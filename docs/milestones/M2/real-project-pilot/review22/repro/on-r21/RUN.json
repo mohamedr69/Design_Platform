@@ -1,0 +1,20 @@
+{
+ "harness": "C:/t/iso/work/r2x/review22/harness-r21",
+ "reviewer_sha256": {
+  "scorer_probes.py": "ee6e8166ad5d8c9a3ed52987234ce826acdcfe1681359117a46f9803af483d27",
+  "test_review22_scoring.py": "b981b468ba3eaa1835e231b4becff63b92753508e30d1b3467dad8a85a17ba46",
+  "final_checks.py": "953ba2ad1ce10d0c588ce399f1710eaac0d59f43ef5e60ed6cfc57bd1521d4bc"
+ },
+ "substitutions": [
+  [
+   "sys.path.insert(0,str(R))",
+   "sys.path.insert(0,'C:/t/iso/work/r2x/review22/harness-r21')"
+  ],
+  [
+   "R=Path(__file__).parent",
+   "R=Path('C:\\\\t\\\\iso\\\\work\\\\r2x\\\\review22\\\\repro\\\\on-r21')"
+  ]
+ ],
+ "probes_exit": 0,
+ "regressions_exit": 1
+}

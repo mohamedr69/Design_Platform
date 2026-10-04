@@ -1,0 +1,31 @@
+{
+ "lifecycle": "runner-lifecycle-2026-10-01.v2",
+ "terminal": true,
+ "kind": "critical_acceptance",
+ "reason": "stop: critical acceptance on a resolved label after EP-16830",
+ "evidence": [
+  {
+   "doc": "EP-16830/synth/raster-6pages.pdf",
+   "page": 2,
+   "field": "identity",
+   "value": "X-DRY-1",
+   "state": "validated",
+   "outcome": "wrong",
+   "truth": "X-DRY-9",
+   "how": "single_component_wrong_identity",
+   "reader": "ai:EV1",
+   "group": "ai:2:own"
+  }
+ ],
+ "reconstructed": false,
+ "at_utc": "2026-09-30T20:51:21+00:00",
+ "pid": 18992,
+ "clock": 1790801481.2851806,
+ "tag": "L1",
+ "arm": "L1",
+ "declaration_sha256": "24bcf7bebfdf202181806561b1b0ffd9bdacd9010c2579aa2cd95735f6c8cfc3",
+ "allowance_key": {
+  "scope": "r22-four-arm-dry-2026-09-30-L1",
+  "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+ }
+}

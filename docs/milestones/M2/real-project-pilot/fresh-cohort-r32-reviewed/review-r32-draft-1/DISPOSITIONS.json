@@ -1,0 +1,255 @@
+{
+ "of": {
+  "response_file": "REVIEWER-RESPONSE.json",
+  "response_sha256": "70f94632884af028f31d66f76557807801cf00fcca37251a2ade25c9de3a3ff8",
+  "critique_file": "CRITIQUE.json",
+  "critique_sha256": "ad6798dc9aba2b1bd20ec6f4db74fbe353bdad93e01144b3ee1d32ab48387eef"
+ },
+ "packet_check": {
+  "manifest_sha256": "15c4114da23e3989b621fed0e43cf9519f9e82e075b972dc2d01f5583f82d0ed",
+  "manifest_ok": true,
+  "manifest_files_rehashed": 110,
+  "manifest_mismatches": 0,
+  "draft_sha256": "ebd1e24d943b3b7b21e96c1930bdb34a1078e4c5d70e3c4c34a258332688a334",
+  "draft_ok": true
+ },
+ "agent": {
+  "task_id": "ORCH-01A.5",
+  "label": "R32REV-DISPOSE",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), per my system context; effort High as configured by the task. Fresh workflow subagent: not the drafter, not a batch reviewer, not the consolidator, not the critic. No model or provider request, no network, no packet script run, no state-changing git; did not open batch notes, batch working images or any forbidden path.",
+  "completed_at_utc": "2026-10-03T06:11:40Z"
+ },
+ "dispositions": [
+  {
+   "id": "D-001",
+   "critique_id": "C-001",
+   "key": {
+    "topic": "(e) class of a code letter: tie-breaker clause vs the EMAAR/Mirage legend",
+    "pool_id": "F025",
+    "field": "decision"
+   },
+   "disposition": "adopted",
+   "reason": "The critic is right that the (e) tie-breaker, read mechanically, makes Mirage/EMAAR C ('Not Approved (Re-submit within 14 days)') a rejection option because D ('Incomplete, Resubmit') is a separate revise option, which contradicts the ruling's own consequence and the F025 rows. The F025 class revise and resubmit is right on the page: C carries its own resubmission instruction. The tie-breaker is reworded so it applies only to options worded 'Rejected' (keeps 'Rejected / Resubmit' = rejected, which the critic's proposed wording would have flipped), and the Mirage legend is stated to override the 'not approved' marker of frozen section 5. No page or document row changes; F025 p1/p3/p4 stay revise and resubmit.",
+   "evidence": "C:/t/r2x/r32-stage/renders/F025-p1.png (Code C box filled red and ringed blue; printed 'Approval Codes: A-Approved B-Approved with comments C-Not Approved (Re-submit within 14 days) D-Incomplete, Resubmit E-Submitted for Information (No approval required)'; Electrical: Bipin Mathew 24.09.2025); C:/t/r2x/r32-stage/crops/F025-p1-0.1_0.69_0.93_0.715.png (red box beside 'Code C', blue ellipse); C:/t/r2x/r32-stage/crops/F025-p3-0.69_0.85_0.81_1-r90.png (Mirage block: C 'Not Approved (Re-submit with in 14 days)' highlighted green, D 'Incomplete, Resubmit', Date Reviewed 24.09.2025, Reviewed By Bipin Mathew)",
+   "change_applied": {
+    "field": "convention_rulings[(e)].ruling (tie-breaker clause)",
+    "from": "and where one legend prints both a revise option and a separate rejection option, the rejection option is rejected even if it adds 'Resubmit';",
+    "to": "and where one legend prints both a revise option and a separate option worded 'Rejected', that option is rejected even if it adds 'Resubmit' (e.g. 'Rejected / Resubmit'); an option worded 'Not Approved' that carries its own resubmission instruction (Mirage/EMAAR C 'Not Approved (Re-submit within 14 days)') is revise and resubmit even when the same legend prints another resubmit option (Mirage/EMAAR D 'Incomplete, Resubmit'), and that printed legend overrides the 'not approved' marker listed under rejected in frozen conventions section 5 (final disposition D-001);"
+   }
+  },
+  {
+   "id": "D-002",
+   "critique_id": "C-002",
+   "key": {
+    "pool_id": "F006",
+    "page": 2,
+    "field": "revision"
+   },
+   "disposition": "adopted",
+   "reason": "The critic is right that the issued g2 contradicts itself on F006 p2: the p2 literal 'NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02' does not equal the p1 Reference 'NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02', and g2's reply-sheet revision clause would make the unlabelled R02 absent. Of the critic's two fixes, (b) is adopted because of what the pages show: p2 is not a contractor reply sheet but the LACASA consultant's own comment sheet ('Approved as Noted', 10 comments, signed Mohamad El Haj) that the p1 form's Engineer comments refer to ('Ref to comments on attached comments'), for the same submittal (plot 3347356, Access control system, Comelit, serial 007, R02). F006 p2 is taken out of g2; its identity stays present/resolved because it names the same submittal, and its R02 suffix follows frozen section 4 'embedded only' (present, association uncertain), as ruled. The F006 p2 rows and the F006 document rows (identity yes/yes, revision no/no) are unchanged; only the convention entry changes.",
+   "evidence": "C:/t/r2x/r32-stage/renders/F006-p2.png (LACASA sheet, 'Submittal Ref No. : NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02', underlined 'Approved as Noted', Page 1 of 1); C:/t/r2x/r32-stage/crops/F006-p2-0.2_0.22_0.7_0.31.png (same reference, no '-LC-', no space before R02); C:/t/r2x/r32-stage/crops/F006-p1-0.4_0.22_0.8_0.245.png ('Reference: NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02'); C:/t/r2x/r32-stage/renders/F006-p1.png (MATERIAL APPROVAL SUBMITTAL, ACCESS CONTROL SYSTEM, COMELIT, handwritten Engineer comment referring to the attached comments, APPROVED AS NOTED ticked)",
+   "change_applied": {
+    "field": "convention_rulings[(g2)].ruling (identity condition)",
+    "from": "Identity: the reference on a reply or comments-resolution sheet is the page identity with association resolved when it equals the own number of a submittal in the same staged file (F006 p2, F028 p4, F031 p3);",
+    "to": "Identity: the reference on a reply or comments-resolution sheet is the page identity with association resolved when it equals the own number of a submittal in the same staged file (F028 p4, F031 p3);"
+   },
+   "further_changes": [
+    {
+     "field": "convention_rulings[(g2)].ruling (scope sentence appended)",
+     "from": "",
+     "to": "Scope (final disposition D-002): a consultant's own comment sheet attached to the submittal it reviews is not a reply sheet and is outside this topic (F006 p2, the LACASA comment sheet with 'Approved as Noted', which the p1 form's Engineer comments refer to). Its printed submittal reference is the page identity with association resolved when it names the same submittal in the same file (same project, material, serial and revision; a project-code infix or spacing difference such as '-LC-' and '- R02' is allowed, literals kept as printed), and a revision that appears only as the suffix of that reference follows frozen conventions section 4 'embedded only' (present, association uncertain), not the reply-sheet revision clause."
+    },
+    {
+     "field": "convention_rulings[(g2)].affected_rows",
+     "from": "includes F006/p2/identity",
+     "to": "F006/p2/identity removed"
+    }
+   ]
+  },
+  {
+   "id": "D-003",
+   "critique_id": "C-003",
+   "key": {
+    "pool_id": "F043",
+    "field": "revision"
+   },
+   "disposition": "adopted",
+   "reason": "Under topic (h), which the response adopts, truth is page-level and each page's field belongs to that page's own document. Pages 2-4 are pages of the CMW General Specifications Annexure B vendor list; their own running header labels the revision ('... ANNEXU RE B - Rev. 0 -DATE:5-3-2014'). The value belongs to the page's own document, so association is resolved; the ambiguity of the page identity (which string is the number) does not make the labelled revision uncertain, and the 'lead document' reason contradicts (h), which rejected B7's stricter rule for F002/F035/F069. The footer 'ANNEXURE BROV.011OF12' reads ROV, not REV, so it is no competing revision. F043 p2-p4 revision becomes correct/resolved and the F043 document revision yes/yes; (h) gains one clarifying sentence. Page-level scoring of F043 is already escalated item 2 of REVIEW-NOTE.",
+   "evidence": "C:/t/r2x/r32-stage/crops/F043-p2-0_0_0.2_1-r270.png, C:/t/r2x/r32-stage/crops/F043-p3-0_0_0.2_1-r270.png, C:/t/r2x/r32-stage/crops/F043-p4-0_0_0.2_1-r270.png (running header 'Command of Military Works - CMWGENERAL SPECIFICATIONSANNEXU RE B - Rev. 0 -DATE:5-3-2014', CMW crest); C:/t/r2x/r32-stage/renders/F043-p2.png (rotated annex vendor table, footer 'ANNEXURE BROV.011OF12'); C:/t/r2x/r32-stage/renders/F043-p1.png (Arabic cover letter, الرقم reference, attachments قائمة 1-5, no revision). Working zooms of the footers (not evidence) in my scratch folder r32rev-dispose/w_F043_p2_footer.png etc.",
+   "change_applied": {
+    "field": "document_field_rulings[F043/revision].resolved_for_scoring, carries_fact",
+    "from": "no / no",
+    "to": "yes / yes"
+   },
+   "further_changes": [
+    {
+     "field": "page_field_rulings[F043/p2/revision].ruling, association, association_note, note",
+     "from": "accept; association uncertain (belongs to the annex, not the cover letter that is the lead document)",
+     "to": "correct; association resolved (labelled revision of the page's own document, topic h)"
+    },
+    {
+     "field": "page_field_rulings[F043/p3/revision].ruling, association, association_note, note",
+     "from": "accept; association uncertain (belongs to the annex, not the cover letter that is the lead document)",
+     "to": "correct; association resolved (labelled revision of the page's own document, topic h)"
+    },
+    {
+     "field": "page_field_rulings[F043/p4/revision].ruling, association, association_note, note",
+     "from": "accept; association uncertain (belongs to the annex, not the cover letter that is the lead document)",
+     "to": "correct; association resolved (labelled revision of the page's own document, topic h)"
+    },
+    {
+     "field": "convention_rulings[(h)].ruling and affected_rows",
+     "from": "no statement on labelled header values; F043/identity only",
+     "to": "sentence appended; F043/p2-p4/revision and F043/revision added"
+    }
+   ]
+  },
+  {
+   "id": "D-004",
+   "critique_id": "C-004",
+   "key": {
+    "topic": "(h2) project or job number under a 'Reference' label",
+    "pool_id": "F069",
+    "field": "identity"
+   },
+   "disposition": "escalated",
+   "reason": "Defect (1) is confirmed and the narrowing is applied to h2: '2020-4-1072822' is F038 p1's own letter number and is shared verbatim by other documents, so a shared value cannot by itself establish a job role; F069 still meets the narrowed test (F062 'Project ID', F068 'Oracle Job No. / OM No.'). Defect (2), ambiguous versus absent, is not settled by the page: the F069 pages print only 'Refrence : EP-15744', the role is established only on other pages, and frozen section 2 ties 'ambiguous' to what can be established 'from the page' while section 3 excludes job numbers from the identity. Choosing between them is a convention decision that changes the F069 resolved_for_scoring population (carries_fact is no either way). F069 p1/p3 identity become unresolved with the open question; the F069 identity resolved_for_scoring becomes unresolved. Also answers missed item M-002 for h2.",
+   "evidence": "C:/t/r2x/r32-stage/renders/F069-p1.png ('Design Sheet', 5-Aug-18, 'Refrence : EP-15744', Quotation for Fire Alarm System, Project 'Command Of Military Works 17045 at Al minhad'); C:/t/r2x/r32-stage/renders/F069-p3.png (4-Aug-18, 'Refrence : EP-15744', Quotation for Emergency Lighting System); C:/t/r2x/r32-stage/renders/F062-p1.png (Document Transmittal, 'Project ID : EP-15744', document no. EP-15744/SM/FAS/201); C:/t/r2x/r32-stage/renders/F068-p1.png (rotated form, 'Oracle Job No. / OM No.' EP-15744); C:/t/r2x/r32-stage/crops/F038-p1-0.05_0.19_0.95_0.47.png ('الرقم: 2020-4-1072822', the letter's own number); C:/t/r2x/r32-stage/renders/F047-p1.png (title block 'OLD APPLICATION NUMBER 2020 - 4 - 1072822', same value shared verbatim)",
+   "change_applied": {
+    "field": "page_field_rulings[F069/p1/identity].ruling",
+    "from": "correct (state ambiguous)",
+    "to": "unresolved (state kept ambiguous pending the open question; options ambiguous or absent)"
+   },
+   "further_changes": [
+    {
+     "field": "page_field_rulings[F069/p3/identity].ruling",
+     "from": "correct (state ambiguous)",
+     "to": "unresolved (state kept ambiguous pending the open question; options ambiguous or absent)"
+    },
+    {
+     "field": "document_field_rulings[F069/identity].resolved_for_scoring",
+     "from": "no",
+     "to": "unresolved (no if ambiguous, yes if absent); carries_fact stays no"
+    },
+    {
+     "field": "convention_rulings[(h2)].ruling",
+     "from": "When the value under a document's 'Reference' / 'Ref.' label is the project or job number, the identity is ambiguous (role not established), not present, and the number goes to other_identities. It counts as a project or job number when staged pages of the same project print it as such or distinct documents share it verbatim; file and folder names are never used.",
+     "to": "When the value under a document's 'Reference' / 'Ref.' label is the project or job number, the number goes to other_identities and is never the identity. It counts as a project or job number only when a staged page of the same project prints that value with a project or job role (for example 'Project ID', 'Job No.', 'Oracle Job No. / OM No.'); a value shared verbatim by distinct documents is not by itself a project or job number (F038 p1's letter number '2020-4-1072822' recurs on the F038 p2-p4 stamps and in F042, F047, F048 and F049 and stays F038 p1's identity). File and folder names are never used. ESCALATED (final disposition D-004): whether the page identity is then ambiguous or absent is an open convention question for the preparation review or the owner (see the F069 rows' open_question); this rule is an addition to frozen conventions section 3 and changes the F069 identity population."
+    }
+   ],
+   "open_question": "OPEN QUESTION (D-004, for the preparation review or the owner): F069 p1 and p3 print 'Refrence : EP-15744' and no other candidate own number; other staged pages of the same project print EP-15744 with a project/job role (F062 p1 'Project ID : EP-15744', F068 p1 'Oracle Job No. / OM No.' EP-15744). Frozen conventions section 2 defines ambiguous as a role that cannot be established 'from the page', while section 3 says a job number is never the identity. May a role established on other staged pages of the same project settle the role on this page? If yes: identity absent (no own number printed), EP-15744 to other_identities, F069 identity resolved_for_scoring yes, carries_fact no. If no: identity ambiguous (candidate EP-15744 under 'Refrence'), F069 identity resolved_for_scoring no, carries_fact no. carries_fact is no under either answer; only the resolved_for_scoring population changes. Neither the reviewer nor the critic supports the draft's 'present'."
+  },
+  {
+   "id": "D-005",
+   "critique_id": "C-005",
+   "key": {
+    "pool_id": "F019",
+    "page": 1,
+    "field": "revision"
+   },
+   "disposition": "escalated",
+   "reason": "The page shows the conflict: cell 'Rev. no.' 00, table rows 01 09-05-16 AS PER CONSULTANT COMMENTS and 00 05-03-16 ISSUED FOR APPROVAL, title-block DATE 09-05-16. The image does not settle which revision is current. Frozen section 4 makes the cell the primary source (present '00'); topic (i) adds a conflict rule (ambiguous) that amends section 4 and changes the F019 revision population, and it was not escalated (missed item M-002). Neither answer can be fixed by this review without amending a frozen convention, so F019 p1 revision becomes unresolved with the open question, the F019 document revision becomes unresolved/unresolved, the F019 revision question is marked escalated, and the (i) conflict sentence is marked escalated.",
+   "evidence": "C:/t/r2x/r32-stage/crops/F019-p1-0.03_0.84_0.2_1-r90.png (DATE 09-05-16, DWG. NO FAM-PIV-MAH-SPD-FA-2633-007, Rev. no. 00; Dewan review stamp with arrow to APPROVED AS NOTED, 16.5.16); C:/t/r2x/r32-stage/crops/F019-p1-0.38_0.86_0.44_0.99-r90.png (table rows 09-05-16 AS PER CONSULTANT COMMENTS and 05-03-16 ISSUED FOR APPROVAL); C:/t/r2x/r32-stage/renders/F019-p1.png (row numbers 01 and 00 in the REV column)",
+   "change_applied": {
+    "field": "page_field_rulings[F019/p1/revision].ruling",
+    "from": "accept (state ambiguous)",
+    "to": "unresolved (state kept ambiguous pending the open question; options ambiguous or present '00')"
+   },
+   "further_changes": [
+    {
+     "field": "document_field_rulings[F019/revision].resolved_for_scoring, carries_fact",
+     "from": "no / no",
+     "to": "unresolved / unresolved (yes/yes under frozen section 4, no/no under topic i)"
+    },
+    {
+     "field": "document_questions[F019 revision].ruling",
+     "from": "ambiguous (accept draft); exclude the revision field of F019 from the population",
+     "to": "unresolved (escalated D-005)"
+    },
+    {
+     "field": "convention_rulings[(i)].ruling (revision-conflict sentence) and evidence",
+     "from": "A labelled revision cell that disagrees with the latest revision-table entry on the same page is ambiguous with both candidates and is not resolved for scoring; no inference from dates.",
+     "to": "A labelled revision cell that disagrees with the latest revision-table entry on the same page: ESCALATED (final disposition D-005). This sentence would amend frozen conventions section 4 (revision cell = primary source) and changes the F019 revision population; until the preparation review or the owner rules, the affected row is unresolved (options: ambiguous with both candidates, not resolved for scoring; or the cell value present under section 4). No inference from dates in either case."
+    }
+   ],
+   "open_question": "OPEN QUESTION (D-005, for the preparation review or the owner): F019 p1 prints 'Rev. no.' 00 in the title-block revision cell, while the revision table lists '01 09-05-16 AS PER CONSULTANT COMMENTS' above '00 05-03-16 ISSUED FOR APPROVAL' and the title-block DATE is 09-05-16. Frozen conventions section 4 names the revision cell the primary source and uses the table only when it is the only source; topic (i) as issued adds a conflict rule (cell vs latest table entry = ambiguous). Does the frozen cell-first order govern (present '00', association resolved, F019 revision resolved_for_scoring yes, carries_fact yes) or does the topic (i) amendment apply (ambiguous with candidates 00 and 01, F019 revision no/no)? The page itself does not settle which revision is current."
+  },
+  {
+   "id": "D-006",
+   "critique_id": "C-006",
+   "key": {
+    "pool_id": "F067",
+    "page": 1,
+    "field": "identity"
+   },
+   "disposition": "upheld",
+   "reason": "The gap after 'C001-' is wider than at the other hyphens, but it is not established as a typed space. My column scan of the DRAWING NO. line on the bound crop: hyphen-to-next-glyph gap 9 px after 'C001-' against 3-4 px after the other hyphens; the digit advance is about 23 px, so a full space in this font (about 0.28 em, roughly 11 px added to the normal 4 px) would give about 15 px. 9 px is about half a space. The reviewer literal 'CMW-17045-C001-01-E-0001' stands, with its existing note that the spaced form is the same value for a whitespace-insensitive scorer (topic i2). No scoring effect either way.",
+   "evidence": "C:/t/r2x/r32-stage/crops/F067-p1-0.82_0.74_0.99_0.95.png (DRAWING NO. 'CMW-17045-C001- 01-E-0001' as displayed with a widened gap; REVISION No. 00; AUTHORITIES APPROVAL date stamp 10 MAY 2017); C:/t/r2x/r32-stage/renders/F067-p1.png. Working magnification (not evidence): scratch r32rev-dispose/w_F067_dwgno.png",
+   "change_applied": null
+  },
+  {
+   "id": "D-007",
+   "critique_id": "C-007",
+   "key": {
+    "topic": "(d1) vs (e) wording overlap for 'Approved as noted / Resubmit'"
+   },
+   "disposition": "noted",
+   "reason": "Wording overlap between (d1) and (e) noted; (d1) governs options that open with an approval, outcome right on the images, no row changes.",
+   "evidence": "per critique C-007 (C:/t/r2x/r32-stage/crops/F030-p1-0.11_0.7_0.93_0.725.png and others listed there)",
+   "change_applied": null
+  },
+  {
+   "id": "D-008",
+   "critique_id": "C-008",
+   "key": {
+    "topic": "(f) register status letters with partial coverage",
+    "pool_id": "F020",
+    "page": 3,
+    "field": "decision"
+   },
+   "disposition": "noted",
+   "reason": "Partly filled register Status column (F020 p3) is a wording gap in (f); present/uncertain with a note is consistent and changes no document row.",
+   "evidence": "per critique C-008 (C:/t/r2x/r32-stage/crops/F020-p3-0.03_0.15_0.8_0.5.png)",
+   "change_applied": null
+  },
+  {
+   "id": "D-009",
+   "critique_id": "M-001",
+   "key": {
+    "pool_id": "F038",
+    "field": "identity",
+    "item": "missed item: F038 letter number shared across documents"
+   },
+   "disposition": "noted",
+   "reason": "Missed item, not a field error; it is the reason the h2 test was narrowed in D-004. Recording 2020-4-1072822 as an other identity on the sharing pages is left to the reviewed label version.",
+   "evidence": "per critique M-001",
+   "change_applied": null
+  },
+  {
+   "id": "D-010",
+   "critique_id": "M-002",
+   "key": {
+    "item": "missed item: escalation list omits convention amendments (i) and (h2)"
+   },
+   "disposition": "noted",
+   "reason": "Missed item accepted and acted on through D-004 (h2) and D-005 (i): both are now listed as escalated items in REVIEW-NOTE.final.md.",
+   "evidence": "per critique M-002",
+   "change_applied": null
+  }
+ ],
+ "counts": {
+  "critique_disagreements": 8,
+  "material_total": 6,
+  "upheld": 1,
+  "adopted": 3,
+  "escalated": 2,
+  "noted_non_material_disagreements": 2,
+  "noted_missed_items": 2,
+  "dispositions_total": 10
+ },
+ "final_file": "REVIEWER-RESPONSE.final.json",
+ "final_sha256": "920a21d63871d1618b36deb623e4121d31f3d52949d9c5617536aab7af9d4c5b",
+ "statement": "owner-delegated independent Claude AI disposition under decision A-03; not human sign-off; predictions not consulted; M2 remains CHANGES STILL REQUIRED and M3 has not started"
+}

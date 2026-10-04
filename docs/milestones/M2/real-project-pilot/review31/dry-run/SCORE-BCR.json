@@ -1,0 +1,510 @@
+{
+ "thresholds": {
+  "accepted_precision_min": 0.98,
+  "clean_recovery_min": 0.9,
+  "critical_on_resolved_max": 0,
+  "facts_per_extra_requests": 8
+ },
+ "population_gate": {
+  "rule": ">= 12 resolved, independently reviewed documents per field (identity, revision, decision); no partial closure run",
+  "counts": {
+   "identity": 16,
+   "revision": 16,
+   "decision": 6
+  },
+  "short": {
+   "decision": 6
+  },
+  "extensions_used": 2,
+  "action": "PREPARATION BLOCKED"
+ },
+ "outcome": "PREPARATION BLOCKED",
+ "exercise_only": "the population gate refuses dispatch; any figure below exercises the scorer and is not a result",
+ "metrics": {
+  "B": {
+   "fields": {
+    "identity": {
+     "recovery_counts": {
+      "missed": 11,
+      "recovered_clean": 11
+     },
+     "readable": 22,
+     "clean_recovery": 0.5,
+     "accepted": {
+      "correct": 7,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "other:not_attempted": 24,
+      "coverage": 0
+     }
+    },
+    "revision": {
+     "recovery_counts": {
+      "missed": 10,
+      "recovered_clean": 10,
+      "tn": 2
+     },
+     "readable": 20,
+     "clean_recovery": 0.5,
+     "accepted": {
+      "correct": 5,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "other:not_attempted": 24,
+      "coverage": 0
+     }
+    },
+    "decision": {
+     "recovery_counts": {
+      "missed": 7,
+      "tn": 15
+     },
+     "readable": 7,
+     "clean_recovery": 0.0,
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "coverage_resolved": {
+      "pages": 24,
+      "other:not_attempted": 24,
+      "coverage": 0
+     }
+    }
+   },
+   "critical": {
+    "resolved": [],
+    "unresolved": []
+   }
+  },
+  "C": {
+   "fields": {
+    "identity": {
+     "recovery_counts": {
+      "missed": 5,
+      "recovered_clean": 15,
+      "held_only": 2
+     },
+     "readable": 22,
+     "clean_recovery": 0.6818,
+     "accepted": {
+      "correct": 11,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "completed_read": 9,
+      "other:not_selected_by_policy": 6,
+      "other:not_attempted": 5,
+      "other:budget": 3,
+      "verified_absence": 1,
+      "coverage": 10
+     }
+    },
+    "revision": {
+     "recovery_counts": {
+      "missed": 7,
+      "recovered_clean": 12,
+      "tn": 2,
+      "held_only": 1
+     },
+     "readable": 20,
+     "clean_recovery": 0.6,
+     "accepted": {
+      "correct": 9,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "other:budget": 4,
+      "other:not_selected_by_policy": 6,
+      "completed_read": 8,
+      "other:not_attempted": 5,
+      "verified_absence": 1,
+      "coverage": 9
+     }
+    },
+    "decision": {
+     "recovery_counts": {
+      "missed": 5,
+      "tn": 15,
+      "recovered_clean": 2
+     },
+     "readable": 7,
+     "clean_recovery": 0.2857,
+     "accepted": {
+      "correct": 2,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "verified_absence": 3,
+      "other:not_selected_by_policy": 6,
+      "completed_read": 4,
+      "other:not_attempted": 8,
+      "other:budget": 3,
+      "coverage": 7
+     }
+    }
+   },
+   "critical": {
+    "resolved": [],
+    "unresolved": []
+   }
+  },
+  "R": {
+   "fields": {
+    "identity": {
+     "recovery_counts": {
+      "missed": 6,
+      "recovered_clean": 14,
+      "held_only": 2
+     },
+     "readable": 22,
+     "clean_recovery": 0.6364,
+     "accepted": {
+      "correct": 10,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "completed_read": 9,
+      "other:not_selected_by_policy": 6,
+      "other:not_attempted": 5,
+      "other:budget": 3,
+      "verified_absence": 1,
+      "coverage": 10
+     }
+    },
+    "revision": {
+     "recovery_counts": {
+      "missed": 6,
+      "recovered_clean": 12,
+      "tn": 2,
+      "held_only": 2
+     },
+     "readable": 20,
+     "clean_recovery": 0.6,
+     "accepted": {
+      "correct": 9,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "other:budget": 4,
+      "other:not_selected_by_policy": 6,
+      "completed_read": 8,
+      "other:not_attempted": 5,
+      "verified_absence": 1,
+      "coverage": 9
+     }
+    },
+    "decision": {
+     "recovery_counts": {
+      "missed": 5,
+      "tn": 15,
+      "recovered_clean": 1,
+      "held_only": 1
+     },
+     "readable": 7,
+     "clean_recovery": 0.1429,
+     "accepted": {
+      "correct": 1,
+      "wrong": 0
+     },
+     "accepted_precision": 1.0,
+     "coverage_resolved": {
+      "pages": 24,
+      "verified_absence": 5,
+      "other:not_selected_by_policy": 6,
+      "completed_read": 4,
+      "other:not_attempted": 5,
+      "other:budget": 2,
+      "wrong_absence": 1,
+      "other:no_region": 1,
+      "coverage": 9
+     }
+    }
+   },
+   "critical": {
+    "resolved": [],
+    "unresolved": []
+   }
+  }
+ },
+ "paired": {
+  "identity": {
+   "matched": 16,
+   "paired_difference": {
+    "estimate": 0.25,
+    "ci95": [
+     0.1875,
+     0.3125
+    ],
+    "n_documents": 16,
+    "seed": "m2-r30-bootstrap-2026-10-02:identity",
+    "resamples": 2000,
+    "stratified_by": "project"
+   },
+   "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+  },
+  "revision": {
+   "matched": 16,
+   "paired_difference": {
+    "estimate": 0.125,
+    "ci95": [
+     0.0,
+     0.25
+    ],
+    "n_documents": 16,
+    "seed": "m2-r30-bootstrap-2026-10-02:revision",
+    "resamples": 2000,
+    "stratified_by": "project"
+   },
+   "verdict": "INCONCLUSIVE (interval includes zero)"
+  },
+  "decision": {
+   "matched": 6,
+   "paired_difference": {
+    "estimate": 0.3333,
+    "ci95": [
+     0.3333,
+     0.3333
+    ],
+    "n_documents": 6,
+    "seed": "m2-r30-bootstrap-2026-10-02:decision",
+    "resamples": 2000,
+    "stratified_by": "project"
+   },
+   "verdict": "INCONCLUSIVE (matched resolved documents 6 < 12)"
+  }
+ },
+ "request_gate": {
+  "rule": ">= 1 correctly associated fact per 8 extra requests at equal caps, no new false accept, interval excluding zero",
+  "applicable": true,
+  "caps": {
+   "B": 240,
+   "C": 240
+  },
+  "net_correct_facts": 8,
+  "requests": {
+   "B": 4,
+   "C": 80
+  },
+  "extra_requests": 76,
+  "facts_per_8_extra": 0.842,
+  "net_gain_per_document": {
+   "estimate": 0.5,
+   "ci95": [
+    0.1875,
+    0.8125
+   ],
+   "n_documents": 16,
+   "seed": "m2-r30-bootstrap-2026-10-02:requests",
+   "resamples": 2000,
+   "stratified_by": "project"
+  },
+  "new_false_accepts": [],
+  "passes": false,
+  "policy_cost_note": "the request difference is part of the policy; nothing is reported as equal-budget accuracy"
+ },
+ "decision_coverage_gate": {
+  "rule": "completed read or verified absence (incl. outside the title block); a wrong absence and located_incomplete are never coverage; C >= B and C >= R",
+  "B": {
+   "pages": 24,
+   "other:not_attempted": 24,
+   "coverage": 0
+  },
+  "C": {
+   "pages": 24,
+   "verified_absence": 3,
+   "other:not_selected_by_policy": 6,
+   "completed_read": 4,
+   "other:not_attempted": 8,
+   "other:budget": 3,
+   "coverage": 7
+  },
+  "passes": false,
+  "R": {
+   "pages": 24,
+   "verified_absence": 5,
+   "other:not_selected_by_policy": 6,
+   "completed_read": 4,
+   "other:not_attempted": 5,
+   "other:budget": 2,
+   "wrong_absence": 1,
+   "other:no_region": 1,
+   "coverage": 9
+  }
+ },
+ "concentration": {
+  "identity": {
+   "net_gain": 4,
+   "by_project": {
+    "EP-30549": 0,
+    "EP-27421": 0,
+    "EP-23091": 1,
+    "EP-26208": 3,
+    "EP-23323": 0,
+    "EP-17428": 0,
+    "EP-19144": 0
+   },
+   "by_stratum": {
+    "four-arm sample": 4
+   },
+   "concentrated": true
+  },
+  "revision": {
+   "net_gain": 2,
+   "by_project": {
+    "EP-30549": 0,
+    "EP-27421": 0,
+    "EP-23091": 1,
+    "EP-26208": 1,
+    "EP-23323": 0,
+    "EP-17428": 0,
+    "EP-19144": 0
+   },
+   "by_stratum": {
+    "four-arm sample": 2
+   },
+   "concentrated": true
+  },
+  "decision": {
+   "net_gain": 2,
+   "by_project": {
+    "EP-23091": 1,
+    "EP-19144": 0,
+    "EP-23323": 0,
+    "EP-26208": 1
+   },
+   "by_stratum": {
+    "four-arm sample": 2
+   },
+   "concentrated": true
+  }
+ },
+ "primary_outcomes": {
+  "association": {
+   "B": {
+    "identity": 22,
+    "single_component": 3
+   },
+   "C": {
+    "identity": 30,
+    "single_component": 165,
+    "target": 5,
+    "negative_page": 32,
+    "unassociated": 4
+   },
+   "R": {
+    "identity": 28,
+    "single_component": 167,
+    "target": 6,
+    "negative_page": 29
+   }
+  },
+  "critical": {
+   "B": {
+    "resolved": 0,
+    "unresolved": 0
+   },
+   "C": {
+    "resolved": 0,
+    "unresolved": 0
+   },
+   "R": {
+    "resolved": 0,
+    "unresolved": 0
+   }
+  },
+  "decision": {
+   "B": {
+    "pages": 42,
+    "other:not_attempted": 42,
+    "coverage": 0,
+    "accepted": {
+     "correct": 0,
+     "wrong": 0
+    }
+   },
+   "C": {
+    "pages": 42,
+    "verified_absence": 9,
+    "other:not_selected_by_policy": 12,
+    "other:failed": 3,
+    "completed_read": 5,
+    "other:not_attempted": 9,
+    "other:budget": 4,
+    "coverage": 14,
+    "accepted": {
+     "correct": 2,
+     "wrong": 0
+    }
+   },
+   "R": {
+    "pages": 42,
+    "verified_absence": 16,
+    "other:not_selected_by_policy": 12,
+    "completed_read": 5,
+    "other:not_attempted": 5,
+    "other:budget": 2,
+    "wrong_absence": 1,
+    "other:no_region": 1,
+    "coverage": 21,
+    "accepted": {
+     "correct": 1,
+     "wrong": 0
+    }
+   }
+  },
+  "requests": {
+   "B": {
+    "own_dispatched": 4,
+    "inherited_from_b": 0
+   },
+   "C": {
+    "own_dispatched": 76,
+    "inherited_from_b": 4
+   },
+   "R": {
+    "own_dispatched": 0,
+    "inherited_from_b": 4
+   }
+  },
+  "tokens": {
+   "B": "replayed usage of the frozen L3 captures (dry run); a live run records provider-reported usage per lane",
+   "C": "replayed usage of the frozen L3 captures (dry run); a live run records provider-reported usage per lane",
+   "R": "replayed usage of the frozen L3 captures (dry run); a live run records provider-reported usage per lane"
+  },
+  "revision_under_PA_C_vs_R": {
+   "lost": [],
+   "gained": [],
+   "note": "identical captured responses wherever both asked the same request (content key)"
+  }
+ },
+ "reasons_not_eligible": [
+  "identity: clean recovery 0.6818 < 0.90",
+  "identity: more than half the net gain from one project or stratum",
+  "revision: clean recovery 0.6 < 0.90",
+  "revision: more than half the net gain from one project or stratum",
+  "decision: clean recovery 0.2857 < 0.90",
+  "decision: matched 6 < 12",
+  "decision: more than half the net gain from one project or stratum",
+  "request-normalised gate not met",
+  "decision coverage of C below B or R"
+ ],
+ "default_selected": null
+}

@@ -1,0 +1,111 @@
+{
+  "same_revision_literal_different_targets": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "recovered_clean",
+      "decision": "recovered_clean"
+    },
+    "judged": [
+      [
+        "decision",
+        "ANN",
+        "validated",
+        "correct"
+      ],
+      [
+        "identity",
+        "X-SD-1",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "03",
+        "validated",
+        "correct"
+      ]
+    ],
+    "anchors": {
+      "own:decision": {
+        "source": "reconstructed",
+        "attempt": 1,
+        "identity": "X-SD-1",
+        "revision": null,
+        "revision_known": true
+      },
+      "own:identity": null,
+      "own:revision": {
+        "source": "read",
+        "seq": 3,
+        "identity": "X-SD-1"
+      }
+    }
+  },
+  "different_literal_control": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "recovered_clean",
+      "decision": "held_only"
+    },
+    "judged": [
+      [
+        "decision",
+        "ANN",
+        "held",
+        "held_correct"
+      ],
+      [
+        "identity",
+        "X-SD-1",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "03",
+        "validated",
+        "correct"
+      ]
+    ],
+    "anchors": {
+      "own:decision": {
+        "source": "reconstructed",
+        "attempt": 1,
+        "identity": "X-SD-1",
+        "revision": "02",
+        "revision_known": true
+      },
+      "own:identity": null,
+      "own:revision": {
+        "source": "read",
+        "seq": 3,
+        "identity": "X-SD-1"
+      }
+    }
+  },
+  "missing_identity_order": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "recovered_clean",
+      "decision": "missed"
+    },
+    "judged": [
+      [
+        "identity",
+        "X-SD-9",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "02",
+        "validated",
+        "correct"
+      ]
+    ],
+    "anchors": {
+      "own:identity": null,
+      "own:revision": null
+    }
+  }
+}

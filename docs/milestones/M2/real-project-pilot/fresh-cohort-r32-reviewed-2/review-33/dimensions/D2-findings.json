@@ -1,0 +1,217 @@
+{
+ "dimension": "D2",
+ "agent": {
+  "task_id": "ORCH-03.1/D2",
+  "label": "R33-D2",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), per my system context; fresh isolated read-only workflow subagent; no provider or model request, no network, no prediction, no state-changing git; no staged image opened (dimension D2 needed none)"
+ },
+ "findings": [
+  {
+   "id": "D2-01",
+   "severity": "info",
+   "claim": "Everything done so far stayed inside the A-02 permitted list (metadata discovery, download, staging, rendering, label drafting and preparation). No provider or model request went through the application or harness, no validation run, no ledger scope, no 556-ceiling use and no sealed-project access.",
+   "verdict": "CONFIRMED",
+   "evidence": "AI ledger opened through file:...?mode=ro: entries 483, scopes 17, limit_amendments 0, newest entry 1790878663 = 2026-10-01T18:17:43Z; .sqlite mtime 2026-10-01T18:17:50Z, -wal 0 bytes. C:/t/r2x/runs directory mtime 2026-10-01T17:51:11Z (stat only; nothing opened). Packet and reviewed-package scripts contain no network or provider code; the only sqlite opens are read-only ledger counts (verify_r32_packet.py l.70, verify_r32b_package.py l.209), plus a read-only git call. Timeline: PROJECT-VERIFICATION 18:57:59Z, FROZEN-SELECTION 18:59:13Z and staging 18:59:49Z-19:01:52Z (SOURCE-MANIFEST staged_at_utc) all come after the 18:55Z authorization. Sealed list (10 EPs) is identical to the ROUND2-SELECTION projects whose record mentions 'seal', and none of the 34 Round-2 EPs is in the cohort or alternates. os.stat of all 72 originals (long-path prefix): size and mtime equal SOURCE-MANIFEST selected_size and selected_modified_utc for 72/72. Both PREPARATION-REPORTs and the response-ledger entry state no model request, no scope, ledger 483/17.",
+   "required_action": "None."
+  },
+  {
+   "id": "D2-02",
+   "severity": "minor",
+   "claim": "The consent record covers the actions it lists, with two limits. The 'Scope as recorded' table and A-02 add 'and preparation', which is not in the verbatim question (that names only label drafting). The record does not say that the dialog option the owner selected was worded by the assistant; only A-02 and ORCH-001 add that. Label review, application and this preparation review rest on A-01 (the Review 32 process) and A-03, whose source owner message is not reproduced verbatim.",
+   "verdict": "CONFIRMED",
+   "evidence": "AUTHORIZATION-2026-10-02.md (sha256 fd20167a...721d, byte-identical packet-inputs copy). The question quotes 'metadata discovery, downloading ..., copying ..., rendering, and label drafting'. The answer reads 'I authorize this'. The 'Permitted' row reads '... label drafting and preparation'. A-02 qualifies it as 'selection in the session's question dialog; the option label was written by the assistant'. A-03 says 'the message is not reproduced in full'. I cannot verify A-03's verbatim text (UNVERIFIABLE).",
+   "required_action": "The owner should confirm in a chat message of his own: (a) that the 18:55Z authorization is his; (b) that 'preparation' covers the independent label review, the application of rulings and this preparation review. The orchestrator should preserve the verbatim A-03 owner message, append-only. Neither step blocks the review."
+  },
+  {
+   "id": "D2-03",
+   "severity": "minor",
+   "claim": "Read literally, the record's 'It does NOT cover any provider or model request' would exclude Claude agents reading staged OneDrive page images: the drafter, 7 batch reviewers, the consolidator, the critic, the disposer and Review 33's image-reading agents. Every document reads the exclusion as 'through the application or experiment harness', which matches Review 32 and A-03 item 5, but the authorization record carries no such qualifier.",
+   "verdict": "CONFIRMED",
+   "evidence": "Review 32 NEXT-LLM-INSTRUCTIONS: 'Do not call Claude or any other provider through the application or experiment harness'. A-03 item 5: 'no provider/model requests through the EP Platform'. ORCH-001: 'The drafting assistant's own reading of page images is the authorized label drafting ... not a harness request'. The authorization question has no 'through the application or harness' wording.",
+   "required_action": "The owner should confirm that Claude agents may read the staged images of the six projects for label drafting and review, and record it as an append-only note. No re-work is needed."
+  },
+  {
+   "id": "D2-04",
+   "severity": "info",
+   "claim": "Project verification matches the Review 31 selector rules and COHORT-PROPOSAL.md: the same six primaries and four alternates in order, one folder per EP, class 'project', folder name carrying the EP, contractor equal to the R31 record, no contractor-cluster alias hits, sealed Round-2 EPs excluded, and no replacement used.",
+   "verdict": "CONFIRMED",
+   "evidence": "PROJECT-VERIFICATION.json (sha256 4cecf2fc...): cohort [3563, 22349, 27331, 15744, 26687, 29255], replacements [], remaining_alternates_in_order [22317, 29628, 25909, 28908]. For all 10 EPs: folders 1, folder_name_ep true, class project, contractor_matches_r31 true, contractor_cluster_used_by [], round2_selection false, passes true. verify_projects_r32.py imports the R31 used_sets/selector_core unchanged (review31 manifest d5fe1649... recomputed 58/58). One rule adjustment is disclosed: S5 narrative mentions found only in the Review 32 proposal files are not counted as use, so used_eps reads 209 (199 + 10).",
+   "required_action": "None."
+  },
+  {
+   "id": "D2-05",
+   "severity": "minor",
+   "claim": "The freshness re-check read 930 M1/M2 databases, against 959 in Review 31. used_sets.build skips any database it cannot open or that lacks a projects table, with no record. The difference is neither explained nor listed.",
+   "verdict": "CONFIRMED",
+   "evidence": "PROJECT-VERIFICATION.json databases_read 930; review31/cohort/FRESH-PROJECTS-R31.json databases_read 959; used_sets.py l.65-80 ('except sqlite3.Error: continue'). Metadata listing today: 957 *.db under C:/t (10 newer than FRESH-PROJECTS-R31.json) plus 5 under backend/. I opened no database. Review 31's check over 959 databases still stands for databases that existed then.",
+   "required_action": "Before the declaration, disclose the difference and list the unread databases by path (read-only), or state that freshness rests on the Review 31 check plus the 930-database re-check."
+  },
+  {
+   "id": "D2-06",
+   "severity": "info",
+   "claim": "FROZEN-SELECTION.json follows plan v2 section 2: seed m2-r30-pool-2026-10-02, quotas 40/20/12, exactly 12 per project, the same REVIEW and DRAWING regular expressions as Review 31, and one global sha256 order. The seeded order recomputes exactly.",
+   "verdict": "CONFIRMED",
+   "evidence": "sha256 bf71779a...5d21. rules_sha256 matches its rules text. order_key = sha256(seed|EP-ep|relative_path) recomputed for 374/374 rows (72 pool + 302 extension), 0 mismatches; pool order within each stratum and extension order are ascending. by_how review_signal 40, drawing_signal 20, other 12, no 'fill'; by_project 12 each. Pool review-signal: 3563 12, 27331 12, 29255 12, 22349 2, 26687 2, 15744 0. Review 32 step 4's 'source hash' sits in SOURCE-MANIFEST.json (72/72 source==staged), not in the selection file.",
+   "required_action": "None."
+  },
+  {
+   "id": "D2-07",
+   "severity": "minor",
+   "claim": "The extension draw rule does not follow the Review 31 declaration. DRAFT-DECLARATION.v2 declares separate seeds for extension-1 and extension-2. FROZEN-SELECTION and select_pool_r32.py instead take extensions as 'the next 36' from the single pool-seed order. Neither preparation report discloses this.",
+   "verdict": "CONFIRMED",
+   "evidence": "DRAFT-DECLARATION.v2.json l.111-123: extension-1 seed 'm2-r31-extension-1-2026-10-02', extension-2 'm2-r31-extension-2-2026-10-02' (also FIELD-POPULATION-FEASIBILITY.v2 steps 5-6). FROZEN-SELECTION rules: 'extension-1 the next 36 review_signal documents in the seeded order'. The extension_order_review_signal keys use the pool seed. No extension was drawn, so the frozen pool is unaffected.",
+   "required_action": "Disclose this in Review 33. The final declaration must bind the frozen extension order, or state the declared seeds, explicitly."
+  },
+  {
+   "id": "D2-08",
+   "severity": "minor",
+   "claim": "The duplicate rule (lower-cased file name plus size) is new: neither the Review 31 plan nor the declaration has it. It was frozen before the draw, but it let two byte-identical pairs and two content-duplicate pairs through, so the 72-document pool holds 68 distinct documents.",
+   "verdict": "CONFIRMED",
+   "evidence": "FROZEN-SELECTION rules 'duplicates'; 457 excluded. F038 (review_signal) = F052 (drawing_signal), both 5,295,291 bytes, and F067 = F070, both 1,395,605 bytes, are byte-identical (SOURCE-MANIFEST staged_sha256). F031/F001 and F059/F046 are content duplicates (final convention (c)). FIELD-POPULATION: distinct_after_count_once 68.",
+   "required_action": "Disclose that the effective pool is 68 distinct documents and that one byte-identical pair spans two strata. No re-draw."
+  },
+  {
+   "id": "D2-09",
+   "severity": "info",
+   "claim": "The universe difference (3,046 PDFs found with long-path handling against 2,455 counted by Review 31) leaves the feasibility basis that Review 32 accepted unchanged. The prevalence table depends only on document counts, and the cap-bound path capacity recomputes to the same 60/78/96. That capacity table was an upper bound, though: the realised extension yield is 34/36 for Extension 1 and 22/36 for Extension 2.",
+   "verdict": "CONFIRMED",
+   "evidence": "Eligible review-signal paths by project: 3563 134, 22349 7, 27331 71, 15744 5, 26687 12, 29255 113. min(cap, n) totals 60 at cap 12, 78 at cap 18 and 96 at cap 24, identical to the FIELD-POPULATION-FEASIBILITY.v2 capacity table. Simulating the frozen order with the pool's per-project counts: Extension 1 = 34 (3563 6, 29255 6, 27331 6, 26687 6, 22349 5, 15744 5); Extension 2 = 22 (6, 6, 6, 4). The pool used up the 12-document cap of 22349, 15744 and 26687 with drawing/other documents. Review 31's 'feasible yes' for Extension 1 (78 >= 76) would give 74 cumulative in practice. The gate is met (57/38/38), so no extension is needed now.",
+   "required_action": "Disclose this in Review 33. No action unless an extension becomes necessary (see D2-10)."
+  },
+  {
+   "id": "D2-10",
+   "severity": "minor",
+   "claim": "The frozen extension-2 rule (alternates enter when the cohort is exhausted) and Review 31's capacity plan (EP-22317 at Extension 2) conflict with A-02, which permits alternates only as replacements. The extension-1 rule has no instruction for its 2-path shortfall. Both are latent.",
+   "verdict": "CONFIRMED",
+   "evidence": "FROZEN-SELECTION rules: 'extension-2 ... the alternate projects enter in their order'. DRAFT-DECLARATION.v2 'alternates': 'entered ... only when the picked projects' paths are exhausted under the cap'. A-02 'Open point' and ORCHESTRATOR-STATE open point 2 record this.",
+   "required_action": "Owner-only, and only if an extension is needed: decide (i) whether Extension 1 may stand at 34, and (ii) whether EP-22317 may be accessed for capacity, which needs a new authorization. Nothing now."
+  },
+  {
+   "id": "D2-11",
+   "severity": "major",
+   "claim": "The plan's concentration rule, applied to this population, makes decision eligibility unreachable by construction and identity eligibility very likely so. 37 of the 38 counted decision documents are in the review_signal stratum. score_bcr.concentration marks a field concentrated when one stratum's net gain exceeds half the total, so any positive decision gain not carried by F072 alone fails the rule.",
+   "verdict": "CONFIRMED",
+   "evidence": "My recount from R32-LABELS-REVIEWED-1.json gives identity 57 / revision 38 / decision 38, excluded F069 / F019. Strata from FROZEN-SELECTION: decision review_signal 37, other 1 (F072). Identity: review_signal 36, drawing 16, other 5, but 37 of 38 decision documents carry identity and the run set takes decision documents first (up to 16). Revision: 29 of 38 decision documents carry it; the 9 revision-only documents are drawing 8, other 1 (26687 7, 15744 2). The rule is in plan v2 section 5.5, DRAFT-DECLARATION.v2 l.217 and score_bcr.py l.198-209 (conc = net>0 and max(by_s) > net/2), which feeds reasons_not_eligible (l.263). By project, decision documents split 27331 12 / 3563 11 / 29255 10 / 26687 3 / 22349 2 / 15744 0 (largest 31.6%), so the project leg has no structural problem.",
+   "required_action": "Before the declaration: the owner and an independent review decide whether the stratum leg applies to fields whose run-set population comes from one stratum by design. Options: drop or redefine it for decision and identity, or record that decision eligibility cannot be shown on this cohort. Freeze the choice in the declaration. Without this, the budget buys a run whose decision outcome is predetermined."
+  },
+  {
+   "id": "D2-12",
+   "severity": "info",
+   "claim": "On counts, the plan's matched-population requirement (at least 12 per field attempted by both future arms) can be met within the 30-document run set. Whether it is actually met depends on both arms attempting the documents.",
+   "verdict": "CONFIRMED",
+   "evidence": "Run set (plan v2 2.3): up to 16 decision documents (38 available); 37/38 of them carry identity, so at least 15. Revision: worst case 7 of 16 decision documents carry it, and the top-up of up to 8 from the 9 revision-only documents brings it to at least 12. 16+8+4+2 = 30. score_bcr.matched requires attempted in B and C and not unsupported. Actual attainment is UNVERIFIABLE before a run: breaker or stop rules can cut it. No run-set selector exists in review31/scripts/harness; only the declaration text does. The adapter must map the count-once aliases F031, F052, F059 and F070 so that they are not counted as separate documents.",
+   "required_action": "Declaration and D4: implement and test the run-set selection, and map the count-once aliases before population_gate and matched are used."
+  },
+  {
+   "id": "D2-13",
+   "severity": "major",
+   "claim": "AI-ACCURACY-POLICY section 8 says gold labels must not be generated or approved solely by another model. r32-labels-reviewed-1 was drafted by Claude and approved only by Claude agents. No authority entry, ledger entry, Review 31/32 document or preparation report addresses this sentence, so it is an open authority conflict for using these labels as gold for the M2 thresholds.",
+   "verdict": "CONFIRMED",
+   "evidence": "AI-ACCURACY-POLICY.md (sha256 7efa891b...4f47) section 8: 'Gold labels must be independently checked against originals, not generated or approved solely by another model.' R32-LABELS-REVIEWED-1 status: 'AI-reviewed ... NOT human-signed; NOT a human review'. A-03 (Claude-only workflow) and Review 32 ('an owner-delegated AI review unless a named human signs it') accept AI review for preparation but do not amend the policy. A grep of the orchestrator, review-32 and review31 documents finds no reference to this sentence.",
+   "required_action": "Owner-only, before the declaration: either amend or waive policy section 8 for this run explicitly (append-only, quoted in the declaration), or arrange a human check of the scored label rows. Until then, a run on these labels cannot support an M2 acceptance claim under the policy. This is a material authority conflict, which is an A-03 stop condition."
+  },
+  {
+   "id": "D2-14",
+   "severity": "info",
+   "claim": "The A-03 process was followed. Fresh Claude Opus 5.5 High agents reviewed the labels independently of the drafter. A different fresh agent applied the rulings in a new work folder and package, and a separate read-only agent re-derived them. Nothing frozen was edited in place. The review_kind wording (Claude, NOT human sign-off) appears everywhere it should.",
+   "verdict": "CONFIRMED",
+   "evidence": "Agent records: REVIEWER-RESPONSE.final.json lists 9 agents (B1-B7, CONSOLIDATE, DISPOSE), and CRITIQUE.json has the critic, all model_configured claude-opus-5-5, effort high, with self-reports. All 7 batch files say independent_of_drafter true and predictions_consulted false. A forbidden-path pattern scan (drafter folder, r26.2, arms, replay, runs, OneDrive, .db/.sqlite) of all batch, critique, final and dispositions JSON found 0 hits. 'Not human sign-off' wording is present in all 7 batch JSON, all 7 notes (B7 'not a human sign-off'), CRITIQUE.json/.md, DISPOSITIONS, REVIEW-NOTE(.final), the reviewed labels status, the reviewed PREPARATION-REPORT and the response-ledger entry. Implementer R32APPLY-IMPL worked in r32b (audit log: no opening of the r32 drafter folder; ledger mode=ro); ORCH-005 records R32APPLY-VERIFY. Frozen state: manifests 110/110, 45/45 and 58/58 match with no unlisted files except the manifest/check files. The review folder's 23 files are byte-identical to the reviewed-package copy, and the 5 packet inputs and the draft copy are byte-identical. Newest mtimes: packet 2026-10-02T20:06Z, review folder 06:12:39Z, staging 20:00Z. My recount matches 57/38/38. Independence is evidenced by records and self-reports only; transcripts are not available (that part is UNVERIFIABLE).",
+   "required_action": "None."
+  },
+  {
+   "id": "D2-15",
+   "severity": "minor",
+   "claim": "A-03 item 2 says only one write-capable Opus agent may run at a time. Seven batch reviewers ran at the same time, each writing its own file in the shared review folder, and item 5's single reviewer became a 7+1+1+1 pipeline. The orchestrator recorded this interpretation for the owner to object to.",
+   "verdict": "CONFIRMED",
+   "evidence": "Batch started/completed_at_utc: B1 04:49:51-05:04:45, B2 04:49:54-05:01:25, B3 04:49:54-05:01:10, B4 04:49:53-04:57:52, B5 04:49:54-04:58:21, B6 04:49:55-04:58:01, B7 04:58:47-05:11:01. A-03 'Orchestrator interpretation, recorded so the owner can object'; ORCH-002 decision 3. Outputs are disjoint and hash-verified, and I found no harm.",
+   "required_action": "The owner should confirm or object to the interpretation (it applies again to Review 33's parallel dimension agents). No re-work."
+  },
+  {
+   "id": "D2-16",
+   "severity": "minor",
+   "claim": "Several documents still name Codex as the label reviewer. A-03 amends this in substance, so it is not a defect. But A-03's list of amended documents is incomplete, and it lists FIELD-POPULATION.json, which contains no Codex mention.",
+   "verdict": "CONFIRMED",
+   "evidence": "Covered by A-03's list: LABEL-CONVENTIONS-R32.md l.67 (section 8), REVIEWER-PACKET.md, REVIEWER-RESPONSE-TEMPLATE.json review_kind, review31/CORRECTION-REPORT.md l.113. Not in A-03's list: review31/REVISED-FRESH-VALIDATION-PLAN.v2.md l.44, FIELD-POPULATION-FEASIBILITY.v2.md l.8, BUDGET-DECISION-CARD.v2.md l.22, CORRECTION-REPORT.md l.121, DRAFT-DECLARATION.v2.json l.150 (labels.review), scripts make_draft_declaration_v2.py and harness/dry_run.py, fresh-cohort-r32/PREPARATION-REPORT.md l.102, scripts/make_review_packet_r32.py, and historical M2-REVIEW-RESPONSE.md entries. fresh-cohort-r32/FIELD-POPULATION.json: 0 Codex mentions.",
+   "required_action": "The final declaration must replace labels.review with the Claude, NOT human sign-off wording. Optionally, add an append-only note completing A-03's list."
+  },
+  {
+   "id": "D2-17",
+   "severity": "minor",
+   "claim": "ORCH-001 finding 8 required the preparation report to disclose that the drafting session opened the r26.2 label sets after the conventions were frozen. Neither preparation report does, and the r32 report states 'Never used: ... earlier labels'.",
+   "verdict": "CONFIRMED",
+   "evidence": "DECISION-LEDGER ORCH-001 'Findings to carry forward' item 8 ('disclose in the preparation report'). grep of both PREPARATION-REPORT.md files and COMMANDS-AND-AUDIT-LOG.md finds no r26 mention; fresh-cohort-r32/PREPARATION-REPORT.md l.68 says 'Never used: ... earlier labels'. I cannot check the underlying fact (drafting transcript) (UNVERIFIABLE). The r26.2 labels cover other projects, not these documents.",
+   "required_action": "Add the disclosure in an append-only addendum or the next package version (not in place), and carry it into the declaration."
+  },
+  {
+   "id": "D2-18",
+   "severity": "info",
+   "claim": "Both PREPARATION-REPORTs state the seven statuses separately, and each was truthful when written. The r32 report (20:06Z) predates A-03, so its 'Codex reviewer, PENDING' is superseded rather than false. The reviewed report's counts, exclusions, agents and ledger figures recompute. Minor gaps: the reviewed FIELD-POPULATION.json has no label-truth (AI-reviewed, not human-signed) statement, and ORCHESTRATOR-STATE.md still has a stale 'Review pipeline in progress' section.",
+   "verdict": "CONFIRMED",
+   "evidence": "fresh-cohort-r32/PREPARATION-REPORT.md 'Statuses, stated separately' items 1-7. fresh-cohort-r32-reviewed/PREPARATION-REPORT.md items 1-7: counts 57/38/38, F069/F019 excluded, upper bound 57/39/38, ledger 483/17, all matching my recomputation. The reviewed report keeps the two packages apart ('unchanged ... authorized and verified in the r32 packet'). ORCHESTRATOR-STATE.md (10:49 +04) describes attempt 2 as in progress although ORCH-004/005 are complete.",
+   "required_action": "Optional: add a label-truth line to the next FIELD-POPULATION version and refresh ORCHESTRATOR-STATE."
+  },
+  {
+   "id": "D2-19",
+   "severity": "info",
+   "claim": "Side effects, for the record. The 72 OneDrive originals, all cloud-only placeholders at selection, are now hydrated locally (about 249.5 MB), with content size and mtime unchanged. The frozen packages are untracked in git.",
+   "verdict": "CONFIRMED",
+   "evidence": "os.stat st_file_attributes: 72/72 have RECALL_ON_DATA_ACCESS and OFFLINE clear, and FROZEN-SELECTION placeholder true for all 72. git status --porcelain: '?? fresh-cohort-r32/', '?? fresh-cohort-r32-reviewed/', '?? review31/', ' M M2-REVIEW-RESPONSE.md'. ORCH-001 finding 11 records the untracked-evidence risk.",
+   "required_action": "Owner, optional: free up OneDrive space if wanted. Keep the packages out of any git clean or checkout, or commit them under owner control."
+  },
+  {
+   "id": "D2-20",
+   "severity": "info",
+   "claim": "Owner-only items that remain before any live run.",
+   "verdict": "CONFIRMED",
+   "evidence": "A-02 excludes provider use, and the R31 budget card step 2 and DRAFT-DECLARATION.v2 cohort.permission expected the cohort permission to include 'provider use'. Not authorized by any entry: the declaration, budget, ledger scope, 556 ceiling, and alternates for capacity (AUTHORITY-REGISTER 'Standing'). The open conflicts are D2-11 and D2-13.",
+   "required_action": "(1) A provider-use permission naming EP-3563, 22349, 27331, 15744, 26687 and 29255 for the live run. (2) The final live-validation declaration, replacing the DRAFT-DECLARATION.v2 bindings: cohort.permission, labels status/review wording and the reviewed-label hash, the extension order or seeds (D2-07), the count-once aliases, and the concentration rule (D2-11). (3) The model budget (B 240 / C 240 / R 40 / P 36, at most 556) and the experiment ledger scope. (4) A resolution of AI-ACCURACY-POLICY section 8 (D2-13). (5) Alternates for extension capacity, only if an extension is needed (D2-10). (6) Optional confirmations: consent wording and Claude image reading (D2-02, D2-03), and the parallel-reviewer interpretation (D2-15)."
+  }
+ ],
+ "files_opened": [
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/DECISION-LEDGER.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/NEXT-BOUNDED-TASK.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/ORCHESTRATOR-STATE.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-32/INDEPENDENT-REVIEW.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-32/NEXT-LLM-INSTRUCTIONS.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY.md (grep; lines 84-100)",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-label-review-r32-draft-1/ (all 23 files hashed; JSON metadata, agents, files_opened, wording grep; batch notes grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/AUTHORIZATION-2026-10-02.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PRE-AUTHORIZATION-HASH-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PREPARATION-REPORT.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-VERIFICATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-AND-CONTRACTOR-VERIFICATION.csv",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FROZEN-SELECTION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FIELD-POPULATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/COMMANDS-AND-AUDIT-LOG.md (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/REVIEWER-PACKET.md (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.md (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/select_pool_r32.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/verify_projects_r32.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/* (grep for network, provider and ledger code)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json (110 files re-hashed)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/PREPARATION-REPORT.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/FIELD-POPULATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/COMMANDS-AND-AUDIT-LOG.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/labels/R32-LABELS-REVIEWED-1.json (document review fields, status, agents, aliases)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/EVIDENCE-MANIFEST.json (45 files re-hashed)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/REVISED-FRESH-VALIDATION-PLAN.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/FIELD-POPULATION-FEASIBILITY.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/COHORT-PROPOSAL.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BUDGET-DECISION-CARD.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/DRAFT-DECLARATION.v2.json (l.80-150, grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/score_bcr.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/used_sets.py (l.40-95)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/cohort/FRESH-PROJECTS-R31.json (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/evidence/EVIDENCE-MANIFEST.json (58 files re-hashed)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review06/evidence/round2/ROUND2-SELECTION.json (project ep and sealed metadata only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/M2-REVIEW-RESPONSE.md (hash, 156,880-byte prefix hash, appended entry)",
+  "C:/t/r2x/ledger/r2x-ledger.sqlite (read-only URI, table counts only)",
+  "OneDrive originals: os.stat only, 72 selected files; *.db files: directory listing only, none opened; C:/t/r2x/runs: directory stat only",
+  "Disclosure: a recursive grep -c for 'Codex' over review31/ counted one match in review31/dry-run/LABELS-NORMALISED.json; no row content was displayed or read"
+ ],
+ "summary": "D2 (cohort, authority and process): no blocker. 2 major findings: D2-11 (the stratum leg of the concentration rule makes decision eligibility unreachable on this population) and D2-13 (AI-ACCURACY-POLICY section 8 conflicts with Claude-only gold labels). Both are owner/declaration-level decisions, not preparation defects. 9 minor findings are disclosure and wording gaps; 9 info findings record facts. A-02 scope, project verification, frozen selection, A-03 independence and frozen-state integrity are CONFIRMED; populations recount to 57/38/38. Owner-only items: provider-use permission, declaration, budget and ledger scope, policy section 8 resolution, and alternates for extension capacity if ever needed. M2 CHANGES STILL REQUIRED; M3 not started."
+}

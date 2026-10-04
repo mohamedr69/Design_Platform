@@ -1,0 +1,183 @@
+{
+ "N0_reference": {
+  "application_reachable": {
+   "a_stricter_critical": 1448,
+   "b_looser_accepts_wrong": 86,
+   "b_looser_hides_wrong": 32,
+   "c_not_scorable_excluded": 212,
+   "parity": 5898
+  },
+  "class_vs_pair": {
+   "a_stricter_critical": 2124,
+   "a_stricter_recovery": 549,
+   "b_looser_accepts_wrong": 86,
+   "b_looser_hides_wrong": 308,
+   "c_not_scorable_excluded": 242,
+   "parity": 6301
+  }
+ },
+ "N1": {
+  "cases_harness_also_accepts": [
+   "FX-00927/register",
+   "FX-00927/ai_validated",
+   "FX-00977/register",
+   "FX-00977/ai_validated",
+   "FX-02197/register",
+   "FX-02197/ai_validated",
+   "FX-02291/register",
+   "FX-02291/ai_validated",
+   "FX-02345/register",
+   "FX-02345/ai_validated",
+   "FX-04791/register",
+   "FX-04791/ai_validated"
+  ],
+  "cases_harness_rejects": [],
+  "counts": {
+   "class_vs_pair": {
+    "a_stricter_critical": 447,
+    "a_stricter_recovery": 86,
+    "b_looser_accepts_wrong": 106,
+    "b_looser_hides_wrong": 210,
+    "c_not_scorable_excluded": 242,
+    "parity": 8519
+   },
+   "class_vs_pair_reachable": {
+    "a_stricter_critical": 112,
+    "b_looser_accepts_wrong": 106,
+    "b_looser_hides_wrong": 32,
+    "c_not_scorable_excluded": 212,
+    "parity": 7214
+   },
+   "side_rows": {
+    "b_looser_credit": 270
+   }
+  },
+  "guard": [],
+  "not_scorable_scored": 0,
+  "residual_reachable": [
+   {
+    "cases": 14,
+    "class": "a_stricter_critical",
+    "field": "decision",
+    "variant_or_group": "d1:rejected"
+   },
+   {
+    "cases": 24,
+    "class": "a_stricter_critical",
+    "field": "identity",
+    "variant_or_group": "g1_labelled_tail_lower"
+   },
+   {
+    "cases": 24,
+    "class": "a_stricter_critical",
+    "field": "identity",
+    "variant_or_group": "g1_labelled_tail_present"
+   },
+   {
+    "cases": 24,
+    "class": "a_stricter_critical",
+    "field": "identity",
+    "variant_or_group": "g1_labelled_tail_present_ws"
+   },
+   {
+    "cases": 26,
+    "class": "a_stricter_critical",
+    "field": "identity",
+    "variant_or_group": "labelled_tail_not_printed_on_this_page"
+   },
+   {
+    "cases": 106,
+    "class": "b_looser_accepts_wrong",
+    "field": "revision",
+    "variant_or_group": "ws_inside_number"
+   },
+   {
+    "cases": 32,
+    "class": "b_looser_hides_wrong",
+    "field": "identity",
+    "variant_or_group": "compilation_page_keyed"
+   }
+  ],
+  "sha256": "6744471375ba68180420c7b8a5236514ded33ead3f19f5c5b5f54425c97607b5",
+  "sha256_of_work_file": null,
+  "variants_harness_also_accepts": {
+   "code_D_with_legend": 12
+  },
+  "work_file": "C:/t/iso/work/r2x/r35/run/NORMALISER-N1.json",
+  "wrong_value_controls_accepted_where_harness_also_accepts": 12,
+  "wrong_value_controls_accepted_where_harness_rejects": 0
+ },
+ "N2": {
+  "cases_harness_also_accepts": [
+   "FX-00047/register",
+   "FX-00047/ai_validated",
+   "FX-00927/register",
+   "FX-00927/ai_validated",
+   "FX-00977/register",
+   "FX-00977/ai_validated",
+   "FX-01622/register",
+   "FX-01622/ai_validated",
+   "FX-02082/register",
+   "FX-02082/ai_validated",
+   "FX-02197/register",
+   "FX-02197/ai_validated",
+   "FX-02291/register",
+   "FX-02291/ai_validated",
+   "FX-02345/register",
+   "FX-02345/ai_validated",
+   "FX-02397/register",
+   "FX-02397/ai_validated",
+   "FX-02606/register",
+   "FX-02606/ai_validated",
+   "FX-02716/register",
+   "FX-02716/ai_validated",
+   "FX-02932/register",
+   "FX-02932/ai_validated",
+   "FX-04791/register",
+   "FX-04791/ai_validated"
+  ],
+  "cases_harness_rejects": [],
+  "counts": {
+   "class_vs_pair": {
+    "a_stricter_critical": 6,
+    "b_looser_accepts_wrong": 106,
+    "b_looser_hides_wrong": 178,
+    "c_not_scorable_excluded": 242,
+    "parity": 9078
+   },
+   "class_vs_pair_reachable": {
+    "a_stricter_critical": 6,
+    "b_looser_accepts_wrong": 106,
+    "c_not_scorable_excluded": 212,
+    "parity": 7352
+   },
+   "side_rows": {}
+  },
+  "guard": [],
+  "not_scorable_scored": 0,
+  "residual_reachable": [
+   {
+    "cases": 6,
+    "class": "a_stricter_critical",
+    "field": "identity",
+    "variant_or_group": "compilation_page_keyed"
+   },
+   {
+    "cases": 106,
+    "class": "b_looser_accepts_wrong",
+    "field": "revision",
+    "variant_or_group": "ws_inside_number"
+   }
+  ],
+  "sha256": "863d2a4c3d0daba9e0cdcb75d714e605662d4c22f8c99a4a00bb4ece9ae310bb",
+  "sha256_of_work_file": null,
+  "variants_harness_also_accepts": {
+   "code_D_with_legend": 26
+  },
+  "work_file": "C:/t/iso/work/r2x/r35/run/NORMALISER-N2.json",
+  "wrong_value_controls_accepted_where_harness_also_accepts": 26,
+  "wrong_value_controls_accepted_where_harness_rejects": 0
+ },
+ "kind": "ORCH-06 normaliser experiment (analysis only; not bound code)",
+ "statement": "SYNTHETIC: every prediction value here is built from the r32 truth strings by a fixed rule. None is a prediction of any model or of the application; no cohort document, page image, prediction or arm output was read; no provider or model request was made."
+}

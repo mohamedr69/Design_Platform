@@ -1,0 +1,335 @@
+{
+  "budget": {
+    "actual_job_budget_classes_used": "C:\\t\\iso\\frozen-r12\\backend\\app\\ai\\budget.py",
+    "child_exit": 91,
+    "persisted_calls_after_crash": 5,
+    "calls_before_crash": 5,
+    "resume": {
+      "sent": 7,
+      "resumed": true,
+      "calls_before": 5,
+      "calls_after": 12,
+      "exhausted": "calls_per_document",
+      "attempt": 2,
+      "interrupted_attempts_found": [
+        {
+          "attempt": 1,
+          "pid": 10948,
+          "started": 1790736259.342249,
+          "calls_at_start": 0
+        }
+      ],
+      "harness": "r2x-boq-harness-2026-09-30.r15.1"
+    },
+    "total_scripted_provider_calls": 12,
+    "expected_max_total": 12,
+    "clean_completion_control": [
+      {
+        "sent": 12,
+        "resumed": false,
+        "calls_before": 0,
+        "calls_after": 12,
+        "exhausted": "calls_per_document",
+        "attempt": 1,
+        "interrupted_attempts_found": [],
+        "harness": "r2x-boq-harness-2026-09-30.r15.1"
+      },
+      {
+        "sent": 0,
+        "resumed": true,
+        "calls_before": 12,
+        "calls_after": 12,
+        "exhausted": "calls_per_document",
+        "attempt": 2,
+        "interrupted_attempts_found": [],
+        "harness": "r2x-boq-harness-2026-09-30.r15.1"
+      }
+    ]
+  },
+  "row_join": {
+    "single_misread_duplicate": {
+      "pairs": [
+        [
+          "first-physical-row",
+          6,
+          "ambiguous"
+        ]
+      ],
+      "held": {
+        "first-physical-row": [
+          6,
+          37
+        ]
+      },
+      "unmatched_emitted": [],
+      "unmatched_truth": []
+    },
+    "same_row_unreadable_quantity": {
+      "pairs": [
+        [
+          "first-physical-row",
+          6,
+          "ambiguous"
+        ]
+      ],
+      "held": {
+        "first-physical-row": [
+          6,
+          37
+        ]
+      },
+      "unmatched_emitted": [],
+      "unmatched_truth": []
+    },
+    "two_row_control": {
+      "pairs": [
+        [
+          "first-physical-row",
+          6,
+          "matched"
+        ],
+        [
+          "second-physical-row",
+          37,
+          "matched"
+        ]
+      ],
+      "held": {},
+      "unmatched_emitted": [],
+      "unmatched_truth": []
+    },
+    "expected": "A quantity being evaluated must not select a different physical truth row; without verified source alignment, hold the sparse duplicate."
+  },
+  "overlay": {
+    "accepted_target_equals_unapproved_proposal": {
+      "overlay": "r2x-overlay-2026-09-30.r15.1",
+      "authority": "annotation only: acceptance / recovery / critical are the evaluator's",
+      "context": null,
+      "annotations": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_evaluator": 1,
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    },
+    "wrong_context_inserted_first": {
+      "overlay": "r2x-overlay-2026-09-30.r15.1",
+      "authority": "annotation only: acceptance / recovery / critical are the evaluator's",
+      "context": null,
+      "annotations": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_evaluator": 1,
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    },
+    "active_context_inserted_first": {
+      "overlay": "r2x-overlay-2026-09-30.r15.1",
+      "authority": "annotation only: acceptance / recovery / critical are the evaluator's",
+      "context": null,
+      "annotations": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_evaluator": 1,
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    },
+    "revision_1_dot_0_vs_10": {
+      "overlay": "r2x-overlay-2026-09-30.r15.1",
+      "authority": "annotation only: acceptance / recovery / critical are the evaluator's",
+      "context": null,
+      "annotations": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "1.0",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": false,
+          "role_state": "unknown",
+          "association_state": "unknown",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "1.0",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": false,
+          "role_state": "unknown",
+          "association_state": "unknown",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_evaluator": 1,
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 0
+    },
+    "no_target_control": {
+      "overlay": "r2x-overlay-2026-09-30.r15.1",
+      "authority": "annotation only: acceptance / recovery / critical are the evaluator's",
+      "context": null,
+      "annotations": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "fact_state": "validated",
+          "context": null,
+          "context_status": "context_unknown",
+          "recorded_target": null,
+          "recorded_state": null,
+          "recorded_anchor_identity": null,
+          "literal_supported": true,
+          "role_state": "unknown",
+          "association_state": "proposal_only",
+          "annotation": "context context unknown",
+          "critical": true
+        }
+      ],
+      "critical_evaluator": 1,
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    }
+  }
+}

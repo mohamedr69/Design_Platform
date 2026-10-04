@@ -1,0 +1,429 @@
+{
+ "status": "DRAFT / NOT EXECUTED / NOT AUTHORIZED TO RUN",
+ "version": "isolated-accuracy-experiment-draft-2026-09-30.1",
+ "requires_before_run": [
+  "prerequisite implementation reviewed (D flag; coverage v3 scorer; optional decision-region strategy)",
+  "frozen, hashed final declaration binding every item of 'freeze'",
+  "a separate owner budget decision"
+ ],
+ "named_changes": {
+  "G": "guard",
+  "Rrot": "rotation-correct clipping",
+  "Rocr": "local OCR fallback",
+  "D": "deadline policy",
+  "ROI": "located title-block discovery",
+  "X": "optional targeted context reads"
+ },
+ "live_arms": {
+  "L1": {
+   "discovery": "whole_page",
+   "X": false,
+   "guard": "G on",
+   "support": "P3 = rotation-correct clip + local OCR fallback",
+   "deadline": "D on (requires the D flag, section 9)",
+   "variant": "EV1",
+   "limits": {
+    "per_document_profile": 12,
+    "escalations": 2,
+    "job_seconds": 120,
+    "project_rolling_day": 60,
+    "per_request_input_breaker_incl_cached": 70000
+   }
+  },
+  "L2": {
+   "discovery": "roi",
+   "X": false,
+   "guard": "G on",
+   "support": "P3 = rotation-correct clip + local OCR fallback",
+   "deadline": "D on (requires the D flag, section 9)",
+   "variant": "EV1",
+   "limits": {
+    "per_document_profile": 12,
+    "escalations": 2,
+    "job_seconds": 120,
+    "project_rolling_day": 60,
+    "per_request_input_breaker_incl_cached": 70000
+   }
+  },
+  "L3": {
+   "discovery": "whole_page",
+   "X": true,
+   "guard": "G on",
+   "support": "P3 = rotation-correct clip + local OCR fallback",
+   "deadline": "D on (requires the D flag, section 9)",
+   "variant": "EV1",
+   "limits": {
+    "per_document_profile": 12,
+    "escalations": 2,
+    "job_seconds": 120,
+    "project_rolling_day": 60,
+    "per_request_input_breaker_incl_cached": 70000
+   }
+  },
+  "L4": {
+   "discovery": "roi",
+   "X": true,
+   "guard": "G on",
+   "support": "P3 = rotation-correct clip + local OCR fallback",
+   "deadline": "D on (requires the D flag, section 9)",
+   "variant": "EV1",
+   "limits": {
+    "per_document_profile": 12,
+    "escalations": 2,
+    "job_seconds": 120,
+    "project_rolling_day": 60,
+    "per_request_input_breaker_incl_cached": 70000
+   }
+  },
+  "L1-D (optional)": {
+   "discovery": "whole_page",
+   "X": false,
+   "guard": "G on",
+   "support": "P3 = rotation-correct clip + local OCR fallback",
+   "deadline": "D off",
+   "variant": "EV1",
+   "limits": {
+    "per_document_profile": 12,
+    "escalations": 2,
+    "job_seconds": 120,
+    "project_rolling_day": 60,
+    "per_request_input_breaker_incl_cached": 70000
+   }
+  }
+ },
+ "contrasts": {
+  "ROI alone": "L1->L2",
+  "X on whole page": "L1->L3",
+  "X on ROI": "L2->L4",
+  "D alone (optional)": "L1-D->L1",
+  "G / Rrot / Rocr": "offline P0->P1->P2->P3 on each live arm's own captured responses (identical responses)",
+  "accepted reader vs L1": "COMBINED policy (G+Rrot+Rocr+D); never labelled rotation-only"
+ },
+ "offline_policies": {
+  "P0": "guard off, accepted region text",
+  "P1": "guard on, accepted region text",
+  "P2": "guard on, rotation-correct clip only",
+  "P3": "guard on, rotation-correct clip + local OCR fallback"
+ },
+ "sample": {
+  "pool": "415-document non-sealed exploration manifest minus every predicted / held-out document (sha256)",
+  "pool_after_exclusion": 387,
+  "within_reader_scope_pdfs": 283,
+  "strata_available": {
+   "a3_a4 / rot0 / scan_like": 77,
+   "a3_a4 / rot0 / text": 91,
+   "a3_a4 / rotated / scan_like": 4,
+   "a3_a4 / rotated / text": 3,
+   "drawing_sheet / rot0 / scan_like": 8,
+   "drawing_sheet / rot0 / text": 33,
+   "drawing_sheet / rotated / scan_like": 3,
+   "drawing_sheet / rotated / text": 64
+  },
+  "input_shapes": {
+   "pdf_pages_beyond_reader_scope": 89,
+   "pdf": 283,
+   "unsupported_input:.doc": 13,
+   "unsupported_input:.docx": 2
+  },
+  "proposed": {
+   "rotated text-layer drawing sheets": 8,
+   "rotation-0 text-layer drawing sheets": 4,
+   "drawing-sheet scans": 3,
+   "A3/A4 text layer": 5,
+   "A3/A4 scans": 4,
+   "coverage controls": {
+    "pdf_over_4_pages": 2,
+    "word_file": 1
+   }
+  },
+  "per_project_max": 3,
+  "order": "sha256(seed | doc_key), new seed at freeze",
+  "planned_denominator": 27
+ },
+ "labels": {
+  "workflow": [
+   "AI-drafted from source renders / text layer before any prediction, page / region bound",
+   "decision: present / absent, marked option, actor, legend, location vs title block (inside / outside / none)",
+   "independent owner-delegated AI source review of all decisions, all rotated / scanned items and a seeded 25 % subset",
+   "ambiguous -> unresolved (reported separately)",
+   "no human signature implied or filled",
+   "frozen with hashes"
+  ]
+ },
+ "coverage": "page / field-aware coverage v3 (draft prototype): every declared page, fail closed on missing pages, unsupported marked, transport separate",
+ "gates": {
+  "safety": "no critical false accept on a resolved label (stop rule); rule-of-three bound reported",
+  "decision_coverage_for_ROI": "ROI arm decision coverage >= matching WP arm, counting off-title-block decisions; unknown is not coverage",
+  "X": ">= 1 correctly associated fact per 8 extra requests at equal caps, no new false accept; CI including zero = no evidence of benefit",
+  "deterministic_support": "offline on fresh responses; zero new wrong validations; OCR time bound reviewed",
+  "coverage_honesty": "every planned page / file reported; timeouts charged at estimate"
+ },
+ "uncertainty": "Wilson 95 % intervals; per project and per layout; zero false accepts reported with the 3/n bound",
+ "workload": {
+  "observed": {
+   "tasks": {
+    "discover_page": {
+     "requests": 34,
+     "usage_unknown": 2,
+     "timeouts": 2,
+     "input_total_incl_cached": {
+      "mean": 26492,
+      "p90": 55102,
+      "max": 81625
+     },
+     "cached_input_mean": 17853,
+     "output": {
+      "mean": 4611,
+      "max": 17923
+     },
+     "latency_ms": {
+      "p50": 38990,
+      "p90": 168101,
+      "max": 265854
+     },
+     "turns": {
+      "p50": 4,
+      "max": 8
+     },
+     "estimate_charged_for_unknown": [
+      45544
+     ]
+    },
+    "discover_region": {
+     "requests": 6,
+     "usage_unknown": 1,
+     "timeouts": 1,
+     "input_total_incl_cached": {
+      "mean": 13891,
+      "p90": 25963,
+      "max": 25963
+     },
+     "cached_input_mean": 9654,
+     "output": {
+      "mean": 3502,
+      "max": 5162
+     },
+     "latency_ms": {
+      "p50": 35860,
+      "p90": 56577,
+      "max": 56577
+     },
+     "turns": {
+      "p50": 4,
+      "max": 5
+     },
+     "estimate_charged_for_unknown": [
+      11947
+     ]
+    },
+    "read_boq_row": {
+     "requests": 17,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 5721,
+      "p90": 5532,
+      "max": 8967
+     },
+     "cached_input_mean": 4177,
+     "output": {
+      "mean": 437,
+      "max": 1211
+     },
+     "latency_ms": {
+      "p50": 7765,
+      "p90": 9903,
+      "max": 16119
+     },
+     "turns": {
+      "p50": 5,
+      "max": 7
+     },
+     "estimate_charged_for_unknown": []
+    },
+    "read_decision": {
+     "requests": 1,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 6239,
+      "p90": 6239,
+      "max": 6239
+     },
+     "cached_input_mean": 2521,
+     "output": {
+      "mean": 362,
+      "max": 362
+     },
+     "latency_ms": {
+      "p50": 7944,
+      "p90": 7944,
+      "max": 7944
+     },
+     "turns": {
+      "p50": 3,
+      "max": 3
+     },
+     "estimate_charged_for_unknown": []
+    },
+    "read_field_context": {
+     "requests": 3,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 6703,
+      "p90": 7507,
+      "max": 7507
+     },
+     "cached_input_mean": 3157,
+     "output": {
+      "mean": 316,
+      "max": 454
+     },
+     "latency_ms": {
+      "p50": 6936,
+      "p90": 9079,
+      "max": 9079
+     },
+     "turns": {
+      "p50": 3,
+      "max": 3
+     },
+     "estimate_charged_for_unknown": []
+    },
+    "read_identity": {
+     "requests": 22,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 7841,
+      "p90": 10732,
+      "max": 20893
+     },
+     "cached_input_mean": 4691,
+     "output": {
+      "mean": 414,
+      "max": 1407
+     },
+     "latency_ms": {
+      "p50": 7481,
+      "p90": 15600,
+      "max": 19000
+     },
+     "turns": {
+      "p50": 3,
+      "max": 6
+     },
+     "estimate_charged_for_unknown": []
+    },
+    "read_revision": {
+     "requests": 18,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 6097,
+      "p90": 7569,
+      "max": 9447
+     },
+     "cached_input_mean": 3997,
+     "output": {
+      "mean": 235,
+      "max": 313
+     },
+     "latency_ms": {
+      "p50": 6143,
+      "p90": 8251,
+      "max": 15560
+     },
+     "turns": {
+      "p50": 3,
+      "max": 4
+     },
+     "estimate_charged_for_unknown": []
+    },
+    "read_submittal_form": {
+     "requests": 3,
+     "usage_unknown": 0,
+     "timeouts": 0,
+     "input_total_incl_cached": {
+      "mean": 20579,
+      "p90": 26121,
+      "max": 26121
+     },
+     "cached_input_mean": 10274,
+     "output": {
+      "mean": 1907,
+      "max": 3035
+     },
+     "latency_ms": {
+      "p50": 24635,
+      "p90": 36136,
+      "max": 36136
+     },
+     "turns": {
+      "p50": 5,
+      "max": 5
+     },
+     "estimate_charged_for_unknown": []
+    }
+   },
+   "requests_per_planned_document": {
+    "ai-pilot-2026-09-30-S": 1.5,
+    "ai-pilot-2026-09-30-G": 2.17,
+    "ai-pilot-2026-09-30-T": 0.75,
+    "ai-pilot-r18-2026-09-30-S": 2.14,
+    "ai-pilot-r18-2026-09-30-T2": 2.29,
+    "ai-pilot-2026-09-30-BOQ-S": 5.0,
+    "ai-pilot-2026-09-30-BOQ-T": 12.0
+   }
+  },
+  "proposed": {
+   "L1": {
+    "expected": 55,
+    "cap": 65,
+    "input_tokens": 850000
+   },
+   "L2": {
+    "expected": 52,
+    "cap": 65,
+    "input_tokens": 550000
+   },
+   "L3": {
+    "expected": 65,
+    "cap": 75,
+    "input_tokens": 950000
+   },
+   "L4": {
+    "expected": 62,
+    "cap": 75,
+    "input_tokens": 650000
+   },
+   "L1-D (optional)": {
+    "expected": 55,
+    "cap": 65,
+    "input_tokens": 850000
+   }
+  },
+  "total_core": {
+   "expected_requests": 234,
+   "declared_cap": 280,
+   "input_tokens": 3000000,
+   "output_tokens": 300000
+  },
+  "total_with_optional": {
+   "expected_requests": 289,
+   "declared_cap": 345,
+   "input_tokens": 3850000
+  },
+  "price": "unknown: no dollar amount",
+  "funding": "not from the original experiment's residual; a separate owner decision after review"
+ },
+ "evidence_files": {
+  "isolation/OFFLINE-ISOLATION-REPLAY.json": "25aff3202729f1d74414d503a4f6d635b18f7ba1625f70c54029d8d667417296",
+  "feasibility/SAMPLE-FEASIBILITY.json": "a95ab58578b47fffc682ca2df4f1640f7bdbdfb47f9ecbb432438d6ed2e5c567",
+  "coverage-v3/PILOT-COVERAGE-V3-DRAFT.json": "95fe7869d4e84581623277ac7ddf721c8964085652703b238aacb5dcae48d1b3",
+  "workload/OBSERVED-WORKLOAD.json": "9d45637b2224b17974219296c74a8f44e358b4d7df95c56da05f784d4845f6c6",
+  "coverage_v3_draft.py": "b89469ca01a64e119396c970e7bcf65950b967c13c4feed0410061fad5a6a1ea",
+  "test_coverage_v3_draft.py": "981d194a189cb1db0f40351d9ae7c47eed1c241fef5a142ac004c6d3b54028e3"
+ }
+}

@@ -1,0 +1,307 @@
+{
+ "after_invocation_1": {
+  "allowance_used": {
+   "B": 24,
+   "C": 5,
+   "P": 0,
+   "R": 0
+  },
+  "reserved_seq": [
+   29
+  ],
+  "rows_by_lane_state": [
+   [
+    "B",
+    "failed",
+    24
+   ],
+   [
+    "C",
+    "failed",
+    4
+   ],
+   [
+    "C",
+    "reserved",
+    1
+   ]
+  ]
+ },
+ "after_invocation_2": {
+  "allowance": {
+   "caps_fixed": {
+    "B": 240,
+    "C": 240,
+    "P": 36,
+    "R": 40
+   },
+   "project_day_limit": 60,
+   "run_key": "ee5b192a82454522a816460957d16e72b82b1be74d5148bf5642a76196f4203b",
+   "used": {
+    "B": 24,
+    "C": 24,
+    "P": 0,
+    "R": 1
+   },
+   "used_total": 49
+  },
+  "lanes": {
+   "B": {
+    "allowance_used": 24,
+    "dry_stub_calls": 0,
+    "serves_by_mode": {
+     "same_bound_fingerprint": 24
+    },
+    "stats": {
+     "dry_refused": 24,
+     "ok": 0,
+     "stopped_by_guard": 0
+    }
+   },
+   "C": {
+    "allowance_used": 24,
+    "dry_stub_calls": 19,
+    "serves_by_mode": {
+     "same_bound_fingerprint": 5
+    },
+    "stats": {
+     "dry_refused": 23,
+     "interrupted_charged": 1,
+     "ok": 0,
+     "stopped_by_guard": 0
+    }
+   },
+   "P": {
+    "allowance_used": 0,
+    "dry_stub_calls": 0,
+    "serves_by_mode": {},
+    "stats": {
+     "ok": 0,
+     "stopped_by_guard": 0
+    }
+   },
+   "R": {
+    "allowance_used": 1,
+    "dry_stub_calls": 1,
+    "serves_by_mode": {
+     "reference_from_capture": 24
+    },
+    "stats": {
+     "dry_refused": 24,
+     "interrupted_charged": 1,
+     "ok": 0,
+     "stopped_by_guard": 0
+    }
+   }
+  },
+  "reserved_seq": [
+   29
+  ],
+  "rows": 49,
+  "store": {
+   "b_or_c_served_from_p": 0,
+   "duplicate_bound_keys": [],
+   "r_rows_served_to_c": 0,
+   "reference_serves": 24,
+   "requests_by_lane_state": [
+    {
+     "lane": "B",
+     "n": 24,
+     "outcome": "dry_refused",
+     "state": "failed"
+    },
+    {
+     "lane": "C",
+     "n": 23,
+     "outcome": "dry_refused",
+     "state": "failed"
+    },
+    {
+     "lane": "C",
+     "n": 1,
+     "outcome": null,
+     "state": "reserved"
+    },
+    {
+     "lane": "R",
+     "n": 1,
+     "outcome": "dry_refused",
+     "state": "failed"
+    }
+   ],
+   "reserved_without_answer": 1,
+   "rows": 49,
+   "serves_by_lane_mode": [
+    {
+     "lane": "B",
+     "mode": "same_bound_fingerprint",
+     "n": 24,
+     "served_lane": "B"
+    },
+    {
+     "lane": "C",
+     "mode": "same_bound_fingerprint",
+     "n": 5,
+     "served_lane": "C"
+    },
+    {
+     "lane": "R",
+     "mode": "reference_from_capture",
+     "n": 24,
+     "served_lane": "C"
+    }
+   ]
+  }
+ },
+ "checks": {
+  "charges_equal_first_dispatches": true,
+  "further_resume_refused": true,
+  "further_run_refused": true,
+  "inv1_interrupted": true,
+  "inv1_one_reserved_row_in_C": true,
+  "ledger_unchanged_each_invocation": true,
+  "model_requests_0": true,
+  "no_duplicate_bound_key": true,
+  "no_fresh_caps": true,
+  "reserved_row_never_resent": true,
+  "reserved_served_once_as_interrupted_charged": true,
+  "resume_B_sent_nothing": true,
+  "resume_C_sent_only_new_requests": true,
+  "resume_completed": true,
+  "second_fresh_run_refused": true
+ },
+ "dry_stub_calls": {
+  "inv-1 (B complete, C crashed)": {
+   "B": 24,
+   "C": 5
+  },
+  "inv-2": {
+   "B": 0,
+   "C": 19,
+   "P": 0,
+   "R": 1
+  }
+ },
+ "fault": {
+  "after_dispatches": 5,
+  "lane": "C"
+ },
+ "note": "dry stub calls are not provider or model requests: no provider exists in dry mode (DryRefusingProvider)",
+ "passes": true,
+ "run_folder": "C:/t/r2x/r34-sandbox/r34dry-20261003b",
+ "stamp": "r34dry-20261003b",
+ "steps": [
+  {
+   "argv": [
+    "run",
+    "--mode",
+    "dry",
+    "--stamp",
+    "r34dry-20261003b",
+    "--run-set",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+    "--binding",
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+    "--binding-sha",
+    "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27",
+    "--out",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\inv-1",
+    "--dry-fault",
+    "C:5"
+   ],
+   "as_expected": true,
+   "error": "lane C failed (75); see C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\inv-1\\lane-C.log",
+   "expected": "error",
+   "started_utc": "2026-10-03T12:49:53+00:00",
+   "step": "1 run (fresh) with a dry fault: lane C dies after its 5th dispatch was sent"
+  },
+  {
+   "argv": [
+    "run",
+    "--mode",
+    "dry",
+    "--stamp",
+    "r34dry-20261003b",
+    "--run-set",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+    "--binding",
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+    "--binding-sha",
+    "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27",
+    "--out",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\refused-run-2"
+   ],
+   "as_expected": true,
+   "expected": "refused",
+   "refused": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r34-sandbox/r34dry-20261003b exists); use 'resume'",
+   "started_utc": "2026-10-03T12:50:04+00:00",
+   "step": "2 run (fresh) again, same stamp"
+  },
+  {
+   "argv": [
+    "resume",
+    "--mode",
+    "dry",
+    "--stamp",
+    "r34dry-20261003b",
+    "--run-set",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+    "--binding",
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+    "--binding-sha",
+    "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27",
+    "--out",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\inv-2"
+   ],
+   "as_expected": true,
+   "expected": "returncode",
+   "returncode": 0,
+   "started_utc": "2026-10-03T12:50:04+00:00",
+   "step": "3 resume (same stamp)"
+  },
+  {
+   "argv": [
+    "resume",
+    "--mode",
+    "dry",
+    "--stamp",
+    "r34dry-20261003b",
+    "--run-set",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+    "--binding",
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+    "--binding-sha",
+    "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27",
+    "--out",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\refused-resume-3"
+   ],
+   "as_expected": true,
+   "expected": "refused",
+   "refused": "refused: the run is complete; there is nothing to resume",
+   "started_utc": "2026-10-03T12:50:18+00:00",
+   "step": "4 resume again"
+  },
+  {
+   "argv": [
+    "run",
+    "--mode",
+    "dry",
+    "--stamp",
+    "r34dry-20261003b",
+    "--run-set",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+    "--binding",
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+    "--binding-sha",
+    "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27",
+    "--out",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\refused-run-4"
+   ],
+   "as_expected": true,
+   "expected": "refused",
+   "refused": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r34-sandbox/r34dry-20261003b exists); use 'resume'",
+   "started_utc": "2026-10-03T12:50:18+00:00",
+   "step": "5 run (fresh) again"
+  }
+ ]
+}

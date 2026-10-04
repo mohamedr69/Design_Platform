@@ -1,0 +1,565 @@
+{
+ "status": "PROPOSAL ONLY -- not executed; the frozen selection and manifest are unchanged; no sealed project involved",
+ "rule": "R14-05: a deterministic WITHIN-COHORT reallocation proposal for the 35-document shortfall -- a proposal only: nothing\nis staged, the frozen EXPLORATION-SELECTION.json / EXPLORATION-MANIFEST.json are not changed, and no sealed project is\ntouched (the pools below are the exploration projects' own frozen replacement orders).\n\nRule (fixed before any candidate is read):\n  * the short slots are taken in the manifest's shortfall order; each keeps its STRATUM;\n  * receivers are the exploration projects not taken in full (quota < 90): 16830, 17428, 23323, 26208, 30549, in a\n    rotation that advances by one per slot;\n  * a slot takes the receiver's next unused candidate of that stratum in the FROZEN rank order (EXPLORATION-SELECTION\n    replacements), provided the receiver stays within the 90 cap and its stratum within 45 % of its new quota; else the\n    next receiver in the rotation; a slot no receiver can fill in its stratum is reported as unfillable (not re-typed);\n  * every candidate is READ (the approved read-only workflow; OneDrive placeholders hydrate) and SHA-256 hashed: it\n    must be distinct from all 415 staged documents, the recorded duplicates, the exposed cohorts' hashes and the\n    candidates already proposed; an unreadable or duplicate candidate is recorded and the next one is tried.\nOutput: SHORTFALL-REALLOCATION-PROPOSAL.json (verified candidates, rejects, per-project effect).",
+ "selection_sha256": "4e8190d027444f03a58230357838eb1d0693ebcf9e0d14c236b3a46c1f59db4e",
+ "manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+ "short_slots": 35,
+ "verified_distinct_candidates": 35,
+ "unfillable_slots": [],
+ "rejects": [
+  {
+   "doc_key": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/PDF/previous approval.pdf",
+   "reason": "duplicate content",
+   "sha256": "64ebfbaac6e5bd29b3b406ab08a0f628e4057c718644c56e72b2f09a24d96350"
+  }
+ ],
+ "candidates": [
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-02-END-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "16830",
+   "doc_key": "EP-16830/EP-16830-MS-ELV/FA system/Retail & Nursery/PDF/12. Previous Approvals.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 1,
+   "extension": ".pdf",
+   "sha256": "05eb0fa5794365daa12e6ba53302df9fd7bf7db1586e6a15a11637024e348338",
+   "bytes": 7085633,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-MID-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/VESDA SYSTEM/REV-01 13.06.2021/final VESDA Drawing - Approved/DIB-FA-201 ASPIRATING SMOKE-24.03.22.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 2,
+   "extension": ".pdf",
+   "sha256": "deccc720a17264bb94e67a6dff77522ce3a9156da33fed94f149e92afeda30f2",
+   "bytes": 982066,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B01-Warehouse Updated Full Package & Compliance Sheet/1- Approval Drawings/PDF/DJ-295-O-EN-DST-00-ASS-0135-01.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 4,
+   "extension": ".pdf",
+   "sha256": "142de33d16da70e4a2ec1867f905a92afb069622fab4f4155bcb122b9b2f2d9d",
+   "bytes": 7960819,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-END-GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B01-Warehouse Updated Full Package & Compliance Sheet/1- Approval Drawings/PDF/DJ-295-O-EN-DST-00-ASS-0113-01.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 5,
+   "extension": ".pdf",
+   "sha256": "aec70204f6a62e7ed2cfafb53dea941ab84d491d9a935ac37a3cdbaf0535b331",
+   "bytes": 8182830,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/File-1/File-1/Drawings/Specific Drawings-DCD APPROVED/448112FireProtectionSystem.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 6,
+   "extension": ".pdf",
+   "sha256": "777945bb5e2a78d9790a79cee9b2572c0e54f980b7e30d9677a64e6cd35bf7d8",
+   "bytes": 26587429,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/CIVIL DEFENCE/Fire Alarm System/AS APPROVED/448112FireAlarmSystem.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 7,
+   "extension": ".pdf",
+   "sha256": "f59223166aa4937bfe8996637fa8e29a047b05977397cd5529f373fbe55632da",
+   "bytes": 9906750,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "26208",
+   "doc_key": "EP-26208/EP-26208 drawing/Approved dwg/wetransfer_mec-sd-pr56-0162-rev-1-b01-emergency-lighting-system-aan-pdf_2023-09-01_1055/MEC-SD-PR56-0164 Rev.1 B17 Emergency Lighting System AAN.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "5934e4ced6fa45b37f56e39b3999617db8778c47851dba239de6c6bc43f8974f",
+   "bytes": 11248204,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "approval_sample",
+    "was": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-02-MID-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 MS/CONSULTANT APPROVALS/EP-17428 EM MS R1 App.pdf",
+   "stratum": "approval_sample",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "d3c192834d940d5c0f14756bcc8a6fe64a7b92e3100b9cb5a9ff74cd5172ee7e",
+   "bytes": 1308481,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "reply",
+    "was": "EP-19144/EP-18101 MS/R1 Consultant comments/Etisalat Approved 12U 150mm.PDF"
+   },
+   "receiver": "30549",
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40059_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 1 OF 4.pdf",
+   "stratum": "reply",
+   "rank_in_stratum": 4,
+   "extension": ".pdf",
+   "sha256": "4e997718404d71b7e6fbde80bdf121642ada0f90333c5a83d2528c07ce4f32a8",
+   "bytes": 11416614,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "19144",
+    "stratum": "reply",
+    "was": "EP-19144/EP-18101 MS/R1 Consultant comments/Re__12U_cabinet_GA_dwgs/Etisalat Approved 12U 150mm.PDF"
+   },
+   "receiver": "30549",
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74038_E_GF (PARKING 1) - EMERGENCY RESPONSE- CRISIS MANAGEMENT RM - TOILET - PLAN, RCP & SECTION.pdf",
+   "stratum": "reply",
+   "rank_in_stratum": 5,
+   "extension": ".pdf",
+   "sha256": "f28e1080b928770a4cb50b56bb79baa760b9bfc79b9fd53c22f70178ebffae19",
+   "bytes": 5615204,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "22510",
+    "stratum": "submittal",
+    "was": "EP-22510/EP-22510 MS/Al Sahoo Villa Electrical Specification Compliance.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 MS/FA MS/Rev.02/Index & Divider.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 5,
+   "extension": ".pdf",
+   "sha256": "ce4acba3174ed79046ef5a90e4f8a19e391695fd10ab815f81aeb4b5857f40fd",
+   "bytes": 80624,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "scan",
+    "was": "EP-23091/Scan Doc/EP-23091 Cost.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Scan Doc/EP-17428 EM Samp. B. Ack.pdf",
+   "stratum": "scan",
+   "rank_in_stratum": 2,
+   "extension": ".pdf",
+   "sha256": "b0d050e5eecac853df3e9834ab5b7621934514db32a4ba51cffd88a02002c9e9",
+   "bytes": 1837817,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "scan",
+    "was": "EP-23091/Scan Doc/EP-23091 FA&EML BOQ.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/EP-23323 Scan/EP-23323 EM Sam B Ack 21.02.2023.pdf",
+   "stratum": "scan",
+   "rank_in_stratum": 2,
+   "extension": ".pdf",
+   "sha256": "d819bf90bbafa90a7a24ce154b3d687ac253ce75acd302881e204bcbb59df0e4",
+   "bytes": 1785439,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "scan",
+    "was": "EP-23091/Scan Doc/EP-23091 Quotation.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/EP-23323 Scan/EP-23323 PQ R1 APP.pdf",
+   "stratum": "scan",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "004a6d42889df827dc258df018da169a75d6288f69436e19d8557c3fe06ee349",
+   "bytes": 1412880,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "scan",
+    "was": "EP-23091/Scan Doc/SKM_C450i21102711301.pdf"
+   },
+   "receiver": "26208",
+   "doc_key": "EP-26208/EP-26208 Scan/EP-26208 FA EM SD R0 25.7.23.pdf",
+   "stratum": "scan",
+   "rank_in_stratum": 2,
+   "extension": ".pdf",
+   "sha256": "07179eefc36ab3745b5fca882de157cfda0a66e92d260291bc2fe404d329ef31",
+   "bytes": 1387622,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "scan",
+    "was": "EP-23091/Scan Doc/EP-23091 EML Design.pdf"
+   },
+   "receiver": "26208",
+   "doc_key": "EP-26208/EP-26208 Scan/EP-26208 PAVA SD R1 ack 22.11.23.pdf",
+   "stratum": "scan",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "aeacc96a3f9e3612da8ee88734e7b308f20ffd8e56cfe5244b296ceda2921e03",
+   "bytes": 76224,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "23091",
+    "stratum": "submittal",
+    "was": "EP-23091/EP-23091 Material Submittal/SOM EML.pdf"
+   },
+   "receiver": "26208",
+   "doc_key": "EP-26208/EP-26208 MS/PAVA system/3. Authorization Letter for Al Arabia Safert & Security.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "8212031f17ead67d54f18495c2763596da6ea777d9399ee526879e7400909391",
+   "bytes": 395063,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-01.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-0/PDF/FA_EM_VE_115_TWELTH_FLOOR.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 4,
+   "extension": ".pdf",
+   "sha256": "f0741d9c7d00ee9ef40063f0a6cb4f97962009f9b21fcf5df13a46b4073ce729",
+   "bytes": 792154,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-07.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-4/SLD/14.03.2021 Shop Drawing Data Center/SCHEMATIC DIAGRAM 201B (14.03.2021).pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 5,
+   "extension": ".pdf",
+   "sha256": "ed91f8ffef149eecd8bef83d534bdafd82a7983ed98698347e8d924cd069da9f",
+   "bytes": 706854,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EML-03.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-2/PDF/REV-02/FA_EM_VE_102_BASEMENT_04.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 6,
+   "extension": ".pdf",
+   "sha256": "05a8545d9b8a869b95a303925304ce27b338363b860d75c5de7780f7b19fcb64",
+   "bytes": 684840,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-05.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/EM SYSTEM/REV-0/FA_EM_VE_121 ROOF FLOOR.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 7,
+   "extension": ".pdf",
+   "sha256": "12dee39d4686f9d7a3c41ec8711f2be61450054b7dc0a2c7226bc02648471692",
+   "bytes": 480015,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EML-04.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-115-12TH FLOOR.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 8,
+   "extension": ".pdf",
+   "sha256": "9e8b89babcbf8071e4f16692262e7dc71e24eca7dcb81d1172aa38bcc71ae39b",
+   "bytes": 754829,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/FAS-05.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-01-ASY-0009-01.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 5,
+   "extension": ".pdf",
+   "sha256": "6fd435725b9bcf4a2fd04af2ccbdb813e780afe96af9e8801efa996f46055860",
+   "bytes": 1362735,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-08.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-00/Fire Alarm System/DJ-295-P-EN-SFD-10-ASY-0026-00.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 6,
+   "extension": ".pdf",
+   "sha256": "ca93d4877c1e2c7c55ff0741f07f3ddd928a3d8a8cbfde8712fdcf00bc591e42",
+   "bytes": 748643,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EML-02.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-02/Central Battery System/DJ-295-P-EN-SEE-03-ASY-0018.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 7,
+   "extension": ".pdf",
+   "sha256": "46bba1f2bfc55e5a9eed4061d24dd9003280d73da8636ce393c3e2d4051de4d3",
+   "bytes": 1030827,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-01..pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-02/Fire Alarm System/DJ-295-P-EN-SFD-01-ASY-0011.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 8,
+   "extension": ".pdf",
+   "sha256": "df729588eb62c2e1ee1f91b6e04d79050056b4124cc68229c143087e16dad269",
+   "bytes": 3086445,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/FAS-04.pdf"
+   },
+   "receiver": "26208",
+   "doc_key": "EP-26208/EP-26208 drawing/Shop dwg/CBS System/Rev-0/B11/ELEC-B11-EM-102.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 15,
+   "extension": ".pdf",
+   "sha256": "7f17d3db6b20fab37df2c7c495f073ce6b0eab564cb65db035d9d00b4c1a29da",
+   "bytes": 1189353,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/6439742.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-3/FA_EM_VE_101_WATER TANK & PUMP LEVEL.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 9,
+   "extension": ".pdf",
+   "sha256": "b3a62f4c961b8c49102a0caad8a259d264fb783627f8bf26e60bf2cf4d71b772",
+   "bytes": 557347,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/FAS-02.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-0/PDF/FA_EM_VE_119_TOP ROOF_FLOOR.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 10,
+   "extension": ".pdf",
+   "sha256": "4165ecce8b53c6c1877cbdb77aabb86ee1333656595f15acbc77d56a81129596",
+   "bytes": 721433,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/FAS-03.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/EM SYSTEM/REV-0/FA_EM_VE_101_WATER TANK & PUMP LEVEL.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 11,
+   "extension": ".pdf",
+   "sha256": "160b4f53b166d8f13cab534439deb20a259d07605508b3ca9910430a129c1050",
+   "bytes": 581804,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "shop_drawing",
+    "was": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-06.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-110-4TH FLOOR.pdf",
+   "stratum": "shop_drawing",
+   "rank_in_stratum": 12,
+   "extension": ".pdf",
+   "sha256": "08b5b97ecde0fa34108829ea031992e52b68802fdb3f7b07303821e558cbcf6b",
+   "bytes": 759951,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "27421",
+    "stratum": "submittal",
+    "was": "EP-27421/EP-27421 Material Submittals/LIWAN II EML SOM.pdf"
+   },
+   "receiver": "17428",
+   "doc_key": "EP-17428/EP-17428 MS/FA MS/Rev.02/C-TEC NC951 Accessible Toilet Alarm Kit/C-TEC_(Computionics_Limited)_-_NC951_Datasheet_2020-07-13-140855.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 6,
+   "extension": ".pdf",
+   "sha256": "6ccd254f26a105e73b1df4946058007b42f2a456c49c96103aaac29643fb664c",
+   "bytes": 307228,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "28745",
+    "stratum": "submittal",
+    "was": "EP-28745/MS/Copper/R0/PDF/3. Ajman CD -Cooper -24-25 17.07.24.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/MS FP200/MS Fire Resistant cable - FP200.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 2,
+   "extension": ".pdf",
+   "sha256": "2ee07006c2c7147eac96f1a664f77590f5cf58d20bf7b09b30fa920ce890f205",
+   "bytes": 14178573,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "28745",
+    "stratum": "submittal",
+    "was": "EP-28745/MS/Copper/R0/PDF/Previous Project List.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/MS CBS/R3/Lux Report - AKI Warehouse1.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 3,
+   "extension": ".pdf",
+   "sha256": "3daafdbed32e0678c535ee419b70b4fa0ff999aa4c6d69cb43c1f82c4a329984",
+   "bytes": 452910,
+   "hydrated": true
+  },
+  {
+   "for_short_slot": {
+    "ep": "28745",
+    "stratum": "submittal",
+    "was": "EP-28745/MS/Edwards/R0/PDF/Content.pdf"
+   },
+   "receiver": "23323",
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/MS CBS/AKI SUBMITTAL 23.12.2022.pdf",
+   "stratum": "submittal",
+   "rank_in_stratum": 4,
+   "extension": ".pdf",
+   "sha256": "887ad06c3a5389a05d8a16f3f73d5eb3a8fa640588a25bcc9463d9f399f61443",
+   "bytes": 90766287,
+   "hydrated": true
+  }
+ ],
+ "effect": {
+  "distinct_documents_if_adopted": 450,
+  "per_project_after": {
+   "16830": 41,
+   "17428": 54,
+   "19144": 45,
+   "22510": 35,
+   "23091": 53,
+   "23323": 53,
+   "26208": 45,
+   "27421": 44,
+   "28745": 34,
+   "30549": 46
+  },
+  "per_receiver_added": {
+   "16830": 1,
+   "17428": 14,
+   "23323": 13,
+   "26208": 5,
+   "30549": 2
+  }
+ }
+}

@@ -1,0 +1,118 @@
+{
+  "before_file": {
+    "initial_exit": 98,
+    "initial_recorded_sends": 3,
+    "initial_outcomes": [
+      "transport",
+      "transport",
+      "transport"
+    ],
+    "stop_file_before_resume": null,
+    "manifest_stop_before_resume": null,
+    "resume_exit": 0,
+    "new_sends": 16,
+    "resume_status": "completed",
+    "resume_stop": null,
+    "stop_file_after_resume": null
+  },
+  "after_file": {
+    "initial_exit": 98,
+    "initial_recorded_sends": 3,
+    "initial_outcomes": [
+      "transport",
+      "transport",
+      "transport"
+    ],
+    "stop_file_before_resume": {
+      "lifecycle": "runner-lifecycle-2026-10-01.v1",
+      "terminal": true,
+      "kind": "provider_failures",
+      "reason": "stop: three consecutive provider failures",
+      "evidence": [
+        {
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 2,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "reconstructed": false,
+      "at_utc": "2026-09-30T20:42:36+00:00",
+      "pid": 37592,
+      "clock": 1790800956.79641,
+      "tag": "L1",
+      "arm": "L1",
+      "declaration_sha256": "68edc2b8c27b89f8cfce0690ee4aed36b4e906f42bc47f3036cbaa830b4b214c",
+      "allowance_key": {
+        "scope": "r22-four-arm-dry-2026-09-30-L1",
+        "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+      }
+    },
+    "manifest_stop_before_resume": null,
+    "resume_exit": 4,
+    "new_sends": 0,
+    "resume_status": "stopped",
+    "resume_stop": "stop: three consecutive provider failures",
+    "stop_file_after_resume": {
+      "lifecycle": "runner-lifecycle-2026-10-01.v1",
+      "terminal": true,
+      "kind": "provider_failures",
+      "reason": "stop: three consecutive provider failures",
+      "evidence": [
+        {
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 2,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "reconstructed": false,
+      "at_utc": "2026-09-30T20:42:36+00:00",
+      "pid": 37592,
+      "clock": 1790800956.79641,
+      "tag": "L1",
+      "arm": "L1",
+      "declaration_sha256": "68edc2b8c27b89f8cfce0690ee4aed36b4e906f42bc47f3036cbaa830b4b214c",
+      "allowance_key": {
+        "scope": "r22-four-arm-dry-2026-09-30-L1",
+        "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+      }
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+ "contract": "corrected (R14-01)",
+ "method": "Per-project workload and remaining allowance for the remaining exploration batch UNDER THE CORRECTED CONTRACT\n(per document per profile: 12 calls / 120 s; evidence reader cap 8 calls per document; per project per rolling 24 h:\n60 across all tracks; ledger: a new declared scope). Two figures per project, never a single calendar date:\n  observed  : the small batch's measured requests per document (B 24/12, C 29/12; A 0 on non-form documents)\n  cap-bound : the most the caps allow (B and C: 8 per PDF; BOQ: 12 per sheet per profile)\nMinimum rolling days per project = ceil(requests / 60): the day limit binds per project, so projects are not summed\ninto one daily total; the ledger scope's request cap and provider latency bind in addition (not modelled).",
+ "projects": {
+  "16830": {
+   "pdf_documents": 36,
+   "word_documents": 3,
+   "boq_sheets": 6,
+   "requests_observed_rate": 231,
+   "requests_cap_bound": 720,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 12
+  },
+  "17428": {
+   "pdf_documents": 37,
+   "word_documents": 2,
+   "boq_sheets": 10,
+   "requests_observed_rate": 283,
+   "requests_cap_bound": 832,
+   "min_rolling_days_observed": 5,
+   "min_rolling_days_cap_bound": 14
+  },
+  "19144": {
+   "pdf_documents": 42,
+   "word_documents": 2,
+   "boq_sheets": 0,
+   "requests_observed_rate": 185,
+   "requests_cap_bound": 672,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 12
+  },
+  "22510": {
+   "pdf_documents": 33,
+   "word_documents": 1,
+   "boq_sheets": 3,
+   "requests_observed_rate": 182,
+   "requests_cap_bound": 600,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 10
+  },
+  "23091": {
+   "pdf_documents": 51,
+   "word_documents": 1,
+   "boq_sheets": 2,
+   "requests_observed_rate": 249,
+   "requests_cap_bound": 864,
+   "min_rolling_days_observed": 5,
+   "min_rolling_days_cap_bound": 15
+  },
+  "23323": {
+   "pdf_documents": 38,
+   "word_documents": 1,
+   "boq_sheets": 6,
+   "requests_observed_rate": 240,
+   "requests_cap_bound": 752,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 13
+  },
+  "26208": {
+   "pdf_documents": 37,
+   "word_documents": 2,
+   "boq_sheets": 4,
+   "requests_observed_rate": 211,
+   "requests_cap_bound": 688,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 12
+  },
+  "27421": {
+   "pdf_documents": 40,
+   "word_documents": 2,
+   "boq_sheets": 2,
+   "requests_observed_rate": 201,
+   "requests_cap_bound": 688,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 12
+  },
+  "28745": {
+   "pdf_documents": 32,
+   "word_documents": 1,
+   "boq_sheets": 2,
+   "requests_observed_rate": 165,
+   "requests_cap_bound": 560,
+   "min_rolling_days_observed": 3,
+   "min_rolling_days_cap_bound": 10
+  },
+  "30549": {
+   "pdf_documents": 42,
+   "word_documents": 0,
+   "boq_sheets": 1,
+   "requests_observed_rate": 197,
+   "requests_cap_bound": 696,
+   "min_rolling_days_observed": 4,
+   "min_rolling_days_cap_bound": 12
+  }
+ },
+ "totals": {
+  "pdf_documents": 388,
+  "boq_sheets": 36,
+  "requests_observed_rate": 2144,
+  "requests_cap_bound": 7072
+ },
+ "longest_project_min_days": {
+  "observed": 5,
+  "cap_bound": 15
+ },
+ "project_day_used_now": {
+  "16830": 2,
+  "17428": 14,
+  "19144": 2,
+  "22510": 7,
+  "23091": 4,
+  "23323": 2,
+  "26208": 2,
+  "27421": 6,
+  "28745": 5,
+  "30549": 9,
+  "8430": 60
+ },
+ "ledger_small_scope": {
+  "limit": 150,
+  "settled": 113,
+  "remaining": 37,
+  "note": "the small scope is not reused for the next batch; a new declaration names its own scope (nothing reset)"
+ },
+ "BOQ_note": "BOQ observed rate unknown under the corrected contract (the stored runs exceeded 12); estimated at half the 12-call cap per sheet per profile"
+}

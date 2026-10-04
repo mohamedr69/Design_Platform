@@ -1,0 +1,817 @@
+{
+ "code_constants": {
+  "ai_cli_timeout_s": 300,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_elapsed_s_per_job": 120,
+  "ai_max_escalations_per_document": 2,
+  "ai_read_max_calls_per_document": 60,
+  "ai_read_max_calls_per_project_per_day": 600,
+  "b_pages_to_read": 2,
+  "decision_reads_per_page": 3,
+  "drawings_ai_max_calls_per_sync": 10,
+  "drawings_ai_review_enabled_default": true,
+  "max_pages_per_document": 4,
+  "reader_soft_calls_per_document": 8,
+  "sources": {
+   "baseline/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "baseline/app/ai/sheet_reader.py": "900e159f131b293b48a36a433362e0b252b38c0538df8dce85b18fcb98a507f0",
+   "baseline/app/ai/submittal_reader.py": "7127640681241387b1fdd538180c11aa9eb0d347859ee7b806aa7503b8e0d5bd",
+   "baseline/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155",
+   "baseline/app/services/document_processing.py": "5f5b25940ad0677f655febf14d6af8ccd6b038232bc1c800efa4496a0f31bf0f",
+   "baseline/app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d",
+   "baseline/app/services/shop_drawings.py": "ae9eb36eaded3a782a37e750c1f0732a7882093c8293387f026c0ace6421392e",
+   "candidate/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "candidate/app/ai/evidence_reader.py": "d74397b374fc91a69ed6b4d2ba4306e5fe89682144b2cf5275c7c4091c7ca07a",
+   "candidate/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155"
+  }
+ },
+ "compatible_limits": {
+  "binding_project": "EP-27331",
+  "kept_at_tree_default": {
+   "AI_MAX_CALLS_PER_DOCUMENT": 12,
+   "AI_MAX_ELAPSED_S_PER_JOB": 120,
+   "note": "the per-document job limits are the evaluated arms' own policy; the structural bounds assume them"
+  },
+  "required_minimum": {
+   "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 84,
+   "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 84
+  },
+  "rule": "the application's per-project counters count AiUsage rows in ONE lane database per invocation; they must be >= the largest such count so that only the harness window can refuse (visibly)",
+  "tree_defaults": {
+   "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 60,
+   "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 600
+  }
+ },
+ "drawings_ai": {
+  "counted": 0,
+  "declared": "false (application_env, every lane, every invocation)",
+  "enable_key": "DRAWINGS_AI_REVIEW_ENABLED",
+  "if_enabled_per_project_per_B_invocation": 10,
+  "path": "baseline document_processing.run -> shop_drawings.reconcile -> _ai_review -> drawing_ai_review._ask (tasks drawings_reply_match, drawings_reference_conflict, drawings_floor_alias)",
+  "tree_default_enabled": true
+ },
+ "elapsed_bound_s": 604800,
+ "lane_switches": {
+  "B": {
+   "AI_EVIDENCE_VARIANT": "off"
+  },
+  "C": {
+   "AI_EVIDENCE_ADJUDICATE": "1",
+   "AI_EVIDENCE_ASSOC": "1",
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_DECISION_REGION": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_IDGUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  },
+  "P": {},
+  "R": {
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  }
+ },
+ "lanes": {
+  "B": {
+   "cap": 240,
+   "cap_can_bind": false,
+   "if_the_cap_binds": "the lane's allowance refuses visibly: the lane is budget-stopped, its remaining documents are INCOMPLETE",
+   "planning_sum": 16,
+   "structural_maximum": 48,
+   "structural_sum_before_cap": 48
+  },
+  "C": {
+   "cap": 240,
+   "cap_can_bind": true,
+   "if_the_cap_binds": "the lane's allowance refuses visibly: the lane is budget-stopped, its remaining documents are INCOMPLETE",
+   "planning_sum": 112,
+   "structural_maximum": 240,
+   "structural_sum_before_cap": 255
+  },
+  "P": {
+   "cap": 36,
+   "cap_can_bind": true,
+   "if_the_cap_binds": "the lane's allowance refuses visibly: the lane is budget-stopped, its remaining documents are INCOMPLETE",
+   "planning_sum": 16.8,
+   "structural_maximum": 36,
+   "structural_sum_before_cap": 171
+  },
+  "R": {
+   "cap": 40,
+   "cap_can_bind": true,
+   "if_the_cap_binds": "the lane's allowance refuses visibly: the lane is budget-stopped, its remaining documents are INCOMPLETE",
+   "planning_sum": 10.0,
+   "structural_maximum": 40,
+   "structural_sum_before_cap": 222
+  }
+ },
+ "largest_project": "EP-27331",
+ "per_document": {
+  "F006": {
+   "decision_bearing": true,
+   "pages_read": 2,
+   "planning": {
+    "B": 1,
+    "C": 4
+   },
+   "project": "EP-29255",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F009": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F015": {
+   "decision_bearing": true,
+   "pages_read": 1,
+   "planning": {
+    "B": 1,
+    "C": 2
+   },
+   "project": "EP-29255",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F016": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-3563",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F018": {
+   "decision_bearing": true,
+   "pages_read": 1,
+   "planning": {
+    "B": 1,
+    "C": 2
+   },
+   "project": "EP-3563",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F020": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F021": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F030": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F032": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F033": {
+   "decision_bearing": true,
+   "pages_read": 1,
+   "planning": {
+    "B": 1,
+    "C": 2
+   },
+   "project": "EP-3563",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F035": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-22349",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F037": {
+   "decision_bearing": true,
+   "pages_read": 3,
+   "planning": {
+    "B": 1,
+    "C": 6
+   },
+   "project": "EP-27331",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F038": {
+   "decision_bearing": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 1,
+    "C": 8
+   },
+   "project": "EP-22349",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F039": {
+   "decision_bearing": true,
+   "pages_read": 2,
+   "planning": {
+    "B": 1,
+    "C": 4
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F040": {
+   "decision_bearing": true,
+   "pages_read": 2,
+   "planning": {
+    "B": 1,
+    "C": 4
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F042": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-22349",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F043": {
+   "decision_bearing": false,
+   "pages_read": 4,
+   "planning": {
+    "B": 0,
+    "C": 8
+   },
+   "project": "EP-15744",
+   "structural": {
+    "B": 2,
+    "C": 12,
+    "R": 12
+   }
+  },
+  "F046": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F047": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-22349",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F051": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-22349",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F057": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F060": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F066": {
+   "decision_bearing": false,
+   "pages_read": 1,
+   "planning": {
+    "B": 0,
+    "C": 2
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  },
+  "F072": {
+   "decision_bearing": true,
+   "pages_read": 1,
+   "planning": {
+    "B": 1,
+    "C": 2
+   },
+   "project": "EP-26687",
+   "structural": {
+    "B": 2,
+    "C": 9,
+    "R": 6
+   }
+  }
+ },
+ "per_page_maximum": {
+  "C": 9,
+  "R": 6
+ },
+ "probe_k_maximum": 36,
+ "project_window": {
+  "counts": "harness charges of every lane, rolling window",
+  "governs": true,
+  "limit": 60,
+  "window_s": 86400
+ },
+ "projects": {
+  "EP-15744": {
+   "application_rows_maximum": {
+    "B_database": 2,
+    "C_database": 14,
+    "P": 0,
+    "R_database": 14,
+    "max": 14
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 1,
+    "r38_structural_all_lanes": 37,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 1,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 47,
+     "structural_all_lanes": 48,
+     "windows_needed": 1
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 0,
+   "fits_elapsed_bound": true,
+   "pages_read": 4,
+   "planning": {
+    "B": 0,
+    "C": 8,
+    "P": 1.2,
+    "R": 0.7,
+    "all_lanes": 9.9
+   },
+   "planning_exceeds_window": false,
+   "pool_ids": [
+    "F043"
+   ],
+   "structural_before_lane_caps": {
+    "B": 2,
+    "C": 12,
+    "P": 12,
+    "R": 12
+   },
+   "structural_exceeds_window": false,
+   "structural_maximum": {
+    "B": 2,
+    "C": 12,
+    "P": 12,
+    "R": 12,
+    "all_lanes": 38
+   },
+   "windows_needed_structural": 1
+  },
+  "EP-22349": {
+   "application_rows_maximum": {
+    "B_database": 10,
+    "C_database": 61,
+    "P": 0,
+    "R_database": 52,
+    "max": 61
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 5,
+    "r38_structural_all_lanes": 132,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 5,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 142,
+     "structural_all_lanes": 147,
+     "windows_needed": 3
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 172800,
+   "fits_elapsed_bound": true,
+   "pages_read": 11,
+   "planning": {
+    "B": 2,
+    "C": 22,
+    "P": 3.3,
+    "R": 2.0,
+    "all_lanes": 29.3
+   },
+   "planning_exceeds_window": false,
+   "pool_ids": [
+    "F038",
+    "F035",
+    "F051",
+    "F042",
+    "F047"
+   ],
+   "structural_before_lane_caps": {
+    "B": 10,
+    "C": 51,
+    "P": 36,
+    "R": 42
+   },
+   "structural_exceeds_window": true,
+   "structural_maximum": {
+    "B": 10,
+    "C": 51,
+    "P": 36,
+    "R": 40,
+    "all_lanes": 137
+   },
+   "windows_needed_structural": 3
+  },
+  "EP-26687": {
+   "application_rows_maximum": {
+    "B_database": 14,
+    "C_database": 83,
+    "P": 0,
+    "R_database": 68,
+    "max": 83
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 7,
+    "r38_structural_all_lanes": 152,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 7,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 162,
+     "structural_all_lanes": 169,
+     "windows_needed": 3
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 172800,
+   "fits_elapsed_bound": true,
+   "pages_read": 9,
+   "planning": {
+    "B": 3,
+    "C": 18,
+    "P": 2.7,
+    "R": 1.6,
+    "all_lanes": 25.3
+   },
+   "planning_exceeds_window": false,
+   "pool_ids": [
+    "F072",
+    "F039",
+    "F040",
+    "F060",
+    "F057",
+    "F046",
+    "F066"
+   ],
+   "structural_before_lane_caps": {
+    "B": 14,
+    "C": 69,
+    "P": 36,
+    "R": 54
+   },
+   "structural_exceeds_window": true,
+   "structural_maximum": {
+    "B": 14,
+    "C": 69,
+    "P": 36,
+    "R": 40,
+    "all_lanes": 159
+   },
+   "windows_needed_structural": 3
+  },
+  "EP-27331": {
+   "application_rows_maximum": {
+    "B_database": 12,
+    "C_database": 84,
+    "P": 0,
+    "R_database": 84,
+    "max": 84
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 6,
+    "r38_structural_all_lanes": 154,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 6,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 164,
+     "structural_all_lanes": 170,
+     "windows_needed": 3
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 172800,
+   "fits_elapsed_bound": true,
+   "pages_read": 23,
+   "planning": {
+    "B": 6,
+    "C": 46,
+    "P": 6.9,
+    "R": 4.1,
+    "all_lanes": 63.0
+   },
+   "planning_exceeds_window": true,
+   "pool_ids": [
+    "F037",
+    "F009",
+    "F032",
+    "F021",
+    "F030",
+    "F020"
+   ],
+   "structural_before_lane_caps": {
+    "B": 12,
+    "C": 72,
+    "P": 36,
+    "R": 72
+   },
+   "structural_exceeds_window": true,
+   "structural_maximum": {
+    "B": 12,
+    "C": 72,
+    "P": 36,
+    "R": 40,
+    "all_lanes": 160
+   },
+   "windows_needed_structural": 3
+  },
+  "EP-29255": {
+   "application_rows_maximum": {
+    "B_database": 4,
+    "C_database": 25,
+    "P": 0,
+    "R_database": 22,
+    "max": 25
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 2,
+    "r38_structural_all_lanes": 62,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 2,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 72,
+     "structural_all_lanes": 74,
+     "windows_needed": 2
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 86400,
+   "fits_elapsed_bound": true,
+   "pages_read": 3,
+   "planning": {
+    "B": 2,
+    "C": 6,
+    "P": 0.9,
+    "R": 0.5,
+    "all_lanes": 9.4
+   },
+   "planning_exceeds_window": false,
+   "pool_ids": [
+    "F006",
+    "F015"
+   ],
+   "structural_before_lane_caps": {
+    "B": 4,
+    "C": 21,
+    "P": 21,
+    "R": 18
+   },
+   "structural_exceeds_window": true,
+   "structural_maximum": {
+    "B": 4,
+    "C": 21,
+    "P": 21,
+    "R": 18,
+    "all_lanes": 64
+   },
+   "windows_needed_structural": 2
+  },
+  "EP-3563": {
+   "application_rows_maximum": {
+    "B_database": 6,
+    "C_database": 36,
+    "P": 0,
+    "R_database": 30,
+    "max": 36
+   },
+   "change_from_r38_model": {
+    "B_reconcile_retry": 3,
+    "r38_structural_all_lanes": 87,
+    "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+   },
+   "documents": 3,
+   "drawings_ai": {
+    "if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 97,
+     "structural_all_lanes": 100,
+     "windows_needed": 2
+    },
+    "state": "disabled (DRAWINGS_AI_REVIEW_ENABLED=false in the declared application_env of every lane); counted 0"
+   },
+   "earliest_completion_s_structural": 86400,
+   "fits_elapsed_bound": true,
+   "pages_read": 6,
+   "planning": {
+    "B": 3,
+    "C": 12,
+    "P": 1.8,
+    "R": 1.1,
+    "all_lanes": 17.9
+   },
+   "planning_exceeds_window": false,
+   "pool_ids": [
+    "F033",
+    "F016",
+    "F018"
+   ],
+   "structural_before_lane_caps": {
+    "B": 6,
+    "C": 30,
+    "P": 30,
+    "R": 24
+   },
+   "structural_exceeds_window": true,
+   "structural_maximum": {
+    "B": 6,
+    "C": 30,
+    "P": 30,
+    "R": 24,
+    "all_lanes": 90
+   },
+   "windows_needed_structural": 2
+  }
+ },
+ "retries_across_resumes": "not in the totals: a resume dispatches again every fingerprint whose dispatches all failed (ORCH-08C, R39-16), each a new charge counted by the window; bounded by the lane allowances {'B': 240, 'C': 240, 'R': 40, 'P': 36}, the parent total and the window, not by this file",
+ "run_set": {
+  "documents": 24,
+  "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json",
+  "sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8"
+ },
+ "statement": "bounds and estimates, not measurements; no request was made to compute them",
+ "version": "project-bounds-r39-2026-10-04.1"
+}

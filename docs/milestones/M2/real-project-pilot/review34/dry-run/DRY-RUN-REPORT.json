@@ -1,0 +1,786 @@
+{
+ "authorization_files_found": [],
+ "carried_reproduced": {
+  "LABELS-R32-EVAL-INPUT.json": true,
+  "RUN-SET-PROPOSAL.json": true,
+  "TRUTH-R32.json": true
+ },
+ "drill": {
+  "checks": {
+   "charges_equal_first_dispatches": true,
+   "further_resume_refused": true,
+   "further_run_refused": true,
+   "inv1_interrupted": true,
+   "inv1_one_reserved_row_in_C": true,
+   "ledger_unchanged_each_invocation": true,
+   "model_requests_0": true,
+   "no_duplicate_bound_key": true,
+   "no_fresh_caps": true,
+   "reserved_row_never_resent": true,
+   "reserved_served_once_as_interrupted_charged": true,
+   "resume_B_sent_nothing": true,
+   "resume_C_sent_only_new_requests": true,
+   "resume_completed": true,
+   "second_fresh_run_refused": true
+  },
+  "passes": true,
+  "steps": [
+   {
+    "as_expected": true,
+    "error": "lane C failed (75); see C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\dry-run\\runner\\inv-1\\lane-C.log",
+    "refused": null,
+    "returncode": null,
+    "step": "1 run (fresh) with a dry fault: lane C dies after its 5th dispatch was sent"
+   },
+   {
+    "as_expected": true,
+    "error": null,
+    "refused": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r34-sandbox/r34dry-20261003b exists); use 'resume'",
+    "returncode": null,
+    "step": "2 run (fresh) again, same stamp"
+   },
+   {
+    "as_expected": true,
+    "error": null,
+    "refused": null,
+    "returncode": 0,
+    "step": "3 resume (same stamp)"
+   },
+   {
+    "as_expected": true,
+    "error": null,
+    "refused": "refused: the run is complete; there is nothing to resume",
+    "returncode": null,
+    "step": "4 resume again"
+   },
+   {
+    "as_expected": true,
+    "error": null,
+    "refused": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r34-sandbox/r34dry-20261003b exists); use 'resume'",
+    "returncode": null,
+    "step": "5 run (fresh) again"
+   }
+  ]
+ },
+ "dry_stub_calls_note": "every request of the dry run ended at DryRefusingProvider ('dry_refused'); no provider exists in dry mode",
+ "ep27331_decision_gain_sweep": {
+  "1": [
+   1,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ],
+  "2": [
+   2,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ],
+  "3": [
+   3,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ],
+  "4": [
+   4,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ],
+  "5": [
+   5,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ],
+  "6": [
+   6,
+   "NOT ELIGIBLE",
+   "NOT ELIGIBLE"
+  ]
+ },
+ "finished_utc": "2026-10-03T12:50:24+00:00",
+ "guard": {
+  "authorization_files_found": [],
+  "check_with_a_made_up_declaration_hash": {
+   "authorized": false,
+   "reason": "refused: the declaration is missing or does not hash to the verified sha256"
+  },
+  "check_without_declaration": {
+   "authorized": false,
+   "reason": "refused: no verified declaration (path and 64-hex sha256 are both required)"
+  },
+  "exists": false,
+  "guarded_provider": {
+   "built": false,
+   "response": "dispatch_refused"
+  },
+  "ok": true,
+  "pinned_authorization_path_for_a_declaration_at_the_review34_root": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/OWNER-DISPATCH-AUTHORIZATION.json",
+  "preexisting_files_with_authorization_in_the_name": {
+   "four-arm-final\\authorization\\AUTHORIZATION-2026-10-01.md": "2026-10-01T18:35:16+00:00",
+   "fresh-cohort-r32-reviewed-2\\packet-inputs\\AUTHORIZATION-2026-10-02.md": "2026-10-03T09:53:49+00:00",
+   "fresh-cohort-r32-reviewed\\packet-inputs\\AUTHORIZATION-2026-10-02.md": "2026-10-03T06:29:39+00:00",
+   "fresh-cohort-r32\\AUTHORIZATION-2026-10-02.md": "2026-10-02T20:06:21+00:00",
+   "fresh-cohort-r32\\PRE-AUTHORIZATION-HASH-CHECK.json": "2026-10-02T20:06:21+00:00",
+   "review07\\evidence\\matched\\SANDBOX-AUTHORIZATION.json": "2026-09-29T04:02:25+00:00"
+  },
+  "preexisting_note": "earlier packages' files (written before this task) whose name contains AUTHORIZATION; none is an owner dispatch authorization",
+  "runner_auth_path_argument": {
+   "returncode": 2,
+   "stderr_tail": "runner_r32.py: error: unrecognized arguments: --auth-path C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\x.json"
+  }
+ },
+ "ingest_72": {
+  "b_database_sha256": "a5bd1a3c5513c937bd0fd0e24740409f106df42367ff55dff2cf73fad7574eae",
+  "documents": 72,
+  "model_requests": 0,
+  "ok": true,
+  "processing_run": false,
+  "projects": [
+   "15744",
+   "22349",
+   "26687",
+   "27331",
+   "29255",
+   "3563"
+  ],
+  "registration": {
+   "by_project": {
+    "15744": 12,
+    "22349": 12,
+    "26687": 12,
+    "27331": 12,
+    "29255": 12,
+    "3563": 12
+   },
+   "by_state": {
+    "pending": 72
+   },
+   "ok": true,
+   "problems": [],
+   "rows": 72,
+   "table_counts": {
+    "ai_usage": 0,
+    "background_jobs": 0,
+    "document_readings": 0,
+    "extraction_runs": 0,
+    "project_submittals": 0,
+    "result_cache": 0
+   }
+  },
+  "root": "C:\\t\\r2x\\r34-sandbox\\r34dry-20261003b-all72",
+  "state_check": {
+   "checks": {
+    "b_file_sha256": "a5bd1a3c5513c937bd0fd0e24740409f106df42367ff55dff2cf73fad7574eae",
+    "b_logical_sha256": "199276e90f8566d9ec74785fbfadc1d7ca79d7ba80bd0df36c0c8ad9f0950dc0",
+    "c_logical_sha256": "199276e90f8566d9ec74785fbfadc1d7ca79d7ba80bd0df36c0c8ad9f0950dc0",
+    "documents_with_c_policy_evidence": [],
+    "evidence_task_cache_rows": 0
+   },
+   "ok": true,
+   "problems": []
+  }
+ },
+ "ledger_after": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ledger_before": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ledger_unchanged": true,
+ "model_requests": 0,
+ "population": {
+  "decision": 38,
+  "identity": 57,
+  "revision": 38
+ },
+ "preflight_inputs": "PACKET OK",
+ "provider_calls": 0,
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "run_set": {
+  "by_reason": {
+   "decision_bearing": 16,
+   "negative_control": 4,
+   "top_up": 4
+  },
+  "count": 24,
+  "projection": {
+   "decision": 16,
+   "identity": 23,
+   "revision": 16
+  },
+  "sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+  "shortfalls": {
+   "unsupported_controls": {
+    "found": 0,
+    "required": 2,
+    "why": "no canonical pool document has an in-scope page labelled 'unsupported' or 'illegible' in r32-labels-reviewed-2; no document is invented and no file outside the pool is drawn"
+   }
+  }
+ },
+ "runner_invocation_2": {
+  "allowance": {
+   "caps_fixed": {
+    "B": 240,
+    "C": 240,
+    "P": 36,
+    "R": 40
+   },
+   "project_day_limit": 60,
+   "run_key": "ee5b192a82454522a816460957d16e72b82b1be74d5148bf5642a76196f4203b",
+   "used": {
+    "B": 24,
+    "C": 24,
+    "P": 0,
+    "R": 1
+   },
+   "used_total": 49
+  },
+  "b_database_sha256_final": "5cc597ea189c4d7710801f8e41fc782df92081d255cf50edbb7be5793de7b91c",
+  "binding": {
+   "binding_manifest": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+   "files_verified": 118,
+   "sha256": "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27"
+  },
+  "candidate_outcome": "NOT ELIGIBLE",
+  "comparison_state": "PENDING",
+  "concentration_outcome_by_field": {
+   "decision": "UNDETERMINED",
+   "identity": "UNDETERMINED",
+   "revision": "UNDETERMINED"
+  },
+  "dispatch_guard": {
+   "authorized": false,
+   "reason": "dry mode: no declaration, no provider; the dry stub refuses every request"
+  },
+  "ingest": {
+   "b_database_sha256": "5cc597ea189c4d7710801f8e41fc782df92081d255cf50edbb7be5793de7b91c",
+   "documents": 24,
+   "ok": true,
+   "projects": [
+    "15744",
+    "22349",
+    "26687",
+    "27331",
+    "29255",
+    "3563"
+   ],
+   "registration": {
+    "by_project": {
+     "15744": 1,
+     "22349": 5,
+     "26687": 7,
+     "27331": 6,
+     "29255": 2,
+     "3563": 3
+    },
+    "by_state": {
+     "pending": 24
+    },
+    "ok": true,
+    "problems": [],
+    "rows": 24,
+    "table_counts": {
+     "ai_usage": 0,
+     "background_jobs": 0,
+     "document_readings": 0,
+     "extraction_runs": 0,
+     "project_submittals": 0,
+     "result_cache": 0
+    }
+   },
+   "state_check": {
+    "checks": {
+     "b_file_sha256": "5cc597ea189c4d7710801f8e41fc782df92081d255cf50edbb7be5793de7b91c",
+     "b_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+     "c_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+     "documents_with_c_policy_evidence": [],
+     "evidence_task_cache_rows": 0
+    },
+    "ok": true,
+    "problems": []
+   }
+  },
+  "invocation": 2,
+  "kind": "resume",
+  "lanes": {
+   "B": {
+    "allowance_used": 24,
+    "application_processing_run": false,
+    "application_reader_run": null,
+    "dry_stub_calls": 0,
+    "environment_check": {
+     "provider_env_verified": [],
+     "switches": {
+      "AI_EVIDENCE_VARIANT": "off"
+     }
+    },
+    "evidence_tasks": null,
+    "lane_stop_state": {
+     "reason": null,
+     "state": "running",
+     "streak": 0
+    },
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "policy_version": null,
+    "reader": "none",
+    "seconds": 2.0,
+    "serves_by_mode": {
+     "same_bound_fingerprint": 24
+    },
+    "stats": {
+     "dry_refused": 24,
+     "ok": 0,
+     "stopped_by_guard": 0
+    },
+    "stopped": null,
+    "store_dispatched_to_inner": null,
+    "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+   },
+   "C": {
+    "allowance_used": 24,
+    "application_processing_run": null,
+    "application_reader_run": false,
+    "dry_stub_calls": 19,
+    "environment_check": {
+     "provider_env_verified": [],
+     "switches": {
+      "AI_EVIDENCE_ADJUDICATE": "1",
+      "AI_EVIDENCE_ASSOC": "1",
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_DECISION_REGION": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_IDGUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     }
+    },
+    "evidence_tasks": [
+     "discover_page",
+     "locate_decision",
+     "read_boq_row",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ],
+    "lane_stop_state": {
+     "reason": null,
+     "state": "running",
+     "streak": 1
+    },
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+    "reader": "none",
+    "seconds": 1.8,
+    "serves_by_mode": {
+     "same_bound_fingerprint": 5
+    },
+    "stats": {
+     "dry_refused": 23,
+     "interrupted_charged": 1,
+     "ok": 0,
+     "stopped_by_guard": 0
+    },
+    "stopped": null,
+    "store_dispatched_to_inner": 19,
+    "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+   },
+   "P": {
+    "allowance_used": 0,
+    "application_processing_run": null,
+    "application_reader_run": null,
+    "dry_stub_calls": 0,
+    "environment_check": {
+     "provider_env_verified": [],
+     "switches": {}
+    },
+    "evidence_tasks": null,
+    "lane_stop_state": {
+     "reason": null,
+     "state": "running",
+     "streak": 0
+    },
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "policy_version": "probe:evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+    "reader": "none",
+    "seconds": 0.0,
+    "serves_by_mode": {},
+    "stats": {
+     "ok": 0,
+     "stopped_by_guard": 0
+    },
+    "stopped": null,
+    "store_dispatched_to_inner": null,
+    "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+   },
+   "R": {
+    "allowance_used": 1,
+    "application_processing_run": null,
+    "application_reader_run": false,
+    "dry_stub_calls": 1,
+    "environment_check": {
+     "provider_env_verified": [],
+     "switches": {
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     }
+    },
+    "evidence_tasks": [
+     "discover_page",
+     "read_boq_row",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ],
+    "lane_stop_state": {
+     "reason": null,
+     "state": "running",
+     "streak": 1
+    },
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+    "reader": "none",
+    "seconds": 1.4,
+    "serves_by_mode": {
+     "reference_from_capture": 24
+    },
+    "stats": {
+     "dry_refused": 24,
+     "interrupted_charged": 1,
+     "ok": 0,
+     "stopped_by_guard": 0
+    },
+    "stopped": null,
+    "store_dispatched_to_inner": 1,
+    "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+   }
+  },
+  "ledger_after": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scopes": 17
+  },
+  "ledger_before": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scopes": 17
+  },
+  "ledger_unchanged": true,
+  "model_requests": 0,
+  "population_gate": {
+   "action": "DISPATCH_ELIGIBLE",
+   "counts": {
+    "decision": 38,
+    "identity": 57,
+    "revision": 38
+   },
+   "extensions_used": 0,
+   "rule": ">= 12 resolved (per field), independently reviewed documents per field carrying the fact; canonical ids; no partial closure run",
+   "short": {}
+  },
+  "run_folder": "C:/t/r2x/r34-sandbox/r34dry-20261003b",
+  "run_key": "ee5b192a82454522a816460957d16e72b82b1be74d5148bf5642a76196f4203b",
+  "run_set": {
+   "documents": 24,
+   "path": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+   "sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8"
+  },
+  "score_outcome_by_field": {
+   "decision": "NOT ELIGIBLE",
+   "identity": "NOT ELIGIBLE",
+   "revision": "NOT ELIGIBLE"
+  },
+  "state_check_C": {
+   "checks": {
+    "b_file_sha256": "5cc597ea189c4d7710801f8e41fc782df92081d255cf50edbb7be5793de7b91c",
+    "b_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+    "c_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+    "documents_with_c_policy_evidence": [],
+    "evidence_task_cache_rows": 0
+   },
+   "ok": true,
+   "problems": []
+  },
+  "state_check_R": {
+   "checks": {
+    "b_file_sha256": "5cc597ea189c4d7710801f8e41fc782df92081d255cf50edbb7be5793de7b91c",
+    "b_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+    "c_logical_sha256": "66689392b7fe0cdbc80d80e9ac1c2b13a2737e8f72d6b35e1a33d4ca6bf2ccc4",
+    "documents_with_c_policy_evidence": [],
+    "evidence_task_cache_rows": 0
+   },
+   "ok": true,
+   "problems": []
+  },
+  "stop_controller": {
+   "comparison": "PENDING",
+   "findings": [],
+   "lanes": {
+    "B": {
+     "reason": null,
+     "state": "running",
+     "streak": 0
+    },
+    "C": {
+     "reason": null,
+     "state": "running",
+     "streak": 1
+    },
+    "P": {
+     "reason": null,
+     "state": "running",
+     "streak": 0
+    },
+    "R": {
+     "reason": null,
+     "state": "running",
+     "streak": 1
+    }
+   }
+  },
+  "store": {
+   "b_or_c_served_from_p": 0,
+   "duplicate_bound_keys": [],
+   "r_rows_served_to_c": 0,
+   "reference_serves": 24,
+   "requests_by_lane_state": [
+    {
+     "lane": "B",
+     "n": 24,
+     "outcome": "dry_refused",
+     "state": "failed"
+    },
+    {
+     "lane": "C",
+     "n": 23,
+     "outcome": "dry_refused",
+     "state": "failed"
+    },
+    {
+     "lane": "C",
+     "n": 1,
+     "outcome": null,
+     "state": "reserved"
+    },
+    {
+     "lane": "R",
+     "n": 1,
+     "outcome": "dry_refused",
+     "state": "failed"
+    }
+   ],
+   "reserved_without_answer": 1,
+   "rows": 49,
+   "serves_by_lane_mode": [
+    {
+     "lane": "B",
+     "mode": "same_bound_fingerprint",
+     "n": 24,
+     "served_lane": "B"
+    },
+    {
+     "lane": "C",
+     "mode": "same_bound_fingerprint",
+     "n": 5,
+     "served_lane": "C"
+    },
+    {
+     "lane": "R",
+     "mode": "reference_from_capture",
+     "n": 24,
+     "served_lane": "C"
+    }
+   ]
+  }
+ },
+ "scenario_outcomes": {
+  "S1 one wrong revision acceptance in C": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S2 identity gain 8 and one wrong decision acceptance": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "ELIGIBLE",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S3a decision gain 2 inside one project": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S3b decision gain 3 inside EP-27331": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   }
+  },
+  "S3c decision gain 4 inside EP-27331": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   }
+  },
+  "S3c-spread decision gain 4 over four projects": {
+   "candidate": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+   "concentration": {
+    "decision": "ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   }
+  },
+  "S3d every field gained on two documents of one project": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S4a C does not attempt five decision documents": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S4b as S4a with the comparison INCOMPLETE": {
+   "candidate": "INCOMPLETE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "INCOMPLETE",
+    "identity": "INCOMPLETE",
+    "revision": "INCOMPLETE"
+   }
+  },
+  "S5 identity gain 8 and decision recovery below 0.90": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "ELIGIBLE",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   }
+  },
+  "S6 revision gain 6 elsewhere and loss 2 in EP-26687": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "UNDETERMINED",
+    "identity": "UNDETERMINED",
+    "revision": "NOT ELIGIBLE"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S7 decision accepted on a negative control": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  },
+  "S8 decision gain 2 in one project and identity loss 1": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "fields": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   }
+  }
+ },
+ "scenarios_sha256": "2232f5080012362875e59d79ced898f9c5657ac1933da1ebac465b0c65b3fa32",
+ "stamp": "r34dry-20261003b",
+ "started_utc": "2026-10-03T12:49:43+00:00",
+ "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064"
+}

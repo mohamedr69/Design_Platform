@@ -1,0 +1,498 @@
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index deea17a..9a068a7 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -41,7 +41,8 @@ from typing import Any
+ 
+ from app.ai.provider import AiRequest, ImagePart, TextPart
+ 
+-READER_VERSION = "evidence-reader-2026-09-29.4"   # .4: review 09 (usable reads, fact association, source identity)
++READER_VERSION = "evidence-reader-2026-09-29.5"   # .5: review 10 (association compatibility of retained facts)
++# evidence-reader-2026-09-29.4: review 09 (usable reads, fact association, source identity)
+ # evidence-reader-2026-09-29.3: review 08 (field-level outcomes and merge, context selection)
+ # evidence-reader-2026-09-29.2: review 07 (validation policy .2, lifecycle, profile)
+ EVIDENCE_POLICY_VERSION = "evidence-policy-2026-09-29.4"   # .4: review 09 -- usable reads; heading only without item evidence
+@@ -1129,37 +1130,111 @@ def merge_evidence(previous: dict | None, attempt: dict, *, sha256: str, profile
+     return ai
+ 
+ 
+-def _usable_value(entry: dict | None) -> str | None:
+-    """A field's current value when it can anchor an association: read (completed, or legacy) and carrying a value."""
+-    if not entry or entry.get("status") not in (COMPLETED, "legacy"):
+-        return None
+-    values = [o.get("value") for o in entry.get("observations") or [] if o.get("value") not in (None, "")]
++def _attempt_no(provenance: dict | None) -> int:
++    """An attempt number from provenance; review 06 `legacy` (and anything unnumbered) is attempt 0."""
++    a = (provenance or {}).get("attempt")
++    return a if isinstance(a, int) else int(a) if str(a).isdigit() else 0
++
++
++def _entry_value(entry: dict | None) -> str | None:
++    values = [o.get("value") for o in (entry or {}).get("observations") or [] if o.get("value") not in (None, "")]
+     return values[0] if values else None
+ 
+ 
+-def association_of(o: dict, current_identity: str | None, current_revision: str | None) -> dict | None:
++def _read_entry(entry: dict | None) -> dict | None:
++    """The field's current entry when it is read evidence (completed, or legacy) -- an incomplete field anchors nothing."""
++    return entry if entry and entry.get("status") in (COMPLETED, "legacy") else None
++
++
++def _entry_at(entry: dict | None, attempt: int) -> dict | None:
++    """The field's read entry -- current or in its history -- in effect at `attempt`: the latest one read no later."""
++    best = None
++    for e in ([entry] + list(entry.get("history") or [])) if entry else []:
++        if e.get("status") not in (COMPLETED, "legacy"):
++            continue
++        n = _attempt_no(e.get("provenance"))
++        if n <= attempt and (best is None or n >= _attempt_no(best.get("provenance"))):
++            best = e
++    return best
++
++
++def _same(field: str, a, b) -> bool:
++    return literal_key(field, a) == literal_key(field, b)
++
++
++def _revision_for(fields: dict, target: str | None, at: int | None = None) -> str | None:
++    """The own revision compatible with component `target` -- now, or at attempt `at`: one whose recorded target is
++    `target`, or, with no target recorded, whose identity at its own attempt was `target`. Any other revision (another
++    component's, or one of unknown context) is unrelated and supplies no anchor."""
++    if not target:
++        return None
++    rev = fields.get("own:revision")
++    e = _read_entry(rev) if at is None else _entry_at(rev, at)
++    if not e:
++        return None
++    first = (e.get("observations") or [{}])[0]
++    if first.get("target"):
++        compatible = _same("identity", first["target"], target)
++    else:
++        context = _entry_value(_entry_at(fields.get("own:identity"), _attempt_no(e.get("provenance"))))
++        compatible = bool(context) and _same("identity", context, target)
++    return _entry_value(e) if compatible else None
++
++
++def association_of(o: dict, fields: dict) -> dict | None:
+     """The association of a dependent fact (a revision or a decision of the page's own component) with the component
+-    as it is read now (M2 review 09, R9-02). A fact keeps the target it was read for; it is never reattached:
+-      current               its target is the component's current identity (and, for a decision, its revision)
+-      held:target_changed   the component's current identity is another one: the fact stays with its own target
+-      held:revision_changed a decision read with a known revision the component no longer carries
+-      by_target             no usable current identity: associated only by its own recorded target
+-      not_recorded          a fact that never recorded a target (review 06 evidence): none is invented"""
++    as it is read now (M2 review 09, R9-02; review 10, R10-01). The rules are review10/COMPATIBILITY.md; every known
++    constraint is checked before a fact is associated, and nothing is ever reattached or given an invented target.
++    With a recorded `target`:
++      held:target_changed   the component's current identity (established or not) is another one
++      held:revision_changed a decision whose revision anchor (`target_revision`, else the compatible revision at its
++                            own attempt) differs from the revision now compatible with its target -- with or without
++                            a current identity
++      current               the identity is established (validated) as its target
++      by_target             no established identity: associated only by its own target
++    Without one (review 06 / 07 decisions, revisions before reader .4) -- the component it was read with is the identity
++    in effect at its own attempt (retained provenance / history), recorded context, never a target:
++      not_recorded          that context is the component's current identity, or the component has no identity
++                            (the supported, unchanged grouping); `context_identity` names it
++      held:context_changed  the component now reads another identity
++      held:context_unknown  no identity was known when it was read; one has been read since
++      held:revision_changed a decision whose component's compatible revision changed since"""
+     if o.get("field") not in ("decision", "revision") or not _field_key(o).startswith("own:"):
+         return None
++    attempt = _attempt_no(o.get("provenance"))
++    ident = fields.get("own:identity")
++    current_entry = _read_entry(ident)
++    current_id = _entry_value(current_entry)
++    established = current_id if current_id and (current_entry.get("observations") or [{}])[0].get("state") == "validated" else None
+     target = o.get("target")
+-    if not target:
+-        return {"status": "not_recorded"}
+-    base = {"target": target, "current_identity": current_identity}
+-    if current_identity is None:
+-        return {"status": "by_target", **base, "reason": "no usable current identity: associated only by its recorded target"}
+-    if literal_key("identity", target) != literal_key("identity", current_identity):
+-        return {"status": "held:target_changed", **base, "reason": f"read for {target!r}; the component now reads {current_identity!r}"}
+-    tr = o.get("target_revision") if o.get("field") == "decision" else None
+-    if tr and current_revision and literal_key("revision", tr) != literal_key("revision", current_revision):
+-        return {"status": "held:revision_changed", **base, "target_revision": tr, "current_revision": current_revision,
+-                "reason": f"read with revision {tr!r}; the component now reads {current_revision!r}"}
+-    return {"status": "current", **base}
++    if target:
++        base = {"target": target, "current_identity": current_id}
++        if current_id and not _same("identity", target, current_id):
++            return {"status": "held:target_changed", **base, "reason": f"read for {target!r}; the component now reads {current_id!r}"}
++        if o.get("field") == "decision":
++            anchor = o.get("target_revision") or _revision_for(fields, target, at=attempt)
++            now = _revision_for(fields, target)
++            if anchor and now and not _same("revision", anchor, now):
++                return {"status": "held:revision_changed", **base, "target_revision": anchor, "current_revision": now,
++                        "reason": f"read with revision {anchor!r} of {target!r}; that component now reads {now!r}"}
++        if established:
++            return {"status": "current", **base}
++        return {"status": "by_target", **base, "reason": "no established current identity: associated only by its recorded target"}
++    if current_id is None:
++        return {"status": "not_recorded", "context_identity": None}
++    context = _entry_value(_entry_at(ident, attempt))
++    if context is None:
++        return {"status": "held:context_unknown", "context_identity": None, "current_identity": current_id,
++                "reason": "no identity was known when it was read; one has been read since"}
++    base = {"context_identity": context, "current_identity": current_id}
++    if not _same("identity", context, current_id):
++        return {"status": "held:context_changed", **base, "reason": f"read with {context!r}; the component now reads {current_id!r}"}
++    if o.get("field") == "decision":
++        then, now = _revision_for(fields, context, at=attempt), _revision_for(fields, context)
++        if then and now and not _same("revision", then, now):
++            return {"status": "held:revision_changed", **base, "context_revision": then, "current_revision": now,
++                    "reason": f"read with revision {then!r}; the component now reads {now!r}"}
++    return {"status": "not_recorded", **base}
+ 
+ 
+ def evidence_for(ai: dict | None, *, sha256: str | None, profile: str | None, variant: str | None,
+@@ -1228,8 +1303,7 @@ def evidence_for(ai: dict | None, *, sha256: str | None, profile: str | None, va
+                 "context": context, "history": history}
+     current = _flatten({**{k: v for k, v in env.items() if k not in ("pages", "observations")}, "pages": pages})
+     for o in current["observations"]:
+-        page = pages[str(o.get("page") or 1)]["fields"]
+-        assoc = association_of(o, _usable_value(page.get("own:identity")), _usable_value(page.get("own:revision")))
++        assoc = association_of(o, pages[str(o.get("page") or 1)]["fields"])
+         if assoc is not None:
+             o["association"] = assoc
+     incomplete = sorted(f"{p}:{fk}" for p, page in pages.items() for fk, e in page["fields"].items() if e["status"] == "incomplete")
+diff --git a/backend/scripts/m2_eval5.py b/backend/scripts/m2_eval5.py
+index 30c7893..6f8e4e6 100644
+--- a/backend/scripts/m2_eval5.py
++++ b/backend/scripts/m2_eval5.py
+@@ -44,13 +44,15 @@ from pathlib import Path
+ from scripts import m2_eval4 as ev4
+ from scripts import m2_pilot_eval as v3
+ 
+-EVALUATOR_VERSION = "m2-pilot-eval-2026-09-29.8"   # .8: retained facts judged under their association; source identity (review 09)
++EVALUATOR_VERSION = "m2-pilot-eval-2026-09-29.9"   # .9: targetless retained facts held when their context changed (review 10)
++# m2-pilot-eval-2026-09-29.8: retained facts judged under their association; source identity (review 09)
+ # m2-pilot-eval-2026-09-29.7: AI evidence selected for the run's declared context (review 08)
+ # m2-pilot-eval-2026-09-29.6   # .6: a no-record page associates a cross-page copy of the document's own identity (as .4); pending-evidence records hold all their facts
+ FIELDS = ("identity", "revision", "decision")
+ ASSERTED = ("accepted", "observed", "validated")
+ ACCEPTANCE = ("accepted", "validated")          # automatic acceptances: a register value, an AI-validated fact
+ CRITICAL_OUTCOMES = ("wrong", "fp", "accepted_on_conflict", "wrong_unassociated")
++CARRIED = ("target", "target_revision", "association", "context_identity")   # association metadata kept on judgements
+ 
+ 
+ # --- emitted facts ---------------------------------------------------------------------------------------------------
+@@ -160,7 +162,10 @@ def ai_groups(row: dict | None, ai_context: dict | None = None, doc: str | None
+     Review 09 (R9-02): a dependent fact keeps its explicit association (`evidence_reader.association_of`). One whose
+     target is not the component's current identity -- `held:*` (held) or `by_target` (its own state) -- is a group of
+     its own, associated by its target (`association_identity`), never beside another identity. Target and association
+-    travel with the fact into the judgement; a fact that never recorded a target is grouped as before."""
++    travel with the fact into the judgement; a fact that never recorded a target is grouped as before.
++    Review 10 (R10-01): a held fact that never recorded a target (its component's identity or revision changed since it
++    was read) is a group of its own with no association (`unassigned_component`): judged held and unassociated -- no
++    target is invented and it is never reassigned. Target revision and recorded context identity travel with it."""
+     env, _state = ai_envelope(row, ai_context, doc)
+     obs_list = [o for o in env.get("observations") or [] if o.get("value") not in (None, "")]
+     state_of = lambda o: "validated" if o.get("state") == "validated" else "held"
+@@ -175,7 +180,8 @@ def ai_groups(row: dict | None, ai_context: dict | None = None, doc: str | None
+             assoc = o.get("association") or {}
+             status = assoc.get("status")
+             if status and (status.startswith("held:") or status == "by_target"):
+-                key = f"ai:{page}:{o.get('component') or 'own'}@{assoc['target']}"
++                key = (f"ai:{page}:{o.get('component') or 'own'}@{assoc['target']}" if assoc.get("target") else
++                       f"ai:{page}:{o.get('component') or 'own'}~unassociated")
+             elif o.get("component") is not None:
+                 key = f"ai:{page}:{o['component']}"
+             elif len(own_ids) <= 1:
+@@ -186,11 +192,14 @@ def ai_groups(row: dict | None, ai_context: dict | None = None, doc: str | None
+                                               {"version": o.get("version"), "policy": o.get("policy"), "profile": env.get("profile")}))
+             if "@" in key:
+                 g["association_identity"] = assoc["target"]
++            if key.endswith("~unassociated"):
++                g["unassigned_component"] = True
+             if role != "own" and o.get("field") == "identity":
+                 g["facts"].append(_fact("referenced_identity", o["value"], "observed_reference", role=role))
+                 continue
+             state = "held" if status and status.startswith("held:") else state_of(o)
+-            extra = {k: v for k, v in (("target", o.get("target")), ("association", status)) if v}
++            extra = {k: v for k, v in (("target", o.get("target")), ("target_revision", o.get("target_revision")),
++                                       ("association", status), ("context_identity", assoc.get("context_identity"))) if v}
+             g["facts"].append(_fact(o.get("field"), o["value"], state, ai_state=o.get("state"), **extra))
+             if key.endswith(":unassigned"):
+                 g["unassigned_component"] = True
+@@ -266,7 +275,7 @@ def judge_group(g: dict, e: dict | None, how: str, negative_page: bool) -> list[
+         field, state = f["field"], f["state"]
+         asserted = state in ASSERTED
+         rec = {"field": field, "value": f["value"], "state": state, "how": how,
+-               **{k: f[k] for k in ("target", "association") if f.get(k)}}
++               **{k: f[k] for k in CARRIED if f.get(k)}}
+         if field not in FIELDS:
+             rec["outcome"] = "not_scored"
+         elif negative_page:
+@@ -301,7 +310,7 @@ def score_layer(groups: list[dict], exp: list[dict], no_record: set, unvalidated
+             for f in g["facts"]:
+                 judged.append({"field": f["field"], "value": f["value"], "state": f["state"], "how": "unscored_page",
+                                "outcome": "unscored_page", "page": g["page"], "reader": g["reader"], "group": g["component"], "expected": None,
+-                               **{k: f[k] for k in ("target", "association") if f.get(k)}})
++                               **{k: f[k] for k in CARRIED if f.get(k)}})
+             association["unscored_page"] += 1
+             continue
+         negative_page = g["page"] in no_record and not exp_by_page.get(g["page"])
+diff --git a/backend/tests/test_m2_review10.py b/backend/tests/test_m2_review10.py
+new file mode 100644
+index 0000000..9e95a6c
+--- /dev/null
++++ b/backend/tests/test_m2_review10.py
+@@ -0,0 +1,255 @@
++"""M2 review 10 (R10-01): association compatibility of retained dependent facts -- a targetless legacy fact is never
++attached to a changed component (A); a missing current identity never bypasses a known revision constraint (B); the
++relationship rules of review10/COMPATIBILITY.md. Scripted providers only. Written to run unchanged on the review 09
++candidate (689d95e), where the defect cases fail on behaviour: every new key is read with `.get`, and the evaluator's
++judgement (the behavioural assertion) comes first."""
++from types import SimpleNamespace
++
++import pymupdf
++import pytest
++
++from app.ai import evidence_reader as er
++from app.ai.provider import RecordingProvider
++from app.models import Project, ProjectDocument, ResultCache, RoleEnum
++
++from .conftest import make_user
++from .test_m2_review09 import APPROVAL, SHA, decision_read, discover, doc_row, read  # noqa: F401 -- doc_row is a fixture
++
++LABEL = {"doc": "EP-10/form.pdf", "ep": "10", "cohort": "c", "stratum": "s", "extension": ".pdf", "scan_like": False, "confidence": "high"}
++
++
++def own(field, value, state="validated", **kw):
++    return dict(page=1, component="own", role="own", field=field, value=value, state=state, read="completed", **kw)
++
++
++def attempt(n, observations, fields):
++    return {"attempt": n, "outcome": "complete", "observations": observations,
++            "coverage": {"pages": [{"page": 1, "outcome": "evidence", "fields": fields}]}}
++
++
++def merged(*attempts, onto=None):
++    ai = onto
++    for a in attempts:
++        ai = er.merge_evidence(ai, a, sha256=SHA, profile="default", variant="EV1")
++    return ai
++
++
++REVIEW07_LEGACY = {  # a review 07 page envelope: profile and bytes known, no target on its decision or revision
++    "envelopes": {"default|EV1": {"profile": "default", "variant": "EV1", "read_sha256": SHA, "pages": {"1": {
++        "observations": [own("identity", "X-SD-1"), own("revision", "02"), own("decision", "ANN")],
++        "provenance": {"attempt": 1, "read_sha256": SHA, "profile": "default", "variant": "EV1"}}}}},
++    "current_key": "default|EV1", "attempts": [{"attempt": 1, "outcome": "complete", "profile": "default", "variant": "EV1"}]}
++
++
++def review08_revision_without_target():
++    """A review 08 reading: identity and revision read together; revisions recorded no target before reader .4."""
++    return merged(attempt(1, [own("identity", "X-SD-1"), own("revision", "02")],
++                          {"own:identity": "completed", "own:revision": "completed", "own:decision": "absent_by_discovery"}))
++
++
++# --- persistence and scoring ---------------------------------------------------------------------------------------------
++
++
++def persist(d, ai):
++    row = d.db.get(ProjectDocument, d.id)
++    row.extracted = {**row.extracted, "ai_evidence": ai}
++    d.db.commit()
++    d.db.expire_all()
++    return d.db.get(ProjectDocument, d.id).extracted["ai_evidence"]
++
++
++def stage(d, answers):
++    d.db.query(ResultCache).delete()
++    d.db.commit()
++    row = d.db.get(ProjectDocument, d.id)
++    er.evidence_stage(d.db, d.project, [(row, d.path)], provider=RecordingProvider(answers), variant="EV1", profile="default")
++    d.db.commit()
++    d.db.expire_all()
++    return d.db.get(ProjectDocument, d.id).extracted["ai_evidence"]
++
++
++def score(ai, *, reference, revision="00", decision="approved as noted"):
++    from scripts import m2_eval5 as ev
++
++    doc = {**LABEL, "labels": {"kind": "shop-drawing cover", "reference": reference, "revision": revision, "decision": decision}}
++    rows = {LABEL["doc"]: {"state": "fresh", "sha256": SHA, "extracted": {"records": [], "profile": "default",
++                                                                         "coverage": {"outcome": "complete"}, "ai_evidence": ai}}}
++    layer = ev.evaluate({"documents": [doc]}, None, rows, ai_context={"variant": "EV1"})["documents"][0]["layers"]["ai"]
++    return SimpleNamespace(judged=lambda f: [(j["value"], j["state"], j["outcome"]) for j in layer["judged"] if j["field"] == f],
++                           raw=lambda f: [j for j in layer["judged"] if j["field"] == f],
++                           recovery=layer["components"][0]["fields"] if layer["components"] else {})
++
++
++def selected(ai, key):
++    got = er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")
++    assert got["state"] == "current", got
++    return next(o for o in got["observations"] if er._field_key(o) == key)
++
++
++def assoc(ai, key):
++    return selected(ai, key).get("association") or {}
++
++
++@pytest.fixture()
++def det_row(db_session, tmp_path, monkeypatch):
++    """A page whose deterministic reading carries the identity X-SD-1 (a record), so that a decision can take its
++    target from it while the AI reads no identity of its own."""
++    from app.ai import submittal_reader
++
++    monkeypatch.setattr(submittal_reader, "available", lambda project, provider=None: None)
++    pdf = pymupdf.open()
++    page = pdf.new_page(width=1684, height=1190)
++    page.insert_text((1300, 1100), "Drawing No X-SD-1", fontsize=9)
++    page.insert_text((1540, 1100), "REV 02 03", fontsize=9)
++    page.insert_text((200, 200), "B = APPROVED AS NOTED", fontsize=9)
++    path = tmp_path / "det.pdf"
++    pdf.save(path)
++    user = make_user(db_session, "r10@test.local", RoleEnum.admin)
++    project = Project(ep_number="R10", project_name="r10", source_folder_path=str(tmp_path), created_by_id=user.id)
++    db_session.add(project)
++    db_session.flush()
++    row = ProjectDocument(project_id=project.id, path=str(path), relative_path="det.pdf", filename="det.pdf", role="document", state="fresh",
++                          sha256=SHA, extracted={"records": [{"reference": "X-SD-1", "page": 1}], "observations": [], "profile": "default"})
++    db_session.add(row)
++    db_session.commit()
++    return SimpleNamespace(db=db_session, project=project, id=row.id, path=path)
++
++
++# --- A: a targetless retained fact is never attached to a changed component ---------------------------------------------
++
++
++def test_a_review08_revision_without_a_target_is_held_when_the_identity_changes(doc_row):
++    persist(doc_row, review08_revision_without_target())
++    ai = stage(doc_row, [discover("X-SD-9"), read("X-SD-9")])             # identity only: the revision is retained
++    s = score(ai, reference="X-SD-9", revision="02")
++    assert ("02", "validated", "correct") not in s.judged("revision"), "revision 02 was read for X-SD-1, not X-SD-9"
++    assert s.recovery["revision"] != "recovered_clean"
++    assert s.judged("revision") == [("02", "held", "held_unassociated")], "held and visible, never dropped"
++    rev = selected(ai, "own:revision")
++    assert rev.get("target") is None and rev["provenance"]["attempt"] == 1, "no target invented; original provenance kept"
++    a = assoc(ai, "own:revision")
++    assert a.get("status") == "held:context_changed" and a.get("context_identity") == "X-SD-1"
++    assert s.raw("revision")[0].get("association") == "held:context_changed"
++
++
++def test_a_review07_decision_without_a_target_is_held_when_the_identity_changes(doc_row):
++    persist(doc_row, REVIEW07_LEGACY)
++    ai = stage(doc_row, [discover("X-SD-9"), read("X-SD-9")])
++    s = score(ai, reference="X-SD-9")
++    assert ("ANN", "validated", "correct") not in s.judged("decision") and s.recovery["decision"] != "recovered_clean"
++    assert s.judged("decision") == [("ANN", "held", "held_unassociated")]
++    assert assoc(ai, "own:decision").get("status") == "held:context_changed"
++
++
++def test_a_targetless_decision_is_held_when_its_components_revision_changes(doc_row):
++    persist(doc_row, REVIEW07_LEGACY)
++    ai = stage(doc_row, [discover("X-SD-1", revision="03"), read("X-SD-1"), read("03")])   # same identity, revision 03
++    s = score(ai, reference="X-SD-1", revision="03")
++    assert ("ANN", "validated", "correct") not in s.judged("decision") and s.recovery["decision"] != "recovered_clean"
++    assert s.recovery["revision"] == "recovered_clean", "the new revision itself is current evidence"
++    assert assoc(ai, "own:decision").get("status") == "held:revision_changed"
++
++
++def test_a_targetless_fact_read_before_any_identity_is_unresolved_once_one_is_read():
++    ai = merged(attempt(1, [own("revision", "02")], {"own:identity": "absent_by_discovery", "own:revision": "completed",
++                                                     "own:decision": "absent_by_discovery"}),
++                attempt(2, [own("identity", "X-SD-9")], {"own:identity": "completed", "own:revision": "absent_by_discovery",
++                                                         "own:decision": "absent_by_discovery"}))
++    s = score(ai, reference="X-SD-9", revision="02")
++    assert ("02", "validated", "correct") not in s.judged("revision") and s.recovery["revision"] != "recovered_clean"
++    assert assoc(ai, "own:revision").get("status") == "held:context_unknown"
++
++
++# --- B: a missing identity never bypasses a known revision constraint ----------------------------------------------------
++
++
++def test_a_known_revision_constraint_holds_a_decision_without_an_ai_identity(det_row):
++    ai = stage(det_row, [discover("", revision="02", decision=APPROVAL), read("02"), decision_read()])
++    dec = selected(ai, "own:decision")
++    assert (dec["value"], dec["state"], dec.get("target"), dec.get("target_revision")) == ("ANN", "validated", "X-SD-1", "02")
++    assert "own:identity" not in er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")["envelope"]["pages"]["1"]["fields"]
++    ai = stage(det_row, [discover("", revision="03"), read("03")])          # the same target now reads revision 03
++    assert selected(ai, "own:revision").get("target") == "X-SD-1"
++    s = score(ai, reference="X-SD-1", revision="03")
++    assert ("ANN", "validated", "correct") not in s.judged("decision") and s.recovery["decision"] != "recovered_clean"
++    assert assoc(ai, "own:decision").get("status") == "held:revision_changed"
++    assert s.judged("decision") == [("ANN", "held", "held_correct")], "held for its own target X-SD-1, visible"
++    assert s.raw("decision")[0].get("target_revision") == "02"
++
++
++def test_the_reviewers_synthetic_revision_case():
++    ai = merged(attempt(1, [own("revision", "02", target="X-SD-1"), own("decision", "ANN", target="X-SD-1", target_revision="02")],
++                        {"own:revision": "completed", "own:decision": "completed"}),
++                attempt(2, [own("revision", "03", target="X-SD-1")], {"own:revision": "completed"}))
++    s = score(ai, reference="X-SD-1", revision="03")
++    assert ("ANN", "validated", "correct") not in s.judged("decision") and s.recovery["decision"] != "recovered_clean"
++    assert assoc(ai, "own:decision").get("status") == "held:revision_changed"
++
++
++# --- the other rules of the table ----------------------------------------------------------------------------------------
++
++
++def test_an_unrelated_revision_never_supplies_an_anchor():
++    """A revision of another target (or of an unknown context) is not compared: the decision stays associated by its
++    own target, with its own revision constraint untested -- neither held nor confirmed by that revision."""
++    base = attempt(1, [own("decision", "ANN", target="X-SD-1", target_revision="02")], {"own:decision": "completed"})
++    other = merged(base, attempt(2, [own("revision", "03", target="X-SD-7")], {"own:revision": "completed"}))
++    assert assoc(other, "own:decision").get("status") == "by_target"
++    assert score(other, reference="X-SD-1").judged("decision") == [("ANN", "validated", "correct")]
++    unknown = merged(base, attempt(2, [own("revision", "03")], {"own:revision": "completed"}))
++    assert assoc(unknown, "own:decision").get("status") == "by_target"
++
++
++def test_a_candidate_anchor_never_establishes_an_association():
++    explicit = merged(attempt(1, [own("identity", "X-SD-1"), own("decision", "ANN", target="X-SD-1")],
++                              {"own:identity": "completed", "own:decision": "completed"}),
++                      attempt(2, [own("identity", "X-SD-1", state="candidate")], {"own:identity": "completed"}))
++    assert assoc(explicit, "own:decision").get("status") == "by_target", "same literal, not established: associated only by its target"
++    legacy = merged(attempt(2, [own("identity", "X-SD-9", state="candidate")], {"own:identity": "completed"}), onto=REVIEW07_LEGACY)
++    s = score(legacy, reference="X-SD-9")
++    assert ("ANN", "validated", "correct") not in s.judged("decision")
++    assert assoc(legacy, "own:decision").get("status") == "held:context_changed"
++
++
++# --- positive controls ---------------------------------------------------------------------------------------------------
++
++
++def test_control_a_same_context_retry_keeps_the_legacy_association(doc_row):
++    persist(doc_row, REVIEW07_LEGACY)
++    ai = stage(doc_row, [discover("X-SD-1"), read("X-SD-1")])               # the same identity, re-read
++    s = score(ai, reference="X-SD-1", revision="02")
++    assert s.judged("decision") == [("ANN", "validated", "correct")] and s.recovery["decision"] == "recovered_clean"
++    assert s.recovery["revision"] == "recovered_clean"
++    assert assoc(ai, "own:decision").get("status", "not_recorded") == "not_recorded"
++
++
++def test_control_unchanged_legacy_evidence_scores_as_before():
++    s = score(REVIEW07_LEGACY, reference="X-SD-1", revision="02")
++    assert s.judged("decision") == [("ANN", "validated", "correct")] and s.recovery == {"identity": "recovered_clean",
++                                                                                       "revision": "recovered_clean", "decision": "recovered_clean"}
++    flat = {"version": "evidence-reader-2026-09-29.1", "variant": "EV1", "read_sha256": SHA,
++            "observations": [{"page": 1, "field": "identity", "value": "X-SD-1", "state": "validated"},
++                             {"page": 1, "field": "decision", "value": "ANN", "state": "validated"}]}
++    from scripts import m2_eval5 as ev
++
++    doc = {**LABEL, "labels": {"kind": "shop-drawing cover", "reference": "X-SD-1", "revision": "00", "decision": "approved as noted"}}
++    rows = {LABEL["doc"]: {"state": "fresh", "sha256": SHA, "extracted": {"records": [], "profile": "default", "ai_evidence": flat}}}
++    layer = ev.evaluate({"documents": [doc]}, None, rows, ai_context={"variant": "EV1", "accept_unknown_profile": True})["documents"][0]["layers"]["ai"]
++    assert [(j["value"], j["outcome"]) for j in layer["judged"] if j["field"] == "decision"] == [("ANN", "correct")]
++
++
++def test_control_a_reread_that_records_its_target_establishes_the_association(doc_row):
++    persist(doc_row, review08_revision_without_target())
++    stage(doc_row, [discover("X-SD-9"), read("X-SD-9")])
++    ai = stage(doc_row, [discover("X-SD-9", revision="02"), read("X-SD-9"), read("02")])   # revision re-read for X-SD-9
++    s = score(ai, reference="X-SD-9", revision="02")
++    assert s.judged("revision") == [("02", "validated", "correct")] and s.recovery["revision"] == "recovered_clean"
++    assert assoc(ai, "own:revision").get("status", "current") == "current"
++
++
++def test_control_an_explicit_compatible_target_stays_current(doc_row):
++    stage(doc_row, [discover("X-SD-1", revision="02", decision=APPROVAL), read("X-SD-1"), read("02"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1", revision="02"), read("X-SD-1"), read("02")])
++    s = score(ai, reference="X-SD-1", revision="02")
++    assert s.judged("decision") == [("ANN", "validated", "correct")] and s.recovery["decision"] == "recovered_clean"
++    assert assoc(ai, "own:decision").get("status") == "current"

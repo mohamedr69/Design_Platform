@@ -1,0 +1,72 @@
+{
+ "labels_version": "r26-labels-2026-10-01.1",
+ "reviewer": "the same assistant that drafted the labels (second pass in the same session) - NOT independent, NOT human, NOT blind to the draft",
+ "scope": {
+  "every_decision_label": [
+   "D04 p1",
+   "D16 p1",
+   "D17 p1",
+   "D18 p1",
+   "D19 p1",
+   "D22 p1",
+   "D22 p2"
+  ],
+  "every_rotated_or_scanned_item": [
+   "D05",
+   "D06",
+   "D07",
+   "D08",
+   "D09",
+   "D10",
+   "D11",
+   "D12",
+   "D16",
+   "D17",
+   "D18",
+   "D19",
+   "D21",
+   "D22",
+   "D23",
+   "D24"
+  ],
+  "seeded_25_percent_subset": {
+   "seed": "m2-r26-label-review-2026-10-01",
+   "rule": "first 7 of 27 documents by sha256(seed|doc_key)",
+   "documents": [
+    "D12",
+    "D08",
+    "D25",
+    "D19",
+    "D01",
+    "D20",
+    "D11"
+   ]
+  },
+  "also_checked": "every 'n/a' / 'UR' label on a page that prints a decision block (D01, D06, D09, D10, D19 p2-p4) was checked for an empty block"
+ },
+ "methods": [
+  "mechanical: every reference / revision literal of a page with a text layer was searched in that page's text layer - all found (25 records on text pages)",
+  "visual: decision marks and image-only literals re-inspected on new zoom crops (hashes below)",
+  "rules: off-title-block status, page-level decision convention and no-record continuation pages re-checked against the earlier label sets' conventions"
+ ],
+ "decision_recheck_crops": {
+  "D04-p1-0.08_0.58_0.52_0.70.png": "afad035586ff369063710756654f481004ea44f448943cb69ff5b998025f7079",
+  "D19-p1-0.06_0.48_0.92_0.53.png": "aef882a0922a303c81ca20821bba11952d5b09ffae89be50a97408bd837027d1",
+  "D19-p1-0.60_0.09_0.92_0.15.png": "2424801e8b8b906766f0bff9663bf48b70de2c264e37d2fc0afbf3a5fed23b84",
+  "D22-p1-0.06_0.33_0.36_0.43.png": "38e7f6f339990060be7cba79c206c7d14656cc6a48410cd1a1aadb0207e130be",
+  "D23-p1-0.25_0.80_0.75_0.85.png": "0d865edfc3ba74fda06d6ebb4f0ccda3d8d4e85e3c5eb93664eb9c3d85e3e03e",
+  "D16-p1-0.72_0.13_1.00_0.36-r270.png": "d335f614044b5212ae9975369ea32713d3416f7cd050169839e43e5602e73dd7",
+  "D17-p1-0.62_0.18_0.80_0.56-r270.png": "2695e1b4df4b7ef218e5ae4d240d0c96cfee23133714c08ae673b23542d97eb2",
+  "D18-p1-0.50_0.16_0.70_0.36-r270.png": "7ff072406b313b77ac72c30bdbe4c84b61fb8b765c6a6cf5c0b96ccd3c6906a5"
+ },
+ "outcome": {
+  "labels_changed": 0,
+  "disagreements": [],
+  "confirmed": "all drafted labels kept; decisions: D04 approved as noted (Approved with Comments ticked), D16 / D18 approved as noted (ATK CODE B stamp + handwritten status), D17 approved as noted (handwritten status only), D19 p1 rejected (C. Revise & Resubmit ticked), D22 p1 / p2 approved as noted (box ticked; REVIEW STATUS)"
+ },
+ "limits": [
+  "not independent: R21 label-manifest step 4 asks for an independent owner-delegated AI source review; no other model or instance was allowed in this task",
+  "the .doc control (D27) was labelled from text runs of the binary without rendering",
+  "regions are approximate display-fraction boxes derived from the crops"
+ ]
+}

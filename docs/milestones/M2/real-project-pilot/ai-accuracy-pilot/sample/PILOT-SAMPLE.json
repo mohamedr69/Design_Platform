@@ -1,0 +1,203 @@
+{
+ "seed": "m2-ai-pilot-2026-09-30",
+ "rule": "AI accuracy pilot sample (frozen before any label or prediction for these files): up to 12 PDF documents from the\n415-document exploration manifest (EXPLORATION-MANIFEST.json, hash-checked), none from the earlier 12-document small\nbatch, <= 3 pages each (bounds the pre-prediction labelling of the 4-page reading scope), <= 3 per project, >= 4\nprojects. Quotas by stratum (title-block drawings, covers / submittals, decision evidence, a scan, a negative\ncontrol); within a stratum, order = sha256(seed | doc_key). Word files are excluded (the evidence stage reads PDFs).\nReports every availability shortfall; never looks at the sealed cohort (not in this manifest).",
+ "manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+ "excluded_small_batch_sha256": "7039daa3f04935a35d9a272076be16510d4eb0a8885651f83f07af51f44d7139",
+ "quota": [
+  [
+   "shop_drawing",
+   2
+  ],
+  [
+   "drawing_ifc_input",
+   2
+  ],
+  [
+   "approval_sample",
+   2
+  ],
+  [
+   "reply",
+   2
+  ],
+  [
+   "submittal",
+   2
+  ],
+  [
+   "scan",
+   1
+  ],
+  [
+   "other",
+   1
+  ]
+ ],
+ "pool_size": 280,
+ "shortfall": [],
+ "per_project": {
+  "17428": 3,
+  "19144": 3,
+  "23323": 2,
+  "16830": 3,
+  "30549": 1
+ },
+ "documents": [
+  {
+   "doc_key": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-105-BASEMENT-01 FLOOR.pdf",
+   "ep": "17428",
+   "stratum": "shop_drawing",
+   "sha256": "a092c82bf7feffd47ef2449ba7b4144fb1d26f9b739d078c548310dda52a7f0d",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\EP-17428 Drawing\\FA SYSTEM\\REV-1\\PDF\\FA-105-BASEMENT-01 FLOOR.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ]
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 DWGS/SD recieved from Trinity/TELEPHONE LAYOUTs/TELEPHONE LAYOUT/03#END-3B TELEPHONE DATA/TEL-02-END-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-SUB-BIND.pdf",
+   "ep": "19144",
+   "stratum": "shop_drawing",
+   "sha256": "b8df3dee0bb7db68c7cbadc215465ed432ec926dbd638d1119dafbbfae038932",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 DWGS\\SD recieved from Trinity\\TELEPHONE LAYOUTs\\TELEPHONE LAYOUT\\03#END-3B TELEPHONE DATA\\TEL-02-END-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-SUB-BIND.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ]
+  },
+  {
+   "doc_key": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf",
+   "ep": "17428",
+   "stratum": "drawing_ifc_input",
+   "sha256": "7577b344abed8e39da608061eb2b06f9a806e9380f3cb8b6c4fdc94c524a47bf",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\EP-17428 Drawing\\Inputs\\From CD\\DIB IFC DWGS\\ARCH\\PDF\\1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ]
+  },
+  {
+   "doc_key": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+   "ep": "17428",
+   "stratum": "drawing_ifc_input",
+   "sha256": "500833f7db2b83beb195c6ef404769d57b66dc66769aac0e8bbd27a22be36dba",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\VARIATION - NEW ID - OFFICES\\FA EM INPUT\\210307_DIB_AMB_ Tender Package\\2. Drawings\\PDF\\BH2031-ID-OFF-23-109-00_H.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ]
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+   "ep": "23323",
+   "stratum": "approval_sample",
+   "sha256": "b713d5e56599da949cb14fa5fabb1607acdee31c617ab55a7d3de663fdde3a8c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\Inputs\\Amana - Life and Safety\\File-4\\Structure Drawings\\Steel\\B03 - Vehicle Repair Yard\\01-Approval Drawings\\PDF\\DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    842,
+    1191
+   ]
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "stratum": "approval_sample",
+   "sha256": "e740af95461002eb9851c86c5b77a9a672720f1dc9ba71428acfb2f4f05f6088",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 DWGS\\Approved SD\\TELEPHONE APPRVED SHOP DRGS\\TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "pages": 1,
+   "scan_like": true,
+   "first_page_size_pt": [
+    1684,
+    2388
+   ]
+  },
+  {
+   "doc_key": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+   "ep": "16830",
+   "stratum": "reply",
+   "sha256": "1b4770e3ca6eb70e62fb31971a9ae3ab109999d0006861afb359e5e4fd9a3425",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\EP-16830 - PQ\\EP-16830 Reply to Comments.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    792,
+    612
+   ]
+  },
+  {
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+   "ep": "30549",
+   "stratum": "reply",
+   "sha256": "1e98dc27bfaf7905570bce6c71a27beff7150877d0715c2c73d824944314e8bc",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-30549\\Inputs\\DUTCO DOC\\05.05.2026\\01. ARCHITECTURE\\A. ARCHITECTURAL FOLDER\\DRAWINGS\\AR-74000_WET AREAS\\DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    3370,
+    2384
+   ]
+  },
+  {
+   "doc_key": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Rev.01/Content 14.pdf",
+   "ep": "16830",
+   "stratum": "submittal",
+   "sha256": "101bbcb94999adf1f67b9cf439c69f0feaf314078af02ac6cdd559dc389b368c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\EP-16830-MS-ELV\\CCTV\\Nursery & Retail\\Rev.01\\Content 14.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    612,
+    792
+   ]
+  },
+  {
+   "doc_key": "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf",
+   "ep": "16830",
+   "stratum": "submittal",
+   "sha256": "f8e0aae242f54be9b09fd7ac06ae1b5a37af0c8349ef1d90d4791472d4d8a063",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\EP-16830-MS-ELV\\EM lighting system\\Nursery & Retail\\pdf\\Al Arabia - Authorization.pdf",
+   "pages": 1,
+   "scan_like": true,
+   "first_page_size_pt": [
+    595,
+    842
+   ]
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf",
+   "ep": "19144",
+   "stratum": "scan",
+   "sha256": "02fd23fe6c3042f4792db6e3ca9ad85e5de6d2cd64b8246da1035ce1bf241e5f",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 Scan\\EP-19144 SCS DRF.pdf",
+   "pages": 1,
+   "scan_like": true,
+   "first_page_size_pt": [
+    595,
+    841
+   ]
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/O&M/FAS/R0/SOV.pdf",
+   "ep": "23323",
+   "stratum": "other",
+   "sha256": "125e73464eb78875b6fb6ffd753c1d3af02554aef283afe3c8b894b1130bf7b8",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\O&M\\FAS\\R0\\SOV.pdf",
+   "pages": 2,
+   "scan_like": false,
+   "first_page_size_pt": [
+    595,
+    842
+   ]
+  }
+ ]
+}

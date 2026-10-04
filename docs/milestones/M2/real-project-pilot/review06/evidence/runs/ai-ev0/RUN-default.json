@@ -1,0 +1,825 @@
+{
+ "at_utc": "2026-09-28T19:29:35+00:00",
+ "tag": "ai-ev0",
+ "profile": "default",
+ "stage": "C:\\t\\pilot\\stage",
+ "database": "C:\\t\\r6\\ai-ev0\\db\\default.db",
+ "parser": "parse-2026-09-28.7",
+ "ai": "app",
+ "settings": {
+  "extraction_promote_observations": false,
+  "ai_enabled": true,
+  "ai_provider": "claude-code",
+  "ai_model_small": "sonnet",
+  "ai_model_standard": "opus",
+  "ai_evidence_variant": "off",
+  "sync_file_workers": 0,
+  "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 150,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_max_concurrency": 2
+ },
+ "projects": {
+  "EP-29076": {
+   "project_id": 1,
+   "seconds": 581.2,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 55,
+    "processed": 55,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 5,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 1,
+       "revisions": 1,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 17,
+       "revisions": 22,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L23",
+       "B1",
+       "M1",
+       "L16",
+       "L24",
+       "L44",
+       "L68",
+       "L8"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T19:39:18.593890",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.67,
+     "document_processing_seconds": 428.13,
+     "ai_seconds": 137.83,
+     "reconcile_seconds": 14.65,
+     "ai_stage_seconds": 137.91,
+     "reconcile_map_seconds": 0.19,
+     "reconcile_actions_seconds": 0.02,
+     "reconcile_drawings_seconds": 14.43,
+     "total_seconds": 580.79,
+     "processed_count": 55,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf",
+       "seconds": 141.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+       "seconds": 120.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/Fire Alarm/31. 24th Floor Fire Alarm Layout/25H-S202-NCC-SD-MEP-ELE-FA-031-R00 - Code B.pdf",
+       "seconds": 100.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/30. 23rd Floor Emergency Lighting Layout/1. R0/2. Commented/25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf",
+       "seconds": 53.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-100 - LP/R03/New folder/25H-S202-NCC-SD-MEP-ELE-FA-001-R02 - Code C (1).pdf",
+       "seconds": 39.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-152 -L 64/R1/25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf",
+       "seconds": 37.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-058-R00 - Code B/25H-AAEM-SD-ELEC-FA-69F-058A.pdf",
+       "seconds": 35.0,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/48 48th Floor Emergency Lighting Layout (Partial Mechanical Floor)/1. R0/2. Commented/25H-AAEM-SD-EMEC-EM-48F -047.pdf",
+       "seconds": 35.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/32. 25th Floor Emergency Lighting Layout (Mechanical Floor)/1. R0/1. Submission/PDF/25H-AAEM-SD--ELEC-EM-25F-031.pdf",
+       "seconds": 24.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "01- EP-29076 - Scan/EP-29076 FAS Design.pdf",
+       "seconds": 18.6,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 55,
+     "documents_per_minute": 5.7,
+     "percentiles_ms": {
+      "median": 8536,
+      "p90": 37572,
+      "p95": 53380,
+      "p99": 120221,
+      "max": 141044
+     },
+     "stage_ms": {
+      "boxes": 6804,
+      "classification": 11,
+      "content_evidence": 430,
+      "db_write": 111,
+      "deterministic_extract": 292,
+      "hash": 667,
+      "ocr_engine": 381927,
+      "ocr_render": 25832,
+      "pdf_open": 95,
+      "pdf_text_extract": 4999,
+      "storage_wait": 52,
+      "title_block": 280177
+     },
+     "stage_share_pct": {
+      "boxes": 1.0,
+      "classification": 0.0,
+      "content_evidence": 0.1,
+      "db_write": 0.0,
+      "deterministic_extract": 0.0,
+      "hash": 0.1,
+      "ocr_engine": 54.5,
+      "ocr_render": 3.7,
+      "pdf_open": 0.0,
+      "pdf_text_extract": 0.7,
+      "storage_wait": 0.0,
+      "title_block": 39.9
+     },
+     "events": {
+      "ocr_band_retries": 2,
+      "ocr_full_pages": 32,
+      "ocr_pages_attempted": 36,
+      "ocr_pages_used": 18,
+      "ocr_regions": 14,
+      "ocr_runs": 38,
+      "page_text_extractions": 129,
+      "page_text_reused": 131,
+      "pages_scanned": 129,
+      "pdf_opens": 53,
+      "read_pdf": 53,
+      "title_block_ocr": 30
+     },
+     "largest_files": [
+      {
+       "path": "05- MS/01- FA/02- R1/data sheet_pagenumber.pdf",
+       "mb": 40.4,
+       "seconds": 8.7,
+       "role": "submittal_form"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+       "mb": 17.8,
+       "seconds": 120.2,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf",
+       "mb": 14.1,
+       "seconds": 141.0,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/Fire Alarm/31. 24th Floor Fire Alarm Layout/25H-S202-NCC-SD-MEP-ELE-FA-031-R00 - Code B.pdf",
+       "mb": 12.2,
+       "seconds": 100.4,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-100 - LP/R03/New folder/25H-S202-NCC-SD-MEP-ELE-FA-001-R02 - Code C (1).pdf",
+       "mb": 9.1,
+       "seconds": 39.5,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/30. 23rd Floor Emergency Lighting Layout/1. R0/2. Commented/25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf",
+       "mb": 6.1,
+       "seconds": 53.4,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/48 48th Floor Emergency Lighting Layout (Partial Mechanical Floor)/1. R0/2. Commented/25H-AAEM-SD-EMEC-EM-48F -047.pdf",
+       "mb": 5.9,
+       "seconds": 35.0,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-058-R00 - Code B/25H-AAEM-SD-ELEC-FA-69F-058A.pdf",
+       "mb": 5.8,
+       "seconds": 35.0,
+       "role": "submittal_form"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-152 -L 64/R1/25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf",
+       "mb": 5.8,
+       "seconds": 37.6,
+       "role": "document"
+      },
+      {
+       "path": "03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/02_BOQ/01_Tender Document/Volume - III - Bills of Quantities.pdf",
+       "mb": 2.6,
+       "seconds": 0.2,
+       "role": "spec"
+      }
+     ],
+     "roles": {
+      "document": 37,
+      "spec": 11,
+      "submittal_form": 5,
+      "transmittal": 2
+     },
+     "ocr_documents": 22,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 55
+    }
+   }
+  },
+  "EP-30088": {
+   "project_id": 2,
+   "seconds": 483.1,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 41,
+    "processed": 40,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 1,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 5,
+       "revisions": 5,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 3,
+       "revisions": 4,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L3",
+       "L4",
+       "L6",
+       "L10",
+       "L12",
+       "B2",
+       "HC",
+       "L1"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T19:47:21.729869",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 1.44,
+     "document_processing_seconds": 465.47,
+     "ai_seconds": 17.18,
+     "reconcile_seconds": 0.13,
+     "ai_stage_seconds": 17.19,
+     "reconcile_map_seconds": 0.05,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.07,
+     "total_seconds": 482.84,
+     "processed_count": 40,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 1,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/CHILLED WATER/PDF/CHILLED WATER LAYOUTS.pdf",
+       "seconds": 231.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/VENTILATION/PDF/VENTILATION LAYOUT.pdf",
+       "seconds": 227.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "seconds": 188.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/ELECTRICAL/SCHEMATIC DIAGRAM/PDF/SINGLE LINE DIAGRAM.pdf",
+       "seconds": 48.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "seconds": 28.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/4. MATERIAL SUBMITTAL/FIRE ALARM/ICC-DLRC-SPM-MAR-MEP-0056-00-COMMENTED-B.pdf",
+       "seconds": 22.2,
+       "role": "document",
+       "result": "partial"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0086-00-COMMENTED-C.pdf",
+       "seconds": 19.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "01. Commercial Document/EP-30088 Design Sheet FAS.pdf",
+       "seconds": 16.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0080-00-COMMENTED-C.pdf",
+       "seconds": 13.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0084-00-COMMENTED-C.pdf",
+       "seconds": 13.1,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 41,
+     "documents_per_minute": 5.1,
+     "percentiles_ms": {
+      "median": 3648,
+      "p90": 28514,
+      "p95": 188899,
+      "p99": 231098,
+      "max": 231098
+     },
+     "stage_ms": {
+      "boxes": 5112,
+      "classification": 10,
+      "content_evidence": 625,
+      "db_write": 87,
+      "deterministic_extract": 426,
+      "hash": 1438,
+      "ocr_engine": 391901,
+      "ocr_render": 18948,
+      "pdf_open": 184,
+      "pdf_text_extract": 13598,
+      "storage_wait": 1092,
+      "title_block": 347629
+     },
+     "stage_share_pct": {
+      "boxes": 0.7,
+      "classification": 0.0,
+      "content_evidence": 0.1,
+      "db_write": 0.0,
+      "deterministic_extract": 0.1,
+      "hash": 0.2,
+      "ocr_engine": 50.2,
+      "ocr_render": 2.4,
+      "pdf_open": 0.0,
+      "pdf_text_extract": 1.7,
+      "storage_wait": 0.1,
+      "title_block": 44.5
+     },
+     "events": {
+      "box_cache_hits": 2,
+      "ocr_cache_hits": 15,
+      "ocr_full_pages": 19,
+      "ocr_pages_attempted": 35,
+      "ocr_pages_used": 9,
+      "ocr_regions": 83,
+      "ocr_runs": 32,
+      "page_text_extractions": 159,
+      "page_text_reused": 117,
+      "pages_scanned": 159,
+      "pdf_opens": 40,
+      "read_pdf": 40,
+      "title_block_ocr": 35
+     },
+     "largest_files": [
+      {
+       "path": "07. PQ Samana & IVY Gardens/PQ -R1/ICC-DLRC-SIG2-PQ-MEP-0005-00 -  PQ - Al ARABIA FOR SAFETY AND SECURITY LLC.pdf",
+       "mb": 124.7,
+       "seconds": 1.7,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/4. MATERIAL SUBMITTAL/FIRE ALARM/ICC-DLRC-SPM-MAR-MEP-0056-00-COMMENTED-B.pdf",
+       "mb": 37.7,
+       "seconds": 22.2,
+       "role": "document"
+      },
+      {
+       "path": "06. MS/FA/Revised/PDF/Product Catalog.pdf",
+       "mb": 14.2,
+       "seconds": 9.6,
+       "role": "submittal_form"
+      },
+      {
+       "path": "04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "mb": 11.5,
+       "seconds": 188.9,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/2. AUTHORITY DOCUMENTS/4. AUTHORITY AND NOCs/DCD Authority Documents for SPM/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "mb": 11.5,
+       "seconds": 12.8,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/VENTILATION/PDF/VENTILATION LAYOUT.pdf",
+       "mb": 11.4,
+       "seconds": 227.5,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/CHILLED WATER/PDF/CHILLED WATER LAYOUTS.pdf",
+       "mb": 8.0,
+       "seconds": 231.1,
+       "role": "document"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "mb": 4.1,
+       "seconds": 28.5,
+       "role": "document"
+      },
+      {
+       "path": "10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "mb": 4.1,
+       "seconds": 3.6,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf",
+       "mb": 3.3,
+       "seconds": 11.1,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 37,
+      "spec": 2,
+      "submittal_form": 1,
+      "transmittal": 1
+     },
+     "ocr_documents": 16,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 41
+    }
+   }
+  },
+  "EP-30784": {
+   "project_id": 3,
+   "seconds": 482.9,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 41,
+    "processed": 40,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 2,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 6,
+       "revisions": 7,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 7,
+       "revisions": 10,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "P1",
+       "P2",
+       "L2",
+       "L41",
+       "L57",
+       "L58",
+       "B2",
+       "B3",
+       "B4",
+       "GF",
+       "L1",
+       "L52",
+       "L53"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T19:55:24.645316",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.64,
+     "document_processing_seconds": 420.55,
+     "ai_seconds": 35.33,
+     "reconcile_seconds": 26.23,
+     "ai_stage_seconds": 35.34,
+     "reconcile_map_seconds": 0.05,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 26.16,
+     "total_seconds": 482.26,
+     "processed_count": 41,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf",
+       "seconds": 145.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf",
+       "seconds": 113.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 61.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 42.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P02-010030 Shop Drawing for Podium-2 Floor Plan Emergency Lighting Layout.pdf",
+       "seconds": 33.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf",
+       "seconds": 31.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-BSM-B02-010027 Shop Drawing for Basement-2 Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 30.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/01. Basement-4/BBY006-GME-SDW-FP-FA-BSM-B04-010025.pdf",
+       "seconds": 30.2,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/R01/L58/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf",
+       "seconds": 29.8,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "03- Drawings/SD/FA/02. Basement-3/R1/Submitted/BBY006-GME-SDW-FP-FA-BSM-B03-010026.pdf",
+       "seconds": 28.7,
+       "role": "spec",
+       "result": "processed"
+      }
+     ],
+     "documents": 41,
+     "documents_per_minute": 5.1,
+     "percentiles_ms": {
+      "median": 15577,
+      "p90": 33817,
+      "p95": 61591,
+      "p99": 145047,
+      "max": 145047
+     },
+     "stage_ms": {
+      "boxes": 32954,
+      "classification": 7,
+      "content_evidence": 473,
+      "db_write": 85,
+      "deterministic_extract": 371,
+      "hash": 638,
+      "ocr_engine": 335320,
+      "ocr_render": 15336,
+      "pdf_open": 71,
+      "pdf_text_extract": 14046,
+      "storage_wait": 775,
+      "title_block": 313140
+     },
+     "stage_share_pct": {
+      "boxes": 4.6,
+      "classification": 0.0,
+      "content_evidence": 0.1,
+      "db_write": 0.0,
+      "deterministic_extract": 0.1,
+      "hash": 0.1,
+      "ocr_engine": 47.0,
+      "ocr_render": 2.2,
+      "pdf_open": 0.0,
+      "pdf_text_extract": 2.0,
+      "storage_wait": 0.1,
+      "title_block": 43.9
+     },
+     "events": {
+      "ocr_band_retries": 1,
+      "ocr_full_pages": 6,
+      "ocr_pages_attempted": 32,
+      "ocr_pages_used": 12,
+      "ocr_regions": 124,
+      "ocr_runs": 33,
+      "page_text_extractions": 154,
+      "page_text_reused": 108,
+      "pages_scanned": 154,
+      "pdf_opens": 39,
+      "read_pdf": 39,
+      "title_block_ocr": 43
+     },
+     "largest_files": [
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045SMOKECONTROLSYSTEMREVISEDPART02.pdf",
+       "mb": 34.7,
+       "seconds": 16.0,
+       "role": "document"
+      },
+      {
+       "path": "02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf",
+       "mb": 28.8,
+       "seconds": 113.3,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf",
+       "mb": 14.2,
+       "seconds": 145.0,
+       "role": "document"
+      },
+      {
+       "path": "03- MS/03- FRC/EP-30784 FRC MS R0 FIREGUARD.pdf",
+       "mb": 9.5,
+       "seconds": 0.6,
+       "role": "document"
+      },
+      {
+       "path": "03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+       "mb": 9.2,
+       "seconds": 5.1,
+       "role": "submittal_form"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf",
+       "mb": 8.0,
+       "seconds": 31.6,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P02-010030 Shop Drawing for Podium-2 Floor Plan Emergency Lighting Layout.pdf",
+       "mb": 7.0,
+       "seconds": 33.8,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 6.8,
+       "seconds": 61.6,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 5.1,
+       "seconds": 42.1,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-BSM-B02-010027 Shop Drawing for Basement-2 Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 4.4,
+       "seconds": 30.5,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 22,
+      "spec": 15,
+      "submittal_form": 2,
+      "transmittal": 2
+     },
+     "ocr_documents": 18,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 41
+    }
+   }
+  }
+ },
+ "tables": {
+  "project_documents": 137,
+  "project_submittals": 3,
+  "project_shop_drawings": 39,
+  "background_jobs": 6,
+  "project_actions": 1,
+  "ai_usage": 8,
+  "document_readings": 11
+ },
+ "rows": 137,
+ "ai_usage_rows": 8
+}

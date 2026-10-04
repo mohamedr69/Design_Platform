@@ -1,0 +1,213 @@
+{
+ "failures": 23,
+ "by_cause": {
+  "R19-01 expectation": 1,
+  "located absence (R19-01)": 2,
+  "crop contract": 20
+ },
+ "rows": [
+  {
+   "test": "tests/test_ai_pilot_r18.py::test_located_discovery_maps_its_regions_back_to_the_page",
+   "message": "AssertionError: no decision-block words anywhere in the page's text\nassert 'incomplete:l...d_region_only' == 'absent_by_discovery'\n  \n  - absent_by_discovery\n  + incomplete:located_region_only",
+   "located_discoveries": 0,
+   "outside_crop": [],
+   "cause": "R19-01 expectation: the test asserted the removed text-silence rule (decision absent_by_discovery on a crop)"
+  },
+  {
+   "test": "tests/test_evidence_reader_r7.py::test_resumed_work_keeps_what_was_read_and_reads_the_rest",
+   "message": "AssertionError: assert ['budget', 'partial'] == ['budget', 'complete']\n  \n  At index 1 diff: 'partial' != 'complete'\n  Use -v to get more diff",
+   "located_discoveries": 3,
+   "outside_crop": [],
+   "cause": "located absence (R19-01): nothing scripted lay outside the crop; the page's decision was never in view on a located crop, so it is incomplete:located_region_only and the page outcome is 'partial', not 'evidence' / 'complete' (only the final outcome assertion fails; every earlier assertion of the test passed)"
+  },
+  {
+   "test": "tests/test_m2_review08.py::test_a_blind_identity_timeout_keeps_the_old_decision_and_identity",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 1,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review08.py::test_identity_completes_while_revision_times_out_and_decision_is_refused_by_budget",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review08.py::test_a_later_resume_completes_the_missing_work_with_its_own_provenance",
+   "message": "AssertionError: assert ['partial', '...l', 'partial'] == ['evidence', ...', 'evidence']\n  \n  At index 0 diff: 'partial' != 'evidence'\n  Use -v to get more diff",
+   "located_discoveries": 3,
+   "outside_crop": [],
+   "cause": "located absence (R19-01): nothing scripted lay outside the crop; the page's decision was never in view on a located crop, so it is incomplete:located_region_only and the page outcome is 'partial', not 'evidence' / 'complete' (only the final outcome assertion fails; every earlier assertion of the test passed)"
+  },
+  {
+   "test": "tests/test_m2_review08.py::test_a_completed_negative_supersedes_but_absence_by_discovery_or_a_failure_never_does",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_an_illegible_blind_identity_keeps_the_last_good_identity",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_an_unmarked_discovery_and_an_illegible_blind_read_never_erase_a_decision",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_marked_discovery_and_an_illegible_blind_read_never_replace_a_decision",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_first_read_with_an_illegible_blind_answer_is_incomplete_never_verified",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 1,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_legible_unmarked_block_read_both_ways_supersedes",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_timeout_and_budget_controls",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_changed_identity_does_not_inherit_the_retained_decision",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_same_identity_retry_keeps_its_decision_associated",
+   "message": "AssertionError: assert ([] == [('ANN', 'val...', 'correct')]\n  \n  Right contains one more item: ('ANN', 'validated', 'correct')\n  Use -v to get more diff)",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_a_changed_revision_holds_a_decision_made_for_the_earlier_revision",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review09.py::test_multiple_components_on_a_page_keep_their_own_associations",
+   "message": "StopIteration",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review10.py::test_a_known_revision_constraint_holds_a_decision_without_an_ai_identity",
+   "message": "AssertionError: {'context': {'policies': None, 'profile': 'default', 'sha256': '999999999999999999999999999999999999999999999999999999...}, 'history': ['default|EV1'], 'reason': 'reading was attempted for this context; no evidence yet', 'st",
+   "located_discoveries": 1,
+   "outside_crop": [
+    "decision",
+    "own_revision"
+   ],
+   "cause": "crop contract: scripted decision, own_revision printed outside the actual crop -> not visible to located discovery",
+   "locator_finding": "the fixture prints its revision inline as 'REV 02 03' 240 pt right of 'Drawing No X-SD-1'; 'REV 02 03' is not a revision label under the application's pattern, so the label box (number label +/- 12 % of the sheet) clips the revision cell (44 % of the scripted box inside): a real limitation of the located area, reported, not widened"
+  },
+  {
+   "test": "tests/test_m2_review10.py::test_control_an_explicit_compatible_target_stays_current",
+   "message": "AssertionError: assert ([] == [('ANN', 'val...', 'correct')]\n  \n  Right contains one more item: ('ANN', 'validated', 'correct')\n  Use -v to get more diff)",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review11.py::test_a_legacy_decision_stays_held_as_its_old_revision_leaves_history",
+   "message": "AssertionError: assert ([('ANN', 'he..., 'held_only') == ([('ANN', 'va...overed_clean')\n  \n  At index 0 diff: [('ANN', 'held', 'held_correct')] != [('ANN', 'validated', 'correct')]\n  Use -v to get more diff",
+   "located_discoveries": 9,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review11.py::test_an_explicit_target_revision_stays_held_past_the_history_limit",
+   "message": "StopIteration",
+   "located_discoveries": 8,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review11.py::test_attempt_identity_is_persistent_and_unique_across_reloads_past_both_limits",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review12.py::test_an_erroneous_saved_anchor_whose_history_is_gone_is_held_until_a_genuine_reread",
+   "message": "AssertionError: a genuine compatible re-read resolves it\nassert ([('ANN', 'he..., 'held_only') == ([('ANN', 'va...overed_clean')\n  \n  At index 0 diff: [('ANN', 'held', 'held_correct')] != [('ANN', 'validated', 'correct')]\n  Use -v to get mo",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  },
+  {
+   "test": "tests/test_m2_review12.py::test_read_time_anchors_are_never_rewritten",
+   "message": "KeyError: 'own:decision'",
+   "located_discoveries": 2,
+   "outside_crop": [
+    "decision"
+   ],
+   "cause": "crop contract: scripted decision printed outside the actual crop -> not visible to located discovery"
+  }
+ ]
+}

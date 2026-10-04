@@ -1,0 +1,7094 @@
+{
+ "note": "diagnostic replay on the exposed four-arm corpus; not fresh accuracy; labels r26.2 frozen and unchanged",
+ "arms": {
+  "L1": {
+   "stored": {
+    "e9_recovery": {
+     "identity": {
+      "recovered_clean": 14,
+      "missed": 12,
+      "held_only": 5
+     },
+     "revision": {
+      "recovered_clean": 12,
+      "tn": 6,
+      "missed": 8,
+      "held_only": 4,
+      "wrong_only": 1
+     },
+     "decision": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 6
+     }
+    },
+    "e9_critical": 0,
+    "e10_vs_e9_on_stored_rows": {
+     "changed_facts": [
+      {
+       "draft_id": "D26",
+       "label_resolved": false,
+       "page": 3,
+       "field": "revision",
+       "old": [
+        [
+         "00",
+         "validated",
+         "correct"
+        ]
+       ],
+       "new": [
+        [
+         "00",
+         "validated",
+         "fp"
+        ]
+       ]
+      }
+     ],
+     "new_false_acceptances": [
+      {
+       "draft_id": "D26",
+       "label_resolved": false,
+       "page": 3,
+       "field": "revision",
+       "value": "00",
+       "state": "validated",
+       "outcome": "fp",
+       "how": "negative_page"
+      }
+     ],
+     "decision_coverage_changes": [],
+     "recovery_old": {
+      "identity": {
+       "recovered_clean": 14,
+       "missed": 12,
+       "held_only": 5
+      },
+      "revision": {
+       "recovered_clean": 12,
+       "tn": 6,
+       "missed": 8,
+       "held_only": 4,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 6
+      }
+     },
+     "recovery_new": {
+      "identity": {
+       "recovered_clean": 14,
+       "missed": 12,
+       "held_only": 5
+      },
+      "revision": {
+       "recovered_clean": 11,
+       "tn": 6,
+       "missed": 8,
+       "held_only": 5,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 6
+      }
+     },
+     "precision_old": {
+      "identity": [
+       14,
+       14
+      ],
+      "revision": [
+       12,
+       13
+      ],
+      "decision": [
+       0,
+       0
+      ]
+     },
+     "precision_new": {
+      "identity": [
+       14,
+       14
+      ],
+      "revision": [
+       11,
+       13
+      ],
+      "decision": [
+       0,
+       0
+      ]
+     },
+     "critical_old": [],
+     "critical_new": [
+      [
+       "D26",
+       3,
+       "revision",
+       "00",
+       "fp"
+      ]
+     ]
+    }
+   },
+   "configs": {
+    "IG": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+identity-role-guard-2026-10-02.2",
+     "provider": {
+      "served": 31,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 11,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "28 20 00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "revision",
+        "value": "00",
+        "state": "validated",
+        "outcome": "fp",
+        "how": "negative_page"
+       }
+      ],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [],
+      "critical_new": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "28 20 00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "CA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+conflict-adjudication-2026-10-02.2",
+     "provider": {
+      "served": 31,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 11,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "DR": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+decision-region-2026-10-02.1",
+     "provider": {
+      "served": 31,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 11,
+      "unrecorded": 9
+     },
+     "unrecorded_by_task": {
+      "read_decision": 5,
+      "locate_decision": 4
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "PA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 31,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 11,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 8,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        12
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D15",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D16",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "1",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "1",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D17",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "1",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "1",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 10,
+        "tn": 6,
+        "missed": 11,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 7
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        10,
+        12
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "ALL": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 31,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 11,
+      "unrecorded": 9
+     },
+     "unrecorded_by_task": {
+      "read_decision": 5,
+      "locate_decision": 4
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "28 20 00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 4,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 10,
+        "tn": 6,
+        "held_only": 6,
+        "missed": 8,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        10,
+        11
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "28 20 00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 3,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D15",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D16",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "1",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "1",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D17",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "1",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "1",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 11,
+        "tn": 6,
+        "missed": 8,
+        "held_only": 5,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 6
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 14,
+        "missed": 12,
+        "held_only": 5
+       },
+       "revision": {
+        "recovered_clean": 10,
+        "tn": 6,
+        "missed": 11,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 7
+       }
+      },
+      "precision_old": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        11,
+        13
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        14,
+        14
+       ],
+       "revision": [
+        10,
+        11
+       ],
+       "decision": [
+        0,
+        0
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        3,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     }
+    }
+   },
+   "off_replay_equals_stored_under_e9": true
+  },
+  "L2": {
+   "stored": {
+    "e9_recovery": {
+     "identity": {
+      "recovered_clean": 20,
+      "missed": 7,
+      "held_only": 4
+     },
+     "revision": {
+      "recovered_clean": 14,
+      "tn": 6,
+      "held_only": 4,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "decision": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     }
+    },
+    "e9_critical": 1,
+    "e10_vs_e9_on_stored_rows": {
+     "changed_facts": [],
+     "new_false_acceptances": [],
+     "decision_coverage_changes": [],
+     "recovery_old": {
+      "identity": {
+       "recovered_clean": 20,
+       "missed": 7,
+       "held_only": 4
+      },
+      "revision": {
+       "recovered_clean": 14,
+       "tn": 6,
+       "held_only": 4,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "recovery_new": {
+      "identity": {
+       "recovered_clean": 20,
+       "missed": 7,
+       "held_only": 4
+      },
+      "revision": {
+       "recovered_clean": 14,
+       "tn": 6,
+       "held_only": 4,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "precision_old": {
+      "identity": [
+       20,
+       20
+      ],
+      "revision": [
+       14,
+       16
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "precision_new": {
+      "identity": [
+       20,
+       20
+      ],
+      "revision": [
+       14,
+       16
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "critical_old": [
+      [
+       "D26",
+       2,
+       "revision",
+       "00",
+       "fp"
+      ]
+     ],
+     "critical_new": [
+      [
+       "D26",
+       2,
+       "revision",
+       "00",
+       "fp"
+      ]
+     ]
+    }
+   },
+   "configs": {
+    "IG": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1+identity-role-guard-2026-10-02.2",
+     "provider": {
+      "served": 62,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 3,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "CA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1+conflict-adjudication-2026-10-02.2",
+     "provider": {
+      "served": 62,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 3,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "DR": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1+decision-region-2026-10-02.1",
+     "provider": {
+      "served": 59,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 1,
+      "unrecorded": 20
+     },
+     "unrecorded_by_task": {
+      "read_decision": 6,
+      "locate_decision": 14
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00 Video Surveillance System",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D22",
+        "page": 3,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00 Video Surveillance System",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D22",
+        "page": 3,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "PA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 62,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 3,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "held_only": 6,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D22",
+        "label_resolved": true,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D21",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "\"\"",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": [
+         [
+          "\"\"",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 9,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 6,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     }
+    },
+    "ALL": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 59,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 1,
+      "unrecorded": 20
+     },
+     "unrecorded_by_task": {
+      "read_decision": 6,
+      "locate_decision": 14
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00 Video Surveillance System",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D22",
+        "page": 3,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "held_only": 6,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "identity",
+        "old": [
+         [
+          "28 20 00 Video Surveillance System",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 4,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": null
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D22",
+        "label_resolved": true,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D21",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "\"\"",
+          "held",
+          "held_on_negative"
+         ]
+        ],
+        "new": [
+         [
+          "\"\"",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "completed_read",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D22",
+        "page": 3,
+        "old": "not_attempted",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 14,
+        "tn": 6,
+        "held_only": 4,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "missed": 7,
+        "held_only": 4
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 9,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 6,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        14,
+        16
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D26",
+        2,
+        "revision",
+        "00",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     }
+    }
+   },
+   "off_replay_equals_stored_under_e9": true
+  },
+  "L3": {
+   "stored": {
+    "e9_recovery": {
+     "identity": {
+      "recovered_clean": 19,
+      "missed": 6,
+      "held_only": 6
+     },
+     "revision": {
+      "recovered_clean": 13,
+      "tn": 6,
+      "held_only": 5,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "decision": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     }
+    },
+    "e9_critical": 0,
+    "e10_vs_e9_on_stored_rows": {
+     "changed_facts": [],
+     "new_false_acceptances": [],
+     "decision_coverage_changes": [],
+     "recovery_old": {
+      "identity": {
+       "recovered_clean": 19,
+       "missed": 6,
+       "held_only": 6
+      },
+      "revision": {
+       "recovered_clean": 13,
+       "tn": 6,
+       "held_only": 5,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "recovery_new": {
+      "identity": {
+       "recovered_clean": 19,
+       "missed": 6,
+       "held_only": 6
+      },
+      "revision": {
+       "recovered_clean": 13,
+       "tn": 6,
+       "held_only": 5,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "precision_old": {
+      "identity": [
+       19,
+       19
+      ],
+      "revision": [
+       13,
+       14
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "precision_new": {
+      "identity": [
+       19,
+       19
+      ],
+      "revision": [
+       13,
+       14
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "critical_old": [],
+     "critical_new": []
+    }
+   },
+   "configs": {
+    "IG": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 8,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     }
+    },
+    "CA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+conflict-adjudication-2026-10-02.2",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 8,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-10",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D09",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "held_only": 6,
+        "missed": 5
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-10",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D09",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "held_only": 6,
+        "missed": 5
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     }
+    },
+    "DR": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+decision-region-2026-10-02.1",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 8,
+      "unrecorded": 10
+     },
+     "unrecorded_by_task": {
+      "read_decision": 6,
+      "locate_decision": 4
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     }
+    },
+    "PA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+page-association-2026-10-02.1",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 8,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "held_only": 6,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D15",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D18",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D17",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "04",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "04",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 9,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 6,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     }
+    },
+    "ALL": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 3,
+      "refused_as_recorded": 8,
+      "unrecorded": 10
+     },
+     "unrecorded_by_task": {
+      "read_decision": 6,
+      "locate_decision": 4
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-10",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D09",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "held_only": 6,
+        "missed": 5
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00 – Sep. 2018",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D15",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D18",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "01",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D17",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "04",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "04",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-10",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D09",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "DJ-295-P-EN-SEE-04-ASY-0020-01",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 4,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 19,
+        "missed": 6,
+        "held_only": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 20,
+        "held_only": 6,
+        "missed": 5
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 3,
+        "missed": 8,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        19,
+        19
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        20,
+        20
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [],
+      "critical_new": []
+     }
+    }
+   },
+   "off_replay_equals_stored_under_e9": true
+  },
+  "L4": {
+   "stored": {
+    "e9_recovery": {
+     "identity": {
+      "recovered_clean": 23,
+      "missed": 7,
+      "held_only": 1
+     },
+     "revision": {
+      "recovered_clean": 13,
+      "tn": 6,
+      "held_only": 5,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "decision": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     }
+    },
+    "e9_critical": 1,
+    "e10_vs_e9_on_stored_rows": {
+     "changed_facts": [
+      {
+       "draft_id": "D26",
+       "label_resolved": false,
+       "page": 2,
+       "field": "revision",
+       "old": [
+        [
+         "00",
+         "held",
+         "held_correct"
+        ]
+       ],
+       "new": [
+        [
+         "00",
+         "held",
+         "held_on_negative"
+        ]
+       ]
+      }
+     ],
+     "new_false_acceptances": [],
+     "decision_coverage_changes": [],
+     "recovery_old": {
+      "identity": {
+       "recovered_clean": 23,
+       "missed": 7,
+       "held_only": 1
+      },
+      "revision": {
+       "recovered_clean": 13,
+       "tn": 6,
+       "held_only": 5,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "recovery_new": {
+      "identity": {
+       "recovered_clean": 23,
+       "missed": 7,
+       "held_only": 1
+      },
+      "revision": {
+       "recovered_clean": 13,
+       "tn": 6,
+       "held_only": 5,
+       "missed": 6,
+       "wrong_only": 1
+      },
+      "decision": {
+       "tn": 24,
+       "held_only": 1,
+       "missed": 5,
+       "recovered_clean": 1
+      }
+     },
+     "precision_old": {
+      "identity": [
+       23,
+       24
+      ],
+      "revision": [
+       13,
+       14
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "precision_new": {
+      "identity": [
+       23,
+       24
+      ],
+      "revision": [
+       13,
+       14
+      ],
+      "decision": [
+       1,
+       1
+      ]
+     },
+     "critical_old": [
+      [
+       "D03",
+       1,
+       "identity",
+       "2.4 Accessories",
+       "fp"
+      ]
+     ],
+     "critical_new": [
+      [
+       "D03",
+       1,
+       "identity",
+       "2.4 Accessories",
+       "fp"
+      ]
+     ]
+    }
+   },
+   "configs": {
+    "IG": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1+identity-role-guard-2026-10-02.2",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 5,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D03",
+        "label_resolved": false,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "2.4 Accessories",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "2.4 Accessories",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        23
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D03",
+        "label_resolved": false,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "2.4 Accessories",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "2.4 Accessories",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        23
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     }
+    },
+    "CA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1+conflict-adjudication-2026-10-02.2",
+     "provider": {
+      "served": 64,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 5,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-106",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 24,
+        "held_only": 1,
+        "missed": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        24,
+        25
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-106",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 24,
+        "held_only": 1,
+        "missed": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        24,
+        25
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "DR": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1+decision-region-2026-10-02.1",
+     "provider": {
+      "served": 64,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 5,
+      "unrecorded": 18
+     },
+     "unrecorded_by_task": {
+      "read_decision": 5,
+      "locate_decision": 13
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "budget",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "budget",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "PA": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 64,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 5,
+      "unrecorded": 0
+     },
+     "unrecorded_by_task": {},
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "held_only": 6,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "validated",
+          "correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D22",
+        "label_resolved": true,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 12,
+        "tn": 6,
+        "missed": 9,
+        "held_only": 3,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "missed": 6,
+        "recovered_clean": 1
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        12,
+        13
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ]
+     }
+    },
+    "ALL": {
+     "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+     "provider": {
+      "served": 63,
+      "served_timeout_or_failure": 2,
+      "refused_as_recorded": 5,
+      "unrecorded": 18
+     },
+     "unrecorded_by_task": {
+      "read_decision": 5,
+      "locate_decision": 13
+     },
+     "business_hashes_equal_off": true,
+     "e9": {
+      "changed_facts": [
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-106",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D03",
+        "label_resolved": false,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "2.4 Accessories",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "2.4 Accessories",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "budget",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 24,
+        "held_only": 1,
+        "missed": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        24,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     },
+     "e10": {
+      "changed_facts": [
+       {
+        "draft_id": "D26",
+        "label_resolved": false,
+        "page": 1,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "decision",
+        "old": [
+         [
+          "ANN",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "ANN",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D04",
+        "label_resolved": true,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "FA-101-106",
+          "held",
+          "held_wrong"
+         ]
+        ],
+        "new": [
+         [
+          "17",
+          "validated",
+          "correct"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D22",
+        "label_resolved": true,
+        "page": 2,
+        "field": "revision",
+        "old": [
+         [
+          "00",
+          "held",
+          "held_correct"
+         ]
+        ],
+        "new": [
+         [
+          "00",
+          "held",
+          "held_unassociated"
+         ]
+        ]
+       },
+       {
+        "draft_id": "D03",
+        "label_resolved": false,
+        "page": 1,
+        "field": "identity",
+        "old": [
+         [
+          "2.4 Accessories",
+          "validated",
+          "fp"
+         ]
+        ],
+        "new": [
+         [
+          "2.4 Accessories",
+          "held",
+          "held_on_negative"
+         ]
+        ]
+       }
+      ],
+      "new_false_acceptances": [],
+      "decision_coverage_changes": [
+       {
+        "draft_id": "D26",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D26",
+        "page": 3,
+        "old": "discovery_absent",
+        "new": "budget"
+       },
+       {
+        "draft_id": "D15",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D12",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D18",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D16",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D24",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D23",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D20",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D19",
+        "page": 2,
+        "old": "no_region",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D09",
+        "page": 1,
+        "old": "budget",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D05",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D07",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D08",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D11",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D03",
+        "page": 1,
+        "old": "discovery_absent",
+        "new": "failed"
+       },
+       {
+        "draft_id": "D01",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       },
+       {
+        "draft_id": "D06",
+        "page": 1,
+        "old": "located_incomplete",
+        "new": "not_attempted"
+       }
+      ],
+      "recovery_old": {
+       "identity": {
+        "recovered_clean": 23,
+        "missed": 7,
+        "held_only": 1
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 5,
+        "missed": 6,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "held_only": 1,
+        "missed": 5,
+        "recovered_clean": 1
+       }
+      },
+      "recovery_new": {
+       "identity": {
+        "recovered_clean": 24,
+        "held_only": 1,
+        "missed": 6
+       },
+       "revision": {
+        "recovered_clean": 13,
+        "tn": 6,
+        "held_only": 3,
+        "missed": 8,
+        "wrong_only": 1
+       },
+       "decision": {
+        "tn": 24,
+        "recovered_clean": 2,
+        "missed": 5
+       }
+      },
+      "precision_old": {
+       "identity": [
+        23,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        1,
+        1
+       ]
+      },
+      "precision_new": {
+       "identity": [
+        24,
+        24
+       ],
+       "revision": [
+        13,
+        14
+       ],
+       "decision": [
+        2,
+        2
+       ]
+      },
+      "critical_old": [
+       [
+        "D03",
+        1,
+        "identity",
+        "2.4 Accessories",
+        "fp"
+       ]
+      ],
+      "critical_new": []
+     }
+    }
+   },
+   "off_replay_equals_stored_under_e9": true
+  }
+ }
+}

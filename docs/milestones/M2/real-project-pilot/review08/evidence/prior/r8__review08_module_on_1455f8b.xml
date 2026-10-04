@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="24" skipped="0" tests="27" time="17.193" timestamp="2026-09-29T09:00:38.062636+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_m2_review08" name="test_a_blind_identity_timeout_keeps_the_old_decision_and_identity" time="2.153"><failure message="KeyError: 'own:decision'">E   KeyError: 'own:decision'</failure></testcase><testcase classname="tests.test_m2_review08" name="test_before_a_blind_identity_timeout_replaced_the_good_page" time="0.257"><failure message="AssertionError: assert ('evidence' == 'partial'&#10;  &#10;  - partial&#10;  + evidence)">E   AssertionError: assert ('evidence' == 'partial'
+      
+      - partial
+      + evidence)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_budget_attempt_without_field_outcomes_never_overwrites_with_a_candidate" time="0.002"><failure message="AssertionError: assert [('identity', 'X-SD-NEW')] == [('decision',...y', 'X-SD-1')]&#10;  &#10;  At index 0 diff: ('identity', 'X-SD-NEW') != ('decision', 'ANN')&#10;  Right contains one more item: ('identity', 'X-SD-1')&#10;  Use -v to get more diff">E   AssertionError: assert [('identity', 'X-SD-NEW')] == [('decision',...y', 'X-SD-1')]
+      
+      At index 0 diff: ('identity', 'X-SD-NEW') != ('decision', 'ANN')
+      Right contains one more item: ('identity', 'X-SD-1')
+      Use -v to get more diff</failure></testcase><testcase classname="tests.test_m2_review08" name="test_identity_completes_while_revision_times_out_and_decision_is_refused_by_budget" time="2.021"><failure message="AssertionError: the timed-out read replaces nothing&#10;assert ('03', 'candi..., 'completed') == ('02', 'valid..., 'completed')&#10;  &#10;  At index 0 diff: '03' != '02'&#10;  Use -v to get more diff">E   AssertionError: the timed-out read replaces nothing
+    assert ('03', 'candi..., 'completed') == ('02', 'valid..., 'completed')
+      
+      At index 0 diff: '03' != '02'
+      Use -v to get more diff</failure></testcase><testcase classname="tests.test_m2_review08" name="test_one_component_completes_and_another_fails_without_contaminating_each_other" time="1.573"><failure message="AssertionError: the own component failed and keeps its evidence&#10;assert ('X-SD-1', 'candidate', 2) == ('X-SD-1', 'validated', 1)&#10;  &#10;  At index 1 diff: 'candidate' != 'validated'&#10;  Use -v to get more diff">E   AssertionError: the own component failed and keeps its evidence
+    assert ('X-SD-1', 'candidate', 2) == ('X-SD-1', 'validated', 1)
+      
+      At index 1 diff: 'candidate' != 'validated'
+      Use -v to get more diff</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_later_resume_completes_the_missing_work_with_its_own_provenance" time="1.980"><failure message="AssertionError: the replaced value is kept with its own provenance&#10;assert [] == [1]&#10;  &#10;  Right contains one more item: 1&#10;  Use -v to get more diff">E   AssertionError: the replaced value is kept with its own provenance
+    assert [] == [1]
+      
+      Right contains one more item: 1
+      Use -v to get more diff</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_completed_negative_supersedes_but_absence_by_discovery_or_a_failure_never_does" time="1.816"><failure message="KeyError: 'own:decision'">E   KeyError: 'own:decision'</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_field_known_only_from_an_unsuccessful_read_is_incomplete_never_verified" time="1.477"><failure message="AssertionError: assert ('completed' == 'incomplete'&#10;  &#10;  - incomplete&#10;  ? --&#10;  + completed&#10;  ?         +)">E   AssertionError: assert ('completed' == 'incomplete'
+      
+      - incomplete
+      ? --
+      + completed
+      ?         +)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_failed_profile_switch_is_pending_never_the_other_profile[default-promoted]" time="1.583"><failure message="AssertionError: assert 'current' == 'pending'&#10;  &#10;  - pending&#10;  + current">E   AssertionError: assert 'current' == 'pending'
+      
+      - pending
+      + current</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_failed_profile_switch_is_pending_never_the_other_profile[promoted-default]" time="1.593"><failure message="AssertionError: assert 'current' == 'pending'&#10;  &#10;  - pending&#10;  + current">E   AssertionError: assert 'current' == 'pending'
+      
+      - pending
+      + current</failure></testcase><testcase classname="tests.test_m2_review08" name="test_before_a_failed_switch_returned_the_previous_profile_as_current" time="0.004"><failure message="AssertionError: assert {'observation...56': 's', ...} == {'reason': 'n...ext_required'}&#10;  &#10;  Left contains 6 more items:&#10;  {'observations': [{'field': 'identity',&#10;                     'page': 1,&#10;                     'provenance': {'at': None,&#10;                                    'attempt': 1,&#10;                                    'models': None,...&#10;  &#10;  ...Full output truncated (30 lines hidden), use '-vv' to show">E   AssertionError: assert {'observation...56': 's', ...} == {'reason': 'n...ext_required'}
+      
+      Left contains 6 more items:
+      {'observations': [{'field': 'identity',
+                         'page': 1,
+                         'provenance': {'at': None,
+                                        'attempt': 1,
+                                        'models': None,...
+      
+      ...Full output truncated (30 lines hidden), use '-vv' to show</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_budget_stopped_variant_switch_and_changed_bytes" time="1.664"><failure message="AssertionError: assert (0 == 0 and 'current' == 'pending'&#10; +  where 0 = &lt;app.ai.provider.RecordingProvider object at 0x0000019039B17E60&gt;.calls&#10;  &#10;  - pending&#10;  + current)">E   AssertionError: assert (0 == 0 and 'current' == 'pending'
+     +  where 0 = &lt;app.ai.provider.RecordingProvider object at 0x0000019039B17E60&gt;.calls
+      
+      - pending
+      + current)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_unknown_legacy_profiles_are_used_only_when_the_caller_declares_them" time="0.002"><failure message="AssertionError: assert 'current' == 'unavailable'&#10;  &#10;  - unavailable&#10;  + current">E   AssertionError: assert 'current' == 'unavailable'
+      
+      - unavailable
+      + current</failure></testcase><testcase classname="tests.test_m2_review08" name="test_the_evaluator_scores_ai_evidence_only_for_the_declared_context" time="0.150"><failure message="AssertionError: the promoted run is scored with the default profile's evidence&#10;assert [{'doc': 'EP-...entity', ...}] == []&#10;  &#10;  Left contains one more item: {'doc': 'EP-1/a.pdf', 'field': 'identity', 'group': 'ai:1:0', 'how': 'single_component_wrong_identity', ...}&#10;  Use -v to get more diff">E   AssertionError: the promoted run is scored with the default profile's evidence
+    assert [{'doc': 'EP-...entity', ...}] == []
+      
+      Left contains one more item: {'doc': 'EP-1/a.pdf', 'field': 'identity', 'group': 'ai:1:0', 'how': 'single_component_wrong_identity', ...}
+      Use -v to get more diff</failure></testcase><testcase classname="tests.test_m2_review08" name="test_the_reviewers_case_a_reopened_scope_cannot_loosen_its_saved_cap" time="0.108"><failure message="Failed: DID NOT RAISE (&lt;class 'app.ai.ledger.LedgerRefused'&gt;, &lt;class 'app.ai.ledger.LedgerRefused'&gt;)">E   Failed: DID NOT RAISE (&lt;class 'app.ai.ledger.LedgerRefused'&gt;, &lt;class 'app.ai.ledger.LedgerRefused'&gt;)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_another_process_with_different_or_partial_limits" time="0.248"><failure message="assert (0 != 0)&#10; +  where 0 = CompletedProcess(args=['C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\backend\\venv\\Scripts\\python.exe', '-c', '...h_diff0\\\\ledger.sqlite\', &quot;shared&quot;, L.Limits(requests=5)).reserve(&quot;t&quot;, 1, 1)\n'], returncode=0, stdout='', stderr='').returncode">E   assert (0 != 0)
+     +  where 0 = CompletedProcess(args=['C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\backend\\venv\\Scripts\\python.exe', '-c', '...h_diff0\\\\ledger.sqlite\', "shared", L.Limits(requests=5)).reserve("t", 1, 1)\n'], returncode=0, stdout='', stderr='').returncode</failure></testcase><testcase classname="tests.test_m2_review08" name="test_simultaneous_workers_with_conflicting_settings" time="0.031"><failure message="AssertionError: one policy wins the creation; every handle that opened agrees with it&#10;assert 2 == 1&#10; +  where 2 = len({2, 3})">E   AssertionError: one policy wins the creation; every handle that opened agrees with it
+    assert 2 == 1
+     +  where 2 = len({2, 3})</failure></testcase><testcase classname="tests.test_m2_review08" name="test_restart_after_reservations_a_timeout_and_settlement" time="0.057" /><testcase classname="tests.test_m2_review08" name="test_input_output_and_time_caps_are_one_scope_policy" time="0.054"><failure message="Failed: DID NOT RAISE &lt;class 'app.ai.ledger.LedgerRefused'&gt;">E   Failed: DID NOT RAISE &lt;class 'app.ai.ledger.LedgerRefused'&gt;</failure></testcase><testcase classname="tests.test_m2_review08" name="test_an_authorised_amendment_is_explicit_versioned_and_audited" time="0.037"><failure message="AttributeError: 'Ledger' object has no attribute 'amend_limits'">E   AttributeError: 'Ledger' object has no attribute 'amend_limits'</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_heading_answer_is_a_row_type_outcome_never_validated_data[row0-blind0-conflict-disputed]" time="0.001"><failure message="AssertionError: assert (('validated', None) == ('conflict', 'disputed')&#10;  &#10;  At index 0 diff: 'validated' != 'conflict'&#10;  Use -v to get more diff)">E   AssertionError: assert (('validated', None) == ('conflict', 'disputed')
+      
+      At index 0 diff: 'validated' != 'conflict'
+      Use -v to get more diff)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_heading_answer_is_a_row_type_outcome_never_validated_data[row1-blind1-conflict-disputed]" time="0.001"><failure message="AssertionError: assert (('conflict', None) == ('conflict', 'disputed')&#10;  &#10;  At index 1 diff: None != 'disputed'&#10;  Use -v to get more diff)">E   AssertionError: assert (('conflict', None) == ('conflict', 'disputed')
+      
+      At index 1 diff: None != 'disputed'
+      Use -v to get more diff)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_heading_answer_is_a_row_type_outcome_never_validated_data[row2-blind2-not_an_item-heading_confirmed]" time="0.007"><failure message="AssertionError: assert (('validated', None) == ('not_an_item...ng_confirmed')&#10;  &#10;  At index 0 diff: 'validated' != 'not_an_item'&#10;  Use -v to get more diff)">E   AssertionError: assert (('validated', None) == ('not_an_item...ng_confirmed')
+      
+      At index 0 diff: 'validated' != 'not_an_item'
+      Use -v to get more diff)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_heading_answer_is_a_row_type_outcome_never_validated_data[row3-blind3-conflict-disputed]" time="0.002"><failure message="AssertionError: assert (('validated', None) == ('conflict', 'disputed')&#10;  &#10;  At index 0 diff: 'validated' != 'conflict'&#10;  Use -v to get more diff)">E   AssertionError: assert (('validated', None) == ('conflict', 'disputed')
+      
+      At index 0 diff: 'validated' != 'conflict'
+      Use -v to get more diff)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_a_heading_answer_is_a_row_type_outcome_never_validated_data[row4-blind4-unverified-unverified]" time="0.001"><failure message="AssertionError: assert (('validated', None) == ('unverified', 'unverified')&#10;  &#10;  At index 0 diff: 'validated' != 'unverified'&#10;  Use -v to get more diff)">E   AssertionError: assert (('validated', None) == ('unverified', 'unverified')
+      
+      At index 0 diff: 'validated' != 'unverified'
+      Use -v to get more diff)</failure></testcase><testcase classname="tests.test_m2_review08" name="test_before_a_heading_answer_validated_a_part_only_row" time="0.001" /><testcase classname="tests.test_m2_review08" name="test_part_and_quantity_stay_separate_for_absent_and_unreadable_quantities" time="0.001" /></testsuite></testsuites>

@@ -1,0 +1,359 @@
+{
+  "budget": {
+    "initial_exit": 98,
+    "initial_sends": 3,
+    "original_load": {
+      "state": "ok",
+      "streak": 3,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 35400,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 35400,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 3,
+          "pid": 35400,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 2,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 3,
+        "cache_hit": 0,
+        "budget": 0,
+        "none": 0
+      },
+      "processes": 1
+    },
+    "alteration": {
+      "from": {
+        "b": "4089dacb597d113c1d2989b5",
+        "error_detail": "scripted provider failure",
+        "kind": "failure",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 35400,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      },
+      "to": {
+        "b": "4089dacb597d113c1d2989b5",
+        "error_detail": "scripted provider failure",
+        "kind": "budget",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 35400,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      }
+    },
+    "load_before_resume": {
+      "state": "ok",
+      "streak": 2,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 35400,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 35400,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 2,
+        "cache_hit": 0,
+        "budget": 1,
+        "none": 0
+      },
+      "processes": 1
+    },
+    "resume_exit": 0,
+    "new_sends": 16,
+    "status": "completed",
+    "stop": null,
+    "sandbox": "C:\\t\\r2x\\dry-runs\\r25-repro-v4.2\\neutral-budget"
+  },
+  "cache_hit": {
+    "initial_exit": 98,
+    "initial_sends": 3,
+    "original_load": {
+      "state": "ok",
+      "streak": 3,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 10800,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 10800,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 3,
+          "pid": 10800,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 2,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 3,
+        "cache_hit": 0,
+        "budget": 0,
+        "none": 0
+      },
+      "processes": 1
+    },
+    "alteration": {
+      "from": {
+        "b": "822dbadedfc39f1767206996",
+        "error_detail": "scripted provider failure",
+        "kind": "failure",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 10800,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      },
+      "to": {
+        "b": "822dbadedfc39f1767206996",
+        "error_detail": "scripted provider failure",
+        "kind": "cache_hit",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 10800,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      }
+    },
+    "load_before_resume": {
+      "state": "ok",
+      "streak": 2,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 10800,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 10800,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 2,
+        "cache_hit": 1,
+        "budget": 0,
+        "none": 0
+      },
+      "processes": 1
+    },
+    "resume_exit": 0,
+    "new_sends": 16,
+    "status": "completed",
+    "stop": null,
+    "sandbox": "C:\\t\\r2x\\dry-runs\\r25-repro-v4.2\\neutral-cache_hit"
+  },
+  "none": {
+    "initial_exit": 98,
+    "initial_sends": 3,
+    "original_load": {
+      "state": "ok",
+      "streak": 3,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 22180,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 22180,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 3,
+          "pid": 22180,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 2,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 3,
+        "cache_hit": 0,
+        "budget": 0,
+        "none": 0
+      },
+      "processes": 1
+    },
+    "alteration": {
+      "from": {
+        "b": "f53b1a0b0cd86f3032bb0762",
+        "error_detail": "scripted provider failure",
+        "kind": "failure",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 22180,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      },
+      "to": {
+        "b": "f53b1a0b0cd86f3032bb0762",
+        "error_detail": "scripted provider failure",
+        "kind": "none",
+        "model": "dry",
+        "outcome": "transport",
+        "page": 2,
+        "pid": 22180,
+        "seq": 3,
+        "task": "discover_page",
+        "type": "result"
+      }
+    },
+    "load_before_resume": {
+      "state": "ok",
+      "streak": 2,
+      "trailing_failures": [
+        {
+          "seq": 1,
+          "pid": 22180,
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        },
+        {
+          "seq": 2,
+          "pid": 22180,
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "task": "discover_page",
+          "page": 1,
+          "outcome": "transport",
+          "error_detail": "scripted provider failure",
+          "model": "dry"
+        }
+      ],
+      "unresolved": [],
+      "last_seq": 3,
+      "records": 7,
+      "result_counts": {
+        "ok": 0,
+        "failure": 2,
+        "cache_hit": 0,
+        "budget": 0,
+        "none": 1
+      },
+      "processes": 1
+    },
+    "resume_exit": 0,
+    "new_sends": 16,
+    "status": "completed",
+    "stop": null,
+    "sandbox": "C:\\t\\r2x\\dry-runs\\r25-repro-v4.2\\neutral-none"
+  }
+}

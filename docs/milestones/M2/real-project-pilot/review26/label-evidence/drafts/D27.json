@@ -1,0 +1,21 @@
+{
+ "id": "D27",
+ "register": {"kind": "word transmittal", "reference": "TR/4765/19", "revision": "absent", "decision": "n/a", "system": "FIRE ALARM", "register": true},
+ "confidence": "medium",
+ "pages": {},
+ "register_only": true,
+ "unresolved": [],
+ "evidence_doc": {"method": "printable-text runs extracted read-only from the legacy Word (OLE2 .doc) binary of the hash-checked staged copy; not rendered (no Word application used)",
+                  "text_found": ["DOCUMENT TRANSMITTAL", "AASS Ref. TR/4765/19", "13/04/2019", "M/s. Al Yunbou Technical", "Project ID EP-16830", "MBR-Dubai Hills Estate PA07-Nursery, Cafe & Retail.",
+                                 "Subject: Shop Drawing Structured Cabling, Fire Alarm System, Emergency Lighting & Disabled Toilet Alarm Systems R0",
+                                 "819-TL-101 / 819-FA-101 / 819-EM-101 / 819-DA-101 (ground floor plans)", "Khalid Issa, Projects Manager", "P06/TRANS/R1 (form template)"]},
+ "identities": [
+  {"literal": "TR/4765/19", "printed_label": "AASS Ref.", "role": "own_document", "own_for_evaluation": true},
+  {"literal": "EP-16830", "printed_label": "Project ID", "role": "project_reference", "own_for_evaluation": false},
+  {"literal": "P06/TRANS/R1", "printed_label": "(form template code)", "role": "form_template_number", "own_for_evaluation": false},
+  {"literal": "819-FA-101", "printed_label": "Drawing No. (listed)", "role": "listed_enclosure", "own_for_evaluation": false}
+ ],
+ "note": "Al Arabia (AASS) document transmittal to Al Yunbou Technical for the MBR Dubai Hills PA07 nursery, cafe & retail project, 13/04/2019, enclosing four R0 shop drawings. A transmittal carries no decision; it has no revision field of its own ('R0' in the subject is the enclosed drawings' revision; 'P06/TRANS/R1' is the form template). The evidence reader does not read .doc (unsupported input control); the label exists so the document stays in the planned denominator.",
+ "uncertainty": [{"field": "all", "issue": "taken from raw text runs of the binary .doc without rendering; layout (e.g. which number is printed in which cell) cannot be verified visually", "effect": "confidence medium"}],
+ "off_title_block": {"screened": false, "confirmed": false, "basis": "no decision; unsupported input"}
+}

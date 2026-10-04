@@ -1,0 +1,335 @@
+{
+ "groups": [
+  {
+   "group": "F01",
+   "category": "two_own_identities",
+   "run": "AI-EV1",
+   "field": "identity",
+   "value_read": "B2312982",
+   "label": "REQ-2387569",
+   "review07_resolution": "disputed truth -> human review; not counted as an AI false acceptance until settled",
+   "status": "unresolved",
+   "to_decide": "Which printed identity is this document's own for evaluation: the building permit number (B2312982) or the request reference (REQ-2387569)? Record both with their printed labels and roles.",
+   "items": [
+    {
+     "item": "C0073",
+     "cohort": "pilot",
+     "doc": "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/Park Medows   -Final Design Revision Arch  - Approved/REQ-2387569  - BP.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/bbe5a2877086829d-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F02",
+   "category": "ai_correct_label_disputed",
+   "run": "AI-EV1, AI-EV2",
+   "field": "decision",
+   "value_read": "ANN",
+   "label": "n/a (no decision on page 3)",
+   "review07_resolution": "label likely incomplete -> human review",
+   "status": "unresolved",
+   "to_decide": "Does the ticked, signed CODE B stamp on page 3 (sheet 02 of 02) give this component's decision? If so the label is incomplete.",
+   "items": [
+    {
+     "item": "C0083",
+     "cohort": "pilot",
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+     "page": "3",
+     "page_image": "../../review07/human-review-packet/pages/13041b58155be258-p3.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F03",
+   "category": "literal_ocr_error",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "TEP-30784",
+   "label": "EP-30784",
+   "review07_resolution": "raw observation error (observed, not accepted)",
+   "status": "confirm",
+   "to_decide": "Confirm the printed Doc No. literal (label EP-30784). The OCR reading TEP-30784 was observed, never accepted.",
+   "items": [
+    {
+     "item": "C0049",
+     "cohort": "pilot",
+     "doc": "EP-30784/01- EP-30784 Scan/EP-30784 EML Design.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/241c5652f6d3ccc8-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F04",
+   "category": "literal_ocr_error",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "LPOD-1856000229",
+   "label": "LPO/1050000159",
+   "review07_resolution": "raw observation error",
+   "status": "confirm",
+   "to_decide": "Confirm the printed LPO number literal (label LPO/1050000159). The OCR reading was observed, never accepted.",
+   "items": [
+    {
+     "item": "C0261",
+     "cohort": "pilot",
+     "doc": "EP-14119/EP-14119 Commercial/EP-14119 LPO.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/46e16cad3602ed1a-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F05",
+   "category": "referenced_as_own",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "D1902-FC-DWG-EM-B1200",
+   "label": "EP-19977-R1",
+   "review07_resolution": "raw observation error",
+   "status": "confirm",
+   "to_decide": "Confirm the quotation's own reference (label EP-19977-R1); the Ref-line drawing is a referenced (priced) drawing.",
+   "items": [
+    {
+     "item": "C0191",
+     "cohort": "pilot",
+     "doc": "EP-19977/EP-19977 Commercial/EP-19977 CBS Quotation.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/ea9d1519b8af2f08-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F06",
+   "category": "referenced_as_own",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "D1902-FC-DWG-EF-B1200 & ...",
+   "label": "EP - 19977 - R4-B0",
+   "review07_resolution": "raw observation error",
+   "status": "confirm",
+   "to_decide": "Confirm the quotation's own reference (label EP - 19977 - R4-B0); the Ref-line drawings are referenced (priced) drawings.",
+   "items": [
+    {
+     "item": "C0193",
+     "cohort": "pilot",
+     "doc": "EP-19977/EP-19977 Commercial/EP-19977 FA Quotation R4.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/3679b3cbd02b4194-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F07",
+   "category": "two_own_identities",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "K&A-WTRAN-017671 / -000913 / -020525",
+   "label": "TAVC-TRANSMIT-009782 / -000731 / -011156",
+   "review07_resolution": "disputed truth -> human review (3 cases)",
+   "status": "unresolved",
+   "to_decide": "Each transmittal prints the consultant's mail number (TAVC-TRANSMIT-...) and the contractor's reference number (K&A-WTRAN-...). Record both; say which one the register evaluates, or that both are the same document's own numbers.",
+   "items": [
+    {
+     "item": "C0202",
+     "cohort": "pilot",
+     "doc": "EP-13777/C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/78571a79da44dd93-p1.jpg"
+    },
+    {
+     "item": "C0211",
+     "cohort": "pilot",
+     "doc": "EP-13777/Approval Documents/TAV-TN-000731.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/c2b54cc0ebedea1c-p1.jpg"
+    },
+    {
+     "item": "C0220",
+     "cohort": "pilot",
+     "doc": "EP-13777/C & E Matrix/Approved matrix/TAV-TN-011156 (1).pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/91c4d1aec0214727-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F08",
+   "category": "label_gap_unlabelled_own",
+   "run": "det .8",
+   "field": "identity+revision",
+   "value_read": "EP-26369/SS/FA/101, 01",
+   "label": "page 1 labelled no component (components on pages 4-5)",
+   "review07_resolution": "label gap -> human review",
+   "status": "unresolved",
+   "to_decide": "Page 1 is the company's own cover (EP-26369/SS/FA/101, Revision). Is it a component of this document? The label has none on page 1.",
+   "items": [
+    {
+     "item": "C0159",
+     "cohort": "pilot",
+     "doc": "EP-26369/MS FAS/R1/MS FAS SOFTCOPY (TIM AEROSPACE) R1.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/733b0febc0ba007e-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F09",
+   "category": "label_gap_unlabelled_own",
+   "run": "det .8",
+   "field": "identity+revision",
+   "value_read": "EP-30627/SS/EML/ 1293, 00",
+   "label": "page 3 labelled no component",
+   "review07_resolution": "label gap -> human review",
+   "status": "unresolved",
+   "to_decide": "Page 3 is a cover carrying another project's number (EP-30627/SS/EML/ 1293). Is it part of this document (association), and is it a component?",
+   "items": [
+    {
+     "item": "C0034",
+     "cohort": "pilot",
+     "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+     "page": "3",
+     "page_image": "../../review07/human-review-packet/pages/21d2d84830ad11c6-p3.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F10",
+   "category": "two_own_identities",
+   "run": "det .8",
+   "field": "identity",
+   "value_read": "10789-CSCEC-OUT-L0",
+   "label": "L0749",
+   "review07_resolution": "disputed truth -> human review",
+   "status": "unresolved",
+   "to_decide": "The minutes print the contractor's outgoing letter number (10789-CSCEC-OUT-L0...) and the meeting letter number (L0749). Which is the minutes' own identity for evaluation?",
+   "items": [
+    {
+     "item": "C0245",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 MOM/L0749-Minutes of Weekly MEP Meeting No. 020 - Final Issuance.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/b28708dbf3c90abf-p1.jpg"
+    }
+   ],
+   "correction": "Review 07 recorded the project as EP-29076; the file is in EP-26082 (GOLDEN-LABELS.json, packet item C0245, the det .8 output)."
+  },
+  {
+   "group": "F11",
+   "category": "referenced_as_own",
+   "run": "det .8 (parser drawing_sheet observations, also in Candidate C)",
+   "field": "identity",
+   "value_read": "R1029-05-BSB-DWG-ALL-ARC-1282, A-DWG-TYP-GRO-INT-1102-01, ...",
+   "label": "the sheet's own number",
+   "review07_resolution": "raw observation error (pre-existing since Candidate C)",
+   "status": "confirm",
+   "to_decide": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "items": [
+    {
+     "item": "C0221",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 9 (BEL POOL)/78-80_BELLAGIO POOL/78 OF 96_ARCH, STRUC, LSCAPE, SIGNAGE, FLS/D. LANDSCAPE/345-LA-SS-5A-20002.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/0650252ca9aae3b2-p1.jpg"
+    },
+    {
+     "item": "C0222",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/B. INFRASTRUCTURE/R1029-18-AUR-DWG-GFL-PUA-INF-53001-PDF (D) - BELLAGIO.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/d513641371a26448-p1.jpg"
+    },
+    {
+     "item": "C0224",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/09 OF 96_MEP - MGM 2 ELECTRICAL ELV/R1029-08-IFS-DWG-L07-ICT-1207.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/20ec1badbe8eaeb7-p1.jpg"
+    },
+    {
+     "item": "C0225",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/A. LANDSCAPE/345-LA-HS-5C-11000.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/b73c4df87904e83e-p1.jpg"
+    },
+    {
+     "item": "C0226",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/14 OF 96_INTERIOR DESIGN - HOTEL ROOMS/R1029-07-W&A-DWG-TYP-GRO-INT-9011-01-PDF-A.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/3e4e89ffa0c633c4-p1.jpg"
+    },
+    {
+     "item": "C0227",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-08-W&A-DWG-L05-PUA-INT-3250-PDF-B.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/11b5d15c0fbb99ba-p1.jpg"
+    },
+    {
+     "item": "C0229",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-07-W&A-DWG-L05-PUA-INT-3114-PDF-E.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/4b2e4da6f52cddb2-p1.jpg"
+    },
+    {
+     "item": "C0230",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/15 OF 96_INTERIOR DESIGN - SERVICED APARTMENTS/R1029-08-W&A-DWG-L14-GRO-INT-4315-01-PDF-B.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/8156d02ce8d1141c-p1.jpg"
+    },
+    {
+     "item": "C0244",
+     "cohort": "pilot",
+     "doc": "EP-26082/EP-26082 INPUTS/DCD/DCD App (CE,Aria ,Bellagio & MGM-2/DCD Approved Drawing (CE, Aria, Bellagio & MGM 2)/DCD APPROVAL FOR BELLAGIO/revised_gas_bellagio_part1xiba1741941453483 (1).pdf",
+     "page": "9",
+     "page_image": "../../review07/human-review-packet/pages/8f171daed83c545e-p9.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F12",
+   "category": "two_own_identities",
+   "run": "det .8 holdout",
+   "field": "identity",
+   "value_read": "ICDS-DOC-01943",
+   "label": "D15015-0200S-FS-EL-MS-0022",
+   "review07_resolution": "role ambiguity (own vs target) -> human review; the literal's leading 'I' also unverified",
+   "status": "unresolved",
+   "to_decide": "The Dar review form prints its own document number (OCR ICDS-DOC-01943; the leading I is unverified) and the method statement it reviews (D15015-0200S-FS-EL-MS-0022). Which is the component's own identity, and what is the exact literal?",
+   "items": [
+    {
+     "item": "C0282",
+     "cohort": "holdout",
+     "doc": "EP-8430/Approval and Comments/PAVA MS Comments.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/8106a2d77584615c-p1.jpg"
+    }
+   ]
+  },
+  {
+   "group": "F13",
+   "category": "label_gap_unlabelled_own",
+   "run": "det .8 holdout",
+   "field": "identity",
+   "value_read": "BSS/AE/ALARABIA/170315-047",
+   "label": "no component",
+   "review07_resolution": "label gap -> human review",
+   "status": "unresolved",
+   "to_decide": "The Bosch letter prints its own reference BSS/AE/ALARABIA/170315-047. Is the letter a component (it is labelled a no-record page)?",
+   "items": [
+    {
+     "item": "C0283",
+     "cohort": "holdout",
+     "doc": "EP-8430/EP-8430 PAVA MS/Rev. 0/Test Certificates/BOSCH PAVA Letter.pdf",
+     "page": "1",
+     "page_image": "../../review07/human-review-packet/pages/44665c3b5543786e-p1.jpg"
+    }
+   ]
+  }
+ ]
+}

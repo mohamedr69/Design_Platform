@@ -1,0 +1,85 @@
+{
+ "counts": {
+  "review10 (a34d3f8)": {
+   "tests": 1674,
+   "failed": 2,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1637
+  },
+  "review11 (a977364)": {
+   "tests": 1683,
+   "failed": 3,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1645
+  },
+  "review12 (3d5607d)": {
+   "tests": 1694,
+   "failed": 2,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1657
+  }
+ },
+ "sync_worker_claim_test": {
+  "review10 (a34d3f8)": {
+   "status": "passed",
+   "seconds": 4.6
+  },
+  "review11 (a977364)": {
+   "status": "failed",
+   "seconds": 60.8
+  },
+  "review12 (3d5607d)": {
+   "status": "passed",
+   "seconds": 4.8
+  }
+ },
+ "failures": {
+  "tests.test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "review10 (a34d3f8)": {
+    "kind": "failure",
+    "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed"
+   },
+   "review11 (a977364)": {
+    "kind": "failure",
+    "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed"
+   },
+   "review12 (3d5607d)": {
+    "kind": "failure",
+    "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed"
+   }
+  },
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "review10 (a34d3f8)": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}"
+   },
+   "review11 (a977364)": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}"
+   },
+   "review12 (3d5607d)": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}"
+   }
+  },
+  "tests.test_sync_worker::test_two_worker_processes_cannot_both_claim": {
+   "review10 (a34d3f8)": null,
+   "review11 (a977364)": {
+    "kind": "failure",
+    "message": "subprocess.TimeoutExpired: Command '['C:\\\\Users\\\\moham\\\\Desktop\\\\dev\\\\dev\\\\ep-platform\\\\backend\\\\venv\\\\Scripts\\\\python.exe', '-c', \"import sys, time\\nfrom app.d"
+   },
+   "review12 (3d5607d)": null
+  }
+ },
+ "module_delta_vs_review11": {
+  "tests.test_m2_review12": [
+   0,
+   11
+  ]
+ },
+ "skip_delta_vs_review11": {},
+ "review12_failures_identical_to_review10": true
+}

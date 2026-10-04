@@ -1,0 +1,139 @@
+{
+ "demand_note": "planning lanes rounded to whole requests (R 4.1 -> 4, P 6.9 -> 7: 63)",
+ "demands": {
+  "planning": {
+   "B": 6,
+   "C": 46,
+   "P": 7,
+   "R": 4
+  },
+  "structural": {
+   "B": 12,
+   "C": 72,
+   "P": 36,
+   "R": 40
+  }
+ },
+ "planning_total": 63.0,
+ "project": "EP-27331",
+ "results": {
+  "planning|earliest|burst": {
+   "completed": true,
+   "finished_after_s": 86440.0,
+   "invocations": 4,
+   "requests": 63,
+   "resume_starts_s": [
+    0.0,
+    86400.0,
+    86420.0,
+    86440.0
+   ]
+  },
+  "planning|earliest|paced": {
+   "completed": true,
+   "finished_after_s": 86400.0,
+   "invocations": 2,
+   "requests": 63,
+   "resume_starts_s": [
+    0.0,
+    86400.0
+   ]
+  },
+  "planning|full|burst": {
+   "completed": true,
+   "finished_after_s": 87580.0,
+   "invocations": 2,
+   "requests": 63,
+   "resume_starts_s": [
+    0.0,
+    87580.0
+   ]
+  },
+  "planning|full|paced": {
+   "completed": true,
+   "finished_after_s": 87580.0,
+   "invocations": 2,
+   "requests": 63,
+   "resume_starts_s": [
+    0.0,
+    87580.0
+   ]
+  },
+  "structural|earliest|burst": {
+   "completed": true,
+   "finished_after_s": 173580.0,
+   "invocations": 101,
+   "requests": 160,
+   "resume_starts_s": [
+    0.0,
+    86400.0,
+    86420.0,
+    86440.0,
+    86460.0,
+    86480.0,
+    86500.0,
+    86520.0,
+    86540.0,
+    86560.0,
+    86580.0,
+    86600.0,
+    "..."
+   ]
+  },
+  "structural|earliest|paced": {
+   "completed": true,
+   "finished_after_s": 172800.0,
+   "invocations": 3,
+   "requests": 160,
+   "resume_starts_s": [
+    0.0,
+    86400.0,
+    172800.0
+   ]
+  },
+  "structural|full|burst": {
+   "completed": true,
+   "finished_after_s": 173980.4,
+   "invocations": 3,
+   "requests": 160,
+   "resume_starts_s": [
+    0.0,
+    87580.0,
+    173980.4
+   ]
+  },
+  "structural|full|paced": {
+   "completed": true,
+   "finished_after_s": 174760.0,
+   "invocations": 3,
+   "requests": 160,
+   "resume_starts_s": [
+    0.0,
+    87580.0,
+    174760.0
+   ]
+  }
+ },
+ "rule": "ORCH-08C (R39-08; task item 3): how many invocations a project needs under each resume policy -- the runbook input for\nthe declaration task. A deterministic simulation of the harness's own rules, no request and no model:\n  * one project, its requests in lane order B -> C -> R -> P (a later lane starts only when the earlier one deferred\n    nothing); every invocation re-runs every lane: answered requests are served (no charge), the rest are dispatched in\n    order until the project's rolling window (limit L per W seconds, all lanes) refuses one -- the invocation then ends\n    DEFERRED (allowance_r32: a refusal is never a charge);\n  * the resume times: 'earliest' = when the oldest charge in the window leaves it (one slot); 'full' = the harness's\n    default policy, runner_r32.resume_times: the structural-basis retry_at_full (the project's remaining structural\n    maximum fits the window, or -- when it exceeds one window -- the window is empty: allowance_r32.full_retry_time);\n  * timing: the first invocation dispatches one request every d seconds (default 20 s: the claude-code CLI's typical\n    latency per crop read); a resume either dispatches at the same pace ('paced': old charges leave the window as fast as\n    new ones arrive) or in a burst 0.01 s apart ('burst': its served replays and new requests outrun the ageing of the\n    earlier charges -- the worst case for 'earliest', where each resume finds only the slots freed at its start).\nThe demand is the project's requests that actually occur: its planning estimate or its structural maximum (bounds file).\nUsage: resume_invocations_r39.py <PROJECT-REQUEST-BOUNDS.json> <out json> [project]",
+ "statement": "each invocation after the first is a resume with its own owner authorization (one nonce per invocation); a resume before the declared policy's time is refused and creates nothing; numbers are a model, not a measurement",
+ "structural_total": 160,
+ "table": {
+  "planning": {
+   "earliest_burst": 4,
+   "earliest_paced": 2,
+   "full": 2,
+   "full_burst": 2
+  },
+  "structural": {
+   "earliest_burst": 101,
+   "earliest_paced": 3,
+   "full": 3,
+   "full_burst": 3
+  }
+ },
+ "version": "resume-invocations-r39-2026-10-04.1",
+ "window": {
+  "limit": 60,
+  "window_s": 86400
+ }
+}

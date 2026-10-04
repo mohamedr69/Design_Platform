@@ -1,0 +1,258 @@
+{
+ "package": "M2 Review 08 correction",
+ "date": "2026-09-29",
+ "candidate": {
+  "commit": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+  "repository": "C:/t/iso/ep-platform",
+  "parent": "1455f8b7e5f0164a1afec76c6a47250f4ce5dff2",
+  "changed_files_sha256_at_e02a8c1": {
+   "backend/app/ai/evidence_reader.py": "7d534b8ff07ab3c724e9d3e597b39f482feb0ac5fc17fb4ec2d700e3ade5f050",
+   "backend/app/ai/ledger.py": "a474e9ab1c581931d60c449a8314928144be48fd006b827575c7ced73ae0eb2b",
+   "backend/scripts/m2_eval5.py": "649fb83254e982705cb09ebedede1e362a48d33a0654ed75b960fe5e681a3797",
+   "backend/tests/fixtures/evidence_reader_r7.py": "771c41884c0eb88d09229e5128d1d0d5ee7a06b2712081493c124f164c59133c",
+   "backend/tests/fixtures/ledger_r7.py": "b413c40a919eb4ab2cc254dcd625310590def8899bbc0b866476129b57b0212f",
+   "backend/tests/test_ai_ledger.py": "5d7fbef65531ca2e603ba8fdb57c711001507acafb039687f64d28077ee214e7",
+   "backend/tests/test_evidence_reader.py": "af4332feb76a44047a222ab75d71474c619c5e7acb0ca65f28be0b96973ee9cc",
+   "backend/tests/test_evidence_reader_r7.py": "476429d75549bdf90916957c6204801fca65a37da681c3c0bb6ec2242491ff74",
+   "backend/tests/test_m2_eval5.py": "4bd49682f03110eb6032e8a24a1926f329e516270e244c4b6506094ed9aea6c8",
+   "backend/tests/test_m2_review08.py": "74578fe96eedf0c4f2c0b54f9590ef5c7e3ef9445608b9fc95cbc9781dc6a1d4"
+  }
+ },
+ "owner_candidate_c_freeze": {
+  "files": 11,
+  "failures": []
+ },
+ "copied_from": {
+  "tests/test_m2_review08.py": "C:\\t\\iso\\frozen-r8\\backend\\tests\\test_m2_review08.py",
+  "probes/probes_r8.py": "C:\\t\\iso\\work\\r8\\probes_r8.py",
+  "probes/probe-results-r8.json": "C:\\t\\iso\\work\\r8\\probe-results-r8.json",
+  "prior/review08_module_on_1455f8b.txt": "C:\\t\\iso\\work\\r8\\prior\\review08_module_on_1455f8b.txt",
+  "prior/r8__review08_module_on_1455f8b.xml": "C:\\t\\iso\\work\\r8\\prior\\r8__review08_module_on_1455f8b.xml",
+  "eval7/SUMMARY.json": "C:\\t\\iso\\work\\r8\\eval7\\SUMMARY.json",
+  "eval7/ORDER-ONLY-CHECK.json": "C:\\t\\iso\\work\\r8\\eval7\\ORDER-ONLY-CHECK.json",
+  "eval7/rescore7.py": "C:\\t\\iso\\work\\r8\\rescore7.py",
+  "metrics/METRICS-R8.json": "C:\\t\\iso\\work\\r8\\METRICS-R8.json",
+  "metrics/metrics_r8.py": "C:\\t\\iso\\work\\r8\\metrics_r8.py",
+  "freeze/FREEZE-R8.json": "C:\\t\\iso\\work\\r8\\freeze\\FREEZE-R8.json",
+  "freeze/candidate-r8.diff": "C:\\t\\iso\\work\\r8\\freeze\\candidate-r8.diff",
+  "freeze/freeze_r8.py": "C:\\t\\iso\\work\\r8\\freeze_r8.py",
+  "build_packet_v2.py": "C:\\t\\iso\\work\\r8\\build_packet_v2.py",
+  "package_r8.py": "C:\\t\\iso\\work\\r8\\package_r8.py",
+  "patches/er_patch9.py": "C:\\t\\iso\\work\\r8\\er_patch9.py",
+  "patches/er_patch10.py": "C:\\t\\iso\\work\\r8\\er_patch10.py",
+  "patches/er_patch11.py": "C:\\t\\iso\\work\\r8\\er_patch11.py",
+  "patches/er_patch12.py": "C:\\t\\iso\\work\\r8\\er_patch12.py",
+  "patches/er_patch13.py": "C:\\t\\iso\\work\\r8\\er_patch13.py",
+  "patches/ledger_patch.py": "C:\\t\\iso\\work\\r8\\ledger_patch.py",
+  "patches/ledger_patch2.py": "C:\\t\\iso\\work\\r8\\ledger_patch2.py",
+  "patches/ev_patch7.py": "C:\\t\\iso\\work\\r8\\ev_patch7.py",
+  "patches/test_patch_r7_lifecycle.py": "C:\\t\\iso\\work\\r8\\test_patch_r7_lifecycle.py",
+  "patches/t08_patch1.py": "C:\\t\\iso\\work\\r8\\t08_patch1.py",
+  "patches/t08_patch2.py": "C:\\t\\iso\\work\\r8\\t08_patch2.py",
+  "suite/full_frozen_hermetic.log": "C:\\t\\iso\\work\\r8\\suite\\full_frozen_hermetic.log",
+  "suite/r8__suite_full_frozen_hermetic.xml": "C:\\t\\iso\\work\\r8\\suite\\r8__suite_full_frozen_hermetic.xml",
+  "focused/r8__compat_boq_extraction_ai.xml": "C:\\t\\iso\\work\\r8\\focused\\r8__compat_boq_extraction_ai.xml",
+  "focused/r8__review08_module.xml": "C:\\t\\iso\\work\\r8\\focused\\r8__review08_module.xml",
+  "focused/r8__reviewer_module_set.xml": "C:\\t\\iso\\work\\r8\\focused\\r8__reviewer_module_set.xml",
+  "eval7/matched-AI-EV0.json": "C:\\t\\iso\\work\\r8\\eval7\\matched-AI-EV0.json",
+  "eval7/matched-AI-EV1.json": "C:\\t\\iso\\work\\r8\\eval7\\matched-AI-EV1.json",
+  "eval7/matched-AI-EV2.json": "C:\\t\\iso\\work\\r8\\eval7\\matched-AI-EV2.json",
+  "eval7/matched-model-disabled.json": "C:\\t\\iso\\work\\r8\\eval7\\matched-model-disabled.json"
+ },
+ "files": {
+  "build_packet_v2.py": {
+   "sha256": "1a668f41adf270b3ead89670ba1f6f526b1bbef8386198327c694abb54284c70",
+   "bytes": 15494
+  },
+  "eval7/matched-AI-EV0.json": {
+   "sha256": "0f7cddb1b36e49d980e2b134647531e96821639dbb5c536cc95f23b9170aab14",
+   "bytes": 111623
+  },
+  "eval7/matched-AI-EV1.json": {
+   "sha256": "fe65dfc51586ffe92b425dab3b28eaf61b941618e5b630dc39ccba04d532560e",
+   "bytes": 252876
+  },
+  "eval7/matched-AI-EV2.json": {
+   "sha256": "26f0713e88dfa04f4a714c8a2cc10f49de40bcafca65a125b571a75a71a3dc46",
+   "bytes": 225176
+  },
+  "eval7/matched-model-disabled.json": {
+   "sha256": "a3007aa96a483f763faf139bea42ce3942dece1c03e3cfdd15e07fcb7d066f85",
+   "bytes": 111618
+  },
+  "eval7/ORDER-ONLY-CHECK.json": {
+   "sha256": "78be52dc40da53ee476d2c28a350cbb69a726ab749f4a01153f13f873540fd02",
+   "bytes": 409
+  },
+  "eval7/rescore7.py": {
+   "sha256": "614639cf43fb7f18f6d866970a133ba06547090fda1f43213153233fe9174097",
+   "bytes": 7710
+  },
+  "eval7/SUMMARY.json": {
+   "sha256": "45e6a2b9003785cd50d1bcc31eaf8582717b93aacdd913808d94dda3a87ca774",
+   "bytes": 14087
+  },
+  "focused/r8__compat_boq_extraction_ai.xml": {
+   "sha256": "d612dd51bdbf89fc0419f9d7e343dbc531eb92d7c325796cd04fb7542047d370",
+   "bytes": 24251
+  },
+  "focused/r8__review08_module.xml": {
+   "sha256": "97eb52871482635b8769cdb6108ea54dc15c5beee16d6208f064c44d09ee2e51",
+   "bytes": 4048
+  },
+  "focused/r8__reviewer_module_set.xml": {
+   "sha256": "6f0316afa6acd34e5ea1ff35b3cc72e41c57bd5a1f7d96d534613d1ac78b5d9a",
+   "bytes": 11944
+  },
+  "freeze/candidate-r8.diff": {
+   "sha256": "e9819c77c254b943726557af10ebd4b3655f5606a718208e3133b2fdda6c9c4e",
+   "bytes": 182618
+  },
+  "freeze/FREEZE-R8.json": {
+   "sha256": "f4b8c79a50c78edc24dc5ecc73442cb969b7afd1c88e91cdec28af3966bb215e",
+   "bytes": 3481
+  },
+  "freeze/freeze_r8.py": {
+   "sha256": "f41bb23167e9466dda36bfe9cc3034a84d4bcc96aff19795086ca1370891e30a",
+   "bytes": 3469
+  },
+  "metrics/METRICS-R8.json": {
+   "sha256": "b499d6a6d9ee6c0bb90749317da46812c68e55af64dee42566fe29d6e94f422d",
+   "bytes": 36080
+  },
+  "metrics/metrics_r8.py": {
+   "sha256": "e0c80b349549fd78c537971efcf829bd3e9d7b66524eccc587d7ed95bc5817c6",
+   "bytes": 6325
+  },
+  "package_r8.py": {
+   "sha256": "c14efdb84ae27a5792c52ad52c0ee3e6bc50b6a30ac91cbad6f6e129ebec88bf",
+   "bytes": 4059
+  },
+  "patches/er_patch10.py": {
+   "sha256": "7f3859ae3463b59be7ecad93d391e75611f4cc4bceba9434669d8e1e01a86ec0",
+   "bytes": 12874
+  },
+  "patches/er_patch11.py": {
+   "sha256": "ea5a74d0ba38fc6fdde8bd5d1a22433fdf47aa5dea8adc748457235ae526f170",
+   "bytes": 2018
+  },
+  "patches/er_patch12.py": {
+   "sha256": "ba01d8a1810821853a15431a817302057679c28f158c62a2ac468db9df9d7895",
+   "bytes": 780
+  },
+  "patches/er_patch13.py": {
+   "sha256": "8ae0800ad87d595317d356504827f5d6a6a4f87bfe05004cd7249e76f5240281",
+   "bytes": 1595
+  },
+  "patches/er_patch9.py": {
+   "sha256": "95b515daae022c77bd88593166f593050ff0358b5cf5a29281b1a18e813eb6a7",
+   "bytes": 15323
+  },
+  "patches/ev_patch7.py": {
+   "sha256": "deb0dd2ccea47d6d528f90a4e3524825a42fe8f5950e77a029f4fc9268b26e7a",
+   "bytes": 2675
+  },
+  "patches/ledger_patch.py": {
+   "sha256": "f8f89106c9ef48939e272bef723b5a64fc258f08fca8f586a03c32ce0f5754b0",
+   "bytes": 7935
+  },
+  "patches/ledger_patch2.py": {
+   "sha256": "52ba2a8ac80f30a0d7fe534399b08557fe9d97899089f5d9e121d0d536260a84",
+   "bytes": 2398
+  },
+  "patches/t08_patch1.py": {
+   "sha256": "d1e3099b41bbd7ea1ecd4b474c1c4c77bbc031ba7f3e62b3ff358da660ac7edd",
+   "bytes": 5780
+  },
+  "patches/t08_patch2.py": {
+   "sha256": "998fb61ad2b9abb37ef3edeadb72f718cd7ca340d778e2ecac5ac04bcc7d4e39",
+   "bytes": 6487
+  },
+  "patches/test_patch_r7_lifecycle.py": {
+   "sha256": "11779e8fde938f4c69943a73bc4d6b1a4f4259d1a10ab76dd787accf4377c007",
+   "bytes": 10868
+  },
+  "prior/r8__review08_module_on_1455f8b.xml": {
+   "sha256": "611f996a01f92f0b4d41735e965fd3d72c1f3e37ae7bc899183e53b8852cb938",
+   "bytes": 12679
+  },
+  "prior/review08_module_on_1455f8b.txt": {
+   "sha256": "30a8d7a14af7e111fb3ed6c066e1d1f4d5bf59b42ed9297adbfaa15c2d894e8f",
+   "bytes": 2625
+  },
+  "probes/probe-results-r8.json": {
+   "sha256": "3c33c5c838c87f2406a915ac7cf038bf3f490835c46b2f7fdef361360dc4ead8",
+   "bytes": 4739
+  },
+  "probes/probes_r8.py": {
+   "sha256": "39ebac1537f4c9ab044ce33c39e8cb15def60af600b1926e51065ccb5435088e",
+   "bytes": 6617
+  },
+  "suite/full_frozen_hermetic.log": {
+   "sha256": "a2351b0c339b770588e619c03c2b023b39f45cd6322d10038d560a67027e4cbb",
+   "bytes": 22075
+  },
+  "suite/r8__suite_full_frozen_hermetic.xml": {
+   "sha256": "52e30c2661667e7bc7338f790111eddfa3ebc83ab9ca73e69b392fc3692255de",
+   "bytes": 231361
+  },
+  "tests/test_m2_review08.py": {
+   "sha256": "74578fe96eedf0c4f2c0b54f9590ef5c7e3ef9445608b9fc95cbc9781dc6a1d4",
+   "bytes": 28625
+  }
+ },
+ "package_files": {
+  "DISPOSITIONS.md": {
+   "sha256": "e0c78eaee3b3223d55e6f586fe755cdb82d3c9ee553643eda61073710d2f8e19",
+   "bytes": 16400
+  },
+  "human-review-packet-v2/BOQ-ITEMS-v2.csv": {
+   "sha256": "fa715e222e8f59299a1f73c1c0277082225a896b644a18ac841b9e17b80675f3",
+   "bytes": 57726
+  },
+  "human-review-packet-v2/COMPONENT-ITEMS-v2.csv": {
+   "sha256": "2b61333332aa0f1f7bd426a8873c03dc005e48785af4f4c53cec62d70896b669",
+   "bytes": 118327
+  },
+  "human-review-packet-v2/FINDINGS-INDEX.json": {
+   "sha256": "530ed24ba903a2328c02bd27aea57ba329300012722a3faa4c40576d843703e2",
+   "bytes": 12856
+  },
+  "human-review-packet-v2/FINDINGS-INDEX.md": {
+   "sha256": "2112e8b6fba59f3c62efea1b11ce62dc0cea68adedf4d8e4910051f0c4a59e2d",
+   "bytes": 7487
+  },
+  "human-review-packet-v2/IDENTITIES-v2.csv": {
+   "sha256": "299166e466b9ea0f60c346c97f9f21de0fecb3b34248424c4c885e30db35ab9e",
+   "bytes": 36075
+  },
+  "human-review-packet-v2/INSTRUCTIONS-v2.md": {
+   "sha256": "4270d5a34b9ee6bb11c16b669c83c03d4e3d5ec6881a2ad0a87b3d16e9c16806",
+   "bytes": 7206
+  },
+  "human-review-packet-v2/PACKET-MANIFEST-v2.json": {
+   "sha256": "ed3efc2941ca04ac4a77cff23c743a7d4c5691b06c9d0aefd5ae8e1b8a0e831b",
+   "bytes": 1930
+  },
+  "human-review-packet-v2/PACKET-SCHEMA-v2.json": {
+   "sha256": "125c795ecdbb4b5d775e8c4dd4f75b797ab7c84f56a62d5ad2a5fd59c6c2de7b",
+   "bytes": 4342
+  },
+  "METRICS.md": {
+   "sha256": "05b358b5ab25c2314db646451686f808e94b961f1e0fcbc424514a3b72875edc",
+   "bytes": 7772
+  },
+  "PROVENANCE-AND-FREEZE.md": {
+   "sha256": "824d939f33d133ccd9b07acdee9c4921b98453cee9760510cd48c4902e034f20",
+   "bytes": 4908
+  },
+  "REGRESSION.md": {
+   "sha256": "92ff65a708e876d95e92cf66dfcecce795b7b79453ba2d6f662bd25af61c8ee8",
+   "bytes": 8725
+  },
+  "REVIEW-08-REPORT.md": {
+   "sha256": "0cc79260d5a8bc1b4ccaa445291f709a3768949a013472d83851c2f75a614142",
+   "bytes": 7280
+  }
+ }
+}

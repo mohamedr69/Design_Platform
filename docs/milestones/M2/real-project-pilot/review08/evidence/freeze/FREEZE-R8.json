@@ -1,0 +1,101 @@
+{
+ "candidate_commit": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+ "parent": "1455f8b7e5f0164a1afec76c6a47250f4ce5dff2",
+ "branch": "iso-baseline (isolated scratch repository C:/t/iso/ep-platform; core.autocrlf false)",
+ "history_kept": {
+  "c9a1a14": "Review 07 frozen application candidate",
+  "1455f8b": "Review 07 evaluator .6 amendment",
+  "frozen-r7 worktree HEAD": "c9a1a1459c30115daf8bb40f47aba542f2b6079a",
+  "review07 package": "docs/milestones/M2/real-project-pilot/review07 (unchanged)"
+ },
+ "frozen_worktree": {
+  "path": "C:/t/iso/frozen-r8",
+  "head": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+  "has_env": false,
+  "clean": true
+ },
+ "versions": {
+  "reader": "evidence-reader-2026-09-29.3",
+  "policy": "evidence-policy-2026-09-29.3",
+  "ledger": "ai-ledger-2026-09-29.2",
+  "evaluator": "m2-pilot-eval-2026-09-29.7",
+  "parser": "parse-2026-09-29.9 (unchanged)"
+ },
+ "changed_files": {
+  "backend/app/ai/evidence_reader.py": {
+   "sha256": "7d534b8ff07ab3c724e9d3e597b39f482feb0ac5fc17fb4ec2d700e3ade5f050",
+   "bytes": 76577,
+   "kind": "application"
+  },
+  "backend/app/ai/ledger.py": {
+   "sha256": "a474e9ab1c581931d60c449a8314928144be48fd006b827575c7ced73ae0eb2b",
+   "bytes": 21324,
+   "kind": "application"
+  },
+  "backend/scripts/m2_eval5.py": {
+   "sha256": "649fb83254e982705cb09ebedede1e362a48d33a0654ed75b960fe5e681a3797",
+   "bytes": 27467,
+   "kind": "evaluator script"
+  },
+  "backend/tests/fixtures/evidence_reader_r7.py": {
+   "sha256": "771c41884c0eb88d09229e5128d1d0d5ee7a06b2712081493c124f164c59133c",
+   "bytes": 63139,
+   "kind": "test"
+  },
+  "backend/tests/fixtures/ledger_r7.py": {
+   "sha256": "b413c40a919eb4ab2cc254dcd625310590def8899bbc0b866476129b57b0212f",
+   "bytes": 15791,
+   "kind": "test"
+  },
+  "backend/tests/test_ai_ledger.py": {
+   "sha256": "5d7fbef65531ca2e603ba8fdb57c711001507acafb039687f64d28077ee214e7",
+   "bytes": 8859,
+   "kind": "test"
+  },
+  "backend/tests/test_evidence_reader.py": {
+   "sha256": "af4332feb76a44047a222ab75d71474c619c5e7acb0ca65f28be0b96973ee9cc",
+   "bytes": 18995,
+   "kind": "test"
+  },
+  "backend/tests/test_evidence_reader_r7.py": {
+   "sha256": "476429d75549bdf90916957c6204801fca65a37da681c3c0bb6ec2242491ff74",
+   "bytes": 19208,
+   "kind": "test"
+  },
+  "backend/tests/test_m2_eval5.py": {
+   "sha256": "4bd49682f03110eb6032e8a24a1926f329e516270e244c4b6506094ed9aea6c8",
+   "bytes": 10301,
+   "kind": "test"
+  },
+  "backend/tests/test_m2_review08.py": {
+   "sha256": "74578fe96eedf0c4f2c0b54f9590ef5c7e3ef9445608b9fc95cbc9781dc6a1d4",
+   "bytes": 28625,
+   "kind": "test"
+  }
+ },
+ "pinned_prior_fixtures": {
+  "backend/tests/fixtures/evidence_reader_r7.py": {
+   "pinned_from": "1455f8b:backend/app/ai/evidence_reader.py",
+   "identical": true,
+   "sha256": "771c41884c0eb88d09229e5128d1d0d5ee7a06b2712081493c124f164c59133c"
+  },
+  "backend/tests/fixtures/ledger_r7.py": {
+   "pinned_from": "1455f8b:backend/app/ai/ledger.py",
+   "identical": true,
+   "sha256": "b413c40a919eb4ab2cc254dcd625310590def8899bbc0b866476129b57b0212f"
+  }
+ },
+ "diff": {
+  "file": "candidate-r8.diff",
+  "against": "1455f8b",
+  "sha256": "e9819c77c254b943726557af10ebd4b3655f5606a718208e3133b2fdda6c9c4e"
+ },
+ "unchanged_by_this_candidate": [
+  "parser / profiles / register / request cache / submittal and transmittal code",
+  "the owner's checkout",
+  "live services, settings and data",
+  "original sources",
+  "sealed projects"
+ ],
+ "owner_checkout_head": "2221b4327c7dd140994cc2c98e89229431b34899"
+}

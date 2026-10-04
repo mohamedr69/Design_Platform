@@ -1,0 +1,11 @@
+{
+ "declared_at": "2026-09-29T00:07:11",
+ "amends": "EXPERIMENT-DECLARATION.json (sha256 522abfe984111d3aa03333841d317516261478c7fac5c7fa22658f191756da43)",
+ "reason": "the original declaration capped the BOQ application model path (AI-EV0) but not the BOQ row-verification variants; declared here before any of those calls",
+ "boq_variants": {"AI-EV1-targeted BOQ (held rows + frozen 20% audit of accepted rows)": {"cap_fresh_requests": 80},
+                  "AI-EV2-broad BOQ (every row)": {"cap_fresh_requests": 150},
+                  "sheets": "the four eligible sheets of EP-30784 and EP-30088 (projects with ai_policy=allowed)",
+                  "rows_from": "the candidate's deterministic reader, configuration B (sheet extractor 2026-09-29.1), boqexp/pilotB-extraction.json"},
+ "experiment_total_cap": {"fresh_application_requests": 700, "enforcement": "each track's cap is lowered so the running total cannot pass 700; tracks not reached are recorded as not run"},
+ "deterministic_base_note": "AI-EV0/EV1/EV2 document runs sit on the parse-2026-09-28.7 deterministic reading (their EV0 sandbox was made before parse .8); the parse .8 change (OCR title-block trust) is deterministic and is evaluated on its own track"
+}

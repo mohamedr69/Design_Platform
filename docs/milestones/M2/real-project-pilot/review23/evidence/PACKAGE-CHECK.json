@@ -1,0 +1,131 @@
+{
+ "manifest": {
+  "files": 251,
+  "mismatched_or_missing": [],
+  "unlisted": []
+ },
+ "markdown_links": {
+  "checked": 32,
+  "broken": []
+ },
+ "trees": {
+  "accepted": true,
+  "frozen_r21_candidate": true,
+  "reader_unchanged": true,
+  "application_change": "none (harness runner lifecycle, tests and documents only)"
+ },
+ "harness_frozen": {
+  "packaged_files_equal_frozen_hashes": true,
+  "runner": "arm-ev-2026-10-01.v4.1",
+  "lifecycle": "runner-lifecycle-2026-10-01.v1",
+  "scoring_files_unchanged_vs_review22": true,
+  "changed_vs_v4": [
+   "arm_ev.py",
+   "dry_provider2.py",
+   "runner_probes.py",
+   "test_runner_v4.py"
+  ],
+  "new_vs_v4": [
+   "append_response.py",
+   "bindings_r23.py",
+   "lifecycle_probes.py",
+   "package_r22.py",
+   "package_r23.py",
+   "patch_lifecycle.py",
+   "patch_lifecycle_2.py",
+   "patch_probe_fixes_3.py",
+   "run_r23_chain.sh",
+   "test_lifecycle_v4_1.py",
+   "verify_r22_package.py",
+   "verify_r23_package.py"
+  ],
+  "durable_allowance_module_unchanged": true
+ },
+ "reviewer_files_unchanged": true,
+ "earlier_packages_unchanged": {
+  "review13": true,
+  "review14": true,
+  "review15": true,
+  "review16": true,
+  "ai-accuracy-pilot": true,
+  "ai-pilot-r18-correction": true,
+  "review19": true,
+  "review20": true,
+  "review21": true,
+  "review22": true
+ },
+ "labels_r21_unchanged": true,
+ "dry_inputs_unchanged": {
+  "r22_dry_declaration": true,
+  "r22_dry_stage": true,
+  "labels_dry_r22": true
+ },
+ "tests": {
+  "HARNESS-V4": {
+   "tests": 19,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "RUNNER-V4": {
+   "tests": 8,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "LIFECYCLE-V4.1": {
+   "tests": 5,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-STOP-REGRESSIONS-on-v4": {
+   "tests": 3,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-STOP-REGRESSIONS-on-v4.1": {
+   "tests": 3,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  }
+ },
+ "tests_ok": true,
+ "lifecycle_evidence": {
+  "T1_critical_stop_then_plain_resume": true,
+  "T2_repeated_resume": true,
+  "T3_terminal_stop_no_remaining_project": true,
+  "T4_three_consecutive_provider_failures": true,
+  "T4b_single_failed_request_is_not_terminal": true,
+  "T5a_killed_before_stop_persisted": true,
+  "T5b_killed_after_stop_file_before_manifest": true
+ },
+ "runner_controls": {
+  "S2_kill_resume_only_remaining_allowance": true,
+  "S7_deferral_resumes_when_eligible": true,
+  "all_eight": {
+   "S1": true,
+   "S3": true,
+   "S4": true,
+   "S5": true,
+   "S6": true,
+   "S8": true
+  }
+ },
+ "stop_probe": {
+  "v4_resume_sent": 8,
+  "v4_1_resume_sent": 0,
+  "v4_1_stop_preserved": true,
+  "v4_1_initial_requests": {
+   "16830": 12
+  }
+ },
+ "ledger": {
+  "settled_original_experiment": 128,
+  "r21_r22_r23_live_entries": 0,
+  "r21_r22_r23_live_scopes": []
+ },
+ "ok": true
+}

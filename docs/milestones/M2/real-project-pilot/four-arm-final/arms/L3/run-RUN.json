@@ -1,0 +1,873 @@
+{
+ "at_utc": "2026-10-01T17:17:21+00:00",
+ "a_tag": "final-A",
+ "tag": "final-L3",
+ "arm": "L3",
+ "track": "r22-L3",
+ "dry_run": false,
+ "declaration_sha256": "6c0189b3dc30e721c318a5df44fac3507c5804430c85d3bdf6f23615002a70c1",
+ "identities": {
+  "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+  "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "SCHEMA_VERSION": "evidence-schema-1",
+  "PROMPTS": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2",
+   "read_field_context": "read-field-context-2026-09-30.1"
+  },
+  "AUDIT_RATE": 0.2,
+  "AUDIT_SEED": "audit-2026-09-29",
+  "MAX_PAGES_PER_DOCUMENT": 4,
+  "MAX_CALLS_PER_DOCUMENT": 8,
+  "GUARD_ENABLED": true,
+  "TARGETED_ENABLED": true,
+  "EFFICIENT_ENABLED": false,
+  "SUPPORT_V2": true,
+  "REQUIRED_FIRST": true,
+  "DEADLINE_ENABLED": true,
+  "ROI_ENABLED": false
+ },
+ "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+ "tree": "C:/t/iso/cand-ai4",
+ "context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
+  ],
+  "declared": "pilot arm L3"
+ },
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "runner_version": "arm-ev-2026-10-01.v4.2",
+ "allowance_key": {
+  "scope": "m2-four-arm-final-2026-10-01-L3",
+  "profile": "L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "path": "C:/t/r2x/ledger/doc-allowance.sqlite"
+ },
+ "caps": {
+  "durable_per_document": 12,
+  "reader_per_reading": 8,
+  "project_rolling_day": 60
+ },
+ "projects": {
+  "16830": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 6,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 102.6,
+   "documents_in": 1,
+   "documents_skipped_completed": 0,
+   "requests": 6,
+   "worst_case_reserved": 12,
+   "capacity_before": 44,
+   "pid": 30832
+  },
+  "17428": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 6,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 150.4,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 6,
+   "worst_case_reserved": 36,
+   "capacity_before": 51,
+   "pid": 30832
+  },
+  "19144": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 3,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 2,
+   "seconds": 339.8,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 3,
+   "worst_case_reserved": 36,
+   "capacity_before": 46,
+   "pid": 30832
+  },
+  "22510": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 5,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 103.5,
+   "documents_in": 2,
+   "documents_skipped_completed": 0,
+   "requests": 5,
+   "worst_case_reserved": 24,
+   "capacity_before": 53,
+   "pid": 30832
+  },
+  "23091": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 9,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 131.1,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 9,
+   "worst_case_reserved": 36,
+   "capacity_before": 47,
+   "pid": 30832
+  },
+  "23323": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 9,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 214.1,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 9,
+   "worst_case_reserved": 36,
+   "capacity_before": 47,
+   "pid": 30832
+  },
+  "26208": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 11,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 272.3,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 11,
+   "worst_case_reserved": 36,
+   "capacity_before": 47,
+   "pid": 30832
+  },
+  "27421": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 5,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 175.9,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 5,
+   "worst_case_reserved": 36,
+   "capacity_before": 54,
+   "pid": 30832
+  },
+  "28745": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 5,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 92.6,
+   "documents_in": 2,
+   "documents_skipped_completed": 0,
+   "requests": 5,
+   "worst_case_reserved": 24,
+   "capacity_before": 55,
+   "pid": 30832
+  },
+  "30549": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 7,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 234.4,
+   "documents_in": 3,
+   "documents_skipped_completed": 0,
+   "requests": 7,
+   "worst_case_reserved": 36,
+   "capacity_before": 54,
+   "pid": 30832
+  }
+ },
+ "not_attempted": [],
+ "deferred": [],
+ "tripwire": [
+  {
+   "after": "16830",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 25
+   }
+  },
+  {
+   "after": "17428",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 22
+   }
+  },
+  {
+   "after": "19144",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 19
+   }
+  },
+  {
+   "after": "22510",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 17
+   }
+  },
+  {
+   "after": "23091",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 14
+   }
+  },
+  {
+   "after": "23323",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 11
+   }
+  },
+  {
+   "after": "26208",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 8
+   }
+  },
+  {
+   "after": "27421",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": "eligible",
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 5
+   }
+  },
+  {
+   "after": "28745",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": "eligible",
+     "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": "eligible",
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 3
+   }
+  },
+  {
+   "after": "30549",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf": "eligible",
+     "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": "eligible",
+     "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": "eligible",
+     "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "eligible",
+     "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "eligible",
+     "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf": "eligible",
+     "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "eligible",
+     "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "eligible",
+     "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "eligible",
+     "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "eligible",
+     "EP-23091/O&M/EM/Content.pdf": "eligible",
+     "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": "eligible",
+     "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "eligible",
+     "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "eligible",
+     "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "eligible",
+     "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "eligible",
+     "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "eligible",
+     "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "raw_only"
+    },
+    "rejected": 0
+   }
+  }
+ ],
+ "resumes": [],
+ "seconds": 1837.2,
+ "runner_state": {
+  "consecutive_failures": 0,
+  "recent_failures": [],
+  "stopped": null,
+  "terminal_stop": null,
+  "xtrack_refusals": 0,
+  "allowance_refusals": 0,
+  "allowance_busy": 0,
+  "ledger_precheck_refusals": 0,
+  "per_ep": {
+   "16830": 6,
+   "17428": 6,
+   "19144": 3,
+   "22510": 5,
+   "23091": 9,
+   "23323": 9,
+   "26208": 11,
+   "27421": 5,
+   "28745": 5,
+   "30549": 7
+  },
+  "requests_io": 66,
+  "cache_hits": 0,
+  "deferred": [],
+  "skipped_completed": [],
+  "skipped_projects": [],
+  "interrupted_seen": []
+ },
+ "final": true,
+ "allowance": {
+  "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf": {
+   "charged": 2,
+   "attempts": [
+    {
+     "id": 76,
+     "pid": 30832,
+     "started": 1790876628.659471,
+     "ended": 1790876751.886077,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 2
+    }
+   ]
+  },
+  "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 73,
+     "pid": 30832,
+     "started": 1790876535.3483922,
+     "ended": 1790876535.39883,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  },
+  "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": {
+   "charged": 1,
+   "attempts": [
+    {
+     "id": 75,
+     "pid": 30832,
+     "started": 1790876609.2273295,
+     "ended": 1790876628.3379204,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 1
+    }
+   ]
+  },
+  "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": {
+   "charged": 5,
+   "attempts": [
+    {
+     "id": 63,
+     "pid": 30832,
+     "started": 1790875773.643475,
+     "ended": 1790875859.9475782,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    }
+   ]
+  },
+  "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": {
+   "charged": 3,
+   "attempts": [
+    {
+     "id": 68,
+     "pid": 30832,
+     "started": 1790876086.8288264,
+     "ended": 1790876170.5944395,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    }
+   ]
+  },
+  "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf": {
+   "charged": 5,
+   "attempts": [
+    {
+     "id": 78,
+     "pid": 30832,
+     "started": 1790876755.9715402,
+     "ended": 1790876863.0079892,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    }
+   ]
+  },
+  "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": {
+   "charged": 3,
+   "attempts": [
+    {
+     "id": 69,
+     "pid": 30832,
+     "started": 1790876170.62651,
+     "ended": 1790876238.553428,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    }
+   ]
+  },
+  "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": {
+   "charged": 2,
+   "attempts": [
+    {
+     "id": 71,
+     "pid": 30832,
+     "started": 1790876359.5725486,
+     "ended": 1790876464.027678,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 2
+    }
+   ]
+  },
+  "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": {
+   "charged": 5,
+   "attempts": [
+    {
+     "id": 67,
+     "pid": 30832,
+     "started": 1790875993.244203,
+     "ended": 1790876085.8806593,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    }
+   ]
+  },
+  "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 77,
+     "pid": 30832,
+     "started": 1790876752.0171857,
+     "ended": 1790876755.9498441,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  },
+  "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": {
+   "charged": 3,
+   "attempts": [
+    {
+     "id": 72,
+     "pid": 30832,
+     "started": 1790876464.105131,
+     "ended": 1790876535.3279052,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    }
+   ]
+  },
+  "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": {
+   "charged": 4,
+   "attempts": [
+    {
+     "id": 56,
+     "pid": 30832,
+     "started": 1790875260.2910976,
+     "ended": 1790875295.666788,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 4
+    }
+   ]
+  },
+  "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 55,
+     "pid": 30832,
+     "started": 1790875260.205764,
+     "ended": 1790875260.26412,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  },
+  "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 66,
+     "pid": 30832,
+     "started": 1790875992.8515735,
+     "ended": 1790875993.2280567,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  },
+  "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": {
+   "charged": 2,
+   "attempts": [
+    {
+     "id": 54,
+     "pid": 30832,
+     "started": 1790875145.2992449,
+     "ended": 1790875260.181048,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 2
+    }
+   ]
+  },
+  "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": {
+   "charged": 1,
+   "attempts": [
+    {
+     "id": 58,
+     "pid": 30832,
+     "started": 1790875409.4216282,
+     "ended": 1790875529.5535479,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 1
+    }
+   ]
+  },
+  "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": {
+   "charged": 1,
+   "attempts": [
+    {
+     "id": 59,
+     "pid": 30832,
+     "started": 1790875529.5784805,
+     "ended": 1790875635.965421,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 1
+    }
+   ]
+  },
+  "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": {
+   "charged": 1,
+   "attempts": [
+    {
+     "id": 57,
+     "pid": 30832,
+     "started": 1790875296.2156725,
+     "ended": 1790875409.3966494,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 1
+    }
+   ]
+  },
+  "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": {
+   "charged": 4,
+   "attempts": [
+    {
+     "id": 65,
+     "pid": 30832,
+     "started": 1790875871.7709665,
+     "ended": 1790875992.8099654,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 4
+    }
+   ]
+  },
+  "EP-23091/O&M/EM/Content.pdf": {
+   "charged": 1,
+   "attempts": [
+    {
+     "id": 64,
+     "pid": 30832,
+     "started": 1790875859.9663095,
+     "ended": 1790875871.4466417,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 1
+    }
+   ]
+  },
+  "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": {
+   "charged": 4,
+   "attempts": [
+    {
+     "id": 74,
+     "pid": 30832,
+     "started": 1790876535.7786205,
+     "ended": 1790876609.207203,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 4
+    }
+   ]
+  },
+  "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": {
+   "charged": 5,
+   "attempts": [
+    {
+     "id": 70,
+     "pid": 30832,
+     "started": 1790876238.5870817,
+     "ended": 1790876359.1103234,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    }
+   ]
+  },
+  "EP-23091/EP-23091 Material Submittal/cs eml.pdf": {
+   "charged": 3,
+   "attempts": [
+    {
+     "id": 62,
+     "pid": 30832,
+     "started": 1790875740.3293319,
+     "ended": 1790875773.6268456,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    }
+   ]
+  },
+  "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": {
+   "charged": 3,
+   "attempts": [
+    {
+     "id": 60,
+     "pid": 30832,
+     "started": 1790875636.582246,
+     "ended": 1790875704.929753,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    }
+   ]
+  },
+  "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": {
+   "charged": 2,
+   "attempts": [
+    {
+     "id": 61,
+     "pid": 30832,
+     "started": 1790875704.967101,
+     "ended": 1790875740.0974338,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 2
+    }
+   ]
+  },
+  "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": {
+   "charged": 6,
+   "attempts": [
+    {
+     "id": 53,
+     "pid": 30832,
+     "started": 1790875044.0607588,
+     "ended": 1790875144.1408484,
+     "status": "completed:budget_stop",
+     "calls_at_start": 0,
+     "calls_at_end": 6
+    }
+   ]
+  }
+ },
+ "tables": {
+  "project_documents": 27,
+  "project_submittals": 1,
+  "project_shop_drawings": 4,
+  "background_jobs": 20,
+  "project_actions": 0,
+  "ai_usage": 70,
+  "document_readings": 6
+ },
+ "business_hashes": {
+  "project_submittals": "88d6f374a3040bec0431bbcaf7373665cdf04a4f2efcb7467180e3ad89f49da5",
+  "project_shop_drawings": "07b34c26898d93f98db78d1f96c40852e880db7a53a4d47f2f10e03c411ad9fe",
+  "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_documents_role": "86fd4fa8cebd83b65b067fae506a41b2d319e8034bfe559332a1c3ac6ec19727"
+ },
+ "ai_usage_rows": 70,
+ "fresh_requests_this_arm": 66,
+ "status": "completed",
+ "lifecycle": "runner-lifecycle-2026-10-01.v2"
+}

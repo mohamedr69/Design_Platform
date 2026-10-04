@@ -1,0 +1,200 @@
+{
+ "of": {
+  "draft_sha256": "06537a553b9c12429dca02e4173ef6f73761baf5e4deb230c3355973a8b7cb40",
+  "findings_sha256": "39a40941aed340a65a7555a8e6c3079b51fa67cb567981475cbeba2cca65c49a",
+  "escalation_rulings_sha256": "4deb4bacf81d918568acbb01fd176624a256e99aa1dc834f9973a6063a9557c5"
+ },
+ "critic": {
+  "task_id": "ORCH-03.3",
+  "label": "R33-CRITIC",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), per my own system context. A fresh isolated agent: not a dimension reviewer, not the synthesiser, not a label drafter, reviewer or implementer. Effort high as configured by the task."
+ },
+ "disagreements": [
+  {
+   "id": "C-001",
+   "target": "ESCALATION-RULINGS D-005 (and R33-03, C-1, the 57/39/38 expected counts)",
+   "review_position": "F019 p1 revision is PRESENT '00' (the title-block 'Rev. no.' cell), association resolved, not excluded. F019 revision is yes/yes, the revision population goes 38 -> 39, and reviewed-2 expects 57/39/38. Basis: frozen section 4 names the cell the primary source, so the frozen text decides and section 2 'ambiguous' does not apply. '01' is disclosed as a plausible prediction, and F019 is to be named a contested row.",
+   "critic_view": "Rule D-005 AMBIGUOUS, with candidates 00 (the cell) and 01 (the latest table entry), excluded. F019 revision is then no/no and the revision population stays 38. Keep PRESENT '00' only as the owner alternative. (1) The frozen text itself points to ambiguous. Section 4's primary source is 'the page's own CURRENT revision, from its revision cell'. On this page, the revision table's latest row (REV 01, 09-05-16, AS PER CONSULTANT COMMENTS) carries the same date as the title-block DATE (09-05-16). So the page does not establish that the cell shows the current revision, and frozen section 2 defines ambiguous as a case where 'which of several candidates is the field cannot be established from the page'. The R32 dispositions agent recorded exactly that ('The image does not settle which revision is current', DISPOSITIONS D-005), and the draft concedes the same when it calls '01' plausible. Reaching ambiguous therefore needs no topic (i) amendment. (2) The cost is lopsided. Under the frozen stop rules (DRAFT-DECLARATION.v2 stop_rules; STOP-AND-SAFETY-RULES lines 9-12), a critical acceptance on RESOLVED truth makes B terminal with the comparison INVALID, or makes C terminal with the result 'candidate failed the safety gate'. A critical acceptance on unresolved truth is only reported. Revision is a critical field (AI-ACCURACY-POLICY line 60: 'Verify critical identity/revision/decision facts'). Turning a row the review itself calls contested into resolved truth creates a known path to a terminal stop or an INVALID comparison, and a disclosure cannot neutralise it. Revision is 38 >= 12 either way, so making the row scorable gains nothing at the gate. F019 is also a decision-bearing document (decision present/resolved), so it is likely to enter the 16-document run set.",
+   "material": true,
+   "why_material": "Adopting it changes an escalation ruling (D-005 PRESENT -> AMBIGUOUS) and a count: revision after reviewed-2 is 38, not 39, so reviewed-2 expects 57/38/38, not 57/39/38. It also changes required action C-1: the rows to write change, F019 revision is excluded, and the 'contested row' disclosure becomes an excluded-row disclosure. The verdict category does not change.",
+   "evidence": "Read by R33-CRITIC on bound images. crops/F019-p1-0.03_0.84_0.2_1-r90.png: DATE 09-05-16, DWG. NO FAM-PIV-MAH-SPD-FA-2633-007, 'Rev. no.' 00. crops/F019-p1-0.38_0.86_0.44_0.99-r90.png: rows '09-05-16 AS PER CONSULTANT COMMENTS' above '05-03-16 ISSUED FOR APPROVAL'. A scratch rotation (not evidence) of renders/F019-p1.png (1342x1800) reads the REV column as 01 / 00. LABEL-CONVENTIONS-R32.md sections 2 and 4 (5c09d4d2...e570). DISPOSITIONS.json D-005 reason (e8828bec...). DRAFT-DECLARATION.v2 stop_rules (19720ad9...). Context only, NOT label evidence (cross-document): crops/F012-p1-0.8_0.89_0.92_0.94.png shows sheet 'FAM-PIV-MAH-SPD-FA-2633-007 A', DATE 09-05-16, 'Rev. no.' 01 from the same issue date. This illustrates how real the risk is that the F019 cell is stale."
+  },
+  {
+   "id": "C-002",
+   "target": "R33-02 / condition C-3 (and the R33-26 assurance wording)",
+   "review_position": "Policy section 8 conflicts with labels made only by Claude. The owner resolves it by an append-only amendment or waiver, or by a human check of the rows that will be scored. Label truth is accepted on the strength of a 98-item image check with 0 rows refuted.",
+   "critic_view": "The draft leaves out the fact that matters most to the owner's choice: the model under evaluation is from the same family as every label agent. The AI ledger (read-only) shows that the evaluated extraction requests used Claude models: claude-sonnet-5 457 entries, claude-opus-5 5, 'sonnet' 13, blank 8. The drafter, the seven R32 batch reviewers, the consolidator, critic and disposer, all Review 33 dimension agents and this critic are Claude Opus 5.5. Section 8's 'approved solely by another model' bites hardest exactly here. Shared reading errors between labeller and predictor inflate agreement and can hide the critical false acceptances that the zero-critical gate exists to catch. The D3 check does not remove this risk: it is the same model re-reading the pages, and it rechecked about 46 of roughly 382 accept rows (0 refuted gives a 95% upper bound near 6.5%). Required action C-3 should do three things. (a) State the same-family fact explicitly to the owner. (b) Name as the recommended route a human check of every page-field row that will actually be scored in the frozen run set (at most 30 documents, at most 120 pages), done after the selector freezes and before B runs, with a waiver only as the fallback. (c) Have the declaration state the assurance level: AI-drafted, AI-reviewed, and from the same model family as the system under test.",
+   "material": true,
+   "why_material": "It changes the content of required action C-3 and adds a disclosure to C-7. Severity (major) and verdict are unchanged.",
+   "evidence": "C:/t/r2x/ledger/r2x-ledger.sqlite opened through file:...?mode=ro, uri=True. SELECT model, count(*) FROM entries GROUP BY model gives ('',8), ('claude-opus-5',5), ('claude-sonnet-5',457), ('sonnet',13); 483 entries in total. AI-ACCURACY-POLICY.md (7efa891b...) line 91. R32-LABELS-REVIEWED-1 agents: 9 entries, all claude-opus-5-5 / high. D3 sample composition: D3-report section 4."
+  },
+  {
+   "id": "C-003",
+   "target": "R33-05 (count of documents with mixed pages)",
+   "review_position": "'30 pages in 27 documents mix scorable and non-scorable fields' (21 present+uncertain, 6 ambiguous, 3 excluded).",
+   "critic_view": "The 30 non-scorable page-field rows sit on 30 pages in 25 documents, not 27. Every such page has exactly one non-scorable field. The 25 documents are F002, F003, F004, F005, F006, F007, F008, F011, F013, F015, F019, F020, F024, F025, F028, F029, F030, F032, F034, F035, F036, F037, F043, F067 and F069. The 21/6/3 breakdown is correct.",
+   "material": true,
+   "why_material": "It corrects a count stated in a finding and in the draft's section 3 table. Severity and required action are unchanged.",
+   "evidence": "R33-CRITIC script over R32-LABELS-REVIEWED-1.json (00e53e82...). A row is non-scorable when its state is ambiguous, illegible or unsupported, or it is excluded_from_scoring, or it is present with association uncertain. Result: 30 rows, 30 pages, 25 distinct pool ids."
+  },
+  {
+   "id": "C-004",
+   "target": "R33-08 / condition C-7 / draft section 5.2 (declaration bindings)",
+   "review_position": "Section 5.2 lists the bindings the final declaration must replace or add: labels, population, cohort and selection, staging, run set, harness, caps and authorization.",
+   "critic_view": "Two bindings are missing. (1) AI-ACCURACY-POLICY section 7 requires the experiment record, before execution, to hold 'source/truth hashes, selected files and project AI policies', and to use 'project-policy-eligible documents'. No Review 33 dimension or the draft checks or binds the AI policy and eligibility of EP-3563, 22349, 27331, 15744, 26687 and 29255. ORCH-001 records that the live application database holds none of the cohort projects, so the sandbox policy must be declared explicitly. (2) BINDING-MANIFEST.json binds AI-ACCURACY-POLICY.md at 7efa891b..., and DRAFT-DECLARATION.v2 thresholds_verbatim quotes it by hash. If C-3 is met by an append-only amendment to that file, the hash changes and the preflight ('any difference refuses the run') fails unless the policy is re-bound. In addition, the expected-use estimates in DRAFT-DECLARATION.v2 (B about 6, C about 135, R about 10, P about 20) came from the four-arm sample and must be re-estimated for the r32 run set.",
+   "material": true,
+   "why_material": "It adds required declaration bindings to C-7 and an owner-facing check (project AI policies) before any live run. Verdict and severities are unchanged.",
+   "evidence": "AI-ACCURACY-POLICY.md section 7 lead-in (lines 78-80) and the paragraph 'Use isolated copies and project-policy-eligible documents'. sha256 of AI-ACCURACY-POLICY.md recomputed as 7efa891b55fd6a4113f08cff8d0acdca7832d611524bb7f884ec4e5bc30a4f47, equal to review31/BINDING-MANIFEST.json line 86. A grep of COHORT-PROPOSAL.md, PROJECT-VERIFICATION.json, both PREPARATION-REPORTs and the Review 32 and 33 folders finds no project AI-policy check. DRAFT-DECLARATION.v2 limits.expected_use."
+  },
+  {
+   "id": "C-005",
+   "target": "Condition C-2 / R33-04 / ESCALATION-RULINGS carried_over count-once F031->F001, F059->F046",
+   "review_position": "Count-once (c)(ii) is 'defensible' but an unrecorded amendment. C-2 offers two routes: record it as an amendment, or revert to byte-identical-only counting (59/40/39). In the same draft, section 1 says the verdict accepts 'the counted populations, 57/38/38'.",
+   "critic_view": "The draft accepts counts that depend on a rule it declines to rule on. NEXT-BOUNDED-TASK requires Review 33 to 'rule on ... the carried-over convention items with page evidence', and the review ruled D-004 and D-005 with the same authority. It should rule (c)(ii) the same way: ADOPTED for this cohort as a Review 33 ruling, with the F031 p3 caveat. Then C-2 becomes a recording step in reviewed-2 and the declaration, not an open choice. If the review will not rule, it should accept the populations only conditionally, in the form '57/38/38 under (c)(ii), or 59/40/39 without it'. The page evidence supports adoption: R33-CRITIC confirmed 0 differing pixels for F001/F031 p1 and p2, and for F046/F059 a difference confined to a seal outside the title block, with identical title blocks.",
+   "material": true,
+   "why_material": "It changes required action C-2 (an open alternative becomes a ruling) and removes an internal inconsistency in what the verdict accepts. The gate passes either way, so the verdict is unchanged.",
+   "evidence": "INDEPENDENT-REVIEW.draft.md sections 1 and 4. ESCALATION-RULINGS.json carried_over[0..1]. NEXT-BOUNDED-TASK.md 'Required verdict and content'. R33-CRITIC pixel comparison (PIL, grey): F001-p1 vs F031-p1 and F001-p2 vs F031-p2 differ by 0 px. F046-p1 vs F059-p1 (1800x1272): 77,603 px differ, 1,183 by more than 64 levels, bounding box x 0.842-0.882, y 0.856-0.911. A scratch zoom shows the title blocks (DWG-NO:FA- 6001, REV - 0, DATE 07-09-2023) identical, with the seal to the left of the title block on F046 only."
+  },
+  {
+   "id": "C-006",
+   "target": "R33-01 (scope of the concentration effect)",
+   "review_position": "The stratum leg 'makes decision ELIGIBLE unreachable' and very likely fires for identity and revision.",
+   "critic_view": "The effect is wider than one field. score_bcr.evaluate collects every field's concentration flag into a single reasons_not_eligible list, and it sets one outcome for the whole comparison. So any positive decision net gain (except a net gain of 2 split 1/1 with F072) makes the whole candidate NOT ELIGIBLE, not only the decision field. Perversely, C can be ELIGIBLE only if it does not improve decision. The C-4 owner card should say this plainly.",
+   "material": false,
+   "why_material": "R33-01 is already major and C-4 already puts the decision to the owner. Only the description of impact changes.",
+   "evidence": "review31/scripts/harness/score_bcr.py lines 198-208 (concentration) and 255-268 (reasons appended per field; outcome 'NOT ELIGIBLE' if any reason). Decision strata recounted by R33-CRITIC: review_signal 37, other 1 (F072)."
+  },
+  {
+   "id": "C-007",
+   "target": "ESCALATION-RULINGS D-004 (basis, not outcome)",
+   "review_position": "AMBIGUOUS. 'present' is ruled out partly because the same issuer prints EP-15744 as its 'Project ID' (F062) and 'Oracle Job No.' (F068). 'absent' is refused because reading the role from other documents is topic (h2).",
+   "critic_view": "The outcome is right, but the basis is inconsistent. The ruling uses cross-document evidence to exclude 'present' while refusing the same kind of evidence to reach 'absent'. A page-only basis reaches AMBIGUOUS by itself: the label is a bare 'Refrence', no role is stated, and section 3 admits a letter or transmittal reference but excludes job and project numbers, so the role cannot be established from the page (section 2). R33-FINAL should restate the basis on the page alone and cite F062/F068 only as non-evidential context.",
+   "material": false,
+   "why_material": "No change to the ruling, the rows or the counts.",
+   "evidence": "Read by R33-CRITIC: renders/F069-p1.png ('Refrence : EP-15744', 5-Aug-18, Quotation for Fire Alarm System); renders/F069-p3.png ('Refrence : EP-15744', 4-Aug-18, Quotation for Emergency Lighting System); renders/F062-p1.png ('Project ID : EP-15744', document no. EP-15744/SM/FAS/201); renders/F068-p1.png ('Oracle Job No. / OM No.' EP-15744). All CONFIRMED as described."
+  },
+  {
+   "id": "C-008",
+   "target": "ESCALATION-RULINGS D-005 resulting row (region)",
+   "review_position": "Resulting present '00' row: region [0.04, 0.86, 0.43, 0.99].",
+   "critic_view": "That region was copied from the ambiguous row and spans both candidates: the title-block cell and the revision table near x 0.38-0.44. A present row read from 'Rev. no.' should carry the cell's own region (near the DWG. NO cell, x about 0.04-0.06), so that a region-aware consumer does not associate the value with the table. This is moot if C-001 is adopted.",
+   "material": false,
+   "why_material": "Row metadata only; no count or ruling changes.",
+   "evidence": "R32-LABELS-REVIEWED-1: F019 p1 identity region [0.04,0.86,0.06,0.99] against revision region [0.04,0.86,0.43,0.99]. The revision-table crop is at x 0.38-0.44."
+  },
+  {
+   "id": "C-009",
+   "target": "INDEPENDENT-REVIEW.draft.md section 2 (CROPS hash abbreviation)",
+   "review_position": "CROPS 'b1760b64...1cd1ff'.",
+   "critic_view": "The CROPS.jsonl sha256 ends in ...13cd1ff, so the abbreviation should read 'b1760b64...3cd1ff'. The file itself matches the frozen value.",
+   "material": false,
+   "why_material": "Typo in an abbreviation; the full hash recomputes equal.",
+   "evidence": "sha256 CROPS.jsonl = b1760b64a2f88a0415307911b1fe6faccccdd6a22c9cc69468dfe5dbd13cd1ff (recomputed)."
+  },
+  {
+   "id": "C-010",
+   "target": "Verdict (rule citation)",
+   "review_position": "'Under the verdict rule, confirmed majors allow at most acceptance with conditions.'",
+   "critic_view": "No file the critic may read states this rule. NEXT-BOUNDED-TASK.md defines the four verdicts but gives no mapping from blockers or majors to verdicts, and no Review 32/33 or orchestrator file contains 'verdict rule'. The critic applied the NEXT-BOUNDED-TASK definitions instead. There are 0 blockers, and the majors' remedies are conditions to meet before the declaration (plus the reviewed-2 application that the ACCEPTED definition foresees), so PREPARATION ACCEPTED WITH CONDITIONS is consistent. R33-FINAL should quote the rule and its source.",
+   "material": false,
+   "why_material": "The verdict holds under the available definitions; only the citation is missing.",
+   "evidence": "grep -i 'verdict rule|at most acceptance|confirmed major' over orchestrator/, reviews/M2-review-32 and reviews/M2-review-33 matches only the draft's own line 25."
+  },
+  {
+   "id": "C-011",
+   "target": "R33-20 / R33-28 / draft section 8 (Review 33's own parallel writers)",
+   "review_position": "R33-20 discloses that the seven R32 batch reviewers wrote at the same time. Section 8 lists D1 to D4 as read-only agents that wrote dimension files.",
+   "critic_view": "Review 33 itself relied on the same orchestrator reading of A-03's 'one write-capable Opus agent at a time': D1 to D4 ran at the same time, each writing into dimensions/. The file mtimes are 10:58-11:17 local, with overlapping windows. This should be disclosed together with R33-20 for the owner to confirm or object.",
+   "material": false,
+   "why_material": "Disclosure only.",
+   "evidence": "ls -la of reviews/M2-review-33/dimensions: D1 10:58/10:59, D4 11:01/11:03, D2 11:05/11:07, D3 11:15-11:17 (+04). AUTHORITY-REGISTER A-03 orchestrator interpretation."
+  },
+  {
+   "id": "C-012",
+   "target": "R33-21 (places naming Codex)",
+   "review_position": "Lists review31 plan, feasibility, budget card, CORRECTION-REPORT l.121, DRAFT-DECLARATION.v2, two scripts, the r32 PREPARATION-REPORT and make_review_packet_r32.py.",
+   "critic_view": "The list leaves out the append-only response ledger M2-REVIEW-RESPONSE.md, lines 1070 and 1098 ('delegated to the Codex reviewer', 'handed to the owner-delegated Codex reviewer'), which D1-13 and D2-16 note. It cannot be edited, so it should be named in the optional completion note.",
+   "material": false,
+   "why_material": "Completeness of a minor finding's list.",
+   "evidence": "grep -n Codex M2-REVIEW-RESPONSE.md gives lines 1070 and 1098. The R33-CRITIC grep census over review31, fresh-cohort-r32 and fresh-cohort-r32-reviewed otherwise agrees with D2-16."
+  },
+  {
+   "id": "C-013",
+   "target": "Draft section 2 'Relied on from the dimensions' (D2 reliability)",
+   "review_position": "The draft relies on D2 for the selection order-key recomputation, the authority timeline and the database counts.",
+   "critic_view": "D2's own hash table abbreviates the conventions as '5c09d4d2...8570' and the review31 manifest as 'd5fe1649...7460'. The real hashes end in ...e570 and ...c460. The same two typos appear in DECISION-LEDGER ORCH-001, which suggests these D2 entries were copied rather than recomputed. The files are intact (R33-CRITIC and D1 recomputed both). R33-FINAL should note that D2's recomputation claims are not fully demonstrated and should not weigh D2-only items as independently recomputed.",
+   "material": false,
+   "why_material": "No integrity defect exists (the files match); this concerns how much weight the D2 evidence carries.",
+   "evidence": "D2-report.md 'Inputs re-hashed' table. DECISION-LEDGER.md ORCH-001 rows. Recomputed: LABEL-CONVENTIONS-R32.md 5c09d4d2...7dd5e570; review31 EVIDENCE-MANIFEST.json d5fe1649...642077c460."
+  }
+ ],
+ "missing_checks": [
+  {
+   "id": "M-001",
+   "check": "Project AI policies and eligibility of the six cohort projects (AI-ACCURACY-POLICY section 7)",
+   "status": "MISSING in draft and dimensions",
+   "detail": "See C-004. Must be checked and bound before any live run.",
+   "material": true
+  },
+  {
+   "id": "M-002",
+   "check": "Labeller vs evaluated-model family",
+   "status": "MISSING",
+   "detail": "The ledger shows that evaluated requests used claude-sonnet-5 and claude-opus-5; every label agent is claude-opus-5-5. See C-002.",
+   "material": true
+  },
+  {
+   "id": "M-003",
+   "check": "Contested rows against the terminal stop rules (critical on resolved truth: B INVALID / C terminal)",
+   "status": "MISSING",
+   "detail": "The draft treats the tripwire only as needing per-field resolution. It does not weigh making a contested row resolved truth. See C-001.",
+   "material": true
+  },
+  {
+   "id": "M-004",
+   "check": "Re-binding of AI-ACCURACY-POLICY.md (7efa891b...) in BINDING-MANIFEST and thresholds_verbatim if section 8 is amended; re-estimation of expected use",
+   "status": "MISSING",
+   "detail": "See C-004.",
+   "material": false
+  },
+  {
+   "id": "M-005",
+   "check": "Other run-control ledgers (stat only)",
+   "status": "DONE by R33-CRITIC",
+   "detail": "C:/t/r2x/ledger/project-day.sqlite mtime 2026-10-01 22:17:43 +04 and doc-allowance.sqlite 22:17:50 +04 are unchanged since the four-arm run, and C:/t/r2x/runs mtime is 2026-10-01 21:51 +04. Neither file was opened. This supports 'no run', alongside AI ledger 483/17/0.",
+   "material": false
+  },
+  {
+   "id": "M-006",
+   "check": "Sealed projects (independent of D2)",
+   "status": "DONE by R33-CRITIC, CONFIRMED",
+   "detail": "PROJECT-VERIFICATION sealed_round2 has 10 EPs, disjoint from the 6 cohort EPs and the 4 alternates. review06 ROUND2-SELECTION.json has 34 projects, with no overlap with the 10 cohort or alternate EPs.",
+   "material": false
+  },
+  {
+   "id": "M-007",
+   "check": "OneDrive originals (independent of D1)",
+   "status": "DONE by R33-CRITIC, CONFIRMED",
+   "detail": "os.stat only on 72 of 72, through the long-path prefix: size and mtime equal SOURCE-MANIFEST selected_size and selected_modified_utc. No file was opened.",
+   "material": false
+  },
+  {
+   "id": "M-008",
+   "check": "Verdict-rule source",
+   "status": "UNVERIFIABLE",
+   "detail": "See C-010.",
+   "material": false
+  },
+  {
+   "id": "M-009",
+   "check": "Disclosure that Review 33's own dimension agents wrote in parallel",
+   "status": "MISSING",
+   "detail": "See C-011.",
+   "material": false
+  }
+ ],
+ "verdict_challenged": false,
+ "summary": "R33-CRITIC does not challenge the verdict category PREPARATION ACCEPTED WITH CONDITIONS. Every binding recomputes; the populations recount to 57/38/38 (raw 59/40/39); 72 of 72 originals are unchanged by os.stat; sealed projects are disjoint; the ledger stands at 483/17/0; and the D-004 outcome is confirmed on the images. There are 13 disagreements, 5 of them material. (C-001) D-005 should be AMBIGUOUS, not PRESENT '00'. The page does not establish the current revision (table row 01 carries the title-block date), and contested truth made resolved is a direct path to a terminal stop or an INVALID comparison under the frozen stop rules. Revision then stays 38 and reviewed-2 expects 57/38/38. (C-002) C-3 must state that the evaluated model is from the same Claude family as every label agent, and should recommend a human check of the frozen run-set rows. (C-003) R33-05 should read 25 documents, not 27. (C-004) The declaration must bind the project AI policies (policy section 7) and re-bind the policy hash if section 8 is amended. (C-005) Review 33 should rule count-once (c)(ii) adopted, rather than accept 57/38/38 while leaving a revert option open. Nothing in the draft authorizes a run, budget, ledger scope, default, M2 acceptance or M3. M2 remains CHANGES STILL REQUIRED, and M3 has not started. This critique is an owner-delegated independent Claude AI review, not human sign-off."
+}

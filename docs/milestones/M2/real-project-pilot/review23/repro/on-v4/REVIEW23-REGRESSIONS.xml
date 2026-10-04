@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.138" timestamp="2026-10-01T00:21:33.353781+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="test_review23_terminal_stop" name="test_control_initial_tripwire_really_stopped_before_second_project" time="0.004" /><testcase classname="test_review23_terminal_stop" name="test_terminal_critical_stop_cannot_be_cleared_by_plain_resume" time="0.002"><failure message="AssertionError: assert 8 == 0&#10; +  where 8 = sum(dict_values([8]))&#10; +    where dict_values([8]) = &lt;built-in method values of dict object at 0x0000022528D40980&gt;()&#10; +      where &lt;built-in method values of dict object at 0x0000022528D40980&gt; = {'17428': 8}.values">def test_terminal_critical_stop_cannot_be_cleared_by_plain_resume():
+        p=json.loads((R/'CRITICAL-STOP-PROBE.json').read_text())
+&gt;       assert sum(p['resume']['requests_this_invocation'].values())==0
+E       AssertionError: assert 8 == 0
+E        +  where 8 = sum(dict_values([8]))
+E        +    where dict_values([8]) = &lt;built-in method values of dict object at 0x0000022528D40980&gt;()
+E        +      where &lt;built-in method values of dict object at 0x0000022528D40980&gt; = {'17428': 8}.values
+
+test_review23_terminal_stop.py:20: AssertionError</failure></testcase><testcase classname="test_review23_terminal_stop" name="test_control_same_sandbox_declaration_and_arm_on_both_invocations" time="0.017" /></testsuite></testsuites>

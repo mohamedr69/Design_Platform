@@ -1,0 +1,324 @@
+{
+ "stamp": "t3",
+ "model_requests": 0,
+ "ledger_before": {
+  "entries": 483,
+  "scopes": 17
+ },
+ "B": {
+  "run": "C:/t/r2x/runs/final-A (frozen accepted path, evidence reader off)",
+  "requests_dispatched": 4
+ },
+ "population_gate": {
+  "rule": ">= 12 resolved, independently reviewed documents per field (identity, revision, decision); no partial closure run",
+  "counts": {
+   "identity": 16,
+   "revision": 16,
+   "decision": 6
+  },
+  "short": {
+   "decision": 6
+  },
+  "extensions_used": 2,
+  "action": "PREPARATION BLOCKED",
+  "note": "the frozen four-arm sample has no predeclared extension, so the gate is evaluated as with every extension used",
+  "live_run_would": "stop here without any dispatch"
+ },
+ "exercise_mode": true,
+ "store": {
+  "requests_by_lane_state": [
+   {
+    "lane": "C",
+    "state": "answered",
+    "n": 63
+   },
+   {
+    "lane": "C",
+    "state": "failed",
+    "n": 13
+   },
+   {
+    "lane": "P",
+    "state": "answered",
+    "n": 9
+   }
+  ],
+  "serves_by_lane_mode": [
+   {
+    "lane": "R",
+    "served_lane": "C",
+    "mode": "reference_from_capture",
+    "n": 66
+   }
+  ],
+  "duplicate_bound_keys": [],
+  "r_rows_served_to_c": 0,
+  "b_or_c_served_from_p": 0,
+  "reference_serves_with_other_policy": 66,
+  "capture_sha256": "dec0753998995d45982850fc2070397a422471ad8780a7dedeefadab09e5fefb"
+ },
+ "stop_controller": {
+  "lanes": {
+   "B": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "C": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "R": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "P": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   }
+  },
+  "comparison": "PENDING",
+  "findings": [],
+  "note": "post-hoc in the dry run; the live runner evaluates the tripwire after every document"
+ },
+ "score_outcome": "PREPARATION BLOCKED",
+ "score_reasons": [
+  "identity: clean recovery 0.6818 < 0.90",
+  "identity: more than half the net gain from one project or stratum",
+  "revision: clean recovery 0.6 < 0.90",
+  "revision: more than half the net gain from one project or stratum",
+  "decision: clean recovery 0.2857 < 0.90",
+  "decision: matched 6 < 12",
+  "decision: more than half the net gain from one project or stratum",
+  "request-normalised gate not met",
+  "decision coverage of C below B or R"
+ ],
+ "unequal_caps_check": "caps unequal (B 16, C 240): the gate is defined only at equal maximum allowances (R31-03)",
+ "transparency": {
+  "C": {
+   "review29_replay": "L3-ALL",
+   "documents_with_different_observations": [],
+   "recovery_review29": {
+    "identity": {
+     "recovered_clean": 20,
+     "held_only": 6,
+     "missed": 5
+    },
+    "revision": {
+     "recovered_clean": 13,
+     "tn": 6,
+     "held_only": 3,
+     "missed": 8,
+     "wrong_only": 1
+    },
+    "decision": {
+     "tn": 24,
+     "recovered_clean": 2,
+     "missed": 5
+    }
+   },
+   "recovery_dry_run_all_docs": {
+    "identity": 0.6452,
+    "revision": 0.52,
+    "decision": 0.2857
+   },
+   "critical_review29": 0,
+   "critical_dry_run": 0
+  },
+  "R": {
+   "review29_replay": "L3-off",
+   "documents_with_different_observations": [],
+   "recovery_review29": {
+    "identity": {
+     "recovered_clean": 19,
+     "missed": 6,
+     "held_only": 6
+    },
+    "revision": {
+     "recovered_clean": 13,
+     "tn": 6,
+     "held_only": 5,
+     "missed": 6,
+     "wrong_only": 1
+    },
+    "decision": {
+     "tn": 24,
+     "held_only": 1,
+     "missed": 5,
+     "recovered_clean": 1
+    }
+   },
+   "recovery_dry_run_all_docs": {
+    "identity": 0.6129,
+    "revision": 0.52,
+    "decision": 0.1429
+   },
+   "critical_review29": 0,
+   "critical_dry_run": 0
+  }
+ },
+ "lanes": {
+  "C": {
+   "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+   "seconds": 79.6,
+   "inner": {
+    "inner_served": 63,
+    "inner_served_failure": 3,
+    "dry_unrecorded": 10,
+    "refused_as_recorded": 8,
+    "stopped_by_guard": 0
+   },
+   "store_dispatched_to_inner": 76,
+   "lane_stop_state": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "live_provider_attempts_blocked": [],
+   "state_check": {
+    "ok": true,
+    "checks": {
+     "b_file_sha256": "2161297e152920406902bd609e84d53f9963599de9a1b48b8b4444e2276541b6",
+     "b_logical_sha256": "877e304394a22ae463414d31b8acd4023d2e141d4e044855baf91ec0235f01b3",
+     "c_logical_sha256": "877e304394a22ae463414d31b8acd4023d2e141d4e044855baf91ec0235f01b3",
+     "documents_with_c_policy_evidence": [],
+     "evidence_task_cache_rows": 0
+    },
+    "problems": []
+   }
+  },
+  "R": {
+   "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+   "seconds": 64.5,
+   "inner": {
+    "inner_served": 0,
+    "inner_served_failure": 0,
+    "dry_unrecorded": 0,
+    "refused_as_recorded": 8,
+    "stopped_by_guard": 0
+   },
+   "store_dispatched_to_inner": 0,
+   "lane_stop_state": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "live_provider_attempts_blocked": [],
+   "state_check": {
+    "ok": true,
+    "checks": {
+     "b_file_sha256": "2161297e152920406902bd609e84d53f9963599de9a1b48b8b4444e2276541b6",
+     "b_logical_sha256": "877e304394a22ae463414d31b8acd4023d2e141d4e044855baf91ec0235f01b3",
+     "c_logical_sha256": "877e304394a22ae463414d31b8acd4023d2e141d4e044855baf91ec0235f01b3",
+     "documents_with_c_policy_evidence": [],
+     "evidence_task_cache_rows": 0
+    },
+    "problems": []
+   }
+  },
+  "P": {
+   "seconds": 0.2,
+   "inner": {
+    "inner_served": 9,
+    "inner_served_failure": 0,
+    "dry_unrecorded": 0,
+    "refused_as_recorded": 0,
+    "stopped_by_guard": 0
+   },
+   "lane_stop_state": {
+    "state": "running",
+    "streak": 0,
+    "reason": null
+   },
+   "live_provider_attempts_blocked": [],
+   "probe": {
+    "sampled": 9,
+    "of": 63,
+    "seed": "m2-r30-variation-2026-10-02",
+    "rate": 0.15,
+    "dispatched": 9
+   },
+   "agreement": 9,
+   "rows": [
+    {
+     "seq": 1,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 6,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 9,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 17,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 29,
+     "task": "read_identity",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 59,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 64,
+     "task": "discover_page",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 73,
+     "task": "read_identity",
+     "probe": "answered",
+     "agrees": true
+    },
+    {
+     "seq": 74,
+     "task": "read_revision",
+     "probe": "answered",
+     "agrees": true
+    }
+   ]
+  }
+ },
+ "resume_drill": {
+  "reset_to_reserved": {
+   "seq": 1,
+   "task": "discover_page",
+   "page": 1
+  },
+  "dispatched_to_inner": 0,
+  "rows_before": 85,
+  "rows_after": 85,
+  "victim_state_after": "reserved",
+  "serves": {
+   "same_bound_fingerprint": 74
+  },
+  "interrupted_served": 1,
+  "passes": true
+ },
+ "decision_coverage_note": "exercise only: C made 10 requests the frozen L3 run never recorded (DR / IG decision and identity reads); the dry run answers them 'unrecorded', so the decision coverage of C is understated here and says nothing about the candidate",
+ "ledger_after": {
+  "entries": 483,
+  "scopes": 17
+ }
+}

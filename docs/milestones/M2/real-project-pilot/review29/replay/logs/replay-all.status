@@ -1,0 +1,35 @@
+replay L1 off exit 0
+{"arm": "L1", "documents": 27, "identical": 27, "different": 0}
+replay L1 IG exit 0 {"served": 31, "served_timeout_or_failure": 3, "refused_as_recorded": 11, "unrecorded": 0}
+replay L1 CA exit 0 {"served": 31, "served_timeout_or_failure": 3, "refused_as_recorded": 11, "unrecorded": 0}
+replay L1 DR exit 0 {"served": 31, "served_timeout_or_failure": 2, "refused_as_recorded": 11, "unrecorded": 9}
+replay L1 PA exit 0 {"served": 31, "served_timeout_or_failure": 3, "refused_as_recorded": 11, "unrecorded": 0}
+replay L1 ALL exit 0 {"served": 31, "served_timeout_or_failure": 2, "refused_as_recorded": 11, "unrecorded": 9}
+replay L2 off exit 0
+{"arm": "L2", "documents": 27, "identical": 27, "different": 0}
+replay L2 IG exit 0 {"served": 62, "served_timeout_or_failure": 2, "refused_as_recorded": 3, "unrecorded": 0}
+replay L2 CA exit 0 {"served": 62, "served_timeout_or_failure": 2, "refused_as_recorded": 3, "unrecorded": 0}
+replay L2 DR exit 0 {"served": 59, "served_timeout_or_failure": 2, "refused_as_recorded": 1, "unrecorded": 20}
+replay L2 PA exit 0 {"served": 62, "served_timeout_or_failure": 2, "refused_as_recorded": 3, "unrecorded": 0}
+replay L2 ALL exit 0 {"served": 59, "served_timeout_or_failure": 2, "refused_as_recorded": 1, "unrecorded": 20}
+replay L3 off exit 0
+{"arm": "L3", "documents": 27, "identical": 25, "different": 2}
+  EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01- {'envelope_observations': 'differ'}
+  EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-E {'envelope_observations': 'differ'}
+replay L3 IG exit 0 {"served": 63, "served_timeout_or_failure": 3, "refused_as_recorded": 8, "unrecorded": 0}
+replay L3 CA exit 0 {"served": 63, "served_timeout_or_failure": 3, "refused_as_recorded": 8, "unrecorded": 0}
+replay L3 DR exit 0 {"served": 63, "served_timeout_or_failure": 3, "refused_as_recorded": 8, "unrecorded": 10}
+replay L3 PA exit 0 {"served": 63, "served_timeout_or_failure": 3, "refused_as_recorded": 8, "unrecorded": 0}
+replay L3 ALL exit 0 {"served": 63, "served_timeout_or_failure": 3, "refused_as_recorded": 8, "unrecorded": 10}
+replay L4 off exit 0
+{"arm": "L4", "documents": 27, "identical": 25, "different": 2}
+  EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04- {'envelope_observations': 'differ'}
+  EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541 {'envelope_observations': 'differ'}
+replay L4 IG exit 0 {"served": 63, "served_timeout_or_failure": 2, "refused_as_recorded": 5, "unrecorded": 0}
+replay L4 CA exit 0 {"served": 64, "served_timeout_or_failure": 2, "refused_as_recorded": 5, "unrecorded": 0}
+replay L4 DR exit 0 {"served": 64, "served_timeout_or_failure": 2, "refused_as_recorded": 5, "unrecorded": 18}
+replay L4 PA exit 0 {"served": 64, "served_timeout_or_failure": 2, "refused_as_recorded": 5, "unrecorded": 0}
+replay L4 ALL exit 0 {"served": 63, "served_timeout_or_failure": 2, "refused_as_recorded": 5, "unrecorded": 18}
+analysis exit 0
+done
+final-done

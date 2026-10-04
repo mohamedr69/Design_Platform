@@ -1,0 +1,361 @@
+{
+ "reader_soft_cap": 8,
+ "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+ "A": {
+  "calls_per_page": [
+   4,
+   4,
+   4,
+   4
+  ],
+  "raise_reader": false,
+  "provider_calls": 8,
+  "stage_counts": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 8,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0
+  },
+  "attempt_outcome": "partial",
+  "attempt_error": null,
+  "attempt_pages": {
+   "1": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "2": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "3": {
+    "outcome": "budget: calls per document",
+    "fields": null,
+    "requests": null
+   },
+   "4": {
+    "outcome": "budget: calls per document",
+    "fields": null,
+    "requests": null
+   }
+  },
+  "unread": [
+   [
+    "3",
+    "application_reader_cap",
+    false
+   ],
+   [
+    "4",
+    "application_reader_cap",
+    false
+   ]
+  ],
+  "recorder_status": "COMPLETE",
+  "recorder_reason": "read by the application's evidence stage; 2 page(s) not read under the application's own per-document limits (listed in unread_pages, counted as unread)",
+  "classes": [
+   "arm_policy"
+  ],
+  "events": [
+   [
+    "application_reader_cap",
+    "arm_policy",
+    "3"
+   ],
+   [
+    "application_reader_cap",
+    "arm_policy",
+    "4"
+   ]
+  ],
+  "scorer_unread": {
+   "documents": {
+    "a": {
+     "status": "COMPLETE",
+     "unread_page_count": 2,
+     "pages": {
+      "3": [
+       {
+        "kind": "application_reader_cap",
+        "reason": "not read: budget: calls per document",
+        "partial": false
+       }
+      ],
+      "4": [
+       {
+        "kind": "application_reader_cap",
+        "reason": "not read: budget: calls per document",
+        "partial": false
+       }
+      ]
+     },
+     "partially_read_pages": []
+    }
+   },
+   "documents_with_unread_pages": 1,
+   "unread_pages": 2,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator"
+  }
+ },
+ "B": {
+  "calls_per_page": [
+   7,
+   7,
+   7,
+   7
+  ],
+  "raise_reader": false,
+  "provider_calls": 12,
+  "stage_counts": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 12,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1
+  },
+  "attempt_outcome": "budget",
+  "attempt_error": null,
+  "attempt_pages": {
+   "1": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "2": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "3": {
+    "outcome": "budget: calls_per_document",
+    "fields": null,
+    "requests": null
+   },
+   "4": {
+    "outcome": "budget: calls_per_document",
+    "fields": null,
+    "requests": null
+   }
+  },
+  "unread": [
+   [
+    "3",
+    "application_document_limit",
+    false
+   ],
+   [
+    "4",
+    "application_document_limit",
+    false
+   ]
+  ],
+  "recorder_status": "COMPLETE",
+  "recorder_reason": "read by the application's evidence stage; 2 page(s) not read under the application's own per-document limits (listed in unread_pages, counted as unread)",
+  "classes": [
+   "arm_policy"
+  ],
+  "events": [
+   [
+    "application_document_limit",
+    "arm_policy",
+    "3"
+   ],
+   [
+    "application_document_limit",
+    "arm_policy",
+    "4"
+   ]
+  ],
+  "scorer_unread": {
+   "documents": {
+    "b": {
+     "status": "COMPLETE",
+     "unread_page_count": 2,
+     "pages": {
+      "3": [
+       {
+        "kind": "application_document_limit",
+        "reason": "not read: budget: calls_per_document",
+        "partial": false
+       }
+      ],
+      "4": [
+       {
+        "kind": "application_document_limit",
+        "reason": "not read: budget: calls_per_document",
+        "partial": false
+       }
+      ]
+     },
+     "partially_read_pages": []
+    }
+   },
+   "documents_with_unread_pages": 1,
+   "unread_pages": 2,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator"
+  }
+ },
+ "C": {
+  "calls_per_page": null,
+  "raise_reader": true,
+  "provider_calls": 0,
+  "stage_counts": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 0,
+   "cache_hits": 0,
+   "failed": 1,
+   "budget_stopped": 0
+  },
+  "attempt_outcome": "failed",
+  "attempt_error": "RuntimeError: r40 injected evidence-reader exception",
+  "attempt_pages": {},
+  "unread": [
+   [
+    "1",
+    "application_reader_exception",
+    false
+   ],
+   [
+    "2",
+    "application_reader_exception",
+    false
+   ],
+   [
+    "3",
+    "application_reader_exception",
+    false
+   ],
+   [
+    "4",
+    "application_reader_exception",
+    false
+   ]
+  ],
+  "recorder_status": "COMPLETE",
+  "recorder_reason": "read by the application's evidence stage; 4 page(s) not read under the application's own per-document limits (listed in unread_pages, counted as unread)",
+  "classes": [
+   "arm_policy"
+  ],
+  "events": [
+   [
+    "application_reader_exception",
+    "arm_policy",
+    "1"
+   ],
+   [
+    "application_reader_exception",
+    "arm_policy",
+    "2"
+   ],
+   [
+    "application_reader_exception",
+    "arm_policy",
+    "3"
+   ],
+   [
+    "application_reader_exception",
+    "arm_policy",
+    "4"
+   ]
+  ],
+  "scorer_unread": {
+   "documents": {
+    "c": {
+     "status": "COMPLETE",
+     "unread_page_count": 4,
+     "pages": {
+      "1": [
+       {
+        "kind": "application_reader_exception",
+        "reason": "the evidence reader raised: RuntimeError: r40 injected evidence-reader exception",
+        "partial": false
+       }
+      ],
+      "2": [
+       {
+        "kind": "application_reader_exception",
+        "reason": "the evidence reader raised: RuntimeError: r40 injected evidence-reader exception",
+        "partial": false
+       }
+      ],
+      "3": [
+       {
+        "kind": "application_reader_exception",
+        "reason": "the evidence reader raised: RuntimeError: r40 injected evidence-reader exception",
+        "partial": false
+       }
+      ],
+      "4": [
+       {
+        "kind": "application_reader_exception",
+        "reason": "the evidence reader raised: RuntimeError: r40 injected evidence-reader exception",
+        "partial": false
+       }
+      ]
+     },
+     "partially_read_pages": []
+    }
+   },
+   "documents_with_unread_pages": 1,
+   "unread_pages": 4,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator"
+  }
+ },
+ "D_three_pages_3_3_3": {
+  "calls_per_page": [
+   3,
+   3,
+   3
+  ],
+  "raise_reader": false,
+  "provider_calls": 9,
+  "stage_counts": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 9,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0
+  },
+  "attempt_outcome": "complete",
+  "attempt_error": null,
+  "attempt_pages": {
+   "1": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "2": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   },
+   "3": {
+    "outcome": "evidence",
+    "fields": {},
+    "requests": {}
+   }
+  },
+  "unread": [],
+  "recorder_status": "COMPLETE",
+  "recorder_reason": "read by the application's evidence stage",
+  "classes": [],
+  "events": [],
+  "scorer_unread": {
+   "documents": {},
+   "documents_with_unread_pages": 0,
+   "unread_pages": 0,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator"
+  }
+ },
+ "get_provider_calls": 0
+}

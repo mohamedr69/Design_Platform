@@ -1,0 +1,88 @@
+{
+ "accepted": {
+  "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "tree": "C:/t/iso/frozen-r12",
+  "clean": true
+ },
+ "reviewed_candidate": {
+  "commit": "c216206df6812fb17b32719a28cdd4300d44a5c1",
+  "tree": "C:/t/iso/cand-ai2",
+  "clean": true,
+  "evidence_reader_sha256": "75ed39726841e6a0499048d1148217cfc917a15c8b0c022df8be69db40ffff51"
+ },
+ "successor": {
+  "commit": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+  "tree": "C:/t/iso/cand-ai3",
+  "branch": "ai-pilot-r19-2026-09-30",
+  "parent": "c216206df6812fb17b32719a28cdd4300d44a5c1",
+  "clean": true,
+  "changed_files": {
+   "backend/app/ai/evidence_reader.py": "49e7c1c05c9c6d915e5256572be44782fd42e769d78d90ec283e675caaeda489",
+   "backend/tests/_e_crop_coords.py": "a85849a234076d64cea03e624c770465397fa1c2bd6522e971135dddd6138231",
+   "backend/tests/test_ai_pilot_r18.py": "6e59a732a698a81873634cec53732212471cbe6dab6a84b44f0edc39c2e57c84",
+   "backend/tests/test_ai_pilot_r19.py": "6d0e42f1bdc9141ef7f46f2216b80629fc62c2718330669fcc4abc998be94c49"
+  },
+  "diff_sha256": "d7596b21c1414f7ad2d4e13a78fd3686576ca261fb8c9382df151e1128ebee45",
+  "repository": "C:/t/iso/ep-platform (scratch clone; not the owner checkout)"
+ },
+ "h06_control_binding_unchanged": {
+  "declaration": "C:/t/iso/work/r2x/ai-pilot-r18/CONT-DECLARATION.json",
+  "sha256": "7b2513b2f5909796835425553e4560c5a8dc9ae7b525ed7f5adf4213a2988de3",
+  "runner_cont_boq_sha256": "8ff5ada3c080869a3ef1ded3a33f4ae0308db2dcfc0f728f56ae2c4430df70aa",
+  "runner_matches_declaration": true,
+  "boq_arm_reader": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "boq_queue_sha256": "58ad035ecf3aefb7119babb3862085bb48a77f1075fdc8735d7541c3c98d0e4b",
+  "h06_sheet_sha256": "719f8714d2a75673c8ba390a884a2d2889b2438fd587eaa2c42f62d75f344fec",
+  "note": "the R19 document-reader change is not bound into the BOQ control"
+ },
+ "labels": {
+  "continuation": {
+   "CONT-REGISTER-LABELS.json": "e9923fc3fcc37582edc0fbaf5c2c03125fce973461af0bb9013a57c7bcd5d05d",
+   "CONT-PAGE-LABELS.json": "24ee61d0a2d8f467a10640d384015fe753aca3eecbce2acb7902ddb3fe256911",
+   "CONT-UNCERTAINTY-AND-EXPOSURE.json": "2d4fabb0a8be369f15ff727519d4b544f307739438f12d0a6df0f424d4c9e198"
+  },
+  "v2": {
+   "PILOT-REGISTER-LABELS.v2.json": "078fe52838e1ebeca5372105f7edc8294196b3dca8fa8cb0f1532005f97c8bc5",
+   "PILOT-PAGE-LABELS.v2.json": "b8fa41e7ece67efc7592426cf9dac0537f6cf6ca30ef8e09532cb53a3b502724",
+   "PILOT-UNCERTAINTY-AND-EXPOSURE.v2.json": "b1e5da5ba7b57ee6038d238e5b8efebc0593fb49b3b21718bc6b23d0925b0a36",
+   "LABEL-CHANGES-v2.json": "0a525b327ab14317f32be7ce42323bb4f581f299e8532db54366cc79c38391ac"
+  },
+  "unchanged": true
+ },
+ "evaluator": {
+  "module": "scripts.m2_eval5",
+  "version": "m2-pilot-eval-2026-09-29.9",
+  "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+  "tree": "C:/t/iso/frozen-r12"
+ },
+ "result_v2_scorer_sha256": "307830a4079468d86781ad3f2ee5b21863f32dd83f156f18ab25a764ee29487a",
+ "reviewer_files": {
+  "check_package.py": "b99e7d5a06c8e007e15aa115c4d1c44945805d8ee36a2d665bf0496b1c07f5a1",
+  "compare_rescore.py": "2a4ad0ac65ed8b557ebb0a3fe7589792d664ef381e6f39dca959db59df18c914",
+  "efficiency_probes.py": "ef2efe704e04e82f59fe0d2f3b45699c3ec31cd4cbbd87aa234a1b5cbabbc4ca",
+  "INDEPENDENT-E-PROBES.json": "9033c13546b070624f570898e638a45bfe4136b40d202c3dbcad9ce017339bb2",
+  "INDEPENDENT-LEGACY-T.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "INDEPENDENT-LEGACY-T.log": "a41c5ae8afd510e97ed3ac4b0361b589c7efe9fd856188fe85c68ee44dace05f",
+  "INDEPENDENT-LEGACY-T.xml": "eac8913ff38ac103f8e750ca9aa94303575cc4d20b6a5626d97f65c1f7c3d89b",
+  "INDEPENDENT-PACKAGE-CHECK.json": "d9ea4c369d172d6f76bed512cbea8f7280d9e470ac043bfb8170d9fa363d9423",
+  "INDEPENDENT-R18.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "INDEPENDENT-R18.log": "a7a2204ce7e91599b4d06cea667aeec1a4285630145043c45afefa7130e72f8f",
+  "INDEPENDENT-R18.xml": "d83abb72c6e52bc293fedad5e7d6fcebf2e247e9ee6ced4aa91f478094253fee",
+  "manifest.py": "58d3749d5928f1c75073ceb167b688f60905242fab52736e6ec372d0fcb6e02e",
+  "pytest.ini": "578fc1cd12d8d642df8eff41d71d5119626e9f88f21fafadba6b1092ac840a93",
+  "REGRESSION.exit": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04",
+  "REGRESSION.log": "38aca8d39bf9bf368591c6dc6c6be5bbc3271a14e91942c5a1b8220ceadec8d3",
+  "REGRESSION.xml": "58458224f825173cf783856cb44f38aaef832cec0b8721536a30e592bf72bf98",
+  "RESCORE-COMPARISON.json": "3ef1e6b35d5afcd314252a76b135225bcc6a706cacdd5eb6096057bfd9814d7d",
+  "RESCORE.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "RESCORE.log": "1ef90258d94ed556c66711f99d65efd292b207edb8aeabeb4dbbc4d79a49cef3",
+  "REVIEW-19-REPORT.md": "7905008dd13b0fb83c230b53726850edc62420f00498f119a7b6fd44822a6c33",
+  "REVIEW-MANIFEST.json": "5942c348d846ea77c4dd14ab119c525ce2d29e9fd97a70ae835b77a91fc223ee",
+  "SYNTHETIC-RASTER-STAMP.pdf": "d167a77226cde9bd72033e51165a986b0bc22b736404ab814753c272299503f5",
+  "SYNTHETIC-RASTER-STAMP.png": "2868ef08497bbbbcc81c1ff77961b3bf5f7e1417fca16b5f4caed5660805c3b2",
+  "TARGETED-PROBES.json": "72d724d6f6a7c480c8561ea95bf199491ea8ff2b51ee2a51f858222e6b5a85be",
+  "targeted_probes.py": "a67212584d864a78a4973e3800431b7446d4acb24a52810ff63d2b4a49f9fa36",
+  "TASK-CLOSE-REVIEW-19.md": "9884fd7fff9db0e6958d30b6df15973d1ce68d8bf1b5e48a283e99d08fe81fce",
+  "test_review19.py": "d48cf0d796684ce3e664880e0b0ede23c127b675eef86e6d8c9df0d88ce7882b"
+ }
+}

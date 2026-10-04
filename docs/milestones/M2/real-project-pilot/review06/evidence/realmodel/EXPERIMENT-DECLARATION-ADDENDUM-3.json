@@ -1,0 +1,10 @@
+{
+ "declared_at": "2026-09-29T03:43:29",
+ "amends": "EXPERIMENT-DECLARATION.json, ADDENDUM-1, ADDENDUM-2",
+ "reason": "exploration found two defects in the BOQ row verifier .1 (prompt read-boq-row-2026-09-29.1): its prompt made the model drop a leading quantity column as an 'item number' (blind quantity empty on most rows), and its part comparison dropped '+' (PT-1S validated against a blind PT-1S+). AI-EV2 BOQ was stopped at 99 fresh calls; AI-EV1 BOQ completed with 67. Both are kept as evidence of the defect.",
+ "change": "verifier .2 (read-boq-row-2026-09-29.2): the quantity cell is its own image (the reader's quantity_span), part compared literally (whitespace only ignored). New track AI-EV1b-BOQ: the same frozen EV1 selection (every held row + the seeded 20% audit of accepted rows -- the rows are chosen by the frozen rule, not by truth), on the two FAS sheets only: EP-30088/01. Commercial Document\\EP-30088 Design Sheet FAS.pdf, EP-30784/01- EP-30784 Scan\\EP-30784 FAS Design.pdf",
+ "cap_fresh_requests": 60,
+ "experiment_total_before": 636,
+ "experiment_total_cap": 700,
+ "not_run": "AI-EV2 with verifier .2 (no budget left under the declared total)"
+}

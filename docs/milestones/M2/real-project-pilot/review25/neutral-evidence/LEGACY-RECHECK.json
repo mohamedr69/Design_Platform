@@ -1,0 +1,548 @@
+{
+ "old_validator_file": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review24\\harness-v4.2\\provider_journal.py",
+ "old_validator_sha256": "00597ce3ffd42a261e137f01278d7dfd54052a054ffcbc792b85464e05c0eef9",
+ "new_validator": "provider-outcomes.v1/validator-2",
+ "journals": 25,
+ "all_equal": true,
+ "kinds_seen": {
+  "ok": 252,
+  "failure": 28,
+  "cache_hit": 22,
+  "budget": 4,
+  "none": 0
+ },
+ "rows": [
+  {
+   "journal": "r24-boundary\\p1-provider-ordinary\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "a2deb62b08001ddfc9999bc36419777f34c7bbfbf4a6a079ebac11dada514606",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p2-provider-kill-before-file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "602f7df3622cf4ab1d12be3edeb5c064e264c65fd8ad145d9629d95bdda37da8",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p3-provider-kill-after-file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "ce328eee01df1e12c08fa69f3a20b117accf544a26749bcb46220d1eeb556949",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p5a-two-failures-one-unresolved\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "1f30b124a45d49f4495e8ba8470dba16f452928c055c21e443b8f16310f530a4",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 16,
+    "failure": 2,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p5b-success-between-failures\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "4953a053e9626ee6278c5f8ec893005f84b4e6e59fbb1cb6a5cf037e593282d4",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 14,
+    "failure": 4,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p5c-breaker-survives-restart\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "84fe8786819fec5fcd882f3e46bd087015fc07c5812bb85deb0b4c2657032988",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-boundary\\p6a-torn\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "197a8c43c38f3af142cff74e3c53a6c0a2b1f8cba41b167d73321a89002fc4d1",
+   "validator_1": [
+    "indeterminate",
+    null,
+    "torn trailing record (the last line is incomplete)"
+   ],
+   "validator_2": [
+    "indeterminate",
+    null,
+    "torn trailing record (the last line is incomplete)"
+   ],
+   "equal": true,
+   "result_counts": null
+  },
+  {
+   "journal": "r24-boundary\\p6c-rebound\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "9de4112db408ad245e41369343b4dce423abf76502371ba7a625d945e752b3a1",
+   "validator_1": [
+    "indeterminate",
+    null,
+    "the journal is bound to another run"
+   ],
+   "validator_2": [
+    "indeterminate",
+    null,
+    "the journal is bound to another run"
+   ],
+   "equal": true,
+   "result_counts": null
+  },
+  {
+   "journal": "r24-boundary\\p6d-orphan\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "5016a20afdb5d71f544be3d9e7b5b7e9b50da888de2cb38a341f1437389837bb",
+   "validator_1": [
+    "indeterminate",
+    null,
+    "record 4: a result without its open attempt"
+   ],
+   "validator_2": [
+    "indeterminate",
+    null,
+    "record 4: a result without its open attempt"
+   ],
+   "equal": true,
+   "result_counts": null
+  },
+  {
+   "journal": "r24-lifecycle\\t1-critical-stop-resume\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "203528aa9caffde34073aa9737409db0b509f7d9890adbc8d0aa89c7029098bb",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 12,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-lifecycle\\t3-stop-after-last-project\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "2cf93aefb30861a7459a8386eb18db2a7af02d627e9a082384d45c7137cc9c19",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 20,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-lifecycle\\t4-provider-failures\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "9664457f68af5e7874b2a3955e7e9efb7fe38893742bae7e9c85daf882a1f5cf",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-lifecycle\\t4b-single-failure\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "dac5b0440d920a57ccf1c1699366e3815a84e761525a2f9838ecbd002bad0b31",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 19,
+    "failure": 1,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-lifecycle\\t5a-kill-before-stop-file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "e7c26614a1606ecf4fbf7928b00a74576935cb80dfcaa1b26dc0889f87f3cf35",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 12,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-lifecycle\\t5b-kill-after-stop-file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "5f7d7c3761d4e2aaa5f0f5009170706896c62fe15fdbf02a3af6a6b92e46e617",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 12,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s1-baseline\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "eb42161295eb0677fd87421ac342476e954894c47809f5a5c7b8495e6952d1a0",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 20,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s2-kill-resume\\runs\\L3\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "7e5b5a3b689098d5007cf5f6e376a161f4890c4082ad91e1ddc5072a3f468c77",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 24,
+    "failure": 0,
+    "cache_hit": 2,
+    "budget": 1,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s2-kill-resume\\runs\\L3-newtag2\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "abdb3d6333c1879097beac5a94daa5477c9adb09b9b9c6cf22176966b4f084f0",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 9,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 2,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s4-second-writer\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "b71673418315d7ce3d813c9f4ca1b573605eeb63a2f4f79c5e1b12b6727f5ce0",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 20,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s5-cache-hit\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "2fc518074d375a282200e1095190c6c9bc0c07c8076127607773f0dbdaf9cf5c",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 24,
+    "failure": 0,
+    "cache_hit": 20,
+    "budget": 1,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s6-scope-exhaust\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "1cef9016febfdfd66a31e7b9a302fd19a8749faa8411d4e1274f8fea6a7911e0",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 10,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s7-deferral\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "98bd006b7933831623ffdfd3c46fdcaf82dd095ed00c1251c1911b226e307e1b",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 20,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-probes\\s8-refusals\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "ce2035b47469f9785a4b82e801c7737ac27d75e6b6ce68edc35ed9dbf7a24edb",
+   "validator_1": [
+    "ok",
+    0,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    0,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 20,
+    "failure": 0,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-repro-v4.2\\provider-after_file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "8aa9f9dab463125a722b2197e85e6d87ebd1c1982f79891c8f09523d3de32e6a",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  },
+  {
+   "journal": "r24-repro-v4.2\\provider-before_file\\runs\\L1\\out\\PROVIDER-OUTCOMES.jsonl",
+   "sha256": "8cfa556756fd94c4fe92fdc3f95dad1b86e379a288286d786eb3b14991d39ef7",
+   "validator_1": [
+    "ok",
+    3,
+    null
+   ],
+   "validator_2": [
+    "ok",
+    3,
+    null
+   ],
+   "equal": true,
+   "result_counts": {
+    "ok": 0,
+    "failure": 3,
+    "cache_hit": 0,
+    "budget": 0,
+    "none": 0
+   }
+  }
+ ]
+}

@@ -1,0 +1,1599 @@
+{
+ "status": "Worklist for the review14 package. Human answer fields: EMPTY (no human signature exists). AI review: owner-delegated, independent, NOT a human signature and NOT blind to earlier predictions -- shown in each item's ai_review block.",
+ "sample_rule_disclosure": {
+  "rate": 0.2,
+  "seed": "m2-round2-human-sample-2026-09-29",
+  "population": "label units (records, no-record pages, BOQ rows) not on a mandatory page",
+  "ranking": "sha256(seed | unit id), ascending; depends on label unit ids only, never on predictions or scores",
+  "declared_when": "written after the profile A / B runs had started; the rule reads no prediction, so the sample is reproducible from the labels alone (python build_worklist.py)"
+ },
+ "items": [
+  {
+   "id": "F01/C0073",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/Park Medows   -Final Design Revision Arch  - Approved/REQ-2387569  - BP.pdf",
+   "page": 1,
+   "question": "Which printed identity is this document's own for evaluation: the building permit number (B2312982) or the request reference (REQ-2387569)? Record both with their printed labels and roles.",
+   "page_link": "../../review07/human-review-packet/pages/bbe5a2877086829d-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F01-C0073-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F01-C0073-p1-2.jpg",
+    "../../review13/worklist/crops/findings/F01-C0073-p1-together.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "permit_number": "B2312982",
+     "footer_reference": "REQ-2387569-2"
+    },
+    "disposition": "The permit number is a supported own identity of the building permit. Keep the footer reference separately; its visible suffix is -2. Do not score B2312982 as a hallucination merely because a label chose the request reference.",
+    "effect_in_labels_r14.1": "applied (role split)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F02/C0083",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+   "page": 3,
+   "question": "Does the ticked, signed CODE B stamp on page 3 (sheet 02 of 02) give this component's decision? If so the label is incomplete.",
+   "page_link": "../../review07/human-review-packet/pages/13041b58155be258-p3.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F02-C0083-p3-tb.jpg",
+    "../../review13/worklist/crops/findings/F02-C0083-p3-top.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "decision": "ANN",
+     "printed_choice": "Code B Approved as Noted",
+     "actor": "LACASA",
+     "sheet_identity": "25H-AAEM-SD-ELEC-FA-B1-003A",
+     "revision": "03"
+    },
+    "disposition": "The consultant stamp has the Code B choice marked and a signature. Correct the no-decision label for this printed sheet. Do not transfer the decision to a differently numbered filename/cover without supported association.",
+    "effect_in_labels_r14.1": "applied (decision for the printed sheet only)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F03/C0049",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-30784/01- EP-30784 Scan/EP-30784 EML Design.pdf",
+   "page": 1,
+   "question": "Confirm the printed Doc No. literal (label EP-30784). The OCR reading TEP-30784 was observed, never accepted.",
+   "page_link": "../../review07/human-review-packet/pages/241c5652f6d3ccc8-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F03-C0049-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F03-C0049-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F03-C0049-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F03-C0049-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quotation_reference": "EP-30784",
+     "printed_label": "Qtn. Ref."
+    },
+    "disposition": "EP-30784 is printed. The leading T in TEP-30784 is unsupported. Preserve the quotation role.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F04/C0261",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-14119/EP-14119 Commercial/EP-14119 LPO.pdf",
+   "page": 1,
+   "question": "Confirm the printed LPO number literal (label LPO/1050000159). The OCR reading was observed, never accepted.",
+   "page_link": "../../review07/human-review-packet/pages/46e16cad3602ed1a-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F04-C0261-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F04-C0261-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F04-C0261-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "purchase_order": "LPOD-1856000229",
+     "purchase_request": "LPRR-1856000239"
+    },
+    "disposition": "The supplied page contradicts the LPO/1050000159 label and supports the reader literal LPOD-1856000229. Verify the page/source-hash binding before publishing the corrected label; keep purchase order and request distinct.",
+    "effect_in_labels_r14.1": "applied",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F05/C0191",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-19977/EP-19977 Commercial/EP-19977 CBS Quotation.pdf",
+   "page": 1,
+   "question": "Confirm the quotation's own reference (label EP-19977-R1); the Ref-line drawing is a referenced (priced) drawing.",
+   "page_link": "../../review07/human-review-packet/pages/ea9d1519b8af2f08-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F05-C0191-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F05-C0191-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F05-C0191-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F05-C0191-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "quotation_reference": "EP-19977-R3"
+    },
+    "disposition": "The own Reference field is R3, not label R1. D1902-FC-DWG-EM-B1200 is a drawing referenced in the commercial scope, not the quotation identity. A label defect and a reader role defect coexist.",
+    "effect_in_labels_r14.1": "applied",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F06/C0193",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-19977/EP-19977 Commercial/EP-19977 FA Quotation R4.pdf",
+   "page": 1,
+   "question": "Confirm the quotation's own reference (label EP - 19977 - R4-B0); the Ref-line drawings are referenced (priced) drawings.",
+   "page_link": "../../review07/human-review-packet/pages/3679b3cbd02b4194-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F06-C0193-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F06-C0193-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F06-C0193-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F06-C0193-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "quotation_reference": "EP-19977-R4-BD"
+    },
+    "disposition": "Our Ref. wraps after R4- and continues BD, not B0. Referenced drawings in the scope are not this quotation identity. Preserve the image and literal spacing as provenance.",
+    "effect_in_labels_r14.1": "applied (revision held)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F07/C0202",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-13777/C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+   "page": 1,
+   "question": "Each transmittal prints the consultant's mail number (TAVC-TRANSMIT-...) and the contractor's reference number (K&A-WTRAN-...). Record both; say which one the register evaluates, or that both are the same document's own numbers.",
+   "page_link": "../../review07/human-review-packet/pages/78571a79da44dd93-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F07-C0202-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-2.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-3.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-4.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-5.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-6.jpg",
+    "../../review13/worklist/crops/findings/F07-C0202-p1-together.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "mail_number": "TAVC-TRANSMIT-009782",
+     "reference_number": "K&A-WTRAN-017671"
+    },
+    "disposition": "Both numbers are printed under different labels. Score typed observations separately. The mail number identifies this mail; the reference links the other workflow/transmittal. Do not infer the sender or consultant authority from the code alone.",
+    "effect_in_labels_r14.1": "applied (role split)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F07/C0211",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-13777/Approval Documents/TAV-TN-000731.pdf",
+   "page": 1,
+   "question": "Each transmittal prints the consultant's mail number (TAVC-TRANSMIT-...) and the contractor's reference number (K&A-WTRAN-...). Record both; say which one the register evaluates, or that both are the same document's own numbers.",
+   "page_link": "../../review07/human-review-packet/pages/c2b54cc0ebedea1c-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F07-C0211-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-2.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-3.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-4.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-5.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-6.jpg",
+    "../../review13/worklist/crops/findings/F07-C0211-p1-together.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "mail_number": "TAVC-TRANSMIT-000731",
+     "reference_number": "K&A-WTRAN-000913"
+    },
+    "disposition": "Both numbers are printed under different labels. Score typed observations separately. The mail number identifies this mail; the reference links the other workflow/transmittal. Do not infer the sender or consultant authority from the code alone.",
+    "effect_in_labels_r14.1": "applied (role split)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F07/C0220",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-13777/C & E Matrix/Approved matrix/TAV-TN-011156 (1).pdf",
+   "page": 1,
+   "question": "Each transmittal prints the consultant's mail number (TAVC-TRANSMIT-...) and the contractor's reference number (K&A-WTRAN-...). Record both; say which one the register evaluates, or that both are the same document's own numbers.",
+   "page_link": "../../review07/human-review-packet/pages/91c4d1aec0214727-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F07-C0220-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-2.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-3.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-4.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-5.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-6.jpg",
+    "../../review13/worklist/crops/findings/F07-C0220-p1-together.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "mail_number": "TAVC-TRANSMIT-011156",
+     "reference_number": "K&A-WTRAN-020525"
+    },
+    "disposition": "Both numbers are printed under different labels. Score typed observations separately. The mail number identifies this mail; the reference links the other workflow/transmittal. Do not infer the sender or consultant authority from the code alone.",
+    "effect_in_labels_r14.1": "applied (role split)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F08/C0159",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-26369/MS FAS/R1/MS FAS SOFTCOPY (TIM AEROSPACE) R1.pdf",
+   "page": 1,
+   "question": "Page 1 is the company's own cover (EP-26369/SS/FA/101, Revision). Is it a component of this document? The label has none on page 1.",
+   "page_link": "../../review07/human-review-packet/pages/733b0febc0ba007e-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F08-C0159-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F08-C0159-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F08-C0159-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F08-C0159-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "document_number": "EP-26369/SS/FA/101",
+     "revision": "01",
+     "kind": "Fire Alarm material-submittal cover"
+    },
+    "disposition": "The cover has its own printed document-number and revision fields. Include these source observations. Linking this cover to later form pages is separate from inventing a second business record.",
+    "effect_in_labels_r14.1": "applied (register False)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F09/C0034",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+   "page": 3,
+   "question": "Page 3 is a cover carrying another project's number (EP-30627/SS/EML/ 1293). Is it part of this document (association), and is it a component?",
+   "page_link": "../../review07/human-review-packet/pages/21d2d84830ad11c6-p3.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F09-C0034-p3-1.jpg",
+    "../../review13/worklist/crops/findings/F09-C0034-p3-tb.jpg",
+    "../../review13/worklist/crops/findings/F09-C0034-p3-top.jpg",
+    "../../review13/worklist/crops/findings/F09-C0034-p3-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFLICT_HELD",
+    "observations": {
+     "project_header": "EP-30784 BINGHATTI SKYBLADE",
+     "document_number": "EP-30627/SS/EML/ 1293",
+     "revision": "00"
+    },
+    "disposition": "The cover exists in the provided page image and both conflicting project numbers are printed. Keep the literal observations and hold project/register association. Do not silently change 30627 to 30784 or treat a printed literal as a hallucination. No business association is approved here.",
+    "effect_in_labels_r14.1": "applied (literal as source fact; association held; register False)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F10/C0245",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-26082/EP-26082 MOM/L0749-Minutes of Weekly MEP Meeting No. 020 - Final Issuance.pdf",
+   "page": 1,
+   "question": "The minutes print the contractor's outgoing letter number (10789-CSCEC-OUT-L0...) and the meeting letter number (L0749). Which is the minutes' own identity for evaluation?",
+   "page_link": "../../review07/human-review-packet/pages/b28708dbf3c90abf-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F10-C0245-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F10-C0245-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F10-C0245-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "PARTIAL_HELD",
+    "observations": {
+     "kind": "MEP Transmittal Distribution Form",
+     "reference_candidate": "10789-CSCEC-OUT-L0749-O-20250403-KUW",
+     "uncertainty": "O/0 glyph near L and an overprinted character; exact token remains unconfirmed",
+     "subject": "Minutes of Weekly MEP Meeting No. 020 - Final Issuance"
+    },
+    "disposition": "The reference is a longer labelled token, not L0749 alone or truncated 10789-CSCEC-OUT-L0. Preserve the candidate and local ambiguity. A clearer source is needed to confirm every character. Do not create a key from this review candidate.",
+    "effect_in_labels_r14.1": "applied as HOLD (unscorable)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0221",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 9 (BEL POOL)/78-80_BELLAGIO POOL/78 OF 96_ARCH, STRUC, LSCAPE, SIGNAGE, FLS/D. LANDSCAPE/345-LA-SS-5A-20002.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/0650252ca9aae3b2-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0221-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0221-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0221-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F11-C0221-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "345-LA-SS-5A-20002",
+     "revision": "E"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0222",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/B. INFRASTRUCTURE/R1029-18-AUR-DWG-GFL-PUA-INF-53001-PDF (D) - BELLAGIO.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/d513641371a26448-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0222-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0222-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0222-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-18-AUR-DWG-GFL-PUA-INF-53001",
+     "revision": "D"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0224",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/09 OF 96_MEP - MGM 2 ELECTRICAL ELV/R1029-08-IFS-DWG-L07-ICT-1207.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/20ec1badbe8eaeb7-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0224-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0224-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0224-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F11-C0224-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-08-IFS-DWG-L07-ICT-1207",
+     "revision": "C"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0225",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/A. LANDSCAPE/345-LA-HS-5C-11000.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/b73c4df87904e83e-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0225-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0225-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0225-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "345-LA-HS-5C-11000",
+     "revision": "G"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0226",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/14 OF 96_INTERIOR DESIGN - HOTEL ROOMS/R1029-07-W&A-DWG-TYP-GRO-INT-9011-01-PDF-A.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/3e4e89ffa0c633c4-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0226-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0226-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0226-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-07-W&A-DWG-TYP-GRO-INT9011-01",
+     "revision": "A"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": "the reviewer's literal 'R1029-07-W&A-DWG-TYP-GRO-INT9011-01' lacks one hyphen; the PDF text layer carries '-GRO-INT-' + '9011-01' (overlapping glyphs in the image). The label literal R1029-07-W&A-DWG-TYP-GRO-INT-9011-01 is kept; noted, not applied.",
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0227",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-08-W&A-DWG-L05-PUA-INT-3250-PDF-B.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/11b5d15c0fbb99ba-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0227-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F11-C0227-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0227-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0227-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-08-W&A-DWG-L05-PUA-INT-3250",
+     "revision": "B"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0229",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-07-W&A-DWG-L05-PUA-INT-3114-PDF-E.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/4b2e4da6f52cddb2-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0229-p1-1.jpg",
+    "../../review13/worklist/crops/findings/F11-C0229-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0229-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0229-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-07-W&A-DWG-L05-PUA-INT-3114",
+     "revision": "E"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0230",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/15 OF 96_INTERIOR DESIGN - SERVICED APARTMENTS/R1029-08-W&A-DWG-L14-GRO-INT-4315-01-PDF-B.pdf",
+   "page": 1,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/8156d02ce8d1141c-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0230-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F11-C0230-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F11-C0230-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-08-W&A-DWG-L14-GRO-INT-4315-01",
+     "revision": "B"
+    },
+    "disposition": "Read from this sheet title block, not a neighbouring reference-drawing table. Preserve reference-list identifiers separately. A tender or issue-purpose stamp is not consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F11/C0244",
+   "section": "source finding",
+   "kind": "CONFIRM",
+   "doc": "EP-26082/EP-26082 INPUTS/DCD/DCD App (CE,Aria ,Bellagio & MGM-2/DCD Approved Drawing (CE, Aria, Bellagio & MGM 2)/DCD APPROVAL FOR BELLAGIO/revised_gas_bellagio_part1xiba1741941453483 (1).pdf",
+   "page": 9,
+   "question": "Confirm each sheet's own number; the numbers read came from the sheet's reference table or a part number (pre-existing since Candidate C).",
+   "page_link": "../../review07/human-review-packet/pages/8f171daed83c545e-p9.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F11-C0244-p9-1.jpg",
+    "../../review13/worklist/crops/findings/F11-C0244-p9-2.jpg",
+    "../../review13/worklist/crops/findings/F11-C0244-p9-together.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_drawing_number": "R1029-05-IBA-DWG-B01-GAS-1199",
+     "revision": "B",
+     "municipality_number": "F-05-047",
+     "referenced_other_sheet": "R1029-02-IBA-DWG-B01-GAS-1213"
+    },
+    "disposition": "The client drawing number in the page-9 title block identifies this sheet. The parking reference note points to another sheet.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F12/C0282",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-8430/Approval and Comments/PAVA MS Comments.pdf",
+   "page": 1,
+   "question": "The Dar review form prints its own document number (OCR ICDS-DOC-01943; the leading I is unverified) and the method statement it reviews (D15015-0200S-FS-EL-MS-0022). Which is the component's own identity, and what is the exact literal?",
+   "page_link": "../../review07/human-review-packet/pages/8106a2d77584615c-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F12-C0282-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F12-C0282-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F12-C0282-p1-ocr-3.jpg",
+    "../../review13/worklist/crops/findings/F12-C0282-p1-ocr-4.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "review_reference": "CRS-DOC-02006",
+     "submitted_reference": "CDS-DOC-01943"
+    },
+    "disposition": "Own review-form identity is CRS-DOC-02006. CDS-DOC-01943 is the submitted reference, with no leading I. Do not replace the review-form identity with a linked method-statement ID or infer an overall approval from individual comments.",
+    "effect_in_labels_r14.1": "applied (decision unchanged, not re-reviewed)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "F13/C0283",
+   "section": "source finding",
+   "kind": "DECIDE",
+   "doc": "EP-8430/EP-8430 PAVA MS/Rev. 0/Test Certificates/BOSCH PAVA Letter.pdf",
+   "page": 1,
+   "question": "The Bosch letter prints its own reference BSS/AE/ALARABIA/170315-047. Is the letter a component (it is labelled a no-record page)?",
+   "page_link": "../../review07/human-review-packet/pages/44665c3b5543786e-p1.jpg",
+   "crop_links": [
+    "../../review13/worklist/crops/findings/F13-C0283-p1-tb.jpg",
+    "../../review13/worklist/crops/findings/F13-C0283-p1-top.jpg",
+    "../../review13/worklist/crops/findings/F13-C0283-p1-ocr-3.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "own_identity_literal": null,
+    "roles": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_CORRECTION",
+    "observations": {
+     "letter_reference": "BSS/AE/ALARABIA/170315-047",
+     "date": "17 March 2015",
+     "actor": "Bosch"
+    },
+    "disposition": "The letter has its own reference. Include a correspondence component in raw evidence. A manufacturer statement does not constitute consultant approval.",
+    "effect_in_labels_r14.1": "applied (register False)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "H06/H06-1",
+   "section": "H-06 BOQ row",
+   "kind": "CONFIRM",
+   "doc": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "page": 1,
+   "question": "Confirm the printed quantity and part literal of this row (the AI-off reader accepted 4; the proposed label says 1).",
+   "crop_links": [
+    "../../review13/worklist/crops/h06/H06-1-row.png",
+    "../../review13/worklist/crops/h06/H06-1-qty.png"
+   ],
+   "human_answer": {
+    "quantity": null,
+    "part_number": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quantity": 1,
+     "part_number": "PRS-CSNKP",
+     "description": "Numeric Keypad"
+    },
+    "disposition": "The quantity is visibly printed. A blank part cell stays blank. Keep row position/geometry: the same PRS-CSNKP part occurs with different quantities.",
+    "effect_in_labels_r14.1": "confirmed (BOQ label unchanged; review recorded)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "H06/H06-2",
+   "section": "H-06 BOQ row",
+   "kind": "CONFIRM",
+   "doc": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "page": 1,
+   "question": "Confirm the printed quantity and part literal of this row (the AI-off reader accepted 4; the proposed label says 1).",
+   "crop_links": [
+    "../../review13/worklist/crops/h06/H06-2-row.png",
+    "../../review13/worklist/crops/h06/H06-2-qty.png"
+   ],
+   "human_answer": {
+    "quantity": null,
+    "part_number": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quantity": 1,
+     "part_number": null,
+     "description": "CD Changer"
+    },
+    "disposition": "The quantity is visibly printed. A blank part cell stays blank. Keep row position/geometry: the same PRS-CSNKP part occurs with different quantities.",
+    "effect_in_labels_r14.1": "confirmed (BOQ label unchanged; review recorded)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "H06/H06-3",
+   "section": "H-06 BOQ row",
+   "kind": "CONFIRM",
+   "doc": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "page": 1,
+   "question": "Confirm the printed quantity and part literal of this row (the AI-off reader accepted 4; the proposed label says 1).",
+   "crop_links": [
+    "../../review13/worklist/crops/h06/H06-3-row.png",
+    "../../review13/worklist/crops/h06/H06-3-qty.png"
+   ],
+   "human_answer": {
+    "quantity": null,
+    "part_number": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quantity": 1,
+     "part_number": null,
+     "description": "Printer"
+    },
+    "disposition": "The quantity is visibly printed. A blank part cell stays blank. Keep row position/geometry: the same PRS-CSNKP part occurs with different quantities.",
+    "effect_in_labels_r14.1": "confirmed (BOQ label unchanged; review recorded)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "H06/H06-control",
+   "section": "H-06 BOQ row",
+   "kind": "CONFIRM",
+   "doc": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "page": 1,
+   "question": "Confirm the printed quantity and part literal of this row (a known-correct control row).",
+   "crop_links": [
+    "../../review13/worklist/crops/h06/H06-control-row.png",
+    "../../review13/worklist/crops/h06/H06-control-qty.png"
+   ],
+   "human_answer": {
+    "quantity": null,
+    "part_number": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quantity": 2,
+     "part_number": "PRS-CSNKP",
+     "description": "Numeric Keypad"
+    },
+    "disposition": "The quantity is visibly printed. A blank part cell stays blank. Keep row position/geometry: the same PRS-CSNKP part occurs with different quantities.",
+    "effect_in_labels_r14.1": "confirmed (BOQ label unchanged; review recorded)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/535ffbdabfcf/u1",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-17428/EP-17428 MS/FA MS/Rev.01/1-7.pdf",
+   "page": 1,
+   "question": "CONFIRM: header 'Submittal No.:' is blank apart from 'Rev.0' -- identity absent; the literal Rev.0 is not attached to any identity (folder says Rev.01)",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/535ffbdabfcf-u1-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "identity": null,
+     "revision_literal": "Rev.0"
+    },
+    "disposition": "The header prints only a revision token after Submittal No.; there is no supported unique submittal identity. Keep the revision as unassociated source evidence. Folder Rev.01 is not a replacement.",
+    "effect_in_labels_r14.1": "applied (supported observation; no target)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/0c9737211762/u2",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-22510/EP-22510 Scan/EP-22510 DRF.pdf",
+   "page": 1,
+   "question": "CONFIRM: handwritten DRF No. read as '3105' (medium legibility)",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/0c9737211762-u1-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "drf_number": "3105"
+    },
+    "disposition": "The handwriting in the DRF No. box reads 3105. Preserve the crop with the label.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/0c9737211762/u3",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-22510/EP-22510 Scan/EP-22510 DRF.pdf",
+   "page": 1,
+   "question": "CONFIRM: 'Revision Number 04' belongs to the form template (SSD-P-06 B/IQF.17), so the request has no own revision",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/0c9737211762-u2-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "template_reference": "SSD-P-06 B/IQF.17",
+     "template_revision": "04"
+    },
+    "disposition": "These footer fields identify the DRF template and its revision. They do not establish the issue revision of handwritten DRF 3105.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/bdce7913eb15/u4",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-23091/EP-23091 Commercial Documents/EP-23091 EML Design.pdf",
+   "page": 1,
+   "question": "CONFIRM: own identity 'EP-23091 R1' (equal to the project number plus R1) with the revision R1 embedded -- evaluation reference form",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/bdce7913eb15-u1-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "quotation_reference_literal": "EP-23091 R1",
+     "embedded_revision_candidate": "R1"
+    },
+    "disposition": "Preserve the entire Qtn. Ref. literal. Any split into base identity and R1 must be a declared typed normalization, not deletion of the suffix from source truth.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/bdce7913eb15/u5",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-23091/EP-23091 Commercial Documents/EP-23091 EML Design.pdf",
+   "page": 1,
+   "question": "CONFIRM: row 3 part literal '+SL23I' (scan)",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/bdce7913eb15-u2-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "PARTIAL_HELD",
+    "observations": {
+     "part_literal_candidate": "SL2-42D3D-CGL-M +SL23I",
+     "quantity": 10,
+     "uncertainty": "Last glyph of the suffix I/1 is not conclusively distinguishable in this scan"
+    },
+    "disposition": "The first line and plus sign are visible; retain both lines. Do not settle the ambiguous suffix from catalogue familiarity, prior model output or a guessed product number.",
+    "effect_in_labels_r14.1": "applied as HOLD (part ambiguous; quantity 10 kept)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/d8ba80a74660/u6",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-28745/MS/Edwards/R0/PDF/Previous Project List.pdf",
+   "page": 1,
+   "question": "CONFIRM: footer 'P06/TRANS/R1' on every page is a form/letterhead code (role other), not this list's identity or revision R1",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/d8ba80a74660-u1-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_HELD",
+    "observations": {
+     "footer_code": "P06/TRANS/R1",
+     "document_title": "PREVIOUS PROJECT REFERENCE LIST",
+     "own_document_identity": null
+    },
+    "disposition": "The code is in the letterhead/footer, without an own-document number label. It is consistent with a template/control code; this image does not prove that semantic role conclusively. Record it as footer/control candidate and withhold it as a unique document/register key.",
+    "effect_in_labels_r14.1": "applied as HOLD (footer evidence; not an identity)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SB/2472d2cc65c3/u7",
+   "section": "small-batch label question",
+   "kind": "CONFIRM",
+   "doc": "EP-30549/Inputs/DUTCO DOC/03_CALCULATIONS/03_CALCULATIONS/ELECTRICAL/DCH-M-MHT-CAL-IFC-ELE-0001-00.pdf",
+   "page": 1,
+   "question": "CONFIRM: evaluation reference keeps the printed suffix ('DCH-M-MHT-CAL-IFC-ELE-0001-00') or is the base 'DCH-M-MHT-CAL-IFC-ELE-0001' with revision 00",
+   "crop_links": [
+    "../../review13/worklist/crops/small-batch/2472d2cc65c3-u1-p1.jpg"
+   ],
+   "human_answer": {
+    "value": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_SPLIT",
+    "observations": {
+     "reference_literal": "DCH-M-MHT-CAL-IFC-ELE-0001-00",
+     "history_revision": "00"
+    },
+    "disposition": "Keep the full cover reference. Page 2 independently prints revision 00 in Document History. Preserve that relation as a component association proposal; never assume every trailing -00 in other documents is a revision.",
+    "effect_in_labels_r14.1": "applied (supported observation; association proposal)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "CRIT/1",
+   "section": "critical accept (provisional truth)",
+   "kind": "DECIDE",
+   "doc": "EP-17428/EP-17428 MS/FA MS/Rev.01/1-7.pdf",
+   "page": 3,
+   "question": "The divider header prints 'Rev.0'. Is each divider a component of the method statement (blank number, revision 0), or a no-record page as proposed? (Open CONFIRM item SB/535ffbdabfcf/u1.)",
+   "crop_links": [
+    "../../review13/worklist/crops/critical/b1488c9a2c-top.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ASSOCIATION_HELD",
+    "observations": {
+     "revision_literal": "Rev.0",
+     "normalized_revision_candidate": "0",
+     "identity": null
+    },
+    "disposition": "The printed revision is real, so a no-facts negative page is too broad for raw-observation scoring. No own identity is established. Register recovery requires a supported target; this review does not authorize cross-page attachment.",
+    "effect_in_labels_r14.1": "applied (supported observation; no target)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "CRIT/2",
+   "section": "critical accept (provisional truth)",
+   "kind": "DECIDE",
+   "doc": "EP-17428/EP-17428 MS/FA MS/Rev.01/1-7.pdf",
+   "page": 4,
+   "question": "The divider header prints 'Submittal No.:' with only 'Rev.0' after it. Is 'Rev.0' this page's identity? (The proposed label: no identity; a revision literal is not an identity.)",
+   "crop_links": [
+    "../../review13/worklist/crops/critical/22577785a5-1.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED_READER_ERROR",
+    "observations": {
+     "printed_literal": "Rev.0",
+     "literal_role": "revision",
+     "own_identity": null
+    },
+    "disposition": "Rev.0 must not be accepted as a document identity. This is a source-backed type error independent of how divider pages are counted.",
+    "effect_in_labels_r14.1": "applied (reader error confirmed; literal kept as revision evidence)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "CRIT/3",
+   "section": "critical accept (provisional truth)",
+   "kind": "DECIDE",
+   "doc": "EP-30549/Inputs/DUTCO DOC/03_CALCULATIONS/03_CALCULATIONS/ELECTRICAL/DCH-M-MHT-CAL-IFC-ELE-0001-00.pdf",
+   "page": 2,
+   "question": "Page 2 is the Document History of the same calculation (revision 00). Should revision 00 be scored on page 2 (a component page), or only on the page-1 cover as proposed?",
+   "crop_links": [
+    "../../review13/worklist/crops/critical/29156fc56b-1.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "LABEL_SCOPE_CORRECTION",
+    "observations": {
+     "history_revision": "00"
+    },
+    "disposition": "Page 2 explicitly prints Revision 00 in Document History. Count a correct raw observation; do not invent a separate document solely for this page. Link to the cover only under the declared component-association contract; no automatic register-recovery credit from this image alone.",
+    "effect_in_labels_r14.1": "applied (supported observation; association proposal)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "CRIT/4",
+   "section": "critical accept (provisional truth)",
+   "kind": "DECIDE",
+   "doc": "EP-17428/EP-17428 MS/FA MS/Rev.01/1-7.pdf",
+   "page": 2,
+   "question": "Same divider header ('Submittal No.:' followed only by 'Rev.0') on page 2: a component of the method statement with revision 0, or a no-record page as proposed? (SB/535ffbdabfcf/u1.)",
+   "crop_links": [
+    "../../review13/worklist/crops/critical/977bf1625f-1.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ASSOCIATION_HELD",
+    "observations": {
+     "revision_literal": "Rev.0",
+     "normalized_revision_candidate": "0",
+     "identity": null
+    },
+    "disposition": "Same revision-evidence versus record distinction as CRIT/1. The source supports the literal, but it supplies no unique target in the header.",
+    "effect_in_labels_r14.1": "applied (supported observation; no target)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "CRIT/5",
+   "section": "critical accept (provisional truth)",
+   "kind": "DECIDE",
+   "doc": "EP-28745/MS/Edwards/R0/PDF/Previous Project List.pdf",
+   "page": 1,
+   "question": "The footer 'P06/TRANS/R1' on every page: the list's own identity, or the letterhead / form code as proposed (open CONFIRM item SB/d8ba80a74660/u1)?",
+   "crop_links": [
+    "../../review13/worklist/crops/critical/2ee4c9b285-1.jpg"
+   ],
+   "human_answer": {
+    "decision": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "ROLE_HELD",
+    "observations": {
+     "footer_code": "P06/TRANS/R1"
+    },
+    "disposition": "Printed existence is confirmed; ownership as a unique document ID is not. Withhold automatic identity acceptance, retain footer evidence, and do not label the printed token a hallucination.",
+    "effect_in_labels_r14.1": "applied as HOLD (footer evidence; not an identity)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SAMPLE/1",
+   "section": "independent 20 % sample",
+   "kind": "CHECK",
+   "doc": "EP-26208/Lux Calculation/Lux calculation/LUX CALCULATIN17.7.23.pdf",
+   "page": 3,
+   "unit": "a7763559b0bc/p3/no_record",
+   "question": "Is the label of this unit correct?",
+   "page_link": "pages/a7763559b0bc-p3.jpg",
+   "human_answer": {
+    "label_correct": null,
+    "correction": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_identity": null,
+     "current_revision": null,
+     "consultant_decision": null,
+     "page_kind": "DIALux contents"
+    },
+    "disposition": "Confirm no own identity/revision/consultant-decision record on this page. The report date, section names, page numbers and software version are not those fields.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SAMPLE/2",
+   "section": "independent 20 % sample",
+   "kind": "CHECK",
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B01-Warehouse Updated Full Package & Compliance Sheet/1- Approval Drawings/PDF/DJ-295-O-EN-DST-00-ASS-0157-01.pdf",
+   "page": 1,
+   "unit": "35bd128789de/p1/record/DJ-295-O-EN-DST-00-ASS-0157",
+   "question": "Is the label of this unit correct?",
+   "page_link": "pages/35bd128789de-p1.jpg",
+   "human_answer": {
+    "label_correct": null,
+    "correction": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "amana_drawing_number": "DJ-295-O-EN-DST-00-ASS-0157",
+     "amana_revision": "01",
+     "client_drawing_number": null,
+     "client_revision_field": "00",
+     "consultant_decision": null
+    },
+    "disposition": "The AMANA number and revision 01 are a pair. A separate empty Client Drawing Number has revision 00. Keep the fields separate. Issued for Approval is submission purpose, not proof of consultant approval.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SAMPLE/3",
+   "section": "independent 20 % sample",
+   "kind": "CHECK",
+   "doc": "EP-16830/EP-16830 - PQ/Rev.01/0.0 Table of Content.pdf",
+   "page": 1,
+   "unit": "d7ac7576420d/p1/no_record",
+   "question": "Is the label of this unit correct?",
+   "page_link": "pages/d7ac7576420d-p1.jpg",
+   "human_answer": {
+    "label_correct": null,
+    "correction": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "own_identity": null,
+     "current_revision": null,
+     "consultant_decision": null,
+     "mentioned_prior_revision": "Rev.0"
+    },
+    "disposition": "This is a contents page. Comments & Reply to Comments on Rev.0 describes listed material; it is not a current issue revision or approval. Confirm no own document-control record.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  },
+  {
+   "id": "SAMPLE/4",
+   "section": "independent 20 % sample",
+   "kind": "CHECK",
+   "doc": "EP-26208/Lux Calculation/Lux calculation/LUX CALCULATIN17.7.23.pdf",
+   "page": 1,
+   "unit": "a7763559b0bc/p1/record/EP-26208/SK/CBS/201",
+   "question": "Is the label of this unit correct?",
+   "page_link": "pages/a7763559b0bc-p1.jpg",
+   "human_answer": {
+    "label_correct": null,
+    "correction": null,
+    "reviewer": null,
+    "date": null
+   },
+   "ai_review": {
+    "status": "CONFIRMED",
+    "observations": {
+     "document_number": "EP-26208/SK/CBS/201",
+     "revision": null,
+     "consultant_decision": null
+    },
+    "disposition": "Document No. clearly supports the proposed identity. No revision or consultant decision is printed on this cover.",
+    "effect_in_labels_r14.1": "confirmed (no change)",
+    "binding": "all images bound",
+    "literal_note": null,
+    "reviewer": "Codex (independent AI reviewer)",
+    "reviewer_type": "AI",
+    "not": [
+     "a human signature",
+     "blind to earlier predictions"
+    ]
+   }
+  }
+ ],
+ "links_checked": 137,
+ "links_broken": []
+}

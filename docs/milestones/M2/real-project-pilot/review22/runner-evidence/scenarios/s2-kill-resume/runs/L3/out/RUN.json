@@ -1,0 +1,247 @@
+{
+ "at_utc": "2026-09-30T20:02:05+00:00",
+ "a_tag": "r22dry-A",
+ "tag": "L3",
+ "arm": "L3",
+ "track": "r22-L3",
+ "dry_run": true,
+ "declaration_sha256": "452f9e65ce44ae8bb58687da0735373b05dab5ca5c31d324d27ef120ea9bb8a0",
+ "identities": {
+  "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+  "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "SCHEMA_VERSION": "evidence-schema-1",
+  "PROMPTS": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2",
+   "read_field_context": "read-field-context-2026-09-30.1"
+  },
+  "AUDIT_RATE": 0.2,
+  "AUDIT_SEED": "audit-2026-09-29",
+  "MAX_PAGES_PER_DOCUMENT": 4,
+  "MAX_CALLS_PER_DOCUMENT": 8,
+  "GUARD_ENABLED": true,
+  "TARGETED_ENABLED": true,
+  "EFFICIENT_ENABLED": false,
+  "SUPPORT_V2": true,
+  "REQUIRED_FIRST": true,
+  "DEADLINE_ENABLED": true,
+  "ROI_ENABLED": false
+ },
+ "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+ "tree": "C:/t/iso/cand-ai4",
+ "context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
+  ],
+  "declared": "pilot arm L3"
+ },
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "runner_version": "arm-ev-2026-09-30.v4",
+ "allowance_key": {
+  "scope": "r22-four-arm-dry-2026-09-30-L3",
+  "profile": "L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "path": "C:/t/r2x/dry-runs/r22-probes/s2-kill-resume/dry-allowance.sqlite"
+ },
+ "caps": {
+  "durable_per_document": 12,
+  "reader_per_reading": 8,
+  "project_rolling_day": 60
+ },
+ "projects": {
+  "16830": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 9,
+   "cache_hits": 2,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 1.4,
+   "documents_in": 1,
+   "documents_skipped_completed": 1,
+   "requests": 9,
+   "worst_case_reserved": 9,
+   "capacity_before": 52,
+   "pid": 15824
+  },
+  "17428": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 8,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 0.8,
+   "documents_in": 2,
+   "documents_skipped_completed": 0,
+   "requests": 8,
+   "worst_case_reserved": 24,
+   "capacity_before": 60,
+   "pid": 15824
+  }
+ },
+ "not_attempted": [],
+ "deferred": [],
+ "tripwire": [
+  {
+   "after": "16830",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-16830/synth/raster-6pages.pdf": "eligible",
+     "EP-16830/synth/raster-1page.pdf": "eligible"
+    },
+    "rejected": 2
+   }
+  },
+  {
+   "after": "17428",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-16830/synth/raster-6pages.pdf": "eligible",
+     "EP-16830/synth/raster-1page.pdf": "eligible",
+     "EP-17428/synth/raster-2pages.pdf": "eligible",
+     "EP-17428/synth/text-sheet.pdf": "eligible",
+     "EP-17428/synth/note.docx": "ineligible"
+    },
+    "rejected": 0
+   }
+  }
+ ],
+ "resumes": [
+  {
+   "at_utc": "2026-09-30T20:02:07+00:00",
+   "pid": 15824,
+   "clock": 1790798527.9735036,
+   "reread": false
+  }
+ ],
+ "seconds": 2.6,
+ "runner_state": {
+  "consecutive_failures": 0,
+  "stopped": null,
+  "xtrack_refusals": 0,
+  "allowance_refusals": 1,
+  "allowance_busy": 0,
+  "ledger_precheck_refusals": 0,
+  "per_ep": {
+   "16830": 9,
+   "17428": 8
+  },
+  "requests_io": 17,
+  "cache_hits": 2,
+  "deferred": [],
+  "skipped_completed": [
+   "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058"
+  ],
+  "skipped_projects": [],
+  "interrupted_seen": [
+   {
+    "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+    "attempts": [
+     {
+      "attempt": 2,
+      "pid": 4612,
+      "started": 1790798526.5510173,
+      "calls_at_start": 0
+     }
+    ],
+    "calls_already_charged": 3
+   }
+  ]
+ },
+ "final": true,
+ "allowance": {
+  "EP-16830/synth/raster-6pages.pdf": {
+   "charged": 12,
+   "attempts": [
+    {
+     "id": 2,
+     "pid": 4612,
+     "started": 1790798526.5510173,
+     "ended": null,
+     "status": "interrupted",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    },
+    {
+     "id": 3,
+     "pid": 15824,
+     "started": 1790798528.4958198,
+     "ended": 1790798529.5760705,
+     "status": "completed:budget_stop",
+     "calls_at_start": 3,
+     "calls_at_end": 12
+    }
+   ]
+  },
+  "EP-16830/synth/raster-1page.pdf": {
+   "charged": 5,
+   "attempts": [
+    {
+     "id": 1,
+     "pid": 4612,
+     "started": 1790798525.9170973,
+     "ended": 1790798526.5160112,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    }
+   ]
+  },
+  "EP-17428/synth/raster-2pages.pdf": {
+   "charged": 8,
+   "attempts": [
+    {
+     "id": 4,
+     "pid": 15824,
+     "started": 1790798529.635513,
+     "ended": 1790798530.4215076,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 8
+    }
+   ]
+  },
+  "EP-17428/synth/text-sheet.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 5,
+     "pid": 15824,
+     "started": 1790798530.445443,
+     "ended": 1790798530.4509985,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  }
+ },
+ "deferred_before_resume": [],
+ "tables": {
+  "project_documents": 4,
+  "project_submittals": 0,
+  "project_shop_drawings": 0,
+  "background_jobs": 4,
+  "project_actions": 0,
+  "ai_usage": 24,
+  "document_readings": 0
+ },
+ "business_hashes": {
+  "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+ },
+ "ai_usage_rows": 24,
+ "fresh_requests_this_arm": 24,
+ "status": "completed"
+}

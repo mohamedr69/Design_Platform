@@ -1,0 +1,189 @@
+{
+ "manifest": {
+  "files": 559,
+  "mismatched_or_missing": [],
+  "unlisted": []
+ },
+ "markdown_links": {
+  "checked": 28,
+  "broken": []
+ },
+ "trees": {
+  "accepted": true,
+  "frozen_r21_candidate": true,
+  "reader_unchanged": true,
+  "application_change": "none (harness journal validator, tests and documents only)"
+ },
+ "harness_frozen": {
+  "frozen_before_final_validation": true,
+  "packaged_files_equal_frozen_hashes": true,
+  "workspace_files_equal_frozen_hashes": true,
+  "arm_ev_unchanged_vs_v4_2": true,
+  "validator": "provider-outcomes.v1/validator-2",
+  "journal_format": "provider-outcomes.v1",
+  "scoring_files_unchanged_vs_review22": true,
+  "changed_vs_v4_2": [
+   "append_response.py",
+   "lifecycle_probes.py",
+   "provider_boundary_probes.py",
+   "provider_journal.py",
+   "runner_probes.py",
+   "test_boundary_v4_2.py"
+  ],
+  "new_vs_v4_2": [
+   "bindings_r25.py",
+   "legacy_journal_recheck.py",
+   "neutral_mutation_probes.py",
+   "package_r25.py",
+   "patch_kind_outcome.py",
+   "run_r25_chain.sh",
+   "test_neutral_v4_3.py",
+   "verify_r25_package.py"
+  ],
+  "durable_allowance_module_unchanged": true
+ },
+ "reviewer_files_unchanged": true,
+ "reviewer_copies_match": true,
+ "reviewer_runner_is_submitted_v4_2": true,
+ "earlier_packages_unchanged": {
+  "review13": true,
+  "review14": true,
+  "review15": true,
+  "review16": true,
+  "ai-accuracy-pilot": true,
+  "ai-pilot-r18-correction": true,
+  "review19": true,
+  "review20": true,
+  "review21": true,
+  "review22": true,
+  "review23": true,
+  "review24": true
+ },
+ "labels_r21_unchanged": true,
+ "dry_inputs_unchanged": {
+  "r22_dry_declaration": true,
+  "r22_dry_stage": true,
+  "labels_dry_r22": true
+ },
+ "tests": {
+  "SUBMITTED-62": {
+   "tests": 62,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "NEUTRAL-V4.3": {
+   "tests": 32,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-NEUTRAL-on-v4.2": {
+   "tests": 6,
+   "failures": 3,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-NEUTRAL-on-v4.3": {
+   "tests": 6,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "R24-PROVIDER-on-v4.3": {
+   "tests": 3,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  }
+ },
+ "pytest_exit_codes": {
+  "SUBMITTED-62": "0",
+  "NEUTRAL-V4.3": "0",
+  "REVIEWER-NEUTRAL-on-v4.2": "1",
+  "REVIEWER-NEUTRAL-on-v4.3": "0",
+  "R24-PROVIDER-on-v4.3": "0"
+ },
+ "tests_ok": true,
+ "mutation_evidence": {
+  "m0-unmutated-control": true,
+  "m-budget": true,
+  "m-cache_hit": true,
+  "m-none": true
+ },
+ "legacy_recheck": {
+  "journals": 25,
+  "all_equal": true,
+  "kinds_seen": {
+   "ok": 252,
+   "failure": 28,
+   "cache_hit": 22,
+   "budget": 4,
+   "none": 0
+  }
+ },
+ "reviewer_probe": {
+  "budget": {
+   "v4_2": [
+    "ok",
+    0,
+    16,
+    "completed"
+   ],
+   "v4_3": [
+    "indeterminate",
+    5,
+    0,
+    null
+   ]
+  },
+  "cache_hit": {
+   "v4_2": [
+    "ok",
+    0,
+    16,
+    "completed"
+   ],
+   "v4_3": [
+    "indeterminate",
+    5,
+    0,
+    null
+   ]
+  },
+  "none": {
+   "v4_2": [
+    "ok",
+    0,
+    16,
+    "completed"
+   ],
+   "v4_3": [
+    "indeterminate",
+    5,
+    0,
+    null
+   ]
+  }
+ },
+ "r24_probe_on_v4_3": {
+  "before_file": [
+   98,
+   4,
+   0,
+   "stopped"
+  ],
+  "after_file": [
+   98,
+   4,
+   0,
+   "stopped"
+  ]
+ },
+ "ledger": {
+  "settled_original_experiment": 128,
+  "r21_to_r25_live_entries": 0,
+  "r21_to_r25_live_scopes": []
+ },
+ "ok": true
+}

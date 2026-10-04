@@ -1,0 +1,896 @@
+{
+ "mode": "OFFLINE, exposed data, identical stored responses (no model request)",
+ "policies": {
+  "P0": "guard off, accepted region text",
+  "P1": "guard on, accepted region text",
+  "P2": "guard on, rotation-correct clip only",
+  "P3": "guard on, rotation-correct clip + local OCR fallback"
+ },
+ "sets": {
+  "pilot-S": {
+   "cases": [
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "Caf6NGC/KA/PQ·MEP-002",
+     "truth": "Caf6NGC/KA/PQ·MEP-002",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "00",
+     "truth": "00",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "P10781",
+     "truth": "P10781",
+     "rotation": 270,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "ocr_local",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-105-BASEMENT-01 FLOOR.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "MEP-FA-B01-005",
+     "truth": "MEP-FA-B01-005",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-105-BASEMENT-01 FLOOR.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "01",
+     "truth": "01",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P1": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "00",
+     "truth": "00",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "BH2031-JD-OFF-23-109-00",
+     "truth": "BH2031-ID-OFF-23-109-00",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P1": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P2": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P3": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     }
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "H",
+     "truth": "H",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "ATK/E/343/ATH-END-3B/SD/TEL-00",
+     "truth": "TES/1343/NTH-END-3B/SD/TEL-00",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "P2",
+     "truth": "1",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "2836",
+     "truth": "2836",
+     "rotation": 0,
+     "label_status": "unresolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P1": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P2": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P3": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     }
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "E",
+     "truth": "E",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     }
+    }
+   ],
+   "summary": {
+    "P0": {
+     "held:candidate": 10,
+     "validated_correct": 1,
+     "held:conflict": 2
+    },
+    "P1": {
+     "held:candidate": 10,
+     "validated_correct": 1,
+     "held:conflict": 2
+    },
+    "P2": {
+     "validated_correct": 4,
+     "held:candidate": 7,
+     "held:conflict": 2
+    },
+    "P3": {
+     "validated_correct": 5,
+     "held:candidate": 6,
+     "held:conflict": 2
+    }
+   },
+   "changes_by_step": {
+    "P0->P1": [],
+    "P1->P2": [
+     {
+      "doc": "EP-16830 Reply to Comments.pdf",
+      "field": "identity",
+      "rotation": 90,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     },
+     {
+      "doc": "EP-16830 Reply to Comments.pdf",
+      "field": "revision",
+      "rotation": 90,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     },
+     {
+      "doc": "1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf",
+      "field": "revision",
+      "rotation": 90,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     }
+    ],
+    "P2->P3": [
+     {
+      "doc": "Al Arabia - Authorization.pdf",
+      "field": "identity",
+      "rotation": 270,
+      "P2": "held:candidate",
+      "P3": "validated_correct"
+     }
+    ]
+   }
+  },
+  "continuation-S": {
+   "cases": [
+    {
+     "doc": "EP-16830/Drawing/Shop dwg/Structure Cabling/Cafe/REV-1/pdf/819-TL-101 LATEST-CAFE DWG.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "819-TL-101",
+     "truth": "819-TL-101",
+     "rotation": 270,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-16830/Drawing/Shop dwg/Structure Cabling/Cafe/REV-1/pdf/819-TL-101 LATEST-CAFE DWG.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "01",
+     "truth": "01",
+     "rotation": 270,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "BH2031-ID-OFF-23-",
+     "truth": "BH2031-ID-OFF-23-109-00",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P1": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P2": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P3": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     }
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "H",
+     "truth": "H",
+     "rotation": 90,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "ATK/TS/343/ATH-END-3B/SD/TEL-00",
+     "truth": "TES/1343/NTH-END-3B/SD/TEL-00",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "00",
+     "truth": "1",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "DL894DN05F/RAS0281",
+     "truth": "DJ-295-0-EN-DST-07-ASS-0301",
+     "rotation": 0,
+     "label_status": "unresolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "00",
+     "truth": "00",
+     "rotation": 0,
+     "label_status": "unresolved",
+     "blind_read": false,
+     "P0": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     },
+     "P3": {
+      "state": "candidate",
+      "support": "text",
+      "judged": "held:candidate"
+     }
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "EML-09",
+     "truth": "EML-09",
+     "rotation": 270,
+     "label_status": "unresolved",
+     "blind_read": true,
+     "P0": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P1": {
+      "state": "candidate",
+      "support": null,
+      "judged": "held:candidate"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "00",
+     "truth": "00",
+     "rotation": 270,
+     "label_status": "unresolved",
+     "blind_read": true,
+     "P0": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P1": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P2": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P3": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     }
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+     "page": "1",
+     "field": "identity",
+     "value": "ARC-74028",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P1": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P2": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     },
+     "P3": {
+      "state": "conflict",
+      "support": null,
+      "judged": "held:conflict"
+     }
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+     "page": "1",
+     "field": "revision",
+     "value": "E",
+     "truth": "E",
+     "rotation": 0,
+     "label_status": "resolved",
+     "blind_read": true,
+     "P0": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P1": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P2": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     },
+     "P3": {
+      "state": "validated",
+      "support": "text",
+      "judged": "validated_correct"
+     }
+    }
+   ],
+   "summary": {
+    "P0": {
+     "held:candidate": 8,
+     "held:conflict": 3,
+     "validated_correct": 1
+    },
+    "P1": {
+     "held:candidate": 8,
+     "held:conflict": 3,
+     "validated_correct": 1
+    },
+    "P2": {
+     "validated_correct": 5,
+     "held:conflict": 3,
+     "held:candidate": 4
+    },
+    "P3": {
+     "validated_correct": 5,
+     "held:conflict": 3,
+     "held:candidate": 4
+    }
+   },
+   "changes_by_step": {
+    "P0->P1": [],
+    "P1->P2": [
+     {
+      "doc": "819-TL-101 LATEST-CAFE DWG.pdf",
+      "field": "identity",
+      "rotation": 270,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     },
+     {
+      "doc": "819-TL-101 LATEST-CAFE DWG.pdf",
+      "field": "revision",
+      "rotation": 270,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     },
+     {
+      "doc": "BH2031-ID-OFF-23-109-00_H.pdf",
+      "field": "revision",
+      "rotation": 90,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     },
+     {
+      "doc": "EML-09-SCH.pdf",
+      "field": "identity",
+      "rotation": 270,
+      "P1": "held:candidate",
+      "P2": "validated_correct"
+     }
+    ],
+    "P2->P3": []
+   }
+  }
+ },
+ "inputs": {
+  "pilot-S": {
+   "rows": "838b9f0f3a995bf78e5318a0b95b7142942de3d91551da419cb054cd16032122",
+   "sample": "3822df9ef792e6c6277e0bec3271dcee06dcdc6a15291a3e03ab0b25b6bf1917",
+   "labels": "078fe52838e1ebeca5372105f7edc8294196b3dca8fa8cb0f1532005f97c8bc5",
+   "uncertainty": "b1e5da5ba7b57ee6038d238e5b8efebc0593fb49b3b21718bc6b23d0925b0a36"
+  },
+  "continuation-S": {
+   "rows": "7c5389dfc6b3c40eff683dade44583280e707bb7a1572f2f14ff271a317db3f1",
+   "sample": "ddbceb3f75ee2d44a654a68d6a54b41875cc37f0f26899d4806239cfd3e3c7f3",
+   "labels": "e9923fc3fcc37582edc0fbaf5c2c03125fce973461af0bb9013a57c7bcd5d05d",
+   "uncertainty": "2d4fabb0a8be369f15ff727519d4b544f307739438f12d0a6df0f424d4c9e198"
+  }
+ }
+}

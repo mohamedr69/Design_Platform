@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.107" timestamp="2026-10-01T00:42:38.620940+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="test_provider_boundary" name="test_control_three_completed_failures_preceded_the_before_file_kill" time="0.008" /><testcase classname="test_provider_boundary" name="test_provider_terminal_stop_survives_kill_before_stop_file" time="0.001"><failure message="assert 16 == 0">def test_provider_terminal_stop_survives_kill_before_stop_file():
+        p=results()['before_file']
+&gt;       assert p['new_sends']==0
+E       assert 16 == 0
+
+test_provider_boundary.py:17: AssertionError</failure></testcase><testcase classname="test_provider_boundary" name="test_control_kill_after_file_already_preserves_provider_stop" time="0.001" /></testsuite></testsuites>

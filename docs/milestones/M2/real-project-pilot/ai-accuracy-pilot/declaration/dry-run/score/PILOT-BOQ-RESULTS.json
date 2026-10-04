@@ -1,0 +1,936 @@
+{
+ "truth_status": "PROVISIONAL: AI-drafted labels, not reviewed by a person; diagnostic only",
+ "contract": "r2x-boq-contract-2026-09-30.r16.1",
+ "replay_core": "r2x-boq-replay-core-2026-09-30.r16.1",
+ "truth_rows": 15,
+ "part_only_rows_not_in_replay_truth": [
+  {
+   "page": 1,
+   "kind": "part_only",
+   "quantity": null,
+   "description_count": "2",
+   "part_number": "12V8A",
+   "description": "( 2 ) Battery 8 AH, 12 volt cells",
+   "note": "quantity column empty; the ( 2 ) count is in the description (recorded separately)"
+  }
+ ],
+ "emitted": 18,
+ "reader_without_ai": {
+  "emitted": {
+   "total": 18,
+   "matched": 15,
+   "held": 0,
+   "unmatched": 3,
+   "complete_and_disjoint": true
+  },
+  "truth": {
+   "total": 15,
+   "matched": 15,
+   "held_candidate": 0,
+   "missed": 0,
+   "complete": true
+  }
+ },
+ "arms": {
+  "BOQ-S": {
+   "tag": "dry-boq-S",
+   "calls": 5,
+   "allowance": {
+    "resumed": false,
+    "calls_before": 0,
+    "calls_after": 5,
+    "exhausted": null,
+    "attempt": 1,
+    "interrupted_attempts_found": [],
+    "harness": "r2x-boq-harness-2026-09-30.r15.1"
+   },
+   "exhausted": null,
+   "declared_order": {
+    "file": "SELECTION.json",
+    "sha256": "a265c561b1a3f1b09983f23da44fe1e484d0d2a61d28d2ccb86d8b1ac9218531",
+    "at_utc": "2026-09-30T06:22:18+00:00"
+   },
+   "outcomes": {
+    "questioned_correct": 1,
+    "held_blind_wrong": 3,
+    "extra_row": 1
+   },
+   "accounting": {
+    "emitted": {
+     "total": 18,
+     "matched": 15,
+     "held": 0,
+     "unmatched": 3,
+     "complete_and_disjoint": true
+    },
+    "truth": {
+     "total": 15,
+     "matched": 15,
+     "held_candidate": 0,
+     "missed": 0,
+     "complete": true
+    }
+   },
+   "rows": [
+    {
+     "request_order": 1,
+     "emitted_id": "L12",
+     "y": 1929.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "27193-11",
+      "quantity": "3",
+      "description": "Surface Mount Box - Indoor, RED, 1-gang"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 14,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "27193-11",
+      "quantity": "3",
+      "description": "Surface Mount Box - Indoor, RED, 1-gang"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": null,
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part '27193-11', reader quantity '3'"
+     ]
+    },
+    {
+     "request_order": 2,
+     "emitted_id": "I0",
+     "y": 1152.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "IO1000R-2",
+      "quantity": "1",
+      "description": "FACP, 1 LOOP STD EXPANDABLE TO 4, 230v, RED DOOR"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 0,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "IO1000R-2",
+      "quantity": "1",
+      "description": "IO1000 Fire Alarm Control Panel (FACP, 1 loop std expandable to 4, 230v, red door)"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": null,
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'IO1000R-2', reader quantity '1'"
+     ]
+    },
+    {
+     "request_order": 3,
+     "emitted_id": "I1",
+     "y": 1636.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "757-7A-T",
+      "quantity": "6",
+      "description": "15/75 cd Temporal Horn/Strobe - 24 Vdc, RED"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 8,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "757-7A-T",
+      "quantity": "6",
+      "description": "15/75 cd Temporal Horn/Strobe - 24 Vdc, RED"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": null,
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part '757-7A-T', reader quantity '6'"
+     ]
+    },
+    {
+     "request_order": 4,
+     "emitted_id": "I2",
+     "y": 1684.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "G1R-HD",
+      "quantity": "6",
+      "description": "Temporal horn, hi/lo dB output - 24V, RED"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 9,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "G1R-HD",
+      "quantity": "6",
+      "description": "Temporal horn, hi/lo dB output - 24V, RED"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": null,
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'G1R-HD', reader quantity '6'"
+     ]
+    },
+    {
+     "request_order": 5,
+     "emitted_id": "I3",
+     "y": 1847.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "TP606",
+      "quantity": null,
+      "description": "|"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "unmatched",
+     "truth_ordinal": null,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": null,
+     "reader_right": null,
+     "blind_right": null,
+     "outcome": "extra_row",
+     "request": "ok",
+     "queue": null,
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'TP606', reader quantity '|'"
+     ]
+    }
+   ],
+   "verified_emitted_rows": [
+    "I0",
+    "I1",
+    "I2",
+    "I3",
+    "L12"
+   ],
+   "not_reached_emitted_rows": [
+    "L0",
+    "L1",
+    "L10",
+    "L11",
+    "L13",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7",
+    "L8",
+    "L9"
+   ],
+   "full_sheet_verified": false,
+   "usage": {
+    "fresh_requests": 5,
+    "cache_hits": 0,
+    "by_task": {
+     "evidence:read_boq_row": 5
+    },
+    "outcomes": {
+     "ok": 5
+    },
+    "models": {
+     "dry": 5
+    },
+    "input_tokens": 50,
+    "output_tokens": 25,
+    "requests_without_token_usage": 0,
+    "latency_ms": {
+     "p50": 1,
+     "max": 1
+    },
+    "cost": "UNKNOWN (no valid price configured; never zero)"
+   }
+  },
+  "BOQ-T": {
+   "tag": "dry-boq-T",
+   "calls": 12,
+   "allowance": {
+    "resumed": false,
+    "calls_before": 0,
+    "calls_after": 12,
+    "exhausted": null,
+    "attempt": 2,
+    "interrupted_attempts_found": [],
+    "harness": "r2x-boq-harness-2026-09-30.r15.1",
+    "queue": "ai-pilot-boq-queue-2026-09-30.1"
+   },
+   "exhausted": null,
+   "declared_order": {
+    "file": "QUEUE.json",
+    "sha256": "be9b5d7361bd5ec126cddc67d1d7aadc7fff251e32951abc31c70ea85f9a1d3d",
+    "at_utc": "2026-09-30T06:22:25+00:00"
+   },
+   "outcomes": {
+    "held_blind_wrong": 3,
+    "extra_row": 3,
+    "questioned_correct": 6
+   },
+   "accounting": {
+    "emitted": {
+     "total": 18,
+     "matched": 15,
+     "held": 0,
+     "unmatched": 3,
+     "complete_and_disjoint": true
+    },
+    "truth": {
+     "total": 15,
+     "matched": 15,
+     "held_candidate": 0,
+     "missed": 0,
+     "complete": true
+    }
+   },
+   "rows": [
+    {
+     "request_order": 1,
+     "emitted_id": "I0",
+     "y": 1152.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "IO1000R-2",
+      "quantity": "1",
+      "description": "FACP, 1 LOOP STD EXPANDABLE TO 4, 230v, RED DOOR"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 0,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "IO1000R-2",
+      "quantity": "1",
+      "description": "IO1000 Fire Alarm Control Panel (FACP, 1 loop std expandable to 4, 230v, red door)"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": {
+      "position": 1,
+      "tier": "1_held",
+      "signals": [
+       "QUANTITY_OR_UNIT_PARSE_FAILURE"
+      ],
+      "kind": "issue",
+      "index": 0
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'IO1000R-2', reader quantity '1'"
+     ]
+    },
+    {
+     "request_order": 2,
+     "emitted_id": "I1",
+     "y": 1636.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "757-7A-T",
+      "quantity": "6",
+      "description": "15/75 cd Temporal Horn/Strobe - 24 Vdc, RED"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 8,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "757-7A-T",
+      "quantity": "6",
+      "description": "15/75 cd Temporal Horn/Strobe - 24 Vdc, RED"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": {
+      "position": 2,
+      "tier": "1_held",
+      "signals": [
+       "QUANTITY_OR_UNIT_PARSE_FAILURE"
+      ],
+      "kind": "issue",
+      "index": 1
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part '757-7A-T', reader quantity '6'"
+     ]
+    },
+    {
+     "request_order": 3,
+     "emitted_id": "I2",
+     "y": 1684.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "G1R-HD",
+      "quantity": "6",
+      "description": "Temporal horn, hi/lo dB output - 24V, RED"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 9,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "G1R-HD",
+      "quantity": "6",
+      "description": "Temporal horn, hi/lo dB output - 24V, RED"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "held_blind_wrong",
+     "request": "ok",
+     "queue": {
+      "position": 3,
+      "tier": "1_held",
+      "signals": [
+       "QUANTITY_OR_UNIT_PARSE_FAILURE"
+      ],
+      "kind": "issue",
+      "index": 2
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'G1R-HD', reader quantity '6'"
+     ]
+    },
+    {
+     "request_order": 4,
+     "emitted_id": "I3",
+     "y": 1847.0,
+     "accepted_by_reader": false,
+     "emitted": {
+      "part_number": "TP606",
+      "quantity": null,
+      "description": "|"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "unmatched",
+     "truth_ordinal": null,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": null,
+     "reader_right": null,
+     "blind_right": null,
+     "outcome": "extra_row",
+     "request": "ok",
+     "queue": {
+      "position": 4,
+      "tier": "1_held",
+      "signals": [
+       "QUANTITY_OR_UNIT_PARSE_FAILURE"
+      ],
+      "kind": "issue",
+      "index": 3
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'TP606', reader quantity '|'"
+     ]
+    },
+    {
+     "request_order": 5,
+     "emitted_id": "L5",
+     "y": 1492.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "SIGA-IB",
+      "quantity": "4",
+      "description": "Detector Base with Isolator"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 5,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "SIGA-IB",
+      "quantity": "4",
+      "description": "Detector Base with Isolator"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 5,
+      "tier": "2_risk",
+      "signals": [
+       "quantity_rewritten",
+       "low_quantity_confidence",
+       "low_catalog_confidence"
+      ],
+      "kind": "line",
+      "index": 5
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'SIGA-IB', reader quantity '4'"
+     ]
+    },
+    {
+     "request_order": 6,
+     "emitted_id": "L1",
+     "y": 1201.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "12V8A",
+      "quantity": "2",
+      "description": "Battery 8 AH, 12 volt cells"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "unmatched",
+     "truth_ordinal": null,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": null,
+     "reader_right": null,
+     "blind_right": null,
+     "outcome": "extra_row",
+     "request": "ok",
+     "queue": {
+      "position": 6,
+      "tier": "2_risk",
+      "signals": [
+       "quantity_not_from_cell",
+       "low_quantity_confidence"
+      ],
+      "kind": "line",
+      "index": 1
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part '12V8A', reader quantity '2'"
+     ]
+    },
+    {
+     "request_order": 7,
+     "emitted_id": "L0",
+     "y": 914.5,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": null,
+      "quantity": "1",
+      "description": "101000- 1 loop std. expandable to four loops fire alarm control panel, with built-in system relays, 4x20 character backlit LCD display, 4 Nac’s (6 amps), rechargeable batteries to power the system for 24 hours standby and 30 minutes alarm condition. Components are:"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "unmatched",
+     "truth_ordinal": null,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": null,
+     "reader_right": null,
+     "blind_right": null,
+     "outcome": "extra_row",
+     "request": "ok",
+     "queue": {
+      "position": 7,
+      "tier": "2_risk",
+      "signals": [
+       "no_part"
+      ],
+      "kind": "line",
+      "index": 0
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader quantity '1'"
+     ]
+    },
+    {
+     "request_order": 8,
+     "emitted_id": "L3",
+     "y": 1393.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "SIGA-HRD",
+      "quantity": "12",
+      "description": "Intelligent Fixed Temperature / Rate-of-Rise Heat Detector"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 3,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "SIGA-HRD",
+      "quantity": "12",
+      "description": "Intelligent Fixed Temperature / Rate-of-Rise Heat Detector"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 8,
+      "tier": "3_audit",
+      "signals": [],
+      "kind": "line",
+      "index": 3
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'SIGA-HRD', reader quantity '12'"
+     ]
+    },
+    {
+     "request_order": 9,
+     "emitted_id": "L6",
+     "y": 1541.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "SIGA-AB4G",
+      "quantity": "14",
+      "description": "Audible (Sounder) Base"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 6,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "SIGA-AB4G",
+      "quantity": "14",
+      "description": "Audible (Sounder) Base"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 9,
+      "tier": "3_audit",
+      "signals": [],
+      "kind": "line",
+      "index": 6
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'SIGA-AB4G', reader quantity '14'"
+     ]
+    },
+    {
+     "request_order": 10,
+     "emitted_id": "L8",
+     "y": 1735.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "SIGA-CT2",
+      "quantity": "1",
+      "description": "Dual Input Module"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 10,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "SIGA-CT2",
+      "quantity": "1",
+      "description": "Dual Input Module"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 10,
+      "tier": "4_residual_audit",
+      "signals": [],
+      "kind": "line",
+      "index": 8
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'SIGA-CT2', reader quantity '1'"
+     ]
+    },
+    {
+     "request_order": 11,
+     "emitted_id": "L10",
+     "y": 1831.0,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "TP606",
+      "quantity": "12",
+      "description": "2\"x4\" GI Concealed Back Box Single Gange"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 12,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "TP606",
+      "quantity": "12",
+      "description": "2\"x4\" GI Concealed Back Box Single Gange"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 11,
+      "tier": "4_residual_audit",
+      "signals": [],
+      "kind": "line",
+      "index": 10
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part 'TP606', reader quantity '12'"
+     ]
+    },
+    {
+     "request_order": 12,
+     "emitted_id": "L13",
+     "y": 1976.5,
+     "accepted_by_reader": true,
+     "emitted": {
+      "part_number": "757A-WB",
+      "quantity": "6",
+      "description": "Weatherproof Box, Cast - RED"
+     },
+     "blind": {
+      "part_number": "",
+      "quantity": "",
+      "description": ""
+     },
+     "verifier_state": "conflict",
+     "join": "matched",
+     "truth_ordinal": 15,
+     "held_candidates": null,
+     "held_reason": null,
+     "truth": {
+      "part_number": "757A-WB",
+      "quantity": "6",
+      "description": "Weatherproof Box, Cast - RED"
+     },
+     "reader_right": true,
+     "blind_right": false,
+     "outcome": "questioned_correct",
+     "request": "ok",
+     "queue": {
+      "position": 12,
+      "tier": "4_residual_audit",
+      "signals": [],
+      "kind": "line",
+      "index": 13
+     },
+     "row_state": "conflict",
+     "part_state": "unverified",
+     "quantity_state": "unverified",
+     "quantity_source": null,
+     "reasons": [
+      "the reading calls the row a heading, but the row carries item evidence: reader part '757A-WB', reader quantity '6'"
+     ]
+    }
+   ],
+   "verified_emitted_rows": [
+    "I0",
+    "I1",
+    "I2",
+    "I3",
+    "L0",
+    "L1",
+    "L10",
+    "L13",
+    "L3",
+    "L5",
+    "L6",
+    "L8"
+   ],
+   "not_reached_emitted_rows": [
+    "L11",
+    "L12",
+    "L2",
+    "L4",
+    "L7",
+    "L9"
+   ],
+   "full_sheet_verified": false,
+   "usage": {
+    "fresh_requests": 12,
+    "cache_hits": 0,
+    "by_task": {
+     "evidence:read_boq_row": 12
+    },
+    "outcomes": {
+     "ok": 12
+    },
+    "models": {
+     "dry": 12
+    },
+    "input_tokens": 120,
+    "output_tokens": 60,
+    "requests_without_token_usage": 0,
+    "latency_ms": {
+     "p50": 1.0,
+     "max": 1
+    },
+    "cost": "UNKNOWN (no valid price configured; never zero)"
+   },
+   "prefix_at_BOQ_S_calls": {
+    "requests": 5,
+    "outcomes": {
+     "held_blind_wrong": 3,
+     "extra_row": 1,
+     "questioned_correct": 1
+    }
+   }
+  }
+ }
+}

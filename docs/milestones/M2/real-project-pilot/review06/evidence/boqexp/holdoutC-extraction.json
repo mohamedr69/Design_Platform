@@ -1,0 +1,5553 @@
+{
+ "EP-28605/EP-28605 Scan\\EP-28605 Theatre EML Design.pdf": {
+  "sha256_matches_frozen": true,
+  "seconds": 4.0,
+  "state": "completed",
+  "reader": "ocr",
+  "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+  "outcome": "Outcome.NEEDS_INTERPRETATION",
+  "lines": [],
+  "issues": [
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     139,
+     886,
+     2345,
+     975
+    ],
+    "target": "boq_line:1:1",
+    "detail": {
+     "description": "RTECH MR HEO CGL+ 200 MNM 3H IP65",
+     "catalog_no": "RT2RHEO200CGL3HIP M",
+     "group_heading": null,
+     "raw_quantity": "140",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "140",
+      "value": "140",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "140",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'RT2RHEO200CGL3HIP M' at 92%; independent passes on the cell read KIZKHEOZUUCGLSHIP M, KIZRHEOZUUCGLSHIP M (no independent pass read the whole part number)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, block, part characters",
+       "text": "KIZKHEOZUUCGLSHIP M",
+       "value": "KIZKHEOZUUCGLSHIP M"
+      },
+      {
+       "pass": "binarised, block, part characters",
+       "text": "KIZRHEOZUUCGLSHIP M",
+       "value": "KIZRHEOZUUCGLSHIP M"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": true,
+      "reason": "no independent pass read the whole part number"
+     },
+     "catalog_cell": [
+      358,
+      886,
+      828,
+      975
+     ],
+     "bbox": [
+      139,
+      886,
+      2345,
+      975
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     139,
+     975,
+     2345,
+     1064
+    ],
+    "target": "boq_line:1:2",
+    "detail": {
+     "description": "Exit Directional, Corridor Recessed, 30 metre viewing distance",
+     "catalog_no": "SL2-42D3D-CGL-M +SL2RB +SL2DC31",
+     "group_heading": null,
+     "raw_quantity": "35",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "35",
+      "value": "35",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "35",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'SL2-42D3D-CGL-M +SL2RB +SL2DC31' at 71%; independent passes on the cell read SL2-42D3D-CGL-M +ST.IRB+ST2DC31 (an independent pass read another part number)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, block, part characters",
+       "text": "SL2-42D3D-CGL-M +ST.IRB+ST2DC31",
+       "value": "SL2-42D3D-CGL-M +ST.IRB+ST2DC31"
+      },
+      {
+       "pass": "binarised, block, part characters",
+       "text": "SL2-42D3D-CGL-M +ST.IRB+ST2DC31",
+       "value": "SL2-42D3D-CGL-M +ST.IRB+ST2DC31"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": true,
+      "reason": "an independent pass read another part number"
+     },
+     "catalog_cell": [
+      358,
+      975,
+      828,
+      1064
+     ],
+     "bbox": [
+      139,
+      975,
+      2345,
+      1064
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     139,
+     1064,
+     2345,
+     1123
+    ],
+    "target": "boq_line:1:3",
+    "detail": {
+     "description": "Menvier Brand CGLine+ Web Compact Control",
+     "catalog_no": "CTR400CGL2KS-M",
+     "group_heading": null,
+     "raw_quantity": "1",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "1",
+      "value": "1",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "1",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'CTR400CGL2KS-M' at 36%; independent passes on the cell read CTR400CGL2KS-M (the strip read it at 36% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "CTR400CGL2KS-M",
+       "value": "CTR400CGL2KS-M"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "CTR400CGL2KS-M-",
+       "value": "CTR400CGL2KS-M"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 36% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      358,
+      1064,
+      828,
+      1123
+     ],
+     "bbox": [
+      139,
+      1064,
+      2345,
+      1123
+     ]
+    }
+   },
+   {
+    "code": "UNRECOGNIZED_TABLE_LAYOUT",
+    "page": null,
+    "region": null,
+    "target": "",
+    "detail": {
+     "pages": 1
+    }
+   }
+  ],
+  "notes": [],
+  "coverage": {
+   "pages": [
+    {
+     "page": 1,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 632,
+       "bottom": 1123,
+       "status": "processed",
+       "rows_accepted": 4,
+       "rows_dropped": 0,
+       "reason": null
+      }
+     ],
+     "reason": null
+    }
+   ]
+  },
+  "source_unchanged": true
+ },
+ "EP-19138/EP-19138 - Commercial documents\\EP-19138 - Design Sheet.pdf": {
+  "sha256_matches_frozen": true,
+  "seconds": 4.3,
+  "state": "completed",
+  "reader": "ocr",
+  "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+  "outcome": "Outcome.NEEDS_INTERPRETATION",
+  "lines": [],
+  "issues": [
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     86,
+     581,
+     313,
+     625
+    ],
+    "target": "boq_line:1:1",
+    "detail": {
+     "description": ": Customer Evaluation |",
+     "catalog_no": "Type of Customer",
+     "group_heading": null,
+     "raw_quantity": "Gross Margin",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Gross Margin",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Margin",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     86,
+     1376,
+     313,
+     1420
+    ],
+    "target": "boq_line:1:3",
+    "detail": {
+     "description": "1064 Fire Alarm Control Panel 1064 Single loop fire alarm control panel, with built-in system relays, 4 x 20 character backlit LCD display,2 Nac\u2019s (3.75 amps),rechargeable batteries to power the system for 24 hours standby and 30 minutes alarm condition. Components are: ( 1. )FACP,1LOOP.64PT,230V ( 2 )Battery 8 AH, 12 volt cells Field Devices Intelligent Photoelectric Smoke Detector Intelligent Fixed Temperature / Rate-of-Rise Heat Detector Signature Detector Base Manual Pull Station - Double Action, 1-stage Genesis Temporal Horn-strobe, RED 15/75 cd Temporal Horn/Strobe - 24 Vdc, RED Weatherproof Box, Cast - RED Dual Input Module Control Relay Module 2\"x4\" GI Concealed Back Box Single Gange Surface Mount Box - Indoor, RED, 1-gang",
+     "catalog_no": "1064G-2 12V8A SIGA-PD SIGA-HRD SIGA-SB SIGA-278 G1R-HDVM 757-TA-T 757A-WB SIGA-CT2 SIGA-CR TP606 27193-11",
+     "group_heading": null,
+     "raw_quantity": "| 1 11 1 12 1 3 1 1 ] 2 2 3",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "| 1 11 1 12 1 3 1 1 ] 2 2 3",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "UNRECOGNIZED_TABLE_LAYOUT",
+    "page": null,
+    "region": null,
+    "target": "",
+    "detail": {
+     "pages": 1
+    }
+   }
+  ],
+  "notes": [],
+  "coverage": {
+   "pages": [
+    {
+     "page": 1,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 513,
+       "bottom": 1942,
+       "status": "processed",
+       "rows_accepted": 0,
+       "rows_dropped": 3,
+       "reason": null
+      }
+     ],
+     "reason": null
+    }
+   ]
+  },
+  "source_unchanged": true
+ },
+ "EP-28569/EP-28569 ELV\\To T&C\\Project Documents\\Design Sheet\\EP-28569 Design.pdf": {
+  "sha256_matches_frozen": true,
+  "seconds": 65.2,
+  "state": "completed",
+  "reader": "ocr",
+  "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+  "outcome": "Outcome.NEEDS_INTERPRETATION",
+  "lines": [],
+  "issues": [
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     647,
+     2174,
+     691
+    ],
+    "target": "boq_line:1:1",
+    "detail": {
+     "description": "ModelNo _ Z",
+     "catalog_no": null,
+     "group_heading": null,
+     "raw_quantity": "Description Brand",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Description Brand",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "ee eee",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     764,
+     2174,
+     808
+    ],
+    "target": "boq_line:1:2",
+    "detail": {
+     "description": "_NKUKS2SAW",
+     "catalog_no": "a",
+     "group_heading": null,
+     "raw_quantity": "NetKey\u00ae 86mm x 86mm Faceplate Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NetKey\u00ae 86mm x 86mm Faceplate Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "8686",
+       "value": "8686",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NetKey\u00ae 86mm x 86mm Faceplate j= | Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "Nete8686ete t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     825,
+     2174,
+     869
+    ],
+    "target": "boq_line:1:3",
+    "detail": {
+     "description": "NK6X88MAW",
+     "catalog_no": "2",
+     "group_heading": null,
+     "raw_quantity": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "6445",
+       "value": "6445",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module  =\u2014\u2014\u2014\u2014\u2014SsS\u00e9@Paatrn tt",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "t64245oestoeoe t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     884,
+     2174,
+     928
+    ],
+    "target": "boq_line:1:4",
+    "detail": {
+     "description": "NKFP24Y",
+     "catalog_no": "3",
+     "group_heading": null,
+     "raw_quantity": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "241",
+       "value": "241",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NetKey\u00ae Patch Panel, 24Port,1RU,BL  \u2014\u2014\u2014\u2014sss~Paarnduiit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "Netete24ot1L t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     937,
+     2174,
+     981
+    ],
+    "target": "boq_line:1:5",
+    "detail": {
+     "description": "WMPFSE 7",
+     "catalog_no": "4",
+     "group_heading": null,
+     "raw_quantity": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "137",
+       "value": "137",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7in. Depth =\u2014 Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "teLootSseSee137eot t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1004,
+     2174,
+     1048
+    ],
+    "target": "boq_line:1:6",
+    "detail": {
+     "description": "NUL6X04WH-FEG",
+     "catalog_no": "5",
+     "group_heading": null,
+     "raw_quantity": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "6423 21",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White s\u00e9",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "oeet623N LS LS21te t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1153,
+     2174,
+     1197
+    ],
+    "target": "boq_line:1:7",
+    "detail": {
+     "description": "FPSN924 i",
+     "catalog_no": "6",
+     "group_heading": null,
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": null,
+      "status": "empty",
+      "rule": "no text",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Oo IES AS BN SESS OM IBIS AN INET IS IIT SS Panduit",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "oseesoesseeese 1eNNeNSoe t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1303,
+     2174,
+     1347
+    ],
+    "target": "boq_line:1:8",
+    "detail": {
+     "description": "EMT1",
+     "catalog_no": "7",
+     "group_heading": null,
+     "raw_quantity": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "14",
+       "value": "14",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Tray, Straight, 1RU,4Port = = = Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toeStt14ot t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1363,
+     2174,
+     1407
+    ],
+    "target": "boq_line:1:9",
+    "detail": {
+     "description": "CFAPPBL1",
+     "catalog_no": "8",
+     "group_heading": null,
+     "raw_quantity": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1RU = \u2014\u2014\u2014\u2014\u2014\u2014\u2014ssSsSsS\u00e9\u00aePaasrnd it",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toetet1 t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1423,
+     2174,
+     1467
+    ],
+    "target": "boq_line:1:10",
+    "detail": {
+     "description": "FSC24 a",
+     "catalog_no": "9",
+     "group_heading": null,
+     "raw_quantity": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "24",
+       "value": "24",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black = = = __ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toeSeoe24Ses t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1482,
+     2174,
+     1526
+    ],
+    "target": "boq_line:1:11",
+    "detail": {
+     "description": "FAPI2WAGSCZ",
+     "catalog_no": "10",
+     "group_heading": null,
+     "raw_quantity": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "0212",
+       "value": "212",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Adapter Panel, OS2,12SC Simplex, APC Green =\u2014\u2014\u2014\u2014\u2014 Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toetee0S212S Se ee t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1549,
+     2174,
+     1593
+    ],
+    "target": "boq_line:1:12",
+    "detail": {
+     "description": "F91BNANNNSNMO01",
+     "catalog_no": "11",
+     "group_heading": null,
+     "raw_quantity": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "10 97125",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX \u00abPart",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "LtesseeestoeeeeteeSo9",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     1891,
+     2174,
+     1935
+    ],
+    "target": "boq_line:1:13",
+    "detail": {
+     "description": "28569",
+     "catalog_no": "EPNO",
+     "group_heading": null,
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": null,
+      "status": "empty",
+      "rule": "no text",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "ee",
+       "value": null,
+       "status": "rejected"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2390,
+     2174,
+     2434
+    ],
+    "target": "boq_line:1:15",
+    "detail": {
+     "description": "NK6X88MAW 7",
+     "catalog_no": "2",
+     "group_heading": null,
+     "raw_quantity": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "645",
+       "value": "645",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module ==  ~\u2014\u2014 _ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "t645oestoeoe t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2450,
+     2174,
+     2494
+    ],
+    "target": "boq_line:1:16",
+    "detail": {
+     "description": "NKFP24Y _",
+     "catalog_no": "3",
+     "group_heading": null,
+     "raw_quantity": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "241",
+       "value": "241",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NetKey\u00ae Patch Panel, 24Port,1RU,BL \u2014 \u2014sS\u00aeP arn it",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "Netetee24ot1L t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2514,
+     2174,
+     2558
+    ],
+    "target": "boq_line:1:17",
+    "detail": {
+     "description": "WMPFSE _",
+     "catalog_no": "4",
+     "group_heading": null,
+     "raw_quantity": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "137",
+       "value": "137",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth \u2014\u2014s~ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "teLootSeSee137eot t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2578,
+     2174,
+     2622
+    ],
+    "target": "boq_line:1:18",
+    "detail": {
+     "description": "NUL6X04WH-FEG",
+     "catalog_no": "5",
+     "group_heading": null,
+     "raw_quantity": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "64 23 21",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Parnduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "oe et6 23 LS21te t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2718,
+     2174,
+     2762
+    ],
+    "target": "boq_line:1:19",
+    "detail": {
+     "description": "FPSN924",
+     "catalog_no": "6",
+     "group_heading": null,
+     "raw_quantity": "Paneatt",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Paneatt",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "eee ene eee es ee a mero pew ee Panduit",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "Neeetooeoeeeeee eeseeet t",
+       "value": null,
+       "status": "rejected"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2934,
+     2174,
+     2978
+    ],
+    "target": "boq_line:1:21",
+    "detail": {
+     "description": "CFAPPBL1",
+     "catalog_no": "8",
+     "group_heading": null,
+     "raw_quantity": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1RU = ~~ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toeteet1 t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     2994,
+     2174,
+     3038
+    ],
+    "target": "boq_line:1:22",
+    "detail": {
+     "description": "FSC24",
+     "catalog_no": "oF",
+     "group_heading": "ee",
+     "raw_quantity": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "24",
+       "value": "24",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black = = = ~~ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toeSeoe24Ses t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     3045,
+     2174,
+     3089
+    ],
+    "target": "boq_line:1:23",
+    "detail": {
+     "description": "FAP12WAGSCZ i",
+     "catalog_no": "10",
+     "group_heading": "ee",
+     "raw_quantity": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "0212",
+       "value": "212",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Opticom\u00ae Fiber Adapter Panel, OS2,12SC Simplex, APC Green \u2014\u2014\u2014_\u2014Pannduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "toetee0S212SSeee t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     776,
+     3111,
+     2174,
+     3155
+    ],
+    "target": "boq_line:1:24",
+    "detail": {
+     "description": "F91BNANNNSNMOO1",
+     "catalog_no": "11",
+     "group_heading": "ee",
+     "raw_quantity": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "09125",
+       "value": "9125",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX = ~\u2014 ~~ Panduit",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "S0L9125NSL t",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1229,
+     374,
+     1273
+    ],
+    "target": "boq_line:2:25",
+    "detail": {
+     "description": "Indoor 5 MP dome with IR and deep learning",
+     "catalog_no": "AXIS P3267-L",
+     "group_heading": "Cameras",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": "1",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "held_quantity": "1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1286,
+     374,
+     1330
+    ],
+    "target": "boq_line:2:26",
+    "detail": {
+     "description": "5 MP Bullet camera",
+     "catalog_no": "AXISP1467-LE",
+     "group_heading": "Cameras",
+     "raw_quantity": "2 \u2014",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "2 \u2014",
+      "value": "2",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "2"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1459,
+     374,
+     1503
+    ],
+    "target": "boq_line:2:27",
+    "detail": {
+     "description": "Industrial 11 Port Managed Switch, 8 x 10/100/1000Base-T(x)",
+     "catalog_no": "AMG570-8GAT-3S-P240",
+     "group_heading": "Gere Switch",
+     "raw_quantity": "3 =",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "3 =",
+      "value": "3",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "held_quantity": "3"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1543,
+     374,
+     1587
+    ],
+    "target": "boq_line:2:28",
+    "detail": {
+     "description": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting, - 40\u00b0C to +70\u00b0C,",
+     "catalog_no": "AMGPSU-148-P240",
+     "group_heading": "Gere Switch",
+     "raw_quantity": "4",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "4",
+      "value": "4",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "4"
+     },
+     "alternates": null,
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1703,
+     374,
+     1747
+    ],
+    "target": "boq_line:2:29",
+    "detail": {
+     "description": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm Tx/Rx, -40\u00b0C to +85\u00b0C, DDM",
+     "catalog_no": "SFP-SM-1G-LX20-31",
+     "group_heading": "Transcievers",
+     "raw_quantity": "5",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "5",
+      "value": "5",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "5"
+     },
+     "alternates": null,
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1897,
+     374,
+     1941
+    ],
+    "target": "boq_line:2:30",
+    "detail": {
+     "description": "ASI DAKER DK 1KVA BS",
+     "catalog_no": "3100900",
+     "group_heading": "rae Ss ae UPS in \"| 6) os",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": "6",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "held_quantity": "6"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "6",
+       "value": "6",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "6",
+       "value": "6",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "6",
+       "value": "6",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     1953,
+     374,
+     1997
+    ],
+    "target": "boq_line:2:31",
+    "detail": {
+     "description": "EBC DK PLUS 1KVA",
+     "catalog_no": "310660 oe",
+     "group_heading": "rae Ss ae UPS in \"| 6) os",
+     "raw_quantity": "7 -",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "7 -",
+      "value": "7",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "held_quantity": "7"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "7",
+       "value": "7",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "7",
+       "value": "7",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "7",
+       "value": "7",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2010,
+     374,
+     2054
+    ],
+    "target": "boq_line:2:32",
+    "detail": {
+     "description": "RAIL KIT RACK DK (2U)",
+     "catalog_no": "310952",
+     "group_heading": "rae Ss ae UPS in \"| 6) os",
+     "raw_quantity": "8",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "8",
+      "value": "8",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "8"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "8",
+       "value": "8",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "8",
+       "value": "8",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "8",
+       "value": "8",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2067,
+     374,
+     2111
+    ],
+    "target": "boq_line:2:33",
+    "detail": {
+     "description": "CS102 SK - SNMP CARD",
+     "catalog_no": "311058 a",
+     "group_heading": "rae Ss ae UPS in \"| 6) os",
+     "raw_quantity": "9",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "9",
+      "value": "9",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "9"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "9",
+       "value": "9",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "9",
+       "value": "9",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "9",
+       "value": "9",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2236,
+     374,
+     2280
+    ],
+    "target": "boq_line:2:34",
+    "detail": {
+     "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+     "catalog_no": "NK6X88MAW",
+     "group_heading": "Copper Cabling: Panduit",
+     "raw_quantity": "i a spun sass",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "i a spun sass",
+      "value": "1",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 2,
+      "held_quantity": "1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2293,
+     374,
+     2337
+    ],
+    "target": "boq_line:2:35",
+    "detail": {
+     "description": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL",
+     "catalog_no": "NKFP24Y",
+     "group_heading": "Copper Cabling: Panduit",
+     "raw_quantity": "2",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "2",
+      "value": "2",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "2"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2350,
+     374,
+     2394
+    ],
+    "target": "boq_line:2:36",
+    "detail": {
+     "description": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+     "catalog_no": "WMPFSE",
+     "group_heading": "Copper Cabling: Panduit",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": "3",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "held_quantity": "3"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "3",
+       "value": "3",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2406,
+     374,
+     2450
+    ],
+    "target": "boq_line:2:37",
+    "detail": {
+     "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+     "catalog_no": "NUL6X04WH-FEG",
+     "group_heading": "Copper Cabling: Panduit",
+     "raw_quantity": "4",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "4",
+      "value": "4",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "4"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2546,
+     374,
+     2590
+    ],
+    "target": "boq_line:2:38",
+    "detail": {
+     "description": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+     "catalog_no": "FPSN924",
+     "group_heading": "Backbone Cabling",
+     "raw_quantity": ">)",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": ">)",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "5",
+       "value": "5",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "5",
+       "value": "5",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2742,
+     374,
+     2786
+    ],
+    "target": "boq_line:2:39",
+    "detail": {
+     "description": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU",
+     "catalog_no": "CFAPPBL1",
+     "group_heading": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port",
+     "raw_quantity": "7",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "7",
+      "value": "7",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "7"
+     },
+     "alternates": null,
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2799,
+     374,
+     2843
+    ],
+    "target": "boq_line:2:40",
+    "detail": {
+     "description": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black",
+     "catalog_no": "GA 7",
+     "group_heading": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port",
+     "raw_quantity": "8",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "8",
+      "value": "8",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "8"
+     },
+     "alternates": null,
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2856,
+     374,
+     2900
+    ],
+    "target": "boq_line:2:41",
+    "detail": {
+     "description": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+     "catalog_no": "FAP12WAGS@Z",
+     "group_heading": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port",
+     "raw_quantity": "oF",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "oF",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "9",
+       "value": "9",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 2,
+    "region": [
+     164,
+     2912,
+     374,
+     2956
+    ],
+    "target": "boq_line:2:42",
+    "detail": {
+     "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+     "catalog_no": "F91BNANNNSNMOO1",
+     "group_heading": "Opticom\u00ae Fiber Tray, Straight, 1 RU, 4 Port",
+     "raw_quantity": "10",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "10",
+      "value": "10",
+      "status": "ambiguous",
+      "rule": "page 2: the quantity column counts 1..9 down 9 rows: it reads as the item numbers, not quantities, wherever this column layout is read",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "held_quantity": "10"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "10",
+       "value": "10",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "10",
+       "value": "10",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "10",
+       "value": "10",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     861,
+     812,
+     905
+    ],
+    "target": "boq_line:3:43",
+    "detail": {
+     "description": "Axis",
+     "catalog_no": "Indoor 5 MP dome with IR and deep learning",
+     "group_heading": "Racks",
+     "raw_quantity": "\u201cAXIS P3267-L",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "\u201cAXIS P3267-L",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "3267",
+       "value": "3267",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "AXIS P3267-L",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "S3267L",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     918,
+     812,
+     962
+    ],
+    "target": "boq_line:3:44",
+    "detail": {
+     "description": "Axis __",
+     "catalog_no": "SMP Bulletcamera",
+     "group_heading": "Racks",
+     "raw_quantity": "AXIS P1467-LE",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "AXIS P1467-LE",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1467",
+       "value": "1467",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "AXIS P1467-LE",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "S1467Le",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1091,
+     812,
+     1135
+    ],
+    "target": "boq_line:3:45",
+    "detail": {
+     "description": "AMG",
+     "catalog_no": "Industrial 11 Port Managed Switch, 8 x 10/100/1000Base-T(x)",
+     "group_heading": "Racks",
+     "raw_quantity": "AMG570-8GAT-3S-P240",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "AMG570-8GAT-3S-P240",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "5708358240",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "AMG570-8GAT-3S-P240",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "57083S240",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1175,
+     812,
+     1219
+    ],
+    "target": "boq_line:3:46",
+    "detail": {
+     "description": "AMG",
+     "catalog_no": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting,-40\u00b0C to +70\u00b0C",
+     "group_heading": "Racks",
+     "raw_quantity": "AMGPSU-148-P240",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "AMGPSU-148-P240",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "148240",
+       "value": "148240",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "AMGPSU-|48-P240",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "SL148240",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1335,
+     812,
+     1379
+    ],
+    "target": "boq_line:3:47",
+    "detail": {
+     "description": "AMG",
+     "catalog_no": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm _Tx/Rx, -40\u00b0C to +85\u00b0C, DDM",
+     "group_heading": "Racks",
+     "raw_quantity": "SFP-SM-1G-LX20-31_",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "SFP-SM-1G-LX20-31_",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "162031",
+       "value": "162031",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "SFP-SM-1G-LX20-31",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "SS1L2031",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1415,
+     812,
+     1459
+    ],
+    "target": "boq_line:3:48",
+    "detail": {
+     "description": "i",
+     "catalog_no": "UPS Brand : Legrand ey tee Shay i Soy a",
+     "group_heading": "Racks",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "",
+      "value": null,
+      "status": "empty",
+      "rule": "no text",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "Be",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "NeeseeeeeLee",
+       "value": null,
+       "status": "rejected"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1472,
+     812,
+     1516
+    ],
+    "target": "boq_line:3:49",
+    "detail": {
+     "description": ";",
+     "catalog_no": "UPS in IDF arn ee ee 7",
+     "group_heading": "Racks",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "",
+      "value": null,
+      "status": "empty",
+      "rule": "no text",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "ee",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "eeoteeeNs",
+       "value": null,
+       "status": "rejected"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1579,
+     2378,
+     1637
+    ],
+    "target": "boq_line:3:50",
+    "detail": {
+     "description": "Legrand _",
+     "catalog_no": "EBC DK PLUS 1KVA",
+     "group_heading": "Racks",
+     "raw_quantity": "210560 \u2014",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "210560 \u2014",
+      "value": "310660",
+      "status": "ok",
+      "rule": "the column read '210560' (20%); 3 independent passes on the cell read 310660",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "replaced": "210560"
+     },
+     "quantity": "310660",
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "310660",
+       "value": "310660",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "310660",
+       "value": "310660",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "310660",
+       "value": "310660",
+       "status": "ok"
+      }
+     ],
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'EBC DK PLUS 1KVA' at 68%; independent passes on the cell read EBCDKPLUS1KVA TT, EBCDKPLUS1KVA UTETTEE (no independent pass read the whole part number)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "EBCDKPLUS1KVA UTETTEE",
+       "value": "EBCDKPLUS1KVA UTETTEE"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "EBCDKPLUS1KVA TT",
+       "value": "EBCDKPLUS1KVA TT"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "no independent pass read the whole part number"
+     },
+     "catalog_cell": [
+      812,
+      1579,
+      1988,
+      1637
+     ],
+     "bbox": [
+      347,
+      1579,
+      2378,
+      1637
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1869,
+     812,
+     1913
+    ],
+    "target": "boq_line:3:51",
+    "detail": {
+     "description": "Panduit _",
+     "catalog_no": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+     "group_heading": "Racks",
+     "raw_quantity": "NK6X88MAW",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NK6X88MAW",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "multiplier: 'a x b' is not one count",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "688",
+       "value": "688",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NK6X88MAW",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "N688",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1926,
+     812,
+     1970
+    ],
+    "target": "boq_line:3:52",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "NetKey\u00ae Patch Panel, 24 Port, 1 RU, BL OC",
+     "group_heading": "Racks",
+     "raw_quantity": "NKFP24Y oe",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NKFP24Y oe",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "24",
+       "value": "24",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NKFP24Y",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "N24",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     1983,
+     812,
+     2027
+    ],
+    "target": "boq_line:3:53",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "PatchLink\u2122 Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+     "group_heading": "Racks",
+     "raw_quantity": "WMPFSE",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "WMPFSE",
+      "value": null,
+      "status": "rejected",
+      "rule": "not a quantity",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "WMPFSE",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "S",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2039,
+     812,
+     2083
+    ],
+    "target": "boq_line:3:54",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+     "group_heading": "Racks",
+     "raw_quantity": "NUL6X04WH-FEG",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "NUL6X04WH-FEG",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "multiplier: 'a x b' is not one count",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "604",
+       "value": "604",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "NUL6X04WH-FEG",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "NL604L",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2180,
+     812,
+     2224
+    ],
+    "target": "boq_line:3:55",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+     "group_heading": "Racks",
+     "raw_quantity": "FPSN924",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "FPSN924",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "924",
+       "value": "924",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "FPSN924",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "SN924",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2377,
+     812,
+     2421
+    ],
+    "target": "boq_line:3:56",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "Opticom\u00ae Fiber Patch Panel, Flat, Black, 1 RU",
+     "group_heading": "Racks",
+     "raw_quantity": "2",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "2",
+      "value": "2",
+      "status": "ambiguous",
+      "rule": "the column read '2' (10%) but independent passes read 1",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "CFAPPBL1",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "L1",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2434,
+     812,
+     2478
+    ],
+    "target": "boq_line:3:57",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "Opticom\u00ae Fiber Splice Holder, 24 Splices, Black",
+     "group_heading": "Racks",
+     "raw_quantity": "-FSC24 -",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "-FSC24 -",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "24",
+       "value": "24",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "FSC24",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "S24",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2490,
+     812,
+     2534
+    ],
+    "target": "boq_line:3:58",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "Opticom\u00ae Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+     "group_heading": "Racks",
+     "raw_quantity": "FAP12WAGSCZ",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "FAP12WAGSCZ",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "122",
+       "value": "122",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "FAPI2WAGSCZ",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "12S2",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 3,
+    "region": [
+     347,
+     2546,
+     812,
+     2590
+    ],
+    "target": "boq_line:3:59",
+    "detail": {
+     "description": "Panduit",
+     "catalog_no": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+     "group_heading": "Racks",
+     "raw_quantity": "F91BNANNNSNMO01",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "F91BNANNNSNMO01",
+      "value": null,
+      "status": "ambiguous",
+      "rule": "digits mixed with other characters",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "9001",
+       "value": "9001",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "FOIBNANNNSNMOO1",
+       "value": null,
+       "status": "ambiguous"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "NNNNSN001",
+       "value": null,
+       "status": "ambiguous"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "UNRECOGNIZED_TABLE_LAYOUT",
+    "page": null,
+    "region": null,
+    "target": "",
+    "detail": {
+     "pages": 3
+    }
+   }
+  ],
+  "notes": [
+   "page 1: a band of 416 px between two tables (y 1774-2190) was read as 0 row(s)",
+   "page 2: the quantity column counts 1..9 down 9 rows; 16 rows read in that column layout were held for review"
+  ],
+  "coverage": {
+   "pages": [
+    {
+     "page": 1,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 628,
+       "bottom": 1774,
+       "status": "processed",
+       "rows_accepted": 0,
+       "rows_dropped": 12,
+       "reason": null
+      },
+      {
+       "kind": "band",
+       "top": 1774,
+       "bottom": 2190,
+       "status": "processed",
+       "rows_accepted": 0,
+       "rows_dropped": 2,
+       "reason": "inked band between two tables where the column rules break: read as rows"
+      },
+      {
+       "kind": "table",
+       "top": 2190,
+       "bottom": 3156,
+       "status": "processed",
+       "rows_accepted": 0,
+       "rows_dropped": 10,
+       "reason": null
+      }
+     ],
+     "reason": null
+    },
+    {
+     "page": 2,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 1074,
+       "bottom": 3075,
+       "status": "processed",
+       "rows_accepted": 10,
+       "rows_dropped": 8,
+       "reason": null
+      }
+     ],
+     "reason": null
+    },
+    {
+     "page": 3,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 705,
+       "bottom": 2708,
+       "status": "processed",
+       "rows_accepted": 3,
+       "rows_dropped": 18,
+       "reason": null
+      }
+     ],
+     "reason": "read after the page was deskewed +0.25 degrees"
+    }
+   ]
+  },
+  "source_unchanged": true
+ },
+ "EP-8430/EP-8430 Commercial\\EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf": {
+  "sha256_matches_frozen": true,
+  "seconds": 29.6,
+  "state": "completed",
+  "reader": "ocr",
+  "failure": null,
+  "outcome": "Outcome.NEEDS_INTERPRETATION",
+  "lines": [
+   {
+    "catalog_no": "PRS-NCO3",
+    "description": "Network Controller (INCL. PRS-SW)",
+    "quantity": "2",
+    "group_heading": "Praesideo System",
+    "confidence": 93.25,
+    "page": 1,
+    "raw_quantity": "2",
+    "y_px": 740.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "2",
+     "value": "2",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-NCO3",
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": 90.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-NCO3",
+      "value": "PRS-NCO3"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-NCO3",
+      "value": "PRS-NCO3"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     718,
+     642,
+     762
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-NCO3",
+     "cleaned": "PRS-NCO3",
+     "canonical": "PRS-NCO3",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-CSNKP",
+    "description": "Numeric Keypad",
+    "quantity": "4",
+    "group_heading": "Praesideo System",
+    "confidence": 94.33333333333333,
+    "page": 1,
+    "raw_quantity": "4",
+    "y_px": 980.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "4",
+     "value": "4",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-CSNKP",
+    "alternates": null,
+    "quantity_confidence": 95.0,
+    "catalog_confidence": 92.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-CSNKP",
+      "value": "PRS-CSNKP"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-CSNKP",
+      "value": "PRS-CSNKP"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     958,
+     642,
+     1002
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-CSNKP",
+     "cleaned": "PRS-CSNKP",
+     "canonical": "PRS-CSNKP",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-CSR",
+    "description": "Remote Call Station",
+    "quantity": "1",
+    "group_heading": "Praesideo System",
+    "confidence": 76.44444444444444,
+    "page": 1,
+    "raw_quantity": "1",
+    "y_px": 1026.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "1",
+     "value": "1",
+     "status": "ok",
+     "rule": "column read '1' (44%) confirmed by 3 independent passes",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-CSR",
+    "alternates": [
+     {
+      "pass": "binarised, single line, digits",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "binarised, single character",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "greyscale, single line, digits or words",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     }
+    ],
+    "quantity_confidence": 44.0,
+    "catalog_confidence": 91.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-CSR",
+      "value": "PRS-CSR"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-CSR",
+      "value": "PRS-CSR"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     1004,
+     642,
+     1048
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-CSR",
+     "cleaned": "PRS-CSR",
+     "canonical": "PRS-CSR",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-48CH12",
+    "description": "48V Battery Charger Basic",
+    "quantity": "2",
+    "group_heading": "Praesideo System",
+    "confidence": 92.58333333333333,
+    "page": 1,
+    "raw_quantity": "2",
+    "y_px": 1119.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "2",
+     "value": "2",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-48CH12",
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": 92.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-48CH12",
+      "value": "PRS-48CH12"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-48CH12",
+      "value": "PRS-48CH12"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     1097,
+     642,
+     1141
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-48CH12",
+     "cleaned": "PRS-48CH12",
+     "canonical": "PRS-48CH12",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-1P500-EU",
+    "description": "Power Amplifier 1X 500 W (EU)",
+    "quantity": "15",
+    "group_heading": "Praesideo System",
+    "confidence": 91.44444444444444,
+    "page": 1,
+    "raw_quantity": "15",
+    "y_px": 1308.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "15",
+     "value": "15",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-1P500-EU",
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": 92.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-1P500-EU",
+      "value": "PRS-1P500-EU"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-1P500-EU",
+      "value": "PRS-1P500-EU"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     1286,
+     642,
+     1330
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-1P500-EU",
+     "cleaned": "PRS-1P500-EU",
+     "canonical": "PRS-1P500-EU",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "Metal Fire Dome",
+    "quantity": "94",
+    "group_heading": "Praesideo System",
+    "confidence": 95.83333333333334,
+    "page": 1,
+    "raw_quantity": "94",
+    "y_px": 1408.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "94",
+     "value": "94",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "LBC3018/01",
+    "description": "Cabinet Loudspeaker",
+    "quantity": "12",
+    "group_heading": "Praesideo System",
+    "confidence": 94.33333333333333,
+    "page": 1,
+    "raw_quantity": "12",
+    "y_px": 1458.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "12",
+     "value": "12",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "LBC3018/01",
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": 91.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "LBC3018/01",
+      "value": "LBC3018/01"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "LBC3018/01",
+      "value": "LBC3018/01"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     1436,
+     642,
+     1480
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "LBC3018/01",
+     "cleaned": "LBC3018/01",
+     "canonical": "LBC3018/01",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-SWCSL-E",
+    "description": "\u2018PC Call Server NCO License E-code",
+    "quantity": "1",
+    "group_heading": "Praesideo System",
+    "confidence": 91.44444444444444,
+    "page": 1,
+    "raw_quantity": "1",
+    "y_px": 1646.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "1",
+     "value": "1",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": "PRS-SWCSL-E",
+    "alternates": null,
+    "quantity_confidence": 94.0,
+    "catalog_confidence": 92.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-SWCSL-E",
+      "value": "PRS-SWCSL-E"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-SWCSL-E",
+      "value": "PRS-SWCSL-E"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     1624,
+     642,
+     1668
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-SWCSL-E",
+     "cleaned": "PRS-SWCSL-E",
+     "canonical": "PRS-SWCSL-E",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "| PC+Monitor",
+    "quantity": "1",
+    "group_heading": "Praesideo System",
+    "confidence": 78.0,
+    "page": 1,
+    "raw_quantity": "1",
+    "y_px": 1745.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "1",
+     "value": "1",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": [
+     {
+      "pass": "binarised, single line, digits",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "binarised, single character",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "greyscale, single line, digits or words",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     }
+    ],
+    "quantity_confidence": 79.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "\u2018CD Changer",
+    "quantity": "4",
+    "group_heading": "Praesideo System",
+    "confidence": 60.0,
+    "page": 1,
+    "raw_quantity": "|",
+    "y_px": 1795.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": null,
+     "value": "4",
+     "status": "ok",
+     "rule": "the column read gave None; 3 independent passes on the cell read 4",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1",
+     "independent_agreement": 3
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": null,
+    "quantity_confidence": null,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "MP3 Player",
+    "quantity": "1",
+    "group_heading": "Praesideo System",
+    "confidence": 84.25,
+    "page": 1,
+    "raw_quantity": "1",
+    "y_px": 1843.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "1",
+     "value": "1",
+     "status": "ok",
+     "rule": "column read '1' (74%) confirmed by 3 independent passes",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": [
+     {
+      "pass": "binarised, single line, digits",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "binarised, single character",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     },
+     {
+      "pass": "greyscale, single line, digits or words",
+      "text": "1",
+      "value": "1",
+      "status": "ok"
+     }
+    ],
+    "quantity_confidence": 74.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": true,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "FM/AM Tuner",
+    "quantity": "1",
+    "group_heading": "Praesideo System",
+    "confidence": 76.0,
+    "page": 1,
+    "raw_quantity": "1",
+    "y_px": 1887.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "1",
+     "value": "1",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": null,
+    "quantity_confidence": 93.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "Battery",
+    "quantity": "8",
+    "group_heading": "Praesideo System",
+    "confidence": 95.5,
+    "page": 1,
+    "raw_quantity": "8",
+    "y_px": 1940.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "8",
+     "value": "8",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "PA Rack",
+    "quantity": "2",
+    "group_heading": "Praesideo System",
+    "confidence": 70.0,
+    "page": 1,
+    "raw_quantity": "2",
+    "y_px": 1983.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "2",
+     "value": "2",
+     "status": "ok",
+     "rule": "column read '2' (44%) confirmed by 2 independent passes",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Praesideo System",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": [
+     {
+      "pass": "binarised, single line, digits",
+      "text": "2",
+      "value": "2",
+      "status": "ok"
+     },
+     {
+      "pass": "binarised, single character",
+      "text": "2",
+      "value": "2",
+      "status": "ok"
+     },
+     {
+      "pass": "greyscale, single line, digits or words",
+      "text": "",
+      "value": null,
+      "status": "empty"
+     }
+    ],
+    "quantity_confidence": 44.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "LBC3086/41",
+    "description": "Ceiling Loudspeaker",
+    "quantity": "12",
+    "group_heading": "Optional",
+    "confidence": 76.83333333333333,
+    "page": 1,
+    "raw_quantity": "ee 2",
+    "y_px": 2336.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "ee 2",
+     "value": "12",
+     "status": "ok",
+     "rule": "the column read gave 'ee 2'; 3 independent passes on the cell read 12",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1",
+     "independent_agreement": 3
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Optional",
+    "building": null,
+    "catalog_raw": "LBC3086/41",
+    "alternates": [
+     {
+      "pass": "binarised, single line, digits",
+      "text": "12",
+      "value": "12",
+      "status": "ok"
+     },
+     {
+      "pass": "binarised, single character",
+      "text": "12",
+      "value": "12",
+      "status": "ok"
+     },
+     {
+      "pass": "greyscale, single line, digits or words",
+      "text": "12",
+      "value": "12",
+      "status": "ok"
+     }
+    ],
+    "quantity_confidence": 43.5,
+    "catalog_confidence": 91.0,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "LBC3086/41",
+     "cleaned": "LBC3086/41",
+     "canonical": "LBC3086/41",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-CSNKP",
+    "description": "Numeric Keypad",
+    "quantity": "2",
+    "group_heading": "Requirements as per Specification",
+    "confidence": 93.5,
+    "page": 1,
+    "raw_quantity": "2",
+    "y_px": 2718.5,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "2",
+     "value": "2",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Requirements as per Specification",
+    "building": null,
+    "catalog_raw": "PRS-CSNKP",
+    "alternates": null,
+    "quantity_confidence": 95.0,
+    "catalog_confidence": 90.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-CSNKP",
+      "value": "PRS-CSNKP"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-CSNKP",
+      "value": "PRS-CSNKP"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     2696,
+     642,
+     2740
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-CSNKP",
+     "cleaned": "PRS-CSNKP",
+     "canonical": "PRS-CSNKP",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": "PRS-CSR",
+    "description": "Remote Call Station",
+    "quantity": "2",
+    "group_heading": "Requirements as per Specification",
+    "confidence": 94.22222222222223,
+    "page": 1,
+    "raw_quantity": "2",
+    "y_px": 2763.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "2",
+     "value": "2",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Requirements as per Specification",
+    "building": null,
+    "catalog_raw": "PRS-CSR",
+    "alternates": null,
+    "quantity_confidence": 96.0,
+    "catalog_confidence": 91.0,
+    "catalog_alternates": [
+     {
+      "pass": "greyscale, single line, part characters",
+      "text": "PRS-CSR",
+      "value": "PRS-CSR"
+     },
+     {
+      "pass": "binarised, single line, part characters",
+      "text": "PRS-CSR",
+      "value": "PRS-CSR"
+     }
+    ],
+    "catalog_uncertain": false,
+    "catalog_check": {
+     "confirmed": true,
+     "multiline": false,
+     "reason": "an independent pass read the same part number"
+    },
+    "catalog_cell": [
+     176,
+     2741,
+     642,
+     2785
+    ],
+    "verify_quantity": false,
+    "catalog_match": {
+     "source": "PRS-CSR",
+     "cleaned": "PRS-CSR",
+     "canonical": "PRS-CSR",
+     "reason": "as read"
+    },
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   },
+   {
+    "catalog_no": null,
+    "description": "Printer",
+    "quantity": "4",
+    "group_heading": "Requirements as per Specification",
+    "confidence": 93.5,
+    "page": 1,
+    "raw_quantity": "4",
+    "y_px": 2861.0,
+    "quantity_span": [
+     25,
+     176
+    ],
+    "quantity_parse": {
+     "kind": "equipment_count",
+     "raw": "4",
+     "value": "4",
+     "status": "ok",
+     "rule": "digits",
+     "unit": null,
+     "rules_version": "values-2026-09-15.1"
+    },
+    "row_bounds": null,
+    "table_span": [
+     25,
+     2391
+    ],
+    "section": null,
+    "heading": "Requirements as per Specification",
+    "building": null,
+    "catalog_raw": null,
+    "alternates": null,
+    "quantity_confidence": 91.0,
+    "catalog_confidence": null,
+    "catalog_alternates": null,
+    "catalog_uncertain": false,
+    "catalog_check": null,
+    "catalog_cell": null,
+    "verify_quantity": false,
+    "catalog_match": null,
+    "ai_reading": null,
+    "row_id": null,
+    "evidence": null
+   }
+  ],
+  "issues": [
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     766,
+     2391,
+     810
+    ],
+    "target": "boq_line:1:1",
+    "detail": {
+     "description": "Cobra Net Interface",
+     "catalog_no": "LBB4404/00",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "1",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "1",
+      "value": "1",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "1",
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      }
+     ],
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4404/00' at 84%; independent passes on the cell read LBB4404/00 (the strip read it at 84% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBB4404/00",
+       "value": "LBB4404/00"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBB4404/00",
+       "value": "LBB4404/00"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 84% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      766,
+      642,
+      810
+     ],
+     "bbox": [
+      25,
+      766,
+      2391,
+      810
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     811,
+     2391,
+     855
+    ],
+    "target": "boq_line:1:2",
+    "detail": {
+     "description": "Network Cable Assembly 0.5m",
+     "catalog_no": "LBB4416/01",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "27",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "27",
+      "value": "27",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "27",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4416/01' at 88%; independent passes on the cell read 1BB4416/01 (an independent pass read another part number (a near miss of the strip's))",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "1BB4416/01",
+       "value": "1BB4416/01"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "1BB4416/01",
+       "value": "1BB4416/01"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "an independent pass read another part number (a near miss of the strip's)"
+     },
+     "catalog_cell": [
+      176,
+      811,
+      642,
+      855
+     ],
+     "bbox": [
+      25,
+      811,
+      2391,
+      855
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     859,
+     2391,
+     903
+    ],
+    "target": "boq_line:1:3",
+    "detail": {
+     "description": "Network Cable Assembly 2m",
+     "catalog_no": "LBB4416/02",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "4",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "4",
+      "value": "4",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "4",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4416/02' at 87%; independent passes on the cell read 1BB4416/02 (an independent pass read another part number (a near miss of the strip's))",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "1BB4416/02",
+       "value": "1BB4416/02"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "1BB4416/02",
+       "value": "1BB4416/02"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "an independent pass read another part number (a near miss of the strip's)"
+     },
+     "catalog_cell": [
+      176,
+      859,
+      642,
+      903
+     ],
+     "bbox": [
+      25,
+      859,
+      2391,
+      903
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     909,
+     2391,
+     953
+    ],
+    "target": "boq_line:1:4",
+    "detail": {
+     "description": "Call Station Basic",
+     "catalog_no": "LBB4430/00",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "4",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "4",
+      "value": "4",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "4",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4430/00' at 87%; independent passes on the cell read LBB4430/00 (the strip read it at 87% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBB4430/00",
+       "value": "LBB4430/00"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBB4430/00",
+       "value": "LBB4430/00"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 87% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      909,
+      642,
+      953
+     ],
+     "bbox": [
+      25,
+      909,
+      2391,
+      953
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1050,
+     2391,
+     1094
+    ],
+    "target": "boq_line:1:5",
+    "detail": {
+     "description": "Call Station Interface",
+     "catalog_no": "PRS-CSI",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "1",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "1",
+      "value": "1",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "1",
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "1",
+       "value": "1",
+       "status": "ok"
+      }
+     ],
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-CSI' at 85%; independent passes on the cell read PRS-CSI (the strip read it at 85% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "PRS-CSI",
+       "value": "PRS-CSI"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "PRS-CSI",
+       "value": "PRS-CSI"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 85% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1050,
+      642,
+      1094
+     ],
+     "bbox": [
+      25,
+      1050,
+      2391,
+      1094
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1147,
+     2391,
+     1191
+    ],
+    "target": "boq_line:1:6",
+    "detail": {
+     "description": "End of Line Supervision",
+     "catalog_no": "LBB4443/00",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "27",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "27",
+      "value": "27",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "27",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4443/00' at 89%; independent passes on the cell read LBB4443/00 (the strip read it at 89% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBB4443/00",
+       "value": "LBB4443/00"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBB4443/00",
+       "value": "LBB4443/00"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 89% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1147,
+      642,
+      1191
+     ],
+     "bbox": [
+      25,
+      1147,
+      2391,
+      1191
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1192,
+     176,
+     1236
+    ],
+    "target": "boq_line:1:7",
+    "detail": {
+     "description": "Power Amplifier 8 X 60 W (EU)",
+     "catalog_no": "LBB4428/00-EU",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "41",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "41",
+      "value": "41",
+      "status": "ambiguous",
+      "rule": "the column read '41' (79%) but 2 independent passes read '4' and none read the column's value",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1238,
+     2391,
+     1282
+    ],
+    "target": "boq_line:1:8",
+    "detail": {
+     "description": "Power Amplifier 4 X 125 W (EU)",
+     "catalog_no": "PRS-4P125-EU",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "3",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "3",
+      "value": "3",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "3",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-4P125-EU' at 20%; independent passes on the cell read PRS-4P125-EU (the strip read it at 20% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "PRS-4P125-EU",
+       "value": "PRS-4P125-EU"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "PRS-4P125-EU",
+       "value": "PRS-4P125-EU"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 20% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1238,
+      642,
+      1282
+     ],
+     "bbox": [
+      25,
+      1238,
+      2391,
+      1282
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1340,
+     2391,
+     1384
+    ],
+    "target": "boq_line:1:9",
+    "detail": {
+     "description": "Ceiling Loudspeaker",
+     "catalog_no": "LBC3086/41",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "94",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "94",
+      "value": "94",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "94",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBC3086/41' at 7%; independent passes on the cell read LBC3086/41 (the strip read it at 7% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBC3086/41",
+       "value": "LBC3086/41"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBC3086/41",
+       "value": "LBC3086/41"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 7% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1340,
+      642,
+      1384
+     ],
+     "bbox": [
+      25,
+      1340,
+      2391,
+      1384
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1480,
+     2391,
+     1524
+    ],
+    "target": "boq_line:1:10",
+    "detail": {
+     "description": "Horn Loudspeaker 10W, Evac",
+     "catalog_no": "LH1-10M10E",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "515",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "515",
+      "value": "515",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "515",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LH1-10M10E' at 0%; independent passes on the cell read 1H1-10M10E, H1-10M10E (an independent pass read another part number (a near miss of the strip's))",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "1H1-10M10E",
+       "value": "1H1-10M10E"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "H1-10M10E",
+       "value": "H1-10M10E"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "an independent pass read another part number (a near miss of the strip's)"
+     },
+     "catalog_cell": [
+      176,
+      1480,
+      642,
+      1524
+     ],
+     "bbox": [
+      25,
+      1480,
+      2391,
+      1524
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1523,
+     176,
+     1567
+    ],
+    "target": "boq_line:1:11",
+    "detail": {
+     "description": "Volume Control Fail Safe 100W (MK Double, w/ Mounting Box",
+     "catalog_no": "LBC1420/20",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "1",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "1",
+      "value": "1",
+      "status": "ambiguous",
+      "rule": "the column read '1' (87%) but 2 independent passes read '4' and none read the column's value",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "A",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "4",
+       "value": "4",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1580,
+     2391,
+     1624
+    ],
+    "target": "boq_line:1:12",
+    "detail": {
+     "description": "PC Call Server",
+     "catalog_no": "PRS-SWCS",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "1",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "1",
+      "value": "1",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "1",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-SWCS' at 0%; independent passes on the cell read PRS-SWCS (the strip read it at 0% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "PRS-SWCS",
+       "value": "PRS-SWCS"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "PRS-SWCS",
+       "value": "PRS-SWCS"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 0% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1580,
+      642,
+      1624
+     ],
+     "bbox": [
+      25,
+      1580,
+      2391,
+      1624
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     1677,
+     2391,
+     1721
+    ],
+    "target": "boq_line:1:13",
+    "detail": {
+     "description": "Fiber Interface",
+     "catalog_no": "PRS-FIN",
+     "group_heading": "Praesideo System",
+     "raw_quantity": "4",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "4",
+      "value": "4",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "4",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-FIN' at 88%; independent passes on the cell read PRS-FIN (the strip read it at 88% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "PRS-FIN",
+       "value": "PRS-FIN"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "PRS-FIN",
+       "value": "PRS-FIN"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 88% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      1677,
+      642,
+      1721
+     ],
+     "bbox": [
+      25,
+      1677,
+      2391,
+      1721
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2043,
+     176,
+     2087
+    ],
+    "target": "boq_line:1:14",
+    "detail": {
+     "description": "Supply, Testing & Commissioning in AED",
+     "catalog_no": "Total Price For",
+     "group_heading": "Praesideo System",
+     "raw_quantity": null,
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": null,
+      "value": null,
+      "status": "empty",
+      "rule": "no text",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "",
+       "value": null,
+       "status": "empty"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "pom",
+       "value": null,
+       "status": "rejected"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "ee",
+       "value": null,
+       "status": "rejected"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2359,
+     2391,
+     2403
+    ],
+    "target": "boq_line:1:15",
+    "detail": {
+     "description": "Metal Fire Dome",
+     "catalog_no": "LBC3081/02",
+     "group_heading": "Optional",
+     "raw_quantity": "12",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "12",
+      "value": "12",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "12",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBC3081/02' at 89%; independent passes on the cell read LBC3081/02 (the strip read it at 89% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBC3081/02",
+       "value": "LBC3081/02"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBC3081/02",
+       "value": "LBC3081/02"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 89% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      2359,
+      642,
+      2403
+     ],
+     "bbox": [
+      25,
+      2359,
+      2391,
+      2403
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2404,
+     2391,
+     2448
+    ],
+    "target": "boq_line:1:16",
+    "detail": {
+     "description": "Horn Loudspeaker 10W, Evac",
+     "catalog_no": "LH1-10M10E",
+     "group_heading": "Optional",
+     "raw_quantity": "44",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "44",
+      "value": "11",
+      "status": "ok",
+      "rule": "the column read '44' (58%); 3 independent passes on the cell read 11",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "replaced": "44"
+     },
+     "quantity": "11",
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "11",
+       "value": "11",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "11",
+       "value": "11",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "11",
+       "value": "11",
+       "status": "ok"
+      }
+     ],
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LH1-10M10E' at 90%; independent passes on the cell read 1H1-10M10E (an independent pass read another part number (a near miss of the strip's))",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "1H1-10M10E",
+       "value": "1H1-10M10E"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "1H1-10M10E",
+       "value": "1H1-10M10E"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "an independent pass read another part number (a near miss of the strip's)"
+     },
+     "catalog_cell": [
+      176,
+      2404,
+      642,
+      2448
+     ],
+     "bbox": [
+      25,
+      2404,
+      2391,
+      2448
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2553,
+     176,
+     2597
+    ],
+    "target": "boq_line:1:17",
+    "detail": {
+     "description": "PC+Monitor",
+     "catalog_no": null,
+     "group_heading": "Requirements as per Specification",
+     "raw_quantity": "| 9",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "| 9",
+      "value": "9",
+      "status": "ambiguous",
+      "rule": "the column read '9' (74%) but 3 independent passes read '2' and none read the column's value",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      }
+     ],
+     "building": null
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2599,
+     2391,
+     2643
+    ],
+    "target": "boq_line:1:18",
+    "detail": {
+     "description": "PC Call Station Client",
+     "catalog_no": "PRS-CSC-E",
+     "group_heading": "Requirements as per Specification",
+     "raw_quantity": "2",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "2",
+      "value": "2",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "2",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-CSC-E' at 91%; independent passes on the cell read 1PRS-CSC-E (an independent pass read another part number)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "1PRS-CSC-E",
+       "value": "1PRS-CSC-E"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "1PRS-CSC-E",
+       "value": "1PRS-CSC-E"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "reason": "an independent pass read another part number"
+     },
+     "catalog_cell": [
+      176,
+      2599,
+      642,
+      2643
+     ],
+     "bbox": [
+      25,
+      2599,
+      2391,
+      2643
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2647,
+     2391,
+     2691
+    ],
+    "target": "boq_line:1:19",
+    "detail": {
+     "description": "Call Station Basic",
+     "catalog_no": "LBB4430/00",
+     "group_heading": "Requirements as per Specification",
+     "raw_quantity": "9",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "9",
+      "value": "2",
+      "status": "ok",
+      "rule": "the column read '9' (57%); 3 independent passes on the cell read 2",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1",
+      "independent_agreement": 3,
+      "replaced": "9"
+     },
+     "quantity": "2",
+     "alternates": [
+      {
+       "pass": "binarised, single line, digits",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "binarised, single character",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      },
+      {
+       "pass": "greyscale, single line, digits or words",
+       "text": "2",
+       "value": "2",
+       "status": "ok"
+      }
+     ],
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'LBB4430/00' at 88%; independent passes on the cell read LBB4430/00 (the strip read it at 88% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "LBB4430/00",
+       "value": "LBB4430/00"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "LBB4430/00",
+       "value": "LBB4430/00"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 88% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      2647,
+      642,
+      2691
+     ],
+     "bbox": [
+      25,
+      2647,
+      2391,
+      2691
+     ]
+    }
+   },
+   {
+    "code": "QUANTITY_OR_UNIT_PARSE_FAILURE",
+    "page": 1,
+    "region": [
+     25,
+     2789,
+     2391,
+     2833
+    ],
+    "target": "boq_line:1:20",
+    "detail": {
+     "description": "Call Station Interface",
+     "catalog_no": "PRS-CSI",
+     "group_heading": "Requirements as per Specification",
+     "raw_quantity": "2",
+     "quantity_parse": {
+      "kind": "equipment_count",
+      "raw": "2",
+      "value": "2",
+      "status": "ok",
+      "rule": "digits",
+      "unit": null,
+      "rules_version": "values-2026-09-15.1"
+     },
+     "quantity": "2",
+     "alternates": null,
+     "building": null,
+     "reader": "ocr",
+     "reason_code": "PART_NUMBER_CONFLICT",
+     "reason": "the column read the part number 'PRS-CSI' at 86%; independent passes on the cell read PRS-CSI (the strip read it at 86% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence)",
+     "catalog_alternates": [
+      {
+       "pass": "greyscale, single line, part characters",
+       "text": "PRS-CSI",
+       "value": "PRS-CSI"
+      },
+      {
+       "pass": "binarised, single line, part characters",
+       "text": "PRS-CSI",
+       "value": "PRS-CSI"
+      }
+     ],
+     "catalog_check": {
+      "confirmed": false,
+      "multiline": false,
+      "agreement": "correlated",
+      "reason": "the strip read it at 86% and the passes that agree read the same pixels with the same engine: repeated, not independent, evidence"
+     },
+     "catalog_cell": [
+      176,
+      2789,
+      642,
+      2833
+     ],
+     "bbox": [
+      25,
+      2789,
+      2391,
+      2833
+     ]
+    }
+   }
+  ],
+  "notes": [
+   "page 1: a band of 95 px between two tables (y 2028-2123) was read as 0 row(s)"
+  ],
+  "coverage": {
+   "pages": [
+    {
+     "page": 1,
+     "detected": true,
+     "processed": true,
+     "regions": [
+      {
+       "kind": "table",
+       "top": 583,
+       "bottom": 2028,
+       "status": "processed",
+       "rows_accepted": 27,
+       "rows_dropped": 0,
+       "reason": null
+      },
+      {
+       "kind": "band",
+       "top": 2028,
+       "bottom": 2123,
+       "status": "processed",
+       "rows_accepted": 0,
+       "rows_dropped": 1,
+       "reason": "inked band between two tables where the column rules break: read as rows"
+      },
+      {
+       "kind": "table",
+       "top": 2123,
+       "bottom": 2911,
+       "status": "processed",
+       "rows_accepted": 9,
+       "rows_dropped": 1,
+       "reason": null
+      }
+     ],
+     "reason": "read after the page was deskewed +0.75 degrees"
+    }
+   ]
+  },
+  "source_unchanged": true
+ }
+}

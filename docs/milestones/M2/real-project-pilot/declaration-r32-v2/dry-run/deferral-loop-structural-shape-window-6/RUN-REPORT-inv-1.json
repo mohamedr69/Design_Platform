@@ -1,0 +1,976 @@
+{
+ "after_B": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "allowance": {
+  "caps_fixed": {
+   "B": 240,
+   "C": 240,
+   "P": 36,
+   "R": 40
+  },
+  "elapsed_bound_ends_utc": "2026-10-11T12:44:13+00:00",
+  "parent": {
+   "elapsed_s": 604800,
+   "input_tokens": 16300000,
+   "output_tokens": 3260000,
+   "total": 556
+  },
+  "project_window": {
+   "limit": 6,
+   "window_s": 20
+  },
+  "run_key": "9a578698354d3f4aa938ecf7957c9d000039288056073aa941fbed368549cdf1",
+  "stops": {},
+  "used": {
+   "B": 6,
+   "C": 0,
+   "P": 0,
+   "R": 0
+  },
+  "used_total": 6
+ },
+ "allowance_audit": {
+  "path": "C:/t/r2x/r40-sandbox/r40d-s6-52050f/inv-1/out/ALLOWANCE-AUDIT.json",
+  "reconciliation": {
+   "ledger": null,
+   "note": "no ledger in this run (dry): ledger_entry is null for every charge"
+  },
+  "refusals": 6,
+  "stops": {},
+  "total_charged": 6
+ },
+ "b_database_sha256_final": "abe8b22d805a89c3f702cf8400a51f61058a31521d249a68b0741430ebaea176",
+ "binding": {
+  "binding_manifest": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/BINDING-MANIFEST-R39.json",
+  "files_verified": 239,
+  "sha256": "a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b"
+ },
+ "candidate_outcome": "INCOMPLETE",
+ "command": "run",
+ "comparison_state": "INCOMPLETE",
+ "concentration_outcome_by_field": {
+  "decision": "UNDETERMINED",
+  "identity": "UNDETERMINED",
+  "revision": "UNDETERMINED"
+ },
+ "declaration_sha256": null,
+ "deferred": {
+  "C": {
+   "F009": "2026-10-04T12:44:39+00:00",
+   "F020": "2026-10-04T12:44:39+00:00",
+   "F021": "2026-10-04T12:44:39+00:00",
+   "F030": "2026-10-04T12:44:39+00:00",
+   "F032": "2026-10-04T12:44:39+00:00",
+   "F037": "2026-10-04T12:44:39+00:00"
+  },
+  "R": {
+   "F009": "2026-10-04T12:44:39+00:00",
+   "F020": "2026-10-04T12:44:39+00:00",
+   "F021": "2026-10-04T12:44:39+00:00",
+   "F030": "2026-10-04T12:44:39+00:00",
+   "F032": "2026-10-04T12:44:39+00:00",
+   "F037": "2026-10-04T12:44:39+00:00"
+  }
+ },
+ "diagnostics": {
+  "P": {
+   "credit": "none (A-09 point 6)",
+   "state": "INCOMPLETE"
+  },
+  "R": {
+   "credit": "none (A-09 point 6)",
+   "state": "INCOMPLETE"
+  }
+ },
+ "dispatch_guard": {
+  "authorized": false,
+  "reason": "dry mode: no declaration, no provider; the dry stub refuses every request"
+ },
+ "documents": {
+  "B": {
+   "F009": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F020": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F021": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F030": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F032": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F037": {
+    "class": null,
+    "classes": [],
+    "events": 0,
+    "kinds": [],
+    "pages": {},
+    "partially_read_pages": [],
+    "reason": "probe sent through the full chain (reader 'none': no document read)",
+    "retries": 0,
+    "retry_at": null,
+    "retry_at_utc": null,
+    "status": "COMPLETE",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   }
+  },
+  "C": {
+   "F009": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F020": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F021": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F030": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F032": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   },
+   "F037": {
+    "class": null,
+    "classes": [
+     "limit"
+    ],
+    "events": 1,
+    "kinds": [
+     "project_window"
+    ],
+    "pages": {
+     "1": [
+      "project_window"
+     ]
+    },
+    "partially_read_pages": [],
+    "reason": "project window: EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+    "retries": 0,
+    "retry_at": 1791117879.0994594,
+    "retry_at_full": {
+     "planning": 1791117879.3224418,
+     "structural": 1791117879.3224418
+    },
+    "retry_at_full_utc": {
+     "planning": "2026-10-04T12:44:39+00:00",
+     "structural": "2026-10-04T12:44:39+00:00"
+    },
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED",
+    "unread_page_count": 0,
+    "unread_pages": {}
+   }
+  },
+  "P": {},
+  "R": {
+   "F009": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   },
+   "F020": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   },
+   "F021": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   },
+   "F030": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   },
+   "F032": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   },
+   "F037": {
+    "classes": [
+     "limit"
+    ],
+    "events": 0,
+    "kinds": [
+     "waiting"
+    ],
+    "pages": {
+     "*": [
+      "waiting"
+     ]
+    },
+    "reason": "waiting: lane R starts only when no C document is DEFERRED",
+    "retry_at": 1791117879.0994594,
+    "retry_at_utc": "2026-10-04T12:44:39+00:00",
+    "status": "DEFERRED"
+   }
+  }
+ },
+ "earliest_retry": 1791117879.0994594,
+ "earliest_retry_utc": "2026-10-04T12:44:39+00:00",
+ "elapsed_bound_ends_utc": "2026-10-11T12:44:13+00:00",
+ "finished_utc": "2026-10-04T12:44:21+00:00",
+ "heads": {
+  "C:/t/iso/cand-r29": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+  "C:/t/iso/frozen-r12": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3"
+ },
+ "ingest": {
+  "b_database_sha256": "abe8b22d805a89c3f702cf8400a51f61058a31521d249a68b0741430ebaea176",
+  "documents": 6,
+  "ok": true,
+  "projects": [
+   "27331"
+  ],
+  "registration": {
+   "by_project": {
+    "27331": 6
+   },
+   "by_state": {
+    "pending": 6
+   },
+   "ok": true,
+   "problems": [],
+   "rows": 6,
+   "table_counts": {
+    "ai_usage": 0,
+    "background_jobs": 0,
+    "document_readings": 0,
+    "extraction_runs": 0,
+    "project_submittals": 0,
+    "result_cache": 0
+   }
+  },
+  "state_check": {
+   "checks": {
+    "b_file_sha256": "abe8b22d805a89c3f702cf8400a51f61058a31521d249a68b0741430ebaea176",
+    "b_logical_sha256": "af49b88c4b5ac0e3917e3213fa2b843ea6e345f31ea3731382221565e3a2fe35",
+    "c_logical_sha256": "af49b88c4b5ac0e3917e3213fa2b843ea6e345f31ea3731382221565e3a2fe35",
+    "documents_with_c_policy_evidence": [],
+    "evidence_task_cache_rows": 0
+   },
+   "ok": true,
+   "problems": []
+  }
+ },
+ "invocation": 1,
+ "kind": "fresh",
+ "lane_gates": {
+  "P": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-04T12:44:39+00:00)",
+  "R": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-04T12:44:39+00:00)"
+ },
+ "lanes": {
+  "B": {
+   "allowance_used": 6,
+   "application_processing_run": false,
+   "application_reader_run": null,
+   "cli_version": "dry mode: no CLI is run",
+   "deferred": {},
+   "dry_stub_calls": 6,
+   "environment_check": {
+    "provider_env_verified": [],
+    "switches": {
+     "AI_EVIDENCE_VARIANT": "off"
+    }
+   },
+   "evidence_tasks": null,
+   "gate": {
+    "deferred": 0,
+    "refused": 0,
+    "served": 0
+   },
+   "identity": {
+    "checked": 0,
+    "log": "C:/t/r2x/r40-sandbox/r40d-s6-52050f/inv-1/IDENTITY-LOG-B.jsonl",
+    "mismatches": 0,
+    "refused": 0
+   },
+   "lane_stop_state": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "limit_events": [],
+   "live_provider_attempts_blocked": [],
+   "model_requests": 0,
+   "policy_version": null,
+   "reader": "none",
+   "seconds": 1.2,
+   "serves_by_mode": {},
+   "stats": {
+    "dry_refused": 6,
+    "ok": 0,
+    "stopped_by_guard": 0
+   },
+   "stopped": null,
+   "store_dispatched_to_inner": null,
+   "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+  },
+  "C": {
+   "allowance_used": 0,
+   "application_processing_run": null,
+   "application_reader_run": false,
+   "cli_version": "dry mode: no CLI is run",
+   "deferred": {
+    "F009": 1791117879.0994594,
+    "F020": 1791117879.0994594,
+    "F021": 1791117879.0994594,
+    "F030": 1791117879.0994594,
+    "F032": 1791117879.0994594,
+    "F037": 1791117879.0994594
+   },
+   "dry_stub_calls": 0,
+   "environment_check": {
+    "provider_env_verified": [],
+    "switches": {
+     "AI_EVIDENCE_ADJUDICATE": "1",
+     "AI_EVIDENCE_ASSOC": "1",
+     "AI_EVIDENCE_DEADLINE": "1",
+     "AI_EVIDENCE_DECISION_REGION": "1",
+     "AI_EVIDENCE_GUARD": "1",
+     "AI_EVIDENCE_IDGUARD": "1",
+     "AI_EVIDENCE_SCHEDULING": "required_first",
+     "AI_EVIDENCE_SUPPORT": "v2",
+     "AI_EVIDENCE_TARGETED": "1",
+     "AI_EVIDENCE_VARIANT": "EV1"
+    }
+   },
+   "evidence_tasks": [
+    "discover_page",
+    "locate_decision",
+    "read_boq_row",
+    "read_decision",
+    "read_field_context",
+    "read_identity",
+    "read_revision"
+   ],
+   "gate": {
+    "deferred": 6,
+    "refused": 0,
+    "served": 0
+   },
+   "identity": {
+    "checked": 0,
+    "log": "C:/t/r2x/r40-sandbox/r40d-s6-52050f/inv-1/IDENTITY-LOG-C.jsonl",
+    "mismatches": 0,
+    "refused": 0
+   },
+   "lane_stop_state": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "limit_events": [
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F037",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    },
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F009",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    },
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F032",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    },
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F021",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    },
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F030",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    },
+    {
+     "at_utc": "2026-10-04T12:44:21+00:00",
+     "class": "limit",
+     "detail": "EP-27331: 6 charges in the rolling 20 s window (limit 6, all lanes); earliest retry 2026-10-04T12:44:39+00:00; retry_at_full planning 2026-10-04T12:44:39+00:00 (63 remaining), structural 2026-10-04T12:44:39+00:00 (129 remaining)",
+     "kind": "project_window",
+     "lane": "C",
+     "page": "1",
+     "pool_id": "F020",
+     "retry_at": 1791117879.0994594,
+     "retry_at_full": {
+      "planning": 1791117879.3224418,
+      "structural": 1791117879.3224418
+     },
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T12:44:39+00:00",
+      "structural": "2026-10-04T12:44:39+00:00"
+     },
+     "retry_at_utc": "2026-10-04T12:44:39+00:00",
+     "served": false,
+     "task": "r33_dry_probe"
+    }
+   ],
+   "live_provider_attempts_blocked": [],
+   "model_requests": 0,
+   "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+   "reader": "none",
+   "seconds": 0.4,
+   "serves_by_mode": {},
+   "stats": {
+    "ok": 0,
+    "stopped_by_guard": 0
+   },
+   "stopped": null,
+   "store_dispatched_to_inner": 0,
+   "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode"
+  }
+ },
+ "ledger_after": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scopes": 17
+ },
+ "ledger_before": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scopes": 17
+ },
+ "ledger_rule": "dry: the AI ledger must read the same before and after; live: growth only inside the declared scope, within the parent total",
+ "ledger_scope": null,
+ "ledger_unchanged": true,
+ "mode": "dry",
+ "model_requests": 0,
+ "population_gate": {
+  "action": "DISPATCH_ELIGIBLE",
+  "counts": {
+   "decision": 38,
+   "identity": 57,
+   "revision": 38
+  },
+  "extensions_used": 0,
+  "rule": ">= 12 resolved (per field), independently reviewed documents per field carrying the fact; canonical ids; no partial closure run",
+  "short": {}
+ },
+ "probe": null,
+ "provider_identity": {
+  "at_utc": "2026-10-04T12:44:13+00:00",
+  "cli_path": null,
+  "cli_version": "dry mode: no CLI is run",
+  "declared_models": {
+   "small": "claude-sonnet-5",
+   "standard": "claude-opus-5"
+  },
+  "invocation": 1,
+  "mode": "dry",
+  "provider": "claude-code"
+ },
+ "resume_not_before": 1791117879.3224418,
+ "resume_not_before_utc": "2026-10-04T12:44:39+00:00",
+ "resume_policy": "full",
+ "retry_at_earliest": 1791117879.0994594,
+ "retry_at_earliest_utc": "2026-10-04T12:44:39+00:00",
+ "retry_at_full": {
+  "planning": 1791117879.3224418,
+  "structural": 1791117879.3224418
+ },
+ "retry_at_full_utc": {
+  "planning": "2026-10-04T12:44:39+00:00",
+  "structural": "2026-10-04T12:44:39+00:00"
+ },
+ "run_folder": "C:/t/r2x/r40-sandbox/r40d-s6-52050f",
+ "run_key": "9a578698354d3f4aa938ecf7957c9d000039288056073aa941fbed368549cdf1",
+ "run_set": {
+  "documents": 6,
+  "path": "C:\\t\\iso\\work\\r2x\\r40\\dry\\RUN-SET-EP27331.json",
+  "sha256": "469489409b002721f91a2760c8af43ac3f162e9e6b1140acfcccf2e0249f38b6",
+  "synthetic": false
+ },
+ "run_set_keys": [
+  {
+   "doc_key": "EP-27331/Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0084-Rev.00 SD for 49th to 53rd  Floor (Tier 3) Fire Alarm & Voice Evacuation System Layout (Tower-1) Code-B.pdf",
+   "ep": "27331",
+   "pool_id": "F037"
+  },
+  {
+   "doc_key": "EP-27331/Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0034-Rev.00 SD for 5th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+   "ep": "27331",
+   "pool_id": "F009"
+  },
+  {
+   "doc_key": "EP-27331/Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CENTRAL BATTERY SYSTEM (GF to RF)/B01-ASC-SD-ELE-0075-Rev.00 - 25th to 34th  Floor Plan (Tier 1) Emergency Lighting Layout (Tower-1)_Code B.pdf",
+   "ep": "27331",
+   "pool_id": "F032"
+  },
+  {
+   "doc_key": "EP-27331/Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0037-Rev.00 Shop Drawing Submittal for 3rd & 4th Floor Plan Emergency Lighting Layout - B.pdf",
+   "ep": "27331",
+   "pool_id": "F021"
+  },
+  {
+   "doc_key": "EP-27331/Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+   "ep": "27331",
+   "pool_id": "F030"
+  },
+  {
+   "doc_key": "EP-27331/Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0047-Rev.00 Shop Drawing for 7th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+   "ep": "27331",
+   "pool_id": "F020"
+  }
+ ],
+ "run_state": "DEFERRED",
+ "sandbox_base": "C:/t/r2x/r40-sandbox",
+ "scope_limitations": [
+  {
+   "declared_by": "A-09 point 5 (owner)",
+   "found": 0,
+   "id": "unsupported-control-shortfall",
+   "required": 2,
+   "statement": "the run set holds 0 of the 2 unsupported-format controls plan v2 section 2.3 requires: no canonical pool document has an in-scope page labelled 'unsupported' or 'illegible' in r32-labels-reviewed-2; the shortfall is accepted ONLY as a declared scope limitation; no control is replaced once a prediction exists for the run (run_set_selector_r32.replace_controls); this limitation is never removed from a report"
+  }
+ ],
+ "score_outcome_by_field": {
+  "decision": "INCOMPLETE",
+  "identity": "INCOMPLETE",
+  "revision": "INCOMPLETE"
+ },
+ "stamp": "r40d-s6-52050f",
+ "started_utc": "2026-10-04T12:44:13+00:00",
+ "state_check_C": {
+  "checks": {
+   "b_file_sha256": "abe8b22d805a89c3f702cf8400a51f61058a31521d249a68b0741430ebaea176",
+   "b_logical_sha256": "af49b88c4b5ac0e3917e3213fa2b843ea6e345f31ea3731382221565e3a2fe35",
+   "c_logical_sha256": "af49b88c4b5ac0e3917e3213fa2b843ea6e345f31ea3731382221565e3a2fe35",
+   "documents_with_c_policy_evidence": [],
+   "evidence_task_cache_rows": 0
+  },
+  "ok": true,
+  "problems": []
+ },
+ "status": "finished",
+ "stop_controller": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "store": {
+  "b_or_c_served_from_p": 0,
+  "duplicate_bound_keys": [],
+  "r_rows_served_to_c": 0,
+  "reference_serves": 0,
+  "releases": [],
+  "requests_by_lane_state": [
+   {
+    "lane": "B",
+    "n": 6,
+    "outcome": "dry_refused",
+    "state": "failed"
+   }
+  ],
+  "reserved_without_answer": 0,
+  "retries": [],
+  "rows": 6,
+  "serves_by_lane_mode": []
+ },
+ "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+ "unread_pages": {
+  "B": {},
+  "C": {},
+  "P": {},
+  "R": {}
+ }
+}

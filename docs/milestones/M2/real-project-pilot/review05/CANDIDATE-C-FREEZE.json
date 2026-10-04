@@ -1,0 +1,48 @@
+{
+ "at_utc": "2026-09-28T17:21:04+00:00",
+ "candidate": "C",
+ "git_head": "2221b4327c7dd140994cc2c98e89229431b34899",
+ "versions": {
+  "document_control.PARSER_VERSION": "parse-2026-09-28.6",
+  "title_block.TITLE_BLOCK_VERSION": "titleblock-1",
+  "design_sheet_extractor.PARSER_VERSION": "2026-09-28.2",
+  "page_cache.OCR_VERSION": "ocr-1",
+  "document_control.OCR_BAND_VARIANT": "band-1",
+  "document_control.OCR_REGIONS_VARIANT": "regions-2"
+ },
+ "settings": {
+  "AI_ENABLED": false,
+  "profiles": {
+   "default": {
+    "EXTRACTION_PROMOTE_OBSERVATIONS": false
+   },
+   "promoted": {
+    "EXTRACTION_PROMOTE_OBSERVATIONS": true
+   }
+  },
+  "DOCUMENT_CLASSIFICATION_V2": false,
+  "SYNC_FILE_WORKERS": 0,
+  "tesseract": [
+   "tesseract v5.4.0.20240606"
+  ],
+  "budgets": {
+   "PAGE_SCAN_LIMIT": 12,
+   "REPLY_SEARCH_LIMIT": 12,
+   "OCR_PAGE_LIMIT": 12
+  }
+ },
+ "source_sha256": {
+  "app/services/document_control.py": "6e46f12fecef6258019c5174a78574f85ee7fb083cb68254e1c8e939f5df7b3b",
+  "app/services/title_block.py": "41b02300ebffb5681cd5f8bc8c2e7e95b6c6fd6220ac0125ef3ee833a44f906c",
+  "app/services/transmittals.py": "e30b35075b8d3f0686c1b5ef560db41c174cb1e0d0cfab5dbcde330d31167fd3",
+  "app/services/design_sheet_extractor.py": "28cf591b649fb0492f20d6ad9b4ec0e3c68715553fbb7176cc6b8b2d881e1ca5",
+  "app/ai/sheet_reader.py": "dd03d6e075e588659bd5db6a1c05b0ac19feeb6c4d4e0173fa3db50e9597f5cb",
+  "app/routers/projects.py": "00d665cf818839bd42da0f2ed3faf466d8799c5f924492e128f86961b93e9820",
+  "app/services/boq_candidates.py": "523fcc4187220ab13d175cfc36616a5accf482da9cb42e12494006dc5b97383b",
+  "scripts/m2_pilot_eval.py": "845584b076a42ad26eb576c23034890851d35d386e558437c06501399950fe97",
+  "scripts/m2_boq_eval.py": "a20c90750c43d9d8afa2f4de75d7469d3f7690a8b057259f20a5b160bd7a8111",
+  "app/services/document_sync.py": "df88dfe8d49051ec5ee8a5f2146a708f73999e73e02092d67d391b927c6bade5",
+  "app/services/page_cache.py": "09e338e6fc443b9589183a051e6335d112421d7f2bb775be7ac64efc0e4e1e26"
+ },
+ "rule": "no reader or evaluator source changes after this freeze are applied to the holdout run; a change made after it is a new candidate and the holdout it saw is no longer unseen"
+}

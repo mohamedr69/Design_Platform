@@ -1,0 +1,2296 @@
+{
+ "at_utc": "2026-09-28T20:12:03+00:00",
+ "tag": "det-pilot",
+ "profile": "promoted",
+ "stage": "C:\\t\\pilot\\stage",
+ "database": "C:\\t\\r6\\det-pilot\\db\\promoted.db",
+ "parser": "parse-2026-09-29.8",
+ "ai": null,
+ "settings": {
+  "extraction_promote_observations": true,
+  "ai_enabled": false,
+  "ai_provider": "claude-code",
+  "ai_model_small": "sonnet",
+  "ai_model_standard": "opus",
+  "ai_evidence_variant": "off",
+  "sync_file_workers": 0,
+  "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_max_concurrency": 2
+ },
+ "projects": {
+  "EP-13777": {
+   "project_id": 1,
+   "seconds": 5.9,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 40,
+    "processed": 40,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "FAS": {
+       "drawings": 4,
+       "revisions": 5,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "B2"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:12:10.820846",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.62,
+     "document_processing_seconds": 5.55,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.08,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.06,
+     "total_seconds": 5.69,
+     "processed_count": 40,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "C & E Matrix/Approved matrix/A23-EFE-TSB-E-00058 R1 (3) (1).pdf",
+       "seconds": 1.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Correspondance/Sent/B2 Comments.pdf",
+       "seconds": 1.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "OM manual/Rev-1/OM manual R1.pdf",
+       "seconds": 1.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+       "seconds": 0.7,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "OM manual/Rev-0/11. Data Sheets Highlighted 1.pdf",
+       "seconds": 0.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "OM manual/Rev-0/FA O&M R0 Softcopy A2 A3.pdf",
+       "seconds": 0.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Approval Documents/A23-EFE-MAT-E-00033  Fire Alarm System - B.pdf",
+       "seconds": 0.3,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "Approval Documents/A23-EFECO-PQS-MEP-00009 Fire Alarm System - Al Arabia .pdf",
+       "seconds": 0.3,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "C & E Matrix/Rev-0/A23-EFE-SDR-E-FA-SCH-00015 R0.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "C & E Matrix/Rev-0/A23-EFE-SDR-E-FA-SCH-00016 R0.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 40,
+     "documents_per_minute": 422.1,
+     "percentiles_ms": {
+      "median": 143,
+      "p90": 608,
+      "p95": 1189,
+      "p99": 1519,
+      "max": 1519
+     },
+     "stage_ms": {
+      "classification": 4,
+      "content_evidence": 198,
+      "db_write": 49,
+      "deterministic_extract": 117,
+      "hash": 616,
+      "ocr_render": 312,
+      "pdf_open": 257,
+      "pdf_text_extract": 1337,
+      "storage_wait": 5,
+      "title_block": 837
+     },
+     "stage_share_pct": {
+      "classification": 0.1,
+      "content_evidence": 5.3,
+      "db_write": 1.3,
+      "deterministic_extract": 3.1,
+      "hash": 16.5,
+      "ocr_render": 8.4,
+      "pdf_open": 6.9,
+      "pdf_text_extract": 35.8,
+      "storage_wait": 0.1,
+      "title_block": 22.4
+     },
+     "events": {
+      "box_cache_hits": 7,
+      "ocr_cache_hits": 38,
+      "ocr_pages_attempted": 31,
+      "ocr_pages_used": 2,
+      "page_text_extractions": 186,
+      "page_text_reused": 128,
+      "pages_scanned": 186,
+      "pdf_opens": 40,
+      "read_pdf": 40
+     },
+     "largest_files": [
+      {
+       "path": "OM manual/Rev-1/OM manual R1.pdf",
+       "mb": 72.0,
+       "seconds": 1.2,
+       "role": "document"
+      },
+      {
+       "path": "OM manual/Rev-0/11. Data Sheets Highlighted 1.pdf",
+       "mb": 43.7,
+       "seconds": 0.6,
+       "role": "document"
+      },
+      {
+       "path": "OM manual/Rev-0/FA O&M R0 Softcopy A2 A3.pdf",
+       "mb": 37.3,
+       "seconds": 0.5,
+       "role": "document"
+      },
+      {
+       "path": "OM manual/Rev-0/10-LCD oper.PDF",
+       "mb": 7.9,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+       "mb": 6.7,
+       "seconds": 0.7,
+       "role": "spec"
+      },
+      {
+       "path": "C & E Matrix/Rev-0/A23-EFE-SDR-E-FA-SCH-00016 R0.pdf",
+       "mb": 3.4,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "C & E Matrix/Rev-0/A23-EFE-SDR-E-FA-SCH-00015 R0.pdf",
+       "mb": 3.2,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "C & E Matrix/Approved matrix/A23-EFE-TSB-E-00058 R1 (3) (1).pdf",
+       "mb": 2.3,
+       "seconds": 1.5,
+       "role": "document"
+      },
+      {
+       "path": "OM manual/Rev-1/Content.pdf",
+       "mb": 2.0,
+       "seconds": 0.2,
+       "role": "document"
+      },
+      {
+       "path": "Correspondance/Sent/L01 Comments.pdf",
+       "mb": 1.7,
+       "seconds": 0.0,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 33,
+      "spec": 3,
+      "submittal_form": 4
+     },
+     "ocr_documents": 14,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 40
+    }
+   }
+  },
+  "EP-14119": {
+   "project_id": 2,
+   "seconds": 0.2,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 6,
+    "processed": 6,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:12:11.080029",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.01,
+     "document_processing_seconds": 0.12,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.02,
+     "reconcile_actions_seconds": 0.0,
+     "reconcile_drawings_seconds": 0.01,
+     "total_seconds": 0.17,
+     "processed_count": 6,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-14119 Commercial/EP-14119 BOQ.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 Cost.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 LPO.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 Quotation.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-14119 Scan Doc/EP-14119 DRF.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-14119 Scan Doc/EP-14119 VE T&C Ack.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 6,
+     "documents_per_minute": 2144.1,
+     "percentiles_ms": {
+      "median": 30,
+      "p90": 34,
+      "p95": 49,
+      "p99": 49,
+      "max": 49
+     },
+     "stage_ms": {
+      "classification": 0,
+      "content_evidence": 26,
+      "db_write": 6,
+      "deterministic_extract": 10,
+      "hash": 14,
+      "pdf_open": 5,
+      "pdf_text_extract": 8,
+      "storage_wait": 1
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 36.8,
+      "db_write": 7.9,
+      "deterministic_extract": 13.9,
+      "hash": 20.8,
+      "pdf_open": 7.2,
+      "pdf_text_extract": 12.2,
+      "storage_wait": 1.3
+     },
+     "events": {
+      "ocr_cache_hits": 8,
+      "ocr_pages_attempted": 8,
+      "page_text_extractions": 8,
+      "page_text_reused": 14,
+      "pages_scanned": 8,
+      "pdf_opens": 6,
+      "read_pdf": 6
+     },
+     "largest_files": [
+      {
+       "path": "EP-14119 Commercial/EP-14119 Cost.pdf",
+       "mb": 0.7,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 Quotation.pdf",
+       "mb": 0.6,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 LPO.pdf",
+       "mb": 0.5,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-14119 Scan Doc/EP-14119 DRF.pdf",
+       "mb": 0.5,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-14119 Scan Doc/EP-14119 VE T&C Ack.pdf",
+       "mb": 0.5,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-14119 Commercial/EP-14119 BOQ.pdf",
+       "mb": 0.4,
+       "seconds": 0.0,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 6
+     },
+     "ocr_documents": 6,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 6
+    }
+   }
+  },
+  "EP-19977": {
+   "project_id": 3,
+   "seconds": 2.2,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 32,
+    "processed": 32,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:12:13.250251",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.19,
+     "document_processing_seconds": 2.04,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.02,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.01,
+     "total_seconds": 2.08,
+     "processed_count": 32,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-19977 Scan Doc/VOL05 - Project Specification 01.07.2020.pdf",
+       "seconds": 0.8,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/cable vendor list.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/CBS - Vendor List.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EBF-DCP-6374 O&M FAVE App.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EBF-DCP-6374-VL-O&M EM App.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 FA MS R0 R&R.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 FA MS R1 App.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Cummunication/COO_Juma_2nd Jul,2020.docx.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/Emergency lighting system.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 CBS MS R1 R&R.pdf",
+       "seconds": 0.1,
+       "role": "submittal_form",
+       "result": "processed"
+      }
+     ],
+     "documents": 32,
+     "documents_per_minute": 921.2,
+     "percentiles_ms": {
+      "median": 61,
+      "p90": 260,
+      "p95": 269,
+      "p99": 757,
+      "max": 757
+     },
+     "stage_ms": {
+      "classification": 2,
+      "content_evidence": 132,
+      "db_write": 40,
+      "deterministic_extract": 76,
+      "hash": 193,
+      "pdf_open": 30,
+      "pdf_text_extract": 839,
+      "storage_wait": 5
+     },
+     "stage_share_pct": {
+      "classification": 0.1,
+      "content_evidence": 10.1,
+      "db_write": 3.0,
+      "deterministic_extract": 5.8,
+      "hash": 14.6,
+      "pdf_open": 2.3,
+      "pdf_text_extract": 63.7,
+      "storage_wait": 0.4
+     },
+     "events": {
+      "box_cache_hits": 4,
+      "ocr_cache_hits": 31,
+      "ocr_pages_attempted": 31,
+      "ocr_pages_used": 4,
+      "page_text_extractions": 76,
+      "page_text_reused": 81,
+      "pages_scanned": 76,
+      "pdf_opens": 30,
+      "read_pdf": 30
+     },
+     "largest_files": [
+      {
+       "path": "EP-19977 Scan Doc/VOL05 - Project Specification 01.07.2020.pdf",
+       "mb": 32.6,
+       "seconds": 0.8,
+       "role": "spec"
+      },
+      {
+       "path": "EP-19977 Commercial/EP-19977 FA Quotation R4.pdf",
+       "mb": 3.0,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 FRC Sam. B Ack.pdf",
+       "mb": 2.0,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 FA & CBS Samp. B Ack.pdf",
+       "mb": 1.7,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EP-19977 CBS MS R1 R&R.pdf",
+       "mb": 1.2,
+       "seconds": 0.1,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EBF-DCP-6374 O&M FAVE App.pdf",
+       "mb": 1.1,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Scan Doc/EBF-DCP-6374-VL-O&M EM App.pdf",
+       "mb": 1.1,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Scan Doc/CBS - Vendor List.pdf",
+       "mb": 0.9,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-19977 Commercial/EP-19977 FA Quotation.pdf",
+       "mb": 0.8,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "Cummunication/COO_Juma_2nd Jul,2020.docx.pdf",
+       "mb": 0.7,
+       "seconds": 0.2,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 27,
+      "spec": 1,
+      "submittal_form": 2,
+      "transmittal": 2
+     },
+     "ocr_documents": 21,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 32
+    }
+   }
+  },
+  "EP-25091": {
+   "project_id": 4,
+   "seconds": 93.4,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 52,
+    "processed": 52,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 2,
+       "revisions": 4,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 5,
+       "revisions": 12,
+       "candidates": 0,
+       "missing": 0
+      },
+      "PAVA": {
+       "drawings": 5,
+       "revisions": 11,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L1",
+       "B1",
+       "GF"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:13:46.686452",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.68,
+     "document_processing_seconds": 93.24,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.07,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.05,
+     "total_seconds": 93.33,
+     "processed_count": 52,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0501-dwg_2025-08-21_0427/AKA-DCC-ID-02-SD-TL-0504.pdf",
+       "seconds": 48.7,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0501-dwg_2025-08-21_0427/AKA-DCC-ID-02-SD-TL-0508.pdf",
+       "seconds": 42.3,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_id-001-pdf_2024-08-10_0931/ID-202-2.pdf",
+       "seconds": 34.1,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 SD/Final SD  received on 04-02-26 from BK Gulf/ELETRICAL/PAVA/B1/R2 B/AKA-BKG-ELE-B1-SD-PAVA-00010.pdf",
+       "seconds": 6.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 SD/PAVA/PAVA-UR/AKA-BKG-ELE-UR-SD-PAVA-00051.pdf",
+       "seconds": 5.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/IFC DWGS/F-12220-Lower Roof Plan-F-12221.pdf",
+       "seconds": 4.8,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 SD/PAVA/PAVA-UR/AKA-BKG-ELE-UR-SD-PAVA-00051-clouded.pdf",
+       "seconds": 4.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0529-pdf_2025-08-21_0434/AKA-DCC-ID-02-SD-TL-0534L.pdf",
+       "seconds": 4.5,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_id-001-pdf_2024-08-10_0931/ID-601-3.pdf",
+       "seconds": 3.5,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-25091 Inputs/IFC DWGS/F-12200-First Floor Mezz Plan-F-12204.pdf",
+       "seconds": 3.3,
+       "role": "spec",
+       "result": "processed"
+      }
+     ],
+     "documents": 52,
+     "documents_per_minute": 33.4,
+     "percentiles_ms": {
+      "median": 547,
+      "p90": 4786,
+      "p95": 6400,
+      "p99": 42276,
+      "max": 48724
+     },
+     "stage_ms": {
+      "classification": 8,
+      "content_evidence": 400,
+      "db_write": 68,
+      "deterministic_extract": 262,
+      "hash": 677,
+      "pdf_open": 163,
+      "pdf_text_extract": 42457,
+      "storage_wait": 28,
+      "title_block": 41609
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 0.5,
+      "db_write": 0.1,
+      "deterministic_extract": 0.3,
+      "hash": 0.8,
+      "pdf_open": 0.2,
+      "pdf_text_extract": 49.6,
+      "storage_wait": 0.0,
+      "title_block": 48.6
+     },
+     "events": {
+      "box_cache_hits": 15,
+      "ocr_cache_hits": 17,
+      "ocr_pages_attempted": 15,
+      "ocr_pages_used": 2,
+      "page_text_extractions": 123,
+      "page_text_reused": 124,
+      "pages_scanned": 123,
+      "pdf_opens": 51,
+      "read_pdf": 51,
+      "replies_folded": 1
+     },
+     "largest_files": [
+      {
+       "path": "EP-25091 Inputs/wetransfer_id-001-pdf_2024-08-10_0931/ID-202-2.pdf",
+       "mb": 46.6,
+       "seconds": 34.1,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0501-dwg_2025-08-21_0427/AKA-DCC-ID-02-SD-TL-0504.pdf",
+       "mb": 32.6,
+       "seconds": 48.7,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0501-dwg_2025-08-21_0427/AKA-DCC-ID-02-SD-TL-0508.pdf",
+       "mb": 25.8,
+       "seconds": 42.3,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_aka-dcc-id-02-sd-tl-0529-pdf_2025-08-21_0434/AKA-DCC-ID-02-SD-TL-0534L.pdf",
+       "mb": 7.7,
+       "seconds": 4.5,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_id-001-pdf_2024-08-10_0931/ID-601-3.pdf",
+       "mb": 5.4,
+       "seconds": 3.5,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/wetransfer_id-001-pdf_2024-08-10_0931/ID 004.pdf",
+       "mb": 5.3,
+       "seconds": 0.2,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 SD/PAVA/PAVA-UR/AKA-BKG-ELE-UR-SD-PAVA-00051.pdf",
+       "mb": 5.2,
+       "seconds": 5.4,
+       "role": "document"
+      },
+      {
+       "path": "EP-25091 Scan/PAVA Spec.pdf",
+       "mb": 5.2,
+       "seconds": 1.2,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 Inputs/Interior_Finish Schedule.pdf",
+       "mb": 4.5,
+       "seconds": 0.5,
+       "role": "spec"
+      },
+      {
+       "path": "EP-25091 SD/Final SD  received on 04-02-26 from BK Gulf/ELETRICAL/PAVA/B1/R2 B/AKA-BKG-ELE-B1-SD-PAVA-00010.pdf",
+       "mb": 4.4,
+       "seconds": 6.4,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 23,
+      "spec": 26,
+      "submittal_form": 2,
+      "transmittal": 1
+     },
+     "ocr_documents": 12,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 52
+    }
+   }
+  },
+  "EP-26082": {
+   "project_id": 5,
+   "seconds": 98.0,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 58,
+    "processed": 57,
+    "failed": 1,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 2,
+       "revisions": 4,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 4,
+       "revisions": 8,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L8",
+       "GF",
+       "B1",
+       "L1"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 1,
+    "finished_at": "2026-09-28T20:15:24.693192",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 1.07,
+     "document_processing_seconds": 97.77,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.06,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.05,
+     "total_seconds": 97.86,
+     "processed_count": 57,
+     "failed_count": 1,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-26082 INPUTS/DCD/DCD App (CE,Aria ,Bellagio & MGM-2/DCD Approved Drawing (CE, Aria, Bellagio & MGM 2)/DCD APPROVAL FOR BELLAGIO/revised_gas_bellagio_part1xiba1741941453483 (1).pdf",
+       "seconds": 39.2,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23/01-03_STRUCTURAL SITEWIDE/01 OF 96 STRUCTURE STANDARD DETAILS-SITE WORKS/B. SITE WORKS/1710286 - FIGURE 4B 2020-2030 ROW APPROVAL PLAN (TWO WAY).pdf",
+       "seconds": 22.7,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 3 (AR )/31 OF 96_MISC/B. FACADE ACCESS/R1029-04-AESG-DWG-ALL-BMU-2003-DWG.pdf",
+       "seconds": 15.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "SD/FAVE/MGM1/AB/L8/R1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208.pdf",
+       "seconds": 15.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/New IFC Received on 24-07-25/L0885_2025.05.22-KLING Letter to CSCEC-Issuance of Revised Dwgs & Specs to Aria Hotel, IFC/04 Vol IV Drawings/22-33_ARIA HOTEL/R1029-04-IFS-DWG-ALL-GRO-ICT-8502.pdf",
+       "seconds": 8.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/A. LANDSCAPE/345-LA-HS-5C-11000.pdf",
+       "seconds": 8.5,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/09 OF 96_MEP - MGM 2 ELECTRICAL ELV/R1029-08-IFS-DWG-L07-ICT-1207.pdf",
+       "seconds": 8.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "PRESENTATION/Sch/FAVE/R1029-01-IBA-DWG-ALL-FAS-6601-PDF [0].pdf",
+       "seconds": 6.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/42 OF 96_MISC/D. SECURITY/R1029-05-KTC-DWG-ALL-SEC-0005.pdf",
+       "seconds": 6.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 3 (AR )/28 OF 96_INTERIOR DESIGN PART 2/R1029-04-SFS-DWG-ALL-GRO-INT-4112-PDF-B.pdf",
+       "seconds": 6.4,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 58,
+     "documents_per_minute": 35.6,
+     "percentiles_ms": {
+      "median": 833,
+      "p90": 8185,
+      "p95": 15068,
+      "p99": 22690,
+      "max": 39161
+     },
+     "stage_ms": {
+      "classification": 14,
+      "content_evidence": 716,
+      "db_write": 91,
+      "deterministic_extract": 459,
+      "hash": 1067,
+      "pdf_open": 74,
+      "pdf_text_extract": 28492,
+      "storage_wait": 66,
+      "title_block": 57510
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 0.8,
+      "db_write": 0.1,
+      "deterministic_extract": 0.5,
+      "hash": 1.2,
+      "pdf_open": 0.1,
+      "pdf_text_extract": 32.2,
+      "storage_wait": 0.1,
+      "title_block": 65.0
+     },
+     "events": {
+      "box_cache_hits": 11,
+      "ocr_cache_hits": 31,
+      "ocr_pages_attempted": 20,
+      "ocr_pages_used": 1,
+      "page_text_extractions": 158,
+      "page_text_reused": 135,
+      "pages_scanned": 158,
+      "pdf_opens": 56,
+      "read_pdf": 56
+     },
+     "largest_files": [
+      {
+       "path": "EP-26082 INPUTS/DCD/DCD App (CE,Aria ,Bellagio & MGM-2/DCD Approved Drawing (CE, Aria, Bellagio & MGM 2)/DCD APPROVAL FOR BELLAGIO/revised_gas_bellagio_part1xiba1741941453483 (1).pdf",
+       "mb": 60.5,
+       "seconds": 39.2,
+       "role": "spec"
+      },
+      {
+       "path": "EP-26082 INPUTS/FROM TEKNOWARE/Received from teknoware/07-03-25/19-11-25/MGM1 L06 (19-11-25).pdf",
+       "mb": 35.6,
+       "seconds": 0.4,
+       "role": "spec"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23/01-03_STRUCTURAL SITEWIDE/01 OF 96 STRUCTURE STANDARD DETAILS-SITE WORKS/B. SITE WORKS/1710286 - FIGURE 4B 2020-2030 ROW APPROVAL PLAN (TWO WAY).pdf",
+       "mb": 34.2,
+       "seconds": 22.7,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-26082 INPUTS/Spec received from shahul (13-11-24)/B-Particular Specs/3 of 18_V3B_03_Lighting (Part B)_Particular Specifications_Rev.0.pdf",
+       "mb": 24.9,
+       "seconds": 0.5,
+       "role": "spec"
+      },
+      {
+       "path": "SD/CBS/MGM2/Rev.00/L10/MGM2 L10 (22.05.26).pdf",
+       "mb": 17.4,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/A. LANDSCAPE/345-LA-HS-5C-11000.pdf",
+       "mb": 11.6,
+       "seconds": 8.5,
+       "role": "spec"
+      },
+      {
+       "path": "EP-26082 MOM/L0749-Minutes of Weekly MEP Meeting No. 020 - Final Issuance.pdf",
+       "mb": 8.0,
+       "seconds": 0.2,
+       "role": "document"
+      },
+      {
+       "path": "EP-26082 INPUTS/FROM TEKNOWARE/Received from teknoware/30-05-25/MGM 1 L03.pdf",
+       "mb": 7.8,
+       "seconds": 0.3,
+       "role": "spec"
+      },
+      {
+       "path": "EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 3 (AR )/31 OF 96_MISC/B. FACADE ACCESS/R1029-04-AESG-DWG-ALL-BMU-2003-DWG.pdf",
+       "mb": 7.3,
+       "seconds": 15.2,
+       "role": "document"
+      },
+      {
+       "path": "PRESENTATION/Sch/FAVE/R1029-01-IBA-DWG-ALL-FAS-6601-PDF [0].pdf",
+       "mb": 6.7,
+       "seconds": 6.9,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 45,
+      "spec": 10,
+      "submittal_form": 1,
+      "transmittal": 2
+     },
+     "ocr_documents": 12,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 58
+    }
+   }
+  },
+  "EP-26369": {
+   "project_id": 6,
+   "seconds": 59.5,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 60,
+    "processed": 59,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 0,
+       "revisions": 0,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 8,
+       "revisions": 31,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L1",
+       "GF",
+       "RF"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:16:24.196416",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.55,
+     "document_processing_seconds": 59.27,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.08,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.07,
+     "total_seconds": 59.39,
+     "processed_count": 59,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 1,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "SHOP DRAWINGS/R1/RDJ183 FA Stamped.pdf",
+       "seconds": 11.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "SHOP DRAWINGS/MRO SHOP DWGS/JAM-SD-FA-001.pdf",
+       "seconds": 10.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/General Drawings/ARCHITECTURAL/PDF/SA-H2-BEST-00302.pdf",
+       "seconds": 9.1,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/General Drawings/ARCHITECTURAL/PDF/SA-H2-BEST-00301.pdf",
+       "seconds": 9.0,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "SHOP DRAWINGS/MRO SHOP DWGS/UPDATE DWGS/MRO UPDATE -4/JAM-SD-FA-001 (LOW).pdf",
+       "seconds": 6.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "SHOP DRAWINGS/AFS Comments.pdf",
+       "seconds": 5.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Inputs/REV-01-10-Dec-24/REV-01-10-Dec-24/REV-01-10-Dec-24/PDF/RDJ 183-RAQ-DWG-IFC-ARC-000019- Office Building.pdf",
+       "seconds": 4.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "SHOP DRAWINGS/MRO SHOP DWGS/UPDATE DWGS/JAM-SD-FA-001 (HIGH).pdf",
+       "seconds": 4.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/General Drawings/MECHANICAL/1.AC/PDF/SA-H2-BEST-AC-00101c.pdf",
+       "seconds": 3.7,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/Proper Drawings/6.FIRE FIGHTING/PDF/SA-H2-BEST-FF-00100f.pdf",
+       "seconds": 3.5,
+       "role": "spec",
+       "result": "processed"
+      }
+     ],
+     "documents": 60,
+     "documents_per_minute": 60.6,
+     "percentiles_ms": {
+      "median": 812,
+      "p90": 4764,
+      "p95": 8972,
+      "p99": 10430,
+      "max": 11684
+     },
+     "stage_ms": {
+      "classification": 12,
+      "content_evidence": 809,
+      "db_write": 105,
+      "deterministic_extract": 440,
+      "hash": 553,
+      "pdf_open": 78,
+      "pdf_text_extract": 16093,
+      "storage_wait": 86,
+      "title_block": 30902
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 1.6,
+      "db_write": 0.2,
+      "deterministic_extract": 0.9,
+      "hash": 1.1,
+      "pdf_open": 0.2,
+      "pdf_text_extract": 32.8,
+      "storage_wait": 0.2,
+      "title_block": 63.0
+     },
+     "events": {
+      "box_cache_hits": 25,
+      "ocr_cache_hits": 37,
+      "ocr_pages_attempted": 31,
+      "page_text_extractions": 177,
+      "page_text_reused": 152,
+      "pages_scanned": 177,
+      "pdf_opens": 60,
+      "read_pdf": 60,
+      "replies_folded": 1
+     },
+     "largest_files": [
+      {
+       "path": "MS FAS/R1/MS FAS SOFTCOPY (TIM AEROSPACE) R1.pdf",
+       "mb": 36.9,
+       "seconds": 0.6,
+       "role": "submittal_form"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Specification/Full spec/MECHANICAL SPECIFICATION.pdf",
+       "mb": 9.3,
+       "seconds": 0.3,
+       "role": "spec"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/PLUMBING/Rain Water Outlets/Specifications/MECHANICAL SPECIFICATION.pdf",
+       "mb": 9.3,
+       "seconds": 0.2,
+       "role": "spec"
+      },
+      {
+       "path": "SHOP DRAWINGS/R1/RDJ183 FA Stamped.pdf",
+       "mb": 9.2,
+       "seconds": 11.7,
+       "role": "document"
+      },
+      {
+       "path": "SHOP DRAWINGS/AFS Comments.pdf",
+       "mb": 5.1,
+       "seconds": 5.8,
+       "role": "document"
+      },
+      {
+       "path": "SHOP DRAWINGS/MRO SHOP DWGS/UPDATE DWGS/MRO UPDATE -4/JAM-SD-FA-001 (LOW).pdf",
+       "mb": 4.7,
+       "seconds": 6.6,
+       "role": "document"
+      },
+      {
+       "path": "SHOP DRAWINGS/MRO SHOP DWGS/JAM-SD-FA-001.pdf",
+       "mb": 3.9,
+       "seconds": 10.4,
+       "role": "document"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/Proper Drawings/6.FIRE FIGHTING/PDF/SA-H2-BEST-FF-00100f.pdf",
+       "mb": 3.9,
+       "seconds": 3.5,
+       "role": "spec"
+      },
+      {
+       "path": "Inputs/AMANA - wetransfer_l-s-zip_2024-08-02_1335/L&S/L&S/Drawing/Proper Drawings/6.FIRE FIGHTING/PDF/SA-H2-BEST-FF-00105.pdf",
+       "mb": 3.7,
+       "seconds": 3.4,
+       "role": "spec"
+      },
+      {
+       "path": "Inputs/REV-01-10-Dec-24/REV-01-10-Dec-24/REV-01-10-Dec-24/PDF/RDJ 183-RAQ-DWG-IFC-ARC-000019- Office Building.pdf",
+       "mb": 3.2,
+       "seconds": 4.8,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 26,
+      "spec": 32,
+      "submittal_form": 2
+     },
+     "ocr_documents": 18,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 60
+    }
+   }
+  },
+  "EP-27474": {
+   "project_id": 7,
+   "seconds": 0.1,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 2,
+    "processed": 2,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:16:24.330557",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.01,
+     "document_processing_seconds": 0.03,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.02,
+     "reconcile_actions_seconds": 0.0,
+     "reconcile_drawings_seconds": 0.01,
+     "total_seconds": 0.07,
+     "processed_count": 2,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-27474 Scan/EP-27474 Design.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-27474 Scan/EP-27474 DRF.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 2,
+     "documents_per_minute": 1622.3,
+     "percentiles_ms": {
+      "median": 25,
+      "p90": 25,
+      "p95": 25,
+      "p99": 25,
+      "max": 25
+     },
+     "stage_ms": {
+      "classification": 0,
+      "content_evidence": 3,
+      "db_write": 2,
+      "deterministic_extract": 1,
+      "hash": 6,
+      "pdf_open": 2,
+      "pdf_text_extract": 3,
+      "storage_wait": 2
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 14.9,
+      "db_write": 8.0,
+      "deterministic_extract": 5.9,
+      "hash": 34.0,
+      "pdf_open": 8.0,
+      "pdf_text_extract": 16.0,
+      "storage_wait": 13.3
+     },
+     "events": {
+      "ocr_cache_hits": 2,
+      "ocr_pages_attempted": 2,
+      "page_text_extractions": 2,
+      "page_text_reused": 4,
+      "pages_scanned": 2,
+      "pdf_opens": 2,
+      "read_pdf": 2
+     },
+     "largest_files": [
+      {
+       "path": "EP-27474 Scan/EP-27474 DRF.pdf",
+       "mb": 0.9,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-27474 Scan/EP-27474 Design.pdf",
+       "mb": 0.5,
+       "seconds": 0.0,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 2
+     },
+     "ocr_documents": 2,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 2
+    }
+   }
+  },
+  "EP-29076": {
+   "project_id": 8,
+   "seconds": 9.7,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 55,
+    "processed": 55,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 1,
+       "revisions": 1,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 16,
+       "revisions": 21,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "L23",
+       "B1",
+       "M1",
+       "L16",
+       "L24",
+       "L44",
+       "L68"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:16:33.994146",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.56,
+     "document_processing_seconds": 9.44,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.08,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.07,
+     "total_seconds": 9.54,
+     "processed_count": 55,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "06- Drawings/01- FA/Fire Alarm/17. 8th Floor Fire Alarm Layout/1. R0/1. Submission/PDF/25H-AAEM-SD-ELEC-FA-8F-016.pdf",
+       "seconds": 1.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-112 - L05/25H-AAEM-SD-ELEC-FA-5F-013.pdf",
+       "seconds": 1.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/25H-AAEM-SD-ELEC-EM-102 - B1/R0/25H-AAEM-SD-ELEC-EM-B1-003( - Copy.pdf",
+       "seconds": 1.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-157 -L 69/25H-AAEM-SD-ELEC-FA-69F-058A.pdf",
+       "seconds": 0.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/01-HVAC/CHW/LAC-653-PLN-GLF-MEC-CW-103.pdf",
+       "seconds": 0.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/25H-AAEM-SD-ELEC-EM-122 - L16/R1/PDF/25H-AAEM-SD-ELEC-EM-16F-023.pdf",
+       "seconds": 0.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/02- IFC/02- PDF/swisstransfer_69ce9fa7-17c4-4f2e-886d-fa8f29725377/LAC-653-PLN-L04-ELV-FA-111.pdf",
+       "seconds": 0.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/25. 17th Floor Emergency Lighting Layout/3. R2/1. Submission/25H-AAEM-SD-ELEC-EM-17F-024-02.pdf",
+       "seconds": 0.7,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/07_Acoustics/LAC-653-PPS-ZZZ-AC-134-T  42ND, & 60TH FLOOR PLAN ACOUSTIC LAYOUT.pdf",
+       "seconds": 0.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/32. 25th Floor Emergency Lighting Layout (Mechanical Floor)/1. R0/1. Submission/PDF/25H-AAEM-SD--ELEC-EM-25F-031.pdf",
+       "seconds": 0.6,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 55,
+     "documents_per_minute": 345.7,
+     "percentiles_ms": {
+      "median": 257,
+      "p90": 783,
+      "p95": 944,
+      "p99": 1005,
+      "max": 1266
+     },
+     "stage_ms": {
+      "classification": 7,
+      "content_evidence": 322,
+      "db_write": 97,
+      "deterministic_extract": 213,
+      "hash": 556,
+      "pdf_open": 67,
+      "pdf_text_extract": 3643,
+      "storage_wait": 116,
+      "title_block": 3275
+     },
+     "stage_share_pct": {
+      "classification": 0.1,
+      "content_evidence": 3.9,
+      "db_write": 1.2,
+      "deterministic_extract": 2.6,
+      "hash": 6.7,
+      "pdf_open": 0.8,
+      "pdf_text_extract": 43.9,
+      "storage_wait": 1.4,
+      "title_block": 39.5
+     },
+     "events": {
+      "box_cache_hits": 4,
+      "ocr_band_retries": 2,
+      "ocr_cache_hits": 67,
+      "ocr_pages_attempted": 35,
+      "ocr_pages_used": 18,
+      "page_text_extractions": 129,
+      "page_text_reused": 131,
+      "pages_scanned": 129,
+      "pdf_opens": 53,
+      "read_pdf": 53
+     },
+     "largest_files": [
+      {
+       "path": "05- MS/01- FA/02- R1/data sheet_pagenumber.pdf",
+       "mb": 40.4,
+       "seconds": 0.6,
+       "role": "submittal_form"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+       "mb": 17.8,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/Fire Alarm/25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf",
+       "mb": 14.1,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/Fire Alarm/31. 24th Floor Fire Alarm Layout/25H-S202-NCC-SD-MEP-ELE-FA-031-R00 - Code B.pdf",
+       "mb": 12.2,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-100 - LP/R03/New folder/25H-S202-NCC-SD-MEP-ELE-FA-001-R02 - Code C (1).pdf",
+       "mb": 9.1,
+       "seconds": 0.2,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/30. 23rd Floor Emergency Lighting Layout/1. R0/2. Commented/25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf",
+       "mb": 6.1,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/48 48th Floor Emergency Lighting Layout (Partial Mechanical Floor)/1. R0/2. Commented/25H-AAEM-SD-EMEC-EM-48F -047.pdf",
+       "mb": 5.9,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-058-R00 - Code B/25H-AAEM-SD-ELEC-FA-69F-058A.pdf",
+       "mb": 5.8,
+       "seconds": 0.1,
+       "role": "submittal_form"
+      },
+      {
+       "path": "06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-152 -L 64/R1/25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf",
+       "mb": 5.8,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/02_BOQ/01_Tender Document/Volume - III - Bills of Quantities.pdf",
+       "mb": 2.6,
+       "seconds": 0.2,
+       "role": "spec"
+      }
+     ],
+     "roles": {
+      "document": 37,
+      "spec": 11,
+      "submittal_form": 5,
+      "transmittal": 2
+     },
+     "ocr_documents": 21,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 55
+    }
+   }
+  },
+  "EP-30088": {
+   "project_id": 9,
+   "seconds": 33.4,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 41,
+    "processed": 40,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 5,
+       "revisions": 5,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 3,
+       "revisions": 4,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "RF",
+       "L3",
+       "L4",
+       "L6",
+       "L10",
+       "L12",
+       "B2",
+       "HC",
+       "L1"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:17:07.372865",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.83,
+     "document_processing_seconds": 33.18,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.06,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.04,
+     "total_seconds": 33.26,
+     "processed_count": 40,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 1,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "seconds": 9.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/2. AUTHORITY DOCUMENTS/4. AUTHORITY AND NOCs/DCD Authority Documents for SPM/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "seconds": 9.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/CHILLED WATER/PDF/CHILLED WATER LAYOUTS.pdf",
+       "seconds": 7.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/VENTILATION/PDF/VENTILATION LAYOUT.pdf",
+       "seconds": 7.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf",
+       "seconds": 4.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0086-00-COMMENTED-C.pdf",
+       "seconds": 2.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "seconds": 1.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "seconds": 1.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/4. MATERIAL SUBMITTAL/FIRE ALARM/ICC-DLRC-SPM-MAR-MEP-0056-00-COMMENTED-B.pdf",
+       "seconds": 1.3,
+       "role": "document",
+       "result": "partial"
+      },
+      {
+       "path": "10. SD/recieved/Fire alarm layout/Received/R0/R0/ICC-DLRC-SPM-SD-MEP-0040-00-BASEMENT-02 FLOOR PLAN FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-0040-00.pdf",
+       "seconds": 1.3,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 41,
+     "documents_per_minute": 74.0,
+     "percentiles_ms": {
+      "median": 892,
+      "p90": 4490,
+      "p95": 7257,
+      "p99": 9764,
+      "max": 9764
+     },
+     "stage_ms": {
+      "classification": 6,
+      "content_evidence": 381,
+      "db_write": 64,
+      "deterministic_extract": 244,
+      "hash": 830,
+      "ocr_engine": 758,
+      "ocr_render": 944,
+      "pdf_open": 132,
+      "pdf_text_extract": 8934,
+      "storage_wait": 49,
+      "title_block": 12942
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 1.5,
+      "db_write": 0.3,
+      "deterministic_extract": 1.0,
+      "hash": 3.3,
+      "ocr_engine": 3.0,
+      "ocr_render": 3.7,
+      "pdf_open": 0.5,
+      "pdf_text_extract": 35.3,
+      "storage_wait": 0.2,
+      "title_block": 51.2
+     },
+     "events": {
+      "box_cache_hits": 14,
+      "ocr_cache_hits": 82,
+      "ocr_pages_attempted": 36,
+      "ocr_pages_used": 10,
+      "ocr_regions": 7,
+      "ocr_runs": 1,
+      "page_text_extractions": 159,
+      "page_text_reused": 117,
+      "pages_scanned": 159,
+      "pdf_opens": 40,
+      "read_pdf": 40
+     },
+     "largest_files": [
+      {
+       "path": "07. PQ Samana & IVY Gardens/PQ -R1/ICC-DLRC-SIG2-PQ-MEP-0005-00 -  PQ - Al ARABIA FOR SAFETY AND SECURITY LLC.pdf",
+       "mb": 124.7,
+       "seconds": 1.1,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/4. MATERIAL SUBMITTAL/FIRE ALARM/ICC-DLRC-SPM-MAR-MEP-0056-00-COMMENTED-B.pdf",
+       "mb": 37.7,
+       "seconds": 1.3,
+       "role": "document"
+      },
+      {
+       "path": "06. MS/FA/Revised/PDF/Product Catalog.pdf",
+       "mb": 14.2,
+       "seconds": 1.3,
+       "role": "submittal_form"
+      },
+      {
+       "path": "04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "mb": 11.5,
+       "seconds": 9.8,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/2. AUTHORITY DOCUMENTS/4. AUTHORITY AND NOCs/DCD Authority Documents for SPM/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+       "mb": 11.5,
+       "seconds": 9.3,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/VENTILATION/PDF/VENTILATION LAYOUT.pdf",
+       "mb": 11.4,
+       "seconds": 7.2,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/CHILLED WATER/PDF/CHILLED WATER LAYOUTS.pdf",
+       "mb": 8.0,
+       "seconds": 7.3,
+       "role": "document"
+      },
+      {
+       "path": "04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "mb": 4.1,
+       "seconds": 1.9,
+       "role": "document"
+      },
+      {
+       "path": "10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+       "mb": 4.1,
+       "seconds": 1.9,
+       "role": "document"
+      },
+      {
+       "path": "03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf",
+       "mb": 3.3,
+       "seconds": 4.5,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 37,
+      "spec": 2,
+      "submittal_form": 1,
+      "transmittal": 1
+     },
+     "ocr_documents": 16,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 41
+    }
+   }
+  },
+  "EP-30784": {
+   "project_id": 10,
+   "seconds": 29.7,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 41,
+    "processed": 40,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "ELS": {
+       "drawings": 6,
+       "revisions": 7,
+       "candidates": 0,
+       "missing": 0
+      },
+      "FAS": {
+       "drawings": 7,
+       "revisions": 10,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "P1",
+       "P2",
+       "L2",
+       "L41",
+       "L57",
+       "L58",
+       "B2",
+       "B3",
+       "B4",
+       "GF",
+       "L1",
+       "L52",
+       "L53"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:17:37.051821",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.53,
+     "document_processing_seconds": 29.48,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.07,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.06,
+     "total_seconds": 29.58,
+     "processed_count": 40,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 1,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045SMOKECONTROLSYSTEMREVISEDPART02.pdf",
+       "seconds": 13.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf",
+       "seconds": 7.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf",
+       "seconds": 6.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 3.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/03- RCP/OneDrive_1_9-16-2026/BBY006-GEC-SDW-ID-FT-T02-L52-L53-012220.pdf",
+       "seconds": 2.3,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf",
+       "seconds": 2.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P02-010030 Shop Drawing for Podium-2 Floor Plan Emergency Lighting Layout.pdf",
+       "seconds": 2.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/R00/21. L58(TYP 3A) Floor Plan/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf",
+       "seconds": 2.0,
+       "role": "spec",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 1.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-BSM-B02-010027 Shop Drawing for Basement-2 Floor Plan - Fire Alarm Layout.pdf",
+       "seconds": 1.9,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 41,
+     "documents_per_minute": 83.2,
+     "percentiles_ms": {
+      "median": 705,
+      "p90": 2278,
+      "p95": 6922,
+      "p99": 13063,
+      "max": 13063
+     },
+     "stage_ms": {
+      "classification": 6,
+      "content_evidence": 369,
+      "db_write": 51,
+      "deterministic_extract": 304,
+      "hash": 534,
+      "pdf_open": 61,
+      "pdf_text_extract": 11546,
+      "storage_wait": 5,
+      "title_block": 12652
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 1.4,
+      "db_write": 0.2,
+      "deterministic_extract": 1.2,
+      "hash": 2.1,
+      "pdf_open": 0.2,
+      "pdf_text_extract": 45.2,
+      "storage_wait": 0.0,
+      "title_block": 49.6
+     },
+     "events": {
+      "box_cache_hits": 31,
+      "ocr_band_retries": 1,
+      "ocr_cache_hits": 76,
+      "ocr_pages_attempted": 32,
+      "ocr_pages_used": 13,
+      "page_text_extractions": 154,
+      "page_text_reused": 108,
+      "pages_scanned": 154,
+      "pdf_opens": 39,
+      "read_pdf": 39
+     },
+     "largest_files": [
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045SMOKECONTROLSYSTEMREVISEDPART02.pdf",
+       "mb": 34.7,
+       "seconds": 13.1,
+       "role": "document"
+      },
+      {
+       "path": "02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf",
+       "mb": 28.8,
+       "seconds": 6.9,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf",
+       "mb": 14.2,
+       "seconds": 7.6,
+       "role": "document"
+      },
+      {
+       "path": "03- MS/03- FRC/EP-30784 FRC MS R0 FIREGUARD.pdf",
+       "mb": 9.5,
+       "seconds": 0.5,
+       "role": "document"
+      },
+      {
+       "path": "03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+       "mb": 9.2,
+       "seconds": 0.5,
+       "role": "submittal_form"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf",
+       "mb": 8.0,
+       "seconds": 2.1,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P02-010030 Shop Drawing for Podium-2 Floor Plan Emergency Lighting Layout.pdf",
+       "mb": 7.0,
+       "seconds": 2.1,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 6.8,
+       "seconds": 1.9,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 5.1,
+       "seconds": 3.2,
+       "role": "document"
+      },
+      {
+       "path": "04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-BSM-B02-010027 Shop Drawing for Basement-2 Floor Plan - Fire Alarm Layout.pdf",
+       "mb": 4.4,
+       "seconds": 1.9,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 22,
+      "spec": 15,
+      "submittal_form": 2,
+      "transmittal": 2
+     },
+     "ocr_documents": 18,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 41
+    }
+   }
+  }
+ },
+ "tables": {
+  "project_documents": 387,
+  "project_submittals": 0,
+  "project_shop_drawings": 68,
+  "background_jobs": 20,
+  "project_actions": 0,
+  "ai_usage": 0,
+  "document_readings": 0
+ },
+ "rows": 387,
+ "ai_usage_rows": 0
+}

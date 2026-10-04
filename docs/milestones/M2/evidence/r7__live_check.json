@@ -1,0 +1,88 @@
+{
+ "at_local": "2026-09-28T21:57:02",
+ "mode": "read-only (sqlite mode=ro); no process started, stopped or called",
+ "processes": {
+  "listener": {
+   "LocalAddress": "127.0.0.1",
+   "LocalPort": 8000,
+   "OwningProcess": 22592
+  },
+  "processes": [
+   {
+    "ProcessId": 21532,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "venv\\Scripts\\python  -m uvicorn app.main:app --reload --reload-dir app --timeout-graceful-shutdown 3 --port 8000"
+   },
+   {
+    "ProcessId": 22592,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "\"C:\\Users\\moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m uvicorn app.main:app --reload --reload-dir app --timeout-graceful-shutdown 3 --port 8000"
+   },
+   {
+    "ProcessId": 25396,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "venv\\Scripts\\python  -m app.workers.document_worker"
+   },
+   {
+    "ProcessId": 7328,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "\"C:\\Users\\moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m app.workers.document_worker"
+   },
+   {
+    "ProcessId": 21204,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "venv\\Scripts\\python  -m app.workers.ifc_worker"
+   },
+   {
+    "ProcessId": 29180,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "venv\\Scripts\\python  -m app.workers.sync_worker"
+   },
+   {
+    "ProcessId": 14516,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "\"C:\\Users\\moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m app.workers.ifc_worker"
+   },
+   {
+    "ProcessId": 27248,
+    "created": "2026-09-28T09:10:15",
+    "CommandLine": "\"C:\\Users\\moham\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -m app.workers.sync_worker"
+   }
+  ]
+ },
+ "live_db": {
+  "documents": 890,
+  "parser_versions": {
+   "none": 9,
+   "None": 881
+  },
+  "last_processed": "2026-09-27 14:58:09.579508",
+  "newest_jobs": [
+   [
+    27,
+    "ai_verify",
+    "succeeded",
+    "2026-09-27 14:54:15.609921"
+   ],
+   [
+    26,
+    "boq_read",
+    "succeeded",
+    "2026-09-27 14:54:15.374982"
+   ],
+   [
+    25,
+    "process_documents",
+    "succeeded",
+    "2026-09-27 14:46:13.596564"
+   ]
+  ],
+  "last_login": [
+   "admin@ep-platform.com",
+   "2026-09-28 15:09:12.732592"
+  ],
+  "mtime_main": "2026-09-28T21:36:16",
+  "mtime_wal": "2026-09-28T21:57:00"
+ },
+ "symbol_library_mtime": "2026-09-28T21:23:20"
+}

@@ -1,0 +1,2235 @@
+{
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "register_evaluator": "m2-pilot-eval-2026-09-29.4",
+ "ai_context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+  ]
+ },
+ "documents": [
+  {
+   "doc": "EP-16830/synth/rot270-sheet.pdf",
+   "ep": "16830",
+   "cohort": "synthetic",
+   "stratum": "synthetic",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-1",
+      "printed_revision": "02",
+      "decision": "approved as noted",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "missed"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-1",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-1",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-1",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/synth/long-6pages.pdf",
+   "ep": "16830",
+   "cohort": "synthetic",
+   "stratum": "synthetic",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-11",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 2,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-12",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 3,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-13",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 4,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-14",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 5,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-15",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 6,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-16",
+      "printed_revision": "02",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-11",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-11",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-11",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-11",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-12",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-12",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-12",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-12",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:3",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-13",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-13",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:4",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:4",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-13",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-13",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "obs:5",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-14",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-14",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:6",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:6",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-14",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-14",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "obs:7",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-15",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-15",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:8",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:8",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-15",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-15",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "parser",
+       "group": "obs:9",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-16",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-16",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:10",
+       "layer": "raw",
+       "expected": 5
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:10",
+       "layer": "raw",
+       "expected": 5
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-16",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-16",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "parser",
+       "group": "obs:11",
+       "layer": "raw",
+       "expected": 5
+      }
+     ],
+     "association": {
+      "identity": 12
+     },
+     "precision": {
+      "identity": {
+       "correct": 6,
+       "redundant": 6
+      },
+      "revision": {
+       "correct": 6,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 6
+      },
+      "revision:observed": {
+       "correct": 6
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 6
+      },
+      "revision": {
+       "recovered_clean": 6
+      },
+      "decision": {
+       "tn": 6
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-11",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-12",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-13",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-14",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 5,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-15",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 6,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-16",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-11",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-11",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-11",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-11",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-12",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-12",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-12",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-12",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:3",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-13",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-13",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:4",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:4",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-13",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-13",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "obs:5",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-14",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-14",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:6",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:6",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-14",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-14",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "obs:7",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-15",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-15",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:8",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:8",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-15",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-15",
+       "outcome": "correct",
+       "page": 5,
+       "reader": "parser",
+       "group": "obs:9",
+       "layer": "raw",
+       "expected": 4
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-16",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-16",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:10",
+       "layer": "raw",
+       "expected": 5
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:10",
+       "layer": "raw",
+       "expected": 5
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-16",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-16",
+       "outcome": "correct",
+       "page": 6,
+       "reader": "parser",
+       "group": "obs:11",
+       "layer": "raw",
+       "expected": 5
+      }
+     ],
+     "association": {
+      "identity": 12
+     },
+     "precision": {
+      "identity": {
+       "correct": 6,
+       "redundant": 6
+      },
+      "revision": {
+       "correct": 6,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 6
+      },
+      "revision:observed": {
+       "correct": 6
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 6
+      },
+      "revision": {
+       "recovered_clean": 6
+      },
+      "decision": {
+       "tn": 6
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-11",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-12",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-13",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-14",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 5,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-15",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 6,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-16",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 6
+      },
+      "revision": {
+       "missed": 6
+      },
+      "decision": {
+       "tn": 6
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-11",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-12",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-13",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-14",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 5,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-15",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      },
+      {
+       "page": 6,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-16",
+        "printed_revision": "02",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/synth/a4-letter.pdf",
+   "ep": "17428",
+   "cohort": "synthetic",
+   "stratum": "synthetic",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "TR-001",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TR-001",
+       "state": "observed",
+       "how": "identity",
+       "truth": "TR-001",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TR-001",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TR-001",
+       "state": "observed",
+       "how": "identity",
+       "truth": "TR-001",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TR-001",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TR-001",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/synth/stamp-outside.pdf",
+   "ep": "17428",
+   "cohort": "synthetic",
+   "stratum": "synthetic",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "X-SD-7",
+      "printed_revision": "02",
+      "decision": "approved as noted",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "missed"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-7",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-7",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-7",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-7",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-7",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "X-SD-7",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-7",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R2",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "X-SD-7",
+       "state": "observed",
+       "how": "identity",
+       "truth": "X-SD-7",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-7",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "X-SD-7",
+        "printed_revision": "02",
+        "decision": "approved as noted"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/synth/note.docx",
+   "ep": "17428",
+   "cohort": "synthetic",
+   "stratum": "synthetic",
+   "extension": ".docx",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "not_run",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "TR-002",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "TR-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "TR-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "TR-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  }
+ ],
+ "totals": {
+  "register": {
+   "execution": {
+    "complete": 4,
+    "not_run": 1
+   },
+   "records": {
+    "missing": 9,
+    "unregistered": 1
+   },
+   "emissions": {},
+   "redundant_copies": 0,
+   "conflicting_emission_sets": 0,
+   "unvalidated_emitted_records": 0,
+   "register": {
+    "reference": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 9,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 9,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 9,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 9,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 7,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 2,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "raw": {
+    "identity": {
+     "tp": 9,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 9,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.9,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 8,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 8,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 8,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 2,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "critical": [],
+   "evidence": {
+    "identity": {
+     "tp": 9,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 9,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.9,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 8,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 8,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 8,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 2,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "evidence_introduced_errors": [],
+   "ai": {
+    "documents": 4,
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {},
+    "page_outcomes": {}
+   }
+  },
+  "raw": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 9,
+      "redundant": 8
+     },
+     "recovery_counts": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "asserted_distinct": 9,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.9,
+     "clean_recovery": 0.9,
+     "evidence_recovery_incl_held": 0.9
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 8,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "asserted_distinct": 8,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.8,
+     "clean_recovery": 0.8,
+     "evidence_recovery_incl_held": 0.8
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 2,
+      "tn": 8
+     },
+     "asserted_distinct": 0,
+     "readable": 2,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {
+    "identity": 17
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "identity:observed": {
+     "correct": 9
+    },
+    "revision:observed": {
+     "correct": 8
+    }
+   }
+  },
+  "evidence": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 9,
+      "redundant": 8
+     },
+     "recovery_counts": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "asserted_distinct": 9,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.9,
+     "clean_recovery": 0.9,
+     "evidence_recovery_incl_held": 0.9
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 8,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "asserted_distinct": 8,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.8,
+     "clean_recovery": 0.8,
+     "evidence_recovery_incl_held": 0.8
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 2,
+      "tn": 8
+     },
+     "asserted_distinct": 0,
+     "readable": 2,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {
+    "identity": 17
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "identity:observed": {
+     "correct": 9
+    },
+    "revision:observed": {
+     "correct": 8
+    }
+   }
+  },
+  "ai": {
+   "fields": {
+    "identity": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 10
+     },
+     "asserted_distinct": 0,
+     "readable": 10,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    },
+    "revision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 10
+     },
+     "asserted_distinct": 0,
+     "readable": 10,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 2,
+      "tn": 8
+     },
+     "asserted_distinct": 0,
+     "readable": 2,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {},
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {}
+  },
+  "introduced_ai_errors": [],
+  "ai_evidence_states": {
+   "pending": 4,
+   "none": 1
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "declared_at_local": "2026-09-28 (before any holdout document was opened, staged or read)",
+ "candidate": "C (frozen: CANDIDATE-C-FREEZE.json; parser parse-2026-09-28.6, titleblock-1, extractor 2026-09-28.2)",
+ "authority": "the platform owner's standing authorization for diverse real-project selection (the pilot task); read-only use of the OneDrive originals, copies staged to C:/t/holdout; no live database, service, endpoint or model",
+ "projects": "SELECTION.json: seed 20260929, all 1026 EP folders under the archive root shuffled, the first 4 eligible from 4 contractors, none a pilot project or pilot contractor",
+ "strata_rules_by_name_only": {
+  "word_transmittal": ".doc/.docx whose folder or name says Transmittal",
+  "scanned_ack": "PDF whose name says Ack (a scanned, signed acknowledgement of a transmittal)",
+  "shop_drawing_sheet": "PDF under a 'Shop Drawings' / 'As Built Dwg' / 'DWG' folder",
+  "approval_or_comments": "PDF whose name or folder says Approval / Comments / App, or an MTS- consultant submittal",
+  "negative": "PDF under an MS / catalogue / certificate / calculation / commercial folder that is not a design sheet, quotation of record or one of the above (datasheets, certificates, DRF, quotations, cost sheets)",
+  "boq_design_sheet": "PDF whose name says Design (a Design Sheet)"
+ },
+ "quota_per_project": {"word_transmittal": 2, "scanned_ack": 1, "shop_drawing_sheet": 3, "approval_or_comments": 2, "negative": 2, "boq_design_sheet": 1},
+ "sampling": "within each project and stratum, sorted relative paths shuffled with random.Random(seed + int(ep)); the first quota taken; files over 60 MB are skipped (named, not silently)",
+ "overlap_checks": "sha256 of every selected file against every frozen-pilot sha256 (documents and BOQ sheets); contractor/template families named; the company's own forms (Al Arabia transmittals, method-statement covers) are a shared template across all projects and are reported as such",
+ "labelling": "every page of a selected document up to the reader's page budget (12) is labelled from renders of the staged original before any reader output exists; a page not labelled is 'unvalidated'; BOQ sheets labelled row by row (heading / line / component) before the deterministic reader runs",
+ "metrics": "evaluator m2-pilot-eval-2026-09-28.3 and m2-boq-eval-2026-09-28.2, unchanged: accepted precision, readable recovery, negative specificity, held evidence, record accounting, critical list; by project / profile / format / stratum",
+ "targets_unchanged": ">= 98 % precision among auto-accepted critical fields (reference, revision, decision); >= 90 % recovery of clearly readable applicable critical fields; zero unresolved critical false acceptance",
+ "profiles": "default and promoted, identical staged source-hash sets, separate sandbox databases (C:/t/holdout/db/<profile>.db) and a separate page cache",
+ "no_tuning": "no reader or evaluator change after this declaration is applied to this holdout; any failure is reported as found"
+}

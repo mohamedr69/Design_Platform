@@ -1,0 +1,738 @@
+{
+ "mode": "OFFLINE replay of stored outputs (no model call)",
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "rows_sha256": {
+  "A": "05e6531a23d051e8a536f321d03547072bbfee246002dc0715074c8891a1f803",
+  "S": "838b9f0f3a995bf78e5318a0b95b7142942de3d91551da419cb054cd16032122",
+  "G": "26cd378edf6f366c6f6bc2d3d727ffe3cea50e4fb16dacc46e0893915333109e",
+  "T": "cc9e526cd02885f58691acffb30a4a3e50e87271b3c835a1100d8bb61c3d18a0"
+ },
+ "labels_sha256": {
+  "v1": {
+   "PILOT-REGISTER-LABELS.json": "e4ec4c3f65a075365e13423f2c3d6fcb942944d34f057dcd88e68577157ad75a",
+   "PILOT-PAGE-LABELS.json": "e543132254815a993b9816d77ebd0c8b24e33cb9cd2cd619963e16f09643707c",
+   "PILOT-UNCERTAINTY-AND-EXPOSURE.json": "0f7ffe9f95886c7fcb80845c53ef8cf2fdfdee372f2471224a0671c98b0dbedb"
+  },
+  "v2": {
+   "PILOT-REGISTER-LABELS.v2.json": "078fe52838e1ebeca5372105f7edc8294196b3dca8fa8cb0f1532005f97c8bc5",
+   "PILOT-PAGE-LABELS.v2.json": "b8fa41e7ece67efc7592426cf9dac0537f6cf6ca30ef8e09532cb53a3b502724",
+   "PILOT-UNCERTAINTY-AND-EXPOSURE.v2.json": "b1e5da5ba7b57ee6038d238e5b8efebc0593fb49b3b21718bc6b23d0925b0a36"
+  }
+ },
+ "versions": {
+  "v1": {
+   "unresolved_docs": [
+    "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+    "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf"
+   ],
+   "arms": {
+    "A": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 5
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 1
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "missed": 10
+       },
+       "precision": {}
+      },
+      "revision": {
+       "recovery": {
+        "missed": 8,
+        "tn": 2
+       },
+       "precision": {}
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "S": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 5,
+        "held_only": 3,
+        "missed": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 2,
+        "held_only": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 6,
+        "missed": 4
+       },
+       "precision": {}
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 2,
+        "missed": 3,
+        "held_only": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 2,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "G": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 3,
+        "held_only": 1
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 1,
+        "held_only": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 3,
+        "missed": 6,
+        "recovered_clean": 1
+       },
+       "precision": {
+        "correct": 1,
+        "redundant": 0
+       }
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 3,
+        "missed": 2,
+        "held_only": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 3,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "T": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 4
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 2,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 1
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 1,
+        "missed": 7,
+        "recovered_clean": 2
+       },
+       "precision": {
+        "correct": 2,
+        "redundant": 0
+       }
+      },
+      "revision": {
+       "recovery": {
+        "held_only": 1,
+        "missed": 6,
+        "recovered_clean": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 1,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    }
+   },
+   "G_to_T_matched": [
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "field": "identity",
+     "label_status": "unresolved",
+     "G": {
+      "evidence": {
+       "missed": 1
+      },
+      "ai": {
+       "missed": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "field": "revision",
+     "label_status": "unresolved",
+     "G": {
+      "evidence": {
+       "held_only": 1
+      },
+      "ai": {
+       "held_only": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf",
+     "field": "identity",
+     "label_status": "resolved",
+     "G": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "held_only": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    }
+   ]
+  },
+  "v2": {
+   "unresolved_docs": [
+    "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf"
+   ],
+   "arms": {
+    "A": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 5
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 1
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "missed": 10
+       },
+       "precision": {}
+      },
+      "revision": {
+       "recovery": {
+        "missed": 8,
+        "tn": 2
+       },
+       "precision": {}
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "S": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 5,
+        "held_only": 3,
+        "missed": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 5,
+        "missed": 2,
+        "held_only": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 5,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 5
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 6,
+        "missed": 4
+       },
+       "precision": {}
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 2,
+        "missed": 3,
+        "held_only": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 2,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "G": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 3,
+        "held_only": 1
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 2
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 1,
+        "held_only": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 3,
+        "missed": 6,
+        "recovered_clean": 1
+       },
+       "precision": {
+        "correct": 1,
+        "redundant": 0
+       }
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 3,
+        "missed": 2,
+        "held_only": 3,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 3,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    },
+    "T": {
+     "evidence": {
+      "identity": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 4
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 3
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "revision": {
+       "recovery": {
+        "recovered_clean": 6,
+        "missed": 2,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 6,
+        "redundant": 1
+       },
+       "accepted_precision": 1.0,
+       "asserted_distinct": 6
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {},
+       "accepted_precision": null,
+       "asserted_distinct": 0
+      }
+     },
+     "ai": {
+      "identity": {
+       "recovery": {
+        "held_only": 1,
+        "missed": 7,
+        "recovered_clean": 2
+       },
+       "precision": {
+        "correct": 2,
+        "redundant": 0
+       }
+      },
+      "revision": {
+       "recovery": {
+        "held_only": 1,
+        "missed": 6,
+        "recovered_clean": 1,
+        "tn": 2
+       },
+       "precision": {
+        "correct": 1,
+        "redundant": 0
+       }
+      },
+      "decision": {
+       "recovery": {
+        "tn": 9,
+        "missed": 1
+       },
+       "precision": {}
+      }
+     },
+     "critical_resolved": [],
+     "critical_unresolved": []
+    }
+   },
+   "G_to_T_matched": [
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "field": "identity",
+     "label_status": "resolved",
+     "G": {
+      "evidence": {
+       "missed": 1
+      },
+      "ai": {
+       "missed": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+     "field": "revision",
+     "label_status": "resolved",
+     "G": {
+      "evidence": {
+       "held_only": 1
+      },
+      "ai": {
+       "held_only": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    },
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf",
+     "field": "identity",
+     "label_status": "resolved",
+     "G": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "held_only": 1
+      }
+     },
+     "T": {
+      "evidence": {
+       "recovered_clean": 1
+      },
+      "ai": {
+       "recovered_clean": 1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "delta_v1_to_v2": {
+  "resolved_status_changed": [
+   "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf"
+  ],
+  "scores_changed": {
+   "A": false,
+   "S": false,
+   "G": false,
+   "T": false
+  }
+ }
+}

@@ -1,0 +1,70 @@
+{
+ "13eb73c (before M1/M2 commit)": {
+  "test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       sqlite3.IntegrityError: FOREIGN KEY constraint failed | E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed | E       [SQL:  | E       DROP TABLE users]"
+  },
+  "test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...} | E          | E         Extra items in the left set: | E         '3-SDDC2'"
+  },
+  "test_the_page_counts_submittals_by_their_latest_revision": {
+   "result": "passed",
+   "rc": 0,
+   "message": ""
+  }
+ },
+ "ed7d221 (M1/M2 + File Sync V2 + BOQ V2 + Classification V2)": {
+  "test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       sqlite3.IntegrityError: FOREIGN KEY constraint failed | E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed | E       [SQL:  | E       DROP TABLE users]"
+  },
+  "test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...} | E          | E         Extra items in the left set: | E         '3-SDDC2'"
+  },
+  "test_the_page_counts_submittals_by_their_latest_revision": {
+   "result": "passed",
+   "rc": 0,
+   "message": ""
+  }
+ },
+ "2221b43 (Review 01-03 committed)": {
+  "test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       sqlite3.IntegrityError: FOREIGN KEY constraint failed | E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed | E       [SQL:  | E       DROP TABLE users]"
+  },
+  "test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...} | E          | E         Extra items in the left set: | E         '3-SSDC2'"
+  },
+  "test_the_page_counts_submittals_by_their_latest_revision": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       assert 0 == 2 | E        +  where 0 = len([])"
+  }
+ },
+ "working tree (R4 + pilot fixes)": {
+  "test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       sqlite3.IntegrityError: FOREIGN KEY constraint failed | E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed | E       [SQL:  | E       DROP TABLE users]"
+  },
+  "test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...} | E          | E         Extra items in the left set: | E         '3-SDDC2'"
+  },
+  "test_the_page_counts_submittals_by_their_latest_revision": {
+   "result": "failed",
+   "rc": 1,
+   "message": "E       assert 0 == 2 | E        +  where 0 = len([])"
+  }
+ }
+}

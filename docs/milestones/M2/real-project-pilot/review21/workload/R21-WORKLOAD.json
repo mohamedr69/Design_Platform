@@ -1,0 +1,1573 @@
+{
+ "stage_files": 27,
+ "pdf_documents": 26,
+ "pages_total": 96,
+ "pages_in_scope": 42,
+ "pages_beyond_scope": 54,
+ "assumptions": {
+  "expected_reads_per_triggered_page": {
+   "discovery": 1.0,
+   "read_identity": 0.85,
+   "read_revision": 0.8,
+   "read_decision": 0.15,
+   "targeted": 0.6,
+   "escalation": 0.0
+  },
+  "observed_rates": {
+   "discover_page": {
+    "input_mean": 26492,
+    "input_p90": 55102,
+    "output_mean": 4611,
+    "latency_p50_ms": 38990
+   },
+   "discover_region": {
+    "input_mean": 13891,
+    "input_p90": 25963,
+    "output_mean": 3502,
+    "latency_p50_ms": 35860
+   },
+   "read_identity": {
+    "input_mean": 7841,
+    "input_p90": 10732,
+    "output_mean": 414,
+    "latency_p50_ms": 7481
+   },
+   "read_revision": {
+    "input_mean": 6097,
+    "input_p90": 7569,
+    "output_mean": 235,
+    "latency_p50_ms": 6143
+   },
+   "read_decision": {
+    "input_mean": 6239,
+    "input_p90": 6239,
+    "output_mean": 362,
+    "latency_p50_ms": 7944
+   },
+   "read_field_context": {
+    "input_mean": 6703,
+    "input_p90": 7507,
+    "output_mean": 316,
+    "latency_p50_ms": 6936
+   },
+   "read_submittal_form": {
+    "input_mean": 20579,
+    "input_p90": 26121,
+    "output_mean": 1907,
+    "latency_p50_ms": 24635
+   }
+  },
+  "trigger_rate_note": "EV1 selects pages with form / title-block cues and no deterministic identity, plus a seeded 20 % audit; the expected table assumes every in-scope page is triggered (conservative)"
+ },
+ "per_document": [
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+   "ep": "30549",
+   "role": "primary:screened_off_title_block",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "text",
+     true
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+   "ep": "27421",
+   "role": "primary:screened_off_title_block",
+   "pages_in_scope": 2,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ],
+    [
+     2,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 5.6,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 77941,
+     "upper_bound_input_tokens": 217524,
+     "expected_output_tokens": 10520
+    },
+    "L2": {
+     "expected_requests": 5.6,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 77941,
+     "upper_bound_input_tokens": 217524,
+     "expected_output_tokens": 10520
+    },
+    "L3": {
+     "expected_requests": 6.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 85984,
+     "upper_bound_input_tokens": 217524,
+     "expected_output_tokens": 10899
+    },
+    "L4": {
+     "expected_requests": 6.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 85984,
+     "upper_bound_input_tokens": 217524,
+     "expected_output_tokens": 10899
+    }
+   }
+  },
+  {
+   "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+   "ep": "28745",
+   "role": "primary:screened_off_title_block",
+   "pages_in_scope": 4,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ],
+    [
+     2,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     3,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     4,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L2": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L3": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    },
+    "L4": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    }
+   }
+  },
+  {
+   "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+   "ep": "23091",
+   "role": "primary:screened_off_title_block",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+   "ep": "26208",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+   "ep": "30549",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     90,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+   "ep": "26208",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+   "ep": "27421",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+   "ep": "23323",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+   "ep": "30549",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     90,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+   "ep": "27421",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+   "ep": "17428",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     90,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+   "ep": "17428",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+   "ep": "23323",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+   "ep": "17428",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "drawing_sheet",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 26369,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 30391,
+     "upper_bound_input_tokens": 144015,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+   "ep": "23323",
+   "role": "primary",
+   "pages_in_scope": 4,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 3,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     270,
+     "text",
+     false
+    ],
+    [
+     2,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ],
+    [
+     3,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ],
+    [
+     4,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L2": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 118078,
+     "upper_bound_input_tokens": 218847,
+     "expected_output_tokens": 21040
+    },
+    "L3": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    },
+    "L4": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 134165,
+     "upper_bound_input_tokens": 218847,
+     "expected_output_tokens": 21798
+    }
+   }
+  },
+  {
+   "doc": "EP-23091/O&M/EM/Content.pdf",
+   "ep": "23091",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+   "ep": "28745",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "ep": "26208",
+   "role": "primary",
+   "pages_in_scope": 4,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 1,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     270,
+     "scan_like",
+     false
+    ],
+    [
+     2,
+     "a3_a4",
+     270,
+     "scan_like",
+     false
+    ],
+    [
+     3,
+     "a3_a4",
+     270,
+     "scan_like",
+     false
+    ],
+    [
+     4,
+     "drawing_sheet",
+     270,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L2": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 143280,
+     "upper_bound_input_tokens": 277125,
+     "expected_output_tokens": 21040
+    },
+    "L3": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    },
+    "L4": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 159367,
+     "upper_bound_input_tokens": 277125,
+     "expected_output_tokens": 21798
+    }
+   }
+  },
+  {
+   "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+   "ep": "23091",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+   "ep": "22510",
+   "role": "primary",
+   "pages_in_scope": 1,
+   "pages_beyond_scope": 0,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "scan_like",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L2": {
+     "expected_requests": 2.8,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 38970,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5260
+    },
+    "L3": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    },
+    "L4": {
+     "expected_requests": 3.4,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 42992,
+     "upper_bound_input_tokens": 173154,
+     "expected_output_tokens": 5450
+    }
+   }
+  },
+  {
+   "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+   "ep": "22510",
+   "role": "control:pdf_over_4_pages",
+   "pages_in_scope": 4,
+   "pages_beyond_scope": 6,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     2,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     3,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     4,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L2": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L3": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    },
+    "L4": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+   "ep": "16830",
+   "role": "control:pdf_over_4_pages",
+   "pages_in_scope": 4,
+   "pages_beyond_scope": 48,
+   "drawing_pages": 0,
+   "page_classes": [
+    [
+     1,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ],
+    [
+     2,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ],
+    [
+     3,
+     "a3_a4",
+     0,
+     "text",
+     true
+    ],
+    [
+     4,
+     "a3_a4",
+     0,
+     "text",
+     false
+    ]
+   ],
+   "per_arm": {
+    "L1": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L2": {
+     "expected_requests": 11.2,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 155881,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21040
+    },
+    "L3": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    },
+    "L4": {
+     "expected_requests": 12,
+     "upper_bound_requests": 12,
+     "expected_input_tokens": 171968,
+     "upper_bound_input_tokens": 306264,
+     "expected_output_tokens": 21798
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+   "ep": "16830",
+   "role": "control:unsupported_input",
+   "pages_in_scope": 0,
+   "pages_beyond_scope": 0,
+   "shape": "unsupported_input",
+   "per_arm": {}
+  }
+ ],
+ "per_project": {
+  "30549": {
+   "L1": 8.4,
+   "L2": 8.4,
+   "L3": 10.2,
+   "L4": 10.2
+  },
+  "27421": {
+   "L1": 11.2,
+   "L2": 11.2,
+   "L3": 13.6,
+   "L4": 13.6
+  },
+  "28745": {
+   "L1": 14.0,
+   "L2": 14.0,
+   "L3": 15.4,
+   "L4": 15.4
+  },
+  "23091": {
+   "L1": 8.4,
+   "L2": 8.4,
+   "L3": 10.2,
+   "L4": 10.2
+  },
+  "26208": {
+   "L1": 16.8,
+   "L2": 16.8,
+   "L3": 18.8,
+   "L4": 18.8
+  },
+  "23323": {
+   "L1": 16.8,
+   "L2": 16.8,
+   "L3": 18.8,
+   "L4": 18.8
+  },
+  "17428": {
+   "L1": 8.4,
+   "L2": 8.4,
+   "L3": 10.2,
+   "L4": 10.2
+  },
+  "19144": {
+   "L1": 8.4,
+   "L2": 8.4,
+   "L3": 10.2,
+   "L4": 10.2
+  },
+  "22510": {
+   "L1": 14.0,
+   "L2": 14.0,
+   "L3": 15.4,
+   "L4": 15.4
+  },
+  "16830": {
+   "L1": 11.2,
+   "L2": 11.2,
+   "L3": 12.0,
+   "L4": 12.0
+  }
+ },
+ "per_arm_totals": {
+  "L1": {
+   "expected_requests": 117.6,
+   "expected_input_tokens": 1636746.0,
+   "upper_bound_input_tokens": 5211924.0,
+   "expected_output_tokens": 220920.0,
+   "upper_bound_requests": 312.0
+  },
+  "L2": {
+   "expected_requests": 117.6,
+   "expected_input_tokens": 1397327.0,
+   "upper_bound_input_tokens": 4658283.0,
+   "expected_output_tokens": 220920.0,
+   "upper_bound_requests": 312.0
+  },
+  "L3": {
+   "expected_requests": 134.8,
+   "expected_input_tokens": 1805664.0,
+   "upper_bound_input_tokens": 5211924.0,
+   "expected_output_tokens": 228889.0,
+   "upper_bound_requests": 312.0
+  },
+  "L4": {
+   "expected_requests": 134.8,
+   "expected_input_tokens": 1566245.0,
+   "upper_bound_input_tokens": 4658283.0,
+   "expected_output_tokens": 228889.0,
+   "upper_bound_requests": 312.0
+  }
+ },
+ "a_base": {
+  "expected_requests": 4.1,
+  "cap": 8
+ },
+ "schedule": {
+  "rule": "an arm processes a project on a rolling day only if the project's remaining day allowance covers the WORST case of that arm for that project (12 x its PDF documents); otherwise the project is deferred for that arm to the next rolling day (never a partial project, never a raised cap)",
+  "worst_case_per_project_per_arm": {
+   "30549": 36,
+   "27421": 36,
+   "28745": 24,
+   "23091": 36,
+   "26208": 36,
+   "23323": 36,
+   "17428": 36,
+   "19144": 36,
+   "22510": 24,
+   "16830": 12
+  },
+  "worst_case_days": 3,
+  "expected_per_project_all_arms": {
+   "30549": 37.2,
+   "27421": 49.6,
+   "28745": 58.8,
+   "23091": 37.2,
+   "26208": 71.2,
+   "23323": 71.2,
+   "17428": 37.2,
+   "19144": 37.2,
+   "22510": 58.8,
+   "16830": 46.4
+  },
+  "expected_days": 2,
+  "frozen_order": [
+   "A",
+   "L1",
+   "L2",
+   "L3",
+   "L4"
+  ],
+  "pairs_first": "L1 and L2 are completed (or deferred per project) before L3 and L4, so the ROI contrast is complete first; within an arm, projects in EP order, documents in stage order",
+  "incomplete_pairs": "a document an arm could not attempt (deferred beyond the run window, share refusal, cap, breaker) stays in the all-planned denominator as not_attempted / budget for that arm; each pair's analysis reports (a) all planned, (b) documents attempted by both arms of the pair, (c) field-specific read-in-both sets, all with document IDs; a pair with fewer than 12 attempted-by-both documents is reported INCONCLUSIVE"
+ },
+ "proposed_caps": {
+  "A": 8,
+  "L1": 160,
+  "L2": 160,
+  "L3": 180,
+  "L4": 180
+ },
+ "budget": {
+  "price": "UNKNOWN: no dollar amount",
+  "core_expected_requests": 509,
+  "core_proposed_caps": {
+   "A": 8,
+   "L1": 160,
+   "L2": 160,
+   "L3": 180,
+   "L4": 180
+  },
+  "core_cap_total": 688,
+  "core_expected_input_tokens_incl_cached": 6490356,
+  "core_upper_bound_input_tokens": 19740414,
+  "core_expected_output_tokens": 899618,
+  "absolute_ceiling_requests": 1256,
+  "escalations": "EV1 makes none; the cap of 2 per document stays declared",
+  "retries": "the CLI adapter does not retry; a timeout is one request charged at its estimate (45,544 input) with unknown usage",
+  "timeouts_observed": {
+   "discover_page": 2,
+   "discover_region": 1
+  },
+  "optional_arm_L1_minus_D": "excluded from the core (its question -- the deadline policy alone -- does not justify ~55 more requests here)",
+  "offline_replays": "0 requests (P0..P3 on each arm's captured responses)",
+  "note": "the proposed caps are NOT an approved allocation and NOT a guarantee that all four arms finish: a cap below worst case means arms may stop with documents not attempted; those documents enter the all-planned comparison as budget stops"
+ }
+}

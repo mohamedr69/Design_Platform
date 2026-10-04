@@ -1,0 +1,35 @@
+{
+ "addendum": 1,
+ "to_declaration_sha256": "c146e5752003a890256a0c612ceaa6f164766cb7e8683bf120fdd875e0f9c988",
+ "written_at_utc": "2026-09-29T18:36:43+00:00",
+ "limits_changed": "none: no application limit, ledger limit, provider, alias, stage, source or frozen-label change",
+ "entries": [
+  {
+   "what": "profile A attempt 1 failed before any model request",
+   "detail": "xtrack could not open C:/t/r2x/ledger/project-day.sqlite (folder missing). Sandbox preserved as C:/t/r2x/runs/r2x-small-A.failed-1, log run/run-small-A.failed-1.log; ledger entries 0 at that time.",
+   "fix": "xtrack._con creates its folder; runner hash recorded in run/RUNNERS-SHA256.txt (second xtrack.py line)"
+  },
+  {
+   "what": "runner edit after the declaration and before any model request",
+   "detail": "r2x_ev0.py read decl['projects']; the declaration names them under authorization.projects_resolved; the runner was corrected (the deterministic track failed to start on it, no sandbox written)."
+  },
+  {
+   "what": "evaluator input derivation for absent revisions",
+   "detail": "evaluator .9 scores a null printed_revision as unscorable and the literal 'absent' as a known negative. The frozen page labels (sha d21a83fd...) state revision 'absent' in each record's `states` but store null. labels/derive_eval_labels.py writes SMALL-BATCH-LABELS.eval.json (3 records: EP-22510 DRF p1, EP-26208 LUX p1, EP-27421 EML Sam B p1) without editing the frozen file. Found while writing the scorer; profile-B / C outputs had not been read. The deterministic track had been scored once with the null encoding (eval/small-det.json, kept).",
+   "file": "labels/SMALL-BATCH-LABELS.eval.json",
+   "sha256": "c026e65b7125553fd2f3c986777eebf166e23d1b243247e1d3632bbda20a866a"
+  },
+  {
+   "what": "observation, not a change",
+   "detail": "profile A (application AI path) made 0 model requests on the small batch: the application sends only submittal-role forms to the model and no batch document was classified as a submittal; the ledger scope was opened with no entry. For this batch A equals the deterministic track."
+  }
+ ],
+ "runner_sha256": {
+  "r2x_ev0.py": "8cc72f366954f0d8bd511ba09ae9f6b0d8366e99c050f4b6a7f241a63f9c03fe",
+  "r2x_ev.py": "c2f1179a81af38b46861f8c0b99424a74df475572ee385f6980b4801b23541c9",
+  "r2x_boq.py": "edfd88b191cab05fad649b9f2e26b7087a0fd388543f5f52ac172b0e474e2d5d",
+  "xtrack.py": "373147e2abe38c777ffe85e98543d309c4a98b0b74b7277dc129f7d50e59ae7c",
+  "make_small_stage.py": "5b50d9d92ea55cb1d4a89244cf42e5d0714fd4d73e239843f6a21ec1dd0cf9b3",
+  "declare_small.py": "6a33f20e30e01198a42c7f08fe45569e996ebf2014442778c9e39344cc2ce874"
+ }
+}

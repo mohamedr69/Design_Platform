@@ -1,0 +1,96 @@
+{
+ "accepted": {
+  "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "tree": "C:/t/iso/frozen-r12",
+  "clean": true
+ },
+ "reviewed_r19_candidate": {
+  "commit": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+  "tree": "C:/t/iso/cand-ai3",
+  "clean": true
+ },
+ "frozen_r21_candidate": {
+  "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+  "tree": "C:/t/iso/cand-ai4",
+  "branch": "ai-pilot-r21-2026-09-30",
+  "parent": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+  "clean": true,
+  "changed_files": {
+   "backend/app/ai/evidence_reader.py": "c04b173b0d68fc1fd96e603344387020bd38d1348a6542bf736b0ef88907d495",
+   "backend/tests/_e_crop_coords.py": "1a1174d9d61d48c752dd50554bc1151451d6cb8431b9c5d6bac9287e14825126",
+   "backend/tests/_e_frame_shim.py": "8b8a8838c86ebf07c618299c90176190573155edf8ad592205200c08f5c970b5",
+   "backend/tests/test_ai_pilot_2026_09_30.py": "63ec1baff2fa2f8f180c88fd7bdec196ea4509c05fcb28a251da9cc34f5e4581",
+   "backend/tests/test_ai_pilot_r18.py": "c9984a31bdc3bed770bea37bbc44841f4d8b78d02f5b64e824a21aa9a841c18c",
+   "backend/tests/test_ai_pilot_r19.py": "1d73feb99d5dba2b3893ca29c6412ec9a39f6c24c1ba4584d7a94208af6fc291",
+   "backend/tests/test_ai_pilot_r21.py": "7671f6a21939b333ad50a2a952a36b8ac3356c9d7c79e4710257c07c9e362696"
+  },
+  "application_files_changed": [
+   "backend/app/ai/evidence_reader.py"
+  ],
+  "diff_sha256": "f57ce5dc94a8839aa761feff988195cb539ce04a8b5baf152cc2daf97f6f0fb2",
+  "repository": "C:/t/iso/ep-platform (scratch clone; not the owner checkout)",
+  "commits": [
+   "719e8de ai-pilot successor (R21): switch attributes hold explicit values only, legacy implications applied at use time; pilot fixtures state their full switch set; adapters skip the r21 module",
+   "58ff6fc ai-pilot successor (R21): derived switches resolve at use time (legacy T/E implications hold for runtime-set attributes); identities unchanged",
+   "a03939d tests: the E crop adapter and whole-page shim also recognise the explicit ROI switch",
+   "48ba991 ai-pilot successor (R21 prerequisites): one switch per behaviour (support v2, required-first scheduling, deadline, ROI, targeted); legacy G/T/E identities unchanged; four-arm demonstration tests"
+  ]
+ },
+ "h06_control_binding_unchanged": {
+  "declaration": "C:/t/iso/work/r2x/ai-pilot-r18/CONT-DECLARATION.json",
+  "sha256": "7b2513b2f5909796835425553e4560c5a8dc9ae7b525ed7f5adf4213a2988de3",
+  "runner_matches": true,
+  "boq_arm_reader": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "boq_queue_sha256": "58ad035ecf3aefb7119babb3862085bb48a77f1075fdc8735d7541c3c98d0e4b",
+  "note": "the R21 reader is not bound into the H-06 control"
+ },
+ "r21": {
+  "sample": "18b480631547270e9aca26df1d8576ba8924b8e7ec608fd180655a303cd335d9",
+  "page_classes": "6352e4e64c73426f22c3046298fa426e4ea16b41816321c6c95eaf59ef7091f9",
+  "stage_manifest": "e8277a6bb9774d7c48d9d1bfcb64e5d30f80a3f4553d407b7380a44e59f17e0b",
+  "labels_manifest": "0b3560ebcfcf673830420e34191e4e32210e2c15769eb0905a3511cb2d075cb4",
+  "exposure": "2e7ec7446cc22888021ba86909e8eb215eb2fe69709f18f5a3856e1acc92966b",
+  "workload": "5c6e972ef58849477aa3c8331b6cb242b633f7d7f9e6d8301dc7b53d0b20a4e5",
+  "draft_declaration": "da600805fde331a12fd4e9cbd145b37ff96e8bf19e6e966fd65e5fb79cc431a7",
+  "dry_declaration": "0277ca771bff5d411175695036d4e7beefcb280321155c23f50496387e903af2",
+  "scripts": {
+   "patch_r21.py": "06a978bd4ee7836fdc223127eacac2a2b624f67975e95531daa2a1259c5bbd58",
+   "patch_r21_2.py": "83ad2aa91ed0a81db216f71348d2c06ee6d1eb7b8f3ec5b3783e229fdb97cb36",
+   "coverage_v3.py": "ab7c3cc6cd93e5be7f47d51ad82fd59ad19877318409f63050861bb4f2360ab0",
+   "score_arms_v3.py": "7022b6bab700180bc59d0f290a8c4d776a542a553b879b5c9d548e88795a933e",
+   "arm_a.py": "b9d04205453c674740e907eaefba5828b47eec6cbdf08e834e1aca4277122f3f",
+   "arm_shares.py": "b40340bd59f3f530172187d86097804cdd0c41251358257bae12b577a55c8a7b",
+   "arm_ev.py": "4aa1ae7ad2c52c8741d958287cf2602bf7e9fbc0d7ecb4abeb18fe21cdd8fbc3",
+   "declare_r21.py": "5a5a622839b8fe36399decf8d3bab416bfe185601e5f36439e50f74b3c0a140d",
+   "select_r21_sample.py": "012daba7fc71de188f932ed9a9929498ec5989e22b2893ab3995e94205d28c91",
+   "make_r21_stage.py": "22f2046c6b04c980591d428842caafc1796b6aac0cb504ad271593d3b33e79ff",
+   "workload_r21.py": "94ebe021cc48b573b4521de0f6c91e4e06a52a681f2454219279376a32b39813",
+   "label_manifest_r21.py": "1fd6e583acd678e393a2eaa66250600fe0cf5a9af063b130032c4c2aacc6e526"
+  }
+ },
+ "reviewer_files_review20": {
+  "check_replay.py": "58ca8a9f82948e49a141e04324397b1b2560c70b7bec564e6d28f54e8a1741db",
+  "CONTRACTS.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "CONTRACTS.log": "1c24b95d121464881137a887a1b099f3106befdb328038bc94814dbb220f20ce",
+  "CONTRACTS.xml": "0f68b502de891300825856d2ca7b97912a69f3970b3850da036a64ab493bdbae",
+  "efficiency_probes.py": "5ab0e85fd72380dbb87ba4463fff4b68d701786d8da6dedd6c2d3812ebe464e0",
+  "INDEPENDENT-E-PROBES.json": "243572ca625d510de21343503fc0a2d2b967fb118bbacb879c22d9f6c8bbfcfc",
+  "INDEPENDENT-PACKAGE-CHECK.json": "15650dad05e2a35a4a78a2fe28748dbf93a0b35456c69d54b00893b66d2c2346",
+  "manifest.py": "3159c065e9c9b4840e8eee26b5de5a6c87bd6ead7744a0fca88e596e9c2f8dfc",
+  "prepare_review.py": "bc9d64d5592458b0656df9e66ef6815570534b1ef2f94723c81beda01dcceb62",
+  "pytest.ini": "578fc1cd12d8d642df8eff41d71d5119626e9f88f21fafadba6b1092ac840a93",
+  "R18-R19-FOCUSED.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "R18-R19-FOCUSED.log": "f7797a3730f86445e650edd9916a5ffd7be58fba613ee0ceb4af60ebf4bdb900",
+  "R18-R19-FOCUSED.xml": "8d4f1ebba4334f9a58a2d29e94de2ae766cc7135d7ba151f48b5db5d045ec854",
+  "REPLAY-CHECK.json": "be8f5f6591792a581f60577345894f92ddc8988a1b95f8e6ee0d3f41e2386323",
+  "REPLAY.exit": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+  "REPLAY.log": "0d31ae7c30161564254d0412a068979d29d3aaaaf0a0755759d8f363772a10b4",
+  "replay_v2.py": "fc9947b52a24e21248eb7b1a22e9aabbf4796661f22d87572e1a5655dfc38900",
+  "REVIEW-20-REPORT.md": "66fb9e66d2e0711e2a8c21e24a51a70e7b5dcf317c7198ddd57bfd9ac2e1fa40",
+  "REVIEW-MANIFEST.json": "01beebe84a1475af9a05ddad5096d534fd576d4cbaaecdda7970674a410af6e6",
+  "SYNTHETIC-RASTER-STAMP.pdf": "1716c1ea3a62ab888fe50af4703209681176a142a053d841365f94732892fa2b",
+  "SYNTHETIC-RASTER-STAMP.png": "2868ef08497bbbbcc81c1ff77961b3bf5f7e1417fca16b5f4caed5660805c3b2",
+  "TASK-H06-AND-ISOLATED-EXPERIMENT-PREP.md": "c26a48e5d316bbb2eb17f798db45ed1fe145db91e6a70a50abf8324ec8dbbcc5",
+  "test_review19.py": "d48cf0d796684ce3e664880e0b0ede23c127b675eef86e6d8c9df0d88ce7882b"
+ }
+}

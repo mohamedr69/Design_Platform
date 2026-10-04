@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="6" time="0.189" timestamp="2026-10-01T01:08:43.180341+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="test_neutral_kind" name="test_contradictory_neutral_result_refuses_without_dispatch[budget]" time="0.010"><failure message="AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)&#10;  &#10;  At index 0 diff: 'ok' != 'indeterminate'&#10;  Use -v to get more diff">kind = 'budget'
+
+    @pytest.mark.parametrize('kind',['budget','cache_hit','none'])
+    def test_contradictory_neutral_result_refuses_without_dispatch(kind):
+        r=json.loads((Path(__file__).parent/'NEUTRAL-KIND-PROBE.json').read_text())[kind]
+        assert r['initial_exit']==98 and r['initial_sends']==3
+        assert r['original_load']['state']=='ok' and r['original_load']['streak']==3
+        assert r['alteration']['from']['outcome']==r['alteration']['to']['outcome']=='transport'
+&gt;       assert (r['load_before_resume']['state'],r['resume_exit'],r['new_sends'])==('indeterminate',5,0)
+E       AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)
+E         
+E         At index 0 diff: 'ok' != 'indeterminate'
+E         Use -v to get more diff
+
+test_neutral_kind.py:13: AssertionError</failure></testcase><testcase classname="test_neutral_kind" name="test_contradictory_neutral_result_refuses_without_dispatch[cache_hit]" time="0.002"><failure message="AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)&#10;  &#10;  At index 0 diff: 'ok' != 'indeterminate'&#10;  Use -v to get more diff">kind = 'cache_hit'
+
+    @pytest.mark.parametrize('kind',['budget','cache_hit','none'])
+    def test_contradictory_neutral_result_refuses_without_dispatch(kind):
+        r=json.loads((Path(__file__).parent/'NEUTRAL-KIND-PROBE.json').read_text())[kind]
+        assert r['initial_exit']==98 and r['initial_sends']==3
+        assert r['original_load']['state']=='ok' and r['original_load']['streak']==3
+        assert r['alteration']['from']['outcome']==r['alteration']['to']['outcome']=='transport'
+&gt;       assert (r['load_before_resume']['state'],r['resume_exit'],r['new_sends'])==('indeterminate',5,0)
+E       AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)
+E         
+E         At index 0 diff: 'ok' != 'indeterminate'
+E         Use -v to get more diff
+
+test_neutral_kind.py:13: AssertionError</failure></testcase><testcase classname="test_neutral_kind" name="test_contradictory_neutral_result_refuses_without_dispatch[none]" time="0.001"><failure message="AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)&#10;  &#10;  At index 0 diff: 'ok' != 'indeterminate'&#10;  Use -v to get more diff">kind = 'none'
+
+    @pytest.mark.parametrize('kind',['budget','cache_hit','none'])
+    def test_contradictory_neutral_result_refuses_without_dispatch(kind):
+        r=json.loads((Path(__file__).parent/'NEUTRAL-KIND-PROBE.json').read_text())[kind]
+        assert r['initial_exit']==98 and r['initial_sends']==3
+        assert r['original_load']['state']=='ok' and r['original_load']['streak']==3
+        assert r['alteration']['from']['outcome']==r['alteration']['to']['outcome']=='transport'
+&gt;       assert (r['load_before_resume']['state'],r['resume_exit'],r['new_sends'])==('indeterminate',5,0)
+E       AssertionError: assert ('ok', 0, 16) == ('indeterminate', 5, 0)
+E         
+E         At index 0 diff: 'ok' != 'indeterminate'
+E         Use -v to get more diff
+
+test_neutral_kind.py:13: AssertionError</failure></testcase><testcase classname="test_neutral_kind" name="test_valid_neutral_result_preserves_failure_streak[valid-budget]" time="0.021" /><testcase classname="test_neutral_kind" name="test_valid_neutral_result_preserves_failure_streak[valid-cache-hit]" time="0.022" /><testcase classname="test_neutral_kind" name="test_valid_neutral_result_preserves_failure_streak[valid-none]" time="0.016" /></testsuite></testsuites>

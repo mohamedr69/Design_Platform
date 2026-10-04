@@ -1,0 +1,2066 @@
+{
+ "batch": "B2",
+ "status": "DONE",
+ "completed_pool_ids": [
+  "F002",
+  "F003",
+  "F004",
+  "F005",
+  "F006",
+  "F007",
+  "F011",
+  "F015",
+  "F023",
+  "F024",
+  "F027",
+  "F029"
+ ],
+ "projects": [
+  "29255"
+ ],
+ "pool_ids": [
+  "F002",
+  "F003",
+  "F004",
+  "F005",
+  "F006",
+  "F007",
+  "F011",
+  "F015",
+  "F023",
+  "F024",
+  "F027",
+  "F029"
+ ],
+ "review_of": {
+  "draft_version": "r32-labels-draft-1",
+  "draft_sha256": "ebd1e24d943b3b7b21e96c1930bdb34a1078e4c5d70e3c4c34a258332688a334"
+ },
+ "reviewer": {
+  "task_id": "ORCH-01A.1/B2",
+  "agent_label": "R32REV-B2",
+  "model_configured": "claude-opus-5-5 (set by the orchestrator)",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), as stated in my system context",
+  "effort": "high",
+  "context": "fresh workflow subagent; no access to the drafting session, predictions or earlier experiment outputs"
+ },
+ "review_kind": "owner-delegated independent Claude AI review; NOT human sign-off",
+ "independent_of_drafter": true,
+ "predictions_consulted": false,
+ "started_at_utc": "2026-10-03T04:49:54Z",
+ "completed_at_utc": "2026-10-03T05:01:25Z",
+ "integrity": {
+  "manifest_sha256_ok": true,
+  "manifest_files_checked": 110,
+  "mismatches": [],
+  "draft_sha256_ok": true,
+  "reviewer_columns_blank": true
+ },
+ "page_field_rulings": [
+  {
+   "pool_id": "F002",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "TAK-02041-MCR-EL-013",
+   "printed_label": "Material Submittal No:",
+   "semantic_role": "own material submittal number of this request",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.24,
+    0.282,
+    0.4,
+    0.295
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p1.png",
+    "C:/t/r2x/r32-stage/crops/F002-p1-0.04_0.27_0.85_0.35.png"
+   ],
+   "note": "'Material Submittal No:' cell prints TAK-02041-MCR-EL-013 in black, followed by a red 'B R1'; Plot No. JVC10QMRP200 and Project No. P082 are other identities; 'EL-13 B R1' in the Reason-for-Alternative row is a short form. Region matches."
+  },
+  {
+   "pool_id": "F002",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R1",
+   "printed_label": "(none: red suffix 'B R1' after the submittal number; also 'EL-13 B R1' in the Reason-for-Alternative row)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell; 'B R1' is a red annotation whose 'B' may be a status code and 'R1' a revision: role not printed",
+   "absent_kind": "",
+   "region": [
+    0.39,
+    0.282,
+    0.43,
+    0.295
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p1.png",
+    "C:/t/r2x/r32-stage/crops/F002-p1-0.04_0.27_0.85_0.35.png"
+   ],
+   "note": "no revision cell or table on the form; the only revision-like value is the red 'R1' after the submittal number (red 'B R1', also 'EL-13 B R1'). Suffix-only per conventions section 4, association uncertain with note. Region of 'B R1' matches."
+  },
+  {
+   "pool_id": "F002",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "B. Approved as noted",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (Modular Design Engineering Consultant; 'Received by Engineer' block, CONSULTANT COMMENTS)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "the consultant's line 'The above submittal is: A/B/C/D' carries a blue tick at 'B.' joined to the consultant comments ('Arrange sample for final approval from client'), signed; the client's identical line below is unmarked",
+   "absent_kind": "",
+   "region": [
+    0.38,
+    0.594,
+    0.53,
+    0.607
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p1.png",
+    "C:/t/r2x/r32-stage/crops/F002-p1-0.1_0.57_0.85_0.62.png"
+   ],
+   "note": "under CONSULTANT COMMENTS ('Arrange sample for final approval from client') the line 'The above submittal is: A. Approved / B. Approved as noted / C. Resubmit / D. Rejected' has a blue hook at 'B.' continuing as a long stroke up-right; signed in the Project Manager row dated 16/05/23. The CLIENT COMMENTS status line below is unmarked. Class approved as noted, consultant actor, outside title block: correct. Printed literal is 'B. Approved as noted'."
+  },
+  {
+   "pool_id": "F002",
+   "page": 2,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "SAIFCO-351-MEP-MAR-EL-12",
+   "printed_label": "Ref No:",
+   "semantic_role": "own submittal reference number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.66,
+    0.108,
+    0.84,
+    0.12
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p2.png",
+    "C:/t/r2x/r32-stage/crops/F002-p2-0.55_0.1_0.9_0.135.png"
+   ],
+   "note": "'Ref No:' SAIFCO-351-MEP-MAR-EL-12. Header 'No. F02-QP9.1' is the form template number; Project No. S247 is in the SAIFCO stamp. Different project (Riva Residence) and different submittal from page 1: page-level association resolved to this page's own form."
+  },
+  {
+   "pool_id": "F002",
+   "page": 2,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "2",
+   "printed_label": "Revision:",
+   "semantic_role": "revision of this submittal",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.8,
+    0.12,
+    0.88,
+    0.132
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p2.png",
+    "C:/t/r2x/r32-stage/crops/F002-p2-0.55_0.1_0.9_0.135.png"
+   ],
+   "note": "'Revision:' cell prints 2 beside Date 21-Feb-24. Template header 'Revision No. 02 / Revision Date Oct-23' belongs to the form template, correctly excluded."
+  },
+  {
+   "pool_id": "F002",
+   "page": 2,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "(B) Proceed as Noted",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (FOR ENGINEER'S USE ONLY; Khatib & Alami)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "engineer's comments signed 01-03-2024; owner's representative block unmarked",
+   "absent_kind": "",
+   "region": [
+    0.63,
+    0.36,
+    0.8,
+    0.375
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p2.png",
+    "C:/t/r2x/r32-stage/crops/F002-p2-0.62_0.32_0.85_0.4.png"
+   ],
+   "note": "FOR ENGINEER'S USE ONLY: blue tick through the (B) Proceed as Noted box; (A) and (C) empty; Engineer's Comment block handwritten and signed, DATE 01-03-2024; owner's representative boxes unmarked. Received stamps (K&A 23 FEB 2024, SITE NO. 351 01 MAR 2024) are not decisions."
+  },
+  {
+   "pool_id": "F002",
+   "page": 3,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p3.png"
+   ],
+   "note": "enclosures checklist (20 items, YES/N/A marks); no number of its own printed."
+  },
+  {
+   "pool_id": "F002",
+   "page": 3,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p3.png"
+   ],
+   "note": "no revision cell, table or suffix on the page."
+  },
+  {
+   "pool_id": "F002",
+   "page": 3,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "no_decision_area",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p3.png"
+   ],
+   "note": "no review/status area on this checklist; the right-hand column is empty space, not a status box. no_decision_area."
+  },
+  {
+   "pool_id": "F002",
+   "page": 4,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "SAIFCO-351-MEP-MAR-EL-12",
+   "printed_label": "Ref No:",
+   "semantic_role": "own submittal reference number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.66,
+    0.13,
+    0.84,
+    0.142
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p4.png",
+    "C:/t/r2x/r32-stage/crops/F002-p4-0.55_0.12_0.9_0.155.png"
+   ],
+   "note": "'Ref No:' SAIFCO-351-MEP-MAR-EL-12 (poor scan, readable); Date 26-Jan-24."
+  },
+  {
+   "pool_id": "F002",
+   "page": 4,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "1",
+   "printed_label": "Revision:",
+   "semantic_role": "revision of this submittal",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.8,
+    0.142,
+    0.88,
+    0.152
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p4.png",
+    "C:/t/r2x/r32-stage/crops/F002-p4-0.55_0.12_0.9_0.155.png"
+   ],
+   "note": "'Revision:' cell prints 1."
+  },
+  {
+   "pool_id": "F002",
+   "page": 4,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "(B) Proceed as Noted",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (FOR ENGINEER'S USE ONLY; Khatib & Alami)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "engineer's comments signed 6/2/2024",
+   "absent_kind": "",
+   "region": [
+    0.63,
+    0.37,
+    0.8,
+    0.385
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F002-p4.png",
+    "C:/t/r2x/r32-stage/crops/F002-p4-0.6_0.33_0.84_0.41.png"
+   ],
+   "note": "FOR ENGINEER'S USE ONLY: a stroke runs through the (B) Proceed as Noted box (box filled); (A) box shows only a faint speck, (C) empty. Engineer's Comment 'Refer to comment in attached sheet / close all comment to be submitted prior placing order', signed 6/2/2024. Class approved as noted."
+  },
+  {
+   "pool_id": "F003",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0002- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F003-p1.png",
+    "C:/t/r2x/r32-stage/crops/F003-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0002- R00; a visible space after the last hyphen before R00, kept as printed. Plot no. 3347356 and enclosed drawing ET-101 are other identities. Region (label + value) acceptable."
+  },
+  {
+   "pool_id": "F003",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the form has no revision cell of its own; the attachment table's Revision column (00) belongs to the enclosed drawing ET-101; both read 00",
+   "absent_kind": "",
+   "region": [
+    0.78,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F003-p1.png",
+    "C:/t/r2x/r32-stage/crops/F003-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "no revision cell for the form; R00 only as the suffix of the Reference; the attachment table 'Revision 00' is the row of the enclosed drawing ET-101. Suffix-only per conventions section 4: present, association uncertain."
+  },
+  {
+   "pool_id": "F003",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (THE ENGINEER: LACASA; Reviewed By / For The Engineer signatures, 8/8/2025)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): the APPROVED AS NOTED option and its box are circled by hand; engineer comment refers to comments on the shop drawing",
+   "absent_kind": "",
+   "region": [
+    0.2,
+    0.785,
+    0.31,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F003-p1.png",
+    "C:/t/r2x/r32-stage/crops/F003-p1-0.1_0.77_0.8_0.84.png"
+   ],
+   "note": "ACTION (As Marked): a hand-drawn blue ellipse encloses the APPROVED AS NOTED label and its box; the other four boxes are empty. THE ENGINEER COMMENTS 'Refer to the comments on the shop drawings'; Reviewed By signed 8/8/2025; For The Engineer: Engr. Yousef Alghamri, Project Manager, signed. LACASA is printed as The Engineer. Outside title block."
+  },
+  {
+   "pool_id": "F004",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0004- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F004-p1.png",
+    "C:/t/r2x/r32-stage/crops/F004-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0004- R00, visible space after the last hyphen before R00, kept as printed. Enclosed drawing ET-103 and Plot no. 3347356 are other identities."
+  },
+  {
+   "pool_id": "F004",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the form has no revision cell of its own; the attachment table's Revision column (00) belongs to the enclosed drawing ET-103; both read 00",
+   "absent_kind": "",
+   "region": [
+    0.78,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F004-p1.png",
+    "C:/t/r2x/r32-stage/crops/F004-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "no form revision cell; R00 only as the Reference suffix; table 'Revision 00' belongs to the enclosed drawing ET-103. Suffix-only: present, association uncertain."
+  },
+  {
+   "pool_id": "F004",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (THE ENGINEER: LACASA; Reviewed By / For The Engineer signatures, 8/8/2025)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): the APPROVED AS NOTED option and its box are circled by hand; engineer comment refers to comments on the shop drawing",
+   "absent_kind": "",
+   "region": [
+    0.2,
+    0.785,
+    0.31,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F004-p1.png",
+    "C:/t/r2x/r32-stage/crops/F004-p1-0.1_0.77_0.8_0.84.png"
+   ],
+   "note": "ACTION (As Marked): blue ellipse around APPROVED AS NOTED and its box, other boxes empty; THE ENGINEER COMMENTS 'Refer to the comments on the shopdrawing'; Reviewed By signed 8/8/2025; For The Engineer signed (no printed name). LACASA is The Engineer."
+  },
+  {
+   "pool_id": "F005",
+   "page": 1,
+   "field": "identity",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-0004- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.228,
+    0.83,
+    0.243
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F005-p1.png",
+    "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "value accepted: 'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-0004- R00 (space before R00 visible). Region only corrected: this scan sits about 0.007 lower than F003/F004 and the value ends at x~0.826, so the drafted box [0.47,0.222,0.82,0.236] (the same box as F003/F004) cuts the lower half of the line and the end of R00. EC-103 and Plot no. 3347356 are other identities."
+  },
+  {
+   "pool_id": "F005",
+   "page": 1,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the form has no revision cell of its own; the attachment table's Revision column (00) belongs to the enclosed drawing EC-103; both read 00",
+   "absent_kind": "",
+   "region": [
+    0.78,
+    0.228,
+    0.83,
+    0.243
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F005-p1.png",
+    "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.215_0.92_0.33.png"
+   ],
+   "note": "values accepted (R00, suffix of the printed document number, association uncertain; table Revision 00 belongs to enclosed drawing EC-103). Region corrected for the same vertical offset as the identity row."
+  },
+  {
+   "pool_id": "F005",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (THE ENGINEER: LACASA; Reviewed By / For The Engineer signatures, 8/8/2025)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): the APPROVED AS NOTED option and its box are circled by hand; engineer comment refers to comments on the shop drawing",
+   "absent_kind": "",
+   "region": [
+    0.2,
+    0.785,
+    0.31,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F005-p1.png",
+    "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.77_0.8_0.84.png"
+   ],
+   "note": "ACTION (As Marked): blue ellipse around APPROVED AS NOTED and its box; other boxes empty; THE ENGINEER COMMENTS 'Refer to the comments on the attached S.D.'; Reviewed By 8/8/2025 signed; For The Engineer signed. The 'RECEIVED 08 AUG 2025 AL SAFA CONTRACTING' stamp in the employer comments box and the LACASA received stamp are receipts, not decisions."
+  },
+  {
+   "pool_id": "F006",
+   "page": 1,
+   "field": "identity",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.45,
+    0.229,
+    0.69,
+    0.242
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p1.png",
+    "C:/t/r2x/r32-stage/crops/F006-p1-0.4_0.22_0.8_0.245.png"
+   ],
+   "note": "value accepted: 'Reference:' NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02 (photograph, soft but each character readable; a small gap after '007-' before R02, kept as printed). Region only corrected: the line is centred at y~0.236 (glyphs ~0.233-0.239), the drafted box [0.45,0.225,0.69,0.236] covers only its top part. Plot no. 3347356 and Specification Section 281300 are other identities."
+  },
+  {
+   "pool_id": "F006",
+   "page": 1,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "R02",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the form has no revision cell",
+   "absent_kind": "",
+   "region": [
+    0.665,
+    0.229,
+    0.69,
+    0.242
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p1.png",
+    "C:/t/r2x/r32-stage/crops/F006-p1-0.4_0.22_0.8_0.245.png"
+   ],
+   "note": "values accepted (R02, suffix of the printed document number, association uncertain, note 'the form has no revision cell'); region corrected for the same vertical offset as the identity row."
+  },
+  {
+   "pool_id": "F006",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (THE ENGINEER: LACASA; Reviewed By and For The Engineer signatures, 15-8-25)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): a pen stroke runs through the APPROVED AS NOTED box; the other boxes are empty; engineer comment refers to the attached comments (page 2, Approved as Noted)",
+   "absent_kind": "",
+   "region": [
+    0.27,
+    0.615,
+    0.34,
+    0.64
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p1.png",
+    "C:/t/r2x/r32-stage/crops/F006-p1-0.18_0.6_0.82_0.66.png"
+   ],
+   "note": "ACTION (As Marked): one long blue pen stroke rises from below the APPROVED AS NOTED box through that box to above its label; APPROVED, REVISE AND RESUBMIT, SAMPLES and NOT APPROVED boxes are empty. Engineer comment 'Refer to comments on attached comments'; Reviewed By signed 15-8-25; For The Engineer signed; LACASA received stamp 09 AUG 2025 (receipt). Reading the stroke as marking APPROVED AS NOTED is consistent with page 2's 'Approved as Noted'."
+  },
+  {
+   "pool_id": "F006",
+   "page": 2,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02",
+   "printed_label": "Submittal Ref No.",
+   "semantic_role": "number of the submittal this comment sheet belongs to",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.38,
+    0.247,
+    0.65,
+    0.258
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p2.png",
+    "C:/t/r2x/r32-stage/crops/F006-p2-0.2_0.22_0.7_0.31.png"
+   ],
+   "note": "LACASA comment sheet (Page 1 of 1): 'Submittal Ref No. : NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02' printed without '-LC' and without the space; kept as printed. The sheet has no number of its own; the printed submittal number is the number of the submittal it is part of (same project plot 3347356, same material, same R02), so association resolved is defensible."
+  },
+  {
+   "pool_id": "F006",
+   "page": 2,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "R02",
+   "printed_label": "(none: suffix of the Submittal Ref No.)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell on the consultant comment sheet; R02 appears only as the suffix of the printed Submittal Ref No. (conventions section 4, embedded only)",
+   "absent_kind": "",
+   "region": [
+    0.62,
+    0.247,
+    0.65,
+    0.258
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p2.png",
+    "C:/t/r2x/r32-stage/crops/F006-p2-0.2_0.22_0.7_0.31.png"
+   ],
+   "note": "value, role and uncertain association accepted (R02 only as the suffix of the Submittal Ref No.); corrected only to add the missing association_note required for an uncertain association (topic a)."
+  },
+  {
+   "pool_id": "F006",
+   "page": 2,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "Approved as Noted",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (LACASA, Mohamad El Haj, Sr. Electrical Engineer, signed)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "heading of the consultant comment list (10 comments) under the submittal reference",
+   "absent_kind": "",
+   "region": [
+    0.2,
+    0.295,
+    0.33,
+    0.308
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F006-p2.png",
+    "C:/t/r2x/r32-stage/crops/F006-p2-0.2_0.22_0.7_0.31.png"
+   ],
+   "note": "underlined heading 'Approved as Noted' under the submittal details, followed by 10 numbered consultant comments, signed Mohamad El Haj, Sr. Electrical Engineer, on LACASA letterhead. Consultant decision, approved as noted, outside title block."
+  },
+  {
+   "pool_id": "F007",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0009- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.203,
+    0.83,
+    0.215
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p1.png",
+    "C:/t/r2x/r32-stage/crops/F007-p1-0.45_0.2_0.85_0.215.png"
+   ],
+   "note": "'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0009- R00 with a visible space before R00; the draft literal keeps it. EA-201 (attachment table) and Plot no. 3347356 are other identities. Region matches (y~0.21)."
+  },
+  {
+   "pool_id": "F007",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell on the form; attachment-table Revision 00 belongs to drawing EA-201",
+   "absent_kind": "",
+   "region": [
+    0.8,
+    0.203,
+    0.83,
+    0.215
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p1.png",
+    "C:/t/r2x/r32-stage/crops/F007-p1-0.45_0.2_0.85_0.215.png"
+   ],
+   "note": "no revision cell on the form; R00 only as Reference suffix; table 'Revision 00' is the row of drawing EA-201 (which is page 2 of this file). Suffix-only per conventions: present, association uncertain, note present."
+  },
+  {
+   "pool_id": "F007",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (LACASA; Reviewed By and For The Engineer signatures, 4-9-25)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): the APPROVED AS NOTED box carries a diagonal tick",
+   "absent_kind": "",
+   "region": [
+    0.24,
+    0.8,
+    0.29,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p1.png",
+    "C:/t/r2x/r32-stage/crops/F007-p1-0.08_0.79_0.8_0.84.png"
+   ],
+   "note": "ACTION (As Marked): a blue diagonal tick inside the APPROVED AS NOTED box (stroke continues above the label); other boxes empty. Engineer comment 'Refer to comments on Drg'; Reviewed By signed, dated 4-9-25; For The Engineer signed. LACASA received stamp 01 SEP 2025 is a receipt."
+  },
+  {
+   "pool_id": "F007",
+   "page": 2,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "EA-201",
+   "printed_label": "DRAWING NO:",
+   "semantic_role": "own drawing number in the title block",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.9,
+    0.955,
+    0.95,
+    0.975
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p2.png",
+    "C:/t/r2x/r32-stage/crops/F007-p2-0.81_0.92_0.99_0.98.png"
+   ],
+   "note": "title block 'DRAWING NO:' EA-201 (landscape render 1800x1265; value at x~0.92-0.94, y~0.965-0.972, inside the drafted box). JOB NO : 620 (stamp) and plot 3347356 are other identities."
+  },
+  {
+   "pool_id": "F007",
+   "page": 2,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "00",
+   "printed_label": "REVISION:",
+   "semantic_role": "current revision cell in the title block",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.96,
+    0.96,
+    0.98,
+    0.975
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p2.png",
+    "C:/t/r2x/r32-stage/crops/F007-p2-0.81_0.92_0.99_0.98.png"
+   ],
+   "note": "title block 'REVISION:' cell 00; revision table row '00 28.08.2025 ISSUED FOR APPROVAL' agrees."
+  },
+  {
+   "pool_id": "F007",
+   "page": 2,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "CODE B - APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (LACASA shop drawing review stamp, JOB NO : 620, signed)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "stamp placed on this sheet beside the title block; handwritten 'subject to Etisalat approval' nearby; the title-block ENGINEER'S COMMENTS boxes are all empty",
+   "absent_kind": "",
+   "region": [
+    0.815,
+    0.675,
+    0.88,
+    0.73
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F007-p2.png",
+    "C:/t/r2x/r32-stage/crops/F007-p2-0.8_0.66_0.9_0.74.png"
+   ],
+   "note": "LACASA 'JOB NO : 620 SHOP DRAWING' stamp left of the title block column: a blue tick in the CODE B - APPROVED AS NOTED box (stroke continues up-right across CODE A text, A box itself empty), C and D empty, signed in the Signature row; handwritten 'subject to Etisalat approval' beside it. The title-block ENGINEER'S COMMENTS boxes are empty. The stamp only touches the title-block border, so outside_title_block is correct."
+  },
+  {
+   "pool_id": "F011",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0010- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.207,
+    0.83,
+    0.218
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p1.png",
+    "C:/t/r2x/r32-stage/crops/F011-p1-0.45_0.205_0.85_0.22.png"
+   ],
+   "note": "'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0010- R00 (space before R00 visible, kept). FCC-CO-100 (attachment table) and plot 3347356 are other identities. Region matches (y~0.214)."
+  },
+  {
+   "pool_id": "F011",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell on the form; attachment-table Revision 00 belongs to drawing FCC-CO-100",
+   "absent_kind": "",
+   "region": [
+    0.8,
+    0.207,
+    0.83,
+    0.218
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p1.png",
+    "C:/t/r2x/r32-stage/crops/F011-p1-0.45_0.205_0.85_0.22.png"
+   ],
+   "note": "no form revision cell; R00 only as Reference suffix; attachment-table Revision 00 is the row of FCC-CO-100 (page 2). Suffix-only: present, association uncertain, note present."
+  },
+  {
+   "pool_id": "F011",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "REVISE AND RESUBMIT",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "revise and resubmit",
+   "actor": "consultant (LACASA; Reviewed By signature in red 26-9-25, For The Engineer signature)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): a red tick runs through the REVISE AND RESUBMIT box",
+   "absent_kind": "",
+   "region": [
+    0.33,
+    0.8,
+    0.43,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p1.png",
+    "C:/t/r2x/r32-stage/crops/F011-p1-0.08_0.79_0.8_0.84.png"
+   ],
+   "note": "ACTION (As Marked): a red diagonal stroke (tick) through the REVISE AND RESUBMIT box and label; other boxes empty. Engineer comments in red 'Refer to comments on Drg' and 'refer to attached shop drawings for comments'; Reviewed By red signature 26-9-25; For The Engineer signed. LACASA received stamp 13 SEP 2025 is a receipt."
+  },
+  {
+   "pool_id": "F011",
+   "page": 2,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "FCC-CO-100",
+   "printed_label": "DRAWING NO:",
+   "semantic_role": "own drawing number in the title block",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.85,
+    0.962,
+    0.89,
+    0.972
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p2.png",
+    "C:/t/r2x/r32-stage/crops/F011-p2-0.81_0.935_0.92_0.98.png"
+   ],
+   "note": "title block 'DRAWING NO:' FCC-CO-100 (landscape render 1800x1172; value at x~0.85-0.885, y~0.965-0.973). JOB NO : 620 in the stamp is another identity."
+  },
+  {
+   "pool_id": "F011",
+   "page": 2,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "00",
+   "printed_label": "REVISION:",
+   "semantic_role": "current revision cell in the title block",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.9,
+    0.965,
+    0.915,
+    0.975
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p2.png",
+    "C:/t/r2x/r32-stage/crops/F011-p2-0.81_0.935_0.92_0.98.png"
+   ],
+   "note": "title block 'REVISION:' cell 00."
+  },
+  {
+   "pool_id": "F011",
+   "page": 2,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "CODE C - REVISE & RESUBMIT",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "revise and resubmit",
+   "actor": "consultant (LACASA shop drawing review stamp, JOB NO : 620, signed in red)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "stamp at the right edge beside the title block; red tick in the CODE C box",
+   "absent_kind": "",
+   "region": [
+    0.93,
+    0.765,
+    0.98,
+    0.775
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F011-p2.png",
+    "C:/t/r2x/r32-stage/crops/F011-p2-0.92_0.73_1_0.81.png"
+   ],
+   "note": "LACASA 'JOB NO : 620 SHOP DRAWING' stamp at the right edge, outside the title block: red tick in the CODE C - REVISE & RESUBMIT box, A/B/D empty, red signature over ACTION/Signature. Red consultant mark-ups across the sheet. Class revise and resubmit."
+  },
+  {
+   "pool_id": "F015",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0005- R00",
+   "printed_label": "Reference:",
+   "semantic_role": "own submittal reference of this form",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.47,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F015-p1.png",
+    "C:/t/r2x/r32-stage/crops/F015-p1-0.45_0.215_0.85_0.235.png"
+   ],
+   "note": "'Reference:' NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0005- R00, space before R00 visible, kept. ET-104 (attachment table) and plot 3347356 are other identities. Region matches (y~0.228)."
+  },
+  {
+   "pool_id": "F015",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the form has no revision cell of its own; the attachment table's Revision column (00) belongs to the enclosed drawing ET-104; both read 00",
+   "absent_kind": "",
+   "region": [
+    0.78,
+    0.222,
+    0.82,
+    0.236
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F015-p1.png",
+    "C:/t/r2x/r32-stage/crops/F015-p1-0.45_0.215_0.85_0.235.png"
+   ],
+   "note": "no form revision cell; R00 only as Reference suffix; table Revision 00 belongs to the enclosed drawing ET-104 (not in this file). Suffix-only: present, association uncertain, note present."
+  },
+  {
+   "pool_id": "F015",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "APPROVED AS NOTED",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (THE ENGINEER: LACASA; Reviewed By / For The Engineer signatures, 8/8/2025)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "ACTION (As Marked): the APPROVED AS NOTED option and its box are circled by hand; engineer comment 'Refer to the comments on the shop drawings'; Reviewed By dated 8/8/2025",
+   "absent_kind": "",
+   "region": [
+    0.2,
+    0.785,
+    0.31,
+    0.83
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F015-p1.png",
+    "C:/t/r2x/r32-stage/crops/F015-p1-0.1_0.78_0.8_0.83.png"
+   ],
+   "note": "ACTION (As Marked): blue ellipse around APPROVED AS NOTED and its box; other boxes empty. THE ENGINEER COMMENTS 'Refer to the comments on the shop drawings'; Reviewed By signed 8/8/2025; For The Engineer signed. LACASA received stamp 21 JUL 2025 is a receipt."
+  },
+  {
+   "pool_id": "F023",
+   "page": 1,
+   "field": "identity",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "273 / MT / MEP 2 1 7",
+   "printed_label": "MAS Ref. No.",
+   "semantic_role": "own material approval submittal number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.27,
+    0.262,
+    0.42,
+    0.278
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F023-p1.png",
+    "C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.25_0.8_0.3.png"
+   ],
+   "note": "value accepted: 'MAS Ref. No.' 273 / MT / MEP 2 1 7 (low-resolution photograph; the digits 2, 1, 7 stand with gaps clearly wider than inside '273', so the spaces are kept as printed). Region only corrected: the line is centred at y~0.270 (glyphs ~0.266-0.274), the drafted box starts at 0.27 and covers only its lower part. DPOP-PR-3010 (project line) and SITE 273 are other identities."
+  },
+  {
+   "pool_id": "F023",
+   "page": 1,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "00",
+   "printed_label": "Revision No.",
+   "semantic_role": "revision of this submittal (red)",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "resolved",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [
+    0.27,
+    0.279,
+    0.31,
+    0.292
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F023-p1.png",
+    "C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.25_0.8_0.3.png"
+   ],
+   "note": "value accepted: 'Revision No.' 00 in red, own submittal revision, association resolved (the right-hand 'Sample Tag Ref. No. / Revision No.' cells are blank). Region corrected: '00' sits at y~0.282-0.288, the drafted box [0.27,0.285,0.31,0.295] starts mid-glyph."
+  },
+  {
+   "pool_id": "F023",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "B: Approved as noted",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved as noted",
+   "actor": "consultant (For Engineer: Trevor Maltman, Sr. Resident Engineer, signed 30/9/14; Holford Associates is the 'Issued to' party)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "'Returned to Contractor with Status': a tick at the B: Approved as noted box",
+   "absent_kind": "",
+   "region": [
+    0.36,
+    0.69,
+    0.5,
+    0.705
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F023-p1.png",
+    "C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.68_0.8_0.71.png"
+   ],
+   "note": "'Returned to Contractor with Status:' a hand tick at the B box (B: Approved as noted), A and C boxes empty; the D option is partly overlapped by the City Walk RECEIVED 01 OCT 2014 stamp but its box is empty. 'For Engineer' Trevor Maltman, Sr. Resident Engineer, signed, dated 30/9/14; Engineer's Review & Comments 'See comments on attached document review sheet'. Contractor Checked/Approved signatures and received stamps are not decisions. Region matches."
+  },
+  {
+   "pool_id": "F024",
+   "page": 1,
+   "field": "identity",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007-R02",
+   "printed_label": "REF NO:",
+   "semantic_role": "number of the submittal whose consultant comments this reply sheet answers",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the contractor's reply sheet prints no number of its own; 'REF NO:' gives the number of the R02 material submittal whose consultant comments it answers (the draft's own semantic role). Whether the sheet is filed as part of that submittal or only references it cannot be established from the page.",
+   "absent_kind": "",
+   "region": [
+    0.09,
+    0.075,
+    0.63,
+    0.088
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F024-p1.png",
+    "C:/t/r2x/r32-stage/crops/F024-p1-0.05_0.04_0.7_0.11.png"
+   ],
+   "note": "value and label confirmed: 'REF NO: NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007-R02' (no space before R02 here, '-LC-' present). Corrected association resolved -> uncertain: the sheet is an Al Arabia (contractor) reply listing CONSULTANT COMMENTS with RESPONSE; the printed number identifies the answered submittal (another document, the R02 submittal form/comment sheet), so by conventions section 3 it is not shown to be this page's own number. Region matches (y~0.079)."
+  },
+  {
+   "pool_id": "F024",
+   "page": 1,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "R02",
+   "printed_label": "(none: suffix of the REF NO)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell; R02 appears only as the suffix of the REF NO, which itself names the answered submittal (conventions section 4, embedded only)",
+   "absent_kind": "",
+   "region": [
+    0.6,
+    0.075,
+    0.63,
+    0.088
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F024-p1.png",
+    "C:/t/r2x/r32-stage/crops/F024-p1-0.05_0.04_0.7_0.11.png"
+   ],
+   "note": "value R02, role and uncertain association accepted; corrected only to add the missing association_note (topic a)."
+  },
+  {
+   "pool_id": "F024",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "no_decision_area",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F024-p1.png"
+   ],
+   "note": "no review/status area; the typed table header 'CONSULTANT COMMENTS MS ACS (B)' is the contractor restating a status code inside its own reply table, not a reviewing-party mark, stamp or signature; the only stamp is the contractor's Al Arabia seal. absent / no_decision_area."
+  },
+  {
+   "pool_id": "F027",
+   "page": 1,
+   "field": "identity",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F027-p1.png"
+   ],
+   "note": "header block prints Project (Creek View-02 ... DHC2.B.26, Dubai Health Care City), Client, Consultant, MEP Consultant, MEP Contractor, Installer; 'Plot No :' is blank; the table title '144 Port High Density FPP Solution' and part numbers are not document numbers. No own number printed: absent. (The draft lists no other_identities; 'DHC2.B.26' is a plot/location code within the project line and would belong there, not to identity.)"
+  },
+  {
+   "pool_id": "F027",
+   "page": 1,
+   "field": "revision",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F027-p1.png"
+   ],
+   "note": "no revision cell, table or suffix on the page; absent."
+  },
+  {
+   "pool_id": "F027",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "present",
+   "literal": "No Objection",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "approved",
+   "actor": "authority (du - Emirates Integrated Telecommunications Company PJSC, Permits - Operation; Eng UBEDUR RAHMAN MOHAMMAD, signed)",
+   "actor_state": "resolved",
+   "location": "outside_title_block",
+   "association": "resolved",
+   "association_note": "'No Objection / Building NOC, For: CONSTRUCTION NOC' stamp placed on this page; the Date line is blank",
+   "absent_kind": "",
+   "region": [
+    0.37,
+    0.86,
+    0.64,
+    0.99
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F027-p1.png",
+    "C:/t/r2x/r32-stage/crops/F027-p1-0.35_0.85_0.66_1.png"
+   ],
+   "note": "du (Emirates Integrated Telecommunications Company PJSC) 'Permits - Operation' stamp below the table: 'No Objection / Building NOC', For CONSTRUCTION NOC, Eng UBEDUR RAHMAN MOHAMMAD, signed 'M. Rahman'; the Date line is blank; printed footer 'NOTE: Refer to the attached GENERAL CONDITIONS' is fixed stamp text, no written comments or conditions. Authority actor, outside any title block. Class approved (see question and topic d)."
+  },
+  {
+   "pool_id": "F029",
+   "page": 1,
+   "field": "identity",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "NBC-JGH-SCALE-MAS-MEP-ELE-2025-018-R00",
+   "printed_label": "Reference :",
+   "semantic_role": "number of the submittal whose consultant comments this reply sheet answers",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "the reply-to-comments sheet prints no number of its own; 'Reference :' gives NBC-JGH-SCALE-MAS-MEP-ELE-2025-018-R00, the submittal (SCS Rev.00) whose comments it answers (the draft's own semantic role). Whether the sheet is part of that submittal or only references it cannot be established from the page.",
+   "absent_kind": "",
+   "region": [
+    0.09,
+    0.112,
+    0.33,
+    0.12
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F029-p1.png",
+    "C:/t/r2x/r32-stage/crops/F029-p1-0.08_0.08_0.6_0.13.png"
+   ],
+   "note": "value and label confirmed: 'Reference : NBC-JGH-SCALE-MAS-MEP-ELE-2025-018-R00' (underlined; no '-LC-'). Corrected association resolved -> uncertain for the same reason as F024 p1: a contractor (Al Arabia seal) compliance reply whose only number identifies the answered submittal. Region matches (y~0.117)."
+  },
+  {
+   "pool_id": "F029",
+   "page": 1,
+   "field": "revision",
+   "ruling": "correct",
+   "state": "present",
+   "literal": "R00",
+   "printed_label": "(none: suffix of the Reference)",
+   "semantic_role": "suffix of the printed document number",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "uncertain",
+   "association_note": "no revision cell or table; R00 only as the suffix of the Reference, which names the answered submittal; the Subject line 'Reply to comments for SCS Rev.00' agrees but is prose naming the commented submittal's revision, not a revision field",
+   "absent_kind": "",
+   "region": [
+    0.3,
+    0.111,
+    0.325,
+    0.122
+   ],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F029-p1.png",
+    "C:/t/r2x/r32-stage/crops/F029-p1-0.08_0.08_0.6_0.13.png"
+   ],
+   "note": "corrected source: conventions section 4 recognises a revision cell/REV field, a revision table or a suffix of the printed number; the subject-line phrase 'SCS Rev.00' is none of these (it refers to the commented submittal's revision). The convention-conformant value is the R00 suffix of the Reference, association uncertain. Both read 00, so only literal/label/role/region change."
+  },
+  {
+   "pool_id": "F029",
+   "page": 1,
+   "field": "decision",
+   "ruling": "accept",
+   "state": "absent",
+   "literal": "",
+   "printed_label": "",
+   "semantic_role": "",
+   "class": "",
+   "actor": "",
+   "actor_state": "",
+   "location": "",
+   "association": "",
+   "association_note": "",
+   "absent_kind": "no_decision_area",
+   "region": [],
+   "evidence_checked": [
+    "C:/t/r2x/r32-stage/renders/F029-p1.png"
+   ],
+   "note": "Consultant Comments / Compliance table with contractor replies and the contractor's Al Arabia seal only; no consultant stamp, tick or status area. absent / no_decision_area."
+  }
+ ],
+ "document_field_rulings": [
+  {
+   "pool_id": "F002",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "present and resolved on p1 (TAK-02041-MCR-EL-013), p2 and p4 (SAIFCO-351-MEP-MAR-EL-12). The file is a compilation of two unrelated earlier submittals, so the truth is page-level (two different own numbers); scorable only per page, not as one document identity."
+  },
+  {
+   "pool_id": "F002",
+   "field": "revision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p2 'Revision: 2' and p4 'Revision: 1' printed in revision cells, resolved; p1 R1 is suffix-only (uncertain) and does not count. Page-level truth (the two SAIFCO pages carry different revisions of the same submittal)."
+  },
+  {
+   "pool_id": "F002",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant decisions visible and resolved on p1 (B. Approved as noted), p2 and p4 ((B) Proceed as Noted); all approved as noted."
+  },
+  {
+   "pool_id": "F003",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "single-page form; own Reference printed and resolved."
+  },
+  {
+   "pool_id": "F003",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only the R00 suffix of the Reference (association uncertain by convention 4); the table revision 00 belongs to the enclosed drawing ET-101, which is not in the file. No resolved revision truth to score against under the frozen conventions."
+  },
+  {
+   "pool_id": "F003",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant ACTION mark (APPROVED AS NOTED circled) on the form, resolved."
+  },
+  {
+   "pool_id": "F004",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "single-page form; own Reference printed and resolved."
+  },
+  {
+   "pool_id": "F004",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only the R00 suffix of the Reference (association uncertain by convention 4); table revision belongs to ET-103 (not in the file)."
+  },
+  {
+   "pool_id": "F004",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant ACTION mark (APPROVED AS NOTED circled), resolved."
+  },
+  {
+   "pool_id": "F005",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "single-page form; own Reference printed and resolved."
+  },
+  {
+   "pool_id": "F005",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only the R00 suffix of the Reference (association uncertain by convention 4); table revision belongs to EC-103 (not in the file)."
+  },
+  {
+   "pool_id": "F005",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant ACTION mark (APPROVED AS NOTED circled), resolved."
+  },
+  {
+   "pool_id": "F006",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p1 form Reference (NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02) and p2 Submittal Ref No. (NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02) both present and resolved to the same submittal; the literals differ as printed, so scoring must be page-level (p1 literal is the form's own Reference)."
+  },
+  {
+   "pool_id": "F006",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "R02 only as a suffix on both pages (association uncertain by convention 4); no revision cell."
+  },
+  {
+   "pool_id": "F006",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant decision visible on p1 (ACTION mark through APPROVED AS NOTED) and p2 ('Approved as Noted' heading, signed); consistent."
+  },
+  {
+   "pool_id": "F007",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p1 form Reference and p2 drawing number EA-201 both present and resolved (two components of one submittal: form + enclosed drawing); page-level truth."
+  },
+  {
+   "pool_id": "F007",
+   "field": "revision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p2 title-block REVISION 00, resolved; p1 R00 suffix-only (uncertain) not counted."
+  },
+  {
+   "pool_id": "F007",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant decision on p1 (ACTION tick APPROVED AS NOTED) and on p2 (LACASA stamp CODE B - APPROVED AS NOTED), consistent."
+  },
+  {
+   "pool_id": "F011",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p1 form Reference and p2 drawing number FCC-CO-100 present and resolved (form + enclosed drawing)."
+  },
+  {
+   "pool_id": "F011",
+   "field": "revision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "p2 title-block REVISION 00 resolved; p1 suffix-only not counted."
+  },
+  {
+   "pool_id": "F011",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant revise-and-resubmit on p1 (ACTION) and p2 (CODE C stamp), consistent."
+  },
+  {
+   "pool_id": "F015",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "single-page form; own Reference present and resolved."
+  },
+  {
+   "pool_id": "F015",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only the R00 suffix of the Reference (association uncertain by convention 4); table revision belongs to ET-104, not in the file."
+  },
+  {
+   "pool_id": "F015",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "consultant ACTION mark (APPROVED AS NOTED circled), resolved."
+  },
+  {
+   "pool_id": "F023",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "MAS Ref. No. readable and resolved; spacing 'MEP 2 1 7' is as printed but typed-space vs letter-spacing cannot be told from a photograph, so a scorer should compare whitespace-insensitively. Document is an earlier 2014 City Walk approval kept as a reference (not project 29255's own submittal) but page-level truth is resolved."
+  },
+  {
+   "pool_id": "F023",
+   "field": "revision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "'Revision No.' 00 printed in its own cell, resolved."
+  },
+  {
+   "pool_id": "F023",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "engineer's status tick at B: Approved as noted, signed; resolved."
+  },
+  {
+   "pool_id": "F024",
+   "field": "identity",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only number printed is the REF NO of the answered R02 submittal; its association with this reply sheet as the sheet's own number is uncertain (see proposed topic on reply sheets). If the consolidator rules that a reply sheet's REF NO is its own identity, flip to yes/yes."
+  },
+  {
+   "pool_id": "F024",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "R02 only as a suffix of the REF NO (uncertain)."
+  },
+  {
+   "pool_id": "F024",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "no",
+   "note": "truth is resolved as absent (no_decision_area): contractor reply sheet; the typed '(B)' in the header is a restatement, not a decision."
+  },
+  {
+   "pool_id": "F027",
+   "field": "identity",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "no",
+   "note": "truth resolved as absent: the BOQ sheet prints no own number (Plot No blank)."
+  },
+  {
+   "pool_id": "F027",
+   "field": "revision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "no",
+   "note": "truth resolved as absent: no revision source on the page."
+  },
+  {
+   "pool_id": "F027",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "yes",
+   "note": "du No Objection / Building NOC stamp, signed, placed on this page; resolved, class approved (subject to the consolidator's harmonisation of topic d). The sheet belongs to a Creek View-02 (Azizi, DHCC) package, not to the project-29255 building; page-level truth is unaffected."
+  },
+  {
+   "pool_id": "F029",
+   "field": "identity",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "only number printed is the Reference of the answered submittal (018-R00); association with the reply sheet as its own number is uncertain (see proposed topic on reply sheets). If the consolidator rules a reply sheet's Reference is its own identity, flip to yes/yes."
+  },
+  {
+   "pool_id": "F029",
+   "field": "revision",
+   "resolved_for_scoring": "no",
+   "carries_fact": "no",
+   "note": "R00 only as the Reference suffix (and as 'Rev.00' in the subject prose); uncertain."
+  },
+  {
+   "pool_id": "F029",
+   "field": "decision",
+   "resolved_for_scoring": "yes",
+   "carries_fact": "no",
+   "note": "truth resolved as absent (no_decision_area): contractor reply sheet."
+  }
+ ],
+ "document_questions": [
+  {
+   "pool_id": "F002",
+   "question": "p1 revision: 'R1' is a red suffix 'B R1' with no printed revision label (association uncertain)",
+   "ruling": "agree with draft: present, literal R1, semantic_role suffix of the printed document number, association uncertain",
+   "reason": "the page has no revision cell or table; 'R1' appears only in the red annotation 'B R1' appended to the submittal number (and to 'EL-13'). Conventions section 4 'embedded only' applies. It does not count toward carries_fact; the document carries revision through p2 (2) and p4 (1)."
+  },
+  {
+   "pool_id": "F003",
+   "question": "revision: only the R00 suffix of the reference; the table revision belongs to the enclosed drawing (association uncertain)",
+   "ruling": "agree with draft: present, R00, suffix of the printed document number, association uncertain; does not count for the gate",
+   "reason": "the form has no revision cell; the attachment table's Revision column (00) is the revision of drawing ET-101 listed in the table, not of the form. Conventions section 4 'embedded only' requires association uncertain. See proposed convention topic (g)."
+  },
+  {
+   "pool_id": "F004",
+   "question": "revision: only the R00 suffix of the reference; the table revision belongs to the enclosed drawing (association uncertain)",
+   "ruling": "agree with draft: present, R00, suffix of the printed document number, association uncertain; does not count for the gate",
+   "reason": "no revision cell on the form; attachment-table Revision 00 is the row for drawing ET-103. Conventions section 4 'embedded only'. See proposed convention topic (g)."
+  },
+  {
+   "pool_id": "F005",
+   "question": "revision: only the R00 suffix of the reference; the table revision belongs to the enclosed drawing (association uncertain)",
+   "ruling": "agree with draft: present, R00, suffix of the printed document number, association uncertain; does not count for the gate (region corrected only)",
+   "reason": "no revision cell on the form; attachment-table Revision 00 is the row for drawing EC-103. Conventions section 4 'embedded only'. See proposed convention topic (g)."
+  },
+  {
+   "pool_id": "F006",
+   "question": "revision on both pages only as the R02 suffix of the reference (association uncertain)",
+   "ruling": "agree with draft: present, R02, suffix of the printed document number, association uncertain on both pages; p2 row corrected to add the missing association_note; does not count for the gate",
+   "reason": "neither the form nor the comment sheet has a revision cell or table; R02 is only the suffix of the reference. Conventions section 4 'embedded only'. See topics (a) and (g)."
+  },
+  {
+   "pool_id": "F006",
+   "question": "identity literal differs between page 1 (with -LC-) and page 2 (without)",
+   "ruling": "keep each page's literal as printed: p1 'NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007- R02', p2 'NBC-JGH-SCALE-MAS-MEP-ELE-2025-007-R02'; both association resolved",
+   "reason": "the image shows '-LC-' and a space before R02 on the submittal form, and neither on the LACASA comment sheet. Both name the same submittal (same project, material, R02). Page-level truth is the printed literal; a document-level scorer should treat the p1 form Reference as the document's own number and not normalise one into the other."
+  },
+  {
+   "pool_id": "F007",
+   "question": "p1 revision only as the R00 suffix of the reference (association uncertain)",
+   "ruling": "agree with draft: p1 revision present R00, suffix of the printed document number, association uncertain",
+   "reason": "the submittal form has no revision cell; the attachment-table 00 belongs to EA-201. The document still carries a resolved revision on p2 (title-block REVISION 00)."
+  },
+  {
+   "pool_id": "F011",
+   "question": "p1 revision only as the R00 suffix of the reference (association uncertain)",
+   "ruling": "agree with draft: p1 revision present R00, suffix of the printed document number, association uncertain",
+   "reason": "the form has no revision cell; the table 00 belongs to FCC-CO-100. The document carries a resolved revision on p2 (title-block REVISION 00)."
+  },
+  {
+   "pool_id": "F015",
+   "question": "revision: only the R00 suffix of the reference; the table revision belongs to the enclosed drawing (association uncertain)",
+   "ruling": "agree with draft: present, R00, suffix of the printed document number, association uncertain; does not count for the gate",
+   "reason": "no revision cell on the form; attachment-table Revision 00 is the row of drawing ET-104. Conventions section 4 'embedded only'. See topic (g)."
+  },
+  {
+   "pool_id": "F023",
+   "question": "low-resolution photograph: identity spacing and the decision tick should be confirmed by the reviewer",
+   "ruling": "confirmed: identity '273 / MT / MEP 2 1 7' and decision 'B: Approved as noted' (tick at B); only the identity and revision regions are corrected",
+   "reason": "in the render and crop the digits after MEP are visibly spaced wider than within '273'; whether these are typed spaces or a spaced font cannot be decided from a photograph, so the literal keeps the spaces and scoring should be whitespace-insensitive. The status row shows one tick at the B box with A and C empty and D unticked under a received stamp."
+  },
+  {
+   "pool_id": "F024",
+   "question": "decision: the reply sheet header restates '(B)'; recorded as no decision area (contractor document)",
+   "ruling": "agree with draft: decision absent, absent_kind no_decision_area",
+   "reason": "the '(B)' is typed by the contractor in the column header 'CONSULTANT COMMENTS MS ACS (B)' of its own reply table; there is no consultant stamp, tick, signature or status area on the page. Conventions section 5: only the reviewing party's decision counts, contractor documents are not decisions; a restated code is not the reviewer's mark."
+  },
+  {
+   "pool_id": "F024",
+   "question": "revision only as the R02 suffix of the reference",
+   "ruling": "agree: present, R02, suffix of the printed document number, association uncertain; row corrected only to add the missing association_note",
+   "reason": "no revision cell or table; R02 is only the suffix of the REF NO, which itself is the answered submittal's number. Does not count for the gate."
+  },
+  {
+   "pool_id": "F027",
+   "question": "decision class for an authority 'No Objection' recorded as approved",
+   "ruling": "agree: class approved, actor authority (du), actor_state resolved",
+   "reason": "the stamp grants 'No Objection' (Building NOC, for CONSTRUCTION NOC) without any written comment or condition; conventions section 5 puts 'no objection with comments' under approved as noted, so a no-objection without comments is approved. The footer 'Refer to the attached GENERAL CONDITIONS' is pre-printed on every du NOC stamp and is not a review comment. Date line blank does not change the class."
+  },
+  {
+   "pool_id": "F027",
+   "question": "identity absent (no own number printed)",
+   "ruling": "agree: identity absent",
+   "reason": "only project, client, consultant and contractor names, a blank 'Plot No :' and the location code DHC2.B.26 inside the project line are printed; none is the sheet's own document number (conventions section 3)."
+  },
+  {
+   "pool_id": "F029",
+   "question": "revision taken from the subject line 'SCS Rev.00' (literal kept as printed)",
+   "ruling": "correct: record the revision from the Reference suffix, literal R00, semantic_role suffix of the printed document number, association uncertain; the subject-line 'Rev.00' is noted as agreeing",
+   "reason": "the subject line is prose naming the revision of the commented submittal, not a revision cell, REV field or table (conventions section 4). The only convention-recognised source on the page is the -R00 suffix of the Reference. Either way the association is uncertain and the field does not count for the gate."
+  }
+ ],
+ "proposed_convention_rulings": [
+  {
+   "topic": "(a) uncertain association without association_note",
+   "proposed_rule": "Every field with association 'uncertain' must carry a non-empty association_note saying what is uncertain; a row lacking it is ruled 'correct' with the note added and no other change. Value, role and state are not altered by this repair.",
+   "affected_rows": [
+    "F006/p2/revision",
+    "F024/p1/revision"
+   ],
+   "evidence": "draft JSON for F006 p2 and F024 p1 revision has association 'uncertain' and no association_note; images C:/t/r2x/r32-stage/renders/F006-p2.png and C:/t/r2x/r32-stage/renders/F024-p1.png show R02 only as the suffix of the printed submittal number."
+  },
+  {
+   "topic": "(b) evidence strings written as 'render F###-pN.png'",
+   "proposed_rule": "An evidence entry 'render F###-pN.png' denotes the full render C:/t/r2x/r32-stage/renders/F###-pN.png; the consolidator should normalise it to the bare render name. In this batch it resolves and was opened.",
+   "affected_rows": [
+    "F002/p1/decision"
+   ],
+   "evidence": "draft evidence ['F002-p1-0.1_0.57_0.85_0.62.png','render F002-p1.png']; C:/t/r2x/r32-stage/renders/F002-p1.png exists, its sha256 matches EVIDENCE-INDEX, opened."
+  },
+  {
+   "topic": "(d) authority 'No Objection' stamp (du, F027)",
+   "proposed_rule": "An authority's 'No Objection' / NOC stamp without written comments or conditions is class 'approved' (actor authority, resolved); 'no objection with comments' or with written conditions is 'approved as noted' per conventions section 5. Pre-printed stamp footers such as 'Refer to the attached GENERAL CONDITIONS' are not comments and do not change the class.",
+   "affected_rows": [
+    "F027/p1/decision"
+   ],
+   "evidence": "C:/t/r2x/r32-stage/crops/F027-p1-0.35_0.85_0.66_1.png: du Permits - Operation 'No Objection / Building NOC', For CONSTRUCTION NOC, signed, Date blank, fixed footer note."
+  },
+  {
+   "topic": "(e) class of code D",
+   "proposed_rule": "The class follows the printed legend of the code, not the letter: where the legend reads 'Not Approved' or 'Rejected' (LACASA stamp 'CODE D - NOT APPROVED', Modular form 'D. Rejected', SAIFCO form '(D) Rejected Material') the class is 'rejected'; only where a template's own legend for D reads revise/resubmit is it 'revise and resubmit'. A bare letter D with no legend visible on the page defaults to 'rejected' (conventions section 5). A layout helper must not map D to 'revise and resubmit' unless the page's legend says so. No D is marked in batch B2.",
+   "affected_rows": [
+    "F002/p1/decision",
+    "F002/p2/decision",
+    "F002/p4/decision",
+    "F007/p2/decision",
+    "F011/p2/decision"
+   ],
+   "evidence": "legends seen on C:/t/r2x/r32-stage/crops/F007-p2-0.8_0.66_0.9_0.74.png and C:/t/r2x/r32-stage/crops/F011-p2-0.92_0.73_1_0.81.png (CODE D - NOT APPROVED), C:/t/r2x/r32-stage/crops/F002-p1-0.1_0.57_0.85_0.62.png (D. Rejected), C:/t/r2x/r32-stage/renders/F002-p2.png ((D) Rejected Material); none of these D options is marked."
+  },
+  {
+   "topic": "(g) revision only as a suffix of the document number",
+   "proposed_rule": "Applied as frozen: the suffix (e.g. '- R00', '-R02') is recorded as present, semantic_role 'suffix of the printed document number', association uncertain with a note; a revision column in an attachment table that belongs to an enclosed drawing is not used for the form. At document level such a field is resolved_for_scoring 'no' and carries_fact 'no' unless another in-scope page has a resolved revision cell (F007 p2, F011 p2). A subject-line phrase such as 'Reply to comments for SCS Rev.00' is not a revision source; the suffix is used instead. For the consolidator: across the LACASA/Scale submittal forms the '- R0n' suffix is systematic; if the owner wants it to count, that needs an explicit convention change, not a per-row exception.",
+   "affected_rows": [
+    "F002/p1/revision",
+    "F003/p1/revision",
+    "F004/p1/revision",
+    "F005/p1/revision",
+    "F006/p1/revision",
+    "F006/p2/revision",
+    "F007/p1/revision",
+    "F011/p1/revision",
+    "F015/p1/revision",
+    "F024/p1/revision",
+    "F029/p1/revision"
+   ],
+   "evidence": "C:/t/r2x/r32-stage/renders/F003-p1.png, F004-p1.png, F005-p1.png, F006-p1.png, F006-p2.png, F007-p1.png, F011-p1.png, F015-p1.png, F024-p1.png, F029-p1.png and their reference crops; F029 revision corrected from subject 'Rev.00' to suffix 'R00'."
+  },
+  {
+   "topic": "(h) compilation files and files from other projects",
+   "proposed_rule": "Where one file compiles unrelated documents (F002: a TAK/Modular material conformity request on p1 and SAIFCO/Khatib & Alami submittal SAIFCO-351-MEP-MAR-EL-12 at revision 2 on p2 and revision 1 on p4), truth is page-level: each page's identity, revision and decision belong to that page's own document (association resolved); the document carries a field if any in-scope page has it present and resolved; a scorer must score page by page and never collapse the file to one document identity. Files that are earlier approvals from other projects kept as reference (F023 City Walk 2014; F027 Creek View-02 du NOC) are labelled on what the page shows; the foreign project does not change the label.",
+   "affected_rows": [
+    "F002/p1/identity",
+    "F002/p2/identity",
+    "F002/p4/identity",
+    "F002/p2/revision",
+    "F002/p4/revision",
+    "F023/p1/identity",
+    "F027/p1/decision"
+   ],
+   "evidence": "C:/t/r2x/r32-stage/renders/F002-p1.png, F002-p2.png, F002-p4.png (different projects, numbers and revisions); C:/t/r2x/r32-stage/renders/F023-p1.png; C:/t/r2x/r32-stage/renders/F027-p1.png."
+  },
+  {
+   "topic": "(j) helper/template-constant regions",
+   "proposed_rule": "Regions copied from a sibling page of the same template must be checked against each image; where the value lies substantially outside the box (scan offset), the region is corrected and the ruling is 'correct' with values unchanged. In this batch the repeated LACASA box [0.47,0.222,0.82,0.236] fits F003, F004 and F015 but not F005 (scan about 0.007 lower, value ends at x~0.826); the F006 p1 (photograph) and F023 p1 identity/revision boxes also cut the glyph line.",
+   "affected_rows": [
+    "F005/p1/identity",
+    "F005/p1/revision",
+    "F006/p1/identity",
+    "F006/p1/revision",
+    "F023/p1/identity",
+    "F023/p1/revision"
+   ],
+   "evidence": "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.215_0.92_0.33.png, C:/t/r2x/r32-stage/crops/F006-p1-0.4_0.22_0.8_0.245.png, C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.25_0.8_0.3.png; positions converted from crop pixels to display fractions."
+  },
+  {
+   "topic": "(k) rotated crops",
+   "proposed_rule": "No rotated or re-taken crop occurs in batch B2 (all crops rotate_ccw 0, upright and readable); every cited crop is the readable one.",
+   "affected_rows": [],
+   "evidence": "CROPS.jsonl entries for the batch-B2 pool ids; all cited crops opened."
+  },
+  {
+   "topic": "(new) reply-to-comments sheets that print only the answered submittal's reference",
+   "proposed_rule": "A contractor reply sheet that prints no number of its own and only a 'REF NO' / 'Reference' equal to the submittal whose comments it answers: identity present with that literal, association 'uncertain' with a note (the number identifies the answered document; whether the sheet is filed under it cannot be established from the page); the revision suffix likewise uncertain; decision absent / no_decision_area even when the header restates the consultant's code (e.g. 'MS ACS (B)'). At document level identity is resolved_for_scoring 'no'. A consultant comment sheet in the same file that carries the review decision for the same submittal (F006 p2) is distinguished: its printed submittal number is accepted as resolved. If the consolidator instead rules that such a REF NO is the sheet's own identity, F024 and F029 identity flip to yes/yes.",
+   "affected_rows": [
+    "F024/p1/identity",
+    "F024/p1/revision",
+    "F024/p1/decision",
+    "F029/p1/identity",
+    "F029/p1/revision",
+    "F029/p1/decision",
+    "F006/p2/identity"
+   ],
+   "evidence": "C:/t/r2x/r32-stage/renders/F024-p1.png (Al Arabia reply, 'REF NO: NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-007-R02'); C:/t/r2x/r32-stage/renders/F029-p1.png ('Reference : NBC-JGH-SCALE-MAS-MEP-ELE-2025-018-R00', Subject 'Reply to comments for SCS Rev.00'); C:/t/r2x/r32-stage/renders/F006-p2.png (LACASA comment sheet, 'Approved as Noted')."
+  },
+  {
+   "topic": "(new) internal spaces in literals",
+   "proposed_rule": "Literals keep internal spaces as printed ('...-0002- R00', '273 / MT / MEP 2 1 7'); where a space cannot be told apart from letter-spacing on a photograph (F023) or the same number is printed with and without it on different pages (F006 p1 vs p2), the scorer should compare whitespace-insensitively while the label keeps the printed form.",
+   "affected_rows": [
+    "F003/p1/identity",
+    "F004/p1/identity",
+    "F005/p1/identity",
+    "F006/p1/identity",
+    "F007/p1/identity",
+    "F011/p1/identity",
+    "F015/p1/identity",
+    "F023/p1/identity"
+   ],
+   "evidence": "reference crops of the LACASA forms show a gap after the last hyphen before R0n; C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.25_0.8_0.3.png shows wide spacing in '2 1 7'."
+  }
+ ],
+ "files_opened": [
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/REVIEWER-PACKET.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/labels/R32-LABELS-DRAFT-1.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/PAGE-FIELD-WORKLIST.csv",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/DOCUMENT-FIELD-WORKLIST.csv",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/DOCUMENT-QUESTIONS.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/CROPS.jsonl",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/EVIDENCE-INDEX.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json",
+  "(hashed only, not read: the 110 packet files listed in C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json and the 48 batch-B2 renders/crops listed in EVIDENCE-INDEX.json)",
+  "C:/t/r2x/r32-stage/renders/F003-p1.txt",
+  "C:/t/r2x/r32-stage/renders/F004-p1.txt",
+  "C:/t/r2x/r32-stage/renders/F005-p1.txt",
+  "C:/t/r2x/r32-stage/renders/F007-p1.txt",
+  "C:/t/r2x/r32-stage/renders/F011-p1.txt",
+  "C:/t/r2x/r32-stage/renders/F015-p1.txt",
+  "(text layers above were grepped for \"Reference\" only; all but F003-p1.txt were empty and F003-p1.txt holds only the For-The-Engineer name; not used as evidence)",
+  "C:/Users/moham/AppData/Local/Temp/claude/C--Users-moham-Desktop-dev-dev/453468dd-6650-45fd-93b4-4712a8308d22/scratchpad/r32rev-B2/draft_b2.json (my read-only extract of the draft for these pool ids)",
+  "C:/t/r2x/r32-stage/renders/F002-p1.png",
+  "C:/t/r2x/r32-stage/crops/F002-p1-0.04_0.27_0.85_0.35.png",
+  "C:/t/r2x/r32-stage/crops/F002-p1-0.1_0.57_0.85_0.62.png",
+  "C:/t/r2x/r32-stage/renders/F002-p2.png",
+  "C:/t/r2x/r32-stage/crops/F002-p2-0.55_0.1_0.9_0.135.png",
+  "C:/t/r2x/r32-stage/crops/F002-p2-0.62_0.32_0.85_0.4.png",
+  "C:/t/r2x/r32-stage/renders/F002-p3.png",
+  "C:/t/r2x/r32-stage/renders/F002-p4.png",
+  "C:/t/r2x/r32-stage/crops/F002-p4-0.55_0.12_0.9_0.155.png",
+  "C:/t/r2x/r32-stage/crops/F002-p4-0.6_0.33_0.84_0.41.png",
+  "C:/t/r2x/r32-stage/renders/F003-p1.png",
+  "C:/t/r2x/r32-stage/crops/F003-p1-0.1_0.215_0.92_0.33.png",
+  "C:/t/r2x/r32-stage/crops/F003-p1-0.1_0.77_0.8_0.84.png",
+  "C:/t/r2x/r32-stage/renders/F004-p1.png",
+  "C:/t/r2x/r32-stage/crops/F004-p1-0.1_0.215_0.92_0.33.png",
+  "C:/t/r2x/r32-stage/crops/F004-p1-0.1_0.77_0.8_0.84.png",
+  "C:/t/r2x/r32-stage/renders/F005-p1.png",
+  "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.215_0.92_0.33.png",
+  "C:/t/r2x/r32-stage/crops/F005-p1-0.1_0.77_0.8_0.84.png",
+  "C:/t/r2x/r32-stage/renders/F006-p1.png",
+  "C:/t/r2x/r32-stage/crops/F006-p1-0.4_0.22_0.8_0.245.png",
+  "C:/t/r2x/r32-stage/crops/F006-p1-0.18_0.6_0.82_0.66.png",
+  "C:/t/r2x/r32-stage/renders/F006-p2.png",
+  "C:/t/r2x/r32-stage/crops/F006-p2-0.2_0.22_0.7_0.31.png",
+  "C:/t/r2x/r32-stage/renders/F007-p1.png",
+  "C:/t/r2x/r32-stage/crops/F007-p1-0.45_0.2_0.85_0.215.png",
+  "C:/t/r2x/r32-stage/crops/F007-p1-0.08_0.79_0.8_0.84.png",
+  "C:/t/r2x/r32-stage/renders/F007-p2.png",
+  "C:/t/r2x/r32-stage/crops/F007-p2-0.81_0.92_0.99_0.98.png",
+  "C:/t/r2x/r32-stage/crops/F007-p2-0.8_0.66_0.9_0.74.png",
+  "C:/t/r2x/r32-stage/renders/F011-p1.png",
+  "C:/t/r2x/r32-stage/crops/F011-p1-0.45_0.205_0.85_0.22.png",
+  "C:/t/r2x/r32-stage/crops/F011-p1-0.08_0.79_0.8_0.84.png",
+  "C:/t/r2x/r32-stage/renders/F011-p2.png",
+  "C:/t/r2x/r32-stage/crops/F011-p2-0.81_0.935_0.92_0.98.png",
+  "C:/t/r2x/r32-stage/crops/F011-p2-0.92_0.73_1_0.81.png",
+  "C:/t/r2x/r32-stage/renders/F015-p1.png",
+  "C:/t/r2x/r32-stage/crops/F015-p1-0.45_0.215_0.85_0.235.png",
+  "C:/t/r2x/r32-stage/crops/F015-p1-0.1_0.78_0.8_0.83.png",
+  "C:/t/r2x/r32-stage/renders/F023-p1.png",
+  "C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.25_0.8_0.3.png",
+  "C:/t/r2x/r32-stage/crops/F023-p1-0.2_0.68_0.8_0.71.png",
+  "C:/t/r2x/r32-stage/renders/F024-p1.png",
+  "C:/t/r2x/r32-stage/crops/F024-p1-0.05_0.04_0.7_0.11.png",
+  "C:/t/r2x/r32-stage/renders/F027-p1.png",
+  "C:/t/r2x/r32-stage/crops/F027-p1-0.35_0.85_0.66_1.png",
+  "C:/t/r2x/r32-stage/renders/F029-p1.png",
+  "C:/t/r2x/r32-stage/crops/F029-p1-0.08_0.08_0.6_0.13.png"
+ ],
+ "notes": "Resumed run: no earlier batch-B2 response existed, so the review started from scratch (only an earlier integrity.py was present in the scratch folder; it was re-run). Integrity checks all passed (manifest + 110 files, draft, conventions, selection, source manifest, crops, evidence index, reviewer columns blank; the 48 batch-B2 renders/crops also match EVIDENCE-INDEX). Every in-scope render (18 pages) and every crop listed for these pages (30) was opened with the image viewer; text layers were empty for most scans and were not used as evidence. Corrections: 6 region-only rows (F005 p1, F006 p1 and F023 p1 identity and revision), 2 missing association_note repairs (F006 p2, F024 p1 revision), reply-sheet identity association resolved->uncertain (F024 p1, F029 p1), F029 revision source moved from subject prose Rev.00 to the R00 suffix. No decision ruling was changed. Not human sign-off; nothing here changes the M2 verdict (CHANGES STILL REQUIRED) or starts M3."
+}

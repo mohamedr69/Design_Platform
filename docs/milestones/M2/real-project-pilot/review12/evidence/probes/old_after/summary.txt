@@ -1,0 +1,154 @@
+{
+  "timeout_identity": [
+    "X-SD-1"
+  ],
+  "illegible_identity": [
+    [
+      "decision",
+      "ANN",
+      "validated"
+    ],
+    [
+      "identity",
+      "X-SD-1",
+      "validated"
+    ]
+  ],
+  "illegible_decision": [
+    [
+      "decision",
+      "ANN",
+      "validated"
+    ],
+    [
+      "identity",
+      "X-SD-1",
+      "validated"
+    ]
+  ],
+  "missing_hash_state": "unknown_source",
+  "wrong_profile_state": "unavailable",
+  "heading": {
+    "part_control": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item evidence: reader part 'P-1'"
+      ],
+      "reader": {
+        "part_number": "P-1",
+        "quantity": null,
+        "description": null
+      },
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    },
+    "source_description_count": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item evidence: count '( 2 )' in the reader's description"
+      ],
+      "reader": {
+        "part_number": null,
+        "quantity": null,
+        "description": "( 2 ) Dual Input Module"
+      },
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": "Dual Input Module"
+      }
+    },
+    "numeric_zero": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item evidence: reader quantity 0"
+      ],
+      "reader": {
+        "part_number": null,
+        "quantity": 0,
+        "description": null
+      },
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    },
+    "string_zero": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item evidence: reader quantity '0'"
+      ],
+      "reader": {
+        "part_number": null,
+        "quantity": "0",
+        "description": null
+      },
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    }
+  },
+  "grouped_changed_identity": [
+    {
+      "page": 1,
+      "layer": "ai",
+      "kind": "ai_evidence",
+      "reader": "ai:EV1",
+      "component": "ai:1:own@X-SD-1",
+      "facts": [
+        {
+          "field": "decision",
+          "value": "ANN",
+          "state": "held",
+          "ai_state": "validated",
+          "target": "X-SD-1",
+          "association": "held:target_changed"
+        }
+      ],
+      "provenance": {
+        "version": null,
+        "policy": null,
+        "profile": "default"
+      },
+      "association_identity": "X-SD-1"
+    },
+    {
+      "page": 1,
+      "layer": "ai",
+      "kind": "ai_evidence",
+      "reader": "ai:EV1",
+      "component": "ai:1:own",
+      "facts": [
+        {
+          "field": "identity",
+          "value": "X-SD-9",
+          "state": "validated",
+          "ai_state": "validated"
+        }
+      ],
+      "provenance": {
+        "version": "evidence-reader-2026-09-29.7",
+        "policy": "evidence-policy-2026-09-29.4",
+        "profile": "default"
+      }
+    }
+  ]
+}

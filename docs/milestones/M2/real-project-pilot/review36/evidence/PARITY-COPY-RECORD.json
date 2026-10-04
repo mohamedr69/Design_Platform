@@ -1,0 +1,64 @@
+{
+ "files": {
+  "common_r35.py": {
+   "copy_sha256": "e9e1ba639cd5ad33ffe0dc86a7b1d9263da830114a183dc2176589a8b379628b",
+   "diff": [
+    "--- evaluator-offline-r32/scripts/common_r35.py",
+    "+++ r36/parity/scripts/common_r35.py",
+    "@@ -20 +20 @@",
+    "-WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")",
+    "+WORK = pathlib.Path(\"C:/t/iso/work/r2x/r36/parity\")",
+    "@@ -22 +22 @@",
+    "-HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\"",
+    "+HARNESS_DIR = pathlib.Path(\"C:/t/iso/work/r2x/r36/harness-r32\")",
+    "@@ -56 +56 @@",
+    "-    \"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\",",
+    "+    \"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\","
+   ],
+   "source_sha256": "5f6cb52e1f47d34ca5792bda0ffe9393b59c29437ff191f6e43ee662b0fe780d",
+   "substitutions": [
+    [
+     "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")",
+     "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r36/parity\")",
+     1
+    ],
+    [
+     "HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\"",
+     "HARNESS_DIR = pathlib.Path(\"C:/t/iso/work/r2x/r36/harness-r32\")",
+     1
+    ],
+    [
+     "\"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\"",
+     "\"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\"",
+     1
+    ]
+   ]
+  },
+  "run_evaluator_offline_r32.py": {
+   "copy_sha256": "2c368caac98e7f39436f30bc9056fbe78fde974fe5a6cae230c22294b8bf3291",
+   "diff": [
+    "--- evaluator-offline-r32/scripts/run_evaluator_offline_r32.py",
+    "+++ r36/parity/scripts/run_evaluator_offline_r32.py",
+    "@@ -120 +120 @@",
+    "-    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r35/run/no-database-never-created.db\"",
+    "+    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r36/parity/run/no-database-never-created.db\"",
+    "@@ -465 +465 @@",
+    "-    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r35/run/no-database-never-created.db\")",
+    "+    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r36/parity/run/no-database-never-created.db\")"
+   ],
+   "source_sha256": "b7edc6d9cc4a57acf7eaa111303ea845e411d8d3f8e36f4c8bf6f441c85407d0",
+   "substitutions": [
+    [
+     "C:/t/iso/work/r2x/r35/run/no-database-never-created.db",
+     "C:/t/iso/work/r2x/r36/parity/run/no-database-never-created.db",
+     2
+    ]
+   ]
+  }
+ },
+ "kind": "ORCH-06C parity-script copy record",
+ "source_package_manifest_sha256": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7",
+ "statement": "only the work folder, the harness folder and the expected literal_compare_r32 hash differ from the ORCH-06 scripts",
+ "target": "C:/t/iso/work/r2x/r36/parity/scripts",
+ "written_at_utc": "2026-10-03T15:41:19+00:00"
+}

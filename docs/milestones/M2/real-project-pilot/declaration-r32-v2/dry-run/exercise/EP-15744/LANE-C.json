@@ -1,0 +1,185 @@
+{
+ "allowance_charged_this_invocation": 1,
+ "allowance_refused": 0,
+ "allowance_used": 1,
+ "application_env_check": {
+  "application_env_verified": [
+   {
+    "key": "DRAWINGS_AI_REVIEW_ENABLED",
+    "setting": "drawings_ai_review_enabled",
+    "setting_value": false,
+    "value": "false"
+   }
+  ],
+  "drawings_ai_review_enabled": {
+   "enabled": false,
+   "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+  }
+ },
+ "application_reader_run": false,
+ "authorization": null,
+ "cli_version": "dry mode: no CLI is run",
+ "contract_breach": null,
+ "contract_breaches": 0,
+ "declared_identity": {
+  "provider": "dry-refusing",
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "deferred": {},
+ "documents": {
+  "F043": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "probe sent through the full chain (reader 'none': no document read)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  }
+ },
+ "dry_stub_calls": 1,
+ "env_switches": {
+  "AI_EVIDENCE_ADJUDICATE": "1",
+  "AI_EVIDENCE_ASSOC": "1",
+  "AI_EVIDENCE_DEADLINE": "1",
+  "AI_EVIDENCE_DECISION_REGION": "1",
+  "AI_EVIDENCE_GUARD": "1",
+  "AI_EVIDENCE_IDGUARD": "1",
+  "AI_EVIDENCE_SCHEDULING": "required_first",
+  "AI_EVIDENCE_SUPPORT": "v2",
+  "AI_EVIDENCE_TARGETED": "1",
+  "AI_EVIDENCE_VARIANT": "EV1"
+ },
+ "environment_check": {
+  "provider_env_verified": [],
+  "switches": {
+   "AI_EVIDENCE_ADJUDICATE": "1",
+   "AI_EVIDENCE_ASSOC": "1",
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_DECISION_REGION": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_IDGUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  }
+ },
+ "events": [
+  {
+   "error": "dry_refused",
+   "kind": "dry_refused",
+   "lane": "C",
+   "pool_id": "F043",
+   "task": "r33_dry_probe"
+  }
+ ],
+ "evidence_tasks": [
+  "discover_page",
+  "locate_decision",
+  "read_boq_row",
+  "read_decision",
+  "read_field_context",
+  "read_identity",
+  "read_revision"
+ ],
+ "gate": {
+  "deferred": 0,
+  "refused": 0,
+  "served": 0
+ },
+ "guard": null,
+ "identity": {
+  "checked": 0,
+  "log": "C:/t/r2x/r40-sandbox/r40d-m15744-52050f/inv-1/IDENTITY-LOG-C.jsonl",
+  "mismatches": 0,
+  "refused": 0
+ },
+ "invocation": 1,
+ "lane": "C",
+ "lane_stop_state": {
+  "reason": null,
+  "state": "running",
+  "streak": 0
+ },
+ "limit_events": [],
+ "live_provider_attempts_blocked": [],
+ "mode": "dry",
+ "model_requests": 0,
+ "per_document": {
+  "F043": {
+   "probe": "dry_refused"
+  }
+ },
+ "policy_version": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+identity-role-guard-2026-10-02.2+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1",
+ "reader": "none",
+ "reader_version": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1+decision-region-2026-10-02.1",
+ "retries": {
+  "dispatched": 0,
+  "events": []
+ },
+ "run_key": "6eb0d89e97e450c8552cb60a7c6695deaebbee16e2a19c7e0852f10e5970481a",
+ "sandbox": "C:\\t\\r2x\\r40-sandbox\\r40d-m15744-52050f\\inv-1\\C",
+ "seconds": 0.3,
+ "serves_by_mode": {},
+ "stats": {
+  "dry_refused": 1,
+  "ok": 0,
+  "stopped_by_guard": 0
+ },
+ "stop_state": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "stopped": null,
+ "store_dispatched_to_inner": 1,
+ "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode",
+ "task_kinds": [
+  "discover_page",
+  "locate_decision",
+  "r33_dry_probe",
+  "read_decision",
+  "read_field_context",
+  "read_identity",
+  "read_revision"
+ ],
+ "tree": "C:\\t\\iso\\cand-r29\\backend",
+ "tripwire": [
+  {
+   "pool_id": "F043",
+   "resolved": [],
+   "unresolved": [],
+   "when": "exercise_no_facts"
+  }
+ ],
+ "unread_pages": {}
+}

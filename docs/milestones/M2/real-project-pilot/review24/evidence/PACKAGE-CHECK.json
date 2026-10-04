@@ -1,0 +1,165 @@
+{
+ "manifest": {
+  "files": 423,
+  "mismatched_or_missing": [],
+  "unlisted": []
+ },
+ "markdown_links": {
+  "checked": 28,
+  "broken": []
+ },
+ "trees": {
+  "accepted": true,
+  "frozen_r21_candidate": true,
+  "reader_unchanged": true,
+  "application_change": "none (harness runner provider-stop recovery, tests and documents only)"
+ },
+ "harness_frozen": {
+  "frozen_before_final_validation": true,
+  "packaged_files_equal_frozen_hashes": true,
+  "workspace_files_equal_frozen_hashes": true,
+  "runner": "arm-ev-2026-10-01.v4.2",
+  "lifecycle": "runner-lifecycle-2026-10-01.v2",
+  "journal": "provider-outcomes.v1",
+  "scoring_files_unchanged_vs_review22": true,
+  "changed_vs_v4_1": [
+   "append_response.py",
+   "arm_ev.py",
+   "dry_provider2.py",
+   "lifecycle_probes.py",
+   "runner_probes.py"
+  ],
+  "new_vs_v4_1": [
+   "bindings_r24.py",
+   "package_r24.py",
+   "patch_provider_recovery.py",
+   "patch_provider_recovery_2.py",
+   "provider_boundary_probes.py",
+   "provider_journal.py",
+   "run_r24_chain.sh",
+   "test_boundary_v4_2.py",
+   "test_provider_journal.py",
+   "verify_r24_package.py"
+  ],
+  "durable_allowance_module_unchanged": true
+ },
+ "reviewer_files_unchanged": true,
+ "reviewer_runner_is_submitted_v4_1": true,
+ "earlier_packages_unchanged": {
+  "review13": true,
+  "review14": true,
+  "review15": true,
+  "review16": true,
+  "ai-accuracy-pilot": true,
+  "ai-pilot-r18-correction": true,
+  "review19": true,
+  "review20": true,
+  "review21": true,
+  "review22": true,
+  "review23": true
+ },
+ "labels_r21_unchanged": true,
+ "dry_inputs_unchanged": {
+  "r22_dry_declaration": true,
+  "r22_dry_stage": true,
+  "labels_dry_r22": true
+ },
+ "tests": {
+  "PROVIDER-JOURNAL": {
+   "tests": 23,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "LIFECYCLE-V4.1": {
+   "tests": 5,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "RUNNER-V4": {
+   "tests": 8,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "BOUNDARY-V4.2": {
+   "tests": 7,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "HARNESS-V4": {
+   "tests": 19,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-PROVIDER-on-v4.1": {
+   "tests": 3,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-PROVIDER-on-v4.2": {
+   "tests": 3,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  }
+ },
+ "tests_ok": true,
+ "critical_stop_evidence": {
+  "T1_critical_stop_then_plain_resume": true,
+  "T2_repeated_resume": true,
+  "T3_terminal_stop_no_remaining_project": true,
+  "T5a_killed_before_stop_persisted": true,
+  "T5b_killed_after_stop_file_before_manifest": true
+ },
+ "provider_stop_evidence": {
+  "P1_provider_stop_ordinary": true,
+  "P2_provider_stop_killed_before_file": true,
+  "P4_repeated_resume_of_recovered_provider_stop": true,
+  "P3_provider_stop_killed_after_file": true,
+  "P5a_two_failures_and_an_unresolved_request": true,
+  "P5b_success_between_failures": true,
+  "P5c_breaker_not_reset_by_restart": true,
+  "P6a_torn_record": true,
+  "P6b_journal_missing": true,
+  "P6c_other_binding": true,
+  "P6d_result_without_attempt": true,
+  "T4_three_consecutive_provider_failures": true,
+  "T4b_single_failed_request_is_not_terminal": true
+ },
+ "runner_controls": {
+  "S2_kill_resume_only_remaining_allowance": true,
+  "S5_cache_hits_charge_nothing": true,
+  "S7_deferral_resumes_when_eligible": true,
+  "S1_S3_S4_S6_S8": true
+ },
+ "reviewer_probe": {
+  "v4_1_before_file": {
+   "initial_exit": 98,
+   "resume_exit": 0,
+   "new_sends": 16,
+   "resume_status": "completed"
+  },
+  "v4_2_before_file": {
+   "initial_exit": 98,
+   "resume_exit": 4,
+   "new_sends": 0,
+   "resume_status": "stopped"
+  },
+  "v4_2_after_file_control": {
+   "resume_exit": 4,
+   "new_sends": 0,
+   "resume_status": "stopped"
+  }
+ },
+ "ledger": {
+  "settled_original_experiment": 128,
+  "r21_to_r24_live_entries": 0,
+  "r21_to_r24_live_scopes": []
+ },
+ "ok": true
+}

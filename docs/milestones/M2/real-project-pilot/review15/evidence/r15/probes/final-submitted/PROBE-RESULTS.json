@@ -1,0 +1,173 @@
+{
+  "budget": {
+    "actual_job_budget_classes_used": "C:\\t\\iso\\frozen-r12\\backend\\app\\ai\\budget.py",
+    "child_exit": 91,
+    "persisted_calls_after_crash": 0,
+    "calls_before_crash": 5,
+    "resume": {
+      "sent": 12,
+      "resumed": true,
+      "calls_before": 0,
+      "calls_after": 12,
+      "exhausted": "calls_per_document",
+      "harness": "r2x-boq-harness-2026-09-30.1"
+    },
+    "total_scripted_provider_calls": 17,
+    "expected_max_total": 12,
+    "clean_completion_control": [
+      {
+        "sent": 12,
+        "resumed": false,
+        "calls_before": 0,
+        "calls_after": 12,
+        "exhausted": "calls_per_document",
+        "harness": "r2x-boq-harness-2026-09-30.1"
+      },
+      {
+        "sent": 0,
+        "resumed": true,
+        "calls_before": 12,
+        "calls_after": 12,
+        "exhausted": "calls_per_document",
+        "harness": "r2x-boq-harness-2026-09-30.1"
+      }
+    ]
+  },
+  "row_join": {
+    "single_misread_duplicate": {
+      "pairs": [
+        [
+          "first-physical-row",
+          37,
+          "matched"
+        ]
+      ],
+      "unmatched_emitted": [],
+      "unmatched_truth": [
+        6
+      ]
+    },
+    "same_row_unreadable_quantity": {
+      "pairs": [
+        [
+          "first-physical-row",
+          6,
+          "ambiguous"
+        ]
+      ],
+      "unmatched_emitted": [],
+      "unmatched_truth": [
+        37
+      ]
+    },
+    "two_row_control": {
+      "pairs": [
+        [
+          "first-physical-row",
+          6,
+          "matched"
+        ],
+        [
+          "second-physical-row",
+          37,
+          "matched"
+        ]
+      ],
+      "unmatched_emitted": [],
+      "unmatched_truth": []
+    },
+    "expected": "A quantity being evaluated must not select a different physical truth row; without verified source alignment, hold the sparse duplicate."
+  },
+  "overlay": {
+    "accepted_target_equals_unapproved_proposal": {
+      "overlay": "r2x-overlay-2026-09-30.1",
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "recorded_target": "COVER-1",
+          "recorded_anchor_identity": null,
+          "ai_field_key": "own:revision",
+          "type": "held association matching the proposal",
+          "critical": false
+        }
+      ],
+      "critical_after_overlay": 0,
+      "supported_raw_observations": 1
+    },
+    "wrong_context_inserted_first": {
+      "overlay": "r2x-overlay-2026-09-30.1",
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "recorded_target": "COVER-1",
+          "recorded_anchor_identity": null,
+          "ai_field_key": "own:revision",
+          "type": "held association matching the proposal",
+          "critical": false
+        }
+      ],
+      "critical_after_overlay": 0,
+      "supported_raw_observations": 1
+    },
+    "active_context_inserted_first": {
+      "overlay": "r2x-overlay-2026-09-30.1",
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "recorded_target": null,
+          "recorded_anchor_identity": null,
+          "ai_field_key": "own:revision",
+          "type": "correct literal, accepted without a supported target",
+          "critical": true
+        }
+      ],
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    },
+    "revision_1_dot_0_vs_10": {
+      "overlay": "r2x-overlay-2026-09-30.1",
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "1.0",
+          "recorded_target": "COVER-1",
+          "recorded_anchor_identity": null,
+          "ai_field_key": "own:revision",
+          "type": "held association matching the proposal",
+          "critical": false
+        }
+      ],
+      "critical_after_overlay": 0,
+      "supported_raw_observations": 1
+    },
+    "no_target_control": {
+      "overlay": "r2x-overlay-2026-09-30.1",
+      "critical_typed": [
+        {
+          "doc": "D",
+          "page": 2,
+          "field": "revision",
+          "value": "00",
+          "recorded_target": null,
+          "recorded_anchor_identity": null,
+          "ai_field_key": "own:revision",
+          "type": "correct literal, accepted without a supported target",
+          "critical": true
+        }
+      ],
+      "critical_after_overlay": 1,
+      "supported_raw_observations": 1
+    }
+  }
+}

@@ -1,0 +1,3066 @@
+{
+ "frozen_at_utc": "2026-10-02T18:59:13+00:00",
+ "authorization": "AUTHORIZATION-2026-10-02.md",
+ "seed": "m2-r30-pool-2026-10-02",
+ "rules": "Step 4: the seeded initial labelling pool of 72 documents, from METADATA ONLY (directory entries, names, sizes, modified\ntimes, attributes; no content read, no placeholder hydrated). The rules are fixed here, before the draw, and the full\nseeded order is frozen so the two predeclared extensions are deterministic.\n\nRules (Review 31 plan v2 section 2 / FIELD-POPULATION-FEASIBILITY.v2):\n  universe   every *.pdf under the verified project folder of each cohort project (PROJECT-VERIFICATION.json), size > 0;\n             a path naming ANOTHER EP number (cross-project material) is excluded, fail closed\n  stratum    review_signal if the relative path matches REVIEW; else drawing_signal if it matches DRAWING; else other\n             (the same regular expressions as Review 31's selector, so the feasibility basis is unchanged)\n  order      ascending sha256(\"<seed>|EP-<ep>|<relative path>\") -- one global seeded order\n  duplicates a file whose (lower-cased name, size) equals an earlier file in the seeded order is a duplicate copy and is\n             skipped (recorded); the first in seeded order is the representative\n  pool       quotas review_signal 40, drawing_signal 20, other 12, filled stratum by stratum in the seeded order with at most\n             12 documents per project; if caps leave the pool short of 72, the remainder is filled from any stratum in the\n             seeded order, still at most 12 per project (recorded as 'fill')\n  extension-1 the next 36 review_signal documents in the seeded order, cumulative cap 18 per project\n  extension-2 the next 36 review_signal documents, cumulative cap 24; when the cohort projects are exhausted under the cap,\n             the alternate projects enter in their order (each needs the same verification first)\nSeed: m2-r30-pool-2026-10-02 (declared in DRAFT-DECLARATION.v2). Writes FROZEN-SELECTION.json.",
+ "rules_sha256": "84a0bdec9b452067dfc5eba17251fc52778e3ed5dee1328199a962703d34457a",
+ "content_read": "none: directory entries, names, sizes, modified times and attributes only",
+ "cohort": [
+  "3563",
+  "22349",
+  "27331",
+  "15744",
+  "26687",
+  "29255"
+ ],
+ "project_folders": {
+  "3563": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Pivot Engineering\\EP-3563 The First Avenue Mall & Hotel",
+  "22349": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Ardh Al Kananh Building Contracting\\EP-22349 - G+4P+12 on Plot No. 0815 @ Nuaimea 1, Ajman",
+  "27331": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Euro Gulf Technoservices LLC\\EP-27331 - Emaar Beachfront",
+  "15744": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Al Abdouli Group\\EP-15744 - CMW 17045 @ Al Minhad",
+  "26687": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\ENCO\\EP-26687 Wail Al Jamali Villa Umm Suqaim 2nd",
+  "29255": "C:\\Users\\moham\\Juma Al Majid\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Scale EMC\\EP-29255 - G+2P+8F+R @ JUmeirah Garden City"
+ },
+ "universe": {
+  "pdf_files": 3046,
+  "eligible": 2585,
+  "excluded": {
+   "duplicate copy": 457,
+   "names another EP number": 2,
+   "empty file": 2
+  },
+  "by_project_stratum": {
+   "3563": {
+    "review_signal": 134,
+    "other": 175,
+    "drawing_signal": 678
+   },
+   "22349": {
+    "drawing_signal": 74,
+    "other": 51,
+    "review_signal": 7
+   },
+   "27331": {
+    "other": 102,
+    "drawing_signal": 218,
+    "review_signal": 71
+   },
+   "15744": {
+    "other": 72,
+    "drawing_signal": 5,
+    "review_signal": 5
+   },
+   "26687": {
+    "drawing_signal": 30,
+    "other": 30,
+    "review_signal": 12
+   },
+   "29255": {
+    "other": 453,
+    "drawing_signal": 355,
+    "review_signal": 113
+   }
+  },
+  "digest_sha256": "affbc51b6e6449cc52255ee62f8b35d7e865146b13f5e874dccbee620429717c"
+ },
+ "pool": [
+  {
+   "pool_id": "F001",
+   "selection_order": 1,
+   "ep": "3563",
+   "relative_path": "EP-3563 FA Submittal/R3/Consultant Comment.pdf",
+   "size": 1404969,
+   "modified_utc": "2016-03-29T04:42:18+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "00c06622d2f9ad74e9c3bd9cb32729ebd8cb008d8ee8e5c8ea5ac51e88d5ba11"
+  },
+  {
+   "pool_id": "F002",
+   "selection_order": 2,
+   "ep": "29255",
+   "relative_path": "MS/ACS/R1/previous approval/G+5 - Modular Design Engg Consultant - ACS.pdf",
+   "size": 5121165,
+   "modified_utc": "2025-06-26T11:40:01+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0199d0e864a82ccc647fdf1fa510a39bfea3a0f7b18f463da708944e489f14e5"
+  },
+  {
+   "pool_id": "F003",
+   "selection_order": 3,
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-002-R00-AAN(First Podium Floor Plan Telephone Layout).pdf",
+   "size": 108873,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "020de1a64a9353553fce9ce91e2f602e9d081ed49bba5bf6747fb717ba365738"
+  },
+  {
+   "pool_id": "F004",
+   "selection_order": 4,
+   "ep": "29255",
+   "relative_path": "Project document_Scale Jumeriah Garden/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-004-R00-AAN(First Floor Plan Telephone Layout).pdf",
+   "size": 101332,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "02296d009d84c6cff9bf5154e512ac868234e8022845dee202d4e0bf2f5452de"
+  },
+  {
+   "pool_id": "F005",
+   "selection_order": 5,
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-004-R00-AAN(First Floor Plan CCTV System Layout).pdf",
+   "size": 111290,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0248e4917389d643f3e2dc41dd41da6c47b380302e708d98d2f00dbe4bb2de34"
+  },
+  {
+   "pool_id": "F006",
+   "selection_order": 6,
+   "ep": "29255",
+   "relative_path": "Project document_Scale Jumeriah Garden/MS Approval Copy/ACS_Approval.pdf",
+   "size": 159305,
+   "modified_utc": "2025-09-17T11:58:20+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "02cc3ece0a4fb26932deda547c382002dae2ff8416cda602be96dc1da62bd7f8"
+  },
+  {
+   "pool_id": "F007",
+   "selection_order": 7,
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0009-R00 (MTR & TELEPHONE ROOM DETAILS LAYOUT).pdf",
+   "size": 10925192,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "04410f099f1a756727a5af72362c64645f1e34261e3b3949a58694508befedaa"
+  },
+  {
+   "pool_id": "F008",
+   "selection_order": 8,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0102-Rev.00 SD for 35th to 56th  Floor Plan  Emergency Lighting Layout (Tower-1) Code-B.pdf",
+   "size": 14664829,
+   "modified_utc": "2025-06-13T06:53:54+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0453279e37a811cd6840252b96de7be57499db9edbc2a11fa5a7df86a03cfe7d"
+  },
+  {
+   "pool_id": "F009",
+   "selection_order": 9,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0034-Rev.00 SD for 5th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+   "size": 4609394,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0641beb12a67cd1a565934e6e08d77352f6cd694427be2fafabf90b957a36b4d"
+  },
+  {
+   "pool_id": "F010",
+   "selection_order": 10,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002C.pdf",
+   "size": 2108118,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "06fd9a3c4bf5edb8177659cbe2598b4123c492a9314fd57de237f57f3b6dc529"
+  },
+  {
+   "pool_id": "F011",
+   "selection_order": 11,
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/Received from Mep/RECEIVED/NBC-JGH-SCALE-SDS-MEP-CO-2025-010-R00-RAR(FCC-Control Room Details Layout).pdf",
+   "size": 5083231,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0726a3364df97a663c1ed9c1137d6131fce9bf0d756b4262f56789957e5b179d"
+  },
+  {
+   "pool_id": "F012",
+   "selection_order": 12,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-TEL-2633-007A.pdf",
+   "size": 1103145,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "076e479c66f1182497681c67169ed8f835c51f1000c38f2a232faecdbae87c40"
+  },
+  {
+   "pool_id": "F013",
+   "selection_order": 13,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0060-Rev.00 - 25th to 34th  Floor Plan (Tier 1) Fire Alarm & Voice Evac. System Layout_Code B.pdf",
+   "size": 2959939,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0828aab0d4b839bcbf8a2b84eab2a60e6e204079519ef3fb9bfd82f2949efe61"
+  },
+  {
+   "pool_id": "F014",
+   "selection_order": 14,
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xfirefighting_dewan_part2 - approved1483884487958.pdf",
+   "size": 16690259,
+   "modified_utc": "2017-01-31T10:01:19+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "097f562d52c6108240b90141f4a28b9d0bb55c565308a390868a6d14f246f19c"
+  },
+  {
+   "pool_id": "F015",
+   "selection_order": 15,
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-005-R00-AAN(Typical 2nd to 8th Floor Plan Telephone Layout).pdf",
+   "size": 102688,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0a1f03f93b3b73c4cfb94888f7be1dab8616689e3c5ca5353ac9ca710356ce49"
+  },
+  {
+   "pool_id": "F016",
+   "selection_order": 16,
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xfaxemxvoice_dewan - approved1483884487958.pdf",
+   "size": 33515196,
+   "modified_utc": "2017-01-31T10:01:09+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0a8781c01b291039ef37ea89b1f05b162298751d6b3be3d0962e451fc390028c"
+  },
+  {
+   "pool_id": "F017",
+   "selection_order": 17,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/7- roof floor/Rev-0/0 3.pdf",
+   "size": 1082131,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0b19a656eb8be741b3ffc28bdc077f8d693c8c09426bdbbaf8b916b5fc6b16cd"
+  },
+  {
+   "pool_id": "F018",
+   "selection_order": 18,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002F.pdf",
+   "size": 2524785,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0b2e933e3503cd6221557943e656124a7865cbbb9a313283f1f263c2b59acf01"
+  },
+  {
+   "pool_id": "F019",
+   "selection_order": 19,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-TEL-2633-007.pdf",
+   "size": 1900411,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0cb0ad95c55ab864741595c6f0e7c90e902891556976593ad93ab5804e8ee7d3"
+  },
+  {
+   "pool_id": "F020",
+   "selection_order": 20,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0047-Rev.00 Shop Drawing for 7th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+   "size": 5100463,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0d345f3b523f2fac0cc6085c1fa44bbeb466e6f8ccab53e1639719203f6db8dc"
+  },
+  {
+   "pool_id": "F021",
+   "selection_order": 21,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0037-Rev.00 Shop Drawing Submittal for 3rd & 4th Floor Plan Emergency Lighting Layout - B.pdf",
+   "size": 7574838,
+   "modified_utc": "2025-05-13T07:57:17+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0d587a3bdc86e87765f0522db79bc6a43833e514862866436302b14b2efe3e04"
+  },
+  {
+   "pool_id": "F022",
+   "selection_order": 22,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4-SECOND/2ND FLOOR REV-00/1 11.pdf",
+   "size": 1892663,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0dad17a623186694baf971e4a1d3fbf718f1b069a4caf5e1637d98ca160c258a"
+  },
+  {
+   "pool_id": "F023",
+   "selection_order": 23,
+   "ep": "29255",
+   "relative_path": "MS/ACS/R1/previous approval/T.pdf",
+   "size": 71826,
+   "modified_utc": "2025-06-26T11:36:33+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "0e876697f78e4de3f0d0c4a1794ac3e11648140dec4803f771e0f0e91232e938"
+  },
+  {
+   "pool_id": "F024",
+   "selection_order": 24,
+   "ep": "29255",
+   "relative_path": "T&C/MS Approval Copy/Reply to Consultant comments_ACS.pdf",
+   "size": 191787,
+   "modified_utc": "2025-08-18T11:11:56+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "109930a096e979ea8fbbe0334df5ddb0779af7056ee8e8b5e1b8c6527b39cdfa"
+  },
+  {
+   "pool_id": "F025",
+   "selection_order": 25,
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-2/SLD/Rev 1 Comments/B01-ASC-SD-ELE-0184-Rev.00 Shop Drawing for Emergency Lighting Schematic Diagram CODE-C.pdf",
+   "size": 5707099,
+   "modified_utc": "2025-10-13T09:47:53+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "11489601b0a063a768c01d8a76a0f127fdc28c15aa72f7430c2f18192dfd0c0d"
+  },
+  {
+   "pool_id": "F026",
+   "selection_order": 26,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4- 4th floor/Rev-0/0 6.pdf",
+   "size": 2387767,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "1253fbdef4f38e85c8cfa013bcecb05c6225b359b1e139a764783cdd1d49c789"
+  },
+  {
+   "pool_id": "F027",
+   "selection_order": 27,
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Authority Approval/DU....ISP_NOC_19967_09-06-2023 - Part 2-BOQ.pdf",
+   "size": 545591,
+   "modified_utc": "2025-05-12T01:07:30+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "1319decb20bc24a0144d5e423ab918e0a27538a1f612176d0c2bcf8b8e90079b"
+  },
+  {
+   "pool_id": "F028",
+   "selection_order": 28,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/B01-ASC-SD-ELE-0048-Rev.01_B-Shop Drawing for 6th Floor Plan Emergency Lighting Layout Code.pdf",
+   "size": 14480596,
+   "modified_utc": "2025-10-08T04:02:36+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "13dba41f76f05f185185457f2e79da63d3e91cdfe06d1a671611c0e8d9a639eb"
+  },
+  {
+   "pool_id": "F029",
+   "selection_order": 29,
+   "ep": "29255",
+   "relative_path": "MS/SCS/R1/Reply to comments_SCS.pdf",
+   "size": 188189,
+   "modified_utc": "2025-05-17T07:55:04+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "141af76b6e78cd3e942f63a1e8dbf6f6491cf649d55fb8a6f8fc0988d5ebc812"
+  },
+  {
+   "pool_id": "F030",
+   "selection_order": 30,
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+   "size": 8403821,
+   "modified_utc": "2025-05-23T05:45:14+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "142b2986f2fb91fde4c927eadf3bf58c3141a7d1a28b710b38fdb9416c67ba03"
+  },
+  {
+   "pool_id": "F031",
+   "selection_order": 31,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/EP-3563 EST3 MS R2 App.pdf",
+   "size": 1403806,
+   "modified_utc": "2016-03-29T04:42:18+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "14617472d2e952e56bbb5d3193d7db70625f9ca11f78696c37fb00ba531c74fd"
+  },
+  {
+   "pool_id": "F032",
+   "selection_order": 32,
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CENTRAL BATTERY SYSTEM (GF to RF)/B01-ASC-SD-ELE-0075-Rev.00 - 25th to 34th  Floor Plan (Tier 1) Emergency Lighting Layout (Tower-1)_Code B.pdf",
+   "size": 4514142,
+   "modified_utc": "2025-06-10T08:22:38+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "172dbffc1c8ff8d3a1ad1ec5ee124fdbea2539dc36732460f49ae32bf72378d8"
+  },
+  {
+   "pool_id": "F033",
+   "selection_order": 33,
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 2.pdf",
+   "size": 1066360,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "187b38d239497ae3226be62bcde565518f8e95eeaa6be68e5ec1da92fc851f72"
+  },
+  {
+   "pool_id": "F034",
+   "selection_order": 34,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0104-Rev.00 - 57th  Floor Plan (Tier 4) Emergency Lighting Layout (Tower - 1)_Code B.pdf",
+   "size": 4008111,
+   "modified_utc": "2025-06-18T11:58:14+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "19c61d85a723002d4fccf48b7dac97789594c2c4d22701a6228d4fe1705e613a"
+  },
+  {
+   "pool_id": "F035",
+   "selection_order": 35,
+   "ep": "22349",
+   "relative_path": "EP-22349 MS/EMLSC/Project Approvals.pdf",
+   "size": 11550526,
+   "modified_utc": "2022-02-05T07:51:24+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "1fc7c6920b5c4a4b1af80ca7d6bf2643d182721f9758934e31a5f51cadf98984"
+  },
+  {
+   "pool_id": "F036",
+   "selection_order": 36,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0109-Rev.00 - 10th to 44th  Floor Plan Emergency Lighting Layout (Tower - 2)_Code B.pdf",
+   "size": 16218394,
+   "modified_utc": "2025-06-18T11:58:14+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "206f2d11e81801cf63973dece2568a4ee81c4b025875fd4a2f22afc3c1751662"
+  },
+  {
+   "pool_id": "F037",
+   "selection_order": 37,
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0084-Rev.00 SD for 49th to 53rd  Floor (Tier 3) Fire Alarm & Voice Evacuation System Layout (Tower-1) Code-B.pdf",
+   "size": 2538699,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "21421468aff568656f86b166aa568e43a74bf03122b73f29644e519f8a8b4813"
+  },
+  {
+   "pool_id": "F038",
+   "selection_order": 38,
+   "ep": "22349",
+   "relative_path": "Civil Defence Approved Drawings/CIVIL DEFENSE_compressed.pdf",
+   "size": 5295291,
+   "modified_utc": "2022-03-05T04:08:00+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "227590d8769371803e126ba62904b881804b0ffcc8637c91ad855ff58001308c"
+  },
+  {
+   "pool_id": "F039",
+   "selection_order": 39,
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/FA/FA-6001 - Schematic Diagram Fire Alarm Layout.pdf",
+   "size": 1913979,
+   "modified_utc": "2023-09-18T11:23:38+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "2981f335e1bd1fded3c6d031d98dc92eb61530adbcad6e60ae24dee7f575fb15"
+  },
+  {
+   "pool_id": "F040",
+   "selection_order": 40,
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/EM/EM-104 - Schematic Diagram EM Light Layout.pdf",
+   "size": 1926074,
+   "modified_utc": "2023-09-18T10:53:50+00:00",
+   "placeholder": true,
+   "stratum": "review_signal",
+   "how": "review_signal",
+   "order_key": "2bf1eda9550b3c6305971942a51c44a6bc0a13fb6e9340c20627016b5d0f44ee"
+  },
+  {
+   "pool_id": "F041",
+   "selection_order": 41,
+   "ep": "26687",
+   "relative_path": "Drawings/R0/EM/EM-104 EMERGENCY SCHEMATIC.pdf",
+   "size": 944830,
+   "modified_utc": "2023-09-11T12:04:30+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "010d3bf567ecd1b77234c6cc16a0787ad8544e9c03ee86d39def3ffb896824da"
+  },
+  {
+   "pool_id": "F042",
+   "selection_order": 42,
+   "ep": "22349",
+   "relative_path": "DWGS/As Built  Dwg/FA SYSTEM/PDF/Fire Alarm-2ND PARKING.pdf",
+   "size": 672426,
+   "modified_utc": "2023-05-19T07:47:26+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "0421b637f12bc77606e5d6d68efcbfd36277afc49397ad7bff3809fcb13b26f4"
+  },
+  {
+   "pool_id": "F043",
+   "selection_order": 43,
+   "ep": "15744",
+   "relative_path": "Drawings/Tender Drawing/Al Abdouli Group - al aweer/al aweer/1324-2014- المواد المعتمدة ش إ م-عاVENDOR LIST.pdf",
+   "size": 9556967,
+   "modified_utc": "2014-03-19T06:58:48+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "05fc86de91a9c4154cb3bd785ed52f46f17adcef5aeddfb4dec45156e391282f"
+  },
+  {
+   "pool_id": "F044",
+   "selection_order": 44,
+   "ep": "22349",
+   "relative_path": "DWGS/As Built  Dwg/EM SYSTEM/PDF/EM LIGHT-2ND FLOOR (2).pdf",
+   "size": 682252,
+   "modified_utc": "2023-05-19T07:36:33+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "0972abf0932d47dc69a4771eacee301b76262658d65a875d25f2ceace898bb29"
+  },
+  {
+   "pool_id": "F045",
+   "selection_order": 45,
+   "ep": "22349",
+   "relative_path": "EP-22349 MS/EMLSC/certificates/SCHEMATIC DIAGRAM.pdf",
+   "size": 68945,
+   "modified_utc": "2020-09-06T14:27:10+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "09935c0eb3b97f3025e6d657127329f202ea586e53fa8bdedc28431425080145"
+  },
+  {
+   "pool_id": "F046",
+   "selection_order": 46,
+   "ep": "26687",
+   "relative_path": "Drawings/R0/FA/FA-6001 FIRE ALARM SCHEMATIC DIAGRAM.pdf",
+   "size": 953744,
+   "modified_utc": "2023-09-11T12:08:45+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "0c411ef4ec94aeca0909c5c3d8ce36a11b0e46783b53c5a9a4ddda77615b538f"
+  },
+  {
+   "pool_id": "F047",
+   "selection_order": 47,
+   "ep": "22349",
+   "relative_path": "DWGS/Shop Dwg/EM LIGHT SYSTEM/EM-02.pdf",
+   "size": 582640,
+   "modified_utc": "2022-09-27T04:46:42+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "11b3133905755926c66d0f5d74851069015132efda500dd98a97930485e9360a"
+  },
+  {
+   "pool_id": "F048",
+   "selection_order": 48,
+   "ep": "22349",
+   "relative_path": "DWGS/Shop Dwg/FA SYSTEM/PDF/TYPICAL  FL .pdf",
+   "size": 767004,
+   "modified_utc": "2022-03-23T05:24:59+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "12c9ade5ad5c970d8963f3cbc1b2b0cc5e124aa54ccf9e6e698e062cfee55742"
+  },
+  {
+   "pool_id": "F049",
+   "selection_order": 49,
+   "ep": "22349",
+   "relative_path": "DWGS/Shop Dwg/EM LIGHT SYSTEM/PDF/EM LIGHT-TYPICAL FLOOR.pdf",
+   "size": 633106,
+   "modified_utc": "2022-08-31T05:48:35+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1515346a1ba7eaa55ef5cdcb9335b0211ecb0ee385dd5a1c2cea063df236e0f0"
+  },
+  {
+   "pool_id": "F050",
+   "selection_order": 50,
+   "ep": "26687",
+   "relative_path": "Drawings/FA &EM/EM/EM-100 BASEMENT EM.pdf",
+   "size": 1080519,
+   "modified_utc": "2023-09-11T10:16:36+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1575fcd07b7d1b3d4365b3db8dc233c902ff58fa8099010bd365db9b4e3239b5"
+  },
+  {
+   "pool_id": "F051",
+   "selection_order": 51,
+   "ep": "22349",
+   "relative_path": "DWGS/As Built  Dwg/EM SYSTEM/PDF/EM LIGHT-10TH FLOOR (10).pdf",
+   "size": 682204,
+   "modified_utc": "2023-05-19T07:37:59+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1aef82c5e9a72e63c4a4c602e797eb38b7177a0ebf79c67d81da591fd92fcfb3"
+  },
+  {
+   "pool_id": "F052",
+   "selection_order": 52,
+   "ep": "22349",
+   "relative_path": "DWGS/DCD APP/CIVIL DEFENSE_compressed (1).pdf",
+   "size": 5295291,
+   "modified_utc": "2022-02-23T04:51:03+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1c411bc1979c759696fdb5c681fbf585da481ca3a339b7581d2c760e314bf174"
+  },
+  {
+   "pool_id": "F053",
+   "selection_order": 53,
+   "ep": "22349",
+   "relative_path": "DWGS/As Built  Dwg/FA SYSTEM/PDF/Fire Alarm-12TH FLOOR (12).pdf",
+   "size": 734119,
+   "modified_utc": "2023-05-19T07:49:41+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1e31dab5937e4c9b40324b8d954348e3e43ce70c241bb2a634a91c2d692b3b62"
+  },
+  {
+   "pool_id": "F054",
+   "selection_order": 54,
+   "ep": "22349",
+   "relative_path": "DWGS/As Built  Dwg/FA SYSTEM/PDF/Fire Alarm-4TH PARKING.pdf",
+   "size": 675532,
+   "modified_utc": "2023-05-19T07:47:45+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "1f0eea682369ed5aa0b0c65ae8b86cdcc16cf061e652499e2773ec97d4d169c2"
+  },
+  {
+   "pool_id": "F055",
+   "selection_order": 55,
+   "ep": "15744",
+   "relative_path": "Drawings/Tender Drawing/Al Abdouli Group - al aweer/al aweer/EMERGENCY LIGHT SPEC.pdf",
+   "size": 119388,
+   "modified_utc": "2018-04-18T07:00:54+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "238e1cfc4887e11646da84d14668577a6ec0f24b9782ae01e43610829beca7af"
+  },
+  {
+   "pool_id": "F056",
+   "selection_order": 56,
+   "ep": "26687",
+   "relative_path": "Drawings/R1/EM/EM-103  ROOF FLOOR EM.pdf",
+   "size": 2582175,
+   "modified_utc": "2023-09-21T10:01:05+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "2ad12fc6c818b3b93adb0c913bf599eb0d906288398446d1b5cd07132340ea1d"
+  },
+  {
+   "pool_id": "F057",
+   "selection_order": 57,
+   "ep": "26687",
+   "relative_path": "Drawings/R0/FA/FA-1002  GROUND FLOOR FA.pdf",
+   "size": 5654932,
+   "modified_utc": "2023-09-11T12:06:43+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "33ec6d0cf10a159ae49fb93fccae87fc8b4d616502c6d3de92098a6eecee5f98"
+  },
+  {
+   "pool_id": "F058",
+   "selection_order": 58,
+   "ep": "26687",
+   "relative_path": "Drawings/R0/EM/EM-102  FIRST FLOOR EM.pdf",
+   "size": 1883823,
+   "modified_utc": "2023-09-11T12:03:05+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "42831169b36edd8a5e4221432148b6061c76e539a502510f279367aef8239cf2"
+  },
+  {
+   "pool_id": "F059",
+   "selection_order": 59,
+   "ep": "26687",
+   "relative_path": "Drawings/FA &EM/FA/FA-6001 FIRE ALARM SCHEMATIC DIAGRAM.pdf",
+   "size": 499839,
+   "modified_utc": "2023-09-11T10:13:46+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "456b4df3039dadca1305a01b79e7bc79fccd5f69840735a1d342ef0b101f219b"
+  },
+  {
+   "pool_id": "F060",
+   "selection_order": 60,
+   "ep": "26687",
+   "relative_path": "Drawings/R1/EM/EM-100 BASEMENT EM.pdf",
+   "size": 1029950,
+   "modified_utc": "2023-09-21T09:06:27+00:00",
+   "placeholder": true,
+   "stratum": "drawing_signal",
+   "how": "drawing_signal",
+   "order_key": "47e0709bd9cadcf3a61768f476761fecff85cf51dc922c307cf03179ab743272"
+  },
+  {
+   "pool_id": "F061",
+   "selection_order": 61,
+   "ep": "15744",
+   "relative_path": "MS/MS FAS/MS R0/PDF/Dubai CDA Certificate EST 2018 to 2019.pdf",
+   "size": 2465078,
+   "modified_utc": "2018-08-11T06:40:47+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "0375e32ef4836db5e23d0191e7c7a5df1ed4519953ca90f9ef2c429f62532f95"
+  },
+  {
+   "pool_id": "F062",
+   "selection_order": 62,
+   "ep": "15744",
+   "relative_path": "EP-15744 Scan Documents/EP-15744 EST3 MS R0 Ack..pdf",
+   "size": 318190,
+   "modified_utc": "2018-08-14T22:28:54+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "0490bdbcb44dccdc50eb9251e8e3ae8cc405fbdf08698223ec56f96e97676a2b"
+  },
+  {
+   "pool_id": "F063",
+   "selection_order": 63,
+   "ep": "15744",
+   "relative_path": "EP-15744 Scan Documents/EP-15744 PAVA O&M R0 Ack.pdf",
+   "size": 328011,
+   "modified_utc": "2019-11-06T08:17:02+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "049e5af11f8b43062bd4536f0cd26d09ba1e05643e2142c4a632871b321e1bf5"
+  },
+  {
+   "pool_id": "F064",
+   "selection_order": 64,
+   "ep": "15744",
+   "relative_path": "OM Manual/PAVA/operation instr.pdf",
+   "size": 3050112,
+   "modified_utc": "2019-11-02T05:27:50+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "04fb61a092212f7a9bd956001f161d7dfb626cf5af80da1cb545dbed0a882ae6"
+  },
+  {
+   "pool_id": "F065",
+   "selection_order": 65,
+   "ep": "15744",
+   "relative_path": "MS/MS PAVA/PDF/SOM.pdf",
+   "size": 476180,
+   "modified_utc": "2019-02-16T06:56:27+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "0506e35e1681b899144b5829432960ce97352fd3d1c4b53e187a4347c17332cb"
+  },
+  {
+   "pool_id": "F066",
+   "selection_order": 66,
+   "ep": "26687",
+   "relative_path": "MS/R0/PDF/Contents.pdf",
+   "size": 705432,
+   "modified_utc": "2023-08-31T08:25:33+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "0536d9ccae6d125e5548f1a8c87f3d6a5a084d4cfa83ee487f6099b2896fee50"
+  },
+  {
+   "pool_id": "F067",
+   "selection_order": 67,
+   "ep": "15744",
+   "relative_path": "MS/MS PAVA/Specification.pdf",
+   "size": 1395605,
+   "modified_utc": "2019-02-16T07:14:53+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "06614834da288c67a93dd93b00350a042743207c984bdf13ae971d75a735ade3"
+  },
+  {
+   "pool_id": "F068",
+   "selection_order": 68,
+   "ep": "15744",
+   "relative_path": "EP-15744 Scan Documents/SKM_C364e19042815201.pdf",
+   "size": 486018,
+   "modified_utc": "2019-04-27T23:08:38+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "06a22bb9a44cd85195b8db0f0f99a1add13c0572631d8b686b6cd926adf7e56f"
+  },
+  {
+   "pool_id": "F069",
+   "selection_order": 69,
+   "ep": "15744",
+   "relative_path": "Commercial Documents/Design Sheet -FA & Emergency.pdf",
+   "size": 1235744,
+   "modified_utc": "2018-08-05T18:21:38+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "06f71ae91c12064f67d938e3f16c4f7b2db62ac8e557f5dca97d1275e2be8208"
+  },
+  {
+   "pool_id": "F070",
+   "selection_order": 70,
+   "ep": "15744",
+   "relative_path": "MS/MS PAVA/Specification - Copy.pdf",
+   "size": 1395605,
+   "modified_utc": "2019-02-16T07:14:53+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "0d4e95b5774889119c3dc2cc95f98d4c2f9ff61534d79ee2ac72e2db689c6bf7"
+  },
+  {
+   "pool_id": "F071",
+   "selection_order": 71,
+   "ep": "15744",
+   "relative_path": "MS/MS PAVA/accoustic/CME 17045 ALI MIHHAD SPL STI CALCULATION-1.pdf",
+   "size": 247897,
+   "modified_utc": "2019-03-20T05:56:27+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "1ba23adc7fea558e77ca9df99022f3bea8f20ed5c1041dd71fa478a79852e02a"
+  },
+  {
+   "pool_id": "F072",
+   "selection_order": 72,
+   "ep": "26687",
+   "relative_path": "Commercial Document/FA & EM MS R0 R&R.pdf",
+   "size": 1049301,
+   "modified_utc": "2023-09-08T04:56:20+00:00",
+   "placeholder": true,
+   "stratum": "other",
+   "how": "other",
+   "order_key": "2a93667b6abe859ac2c656e49a8827168d7d06541868444bdca97e17cb68b0a9"
+  }
+ ],
+ "pool_counts": {
+  "total": 72,
+  "by_how": {
+   "review_signal": 40,
+   "drawing_signal": 20,
+   "other": 12
+  },
+  "by_project": {
+   "3563": 12,
+   "29255": 12,
+   "27331": 12,
+   "22349": 12,
+   "26687": 12,
+   "15744": 12
+  }
+ },
+ "extension_order_review_signal": [
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R1_Reply/CCTV  MS (B)_Reply.pdf",
+   "size": 330430,
+   "modified_utc": "2025-08-02T05:48:21+00:00",
+   "order_key": "143cb0ef13b3a8d6b578656b30484f6db877b2aff555362a3c35bf6455fea9b9"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "T&C/MS Approval Copy/NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-003-R01-AAN(Public Address & Back Ground Music-PABGM System).pdf",
+   "size": 498362,
+   "modified_utc": "2025-08-01T07:29:59+00:00",
+   "order_key": "18d0384fe864bd6edef47d056dc438d44003176a38b3c13a7dd5b970ed627f2f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/EP-3563 CBS MS R2 App.pdf",
+   "size": 1505222,
+   "modified_utc": "2016-05-09T05:37:51+00:00",
+   "order_key": "1a2723a1269997be3197631a2d969f632592996c76f07524c12c3b6e84552f80"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/SCHEMETIC/REV-01/0 6.pdf",
+   "size": 2221997,
+   "modified_utc": "2016-09-14T10:31:50+00:00",
+   "order_key": "1ab5af037398a08d75ac775ac7456c1123abde6dc0ad5d73feade157a4f46858"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002E.pdf",
+   "size": 2580023,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "1be8dd39d167091d5090e7a492e1b44efa803289ca428e804cd5fe55a7a0938e"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/From supplier/RE_ Request for HCC rakcs Price super tech/wall and floor standing Etisalat Approvals 2025.pdf",
+   "size": 211937,
+   "modified_utc": "2025-05-12T01:07:30+00:00",
+   "order_key": "1c4d0c4cdb0b5a79a2f74d750a27a856edbda8e6e56c5d832a2d7a9aade82f73"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R2-Reply/Reply to Consultant comments.pdf",
+   "size": 186336,
+   "modified_utc": "2025-08-02T05:07:30+00:00",
+   "order_key": "1ecd8f2b551b7de865784efa1722cb6e86b1187e93995dd15cd0494808e804b3"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R2/Reply to Consultant comments.pdf",
+   "size": 179705,
+   "modified_utc": "2025-08-05T14:00:12+00:00",
+   "order_key": "1fc7176e21ccf5acfcc4dccdc035cb480452ba7ebaccb5b2cd4a93920f9ee035"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/BGM-Approved/scan3.pdf",
+   "size": 4948748,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "210f3eecdee74cb0290b9ccd7ebd26205980e9b03dd024e29679d103fc2b54ec"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD GF R0 REV RES.pdf",
+   "size": 865699,
+   "modified_utc": "2016-03-28T10:20:08+00:00",
+   "order_key": "23826fdd449f03c6ae05e6582215d6ffd206b88911fd24b8b0c673c16e54cca1"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/FA  CBS Consultant Comments - First Avenue Mall  Hotel/Fire Alarm Rev. 00 MAT-116 Consultant Replay.pdf",
+   "size": 8773878,
+   "modified_utc": "2016-02-02T17:37:52+00:00",
+   "order_key": "24000840bb80b799205182a19a456502beb5b78fe62245917eeec9bbd888b513"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R1/Reply to Consultant comments.pdf",
+   "size": 107041,
+   "modified_utc": "2025-06-26T11:43:08+00:00",
+   "order_key": "24662048b06c3a916902d97e9f9b8914a2b7f949f1c782877ff09cfb4a7b7409"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-003-R00-AAN(Second Podium Floor Plan CCTV System Layout).pdf",
+   "size": 106837,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "2522137889570bcc53b2c825392ee2fcabb90dab48d54fdc6d04b7921d0e4ce1"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Project document_Scale Jumeriah Garden/SD-Approval Copy/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-002-R00-AAN(First Podium Floor Plan CCTV System Layout).pdf",
+   "size": 117188,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "25ab68189d27b5f89eba7725869259b12776587fa3ece736232fab10c9ca538d"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD GF R1 REV RES.pdf",
+   "size": 914755,
+   "modified_utc": "2016-03-27T04:20:26+00:00",
+   "order_key": "2673862b9a464e860029680d801f90d7e691cf853ad611a315293bd9de00fa4d"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-007-R00-AAN(Site Setting Out Floor Plan Telephone Layout).pdf",
+   "size": 3517162,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "27518227c1cacb374a6755575a191078e349d56d6724953ca18cd869df8a7361"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R1/Supplier reply/Warranty - G+2P+8F+R @ Jumeirah Garden City TL 2364 06052025 (1).pdf",
+   "size": 44505,
+   "modified_utc": "2025-05-17T07:31:02+00:00",
+   "order_key": "27a2a2dc5f09def93e065b7a343b99d64f1c4f44d1aafab871312a4abf3afe88"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/GB/R1/MS REply.pdf",
+   "size": 252993,
+   "modified_utc": "2025-06-18T07:51:06+00:00",
+   "order_key": "27f77e11dedd0ec7357a25621e653480bf7598c5c35fbbf30dff707bd21bf56b"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XSMXGCE.pdf",
+   "size": 24855840,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "27fdb1a41607c013eb705a2b39659123e6810c823ec0e5cc3cc05633980a9eeb"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Detector missing area 19th to 44th  Floor plan Commented.pdf",
+   "size": 2850023,
+   "modified_utc": "2026-08-03T06:06:29+00:00",
+   "order_key": "28189a3e313565d1bba1c9d6b0bba6477abcb0af475711befe266c9c6f1ac868"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 3.pdf",
+   "size": 1616950,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "283785791db52238f023cb4a1c3d7b833b04f1b7d2b29be103a86a775c722923"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 1.pdf",
+   "size": 1132613,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "28e78e85ae9ad04fc4a47652e3364b202e3118f35781ab3da738d4a9b96d15d1"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/SP_CBS-Type changed location marked/SP_CBS-Type changed location marked.pdf",
+   "size": 36569478,
+   "modified_utc": "2026-04-03T11:03:55+00:00",
+   "order_key": "2964f6d13d3937a87a40bcc9aaf66c236f5543d7d72a8d23713e6ae530360cde"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CENTRAL BATTERY SYSTEM (GF to RF)/B01-ASC-SD-ELE-0106-Rev.00 SD for 59th  Floor Plan Lift Motor Room Emergency Lighting Layout (Tower - 1) Code-B.pdf",
+   "size": 2078265,
+   "modified_utc": "2025-06-21T04:19:21+00:00",
+   "order_key": "29796686e6a9b0f22dffecc980383ffe4e2aa4a5dee3f480d72a2e085d63df72"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R1/Consultant Comments_ACS.pdf",
+   "size": 119508,
+   "modified_utc": "2025-06-23T08:41:30+00:00",
+   "order_key": "2a34a0451074d92ea0457638632f55ac631b16f5a4a750c526f8c1acc075a9cb"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Authority Approval/134R_780096s_Datwyler.pdf",
+   "size": 1982113,
+   "modified_utc": "2025-05-09T11:39:00+00:00",
+   "order_key": "2af3737672faf991fe3d827d4020dbf0ab21611662cedb2d0187dcaf235b15c9"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4- 4th floor/Rev-0/0 1.pdf",
+   "size": 1273445,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "2b469629a53326b11eb8c475da7a9b7c047122c6563642512d23286de3ef654a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/SCHEMATIC/Rev. 00/CP-3.pdf",
+   "size": 2435676,
+   "modified_utc": "2016-08-17T10:56:22+00:00",
+   "order_key": "2bebb467fb809bc57efba6ddbbba0a7c84f4628d1936ff9e3f5bc3400effa9ea"
+  },
+  {
+   "ep": "22349",
+   "relative_path": "DWGS/DCD APP/ARCH-STAMP0_stamped (1).pdf",
+   "size": 7213105,
+   "modified_utc": "2022-02-23T04:51:09+00:00",
+   "order_key": "2bfb082f18e4d1d77f9dc97db5d9bac94bd756209fe7ca83b99dd301689e220a"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R1/Supplier reply/Authorization G+2P+8F+R @ Jumeirah Garden City TL 2363 06052025 (1).pdf",
+   "size": 58901,
+   "modified_utc": "2025-05-17T07:30:57+00:00",
+   "order_key": "2d19577d7671643129457a83d8764eabb84bd4c8b9061484091ecdf2c00ac3e8"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "EP-27331 MS/FAS/Rev.01/FAS Reply to Comments for -R1.pdf",
+   "size": 13193346,
+   "modified_utc": "2025-03-18T04:34:26+00:00",
+   "order_key": "2d790d73b100ae8c3f867582a04890a1329ca40699c0df3a9ca3bbf2fced1a48"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0088-Rev.00 SD for 59th  Floor plan Lift Moals Room Fire Alarm & Voice Evacuation System Layout (Tower-1) Code-B.pdf",
+   "size": 1897442,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "2e3eae2077bcc978f817b5e3bfa6fe92363972692d75076b1a20617faa8231fb"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/SLD/Rev 0 Comments/B01-ASC-SD-ELE-0216-Rev.00 for Emergency Lighting Schematic Diagram - T2 _ Code C.pdf",
+   "size": 5266521,
+   "modified_utc": "2026-03-25T06:46:23+00:00",
+   "order_key": "2e8fadcb77de308f98e14f8e2b21775e7a5a24d329132ae444a15ac0af5d1814"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Shop Drawings/Shop Drawings - FAS/R2/TO SUPPLIR/4- SECOND FLOOR/REV-0/Reply to comments.pdf",
+   "size": 334902,
+   "modified_utc": "2017-05-01T04:52:10+00:00",
+   "order_key": "2e9362426faaf83edf351b111750bc700b0bdc49187aabd095c44de0df8e9c15"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Shop Drawings/Shop Drawings - FAS/R2/TO SUPPLIR/4- SECOND FLOOR/PDF/FAM-PIV-MAH-SPD-FA-2633-004(FINAL11)-Layout1.pdf SHEET 1-commented.pdf",
+   "size": 1045950,
+   "modified_utc": "2016-05-04T00:40:46+00:00",
+   "order_key": "2ee0713f5da2d16e7bb0f14d11d32cd0bee2af0ef3dc4c4d91272a52bcdade9b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/MS/CCTV/NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-005-R01-AAN(CCTV System).pdf",
+   "size": 153552,
+   "modified_utc": "2025-08-01T08:38:09+00:00",
+   "order_key": "2f81751ff9b9d46824feed5c53c4156c59fe5a65d014456ab07591cec645bc5e"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/From supplier/wetransfer_al-arabia-g-8-scale-jumeirah-gardens_2025-05-09_1138/Al Arabia G+8 - Scale Jumeirah Gardens/Authority Approval/55R_780092s_Datwyler.pdf",
+   "size": 5021010,
+   "modified_utc": "2025-05-09T11:39:00+00:00",
+   "order_key": "307440b79e11fb53625767a833619a886b8a7d5a677f16aa2c89f70949619b24"
+  },
+  {
+   "ep": "22349",
+   "relative_path": "DWGS/Shop Dwg/EM LIGHT SYSTEM/EL - SCH stamped.pdf",
+   "size": 688582,
+   "modified_utc": "2022-11-15T12:54:39+00:00",
+   "order_key": "30d67f2e71da856282f6b03e3a9d20cf6c59590f3dd149e9344a7ca290685a9d"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0056-Rev.00 Shop Drawing Submittal for 1st Floor Plan Emergency Lighting Layout -B.pdf",
+   "size": 6848884,
+   "modified_utc": "2025-05-23T05:01:44+00:00",
+   "order_key": "311890a167e2f505607106918da7009a97739c2487dd1c2fbbc88be3cc904b7f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/FA  CBS Consultant Comments - First Avenue Mall  Hotel/approved CBS submittal for 1 st avenue.pdf",
+   "size": 48522841,
+   "modified_utc": "2017-01-22T10:40:58+00:00",
+   "order_key": "3164c91466231a5f817ad267c595314f659d615f2fa636c84ca41061fa41629a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xarchitecture_dewan - revised1483895844232.pdf",
+   "size": 12573848,
+   "modified_utc": "2017-01-31T10:01:05+00:00",
+   "order_key": "3227e052ee4a777d6112c59614cb25b611dca48ec9cb34dcff4d7c49610cfbda"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4- 4th floor/Rev-0/CBS SD Comments - L1, L4 & RF.pdf",
+   "size": 2894031,
+   "modified_utc": "2017-06-11T05:32:18+00:00",
+   "order_key": "334a07784941ccfc2144cb9a641f4fbb3e4a6bb6b1b3b0fc178a3195572f9f40"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-005-R00-AAN(Typical 2nd to 8th Floor Plan CCTV System Layout).pdf",
+   "size": 111384,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "335bb3c45d0b839dcc5070b08024dff59450f40f55e26d5449a565790add1d04"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Project document_Scale Jumeriah Garden/SD-Approval Copy/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-001-R00-AAN(Ground Floor Plan CCTV System Layout).pdf",
+   "size": 106110,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "3427aa38f27bc5b7e740bddc9dfd6b0f2a9f9540e18d0ddf740fc164653743dc"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-003-R00-AAN(Second Podium Floor Plan Telephone Layout).pdf",
+   "size": 106407,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "354afefcb0d3fdb6d029756da464117252839a45835ff6706ce6a2c08f59a72a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 2.pdf",
+   "size": 1588826,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "36b6f6a61049865fae1e35fef6b1099a052d2bacc5fdd4361614e9dfec6a64ff"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-TEL-2633-007B.pdf",
+   "size": 1168777,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "36dffd793690d462a983b8a74393e004e552f9eb464f6150af88f9c265ef3ad7"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-FA-2633-006.pdf",
+   "size": 2088658,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "37c4006da82c5433d5095a5b72a0fea295e3a98e335c872bbbf2ab486dfaccb0"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002C.pdf",
+   "size": 2423139,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "380add11e2ea9450335930503390401ee09ab13da5604e26e095ece48cd433ab"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002A.pdf",
+   "size": 2180150,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "381f4f5e8b546290f8192fe090521ebaeb0e809ad9ed7c83af79d63c38cf2ceb"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/FA/FA-1001 - BF_Fire Alarm Layout.pdf",
+   "size": 2393663,
+   "modified_utc": "2023-09-18T11:06:46+00:00",
+   "order_key": "39d1bbd5cf5e6e03421d1a7332d1b855f11bc7b2c89c6c09c68b9d4b1e441ee3"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0086-Rev.00 SD for 57th  Floor (Tier 4) Fire Alarm & Voice Evacuation System Layout (Tower-1)Code-B.pdf",
+   "size": 2185916,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "39e2bb8229a710a9042774a85fbf481655d1ef91cd4859aed0787ec06dd813a5"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/From supplier/wetransfer_al-arabia-g-8-scale-jumeirah-gardens_2025-05-09_1138/Al Arabia G+8 - Scale Jumeirah Gardens/Authority Approval/202R_780093s_Datwyler.pdf",
+   "size": 6181040,
+   "modified_utc": "2025-05-09T11:39:00+00:00",
+   "order_key": "3a0d16a8366092af45e7df076d70403fb2524a92c2d81f5e73cbcc60ee1fcb75"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/FA/FA-1003 - FF_Fire Alarm Layout.pdf",
+   "size": 2694117,
+   "modified_utc": "2023-09-18T11:14:51+00:00",
+   "order_key": "3a0d86093c6f6c62fc824af57a9be6135e0e1ece7461401a37e77cee60ba6e25"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/22.pdf",
+   "size": 48394,
+   "modified_utc": "2025-08-01T13:00:05+00:00",
+   "order_key": "3aa7f521f10c1d31ef9e04a445ef8cfc85c57c3c482ba24609a986acdd9e07e8"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Revised/9TH FLOOR/Rev-0 comments/B01-ASC-SD-ELE-0089-Rev.00 SD for 9th Floor Plan Emergency Lighting Layout Code-B+R.pdf",
+   "size": 7445540,
+   "modified_utc": "2025-06-17T05:49:32+00:00",
+   "order_key": "3bc4492574ab8eb0ee2b199832a0f9ed7f6ed5543b517663afcdfed888cd55d1"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/MS/VI/Approved/NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-0006-R03.pdf",
+   "size": 32062638,
+   "modified_utc": "2025-09-30T11:56:09+00:00",
+   "order_key": "3c4b937ba3ed670f726ce4e059caab9a29b1c4d38098602892b67113674019ee"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS MS R1 REV RES.pdf",
+   "size": 2737318,
+   "modified_utc": "2016-03-14T05:11:33+00:00",
+   "order_key": "3c54df0242ffc05c77f8508e0da93ac43a36e945dcb99df9d57a705766a15c02"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-009.pdf",
+   "size": 1743240,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "3c9fdeb985684273c3a5a4b6ec9def3f37458b9c19662d785c343ce3a34044dd"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-002-R00-AAN(First Podium Floor Plan Telephone Layout).pdf",
+   "size": 1916167,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "3d2eaa0a1e5798736cb4cc0aad3bff72f015975203064bceb92607a149456e31"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/MS/SCS/NBC-JGH-SCALE-MAS-MEP-ELE-2025-018-R02-AAN(Structured Cabling System).pdf",
+   "size": 268434,
+   "modified_utc": "2025-08-01T08:46:50+00:00",
+   "order_key": "3e60d215adb510f5fa35eb4e742b4469dcdac469abcf4374ad98137214805ec0"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CENTRAL BATTERY SYSTEM (GF to RF)/B01-ASC-SD-ELE-0050-Rev.01 Shop Drawing for 8th Floor Plan Emergency Lighting Layout  Code-B.pdf",
+   "size": 13771151,
+   "modified_utc": "2025-06-11T11:33:08+00:00",
+   "order_key": "3f903889fe7b23816c70dd12985f6303ae681e70bbee827f4d4b33378fd4908d"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XLIFESAFETYXPart2.pdf",
+   "size": 25915588,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "3ff289c5ee226864883092d30c9309b7628a27f346ab6469206cbda03b39c980"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CBS Schematic Diagram/B01-ASC-SD-ELE-0184-Rev.01 SD for Emergency Lighting Schematic Diagram T1 _ Code C.pdf",
+   "size": 11337096,
+   "modified_utc": "2026-03-25T06:46:23+00:00",
+   "order_key": "4094b9f3f5f263951064b78df8ad0a8f1842507c4eb77bcbe2c07f4d5c81652b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Authority Approval/54R_780091s_Datwyler.pdf",
+   "size": 7874554,
+   "modified_utc": "2025-05-09T15:57:06+00:00",
+   "order_key": "4113de425f5963a101c490bd3110999b65058584f132c1584521589aafb4836b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-002-R00-AAN(First Podium Floor Plan Access Control System Layout).pdf",
+   "size": 4143759,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "4150aa0604e250d0a28d1525f303497fe49f16fc863bc05608f16dc3b60c3141"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 3.pdf",
+   "size": 1031334,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "42cda9790d42070eda5b070a5573741a2868c320844c7b394df800e6df83e4c5"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1/Reply to Consultant comments.pdf",
+   "size": 107771,
+   "modified_utc": "2025-07-10T12:59:52+00:00",
+   "order_key": "43153133aa5ad25c7bd48e58ed620d995b293b4b2cc89472cc6302a971dfaebc"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-006-R00-AAN(Roof Plan Access Control System Layout).pdf",
+   "size": 3988929,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "433f624087acab17c9cdefdc92dca5f45397e35ed28a2b10fb1924859b8a5ec4"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/Previous Approvals/E-6671 CBS MS R2 App.pdf",
+   "size": 504649,
+   "modified_utc": "2015-03-29T06:34:32+00:00",
+   "order_key": "463d1458d118feba6547ca1ef5faada36c4c4b2790a385675c69e26bb8e1d465"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Commented dwg/B01-ASC-SD-ELE-0024 -  SD for 2nd Floor Emergency Lighting Layout - B (1).pdf",
+   "size": 3531833,
+   "modified_utc": "2025-05-23T05:55:14+00:00",
+   "order_key": "46959abbe3577af9fd50adf97980f6795086b23b96dd24d9eba05b014b65a899"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 4.pdf",
+   "size": 1487714,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "48712ae2a5a8f11fc76e01988297e190b4c1ff3860675f64c4ac001b59d3e5e1"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002F.pdf",
+   "size": 2197314,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "492c13675a501772640a46635ca7b82e55283ee5859459277b32c2c6c57007d9"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-FA-2633-006A.pdf",
+   "size": 1189976,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "493a58b5932764d8f0f426c7f0bada1574d78f83b28f4d9b2e1c5983428459dc"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674_2010xletter to dcd - list of revisions1483893035615.pdf",
+   "size": 1949875,
+   "modified_utc": "2017-01-31T10:01:19+00:00",
+   "order_key": "4940a3c79b0b5d9158eeed07fa2daaf7a6e278cc40a1b954ff2ea75e2da4046a"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Comments received on 8.4.26/Sea_Point - CBS/CENTRAL BATTERY SYSTEM (GF to RF)/B01-ASC-SD-ELE-0049-Rev.01_B-Shop Drawing for 7th Floor Plan Emergency Lighting Layout.pdf",
+   "size": 9481900,
+   "modified_utc": "2025-10-02T08:35:16+00:00",
+   "order_key": "494939fa3aeba2b65c77444b67e5d0213727823a24485ce6c4bd44f7f283dea5"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0057-Rev.00 SD for 10th to 24th  Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+   "size": 3228791,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "4978e442bf82467b6b53320bd3579565930a5ac2e45eead5c155d624bf11bb37"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "PQ/R1/REPLY.pdf",
+   "size": 262227,
+   "modified_utc": "2025-02-19T14:11:24+00:00",
+   "order_key": "4a002f93b11da7ef9caef67e869880c1e337832832b9d7cf038dd1f61af18c8b"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0006-Rev.00 Shop Drawing Submittal for Basement Floor Plan Fire Alarm & Voice Evacuation Layout - B.pdf",
+   "size": 2798740,
+   "modified_utc": "2025-08-25T06:20:39+00:00",
+   "order_key": "4ac17e9005f0ce71dc5f1f98eb7285c5b2d80b0676eca967f8d27d8a72a4a524"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 8.pdf",
+   "size": 1329638,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "4aca7ca3a21f338bc3916fbeeafc83f0e52145a4119d2dc6c903c50a7009cb40"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002B.pdf",
+   "size": 2140248,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "4b7eada5321c48e9780487618535b6433aa57068689a139ad910ab57029ba9b6"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0051-Rev.00 Shop Drawing for 8th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B.pdf",
+   "size": 5810225,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "4bcfdb97c174ff87a4a32aadbc9b873a6a0fbae7ff981f9b3f0f9c39ff3689a6"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R1/Reply to Consultant comments.pdf",
+   "size": 104834,
+   "modified_utc": "2025-06-26T04:45:10+00:00",
+   "order_key": "4cdd1dc1a2311e2c740cd5687b1fff9e8901272b141cc94cd9b2f20a7467d834"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/VI/R3(Comelit)_Reply/MS.pdf",
+   "size": 188155,
+   "modified_utc": "2025-10-01T05:51:09+00:00",
+   "order_key": "4d07d439e87d08501908ef0d49520da60ec6b11896a3450f28c8f584aa04d1e8"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD BAS R1 REV RES .pdf",
+   "size": 591840,
+   "modified_utc": "2016-02-07T05:36:28+00:00",
+   "order_key": "4d164f48ca77df242304ae742f384ff193acd238e055f4ec97ecbfcda3c64e25"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/5-THIRD/3RD FLOOR REV-00/1 7.pdf",
+   "size": 1243606,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "4d5539442b930acd23d42274f55f54507ca0cac0dcfd5b2e89e8e3333b60d686"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/MS/GB/004-R01 (MAS for Gate Barrier System).pdf",
+   "size": 940290,
+   "modified_utc": "2025-08-01T10:09:02+00:00",
+   "order_key": "4df0f89c0452db48736c721e899977c5e0cb4367d721123827f460b2c7ea9ef2"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "PQ/R1/reply to comments-1.pdf",
+   "size": 193798,
+   "modified_utc": "2025-02-20T05:42:05+00:00",
+   "order_key": "4ed886e99170146e10f178e1163e9dfe99b5ee1bd0e612d9d9ff37ec01794521"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/33.pdf",
+   "size": 48384,
+   "modified_utc": "2025-08-01T13:00:27+00:00",
+   "order_key": "4ee5ac5dc5fb70fdc2cf746f843061bb479dd688cf5d8773b26e8e2fdd505f19"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 8.pdf",
+   "size": 1379126,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "505d11cd5eed707f695ac8a77356887532d73a975405d08c663c4326a71b4a86"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/SDS-MEP-ELE-CCTV-001-R00-AAN(Ground Floor Plan CCTV System Layout).pdf",
+   "size": 3441391,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "50cb1c1dfecfcbd75ec01666dc7f20f109cef9f76da46d705cc2a331159adc77"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002.pdf",
+   "size": 3664277,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "50ea638e85efa86d644eabeee4ae66c47eaa0cd7e21b2aadd917373cce0dc0da"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS MS R1 REV RES.pdf",
+   "size": 6195635,
+   "modified_utc": "2016-03-08T05:06:07+00:00",
+   "order_key": "52075a9d2d0b543b1ddd3e1303f3d0397c5334acfee55407b937ba59c6ff5641"
+  },
+  {
+   "ep": "15744",
+   "relative_path": "Drawings/Shop Drawing/Shop Drawing-PAVA/Rev-00/REV-00 Comments/Temp10896.PDF",
+   "size": 11461261,
+   "modified_utc": "2019-02-20T19:40:56+00:00",
+   "order_key": "5246509f32efc9cde3b812ecafdb7c6e0b6621693af3909eca3fca72d74ffd0f"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/EM/EM-102 - FF_EM Light Layout.pdf",
+   "size": 2722888,
+   "modified_utc": "2023-09-18T10:51:02+00:00",
+   "order_key": "5320776d232a1691e620a98621044fd795da922ab72484551a4077aa6d72e6af"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-006-R00-AAN(Roof Floor Plan Telephone Layout).pdf",
+   "size": 107280,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "53439c91d3911962b129e4b1f9cc59cda1be5adc9340eeae2e5f6fdaa1d4ebad"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Authority Approval/Etisalat Approval letter for ONU.pdf",
+   "size": 184927,
+   "modified_utc": "2025-05-12T01:07:30+00:00",
+   "order_key": "53b666a6866bd4b577d0295810774aa65d8f8f61f45f8c5fe16408666b4b7dab"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/R2/Consultant Comments.pdf",
+   "size": 2737318,
+   "modified_utc": "2016-04-06T03:56:28+00:00",
+   "order_key": "574378a6e448175624d9e71ffcefdb00e1d49bb27da4abb8a47b69d550622477"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/FA  CBS Consultant Comments - First Avenue Mall  Hotel/Fire Alarm Rev.02 SPD-MEP-054 Reply To CC.pdf",
+   "size": 552681,
+   "modified_utc": "2016-06-15T17:58:13+00:00",
+   "order_key": "58656d890b759fba4c92f67f9466fcdd5b5db33f98b7ae0f12cf78529b10df27"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 4.pdf",
+   "size": 1774433,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "587be9cf9c34fc1414f25a54aa7643d1f7011743189cff40c98f33284c65660a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 7.pdf",
+   "size": 2342922,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "589ee52d5f3fa006bb0b683eaf5c1d0c529cd8ef9af9fe1bbb9abcd34ed44198"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002.pdf",
+   "size": 3580859,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "59812548bff7d4ccbd7ff6ae63a214c3706be2a1bcc6491be8ad3f7a74503505"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R0/previous app/Previous approval.pdf",
+   "size": 11869736,
+   "modified_utc": "2025-05-17T07:17:36+00:00",
+   "order_key": "5acaba84c3b7f17098b03e7a083eb64fb12f07b6f4c7dc102d93a8143b9d80c3"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Cons.Comment/BGM (2).pdf",
+   "size": 4027446,
+   "modified_utc": "2025-06-12T12:35:05+00:00",
+   "order_key": "5af3d1b0faeec14205dd882b7437c6e7c540027c04283a3f820acce0c48077f3"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-007-R00-AAN(Site Setting Out Floor Plan Telephone Layout).pdf",
+   "size": 106580,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "5ce012a0e37568e786882c7d116bd6a7fe1f5fb1c8afebb2e3b14a8339ecebfe"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002D.pdf",
+   "size": 2469385,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "5cf88b8de3d50f0034a56bd1f3f39edc62db0d35ed515be68010bfcac7262583"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/FA/REV-01/SLD/Rev-0 comments/B01-ASC-SD-ELE-0170 Rev.00 - Fire Alarm & Voice Evacuation Schematic Riser Diagram T1_Code C (1).pdf",
+   "size": 7293120,
+   "modified_utc": "2025-08-25T08:15:17+00:00",
+   "order_key": "5d4e15c85646d33144cc366a9a6c04cbbed57a6b1599968c803e6bd7e8c6223b"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/5-THIRD/3RD FLOOR REV-00/1 6.pdf",
+   "size": 2478335,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "5e00dde418409ad8bc253a0d3a5bba45d2362d5dbffc45166d6c5bc677df8e66"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/SCHEMETIC/REV-01/0 8.pdf",
+   "size": 2165916,
+   "modified_utc": "2016-09-14T10:31:50+00:00",
+   "order_key": "5e1ec3effba0e96299b26aab4319a6446bcd1f9c2c8921f24d7ac993a1d9c8fe"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Cons.Comment/Video Intercom Comments.pdf",
+   "size": 157539,
+   "modified_utc": "2025-06-12T12:34:39+00:00",
+   "order_key": "5e52fca266142df8dbf0ffc0999a6c2065a58c3ce46d7d4837abc0be11e4a25c"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R2-Reply/SCS MS (B)_Reply.pdf",
+   "size": 602371,
+   "modified_utc": "2025-08-02T05:09:29+00:00",
+   "order_key": "5fb026e3a5d19cd3f9ed2557512a71580b9c898908253e295951cdccd24f8f71"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/Received from Mep/SUBMITTED/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0010- R00.pdf",
+   "size": 1208558,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "5fbe51e037ac0715976645277e1fcd3e15ba4632fa3a5fa8ab713779bcf2b54d"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD BAS R2 APP AS NOT RES DWG .pdf",
+   "size": 15812333,
+   "modified_utc": "2016-02-29T11:17:00+00:00",
+   "order_key": "61fa4e09eb997d7faa65240b9c08615bc4729e379acd0750bbed859903615d33"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Project document_Scale Jumeriah Garden/SD-Approval Copy/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-006-R00-AAN(Roof Floor Plan CCTV System Layout).pdf",
+   "size": 109804,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "624e7058f346119560b3e7c640df53fa88e3baf3c966e21d2b91deac1b0c6b67"
+  },
+  {
+   "ep": "22349",
+   "relative_path": "DWGS/Shop Dwg/EM LIGHT SYSTEM/EL - SCH stamped from Gulf fire vision.pdf",
+   "size": 1744994,
+   "modified_utc": "2022-10-06T06:33:59+00:00",
+   "order_key": "625a6792a4d71ad30f18036b16105234f9e6ab8f78d1fe53688972a0ceb462b2"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/EP-3563 EST3 SD 1F R1 App.pdf",
+   "size": 844785,
+   "modified_utc": "2016-05-28T04:36:49+00:00",
+   "order_key": "632da8c71a9dbd82983e4ccc2048b4137087e1bf25f49b0f089643321021ad50"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 1F R0 REV RES .pdf",
+   "size": 618048,
+   "modified_utc": "2016-03-27T04:20:26+00:00",
+   "order_key": "63fe65eda794f6793bc080ce033eb1948dc34d95aa3a25ff499eae6a135b1c2a"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0005-Rev.00 Shop Drawing Submittal for Basement Floor Plan Emergency Lighting Layout - B.pdf",
+   "size": 3994676,
+   "modified_utc": "2025-03-11T03:27:49+00:00",
+   "order_key": "64137ae5c05b40cd9951a2f766696bb0433e0f81f1cacc52ad1ed09f2f415e6f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002E.pdf",
+   "size": 2250813,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "64e29b988dda26f951d0528b8e322a3d2fb9ad9af2aabf7f0cd4bb6e72b5e720"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 1.pdf",
+   "size": 2251415,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "653e6715679c17e9eb86d5b3f73a698a975d90b4c8ae3ee05946570669da90ac"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002D.pdf",
+   "size": 2369161,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "660a3811584ce09694c1c463bfab4cb702b20dc8a09846097ebd2d210b906de4"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/7- roof floor/Rev-0/0 5.pdf",
+   "size": 1909561,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "669967c3fc773ccede5d95525d316910f81f2e968dfe365051a54a34e9cb4dcc"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 7.pdf",
+   "size": 2199158,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "672fc122493016f874da0ea15fe17a16c1dcec75f41f995ae35a6ec7d142259e"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XLIFESAFETYXPart1.pdf",
+   "size": 49544867,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "67613313065d25732601a2eee8c8865962d663f4fba64521b331417efe84c6f0"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 10.pdf",
+   "size": 1298425,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "680c9c0cc591e246b1c6e9d3e483eebeaff9f8d389ece6a42491b3f8333bdc84"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD GF R1 APP AS NOT.pdf",
+   "size": 719216,
+   "modified_utc": "2016-05-03T07:36:15+00:00",
+   "order_key": "6883e6dbba9f671bb8b4de2c606a5e76a6796cf8bc5a46dbc3f8b162dc4550de"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R0/16. Previous project approval/previous approval_CCTV.pdf",
+   "size": 9352160,
+   "modified_utc": "2024-11-01T06:21:39+00:00",
+   "order_key": "689438b5ac4f526e58552be73f2ff316976ea7e5fc6510c153a803026be1a61a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/SCHEMATIC/Rev. 00/CP-1.pdf",
+   "size": 2129454,
+   "modified_utc": "2016-08-17T10:56:22+00:00",
+   "order_key": "6be3417933e0ba682147caf5a316f03e1e634cbfcc215d45b2bc8b21a662c903"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "PQ/R1/PQ Reply to comments.pdf",
+   "size": 7328275,
+   "modified_utc": "2025-02-20T05:43:40+00:00",
+   "order_key": "6d3377797ea08d70111a5385f3a339ea6cbe2105f2458b867de68610f367ab95"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/EP-3563 CBS SD 1F R2 App.pdf",
+   "size": 503580,
+   "modified_utc": "2016-08-24T03:40:52+00:00",
+   "order_key": "6e67083ef8ad80e46f15105e7cedfe443a8d14414d42e3d90c3232881930a767"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/FINAL APPROVED 809543.PDF",
+   "size": 60230,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "6ea559bb110a788648aef7e3ec9063ab01756153d610d5a2bd62ff7bf5ccf548"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/SCHEMATIC DIAGRAM ACCESS CONTROL SYSTEM LAYOUT.pdf",
+   "size": 4452932,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "6f345584d08be68ddfe25c70846f27245ce7afb6caf95519d15549689e685294"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 FA Submittal/R0/Consultant Previous Approvals/SE-33944 MS App.pdf",
+   "size": 141046,
+   "modified_utc": "2015-02-07T10:07:30+00:00",
+   "order_key": "705321e3d0d4d09ddbad481e3ccc6a601f0a2bacf2d5eeb57eb4a8321b80d996"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD Comments - Schematic.pdf",
+   "size": 769421,
+   "modified_utc": "2017-06-11T05:30:24+00:00",
+   "order_key": "70b362cf3c6bb3d670586a3e496e449b475843a944db83387d6101b997910a00"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0020-Rev.00 SD for 2nd Floor Plan Fire Alarm & Voice Evacuation System Layout -B.pdf",
+   "size": 4199251,
+   "modified_utc": "2025-08-25T06:20:39+00:00",
+   "order_key": "721338702eaff1d80cedb14360a6609d682ea128a03be31f626225c983036615"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-0007- R00 SCHEMATIC ACS SYSTEM.pdf",
+   "size": 4526384,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "7333bd64d3256214dec3070bd26bdecca165dec4c3fe0518e9e233f3293babd8"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 5.pdf",
+   "size": 2067842,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "757028b924b1380a36c917689bef598685509967f5799129594ca9149f1f5920"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/VI/R2(Comelit)/Video Intercom consultant comments (2).pdf",
+   "size": 5183605,
+   "modified_utc": "2025-08-19T07:52:48+00:00",
+   "order_key": "759dd471194c6e1b70d64a1c9312147d672a5015dfe7305bcfcc960e74353abf"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/7- roof floor/Rev-0/0 4.pdf",
+   "size": 1107443,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "769de4621a1fb7e1478f7fd85b4a74c61a141831a403b8e348a3a311fc8db405"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-001-R00-AAN(Ground Floor Plan Telephone Layout).pdf",
+   "size": 103587,
+   "modified_utc": "2025-08-08T07:25:54+00:00",
+   "order_key": "76ae5143504b11904566391d6a0be0c975925de86a38acdcb542cf9bc27008b2"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 2F R0 REV RES.pdf",
+   "size": 889363,
+   "modified_utc": "2016-03-27T04:20:26+00:00",
+   "order_key": "76e0224031e47e18243f015254f48aa8366c1e0b1962af4a8113c26572a7b9ac"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0085-Rev.00 SD for 54th to 56th  Floor (Tier 4) Fire Alarm & Voice Evacuation System Layout (Tower-1) CODE-B.pdf",
+   "size": 2401447,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "774fa86d3836ce7f58a6e91a5b074af53d0297dfe31d1a1081a9e408d4645851"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0046-Rev.00 Shop Drawing for 6th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+   "size": 5273961,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "781e04782f73424c4ee2fdbcd6897ffb217395e9e812c69049bcfaa4b48132e9"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/R2/16. Previous Approvals.pdf",
+   "size": 1566402,
+   "modified_utc": "2016-04-05T19:04:07+00:00",
+   "order_key": "78dbe3f087234aebecd8fb6fb2bb9944b91c96bfa0838584047889434a7f7c36"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-TEL-2633-006A.pdf",
+   "size": 1189976,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "78e920b16d2d179c81cfa3c432cf9ed2c76fe7a6bca745ff17cdec7b96005a7d"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0020-Rev.00 SD for 2nd Floor Plan Fire Alarm & Voice Evacuation System Layout -B (1).pdf",
+   "size": 4199251,
+   "modified_utc": "2025-05-23T10:06:57+00:00",
+   "order_key": "7930b0b874a12a9f04b069213452e8ff5f040eb056f2c26d360d1104946be8e1"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/Received from Mep/SUBMITTED/FCC ROOM & CONTROL DETAILS LAYOUT.pdf",
+   "size": 1134398,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "79595452a7850973003e2bb660a09c340a1bdfcd3c664909cb84dcc789ca207f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS MS R2 APP AS NOT.pdf",
+   "size": 1505222,
+   "modified_utc": "2016-05-12T09:07:27+00:00",
+   "order_key": "79b10d669f8f2c8106964bf3009963fee3e212bf4c7497447aebae2bef5370ab"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "input/Mep/Asad/wetransfer_vol-ii-part-3a-electrical-specifications-pdf_2025-05-15_0632/2024_08_09_ ARCH IFC DWGS/CAD/JG Consultant - Meraas.pdf",
+   "size": 76938,
+   "modified_utc": "2025-05-15T06:37:10+00:00",
+   "order_key": "7a529501b5dc9f60eb9013d06c265731a49b8e5c635f2b4cf2aa2677235eb9b1"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/SDS-MEP-ELE-CCTV-005-R00-AAN(Typical 2nd to 8th Floor Plan CCTV System Layout).pdf",
+   "size": 3149959,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "7b09565a47dea5f59f797d7d346f4bdfa29c00a4f43149e0a8f80b8b6473f378"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "EP-27331 MS/CBS/Rev-1/Reply to comments-CBS R0.pdf",
+   "size": 209493,
+   "modified_utc": "2025-04-12T04:51:47+00:00",
+   "order_key": "7b1816076c8eab591e6c72e901c3842c50769d22329a8509499d8dd77ba5d2e0"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/1ST PODIUM FLOOR PLAN ACCESS CONTROL SYSTEM.pdf",
+   "size": 4073868,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "7b3f36617b088881365fe6258f02ed8b0ee49f14dbce1ec2da5443c6628b902b"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0074-Rev.00 - 10th to 24th  Floor Plan (Tier 1) Emergency Lighting Layout (Tower-1)_Code-B.pdf",
+   "size": 4749880,
+   "modified_utc": "2025-06-10T08:22:38+00:00",
+   "order_key": "7d2a5bece587dda3f54497bdfea67e19474ade3bd8b343b9c711d74d1b1d803f"
+  },
+  {
+   "ep": "22349",
+   "relative_path": "Civil Defence Approved Drawings/drawing_stamped (1).pdf",
+   "size": 5873189,
+   "modified_utc": "2022-10-31T12:23:47+00:00",
+   "order_key": "7df94fad7f337d886e3be7ad3895fc1a415f65d48da09169560d0fbfd32355e9"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 4F R1 APP AS NOT.pdf",
+   "size": 796233,
+   "modified_utc": "2016-05-21T06:42:05+00:00",
+   "order_key": "7e14523fe0b13fa29dd94441f53f76fb528f63d93bd9d4c3a7ae6c588bb97403"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "MS/R1/Reply to comments.pdf",
+   "size": 305408,
+   "modified_utc": "2023-09-13T11:29:03+00:00",
+   "order_key": "833025215d72a85921728e9e6b76553548c9dfa8c9053013a1003ebae15f5b79"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/Datasheet/FP200 GOLD.pdf",
+   "size": 454584,
+   "modified_utc": "2025-08-01T13:02:29+00:00",
+   "order_key": "834cf7f407097b987fd0dbeb4dfc17b3d22c6b1c61747086ea77c030eede7961"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XFFXGCE.pdf",
+   "size": 34618240,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "83e80d3d02f3c22fbf57020ec4527c9a885e8e157930feefbdd13a9ee8c5f834"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-005-R00-AAN(Typical 2nd to 8th Floor Plan Telephone Layout).pdf",
+   "size": 3301647,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "8487f65b1db5bf7ff043f3aaa88606f2ea1cbebc4871391c111c1f2c7525815a"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/NBC-JGH-SCALE-MAS-MEP-ELE-LC-2025-003-R01-AAN(Public Address & Back Ground Mus - Copy.pdf",
+   "size": 498362,
+   "modified_utc": "2025-08-01T07:29:59+00:00",
+   "order_key": "85b5232197cd82d2f42a069c67db1dee5e9f61ed6e75ac72d9167f1ffacc32a2"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0095-Rev.00 SD for 19th to 44th  Floor plan Fire Alarm & Voice Evacuation System Layout (Tower-2) Code-B.pdf",
+   "size": 10799649,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "89ed5a9e799971e857b48f739728c82d286c1ab9b1bde5d6a07b4bd91ddc60ef"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R2-Reply/Material submittal of SCS (strucured cable system).pdf",
+   "size": 242636,
+   "modified_utc": "2025-07-18T04:34:36+00:00",
+   "order_key": "8ad40519a75274306305ebaf482042e806963daf7c308ce4df71066b9a354c5a"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/BASEMENT FLOOR/Rev -0 comments/Basement.pdf",
+   "size": 3994676,
+   "modified_utc": "2025-03-11T03:27:49+00:00",
+   "order_key": "8b1f878cc6f2828f798b29db7251c9aa80807101daed748f6bb45b4c2612ddf9"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R2_Reply/Reply to Consultant comments.pdf",
+   "size": 191787,
+   "modified_utc": "2025-08-18T11:11:56+00:00",
+   "order_key": "8b691603a53332008cec811416728ba5cb8ca84534e64e92bc826de24405177b"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-TEL-2633-006B.pdf",
+   "size": 1190125,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "8bf2504cc07e3e03096f89b8d5adad534af21e13bbe441a3077a6a5cb805bd86"
+  },
+  {
+   "ep": "15744",
+   "relative_path": "Drawings/Shop Drawing/Shop Drawing-PAVA/Rev-00/REV-00 Comments/Temp10898.PDF",
+   "size": 12412509,
+   "modified_utc": "2019-02-20T19:41:04+00:00",
+   "order_key": "8d589138bf800d99f0d4ffa65790807e79eded67875640b91dfac77cc530f69b"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0043-Rev.00 - 1st Floor Plan Fire Alarm & Voice Evacuation System Layout_Code B.pdf",
+   "size": 5876785,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "8e858bfd00e770bb8c562633be1ae6ecb22bafb3c4fb091974d81025aec8bd2e"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 6.pdf",
+   "size": 1527306,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "917dbfc503249fe2b8b93c007c123c3626926c0e9822dcc47cc05ccb3f073b0e"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/5-THIRD/3RD FLOOR REV-00/1 8.pdf",
+   "size": 1411856,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "91c643a75b16526a1d547e4db9060024e175c9b68d48e5da4158f671efbb9552"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0061-Rev.00 SD for 35th  Floor Plan Lower MEP Fire Alarm & Voice Evacuation System Layout Code-B.pdf",
+   "size": 2327467,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "92dbb6ec3b217ffae5004ba8f5fcf9793576849348f7c2e2ac4e11b1837c2c74"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/5-THIRD FLOOR/3rd floor/rev-01/1 7.pdf",
+   "size": 1156730,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "94cfe4b8d66c57f4f1e8e14ddcd24530d173e545ecd9390937b898ed0edf993a"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/CBS/CENTRAL BATTERY SYSTEM/CENTRAL BATTERY SYSTEM/B01-ASC-SD-ELE-0024 -  SD for 2nd Floor Emergency Lighting Layout - B.pdf",
+   "size": 3531833,
+   "modified_utc": "2025-05-05T11:45:36+00:00",
+   "order_key": "953770e36d403bae66288997a378b1ce7a2c16565684cee3469cdfb51a3b770f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/D14-22 S038.pdf",
+   "size": 464448,
+   "modified_utc": "2017-01-31T10:01:32+00:00",
+   "order_key": "955e8d3ba7c54d7cb197f85908587010929952d16017f6f0023e5b2dc7987d61"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/From Sajith/DCD approval.pdf",
+   "size": 320971,
+   "modified_utc": "2016-02-10T13:45:45+00:00",
+   "order_key": "9628bbf889d6ba71b26d60107bcd0e7e3c12df4bac6026600724c2c603a24cb0"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-0008-R00 (SCHEMATIC DIAGRAM TELEPHONE SYSTEM).pdf",
+   "size": 11753924,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "967fe7bb73104d9c06e2a214be55f14458106814a6861d18d12f5002af35e4e9"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JHG-SCALE-SDS-MEP-ELE-ACS-2025-004-R00-AAN(First Floor Plan Access Control System Layout).pdf",
+   "size": 4298544,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "96a9dab514b3ce2805e5848c57acb6a9621487aaac2d6abcfd42ae0f59072c24"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/BASEMENT FLOOR/Rev -0 comments/SP-CBS-BF/SP-CBS-BF/EMERGENCY LAYOUT SHEET-2.pdf",
+   "size": 523018,
+   "modified_utc": "2025-03-05T07:49:18+00:00",
+   "order_key": "96b8febbbfb0b2e0544bb5ca2e72eb34a50370fef9960d5c63795dcb5d4a0a24"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/comments/B01-ASC-SD-ELE-0009 - Rev.00 Ground floor fire alarm & evacuation layout code-C.pdf",
+   "size": 5599177,
+   "modified_utc": "2025-03-29T04:20:06+00:00",
+   "order_key": "999da327429f756a5e105ca35e9679772edd1c32ceadef21e973fb30ad170681"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Commented dwg/B01-ASC-SD-ELE-0014-Rev.00 SD Ground Floor Plan Emergency Lighting Layout Code-B (1).pdf",
+   "size": 4064655,
+   "modified_utc": "2025-05-23T05:55:13+00:00",
+   "order_key": "9bc6390dcb15cc609c2615316260f7f5ebb3cdd35e4acc7be872b9f3c1dbf426"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/EM/EM-103 - RF_EM Light Layout.pdf",
+   "size": 3423170,
+   "modified_utc": "2023-09-18T10:58:30+00:00",
+   "order_key": "9bfcf92cef57a39072fd84f3adc9edc820f522549290a85187460ea34fcb8a13"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+   "size": 8463664,
+   "modified_utc": "2026-07-24T06:26:19+00:00",
+   "order_key": "9cf4ad27dfd12f7cd2c70363ce12d142c2001e70d4ab40e0f8ba6530439816c8"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xfirefighting_dewan_part1 - approved1483884487958.pdf",
+   "size": 39690599,
+   "modified_utc": "2017-01-31T10:01:19+00:00",
+   "order_key": "9d661d5cb31c65ebc73ea555672660c5353a83f88e0ce5ae1746466699b544e0"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "EP-27331 MS/CBS/Rev-1/reply to comments CBS.pdf",
+   "size": 339013,
+   "modified_utc": "2025-04-16T04:32:16+00:00",
+   "order_key": "9e8b8e31c8de168d314bc9b78e64d4501c9ac53beac80eb7896d42844471a9a7"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD GF R2 APP AS NOT.pdf",
+   "size": 1327969,
+   "modified_utc": "2016-04-27T11:00:09+00:00",
+   "order_key": "9efdf41e8aa10b27d8629d3d1c92579dc41c5cad3a38825c4466d38c8eefd4e2"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 2.pdf",
+   "size": 1395011,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "9fc822415dba9c10db0ae62225b17ef0bfbb4fbf9290d67061ea65080bc2290f"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/TYPICAL FLOOR PLAN (2ND-8TH) ACCESS CONTROL SYSTEM LAYOUT.pdf",
+   "size": 3763741,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "a07ef2de60605d22becfd436a4bbf3602783d9a57680ad70ab81a88d44c8e5bb"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/FA/FA-1004  - RF_Fire Alarm Layout.pdf",
+   "size": 3412472,
+   "modified_utc": "2023-09-18T11:10:33+00:00",
+   "order_key": "a0d62218b85cd0b69ebbf13f1cf8d9b0cf1a9743321ab0e6118285643dfd5351"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/BGM-Approved/NBC-JGH-SCALE-SDS-MEP-ELE-EBGM-2025-0001 1ST F PLAN BACKGROUND SYSTEM LAYOUT.pdf",
+   "size": 4999932,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "a0de837afb9769ea51a2e1074f92e370c2953a3a6635512c77aba420bdd1f4a4"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Scan Document/EP-26687 FA & EM MS APPROVAL.pdf",
+   "size": 744930,
+   "modified_utc": "2023-11-17T07:46:25+00:00",
+   "order_key": "a1a436c584b11dbda6aed59defd8b5ed41601ee1097c023e8c409c4b2bf6e980"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/ROOF FLOOR PLAN ACCESS CONTROL SYSTEM LAYOUT.pdf",
+   "size": 3922413,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "a3f3eb45c924bcc8fd64142974e578f9645c04a6cced8aa4c1d1075657b0512a"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/ROOF PLAN - CCTV LAYOUT.pdf",
+   "size": 1583665,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "a6896c9e859f612d11350262c658f3b447bce2c6a7bb21a4820fdbe570191809"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Revised/6TH FLOOR/REV 0 comments/level-6.pdf",
+   "size": 8966662,
+   "modified_utc": "2025-05-26T04:49:45+00:00",
+   "order_key": "a6e8767f5b87ddc1e1b9fddaca527315b23670d4a5d138c237e9b0d3c6959977"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/BGM MS (B)_Reply.pdf",
+   "size": 2116535,
+   "modified_utc": "2025-08-01T13:33:39+00:00",
+   "order_key": "a720d4a60bd3b7698aae0fd096d4605c456cea0baa3eb37bf3d4b733de3db702"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Authority Approval/DU app.pdf",
+   "size": 5967070,
+   "modified_utc": "2025-05-09T15:58:51+00:00",
+   "order_key": "a736f871fa05ad8bca2b12e6fa2ebf63567ec4457c8af1ff3bb1458bc8d1e099"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/5-THIRD FLOOR/3rd floor/rev-01/1 8.pdf",
+   "size": 1324869,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "a8a899954637a1073cf3e34aaa8ce67f5c353f7a1c79998fdc4aa9dbbe6cdaf6"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/FA  CBS Consultant Comments - First Avenue Mall  Hotel/Central Battery Rev. 00 MAT-115 Consultant Reply.pdf",
+   "size": 5548379,
+   "modified_utc": "2016-02-06T00:34:16+00:00",
+   "order_key": "a8e30cf2dc5ff3c769143d5a276abf0a0efb1217142ce4403a05b4a791fe8951"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/EP-3563 CBS SD Sche R0 App.pdf",
+   "size": 769421,
+   "modified_utc": "2016-08-24T03:40:39+00:00",
+   "order_key": "aa336b51defd2fbf8467f06d82c800db5f5188a2da81941a253c53fa7b273037"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0091-Rev.00 SD for 10th to 18th  Floor plan (Tier 1) Fire Alarm Tower-2 Code -B.pdf",
+   "size": 2188639,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "aad381721315d7328748ee452dc64070c67a7858095f5768e804fdc2e0d682a7"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 6.pdf",
+   "size": 1721189,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "aaebf6e6b3fe8529613d1529a9028167b7608b0bd1634e2732a3e3f9e8aa2676"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/EM/EM-100 - BF_EM Light Layout.pdf",
+   "size": 2428706,
+   "modified_utc": "2023-09-18T10:42:33+00:00",
+   "order_key": "aaff715bbed5e038596b57919101f90b1675d3c89ae92a13bb4ad3882813ecd8"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XFAXEMXVOICEXGCE.pdf",
+   "size": 27201854,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "ab6a867a06a0f69fe8616f0cbbe553028abe3a1d47053bc5be2ac4f5b09d2b99"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R2/Reply to Consultant comments.pdf",
+   "size": 105611,
+   "modified_utc": "2025-06-25T04:08:49+00:00",
+   "order_key": "ab875a341bf4f7234a251bd1603d3f2705624b24098419d6eb31e8b87c5c6810"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 FA Submittal/R1/Consultant Comments.pdf",
+   "size": 580280,
+   "modified_utc": "2016-02-07T11:10:08+00:00",
+   "order_key": "abd159fbd3705669237ff7ab020599be44cd0e3df53880d0a47baa1a8087ff8c"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/1ST FLOOR PLAN ACCESS CONTROL SYSTEM LAYOUT.pdf",
+   "size": 4225396,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "ac4bc2acb2aa1866730563b43b8e71164c330f98b8166464a181a1ab85a21539"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0170 Rev.00 - Fire Alarm & Voice Evacuation Schematic Riser Diagram T1_Code C.pdf",
+   "size": 7293120,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "acdecc00ae5ed5563d6a18dc76972836bbbd00138c5c7c6fc03f4796d7c7afd5"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R1_Reply/Reply to Consultant comments.pdf",
+   "size": 186615,
+   "modified_utc": "2025-08-02T05:44:08+00:00",
+   "order_key": "acf45993792722f882c4f21aba08d01a45ed99a93b13f785654db19cdd948d6b"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 5.pdf",
+   "size": 1517556,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "adf5dcca15478452198b4dae831c28d4cc49682d95df064f46ae447f14513bd9"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/From supplier/wetransfer_al-arabia-g-8-scale-jumeirah-gardens_2025-05-09_1138/Al Arabia G+8 - Scale Jumeirah Gardens/Authority Approval/54R_780091s_Datwyler.pdf",
+   "size": 2868521,
+   "modified_utc": "2025-05-09T11:39:00+00:00",
+   "order_key": "af9541bc994f1f3a72d9706442fea0a94427d585b9e73d1800756952a06f5e00"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-FA-2633-007.pdf",
+   "size": 1900411,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "afcad21ea219f2e4c4dc5c5fb923f5b1b7aea33d022d6494e86eb28de233c67e"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R1/Supplier reply/COO - G+2P+8F+R @ Jumeirah Garden City  TL 2362 06052025 (1).pdf",
+   "size": 117539,
+   "modified_utc": "2025-05-17T07:30:59+00:00",
+   "order_key": "b0c71ddb40d191810b38c0abe537e1fd62a46bd5cc8a986d2acf223fd03c57b0"
+  },
+  {
+   "ep": "15744",
+   "relative_path": "Drawings/Shop Drawing/Shop Drawing-PAVA/Rev-00/REV-00 Comments/Temp10900.PDF",
+   "size": 14390605,
+   "modified_utc": "2019-02-20T19:41:14+00:00",
+   "order_key": "b19695a1cb7b73d2b964446009f542f3d4620e72763ca508104f12174e3df141"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "PQ/R1/reply  to comments.pdf",
+   "size": 193798,
+   "modified_utc": "2025-02-20T05:36:18+00:00",
+   "order_key": "b2eb2243576d658bd8010dedab9c896b105079145148c976bb5fc253c00e7f40"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD SCH R0 REV RES .pdf",
+   "size": 583447,
+   "modified_utc": "2016-03-27T04:20:25+00:00",
+   "order_key": "b3703c33f30e164341db2aa1ad9b29bce624bffb83d43136d3536f5f0eae4662"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4- 4th floor/Rev-0/0 2.pdf",
+   "size": 1420383,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "b4d1363b75a3cc37e1250cbf812cb0e1986adec30dbe5c5e08768c9aa78bbc48"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/253708-37-1_1.pdf",
+   "size": 164751,
+   "modified_utc": "2017-01-31T10:01:01+00:00",
+   "order_key": "b4d27da664ec2c81510ad9bfd66ea690d7fb335ee174207e1bd1f1ecdefa6ec1"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/Previous Approvals/E-6671 CBS MS R1 App.pdf",
+   "size": 530119,
+   "modified_utc": "2015-01-27T12:35:15+00:00",
+   "order_key": "b552eaa832014902221212725dbb9f9baa959c7139bd315bb1310d1cfa582eb8"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/5-THIRD FLOOR/3rd floor/rev-01/1 9.pdf",
+   "size": 2223323,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "b5767b3ac2b1758f867def44884225edb41c3d4b183bac60349293dcadfbc250"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/VI/R3(Comelit)_Reply/Intercom Appoval.pdf",
+   "size": 168939,
+   "modified_utc": "2026-01-08T10:19:24+00:00",
+   "order_key": "b6bddf06624ce34ac15b9cf4f57991343f2b4a9b5df4c0f5a874a74da6d91e41"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0009-Rev.01 SD for Ground Floor Plan Fire Alarm & Voice Evacuation System Layout -B.pdf",
+   "size": 10072139,
+   "modified_utc": "2025-08-25T06:20:39+00:00",
+   "order_key": "b7c28174f1ceff6f2196ba872e0cfb0440289874e4aeb673b0824ab27ada931b"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/3-FIRST/1st floor fa (rev-02)/0 1.pdf",
+   "size": 1615749,
+   "modified_utc": "2016-08-25T06:05:28+00:00",
+   "order_key": "b90b9e1ab502054092824bb0d7e779c91dede6cb5dc9e2bc3bc18a0cdd2d3df1"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R1/PRE APP/previous approval_CCTV.pdf",
+   "size": 10096714,
+   "modified_utc": "2025-07-08T13:03:12+00:00",
+   "order_key": "b99283251c96f20d450c345a533eb8a5fc7fcca0603306106a4f5336a847b4dc"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/SDS-MEP-ELE-CCTV-002-R00-AAN(First Podium Floor Plan CCTV System Layout).pdf",
+   "size": 3097537,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "b9976421a606b95475f62056b9f8c567b7c1d6d19cabe486b8c167f382a2495d"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS MS R2 APP RES.pdf",
+   "size": 1403806,
+   "modified_utc": "2016-03-23T08:48:07+00:00",
+   "order_key": "b9daafe45102541463609164097417a32e6c8476a1347552e902695011fef073"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-FA-2633-007B.pdf",
+   "size": 1168777,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "ba720f0123093b2c4d63a68e11b5d5dfa49b4984719edc3adb4ae025687a47fd"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/EM/EM-101 - GF_EM Light Layout.pdf",
+   "size": 5584536,
+   "modified_utc": "2023-09-18T10:47:16+00:00",
+   "order_key": "bbb63254ede0dc8f54414320ca8c14a59d9e0e3340a6bd2932294ebecfcc856b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/GROUND FLOOR PLAN ACCESS CONTROL SYSTEM.pdf",
+   "size": 4434391,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "bbf4c9f93905b260bde73e66aca6f2cc83b178257711a90b017419b3fca5da4c"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-001-R00-AAN(Ground Floor Plan Telephone Layout).pdf",
+   "size": 2297807,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "bd4ba1094779d06dba06606dd3cf2ec46d503ec0031d124fa626b74221b872b8"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 6.pdf",
+   "size": 1274758,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "bd9b350dbf217de5666f57189f99c021740f8956f6d43ede59f3ee910a2b7fc4"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/From supplier/wetransfer_al-arabia-g-8-scale-jumeirah-gardens_2025-05-09_1138/Al Arabia G+8 - Scale Jumeirah Gardens/Previous Approvals/Previous Approvals.pdf",
+   "size": 68760571,
+   "modified_utc": "2025-05-09T11:39:00+00:00",
+   "order_key": "bde1d86d08191e3056df71b87080fcddd62135be0876432bf410d6f570104712"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Previous Approvals/121.pdf",
+   "size": 10668768,
+   "modified_utc": "2024-11-05T08:04:33+00:00",
+   "order_key": "c0ec546fb376fd020abc9e0fe2846a36a2fcc50668d41aa89cec80b905d12a5d"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/LPG57THFLOORPLAN.pdf",
+   "size": 1363897,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "c53c14fa5d2432af4cf0a33fc4f335d567706b89a3b0672c00ce90134afb1288"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/SCHEMETIC/REV-01/0 7.pdf",
+   "size": 1847216,
+   "modified_utc": "2016-09-14T10:31:50+00:00",
+   "order_key": "c5ca0fde7fe129a41210e88b05c619ee61bbf0713e0fca3e5d5da4312274409b"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD GF R1 2 3 4 SCH R0 REV RES.pdf",
+   "size": 6404412,
+   "modified_utc": "2016-03-26T17:20:25+00:00",
+   "order_key": "c62f3f9538099fab0d9b4b452e01e50729efdaa495073866c994a9962d3f0c41"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/BASEMENT FLOOR/Rev -0 comments/SP-CBS-BF/SP-CBS-BF/EMERGENCY LAYOUT-SHEET-3.pdf",
+   "size": 442893,
+   "modified_utc": "2025-03-05T07:49:40+00:00",
+   "order_key": "ca6eddfe4d5fcadaef0a417100374ee428c73a27f7816e055f2481624b98c00d"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-005-R00-AAN(Typical Floor Plan-2nd to 8th Floor-Access Control System Layout).pdf",
+   "size": 3829239,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "cd957e5d27a45be2740e3dac43e9eca9953b925424202d74ae2ceb76b0ea0220"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/SCHEMATIC/Rev. 00/CP-2.pdf",
+   "size": 2155346,
+   "modified_utc": "2016-08-17T10:56:22+00:00",
+   "order_key": "d165270ca23982a25bad93aeed620a859d2601ab61f51a1669e7ae76e942b479"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-003-R00-AAN(Second Podium Floor Plan Telephone Layout).pdf",
+   "size": 2990671,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "d205484ae6f85f284e498e3f5907664763f90034598afbed0448a3eae9c2b862"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 FA Submittal/R2/Consultant Comments.pdf",
+   "size": 977831,
+   "modified_utc": "2016-03-08T20:05:07+00:00",
+   "order_key": "d37aa76872004249e98d5a6966612a6d7d1915d8a773a470640a917485ac2bf5"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/VI/R3(Comelit)/Consultant comments.pdf",
+   "size": 63462,
+   "modified_utc": "2025-09-15T08:58:02+00:00",
+   "order_key": "d3f817717000c1ebc439923f5d913f6365192b5873294f8b5530168274126c30"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/CBS SD BAS R2 APP AS NOT RES .pdf",
+   "size": 687192,
+   "modified_utc": "2016-06-04T11:47:49+00:00",
+   "order_key": "d4320839b409f437b00144c8910b5e1f645922d4924c219abf983a1182a3b0f3"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R0/Previous Approvals/Previous Approvals.pdf",
+   "size": 68769171,
+   "modified_utc": "2025-05-09T15:23:19+00:00",
+   "order_key": "d60f683c2940bc7763c698d4b24453832275dce78dc61038e15a6641e6764b8a"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 9.pdf",
+   "size": 1308155,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "d61ea78c9d97d32f420595dabb353d0480c78f96b764ae4c57857864870d70ea"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 4.pdf",
+   "size": 1043093,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "d669b491138f4cb94a61f8326818ee2d02f1feec8a453f624264118e849c6e9e"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002G.pdf",
+   "size": 2035431,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "d720ee1108b3691207f8a59bce05e0cb1077e8018d93ec02074121a2c87358d0"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xfaxemxvoice_dewan-revised1483896148021.pdf",
+   "size": 15087356,
+   "modified_utc": "2017-01-31T10:01:12+00:00",
+   "order_key": "d7842e55a7bc8b418933e533bd80c08fd90da652482c98e1faeb82a5fc868abc"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/CCTV/R1/Consultant Comments_CCTV.pdf",
+   "size": 112752,
+   "modified_utc": "2025-06-23T08:41:30+00:00",
+   "order_key": "d91d443f946e7aefba6ea925ec5dd9cb8a1656a2b023e0a76cfdf03bedb9c8a7"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-CCTV-2025-0007-R00.pdf",
+   "size": 10781357,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "d929ce74104392939b2aa9494a969dc923e25f7cd01aa4fb4c6aab71fb8662bb"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-FA-2633-006B.pdf",
+   "size": 1190125,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "d92e8223fcf9ce1f68c3f88a2d26b9ad71e628d1787f0909785ba7808b91815f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 4F R0 REV RES.pdf",
+   "size": 882263,
+   "modified_utc": "2016-03-27T04:20:25+00:00",
+   "order_key": "d97e3af605fbc6eddd172492fcfa14556927a8d2388d4b4eaa6b7aa61b32b2eb"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "EP-27331 MS/CBS/Rev-2/reply to comments-1.pdf",
+   "size": 198380,
+   "modified_utc": "2025-07-02T05:57:15+00:00",
+   "order_key": "da2ae5c1ce5049c298907596c128b61cae2eae52388c68667ff4c484b028335f"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 3.pdf",
+   "size": 1511441,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "daecdf820e18fd676f23e365902fa93fabafa9ed802005916faf2c51de063e86"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1/Consultant Comments_BGM.pdf",
+   "size": 4027446,
+   "modified_utc": "2025-06-14T07:15:09+00:00",
+   "order_key": "dbc82eeb7ee9c11339a8ce2c9bcb97db464e2f3aefa3ed79a86bd5ddd6151d52"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/2-GROUND/Rev. 02/FAM-PIV-MAH-SPD-FAS-2633-002A.pdf",
+   "size": 1937457,
+   "modified_utc": "2016-04-26T11:25:10+00:00",
+   "order_key": "dbe30180f0ab1fa49da7006161576e187a7f03504c55a38a24bebd7f5dba2c61"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 13.pdf",
+   "size": 1480423,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "dd9be53c8612006d0bde289fe2feeb51679da6c60a831f96554a6a7658938a87"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/Datasheet/Audio mixer.pdf",
+   "size": 106716,
+   "modified_utc": "2025-08-01T13:03:53+00:00",
+   "order_key": "de6b2d88df8162020fbb24f1660eaaabe9c3cec02d23ed9dced5b25e9909de56"
+  },
+  {
+   "ep": "15744",
+   "relative_path": "Drawings/Shop Drawing/Shop Drawing-PAVA/Rev-00/REV-00 Comments/Temp10899.PDF",
+   "size": 13935154,
+   "modified_utc": "2019-02-20T19:41:08+00:00",
+   "order_key": "df50e51f406aead22f4a1076f11857b829aec320861fa18b87a5c561252b7116"
+  },
+  {
+   "ep": "15744",
+   "relative_path": "Drawings/Shop Drawing/Shop Drawing-PAVA/Rev-00/REV-00 Comments/Temp10897.PDF",
+   "size": 10334206,
+   "modified_utc": "2019-02-20T19:41:00+00:00",
+   "order_key": "e051872d848e8260611041f40e2eaf600a6fee61987c64280e6fb239bf84260e"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/Reply to Consultant comments.pdf",
+   "size": 185126,
+   "modified_utc": "2025-08-01T13:32:47+00:00",
+   "order_key": "e0bf25a9e31a2116837100d87693bed94dd8c8fe140cf934353e6f2f804a1621"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/DCD APPROVED DRAWING/dcd Final design approval/604165XSNGXGCE (1).pdf",
+   "size": 26152539,
+   "modified_utc": "2025-02-24T03:36:06+00:00",
+   "order_key": "e256780697abff4b9d54e832985c4f9df41828ea22e1cfb43ba19b518e704fbe"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4-SECOND/2ND FLOOR REV-00/1 9.pdf",
+   "size": 1464010,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "e3b709bf18f0b4424a2daa559e181a9dbbc8c0d11d5b757e9d5d46ddab1d0f18"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Cons.Comment/Structured cabling system (2).pdf",
+   "size": 7250353,
+   "modified_utc": "2025-06-12T12:35:02+00:00",
+   "order_key": "e44c53b453927321106f23b7a69f2f2a7cd8b29b05c3955af6b199126e29c12f"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/Commented dwg/B01-ASC-SD-ELE-0050-Rev.00 Shop Drawing for 8th Floor Plan Emergency Lighting Layout Code-B+R.pdf",
+   "size": 7634224,
+   "modified_utc": "2025-05-23T05:43:51+00:00",
+   "order_key": "e47cc4cd693c7d96b4e59ad1ca444dee754fd64c3db16b730c1bef1c8c850c03"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "input/Mep/Asad/wetransfer_vol-ii-part-3a-electrical-specifications-pdf_2025-05-15_0632/2024_08_09_ ARCH IFC DWGS/CAD/JG Consultant - DDA.pdf",
+   "size": 148256,
+   "modified_utc": "2025-05-15T06:37:10+00:00",
+   "order_key": "e49efb35bd4acfcb7523ecdca4b15a17a57426efbe2f1b31f50b800999fea741"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-004-R00-AAN(First Floor Plan Telephone Layout).pdf",
+   "size": 3475424,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "e4d37eedfd30394b05de0c09eaaa5d2a498088970b00bb0b13c5b6456d4a888a"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-003-R00-AAN(Second Podium Floor Plan Access Control System Layout).pdf",
+   "size": 4245674,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "e4dc9875f64b04d0d63a0307feef27738a7128fd9ed42bdd9313d29e78717f7b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/2ND PODIUM FLOOR PLAN ACCESS CONTROL SYSTEM.pdf",
+   "size": 4173466,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "e6681b93cdece1a9c446eb685c1338e38a8c8d47e6f5a7d2449ce884d2882d38"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/BASEMENT FLOOR/Rev -0 comments/SP-CBS-BF/SP-CBS-BF/EMERGENCY LAYOUT SHEET-1.pdf",
+   "size": 869657,
+   "modified_utc": "2025-03-05T07:48:33+00:00",
+   "order_key": "e6eecbf0107946513a7c6655a70fda3e47cdc5686b0ffa277d8a5ac1dcfb3562"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/SCS_Approved/SDS-MEP-ELE-TEL-006-R00-AAN(Roof Floor Plan Telephone Layout).pdf",
+   "size": 3157147,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "e828bbbdb0dba2da704e5011b929424c482ef7095383589088d25c668ed58af4"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 12.pdf",
+   "size": 1703632,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "e91fc2df647e64cbd0b70ca3b746544f6c90974526dcb71884feffab1496cc8c"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0083-Rev.00 - 37th to 48th  Floor (Tier 2) Fire Alarm & Voice Evacuation System Layout (Tower-1)_Code B.pdf",
+   "size": 3240263,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "e9e7f64f4beec029ae2c34196f6d2ab9ae61d08a6d2b423593d7d1f1f82f9840"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4-SECOND/2ND FLOOR REV-00/1 5.pdf",
+   "size": 2065805,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "eabd4b4ba2e147ee7e7289d41d2aac7227f8994317e410e91878157ca8b1a042"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xfirefighting_dewan - revised1483896308781.pdf",
+   "size": 24741371,
+   "modified_utc": "2017-01-31T10:01:15+00:00",
+   "order_key": "eb69562db68e1eecd903cb6c4df393fca533ab7285dceaae5fbdd57197ee656d"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/1-BASEMENT/Rev. 03/0 7.pdf",
+   "size": 1403410,
+   "modified_utc": "2016-08-29T07:16:10+00:00",
+   "order_key": "ec31044ceb91e4bb434eb4bbf6df26d7ed9baa84475b2050ad1edea8a803c144"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 1F R1 APP AS NOT RES.pdf",
+   "size": 1753775,
+   "modified_utc": "2016-05-30T07:44:51+00:00",
+   "order_key": "ec38795bfec94ae5c6c1730a535410fc732e28e6bc67dbfa669685b934e26bfa"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Cons.Comment/Gate Barrier. (3).pdf",
+   "size": 2792216,
+   "modified_utc": "2025-06-12T12:34:57+00:00",
+   "order_key": "ec99b67fed4836217410d98cf5127f8a0e1682119d37704ce1e181cc64d8bd2c"
+  },
+  {
+   "ep": "22349",
+   "relative_path": "DWGS/DCD APP/CIVIL-STAMP0_stamped_compressed (1).pdf",
+   "size": 3120778,
+   "modified_utc": "2022-02-23T04:50:53+00:00",
+   "order_key": "ecaa46ed6c15c6d91b093af3d9d13a12b219fde7b27415ba0a13a08b99be4f6b"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/VI/R3(Comelit)_Reply/VI  MS (B)_Reply.pdf",
+   "size": 381708,
+   "modified_utc": "2025-10-01T05:52:38+00:00",
+   "order_key": "edf541bbe21cec4cb813c5b19f49553b1fc2ad7545d1860f3b3768c6706d6df5"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/SCHEMATIC/Rev. 00/CP-4.pdf",
+   "size": 2325025,
+   "modified_utc": "2016-08-17T10:56:22+00:00",
+   "order_key": "efa3a11985c037a3059fe493167492991142e019b6292fab9eeb7a61638be8d2"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 CBS Submittal/R1/Consultant comments.pdf",
+   "size": 5548379,
+   "modified_utc": "2016-02-06T00:34:16+00:00",
+   "order_key": "f07d11fa9f75071ffdd651e80e0530d79731dded52961c20205a4d8b7d82051e"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/BGM/R1_Reply/SPL Report/Acoustic Analysis Lacasa.pdf",
+   "size": 425564,
+   "modified_utc": "2025-08-01T12:55:05+00:00",
+   "order_key": "f08dbb20ff63298757afb30e5ae7ee271229b614274f228505c8b708f2e83514"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/4-SECOND/2nd floor/rev-01/1 5.pdf",
+   "size": 1308379,
+   "modified_utc": "2016-08-20T05:12:10+00:00",
+   "order_key": "f0cbef6884bfc8b8699694e06ffcb0ab2caf239fcabb02311e00662a13731802"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674-2010xarchitecture_dewan - approved1483884487958.pdf",
+   "size": 24544179,
+   "modified_utc": "2017-01-31T10:01:03+00:00",
+   "order_key": "f1526fe68778a3041eb489f17d261c4f8ad97442cc11f12515b2f23ce30604e6"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Inputs/DCD APPROVAL/674_2010xlpgsystem_dewan - approved1483884487958.pdf",
+   "size": 50466237,
+   "modified_utc": "2017-01-31T10:01:23+00:00",
+   "order_key": "f17a08a260ff4c83d0b70a02d488a39644203b783eae0042d9c08262b8a38a94"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/4-SECOND/2ND FLOOR REV-00/1 10.pdf",
+   "size": 1889916,
+   "modified_utc": "2016-08-14T06:46:44+00:00",
+   "order_key": "f19f17b1d75c84ffeb3c8a07da7b8fcd17dab70d26b58ca4bb6d0bd649a7d330"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/7-ROOF FLOOR/FAM-PIV-MAH-SPD-FA-2633-007A.pdf",
+   "size": 1103145,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "f1ec8e34ad303f42381fdea9e506aec2ca04fc16562e384ede2c27984558b60d"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/ACS/R1/previous approval/Riva Residence-Burj Al Mina-Khatib Al Alami-Ibam-ACS.pdf",
+   "size": 7114693,
+   "modified_utc": "2025-06-26T11:30:50+00:00",
+   "order_key": "f2036d06c8acc7a8005ff60ca31b53c0cb14e2fdde457644ca7be48f6c53a835"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/3-FIRST/Rev. 00/3- 1st floor/Rev-01/0 11.pdf",
+   "size": 1507924,
+   "modified_utc": "2016-08-02T10:10:28+00:00",
+   "order_key": "f233f3fd8d15b10ac64230cda96b6c7bdf5e24087338e389612e6d4cd3f59a40"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "EP-27331 MS/CBS/Rev-2/REPLY TO COMMENTS R1.pdf",
+   "size": 269849,
+   "modified_utc": "2025-06-16T10:49:09+00:00",
+   "order_key": "f25a6ab3dfa9ac791769fcb730b5f193486299ac5706a6881ab7b3db3b53bba3"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0033-Rev.00 SD for 3rd & 4th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+   "size": 5195205,
+   "modified_utc": "2025-08-25T06:20:39+00:00",
+   "order_key": "f2e9c43ece7db80f99f57a3c80c297afc06af2e87e92bf3d3bc4124f3252c854"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/Sample/CamScanner 18-09-2025 16.45.pdf",
+   "size": 3008250,
+   "modified_utc": "2025-09-18T12:51:04+00:00",
+   "order_key": "f4c1c914be58da9be1ee5d146b7700d11e78eb27c0dc7d0031b1fd1657bd49e5"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD GF FF R0 REV RES.pdf",
+   "size": 2106899,
+   "modified_utc": "2016-03-17T12:15:44+00:00",
+   "order_key": "f698f3f0534f9260ed5bc265167e407f4040014805c6565970615dde3a8897ed"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "EP-3563 FA Submittal/R0/Consultant Previous Approvals/E-6338 MS-R2 App.pdf",
+   "size": 960078,
+   "modified_utc": "2013-10-24T07:26:49+00:00",
+   "order_key": "f6ece890f26240bd593c0a5f17bded778ccd1b376f3b08a589bdac30386f1224"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0062-Rev.00 - 36th  Flr. Pln. Upper MEP (Outrigger) Fire Alarm & Voice Evac. System Layout_Code-B.pdf",
+   "size": 2060054,
+   "modified_utc": "2025-08-25T06:20:40+00:00",
+   "order_key": "f70d5607e95712914b3623b60639ab397e26379125fbbd2a8d972cab798ab1a9"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/CBS/2-GROUND/Rev. 01/FAM-PIV-MAH-SPD-CBS-2633-002B.pdf",
+   "size": 2470817,
+   "modified_utc": "2016-05-08T04:51:00+00:00",
+   "order_key": "f8ec9861a17897b35718f6ce6c6ef42f49e89d0638f18c33b77c6758ea290219"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Pivot Comments/FAS SD 2F R1 REV RES.pdf",
+   "size": 814643,
+   "modified_utc": "2017-04-30T12:22:32+00:00",
+   "order_key": "f90c8714a81c27a8155d36fbc3ed2383495ddbaae90466381ba2f290aee6b2a5"
+  },
+  {
+   "ep": "27331",
+   "relative_path": "Drawing/shop dwg/CBS/REV-01/BASEMENT FLOOR/Rev -0 comments/SP-CBS-BF/SP-CBS-BF/EMERGENCY LAYOUT-SHEET-4.pdf",
+   "size": 469158,
+   "modified_utc": "2025-03-05T07:50:02+00:00",
+   "order_key": "f9346fdd94348550810ad574bf5ac92661481043e272dd903f6e6f5deb42bbbb"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/SDS-MEP-ELE-CCTV-003-R00-AAN(Second Podium Floor Plan CCTV System Layout).pdf",
+   "size": 3114320,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "fb495c0b0df88461a947334c8ccc9a2b362d74ca21361fdf33b2d6515fb944f6"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/ACS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-ACS-2025-0001- R00 GROUND FLOOR PLAN ACS LAYOUT.pdf",
+   "size": 4495326,
+   "modified_utc": "2026-01-23T04:54:06+00:00",
+   "order_key": "fb9ecc16f56e94826ea8f389194afceec64ce7bcf5e49d02c1ae7c1d013c11f1"
+  },
+  {
+   "ep": "3563",
+   "relative_path": "Approvals & Comments/Shop Drawing Comments/FIRE ALARM/6-FOURTH/FOURTH FLOOR/FAM-PIV-MAH-SPD-TEL-2633-006.pdf",
+   "size": 2088658,
+   "modified_utc": "2016-05-19T05:12:32+00:00",
+   "order_key": "fcb9ff179195fda06356cbfce585b0063414c1fd7e536bc266e8fa04797d43a4"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "Consultant Approval/SD/CCTV_Approved/SDS-MEP-ELE-CCTV-004-R00-AAN(First Floor Plan CCTV System Layout).pdf",
+   "size": 3411213,
+   "modified_utc": "2025-10-28T11:03:09+00:00",
+   "order_key": "fccf0f8e2974f746a76bba743c1543eb516a418e67e3ea48b40c7f78f72724ff"
+  },
+  {
+   "ep": "29255",
+   "relative_path": "MS/SCS/R2/Consultant Comments_SCS.pdf",
+   "size": 7250353,
+   "modified_utc": "2025-06-14T07:15:09+00:00",
+   "order_key": "ff5bc4eb2728b333749cb180e328a157a8c04db53259466f4d4e1a712b6b99d1"
+  },
+  {
+   "ep": "26687",
+   "relative_path": "Drawings/Approved Drawings/FA/FA-1002 - GF_Fire Alarm Layout.pdf",
+   "size": 5589392,
+   "modified_utc": "2023-09-18T11:20:28+00:00",
+   "order_key": "ffa4e1a8ff8e645f8b9a4369d8e7679debd436d13dd871e659ca42cc758c73ff"
+  }
+ ],
+ "duplicates_skipped": 457,
+ "source_hash": "recorded at staging (SOURCE-MANIFEST.json): the bytes are hashed while the copy is read; nothing is read here"
+}

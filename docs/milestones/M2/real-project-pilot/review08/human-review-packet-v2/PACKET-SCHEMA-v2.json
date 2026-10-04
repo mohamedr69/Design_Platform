@@ -1,0 +1,76 @@
+{
+ "schema": "m2-source-review-packet-v2",
+ "supersedes": "m2-source-review-packet v1 (review07/human-review-packet, kept unchanged)",
+ "rule": "AI-prepared columns are proposed_* / proposal_origin / finding_group / page_image. Only a person fills human_*. Blank or unresolved_* is unresolved truth: never an AI success, never a confirmed error.",
+ "ambiguity": "Reserved for an unresolved fact or association. Two legible identifiers with clear roles are settled, not ambiguous.",
+ "files": {
+  "COMPONENT-ITEMS-v2.csv": {
+   "key": "item",
+   "columns": {
+    "item": "C0001..C0339 (as v1)",
+    "cohort": "pilot | holdout (as v1)",
+    "scope": "why the item is in the packet (as v1)",
+    "finding_group": "F01..F13 of FINDINGS-INDEX, or blank",
+    "doc": "path relative to the staged project folders",
+    "page": "1-based page number",
+    "page_image": "relative link to the v1 packet page image, or 'open the original'",
+    "component": "cover | sheet | form | ... (as v1)",
+    "proposed_reference": "AI-drafted label (v1/v2 labels)",
+    "proposed_printed_revision": "AI-drafted label",
+    "proposed_decision": "AI-drafted label",
+    "proposed_decision_actor": "AI-drafted label",
+    "proposed_label_confidence": "AI-drafted label",
+    "label_origin": "as v1",
+    "proposed_identity_rows": "number of rows for this item in IDENTITIES-v2.csv",
+    "human_identity_status": "settled | unresolved_fact | unresolved_association | absent | illegible | conflict",
+    "human_own_identity_for_evaluation": "the literal marked yes in IDENTITIES-v2.csv, or blank",
+    "human_printed_revision": "exact literal",
+    "human_revision_status": "settled | absent | illegible | conflict | unresolved_fact",
+    "human_decision": "the marked option as printed",
+    "human_decision_actor": "consultant | client | authority | contractor | other",
+    "human_decision_status": "settled | absent | illegible | conflict | unresolved_fact",
+    "human_association_status": "settled | unresolved_association",
+    "human_uncertainty": "short reason whenever a status is not settled",
+    "human_reviewer": "name (blank until a person reviews)",
+    "human_date": "YYYY-MM-DD",
+    "human_notes": "free text"
+   }
+  },
+  "IDENTITIES-v2.csv": {
+   "key": ["item", "identity_no"],
+   "columns": {
+    "item": "COMPONENT-ITEMS-v2 item",
+    "identity_no": "1..n within the item",
+    "proposed_literal": "AI-prepared",
+    "proposed_printed_label": "AI-prepared",
+    "proposed_role": "AI-prepared: own_document | permit | reviewed_document | referenced_document | unclassified",
+    "proposal_note": "the label author's free-form note (source, confidence, a cut cell), kept whole; never a printed label",
+    "proposal_origin": "the label set or Review 07 finding the proposal came from",
+    "human_literal": "exact literal as printed",
+    "human_printed_label": "the label printed beside it",
+    "human_role": "own_document | own_document_alternate | permit | request | reviewed_document | transmitted_item | listed_item | referenced_document | project_or_contract | other",
+    "human_own_for_evaluation": "yes | no | unresolved (exactly one yes per settled item)",
+    "human_status": "settled | illegible | unresolved_fact | unresolved_association",
+    "human_notes": "free text"
+   }
+  },
+  "BOQ-ITEMS-v2.csv": {
+   "key": "item",
+   "columns": {
+    "item": "B0001..B0194 (as v1)",
+    "human_row_type": "item | heading | part_only | note | unreadable",
+    "human_part_number": "exact literal (every + / -)",
+    "human_part_status": "settled | absent | illegible | conflict",
+    "human_quantity": "exact literal with decimal point, sign or unit",
+    "human_quantity_source": "column | description_count | absent",
+    "human_quantity_status": "settled | absent | illegible | conflict",
+    "human_uncertainty": "short reason whenever a status is not settled",
+    "human_reviewer": "name",
+    "human_date": "YYYY-MM-DD",
+    "human_notes": "free text",
+    "(other columns)": "as v1"
+   }
+  }
+ },
+ "evaluation_use": "Labels v3 take the settled rows. The register is evaluated on the identity marked yes; the other settled identities keep their roles, so a reading of one of them is scored as a correct reading with that role, not as a wrong own identity. Unresolved fields leave the denominators and are reported as coverage gaps."
+}

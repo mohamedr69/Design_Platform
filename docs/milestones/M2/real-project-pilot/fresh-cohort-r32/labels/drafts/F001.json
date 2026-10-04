@@ -1,0 +1,113 @@
+{
+ "pool_id": "F001",
+ "kind": "material submittal form (2 pages: submission sheet + engineer's review sheet)",
+ "pages": {
+  "1": {
+   "page_role": "material submittal form, submission sheet (Transmittal A)",
+   "identity": {
+    "state": "present",
+    "literal": "MAT – 116",
+    "printed_label": "Submittal No.",
+    "semantic_role": "own submittal number of this material submittal",
+    "region": [
+     0.66,
+     0.135,
+     0.85,
+     0.15
+    ],
+    "evidence": [
+     "F001-p1-0.45_0.13_0.92_0.18.png"
+    ],
+    "association": "resolved",
+    "value_note": "dash printed with surrounding spaces; glyph appears as an en dash"
+   },
+   "revision": {
+    "state": "present",
+    "literal": "02",
+    "printed_label": "Revision:",
+    "semantic_role": "revision of this submittal",
+    "region": [
+     0.71,
+     0.16,
+     0.8,
+     0.175
+    ],
+    "evidence": [
+     "F001-p1-0.45_0.13_0.92_0.18.png"
+    ],
+    "association": "resolved"
+   },
+   "decision": {
+    "state": "absent",
+    "absent_kind": "no_decision_area",
+    "note": "page 1 carries only the contractor's submission checkboxes ('Submitted for review and approval' ticked) and received / distribution stamps; the engineer's decision area is on page 2"
+   },
+   "other_identities": [
+    {
+     "literal": "FAM-PIV-BLD-MAT-ELE-116-02",
+     "printed_label": "Reference Number (table)",
+     "role": "submittal reference number in the transmittal table (embeds 116 and 02)"
+    },
+    {
+     "literal": "D 14-22",
+     "printed_label": "Engineer Project Number",
+     "role": "project number"
+    },
+    {
+     "literal": "283111",
+     "printed_label": "Spec. Section",
+     "role": "specification section"
+    },
+    {
+     "literal": "DAE/F016A",
+     "printed_label": "Form",
+     "role": "form template number"
+    }
+   ],
+   "note": "footer 'Material Submittal No. Rev.0' is the form template's revision, not the submittal's"
+  },
+  "2": {
+   "page_role": "engineer's review sheet (Transmittals B-D, ENGINEER'S COMMENTS), 'Page 2 of 2'",
+   "identity": {
+    "state": "absent",
+    "note": "no submittal number printed on page 2"
+   },
+   "revision": {
+    "state": "absent",
+    "note": "no revision printed on page 2 (footer 'Rev.0' is the form template)"
+   },
+   "decision": {
+    "state": "present",
+    "literal": "Approved as noted / Resubmit",
+    "class": "approved as noted",
+    "actor": "consultant (Engineer, Dewan Architects + Engineers)",
+    "actor_state": "resolved",
+    "location": "outside_title_block",
+    "region": [
+     0.07,
+     0.735,
+     0.35,
+     0.75
+    ],
+    "evidence": [
+     "F001-p2-0.05_0.72_0.6_0.76.png",
+     "render F001-p2.png"
+    ],
+    "association": "resolved",
+    "association_note": "page 2 of 2 of the same submittal form; the ticked option sits in the ENGINEER'S COMMENTS block, comments 1-6 in red, initialled and dated 22.3.16",
+    "value_note": "the option text also requires resubmission; class kept as approved as noted per convention 5; the 'Approved' tick in Transmittal B is the contractor's forwarding block, not the engineer's decision"
+   },
+   "other_identities": [
+    {
+     "literal": "DAE/F016A",
+     "printed_label": "Form",
+     "role": "form template number"
+    }
+   ]
+  }
+ },
+ "confidence": "medium",
+ "unresolved": [
+  "decision class for the printed option 'Approved as noted / Resubmit' recorded as approved as noted; reviewer to rule"
+ ]
+}

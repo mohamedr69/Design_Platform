@@ -1,0 +1,168 @@
+
+
+# --- ORCH-06C (Independent Verification 36, finding R36-08, H1): whitespace inside a revision value ----------------------
+# Appended by R36HARNESS-IMPL; every test above is unchanged byte for byte. The fixtures are the frozen ORCH-06 SYNTHETIC
+# predictions (PILOT/evaluator-offline-r32/SYNTHETIC-PREDICTIONS.json): each value is built from the r32 truth strings by
+# a fixed rule and is not a prediction of any model. The truth rows are the frozen review34 dry-run/TRUTH-R32.json. Both
+# files are read-only and hash-checked here; nothing is written.
+import hashlib  # noqa: E402
+import json  # noqa: E402
+import pathlib  # noqa: E402
+import re  # noqa: E402
+
+import lane_judge_r32 as J  # noqa: E402
+
+_PILOT = pathlib.Path("C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot")
+_FIXTURES = (_PILOT / "evaluator-offline-r32" / "SYNTHETIC-PREDICTIONS.json", "9f3e0e56bace4ae5fe2724d259ab657ef63490f0a5afc2f5291d78fbb4d1f774")
+_TRUTH = (_PILOT / "review34" / "dry-run" / "TRUTH-R32.json", "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064")
+_WRONG_VALUE_INTENTS = ("wrong", "page_keyed_wrong")
+_STATES = ("accepted", "validated")
+
+
+def _review34_norm_revision(value) -> str:
+    # review34 literal_compare_r32.norm_revision (sha256 ec2221c8...), reproduced verbatim for the parity test below
+    s = "" if value is None else str(value).strip()
+    if C.is_arabic(s):
+        return C.norm_text(s)
+    s = C._DASH_RE.sub("-", s).upper()
+    s = C._WS_RE.sub(" ", s).strip()
+    m = re.fullmatch(r"(?:REVISION|REV\.?|R\.?)?\s*0*(\d+)", s)
+    if m:
+        return f"R{int(m.group(1))}"
+    return C._WS_RE.sub("", s)
+
+
+def _frozen_json(path_and_sha):
+    path, want = path_and_sha
+    raw = path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == want, f"PACKET MISMATCH: {path}"
+    return json.loads(raw.decode("utf-8"))
+
+
+@pytest.fixture(scope="module")
+def frozen():
+    fx = _frozen_json(_FIXTURES)
+    assert fx["kind"] == "SYNTHETIC" and all(f["not_a_model_prediction"] is True for f in fx["fixtures"])
+    return fx["fixtures"], _frozen_json(_TRUTH)
+
+
+def _target(truth, f, value, state):
+    jd = J.judge_document(truth, f["pool_id"], {"facts": [] if value is None else [{"page": f["page"], "field": f["field"], "value": value, "state": state}]})
+    return next(r for r in jd["rows"] if (r["page"], r["field"]) == (f["page"], f["field"]))
+
+
+def test_h1_the_task_examples():
+    for value, norm in (("0 1", "R1"), ("0 0", "R0"), ("REV 0 1", "R1"), ("R 01", "R1"), ("Rev. 0 2", "R2")):
+        assert C.norm_revision(value) == norm, value
+    assert C.norm_revision("01") == C.norm_revision("1") == C.norm_revision("Rev. 01") == "R1"
+
+
+@pytest.mark.parametrize("truth, predicted, norm", [
+    ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+    ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+    ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+    r = C.compare(truth, predicted, "revision")
+    assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+
+
+@pytest.mark.parametrize("truth, predicted", [
+    ("01", "0 1 2"),        # a digit inserted with spaces reads R12, not R1
+    ("01", "1 0"),          # the digits in another order read R10
+    ("00", "0 1"), ("02", "0 2 0"), ("1", "1 1"), ("10", "0 1"),
+    ("01", "R EV 01"),      # whitespace inside the prefix: not a prefix (the prefix rule is unchanged) -> 'REV01'
+    ("01", "0-1"), ("01", "0 - 1"), ("01", "0 \u2013 1"),   # a dash is not whitespace
+    ("01", "01A"), ("01", "0 1 A"), ("A", "A 1")])
+def test_h1_adversarial_values_stay_different(truth, predicted):
+    r = C.compare(truth, predicted, "revision")
+    assert not r["match"] and r["kind"] == "different", r
+
+
+def test_h1_non_numeric_values_keep_the_fallback():
+    assert C.compare("A1", "A 1", "revision")["match"], "the fallback already removed whitespace ('A 1' -> 'A1')"
+    assert C.norm_revision("A 1") == C.norm_revision("A1") == "A1"
+    assert C.norm_revision("p 0 1") == "P01"
+    assert C.norm_revision("R EV 1") == "REV1"
+    assert C.norm_revision("0-1") == C.norm_revision("0 \u2013 1") == "0-1", "dash folding unchanged; a dashed value is not a number"
+    assert C.compare("A", "a", "revision")["match"] and not C.compare("A1", "A 2", "revision")["match"]
+    assert C.norm_revision(None) == C.norm_revision("") == C.norm_revision("   ") == ""
+
+
+def test_h1_arabic_revision_handling_is_unchanged():
+    a = "\u0660 \u0661"                              # Arabic-Indic digits: byte comparison after whitespace removal only
+    assert C.norm_revision(a) == "\u0660\u0661" == _review34_norm_revision(a)
+    assert C.compare("\u0660\u0661", a, "revision")["kind"] == "arabic_bytes"
+    assert not C.compare("01", a, "revision")["match"], "Arabic-Indic digits are not mapped to ASCII digits"
+
+
+def test_h1_only_values_with_inner_whitespace_change(frozen):
+    fixtures, truth = frozen
+    values = {f["prediction"]["value"] for f in fixtures if f["field"] == "revision" and f["prediction"]["value"] is not None}
+    for rec in truth["rows"].values():
+        if rec["field"] == "revision":
+            values |= {v for v in [rec.get("literal"), *(rec.get("candidates") or []), *(rec.get("alternates") or [])] if v}
+    values |= {"0 1", "0 0", "REV 0 1", "R 01", "Rev. 0 2", "R 0 0", "1 0", "0 1 2", "A 1", "R EV 1", "01", "Rev. 0", "REV.02", "r1"}
+    changed = {v for v in values if C.norm_revision(v) != _review34_norm_revision(v)}
+    for v in values - changed:
+        assert C.norm_revision(v) == _review34_norm_revision(v)
+    for v in changed:
+        inner = C._WS_RE.sub(" ", str(v).strip())
+        assert " " in inner and re.fullmatch(r"R\d+", C.norm_revision(v)), v
+    assert {"0 0", "0 1", "0 2", "0 3"} <= changed and len(values) > 40
+
+
+def test_h1_the_53_ws_inside_number_rows_now_equal_their_truth(frozen):
+    fixtures, truth = frozen
+    ws = [f for f in fixtures if f["variant"] == "ws_inside_number"]
+    assert len(ws) == 53 and {f["field"] for f in ws} == {"revision"} and {f["intent"] for f in ws} == {"correct"}
+    assert {f["prediction"]["value"] for f in ws} == {"0 0", "0 1", "0 2", "0 3"}
+    for f in ws:
+        rec = truth["rows"][f["truth_key"]]
+        assert rec["truth_kind"] == "value" and f["expected_harness"]["judge"]["verdict"] == "critical_false_acceptance"
+        r = C.compare_row(rec, f["prediction"]["value"])
+        assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"], (f["id"], r)
+        for state in _STATES:
+            row = _target(truth, f, f["prediction"]["value"], state)
+            assert row["outcome"] == "recovered_clean" and not row["critical"] and row["match_kinds"] == ["normalised"], (f["id"], state, row)
+
+
+def test_h1_every_wrong_value_control_keeps_its_frozen_verdict(frozen):
+    fixtures, truth = frozen
+    controls = [f for f in fixtures if f["intent"] in _WRONG_VALUE_INTENTS]
+    assert len(controls) == 1636
+    accepted_before = 0
+    for f in controls:
+        v, exp = f["prediction"]["value"], f["expected_harness"]
+        rec = truth["rows"][f["truth_key"]]
+        if exp["literal_compare"].get("applicable"):
+            r = C.compare_row(rec, v)
+            assert r["match"] == exp["literal_compare"]["match"] and r["kind"] == exp["literal_compare"]["kind"], (f["id"], v, r)
+        accepted_before += exp["judge"]["outcome"] in ("recovered_clean", "recovered_mixed")
+        for state in _STATES:
+            row = _target(truth, f, v, state)
+            got = (row["outcome"], len(row["critical"]), row["cross_page"], sorted(row.get("match_kinds") or []))
+            want = (exp["judge"]["outcome"], exp["judge"]["critical"], exp["judge"]["cross_page"], sorted(exp["judge"]["match_kinds"]))
+            assert got == want, (f["id"], state, got, want)
+    # the frozen harness accepts 13 decision controls by its declared vocabulary (H2, 'Code D - Rejected'); the fix adds none
+    assert accepted_before == 13
+
+
+def test_h1_every_revision_wrong_value_control_is_still_a_critical(frozen):
+    fixtures, truth = frozen
+    controls = [f for f in fixtures if f["intent"] in _WRONG_VALUE_INTENTS and f["field"] == "revision"]
+    assert len(controls) == 488
+    for f in controls:
+        for state in _STATES:
+            row = _target(truth, f, f["prediction"]["value"], state)
+            assert row["outcome"] in ("wrong_only", "fp") and len(row["critical"]) == 1, (f["id"], state, row["outcome"])
+
+
+def test_h1_not_scorable_rows_stay_excluded_and_never_read_as_absent(frozen):
+    fixtures, truth = frozen
+    ns = [f for f in fixtures if f["truth_kind"] == "not_scorable"]
+    assert len(ns) == 121
+    for f in ns:
+        for state in _STATES:
+            row = _target(truth, f, f["prediction"]["value"], state)
+            assert row["outcome"] == "not_scorable" and row["truth_kind"] == "not_scorable", (f["id"], state)
+            assert sorted({u["kind"] for u in row["unresolved"]}) == f["expected_harness"]["judge"]["unresolved_kinds"], (f["id"], state)

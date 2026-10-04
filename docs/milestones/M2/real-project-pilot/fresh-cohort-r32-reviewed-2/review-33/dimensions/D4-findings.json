@@ -1,0 +1,162 @@
+{
+ "dimension": "D4",
+ "agent": {
+  "task_id": "ORCH-03.1/D4",
+  "label": "R33-D4",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), Claude Code subagent, effort High. Read-only throughout. No model or provider request was made, the harness was not run and no adapter was built."
+ },
+ "findings": [
+  {
+   "id": "D4-01",
+   "severity": "info",
+   "verdict": "CONFIRMED",
+   "claim": "My own recount from R32-LABELS-REVIEWED-1.json gives identity 57, revision 38 and decision 38. Rule: aliases F031->F001, F052->F038, F059->F046, F070->F067; count a document when resolved_for_scoring is yes AND carries_fact is yes; exclude unresolved values. Unresolved and excluded: F069 (identity) and F019 (revision). Upper bound 57/39/38. These equal FIELD-POPULATION.json and the REVIEW-NOTE.final.md table.",
+   "evidence": "recount.py: the counted id lists equal FIELD-POPULATION.counted_documents for all three fields. Raw yes/yes: identity 59, revision 40, decision 39; removing the count-once aliases F031 and F059 gives 57/38/38. resolved_for_scoring yes is 67/64/69, as in REVIEW-NOTE.final.md lines 76-80. Decision by project: 3563 11, 22349 2, 27331 12, 26687 3, 29255 10, 15744 0. Hashes: reviewed labels 00e53e82...7779, FIELD-POPULATION 5b9cf095...4505.",
+   "required_action": "None. Record the confirmed counts."
+  },
+  {
+   "id": "D4-02",
+   "severity": "info",
+   "verdict": "CONFIRMED",
+   "claim": "carries_fact at document level agrees with the page labels. Every yes (138 document-fields) has an in-scope page where the field is present, association resolved and not excluded. No 'no' has such a page. Eight 'no' document-fields have a present page that a convention rule makes non-countable.",
+   "evidence": "recount.py exception list:\n- F003, F004, F005, F006 (p1, p2) and F015 revision: present/uncertain. Embedded '- R0n' suffix; frozen section 4, ruling g.\n- F024 and F029 identity: present/uncertain. Reply-sheet reference; ruling g2, D-002.\n- F069 p1/p3 identity: present/resolved, but excluded_from_scoring true and review_status unresolved (D-004).\nF019 p1 revision is ambiguous, excluded, unresolved/unresolved (D-005). F052 and F070 have null rulings and no pages (byte-identical copies). Labelled pages = min(page_count, 4) for all 70 documents with their own rulings (144 pages).",
+   "required_action": "None. Disclose the eight present-but-not-counted pages in the preparation record."
+  },
+  {
+   "id": "D4-03",
+   "severity": "minor",
+   "verdict": "CONFIRMED",
+   "claim": "F069 p1 and p3 identity contradict their document review. They keep the draft values state 'present', association 'resolved', literal 'EP-15744', because unresolved rows keep draft values. The document review says the role was 'ruled ambiguous'. Only excluded_from_scoring and review_status mark these pages as not scorable.",
+   "evidence": "In R32-LABELS-REVIEWED-1.json, documents.F069.pages.1/3.identity has state present, association resolved, excluded_from_scoring true and review_status unresolved. review.identity has resolved_for_scoring unresolved, carries_fact no and the note '(ruled ambiguous)'. applied.rules.unresolved reads 'draft values kept, review_status unresolved, excluded_from_scoring true'. An adapter that reads only state and association would add F069 to identity (57 -> 58) and score EP-15744 as truth.",
+   "required_action": "Any normaliser must treat excluded_from_scoring true, or review_status unresolved, as not scorable. Once D-004 is ruled, r32-labels-reviewed-2 should write the ruled state (absent or ambiguous) on F069 p1 and p3."
+  },
+  {
+   "id": "D4-04",
+   "severity": "major",
+   "verdict": "CONFIRMED",
+   "claim": "score_bcr cannot express two things the reviewed labels contain: per-field resolution and per-page-field exclusions. Its label model has one document-level 'resolved' flag and per-page facts {field: value or None}. It reads None as 'truth absent'. It classes critical acceptances as resolved or unresolved per document.",
+   "evidence": "score_bcr.py:\n- lines 40-46: has_fact; primary is per document;\n- lines 80-97: coverage_counts counts discovery_absent with fact None as verified_absence;\n- lines 72-77: critical_split uses primary(doc).\ndry_run.py line 113: tripwire resolved=S.primary(labels, doc).\nIn the reviewed labels, resolution differs between fields of the same document:\n- F019: identity yes, revision unresolved, decision yes;\n- F069;\n- F067: decision no/no.\nmixed.py: 30 pages in 27 documents have a non-scorable field beside scorable ones (21 present+uncertain, 6 ambiguous, 3 excluded).\ndocres.py: the document-level mappings give 57/38/38 ('any field yes'), 56/38/37 ('no field unresolved') and 50/37/32 ('all fields yes').",
+   "required_action": "Before the declaration, a correction task must do one of two things.\n- Option 1: change score_bcr, then test and re-freeze it. The change needs per-field primary status, a 'not scorable' marker distinct from None, and per-field critical classification for the tripwire.\n- Option 2: declare a fixed, conservative normaliser rule and state its effect on counts, coverage and the tripwire.\nThe final declaration binds the choice."
+  },
+  {
+   "id": "D4-05",
+   "severity": "major",
+   "verdict": "CONFIRMED",
+   "claim": "The frozen lane scoring and runner cannot be pointed at r32. score_lane.py, run_lane.py and dry_run.py are hard-bound to the four-arm declaration, the r26.2 label files, the final-A B run and the L3 captures. No live runner exists. Feeding r32 needs new harness code, not only a normaliser.",
+   "evidence": "score_lane.py:\n- line 11: DECL = C:/t/iso/work/r2x/r27/FINAL-DECLARATION.v2.json;\n- lines 25-28: REG/PAGE from r26.2; planned = DECL.sources.sample.documents_planned;\n- line 32: m2_eval6.evaluate(REG, PAGE, rows, page1_corrections);\n- line 38: coverage_v4.document_coverage(..., max_pages=4).\nrun_lane.py:\n- lines 28-31: final-A, POST-RUN-BINDINGS, final-L3;\n- lines 155-190: replay inner provider, iterating every 'fresh' PDF in the sandbox DB;\n- line 197: row key 'EP-<ep>/<relative_path>'.\nShape of LABELS-NORMALISED.json: {source, independent_review, documents{'EP-.../...': {draft_id, project, stratum, resolved, independent_review, in_scope_pages, facts}}}.\nNeither review31 nor the r32 packages contain a run-set, ingestion or live-runner script.",
+   "required_action": "Open a correction task to build:\n1. an r32 lane scorer and a live runner;\n2. an r32 -> evaluator-input converter: register, page and uncertainty files, plus a planned list keyed 'EP-<ep>/<relative_path>' and mapped from pool id through SOURCE-MANIFEST;\n3. ingestion of exactly the run set into the B sandbox;\n4. tests for all of the above;\n5. a new binding manifest.\nRe-freeze before the declaration."
+  },
+  {
+   "id": "D4-06",
+   "severity": "major",
+   "verdict": "UNVERIFIABLE",
+   "claim": "This dimension cannot establish whether the frozen evaluator .10 (m2_eval6.py 268d8623...) meets the scorer requirements of the reviewed conventions. The open requirements are:\n- whitespace-insensitive literal comparison (i2);\n- en-dash and hyphen variants;\n- Arabic literals;\n- keying compilations on (pool id, page) (h);\n- tolerating 'resubmit' on rows with resubmission_required (d1);\n- the decision vocabulary (class names against r26.2 decision strings).",
+   "evidence": "The candidate source was not opened (hard rule). Truth affected:\n- 'MAT – 116' with an en dash on F001 p1 and F031 p1/p3;\n- F043 p1 identity with Arabic-Indic digits;\n- 11 Arabic decision rows on F014, F016 and F038;\n- 9 resubmission_required rows (F001, F031, F017, F022, F026, F033, F030 p1/p3/p4);\n- compilations F002, F035, F043 and F069.\ndry_run.py has NO_DECISION = (None, '', 'UR', 'n/a'), which shows r26.2-style decision strings. If a correct acceptance were scored as a wrong decision, it could fire the C tripwire (STOP-AND-SAFETY-RULES section 1).",
+   "required_action": "Before the declaration, establish how evaluator .10 handles these cases, offline and with zero model calls: synthetic rows scored against the converted labels. If the evaluator needs a change, that is a candidate change and requires a correction task and a re-freeze."
+  },
+  {
+   "id": "D4-07",
+   "severity": "major",
+   "verdict": "CONFIRMED",
+   "claim": "The stratum leg of the concentration rule fires by construction for decision. 37 of the 38 decision documents are in the review_signal stratum. Any positive net decision gain for C is therefore flagged as 'more than half from one stratum', and C is NOT ELIGIBLE. The only exception is a net gain of exactly 2 split 1/1 with F072.",
+   "evidence": "score_bcr.py lines 198-209: conc = net > 0 and (max(by_project) > net/2 or max(by_stratum) > net/2). strata.py: decision by stratum is review_signal 37, other 1 (F072); identity 36/16/5; revision 29/8/1. The run set is chosen around decision documents (plan section 2.3). A net gain of 1 is always concentrated, by project and by stratum.",
+   "required_action": "The plan owner must decide before the declaration. Options:\n- define concentration strata that are not degenerate for this pool;\n- drop or restate the stratum leg for decision;\n- disclose that ELIGIBLE on decision is effectively unreachable.\nAny change to score_bcr or to the plan is a correction plus a re-freeze."
+  },
+  {
+   "id": "D4-08",
+   "severity": "major",
+   "verdict": "CONFIRMED",
+   "claim": "The run-set selection (plan v2 section 2.3) is not implemented and is partly undefined:\n- no selector code exists;\n- the 2 'unsupported controls' are undefined and cannot come from the pool: all 72 staged files are PDFs and no labelled page is 'unsupported';\n- the selector must draw canonical ids only.",
+   "evidence": "A grep for 'runset' and 'run set' in review31, fresh-cohort-r32 and fresh-cohort-r32-reviewed finds only rule text and the seed m2-r30-runset-2026-10-02 (DRAFT-DECLARATION.v2 lines 136-145, make_draft_declaration_v2.py line 60). SOURCE-MANIFEST extensions: pdf 72. The reviewed labels use only the states present, absent and ambiguous. Negative-control candidates do exist: F045, F055, F064, F065, F066, F068 and F071 have yes/no on all fields. If the aliases F031, F052, F059 or F070 were drawn with their canonical, matched() would count them twice.",
+   "required_action": "Open a correction task to:\n1. implement and test the run-set selector (truth presence only, canonical ids, seed);\n2. define the unsupported controls, or amend the plan to drop them. Any file outside the pool needs authority under A-02's 'selected files';\n3. freeze the run-set manifest before B runs."
+  },
+  {
+   "id": "D4-09",
+   "severity": "minor",
+   "verdict": "CONFIRMED",
+   "claim": "At run time the matched population is the run set, not 57/38/38. Decision is 16 (the cap), revision 16, identity about 16-24. The margin over the minimum of 12 is only 4 documents for decision and for revision, so 12 is at risk.",
+   "evidence": "Plan v2 section 2.3. score_bcr.matched (lines 129-130): primary, has_fact, attempted by both B and C, not unsupported.\nrunset_sim.py (20,000 draws; an approximation, since no selector exists): decision 16; revision 16 in 99.9% of draws; identity median 19-20; 16-24 labelled run-set documents before the 6 controls.\nWays a document is lost:\n- C does not attempt it (deadline, elapsed time, breaker or allowance; a refusal also makes the comparison INCOMPLETE);\n- C returns unsupported_input;\n- an alias is counted twice;\n- the adapter's handling of F019;\n- the rolling limit of 60 requests per project per day across tracks (4-5 run-set documents per project on average, up to 10, at up to 8 requests each).\nBinomial: per-document loss of 10%/20%/30% gives P(matched < 12) of 1.7%/20%/55%. Earlier runs ended on breakers (four-arm final 234/688, L1 breaker). Neither PREPARATION-REPORT discusses this.",
+   "required_action": "Disclose the realistic minimum in the declaration: 16 matched for decision and revision, a margin of 4. As an owner decision and plan change, consider a larger decision-bearing allowance within 30 documents and the 240 caps, since 38 decision documents are available."
+  },
+  {
+   "id": "D4-10",
+   "severity": "minor",
+   "verdict": "CONFIRMED",
+   "claim": "Decision-bearing documents are concentrated in three projects: 27331 has 12, 3563 has 11 and 29255 has 10 of the 38, and 15744 has none. 7 of the 9 revision top-ups come from 26687. When net gains are small, the project leg of the concentration rule is therefore likely to fire.",
+   "evidence": "FIELD-POPULATION.by_project_decision, strata.py and runset_proj.py. Revision-without-decision documents: F041, F046, F050, F056, F057, F058, F060 (26687) and F043, F067 (15744). In simulated run sets, the largest single-project share of the 16 decision documents is 5-7, and 7 or more in about 28%.",
+   "required_action": "Disclose in the declaration together with D4-07. No label change."
+  },
+  {
+   "id": "D4-11",
+   "severity": "major",
+   "verdict": "CONFIRMED",
+   "claim": "DRAFT-DECLARATION.v2.json (19720ad9...) is inconsistent with the frozen preparation and has none of the r32 bindings. The final declaration must replace or add them.",
+   "evidence": "Stale entries:\n- status ('no ... labels');\n- labels.status 'not drafted';\n- labels.review 'Codex reviewer' (A-03 made the workflow Claude-only);\n- cohort.permission 'REQUIRED' (A-02 fd20167a grants access only; provider use, budget and ledger scope are still unauthorized);\n- selection.feasibility_sha256 ed1decfe (planning ranges);\n- extension-2 capacity through alternate 22317 (A-02 does not grant this; moot, since 0 extensions were used);\n- evaluators.lane_scoring score_lane.py 17ed2ba3 (bound to the four-arm run);\n- dry_run ac60194c (four-arm sample);\n- stop_rules tripwire without per-field resolution;\n- binding_manifest 2dfef08e (no r32 files).\nTo add:\n- labels 00e53e82 (or reviewed-2), draft ebd1e24d, conventions 5c09d4d2, final 920a21d6, dispositions e8828bec, critique ad6798dc, consolidated 70f94632;\n- FIELD-POPULATION 5b9cf095 (57/38/38; F069 and F019 excluded; aliases; upper bound 57/39/38; extensions_used 0);\n- PROJECT-VERIFICATION 4cecf2fc;\n- FROZEN-SELECTION bf71779a (rules 84a0bdec; universe 3,046/2,585 against 2,455);\n- the extension order: 302 paths, capacity 34/36 and 22/36, unused;\n- SOURCE-MANIFEST 951e8697, RENDERS 175a3a10, CROPS b1760b64, EVIDENCE-INDEX 0d0db4f8, and the package manifests 15c4114d and 64c03667;\n- the run-set selector and manifest;\n- the adapter, runner and scorer code with tests;\n- caps B 240 = C 240, R 40, P 36, total 556 (consistent with 30 documents or fewer);\n- an owner authorization naming the final hash.",
+   "required_action": "Write a new declaration; never edit v2. It carries these bindings and is written after the correction tasks of D4-04, D4-05, D4-06, D4-07 and D4-08 are frozen. Authorization for provider use, budget and ledger scope belongs to the owner alone."
+  },
+  {
+   "id": "D4-12",
+   "severity": "info",
+   "verdict": "CONFIRMED",
+   "claim": "Each of the two appended response-ledger entries states counts and hashes equal to its package.",
+   "evidence": "M2-REVIEW-RESPONSE.md is f0a4ffac...c65b (160,093 bytes). The first 156,880 bytes hash to 6e296c28...; the first 153,812 bytes hash to afddd562..., the prefix that entry 1 cites.\nEntry 1 (offset 153813):\n- manifest 15c4114d, 110 files, 72/149/189, bf71779a, 951e8697, 5c09d4d2, ebd1e24d;\n- projection 62/39/39 equals DRAFT-PROJECTION.json;\n- 432/210/56 equal the worklists and questions;\n- it names the Codex reviewer, which A-03 supersedes.\nEntry 2 (offset 156881):\n- 45 files, manifest 64c03667, check 18/18 ok, labels 00e53e82;\n- 432/210/56 and the page-field statuses equal labels.applied;\n- 57/38/38, the exclusions, upper bound 57/39/38 and 72/70/68 equal FIELD-POPULATION.json;\n- ledger 483/17 equals the read-only query now.",
+   "required_action": "None."
+  },
+  {
+   "id": "D4-13",
+   "severity": "info",
+   "verdict": "CONFIRMED",
+   "claim": "The integrity facts this dimension relies on hold. Package manifests, harness hashes, staging and code trees are as bound.",
+   "evidence": "verify_manifests.py:\n- fresh-cohort-r32 110/110, fresh-cohort-r32-reviewed 45/45, review31 58/58;\n- 0 mismatches; nothing unlisted besides the manifest and the package check;\n- review31 harness hashes equal BINDING-MANIFEST 2dfef08e.\nledger_stage.py: 72 staged files, 149 renders and 189 crops re-hashed, 0 mismatches.\ngit: cand-r29 a8aacedd clean; frozen-r12 3d5607d9 clean.\nThe byte-identical staged pairs are exactly F038/F052 and F067/F070.",
+   "required_action": "None."
+  }
+ ],
+ "files_opened": [
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/labels/R32-LABELS-REVIEWED-1.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/FIELD-POPULATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/PACKAGE-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/PREPARATION-REPORT.md (grep only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/scripts/count_population_r32.py (grep only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/tests/*.xml (testsuite headers)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/PACKAGE-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FROZEN-SELECTION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/RENDERS.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/EVIDENCE-INDEX.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-VERIFICATION.json (keys only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/labels/DRAFT-PROJECTION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/PAGE-FIELD-WORKLIST.csv (row count)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/DOCUMENT-FIELD-WORKLIST.csv (row count)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/review/DOCUMENT-QUESTIONS.json (count)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/REVISED-FRESH-VALIDATION-PLAN.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/FIELD-POPULATION-FEASIBILITY.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/STOP-AND-SAFETY-RULES.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BUDGET-DECISION-CARD.v2.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/COMMANDS.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/COHORT-PROPOSAL.md (grep only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/DRAFT-DECLARATION.v2.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BINDING-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/score_bcr.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/score_lane.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/run_lane.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/dry_run.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/capture_store.py (header and key functions)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/stop_rules.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/scripts/harness/state_check.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/dry-run/LABELS-NORMALISED.json (key names and value types only; no r26.2 values read)",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-label-review-r32-draft-1/REVIEW-NOTE.final.md (grep)",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/DECISION-LEDGER.md (ORCH-001 findings, ORCH-005)",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/NEXT-BOUNDED-TASK.md",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/M2-REVIEW-RESPONSE.md (entries at offsets 153813 and 156881)",
+  "C:/t/r2x/r32-stage/** (hashing and listing only; no image viewed)",
+  "C:/t/r2x/ledger/r2x-ledger.sqlite (read-only URI, counts only)"
+ ],
+ "summary": "Counts are confirmed: identity 57, revision 38, decision 38. F069 (identity) and F019 (revision) are excluded as unresolved; the upper bound is 57/39/38. These equal FIELD-POPULATION.json and the label review. Document and page labels agree; 8 present pages are not counted, each by a convention rule. The pool-level gate (at least 12 per field) is met with no extension. At run time, though, the matched population is the run set: 16 for decision and revision, a margin of 4, so 12 is at risk. The stratum leg of the concentration rule fires by construction for decision (37 of 38 documents are review_signal). The frozen harness cannot consume r32-labels-reviewed-1 without new or changed code. score_bcr cannot express per-field resolution or page-field exclusion; score_lane and run_lane are bound to the four-arm declaration and r26.2; no live runner or run-set selector exists; the unsupported controls are undefined. How evaluator .10 compares values could not be verified here. DRAFT-DECLARATION.v2 is stale on 10 points and has none of the r32 bindings. Both response-ledger entries match their packages. Severities: 0 blocker, 6 major, 3 minor, 4 info."
+}

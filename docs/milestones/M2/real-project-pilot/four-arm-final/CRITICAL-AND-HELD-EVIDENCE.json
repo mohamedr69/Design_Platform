@@ -1,0 +1,953 @@
+{
+ "rule": "terminal stop only for a critical acceptance on a resolved label (confidence high, not on the declared uncertainty list)",
+ "arms": {
+  "L1": {
+   "critical": [],
+   "critical_on_resolved": [],
+   "held": [
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "decision",
+     "value": "ANN",
+     "truth": "ANN",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "FA-101-106",
+     "truth": "17",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D09",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "DJ-298-P-EN-SEE-04-ASY-0020-01",
+     "truth": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D12",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "BH2031_DIB_AMB_ID",
+     "truth": "BH2031_DIB_AMB_ID_MAIN",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "FLS-107",
+     "truth": "FLS-107",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "01",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D16",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "TES/1343/NTH-MID-3B/SD/TEL-04",
+     "truth": "TES/1343/NTH-MID-3B/SD/TEL-04",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D16",
+     "label_resolved": true,
+     "page": 1,
+     "field": "revision",
+     "value": "1",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D17",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "TES/1343/NTH-END-3B/SD/TEL-04",
+     "truth": "TES/1343/NTH-END-3B/SD/TEL-04",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D19",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SFD-01-ASY-00",
+     "truth": "DJ-295-P-EN-SFD-01-ASY-0001-00",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D19",
+     "label_resolved": true,
+     "page": 3,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SFD-01-ASY-0002-00",
+     "truth": "DJ-295-P-EN-SFD-01-ASY-0002-00",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D23",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-23091/AS/MS-EM /101",
+     "truth": "EP-23091/AS/MS-EM /101",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D24",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-22510",
+     "truth": "EP-22510",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D25",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "81-101384",
+     "truth": "81-101384",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "revision",
+     "value": "Rev. 00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    }
+   ],
+   "held_counts": {
+    "held_correct": 11,
+    "held_wrong": 4,
+    "held_on_negative": 2
+   },
+   "accepted_wrong": [],
+   "observed_deterministic_errors": [
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "state": "observed",
+     "outcome": "wrong",
+     "truth": "R1",
+     "how": "single_component",
+     "reader": "title_block",
+     "group": "obs:0"
+    }
+   ],
+   "runner_tripwire": []
+  },
+  "L2": {
+   "critical": [
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "state": "validated",
+     "outcome": "fp",
+     "truth": null,
+     "how": "negative_page",
+     "reader": "ai:EV1",
+     "group": "ai:2:own",
+     "draft_id": "D26",
+     "label_resolved": false,
+     "evidence": {
+      "region_pt": [
+       428.4,
+       741.312,
+       533.052,
+       752.4
+      ],
+      "support": "text",
+      "read": "completed",
+      "reasons": []
+     }
+    }
+   ],
+   "critical_on_resolved": [],
+   "held": [
+    {
+     "draft_id": "D03",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "2.4 Accessories",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "decision",
+     "value": "ANN",
+     "truth": "ANN",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "FA-101-106",
+     "truth": "17",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D06",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "ARC-41034",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D12",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "BH2031_DIB_AMB_ID",
+     "truth": "BH2031_DIB_AMB_ID_MAIN",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "FLS-107",
+     "truth": "FLS-107",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D19",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SFD-01-ASY-00",
+     "truth": "DJ-295-P-EN-SFD-01-ASY-0001-00",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D21",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "3561",
+     "truth": "3561",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "MEC/SD/PR56/0284",
+     "truth": "MEC/SD/PR56/0284",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D23",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-23091/AS/MS-EM /101",
+     "truth": "EP-23091/AS/MS-EM /101",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": "28 20 00",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "identity",
+     "value": "28 20 00 Video Surveillance System",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "revision",
+     "value": "00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 4,
+     "field": "identity",
+     "value": "28 20 00 Video Surveillance System",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 4,
+     "field": "revision",
+     "value": "00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    }
+   ],
+   "held_counts": {
+    "held_on_negative": 6,
+    "held_correct": 8,
+    "held_wrong": 4
+   },
+   "accepted_wrong": [
+    {
+     "draft_id": "D26",
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "truth": null,
+     "outcome": "fp"
+    }
+   ],
+   "observed_deterministic_errors": [
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "state": "observed",
+     "outcome": "wrong",
+     "truth": "R1",
+     "how": "single_component",
+     "reader": "title_block",
+     "group": "obs:0"
+    }
+   ],
+   "runner_tripwire": []
+  },
+  "L3": {
+   "critical": [],
+   "critical_on_resolved": [],
+   "held": [
+    {
+     "draft_id": "D01",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "DCH-M-BSB-DWG-ZZ-ARC-40060",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-40060",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "decision",
+     "value": "ANN",
+     "truth": "ANN",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "FA-101-10",
+     "truth": "17",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D06",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "ARC-41034",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D08",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D09",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+     "truth": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D12",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "BH2031_DIB_AMB_ID",
+     "truth": "BH2031_DIB_AMB_ID_MAIN",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "FLS-107",
+     "truth": "FLS-107",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "01",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D17",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "TES/1343/NTH-END-3B/SD/TEL-04",
+     "truth": "TES/1343/NTH-END-3B/SD/TEL-04",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D17",
+     "label_resolved": true,
+     "page": 1,
+     "field": "revision",
+     "value": "04",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D18",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "TES/1343/NTH-MID-3B/SD/TEL-01",
+     "truth": "TES/1343/NTH-MID-3B/SD/TEL-01",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D18",
+     "label_resolved": true,
+     "page": 1,
+     "field": "revision",
+     "value": "01",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D19",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SFD-01-ASY-00",
+     "truth": "DJ-295-P-EN-SFD-01-ASY-0001-00",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D21",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "3561",
+     "truth": "3561",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D23",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-23091/AS/MS-EM /101",
+     "truth": "EP-23091/AS/MS-EM /101",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D24",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-22510",
+     "truth": "EP-22510",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": "28 20 00",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "00 – Sep. 2018",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "revision",
+     "value": "Rev. 00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 4,
+     "field": "identity",
+     "value": "Section 28 20 00 Video Surveillance System",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 4,
+     "field": "revision",
+     "value": "00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    }
+   ],
+   "held_counts": {
+    "held_correct": 14,
+    "held_wrong": 5,
+    "held_on_negative": 6
+   },
+   "accepted_wrong": [],
+   "observed_deterministic_errors": [
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "state": "observed",
+     "outcome": "wrong",
+     "truth": "R1",
+     "how": "single_component",
+     "reader": "title_block",
+     "group": "obs:0"
+    }
+   ],
+   "runner_tripwire": []
+  },
+  "L4": {
+   "critical": [
+    {
+     "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+     "page": 1,
+     "field": "identity",
+     "value": "2.4 Accessories",
+     "state": "validated",
+     "outcome": "fp",
+     "truth": null,
+     "how": "negative_page",
+     "reader": "ai:EV1",
+     "group": "ai:1:own",
+     "draft_id": "D03",
+     "label_resolved": false,
+     "evidence": {
+      "region_pt": [
+       242.89387896728516,
+       54.80703995361328,
+       305.23840824584966,
+       63.94154661254882
+      ],
+      "support": "text",
+      "read": "completed",
+      "reasons": []
+     }
+    }
+   ],
+   "critical_on_resolved": [],
+   "held": [
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "decision",
+     "value": "ANN",
+     "truth": "ANN",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D04",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "FA-101-106",
+     "truth": "17",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D06",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "ARC-41034",
+     "truth": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D09",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "DJ-295-O-EN-DEE-04-0001",
+     "truth": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D12",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "BH2031_DIB_AMB_ID",
+     "truth": "BH2031_DIB_AMB_ID_MAIN",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D15",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "01",
+     "truth": "R1",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D16",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "TES/1343/NTH-MID-3B/SD/TEL-04",
+     "truth": "TES/1343/NTH-MID-3B/SD/TEL-04",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D19",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "DJ-295-P-EN-SFD-01-ASY-00",
+     "truth": "DJ-295-P-EN-SFD-01-ASY-0001-00",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 2,
+     "field": "identity",
+     "value": "MEC/SD/PR56/0284 Rev. 00",
+     "truth": "MEC/SD/PR56/0284",
+     "state": "held",
+     "outcome": "held_wrong"
+    },
+    {
+     "draft_id": "D22",
+     "label_resolved": true,
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D23",
+     "label_resolved": true,
+     "page": 1,
+     "field": "identity",
+     "value": "EP-23091/AS/MS-EM /101",
+     "truth": "EP-23091/AS/MS-EM /101",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "identity",
+     "value": "28 20 00",
+     "truth": "28 20 00",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 2,
+     "field": "revision",
+     "value": "00",
+     "truth": "R0",
+     "state": "held",
+     "outcome": "held_correct"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "identity",
+     "value": "Section 28 20 00 Video Surveillance System",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    },
+    {
+     "draft_id": "D26",
+     "label_resolved": false,
+     "page": 3,
+     "field": "revision",
+     "value": "00 – Sep. 2018",
+     "truth": null,
+     "state": "held",
+     "outcome": "held_on_negative"
+    }
+   ],
+   "held_counts": {
+    "held_correct": 9,
+    "held_wrong": 6,
+    "held_on_negative": 2
+   },
+   "accepted_wrong": [
+    {
+     "draft_id": "D03",
+     "page": 1,
+     "field": "identity",
+     "value": "2.4 Accessories",
+     "truth": null,
+     "outcome": "fp"
+    }
+   ],
+   "observed_deterministic_errors": [
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "page": 1,
+     "field": "revision",
+     "value": "00",
+     "state": "observed",
+     "outcome": "wrong",
+     "truth": "R1",
+     "how": "single_component",
+     "reader": "title_block",
+     "group": "obs:0"
+    }
+   ],
+   "runner_tripwire": []
+  }
+ }
+}

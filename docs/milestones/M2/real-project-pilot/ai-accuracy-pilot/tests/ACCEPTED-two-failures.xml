@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="3.646" timestamp="2026-09-30T10:33:20.686543+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_ep_archive_models" name="test_directory_upgrade_preserves_existing_project_and_adds_lookup_index" time="1.407"><failure message="sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed&#10;[SQL: &#10;DROP TABLE users]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)">self = &lt;sqlalchemy.engine.base.Connection object at 0x000001B760593440&gt;
+dialect = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001B74B2101D0&gt;
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001B75B2004D0&gt;
+statement = &lt;sqlalchemy.dialects.sqlite.base.SQLiteDDLCompiler object at 0x000001B760820D10&gt;
+parameters = [()]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -&gt; CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+&gt;                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001B74B2101D0&gt;
+cursor = &lt;sqlite3.Cursor object at 0x000001B76093E8C0&gt;
+statement = '\nDROP TABLE users', parameters = ()
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001B75B2004D0&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError
+
+The above exception was the direct cause of the following exception:
+
+db_session = &lt;sqlalchemy.orm.session.Session object at 0x000001B76047A360&gt;
+
+    def test_directory_upgrade_preserves_existing_project_and_adds_lookup_index(db_session):
+        user = db_session.query(User).first()
+        project = Project(ep_number="stage1-keep", created_by_id=user.id, project_name="Keep this project")
+        db_session.add(project)
+        db_session.commit()
+        db_session.close()
+        config = Config(str(ALEMBIC_INI))
+        with engine.begin() as connection:
+            config.attributes["connection"] = connection
+&gt;           command.downgrade(config, "c4d5e6f7a8b9")
+
+tests\test_ep_archive_models.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\command.py:534: in downgrade
+    script.run_env()
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\script\base.py:550: in run_env
+    util.load_python_file(self.dir, "env.py")
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\util\pyfiles.py:114: in load_python_file
+    module = load_module_py(module_id, path)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\util\pyfiles.py:132: in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+&lt;frozen importlib._bootstrap_external&gt;:999: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:488: in _call_with_frames_removed
+    ???
+alembic\env.py:68: in &lt;module&gt;
+    run_migrations_online()
+alembic\env.py:51: in run_migrations_online
+    context.run_migrations()
+&lt;string&gt;:8: in run_migrations
+    ???
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\runtime\environment.py:970: in run_migrations
+    self.get_context().run_migrations(**kw)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\runtime\migration.py:621: in run_migrations
+    step.migration_fn(**kw)
+alembic\versions\f2a8c4e01d76_specific_engineer_roles.py:71: in downgrade
+    with op.batch_alter_table("users", schema=None) as batch:
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:144: in __exit__
+    next(self.gen)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\base.py:404: in batch_alter_table
+    impl.flush()
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\batch.py:160: in flush
+    batch_impl._create(self.impl)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\batch.py:457: in _create
+    op_impl.drop_table(self.table)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\ddl\impl.py:457: in drop_table
+    self._exec(schema.DropTable(table, **kw))
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\ddl\impl.py:252: in _exec
+    return conn.execute(construct, params)
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1418: in execute
+    return meth(
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\sql\ddl.py:180: in _execute_on_connection
+    return connection._execute_ddl(
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1529: in _execute_ddl
+    ret = self._execute_context(
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001B74B2101D0&gt;
+cursor = &lt;sqlite3.Cursor object at 0x000001B76093E8C0&gt;
+statement = '\nDROP TABLE users', parameters = ()
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001B75B2004D0&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed
+E       [SQL: 
+E       DROP TABLE users]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+C:\Users\moham\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError</failure></testcase><testcase classname="tests.test_proposed_materials" name="test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it" time="1.157"><failure message="AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} &lt;= {'3-CAB14B', ...3-CHAS4', ...}&#10;  &#10;  Extra items in the left set:&#10;  '3-SDDC2'&#10;  'SIGA-OSD-FCN'&#10;  '3-SSDC2'">client = &lt;starlette.testclient.TestClient object at 0x000001B75B1B4470&gt;
+db_session = &lt;sqlalchemy.orm.session.Session object at 0x000001B760593950&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-4/test_the_part_catalogue_knows_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B760B92360&gt;
+
+    def test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it(client, db_session, tmp_path, monkeypatch):
+        import app.routers.materials as materials_router
+        import app.services.part_catalog as catalog_module
+        from app.services.datasheet_library import DatasheetLibrary
+    
+        edwards = tmp_path / "EST4"
+        menvier = tmp_path / "MENVIER"
+        for path, lines in [
+            (edwards / "01- PANEL" / "01- 4-CPU.pdf", ["4-CPU Central Processor Module"]),
+            (edwards / "01- PANEL" / "3-SDDC2 &amp; 3-SSDC2.pdf", ["Loop controllers"]),
+            (edwards / "02- Initiating Devices" / "China" / "01- SIGA-OSD-FCN.pdf", ["Smoke detector"]),
+            (edwards / "00- submittal" / "EST4 Technical Reference Manual.pdf", ["Manual"]),
+            (menvier / "CTR160CGL2KS-M.pdf", ["Menvier luminaire"]),
+        ]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            doc = pymupdf.open()
+            doc.new_page().insert_text((40, 50), "\n".join(lines), fontsize=9)
+            doc.save(path)
+            doc.close()
+        libraries = {"EDWARDS": DatasheetLibrary("EDWARDS", edwards), "MENVIER": DatasheetLibrary("MENVIER", menvier)}
+        monkeypatch.setattr(catalog_module, "get_libraries", lambda: libraries)
+        monkeypatch.setattr(materials_router, "get_libraries", lambda: libraries)
+        _login(client)
+        project_id = client.post("/projects", json={
+            "ep_number": "30791", "project_name": "Titania", "design_sheets": [],
+            "systems": [{"name": "Fire Alarm", "brand": "EDWARDS", "method_statement": True, "drawing": True},
+                        {"name": "Emergency Light Monitoring", "brand": "MENVIER", "method_statement": True, "drawing": True}],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[
+            {"system_code": "FAS", "group_heading": "Panel", "catalog_no": "4-CPU", "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "SIGA-PS", "description": "Photoelectric smoke detector", "quantity": "120", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "12", "description": "GRSW-10", "quantity": "1", "manufacturer": "EDWARDS"},
+        ])
+    
+        numbers = {e.part_no for e in part_catalog.catalog(db_session, "EDWARDS")}
+&gt;       assert {"4-CPU", "3-SDDC2", "3-SSDC2", "SIGA-OSD-FCN", "SIGA-PS"} &lt;= numbers    # datasheet names, the BOQ
+E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} &lt;= {'3-CAB14B', ...3-CHAS4', ...}
+E         
+E         Extra items in the left set:
+E         '3-SDDC2'
+E         'SIGA-OSD-FCN'
+E         '3-SSDC2'
+
+tests\test_proposed_materials.py:108: AssertionError</failure></testcase></testsuite></testsuites>

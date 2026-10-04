@@ -1,0 +1,860 @@
+{
+ "plan": "Review 21 ANALYSIS-PLAN: document unit, resolved labels primary, cluster bootstrap 2,000 stratified by project; fewer than 12 documents attempted by both arms is INCONCLUSIVE; four contrasts x three fields, pre-ordered: ROI alone on decision coverage first, then X on identity / revision",
+ "seed": 20261001,
+ "pairs": {
+  "ROI effect without targeted reads": {
+   "arms": [
+    "L1",
+    "L2"
+   ],
+   "documents_attempted_by_both": 14,
+   "minimum_documents": 12,
+   "minimum_reached": true,
+   "required_complete_in_both": [
+    "D24",
+    "D04",
+    "D20"
+   ],
+   "fields": {
+    "identity": {
+     "resolved_documents_with_fact_attempted_by_both": 7,
+     "unresolved_reported_separately": 5,
+     "matched_field_read_in_both_all_in_scope_pages": 3,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 7
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D24": 1,
+      "D25": 1,
+      "D26": -1
+     },
+     "verdict": "INCONCLUSIVE (too few matched facts: 7 resolved documents with this fact attempted by both arms)"
+    },
+    "revision": {
+     "resolved_documents_with_fact_attempted_by_both": 7,
+     "unresolved_reported_separately": 5,
+     "matched_field_read_in_both_all_in_scope_pages": 1,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 7
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {},
+     "verdict": "INCONCLUSIVE (too few matched facts: 7 resolved documents with this fact attempted by both arms)"
+    },
+    "decision": {
+     "resolved_documents_with_fact_attempted_by_both": 2,
+     "unresolved_reported_separately": 0,
+     "matched_field_read_in_both_all_in_scope_pages": 1,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 2
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {},
+     "verdict": "INCONCLUSIVE (too few matched facts: 2 resolved documents with this fact attempted by both arms)"
+    }
+   },
+   "coverage_imbalance": {
+    "L1": {
+     "page_fields_budget": 18,
+     "page_fields_not_attempted": 33,
+     "documents_attempted": 16,
+     "in_scope_completed_read": {
+      "identity": 8,
+      "revision": 5,
+      "decision": 1
+     }
+    },
+    "L2": {
+     "page_fields_budget": 8,
+     "page_fields_not_attempted": 12,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 15,
+      "revision": 12,
+      "decision": 6
+     }
+    }
+   },
+   "breaker_and_timeouts": {
+    "L1": {
+     "breaker": "request 287 used 70264 input tokens > per-request 70000",
+     "timeouts": 3
+    },
+    "L2": {
+     "breaker": null,
+     "timeouts": 2
+    }
+   },
+   "run_to_run_variation": {
+    "common_first_readings": 31,
+    "differing": 6,
+    "examples": [
+     {
+      "draft_id": "D26",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "28 20 00",
+      "L2": "SECTION 28 20 00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "revision",
+      "source": "discovery",
+      "L1": "REV. 00 – SEP. 2018",
+      "L2": "00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "28 20 00",
+      "L2": "28 20 00 VIDEO SURVEILLANCE SYSTEM"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "revision",
+      "source": "discovery",
+      "L1": "00",
+      "L2": "00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D12",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "BH2031_DIB_AMB_ID_MAIN",
+      "L2": "BH2031_DIB_AM"
+     },
+     {
+      "draft_id": "D09",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "DJ-298-P-EN-SEE-04-ASY-0020-01",
+      "L2": "DJ-295-P-EN-SEE-04-ASY-0020-01"
+     }
+    ],
+    "interpretation": "discovery inputs differ (whole page versus title block), so differences mix treatment and variation"
+   },
+   "requests": {
+    "L1": 34,
+    "L2": 64
+   },
+   "roi_decision_gate": {
+    "rule": "ROI arm decision coverage (completed read or verified absence, incl. outside the title block) >= matching whole-page arm; located_incomplete is not coverage",
+    "decision_pages": [
+     {
+      "draft_id": "D04",
+      "page": 1,
+      "L1": "completed_read",
+      "L2": "completed_read"
+     },
+     {
+      "draft_id": "D16",
+      "page": 1,
+      "L1": "discovery_absent",
+      "L2": "not_attempted"
+     },
+     {
+      "draft_id": "D17",
+      "page": 1,
+      "L1": "failed",
+      "L2": "not_attempted"
+     },
+     {
+      "draft_id": "D18",
+      "page": 1,
+      "L1": "not_attempted",
+      "L2": "located_incomplete"
+     },
+     {
+      "draft_id": "D19",
+      "page": 1,
+      "L1": "not_selected_by_policy",
+      "L2": "not_selected_by_policy"
+     },
+     {
+      "draft_id": "D22",
+      "page": 1,
+      "L1": "not_attempted",
+      "L2": "completed_read"
+     },
+     {
+      "draft_id": "D22",
+      "page": 2,
+      "L1": "budget",
+      "L2": "completed_read"
+     }
+    ],
+    "usable_by_rule": {
+     "L1": 2,
+     "L2": 3
+    },
+    "completed_read": {
+     "L1": 1,
+     "L2": 3
+    },
+    "note": "every listed page carries a labelled decision, so 'discovery_absent' on it is a wrong absence; the strict count uses completed reads only",
+    "passes_by_rule": true,
+    "passes_completed_read_only": true
+   }
+  },
+  "Targeted-read effect on whole-page discovery": {
+   "arms": [
+    "L1",
+    "L3"
+   ],
+   "documents_attempted_by_both": 14,
+   "minimum_documents": 12,
+   "minimum_reached": true,
+   "required_complete_in_both": [
+    "D24",
+    "D04",
+    "D20"
+   ],
+   "fields": {
+    "identity": {
+     "resolved_documents_with_fact_attempted_by_both": 7,
+     "unresolved_reported_separately": 5,
+     "matched_field_read_in_both_all_in_scope_pages": 3,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 7
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D25": 1,
+      "D26": -1
+     },
+     "verdict": "INCONCLUSIVE (too few matched facts: 7 resolved documents with this fact attempted by both arms)"
+    },
+    "revision": {
+     "resolved_documents_with_fact_attempted_by_both": 7,
+     "unresolved_reported_separately": 5,
+     "matched_field_read_in_both_all_in_scope_pages": 1,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 7
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D26": -1
+     },
+     "verdict": "INCONCLUSIVE (too few matched facts: 7 resolved documents with this fact attempted by both arms)"
+    },
+    "decision": {
+     "resolved_documents_with_fact_attempted_by_both": 2,
+     "unresolved_reported_separately": 0,
+     "matched_field_read_in_both_all_in_scope_pages": 1,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 2
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {},
+     "verdict": "INCONCLUSIVE (too few matched facts: 2 resolved documents with this fact attempted by both arms)"
+    }
+   },
+   "coverage_imbalance": {
+    "L1": {
+     "page_fields_budget": 18,
+     "page_fields_not_attempted": 33,
+     "documents_attempted": 16,
+     "in_scope_completed_read": {
+      "identity": 8,
+      "revision": 5,
+      "decision": 1
+     }
+    },
+    "L3": {
+     "page_fields_budget": 12,
+     "page_fields_not_attempted": 15,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 16,
+      "revision": 10,
+      "decision": 5
+     }
+    }
+   },
+   "breaker_and_timeouts": {
+    "L1": {
+     "breaker": "request 287 used 70264 input tokens > per-request 70000",
+     "timeouts": 3
+    },
+    "L3": {
+     "breaker": null,
+     "timeouts": 3
+    }
+   },
+   "run_to_run_variation": {
+    "common_first_readings": 36,
+    "differing": 6,
+    "examples": [
+     {
+      "draft_id": "D26",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "28 20 00",
+      "L3": "SECTION 28 20 00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 1,
+      "field": "revision",
+      "source": "discovery",
+      "L1": "00",
+      "L3": "00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "revision",
+      "source": "discovery",
+      "L1": "REV. 00 – SEP. 2018",
+      "L3": "00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "revision",
+      "source": "discovery",
+      "L1": "00",
+      "L3": "REV. 00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D04",
+      "page": 1,
+      "field": "identity",
+      "source": "blind_small",
+      "L1": "FA-101-106",
+      "L3": "FA-101-10"
+     },
+     {
+      "draft_id": "D09",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L1": "DJ-298-P-EN-SEE-04-ASY-0020-01",
+      "L3": "DJ-296-P-EN-SEE-04-ASY-0020-01"
+     }
+    ],
+    "interpretation": "same discovery input and first-read path in both arms, so differences are run-to-run model variation"
+   },
+   "requests": {
+    "L1": 34,
+    "L3": 66
+   },
+   "x_gate": {
+    "rule": ">= 1 correctly associated fact per 8 extra requests at equal caps, no new false accept, interval excluding zero",
+    "net_correct_facts_resolved": 0,
+    "extra_requests": 32,
+    "facts_per_8_extra": 0.0,
+    "new_false_accepts": [],
+    "passes": false
+   }
+  },
+  "Targeted-read effect under ROI": {
+   "arms": [
+    "L2",
+    "L4"
+   ],
+   "documents_attempted_by_both": 23,
+   "minimum_documents": 12,
+   "minimum_reached": true,
+   "required_complete_in_both": [
+    "D24",
+    "D04",
+    "D20"
+   ],
+   "fields": {
+    "identity": {
+     "resolved_documents_with_fact_attempted_by_both": 13,
+     "unresolved_reported_separately": 8,
+     "matched_field_read_in_both_all_in_scope_pages": 10,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 13
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D15": 1,
+      "D21": 1,
+      "D26": 1
+     },
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "resolved_documents_with_fact_attempted_by_both": 13,
+     "unresolved_reported_separately": 8,
+     "matched_field_read_in_both_all_in_scope_pages": 8,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 13
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D26": -1
+     },
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "decision": {
+     "resolved_documents_with_fact_attempted_by_both": 4,
+     "unresolved_reported_separately": 0,
+     "matched_field_read_in_both_all_in_scope_pages": 2,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 4
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {},
+     "verdict": "INCONCLUSIVE (too few matched facts: 4 resolved documents with this fact attempted by both arms)"
+    }
+   },
+   "coverage_imbalance": {
+    "L2": {
+     "page_fields_budget": 8,
+     "page_fields_not_attempted": 12,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 15,
+      "revision": 12,
+      "decision": 6
+     }
+    },
+    "L4": {
+     "page_fields_budget": 16,
+     "page_fields_not_attempted": 9,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 19,
+      "revision": 12,
+      "decision": 3
+     }
+    }
+   },
+   "breaker_and_timeouts": {
+    "L2": {
+     "breaker": null,
+     "timeouts": 2
+    },
+    "L4": {
+     "breaker": null,
+     "timeouts": 2
+    }
+   },
+   "run_to_run_variation": {
+    "common_first_readings": 73,
+    "differing": 5,
+    "examples": [
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "identity",
+      "source": "blind_small",
+      "L2": "",
+      "L4": "28 20 00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "revision",
+      "source": "discovery",
+      "L2": "00",
+      "L4": "REV. 00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "identity",
+      "source": "discovery",
+      "L2": "28 20 00 VIDEO SURVEILLANCE SYSTEM",
+      "L4": "SECTION 28 20 00 VIDEO SURVEILLANCE SYSTEM"
+     },
+     {
+      "draft_id": "D09",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L2": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+      "L4": "DJ-295-O-EN-DEE-04-0001"
+     },
+     {
+      "draft_id": "D22",
+      "page": 2,
+      "field": "identity",
+      "source": "blind_small",
+      "L2": "",
+      "L4": "MEC/SD/PR56/0284 REV. 00"
+     }
+    ],
+    "interpretation": "same discovery input and first-read path in both arms, so differences are run-to-run model variation"
+   },
+   "requests": {
+    "L2": 64,
+    "L4": 66
+   },
+   "x_gate": {
+    "rule": ">= 1 correctly associated fact per 8 extra requests at equal caps, no new false accept, interval excluding zero",
+    "net_correct_facts_resolved": 0,
+    "extra_requests": 2,
+    "facts_per_8_extra": 0.0,
+    "new_false_accepts": [
+     {
+      "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+      "page": 1,
+      "field": "identity",
+      "value": "2.4 Accessories",
+      "state": "validated",
+      "outcome": "fp",
+      "truth": null,
+      "how": "negative_page",
+      "reader": "ai:EV1",
+      "group": "ai:1:own",
+      "draft_id": "D03",
+      "label_resolved": false,
+      "evidence": {
+       "region_pt": [
+        242.89387896728516,
+        54.80703995361328,
+        305.23840824584966,
+        63.94154661254882
+       ],
+       "support": "text",
+       "read": "completed",
+       "reasons": []
+      }
+     }
+    ],
+    "passes": false
+   }
+  },
+  "ROI effect with targeted reads": {
+   "arms": [
+    "L3",
+    "L4"
+   ],
+   "documents_attempted_by_both": 23,
+   "minimum_documents": 12,
+   "minimum_reached": true,
+   "required_complete_in_both": [
+    "D24",
+    "D23",
+    "D04",
+    "D20",
+    "D21"
+   ],
+   "fields": {
+    "identity": {
+     "resolved_documents_with_fact_attempted_by_both": 13,
+     "unresolved_reported_separately": 8,
+     "matched_field_read_in_both_all_in_scope_pages": 11,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 13
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {
+      "D15": 1,
+      "D21": 1,
+      "D24": 1,
+      "D26": 1
+     },
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "resolved_documents_with_fact_attempted_by_both": 13,
+     "unresolved_reported_separately": 8,
+     "matched_field_read_in_both_all_in_scope_pages": 7,
+     "paired_difference_resolved": {
+      "estimate": -0.0769,
+      "ci95": [
+       -0.2308,
+       0.0
+      ],
+      "n_documents": 13
+     },
+     "documents_that_differ": {
+      "D22": -1
+     },
+     "net_difference_by_project": {
+      "EP-26208": -1
+     },
+     "gain_clustered_in_one_project": true,
+     "unresolved_differences": {
+      "D08": 1
+     },
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "decision": {
+     "resolved_documents_with_fact_attempted_by_both": 4,
+     "unresolved_reported_separately": 0,
+     "matched_field_read_in_both_all_in_scope_pages": 2,
+     "paired_difference_resolved": {
+      "estimate": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "n_documents": 4
+     },
+     "documents_that_differ": {},
+     "net_difference_by_project": {},
+     "gain_clustered_in_one_project": false,
+     "unresolved_differences": {},
+     "verdict": "INCONCLUSIVE (too few matched facts: 4 resolved documents with this fact attempted by both arms)"
+    }
+   },
+   "coverage_imbalance": {
+    "L3": {
+     "page_fields_budget": 12,
+     "page_fields_not_attempted": 15,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 16,
+      "revision": 10,
+      "decision": 5
+     }
+    },
+    "L4": {
+     "page_fields_budget": 16,
+     "page_fields_not_attempted": 9,
+     "documents_attempted": 24,
+     "in_scope_completed_read": {
+      "identity": 19,
+      "revision": 12,
+      "decision": 3
+     }
+    }
+   },
+   "breaker_and_timeouts": {
+    "L3": {
+     "breaker": null,
+     "timeouts": 3
+    },
+    "L4": {
+     "breaker": null,
+     "timeouts": 2
+    }
+   },
+   "run_to_run_variation": {
+    "common_first_readings": 64,
+    "differing": 10,
+    "examples": [
+     {
+      "draft_id": "D26",
+      "page": 1,
+      "field": "revision",
+      "source": "discovery",
+      "L3": "00 – SEP. 2018",
+      "L4": "00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "identity",
+      "source": "blind_small",
+      "L3": "",
+      "L4": "28 20 00"
+     },
+     {
+      "draft_id": "D26",
+      "page": 2,
+      "field": "revision",
+      "source": "discovery",
+      "L3": "00",
+      "L4": "REV. 00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "identity",
+      "source": "discovery",
+      "L3": "28 20 00",
+      "L4": "SECTION 28 20 00 VIDEO SURVEILLANCE SYSTEM"
+     },
+     {
+      "draft_id": "D26",
+      "page": 3,
+      "field": "revision",
+      "source": "discovery",
+      "L3": "REV. 00 – SEP. 2018",
+      "L4": "00 – SEP. 2018"
+     },
+     {
+      "draft_id": "D15",
+      "page": 1,
+      "field": "revision",
+      "source": "discovery",
+      "L3": "01",
+      "L4": ""
+     },
+     {
+      "draft_id": "D12",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L3": "BH2031_DIB_AMB_ID_MAIN",
+      "L4": "BH2031_DIB_AM"
+     },
+     {
+      "draft_id": "D04",
+      "page": 1,
+      "field": "identity",
+      "source": "blind_small",
+      "L3": "FA-101-10",
+      "L4": "FA-101-106"
+     },
+     {
+      "draft_id": "D09",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L3": "DJ-296-P-EN-SEE-04-ASY-0020-01",
+      "L4": "DJ-295-O-EN-DEE-04-0001"
+     },
+     {
+      "draft_id": "D01",
+      "page": 1,
+      "field": "identity",
+      "source": "discovery",
+      "L3": "DCH-M-B18-DWG-ZZ-ARC-40060",
+      "L4": "DCH-M-BSB-DWG-ZZ-ARC-40060"
+     }
+    ],
+    "interpretation": "discovery inputs differ (whole page versus title block), so differences mix treatment and variation"
+   },
+   "requests": {
+    "L3": 66,
+    "L4": 66
+   },
+   "roi_decision_gate": {
+    "rule": "ROI arm decision coverage (completed read or verified absence, incl. outside the title block) >= matching whole-page arm; located_incomplete is not coverage",
+    "decision_pages": [
+     {
+      "draft_id": "D04",
+      "page": 1,
+      "L3": "completed_read",
+      "L4": "completed_read"
+     },
+     {
+      "draft_id": "D16",
+      "page": 1,
+      "L3": "not_attempted",
+      "L4": "located_incomplete"
+     },
+     {
+      "draft_id": "D17",
+      "page": 1,
+      "L3": "budget",
+      "L4": "not_attempted"
+     },
+     {
+      "draft_id": "D18",
+      "page": 1,
+      "L3": "discovery_absent",
+      "L4": "located_incomplete"
+     },
+     {
+      "draft_id": "D19",
+      "page": 1,
+      "L3": "not_selected_by_policy",
+      "L4": "not_selected_by_policy"
+     },
+     {
+      "draft_id": "D22",
+      "page": 1,
+      "L3": "completed_read",
+      "L4": "completed_read"
+     },
+     {
+      "draft_id": "D22",
+      "page": 2,
+      "L3": "not_attempted",
+      "L4": "budget"
+     }
+    ],
+    "usable_by_rule": {
+     "L3": 3,
+     "L4": 2
+    },
+    "completed_read": {
+     "L3": 2,
+     "L4": 2
+    },
+    "note": "every listed page carries a labelled decision, so 'discovery_absent' on it is a wrong absence; the strict count uses completed reads only",
+    "passes_by_rule": false,
+    "passes_completed_read_only": true
+   }
+  }
+ }
+}

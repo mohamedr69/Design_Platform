@@ -1,0 +1,2538 @@
+{
+ "evaluator": "m2-boq-eval-2026-09-29.3",
+ "ai_enabled": false,
+ "labels_corrections_applied": [],
+ "sheets": [
+  {
+   "ep": "28605",
+   "relative_path": "EP-28605 Scan\\EP-28605 Theatre EML Design.pdf",
+   "pages": 1,
+   "truth": {
+    "line": 4
+   },
+   "state": "completed",
+   "outcome": "Outcome.NEEDS_INTERPRETATION",
+   "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+   "emitted": {
+    "accepted": 0,
+    "held": 2
+   },
+   "fields": {
+    "part_number": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 2,
+     "missed": 2,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "quantity": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 2,
+     "missed": 2,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "description": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 2,
+     "missed": 2,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    }
+   },
+   "rows": {
+    "equipment missing": 2,
+    "equipment matched (held)": 2
+   },
+   "critical": [],
+   "pairs": [
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SL2-42D3D-CGL-M",
+      "quantity": "9",
+      "description": "Surface Mounted Emergency Light",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "RT2RHEO200CGL3HIPM",
+      "quantity": "140",
+      "description": "RTECH MR HEO CGL+ 200 MNM 3H IP65",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "SL2-42D3D-CGL-M +SL2RB +SL2DC3I",
+      "quantity": "35",
+      "description": "Exit Directional, Corridor Recessed, 30 metre viewing distance",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "SL2-42D3D-CGL-M +SL2RB +SL2DC31",
+      "quantity": "35",
+      "description": "Exit Directional, Corridor Recessed, 30 metre viewing distance",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "CTR400CGL2KS-M",
+      "quantity": "1",
+      "description": "Menvier Brand CGLine+ Web Compact Controlle(r) (cut at the cell edge)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "CTR400CGL2KS-M",
+      "quantity": "1",
+      "description": "Menvier Brand CGLine+ Web Compact Control",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    }
+   ],
+   "sha256_matches_frozen": true
+  },
+  {
+   "ep": "19138",
+   "relative_path": "EP-19138 - Commercial documents\\EP-19138 - Design Sheet.pdf",
+   "pages": 1,
+   "truth": {
+    "heading": 2,
+    "line": 12,
+    "component": 2
+   },
+   "state": "completed",
+   "outcome": "Outcome.NEEDS_INTERPRETATION",
+   "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+   "emitted": {
+    "accepted": 0,
+    "held": 2
+   },
+   "fields": {
+    "part_number": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 1,
+     "held": 1,
+     "missed": 12,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "quantity": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 1,
+     "missed": 13,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "description": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 1,
+     "missed": 13,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    }
+   },
+   "rows": {
+    "extra held": 1,
+    "heading (not emitted)": 2,
+    "equipment missing": 13,
+    "equipment matched (held)": 1
+   },
+   "critical": [],
+   "pairs": [
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Type of Customer",
+      "quantity": "Gross Margin",
+      "description": ": Customer Evaluation |",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "quantity": "1",
+      "description": "IO64 Single loop fire alarm control panel, with built-in system relays, 4 x 20 character backlit LCD display, 2 Nac's (3.75 amps), rechargeable batteries ... Components are:",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "IO64G-2",
+      "quantity": "1",
+      "description": "FACP,1LOOP,64PT,230V",
+      "kind": "component"
+     },
+     "emitted": {
+      "part_number": "1064G-2 12V8A SIGA-PD SIGA-HRD SIGA-SB SIGA-278 G1R-HDVM 757-TA-T 757A-WB SIGA-CT2 SIGA-CR TP606 27193-11",
+      "quantity": "| 1 11 1 12 1 3 1 1 ] 2 2 3",
+      "description": "1064 Fire Alarm Control Panel 1064 Single loop fire alarm control panel, with built-in system relays, 4 x 20 character backlit LCD display,2 Nac’s (3.75 amps),rechargeable batteries to power the system for 24 hours standby and 30 minutes alarm condition. Components are: ( 1. )FACP,1LOOP.64PT,230V ( 2 )Battery 8 AH, 12 volt cells Field Devices Intelligent Photoelectric Smoke Detector Intelligent Fixed Temperature / Rate-of-Rise Heat Detector Signature Detector Base Manual Pull Station - Double Action, 1-stage Genesis Temporal Horn-strobe, RED 15/75 cd Temporal Horn/Strobe - 24 Vdc, RED Weatherproof Box, Cast - RED Dual Input Module Control Relay Module 2\"x4\" GI Concealed Back Box Single Gange Surface Mount Box - Indoor, RED, 1-gang",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "12V8A",
+      "quantity": "2",
+      "description": "Battery 8 AH, 12 volt cells",
+      "kind": "component"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-PD",
+      "quantity": "11",
+      "description": "Intelligent Photoelectric Smoke Detector",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-HRD",
+      "quantity": "1",
+      "description": "Intelligent Fixed Temperature / Rate-of-Rise Heat Detector",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-SB",
+      "quantity": "12",
+      "description": "Signature Detector Base",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-278",
+      "quantity": "1",
+      "description": "Manual Pull Station - Double Action, 1-stage",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "G1R-HDVM",
+      "quantity": "3",
+      "description": "Genesis Temporal Horn-strobe, RED",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "757-7A-T",
+      "quantity": "1",
+      "description": "15/75 cd Temporal Horn/Strobe - 24 Vdc, RED",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "757A-WB",
+      "quantity": "1",
+      "description": "Weatherproof Box, Cast - RED",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-CT2",
+      "quantity": "1",
+      "description": "Dual Input Module",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "SIGA-CR",
+      "quantity": "2",
+      "description": "Control Relay Module",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "TP606",
+      "quantity": "2",
+      "description": "2\"x4\" GI Concealed Back Box Single Gange",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "27193-11",
+      "quantity": "3",
+      "description": "Surface Mount Box - Indoor, RED, 1-gang",
+      "kind": "line"
+     }
+    }
+   ],
+   "sha256_matches_frozen": true
+  },
+  {
+   "ep": "28569",
+   "relative_path": "EP-28569 ELV\\To T&C\\Project Documents\\Design Sheet\\EP-28569 Design.pdf",
+   "pages": 3,
+   "truth": {
+    "heading": 30,
+    "line": 64
+   },
+   "state": "completed",
+   "outcome": "Outcome.NEEDS_INTERPRETATION",
+   "failure": "Could not find a line-item table in this Design Sheet -- its layout is not one this extractor recognises",
+   "emitted": {
+    "accepted": 0,
+    "held": 57
+   },
+   "fields": {
+    "part_number": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 4,
+     "held": 18,
+     "missed": 42,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "quantity": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 18,
+     "missed": 46,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    },
+    "description": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 18,
+     "missed": 46,
+     "unscorable": 0,
+     "accepted": 0,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0
+    }
+   },
+   "rows": {
+    "extra held": 36,
+    "heading (not emitted)": 27,
+    "equipment missing": 46,
+    "equipment matched (held)": 18,
+    "heading held": 3
+   },
+   "critical": [],
+   "pairs": [
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "quantity": "Description Brand",
+      "description": "ModelNo _ Z",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "a",
+      "quantity": "NetKey® 86mm x 86mm Faceplate Panduit",
+      "description": "_NKUKS2SAW",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "2",
+      "quantity": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+      "description": "NK6X88MAW",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "3",
+      "quantity": "NetKey® Patch Panel, 24 Port, 1 RU, BL Panduit",
+      "description": "NKFP24Y",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "4",
+      "quantity": "PatchLink™ Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+      "description": "WMPFSE 7",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "5",
+      "quantity": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+      "description": "NUL6X04WH-FEG",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "6",
+      "description": "FPSN924 i",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "7",
+      "quantity": "Opticom® Fiber Tray, Straight, 1 RU, 4 Port Panduit",
+      "description": "EMT1",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "8",
+      "quantity": "Opticom® Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+      "description": "CFAPPBL1",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "9",
+      "quantity": "Opticom® Fiber Splice Holder, 24 Splices, Black Panduit",
+      "description": "FSC24 a",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "10",
+      "quantity": "Opticom® Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+      "description": "FAPI2WAGSCZ",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "11",
+      "quantity": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+      "description": "F91BNANNNSNMO01",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "EPNO",
+      "description": "28569",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "2",
+      "quantity": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module Panduit",
+      "description": "NK6X88MAW 7",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "3",
+      "quantity": "NetKey® Patch Panel, 24 Port, 1 RU, BL Panduit",
+      "description": "NKFP24Y _",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "4",
+      "quantity": "PatchLink™ Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth Panduit",
+      "description": "WMPFSE _",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "5",
+      "quantity": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White Panduit",
+      "description": "NUL6X04WH-FEG",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "6",
+      "quantity": "Paneatt",
+      "description": "FPSN924",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "8",
+      "quantity": "Opticom® Fiber Patch Panel, Flat, Black, 1 RU Panduit",
+      "description": "CFAPPBL1",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "oF",
+      "quantity": "Opticom® Fiber Splice Holder, 24 Splices, Black Panduit",
+      "description": "FSC24",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "10",
+      "quantity": "Opticom® Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green Panduit",
+      "description": "FAP12WAGSCZ i",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "11",
+      "quantity": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX Panduit",
+      "description": "F91BNANNNSNMOO1",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NKUKS2SAW",
+      "quantity": "11",
+      "description": "NetKey 86mm x 86mm Faceplate",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NK6X88MAW",
+      "quantity": "44",
+      "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NKFP24Y",
+      "quantity": "1",
+      "description": "NetKey Patch Panel, 24 Port, 1 RU, BL",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "WMPFSE",
+      "quantity": "1",
+      "description": "PatchLink Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NUL6X04WH-FEG",
+      "quantity": "lot",
+      "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FPSN924",
+      "quantity": "lot",
+      "description": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FMT1",
+      "quantity": "2",
+      "description": "Opticom Fiber Tray, Straight, 1 RU, 4 Port",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "CFAPPBL1",
+      "quantity": "2",
+      "description": "Opticom Fiber Patch Panel, Flat, Black, 1 RU",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FSC24",
+      "quantity": "2",
+      "description": "Opticom Fiber Splice Holder, 24 Splices, Black",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FAP12WAGSCZ",
+      "quantity": "4",
+      "description": "Opticom Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "F91BNANNNSNM001",
+      "quantity": "48",
+      "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "quantity": "1",
+      "description": "18U Rack",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NKUKS2SAW",
+      "quantity": "11",
+      "description": "NetKey 86mm x 86mm Faceplate",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NK6X88MAW",
+      "quantity": "44",
+      "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NKFP24Y",
+      "quantity": "1",
+      "description": "NetKey Patch Panel, 24 Port, 1 RU, BL",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "WMPFSE",
+      "quantity": "1",
+      "description": "PatchLink Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "NUL6X04WH-FEG",
+      "quantity": "lot",
+      "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FPSN924",
+      "quantity": "lot",
+      "description": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FMT1",
+      "quantity": "2",
+      "description": "Opticom Fiber Tray, Straight, 1 RU, 4 Port",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "CFAPPBL1",
+      "quantity": "2",
+      "description": "Opticom Fiber Patch Panel, Flat, Black, 1 RU",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FSC24",
+      "quantity": "2",
+      "description": "Opticom Fiber Splice Holder, 24 Splices, Black",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "FAP12WAGSCZ",
+      "quantity": "4",
+      "description": "Opticom Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 1,
+     "how": "missing",
+     "truth": {
+      "part_number": "F91BNANNNSNM001",
+      "quantity": "48",
+      "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 2,
+     "how": "missing",
+     "truth": {
+      "quantity": "1",
+      "description": "18U Rack",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "AXIS P3267-L",
+      "quantity": "3",
+      "description": "Indoor 5 MP dome with IR and deep learning",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "AXIS P3267-L",
+      "description": "Indoor 5 MP dome with IR and deep learning",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "AXIS P1467-LE",
+      "quantity": "4",
+      "description": "5 MP Bullet camera",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "AXISP1467-LE",
+      "quantity": "2 —",
+      "description": "5 MP Bullet camera",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "AMG570-8GAT-3S-P240",
+      "quantity": "1",
+      "description": "Industrial 11 Port Managed Switch, 8 x 10/100/1000Base-T(x)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "AMG570-8GAT-3S-P240",
+      "quantity": "3 =",
+      "description": "Industrial 11 Port Managed Switch, 8 x 10/100/1000Base-T(x)",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "AMGPSU-I48-P240",
+      "quantity": "1",
+      "description": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "AMGPSU-148-P240",
+      "quantity": "4",
+      "description": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting, - 40°C to +70°C,",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "SFP-SM-1G-LX20-31",
+      "quantity": "2",
+      "description": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm Tx/Rx, DDM",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "SFP-SM-1G-LX20-31",
+      "quantity": "5",
+      "description": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm Tx/Rx, -40°C to +85°C, DDM",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "310049",
+      "quantity": "1",
+      "description": "ASI DAKER DK 1KVA BS",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "3100900",
+      "description": "ASI DAKER DK 1KVA BS",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "310660",
+      "quantity": "1",
+      "description": "EBC DK PLUS 1KVA",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "310660 oe",
+      "quantity": "7 -",
+      "description": "EBC DK PLUS 1KVA",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "310952",
+      "quantity": "2",
+      "description": "RAIL KIT RACK DK (2U)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "310952",
+      "quantity": "8",
+      "description": "RAIL KIT RACK DK (2U)",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "311058",
+      "quantity": "1",
+      "description": "CS102 SK - SNMP CARD",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "311058 a",
+      "quantity": "9",
+      "description": "CS102 SK - SNMP CARD",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "NK6X88MAW",
+      "quantity": "7",
+      "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "NK6X88MAW",
+      "quantity": "i a spun sass",
+      "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "NKFP24Y",
+      "quantity": "1",
+      "description": "NetKey Patch Panel, 24 Port, 1 RU, BL",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "NKFP24Y",
+      "quantity": "2",
+      "description": "NetKey® Patch Panel, 24 Port, 1 RU, BL",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "WMPFSE",
+      "quantity": "1",
+      "description": "PatchLink Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "WMPFSE",
+      "description": "PatchLink™ Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "NUL6X04WH-FEG",
+      "quantity": "lot",
+      "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "NUL6X04WH-FEG",
+      "quantity": "4",
+      "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "FPSN924",
+      "quantity": "lot",
+      "description": "24 fibre outside plant armored cable is OS2, EuroClass Fca and features 250um fibres",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "FPSN924",
+      "quantity": ">)",
+      "description": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "missing",
+     "truth": {
+      "part_number": "FMT1",
+      "quantity": "2",
+      "description": "Opticom Fiber Tray, Straight, 1 RU, 4 Port",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "CFAPPBL1",
+      "quantity": "2",
+      "description": "Opticom Fiber Patch Panel, Flat, Black, 1 RU",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "CFAPPBL1",
+      "quantity": "7",
+      "description": "Opticom® Fiber Patch Panel, Flat, Black, 1 RU",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "FSC24",
+      "quantity": "2",
+      "description": "Opticom Fiber Splice Holder, 24 Splices, Black",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "GA 7",
+      "quantity": "8",
+      "description": "Opticom® Fiber Splice Holder, 24 Splices, Black",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "FAP12WAGSCZ",
+      "quantity": "4",
+      "description": "Opticom Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "FAP12WAGS@Z",
+      "quantity": "oF",
+      "description": "Opticom® Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "F91BNANNNSNM001",
+      "quantity": "48",
+      "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "F91BNANNNSNMOO1",
+      "quantity": "10",
+      "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "accepted": false
+     }
+    },
+    {
+     "page": 2,
+     "how": "missing",
+     "truth": {
+      "quantity": "1",
+      "description": "18U Rack",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Indoor 5 MP dome with IR and deep learning",
+      "quantity": "“AXIS P3267-L",
+      "description": "Axis",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "SMP Bulletcamera",
+      "quantity": "AXIS P1467-LE",
+      "description": "Axis __",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting,-40°C to +70°C",
+      "quantity": "AMGPSU-148-P240",
+      "description": "AMG",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm _Tx/Rx, -40°C to +85°C, DDM",
+      "quantity": "SFP-SM-1G-LX20-31_",
+      "description": "AMG",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "UPS Brand : Legrand ey tee Shay i Soy a",
+      "description": "i",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "UPS in IDF arn ee ee 7",
+      "description": ";",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "AXIS P3267-L",
+      "quantity": "3",
+      "description": "Indoor 5 MP dome with IR and deep learning",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "AXIS P1467-LE",
+      "quantity": "4",
+      "description": "5 MP Bullet camera",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "AMG570-8GAT-3S-P240",
+      "quantity": "1",
+      "description": "Industrial 11 Port Managed Switch, 8 x 10/100/1000Base-T(x)",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "AMGPSU-I48-P240",
+      "quantity": "1",
+      "description": "48 VDC, 240W (5A) Industrial Power Supply, DIN-Rail Mounting",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "SFP-SM-1G-LX20-31",
+      "quantity": "2",
+      "description": "SFP Single mode, 1Gb, 2 Fibers, 20Km, LC Connectors, 1310nm Tx/Rx, DDM",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "310049",
+      "quantity": "1",
+      "description": "ASI DAKER DK 1KVA BS",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "310660",
+      "quantity": "1",
+      "description": "EBC DK PLUS 1KVA",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "310952",
+      "quantity": "2",
+      "description": "RAIL KIT RACK DK (2U)",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "311058",
+      "quantity": "1",
+      "description": "CS102 SK - SNMP CARD",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "NetKey® Patch Panel, 24 Port, 1 RU, BL OC",
+      "quantity": "NKFP24Y oe",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "PatchLink™ Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "quantity": "WMPFSE",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "quantity": "NUL6X04WH-FEG",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "24 fibre outside plant armored (single armor, single jacket) cable is OS2, EuroClass Fca and features 250um fibres",
+      "quantity": "FPSN924",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Opticom® Fiber Patch Panel, Flat, Black, 1 RU",
+      "quantity": "2",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Opticom® Fiber Splice Holder, 24 Splices, Black",
+      "quantity": "-FSC24 -",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Opticom® Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "quantity": "FAP12WAGSCZ",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "quantity": "F91BNANNNSNMO01",
+      "description": "Panduit",
+      "accepted": false
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "NK6X88MAW",
+      "quantity": "7",
+      "description": "Cat 6A UTP RJ45 Punchdown Keystone Jack Module",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "NKFP24Y",
+      "quantity": "1",
+      "description": "NetKey Patch Panel, 24 Port, 1 RU, BL",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "WMPFSE",
+      "quantity": "1",
+      "description": "PatchLink Horizontal Single-Sided Manager, 1RU, 3.7 in. Depth",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "NUL6X04WH-FEG",
+      "quantity": "lot",
+      "description": "Copper Cable, Cat 6A, 23 AWG, U/UTP, LSZH-1, White",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "FPSN924",
+      "quantity": "lot",
+      "description": "24 fibre outside plant armored cable is OS2, EuroClass Fca and features 250um fibres",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "FMT1",
+      "quantity": "2",
+      "description": "Opticom Fiber Tray, Straight, 1 RU, 4 Port",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "CFAPPBL1",
+      "quantity": "2",
+      "description": "Opticom Fiber Patch Panel, Flat, Black, 1 RU",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "FSC24",
+      "quantity": "2",
+      "description": "Opticom Fiber Splice Holder, 24 Splices, Black",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "FAP12WAGSCZ",
+      "quantity": "4",
+      "description": "Opticom Fiber Adapter Panel, OS2, 12 SC Simplex, APC Green",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "part_number": "F91BNANNNSNM001",
+      "quantity": "48",
+      "description": "SC APC TO PIGTAIL, 9/125 MICRON, SIMPLEX",
+      "kind": "line"
+     }
+    },
+    {
+     "page": 3,
+     "how": "missing",
+     "truth": {
+      "quantity": "1",
+      "description": "18U Rack",
+      "kind": "line"
+     }
+    }
+   ],
+   "sha256_matches_frozen": true
+  },
+  {
+   "ep": "8430",
+   "relative_path": "EP-8430 Commercial\\EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "pages": 1,
+   "truth": {
+    "heading": 4,
+    "line": 37
+   },
+   "state": "completed",
+   "outcome": "Outcome.NEEDS_INTERPRETATION",
+   "failure": null,
+   "emitted": {
+    "accepted": 22,
+    "held": 16
+   },
+   "fields": {
+    "part_number": {
+     "tp": 13,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 8,
+     "held": 15,
+     "missed": 1,
+     "unscorable": 0,
+     "accepted": 13,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.4483
+    },
+    "quantity": {
+     "tp": 18,
+     "wrong": 4,
+     "fp": 0,
+     "tn": 0,
+     "held": 15,
+     "missed": 0,
+     "unscorable": 0,
+     "accepted": 22,
+     "precision_of_accepted": 0.8182,
+     "recovery_of_readable": 0.4865
+    },
+    "description": {
+     "tp": 22,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 15,
+     "missed": 0,
+     "unscorable": 0,
+     "accepted": 22,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.5946
+    }
+   },
+   "rows": {
+    "heading (not emitted)": 4,
+    "equipment matched (accepted)": 22,
+    "equipment matched (held)": 15,
+    "extra held": 1
+   },
+   "critical": [
+    {
+     "kind": "accepted wrong quantity",
+     "page": 1,
+     "part": "PRS-CSNKP",
+     "truth": "1",
+     "emitted": "4"
+    },
+    {
+     "kind": "accepted wrong quantity",
+     "page": 1,
+     "part": null,
+     "truth": "1",
+     "emitted": "4"
+    },
+    {
+     "kind": "accepted wrong quantity",
+     "page": 1,
+     "part": null,
+     "truth": "2",
+     "emitted": "9"
+    },
+    {
+     "kind": "accepted wrong quantity",
+     "page": 1,
+     "part": null,
+     "truth": "1",
+     "emitted": "4"
+    }
+   ],
+   "pairs": [
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-NCO3",
+      "quantity": "2",
+      "description": "Network Controller (INCL. PRS-SW)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-NCO3",
+      "quantity": "2",
+      "description": "Network Controller (INCL. PRS-SW)",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4404/00",
+      "quantity": "1",
+      "description": "Cobra Net Interface",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4404/00",
+      "quantity": "1",
+      "description": "Cobra Net Interface",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4416/01",
+      "quantity": "27",
+      "description": "Network Cable Assembly 0.5m",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4416/01",
+      "quantity": "27",
+      "description": "Network Cable Assembly 0.5m",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4416/02",
+      "quantity": "4",
+      "description": "Network Cable Assembly 2m",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4416/02",
+      "quantity": "4",
+      "description": "Network Cable Assembly 2m",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4430/00",
+      "quantity": "1",
+      "description": "Call Station Basic",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4430/00",
+      "quantity": "4",
+      "description": "Call Station Basic",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "wrong",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-CSNKP",
+      "quantity": "1",
+      "description": "Numeric Keypad",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSNKP",
+      "quantity": "4",
+      "description": "Numeric Keypad",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-CSR",
+      "quantity": "1",
+      "description": "Remote Call Station",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSR",
+      "quantity": "1",
+      "description": "Remote Call Station",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "PRS-CSI",
+      "quantity": "1",
+      "description": "Call Station Interface",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSI",
+      "quantity": "1",
+      "description": "Call Station Interface",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-48CH12",
+      "quantity": "2",
+      "description": "48V Battery Charger Basic",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-48CH12",
+      "quantity": "2",
+      "description": "48V Battery Charger Basic",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4443/00",
+      "quantity": "27",
+      "description": "End of Line Supervision",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4443/00",
+      "quantity": "27",
+      "description": "End of Line Supervision",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4428/00-EU",
+      "quantity": "1",
+      "description": "Power Amplifier 8 X 60 W (EU)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4428/00-EU",
+      "quantity": "41",
+      "description": "Power Amplifier 8 X 60 W (EU)",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "PRS-4P125-EU",
+      "quantity": "3",
+      "description": "Power Amplifier 4 X 125 W (EU)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-4P125-EU",
+      "quantity": "3",
+      "description": "Power Amplifier 4 X 125 W (EU)",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-1P500-EU",
+      "quantity": "15",
+      "description": "Power Amplifier 1 X 500 W (EU)",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-1P500-EU",
+      "quantity": "15",
+      "description": "Power Amplifier 1X 500 W (EU)",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBC3086/41",
+      "quantity": "94",
+      "description": "Ceiling Loudspeaker",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBC3086/41",
+      "quantity": "94",
+      "description": "Ceiling Loudspeaker",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "missed",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "LBC3081/02",
+      "quantity": "94",
+      "description": "Metal Fire Dome",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "94",
+      "description": "Metal Fire Dome",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "LBC3018/01",
+      "quantity": "12",
+      "description": "Cabinet Loudspeaker",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBC3018/01",
+      "quantity": "12",
+      "description": "Cabinet Loudspeaker",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LH1-10M10E",
+      "quantity": "515",
+      "description": "Horn Loudspeaker 10W, Evac",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LH1-10M10E",
+      "quantity": "515",
+      "description": "Horn Loudspeaker 10W, Evac",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "LBC1420/20",
+      "quantity": "1",
+      "description": "Volume Control Fail Safe 100W (MK Double, w/ Mounting Box",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBC1420/20",
+      "quantity": "1",
+      "description": "Volume Control Fail Safe 100W (MK Double, w/ Mounting Box",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "PRS-SWCS",
+      "quantity": "1",
+      "description": "PC Call Server",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-SWCS",
+      "quantity": "1",
+      "description": "PC Call Server",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-SWCSL-E",
+      "quantity": "1",
+      "description": "PC Call Server NCO License E-code",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-SWCSL-E",
+      "quantity": "1",
+      "description": "‘PC Call Server NCO License E-code",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "PRS-FIN",
+      "quantity": "4",
+      "description": "Fiber Interface",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-FIN",
+      "quantity": "4",
+      "description": "Fiber Interface",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "1",
+      "description": "PC+Monitor",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "1",
+      "description": "| PC+Monitor",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "wrong",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "1",
+      "description": "CD Changer",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "4",
+      "description": "‘CD Changer",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "1",
+      "description": "MP3 Player",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "1",
+      "description": "MP3 Player",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "1",
+      "description": "FM/AM Tuner",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "1",
+      "description": "FM/AM Tuner",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "8",
+      "description": "Battery",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "8",
+      "description": "Battery",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "2",
+      "description": "PA Rack",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "2",
+      "description": "PA Rack",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "extra held",
+     "emitted": {
+      "part_number": "Total Price For",
+      "description": "Supply, Testing & Commissioning in AED",
+      "accepted": false
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "LBC3086/41",
+      "quantity": "12",
+      "description": "Ceiling Loudspeaker",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBC3086/41",
+      "quantity": "12",
+      "description": "Ceiling Loudspeaker",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBC3081/02",
+      "quantity": "12",
+      "description": "Metal Fire Dome",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBC3081/02",
+      "quantity": "12",
+      "description": "Metal Fire Dome",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "LH1-10M10E",
+      "quantity": "11",
+      "description": "Horn Loudspeaker 10W, Evac",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LH1-10M10E",
+      "quantity": "11",
+      "description": "Horn Loudspeaker 10W, Evac",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "wrong",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "2",
+      "description": "PC+Monitor",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "9",
+      "description": "PC+Monitor",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-CSC-E",
+      "quantity": "2",
+      "description": "PC Call Station Client",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSC-E",
+      "quantity": "2",
+      "description": "PC Call Station Client",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "LBB4430/00",
+      "quantity": "2",
+      "description": "Call Station Basic",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "LBB4430/00",
+      "quantity": "2",
+      "description": "Call Station Basic",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-CSNKP",
+      "quantity": "2",
+      "description": "Numeric Keypad",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSNKP",
+      "quantity": "2",
+      "description": "Numeric Keypad",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tp",
+      "quantity": "tp",
+      "description": "tp"
+     },
+     "truth": {
+      "part_number": "PRS-CSR",
+      "quantity": "2",
+      "description": "Remote Call Station",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSR",
+      "quantity": "2",
+      "description": "Remote Call Station",
+      "accepted": true
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "held",
+      "quantity": "held",
+      "description": "held"
+     },
+     "truth": {
+      "part_number": "PRS-CSI",
+      "quantity": "2",
+      "description": "Call Station Interface",
+      "kind": "line"
+     },
+     "emitted": {
+      "part_number": "PRS-CSI",
+      "quantity": "2",
+      "description": "Call Station Interface",
+      "accepted": false,
+      "reason": "PART_NUMBER_CONFLICT"
+     }
+    },
+    {
+     "page": 1,
+     "how": "matched",
+     "fields": {
+      "part_number": "tn",
+      "quantity": "wrong",
+      "description": "tp"
+     },
+     "truth": {
+      "quantity": "1",
+      "description": "Printer",
+      "kind": "line"
+     },
+     "emitted": {
+      "quantity": "4",
+      "description": "Printer",
+      "accepted": true
+     }
+    }
+   ],
+   "sha256_matches_frozen": true
+  }
+ ],
+ "totals": {
+  "rows": {
+   "equipment missing": 61,
+   "equipment matched (held)": 36,
+   "extra held": 38,
+   "heading (not emitted)": 33,
+   "heading held": 3,
+   "equipment matched (accepted)": 22
+  },
+  "fields": {
+   "part_number": {
+    "tp": 13,
+    "wrong": 0,
+    "fp": 0,
+    "tn": 13,
+    "held": 36,
+    "missed": 57,
+    "unscorable": 0,
+    "accepted": 13,
+    "precision_of_accepted": 1.0,
+    "recovery_of_readable": 0.1226
+   },
+   "quantity": {
+    "tp": 18,
+    "wrong": 4,
+    "fp": 0,
+    "tn": 0,
+    "held": 36,
+    "missed": 61,
+    "unscorable": 0,
+    "accepted": 22,
+    "precision_of_accepted": 0.8182,
+    "recovery_of_readable": 0.1513
+   },
+   "description": {
+    "tp": 22,
+    "wrong": 0,
+    "fp": 0,
+    "tn": 0,
+    "held": 36,
+    "missed": 61,
+    "unscorable": 0,
+    "accepted": 22,
+    "precision_of_accepted": 1.0,
+    "recovery_of_readable": 0.1849
+   }
+  },
+  "critical": 4,
+  "sheets": 4,
+  "outcomes": {
+   "Outcome.NEEDS_INTERPRETATION": 4
+  }
+ }
+}

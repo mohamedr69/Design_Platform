@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="13" time="20.989" timestamp="2026-09-30T18:25:04.694877+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_ai_pilot_r19" name="test_raster_stamp_outside_the_real_crop_is_incomplete_not_absent" time="1.796"><failure message="AssertionError: an uninspected raster stamp leaves the decision unknown, never absent&#10;assert 'absent_by_discovery' == 'incomplete:l...d_region_only'&#10;  &#10;  - incomplete:located_region_only&#10;  + absent_by_discovery">db_session = &lt;sqlalchemy.orm.session.Session object at 0x000002B3318A5BE0&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-30/test_raster_stamp_outside_the_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B3318A5A90&gt;
+
+    def test_raster_stamp_outside_the_real_crop_is_incomplete_not_absent(db_session, tmp_path, monkeypatch):
+        _flags(monkeypatch)
+        doc = sheet(stamp=["CONSULTANT - CODE B", "APPROVED AS NOTED"])
+        page = doc[0]
+        clip, route = _clip(page)
+        stamp = pymupdf.Rect(page.rect.width * 0.06, page.rect.height * 0.08, page.rect.width * 0.06 + 420, page.rect.height * 0.08 + 112)
+        assert not clip.intersects(stamp), "the raster stamp lies outside the located crop"
+        assert "APPROVED" not in page.get_text() and len(page.get_text()) &gt;= 80, "the text layer is silent about the (raster) decision"
+        s = Stage(db_session, tmp_path, doc, "rasterstamp")
+        p = KeyedProvider({("discover_region", None, "small"): crop_answer(page, clip), ("read_identity", "identity", "small"): read("X-SD-1"),
+                           ("read_revision", "revision", "small"): read("02")})
+        ai = s.run(p)
+        f = s.page_fields(ai)
+&gt;       assert f["own:decision"] == er.LOCATED_ABSENCE, "an uninspected raster stamp leaves the decision unknown, never absent"
+E       AssertionError: an uninspected raster stamp leaves the decision unknown, never absent
+E       assert 'absent_by_discovery' == 'incomplete:l...d_region_only'
+E         
+E         - incomplete:located_region_only
+E         + absent_by_discovery
+
+tests\test_ai_pilot_r19.py:179: AssertionError</failure></testcase><testcase classname="tests.test_ai_pilot_r19" name="test_control_ordinary_text_page_discovered_whole_keeps_absence" time="1.165" /><testcase classname="tests.test_ai_pilot_r19" name="test_control_wholly_scanned_sheet_is_located_and_leaves_absence_unknown" time="5.227" /><testcase classname="tests.test_ai_pilot_r19" name="test_control_decision_words_outside_the_crop_stay_incomplete" time="1.204" /><testcase classname="tests.test_ai_pilot_r19" name="test_control_a_completed_genuine_decision_read_inside_the_crop" time="1.290" /><testcase classname="tests.test_ai_pilot_r19" name="test_control_a_failed_reread_and_a_later_crop_keep_the_good_decision" time="1.365" /><testcase classname="tests.test_ai_pilot_r19" name="test_actual_crop_coordinates_and_support_at_every_rotation[0]" time="1.166"><failure message="AssertionError: assert ('completed' == 'completed'&#10;  &#10;    completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'&#10;  &#10;  - incomplete:located_region_only&#10;  + absent_by_discovery)">db_session = &lt;sqlalchemy.orm.session.Session object at 0x000002B33238B590&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-30/test_actual_crop_coordinates_a0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B3323438F0&gt;
+rotation = 0
+
+    @pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+    def test_actual_crop_coordinates_and_support_at_every_rotation(db_session, tmp_path, monkeypatch, rotation):
+        _flags(monkeypatch)
+        doc = sheet(rotation=rotation)
+        page = doc[0]
+        clip, route = _clip(page)
+        ans = crop_answer(page, clip)
+        assert ans["own_identity_region"] and ans["own_revision_region"], "both own fields are inside the actual crop"
+        s = Stage(db_session, tmp_path, doc, f"rot{rotation}")
+        p = KeyedProvider({("discover_region", None, "small"): ans, ("read_identity", "identity", "small"): read("X-SD-1"),
+                           ("read_revision", "revision", "small"): read("02")})
+        ai = s.run(p)
+        f = s.page_fields(ai)
+&gt;       assert f["own:identity"] == f["own:revision"] == "completed" and f["own:decision"] == er.LOCATED_ABSENCE
+E       AssertionError: assert ('completed' == 'completed'
+E         
+E           completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'
+E         
+E         - incomplete:located_region_only
+E         + absent_by_discovery)
+
+tests\test_ai_pilot_r19.py:284: AssertionError</failure></testcase><testcase classname="tests.test_ai_pilot_r19" name="test_actual_crop_coordinates_and_support_at_every_rotation[90]" time="1.174"><failure message="AssertionError: assert ('completed' == 'completed'&#10;  &#10;    completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'&#10;  &#10;  - incomplete:located_region_only&#10;  + absent_by_discovery)">db_session = &lt;sqlalchemy.orm.session.Session object at 0x000002B33545C440&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-30/test_actual_crop_coordinates_a1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B33545CF80&gt;
+rotation = 90
+
+    @pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+    def test_actual_crop_coordinates_and_support_at_every_rotation(db_session, tmp_path, monkeypatch, rotation):
+        _flags(monkeypatch)
+        doc = sheet(rotation=rotation)
+        page = doc[0]
+        clip, route = _clip(page)
+        ans = crop_answer(page, clip)
+        assert ans["own_identity_region"] and ans["own_revision_region"], "both own fields are inside the actual crop"
+        s = Stage(db_session, tmp_path, doc, f"rot{rotation}")
+        p = KeyedProvider({("discover_region", None, "small"): ans, ("read_identity", "identity", "small"): read("X-SD-1"),
+                           ("read_revision", "revision", "small"): read("02")})
+        ai = s.run(p)
+        f = s.page_fields(ai)
+&gt;       assert f["own:identity"] == f["own:revision"] == "completed" and f["own:decision"] == er.LOCATED_ABSENCE
+E       AssertionError: assert ('completed' == 'completed'
+E         
+E           completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'
+E         
+E         - incomplete:located_region_only
+E         + absent_by_discovery)
+
+tests\test_ai_pilot_r19.py:284: AssertionError</failure></testcase><testcase classname="tests.test_ai_pilot_r19" name="test_actual_crop_coordinates_and_support_at_every_rotation[180]" time="1.142"><failure message="AssertionError: assert ('completed' == 'completed'&#10;  &#10;    completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'&#10;  &#10;  - incomplete:located_region_only&#10;  + absent_by_discovery)">db_session = &lt;sqlalchemy.orm.session.Session object at 0x000002B33A134CE0&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-30/test_actual_crop_coordinates_a2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B339EAEC30&gt;
+rotation = 180
+
+    @pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+    def test_actual_crop_coordinates_and_support_at_every_rotation(db_session, tmp_path, monkeypatch, rotation):
+        _flags(monkeypatch)
+        doc = sheet(rotation=rotation)
+        page = doc[0]
+        clip, route = _clip(page)
+        ans = crop_answer(page, clip)
+        assert ans["own_identity_region"] and ans["own_revision_region"], "both own fields are inside the actual crop"
+        s = Stage(db_session, tmp_path, doc, f"rot{rotation}")
+        p = KeyedProvider({("discover_region", None, "small"): ans, ("read_identity", "identity", "small"): read("X-SD-1"),
+                           ("read_revision", "revision", "small"): read("02")})
+        ai = s.run(p)
+        f = s.page_fields(ai)
+&gt;       assert f["own:identity"] == f["own:revision"] == "completed" and f["own:decision"] == er.LOCATED_ABSENCE
+E       AssertionError: assert ('completed' == 'completed'
+E         
+E           completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'
+E         
+E         - incomplete:located_region_only
+E         + absent_by_discovery)
+
+tests\test_ai_pilot_r19.py:284: AssertionError</failure></testcase><testcase classname="tests.test_ai_pilot_r19" name="test_actual_crop_coordinates_and_support_at_every_rotation[270]" time="1.276"><failure message="AssertionError: assert ('completed' == 'completed'&#10;  &#10;    completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'&#10;  &#10;  - incomplete:located_region_only&#10;  + absent_by_discovery)">db_session = &lt;sqlalchemy.orm.session.Session object at 0x000002B33A0AC320&gt;
+tmp_path = WindowsPath('C:/t/iso/tmp/pytest-of-moham/pytest-30/test_actual_crop_coordinates_a3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B33A0AF4D0&gt;
+rotation = 270
+
+    @pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+    def test_actual_crop_coordinates_and_support_at_every_rotation(db_session, tmp_path, monkeypatch, rotation):
+        _flags(monkeypatch)
+        doc = sheet(rotation=rotation)
+        page = doc[0]
+        clip, route = _clip(page)
+        ans = crop_answer(page, clip)
+        assert ans["own_identity_region"] and ans["own_revision_region"], "both own fields are inside the actual crop"
+        s = Stage(db_session, tmp_path, doc, f"rot{rotation}")
+        p = KeyedProvider({("discover_region", None, "small"): ans, ("read_identity", "identity", "small"): read("X-SD-1"),
+                           ("read_revision", "revision", "small"): read("02")})
+        ai = s.run(p)
+        f = s.page_fields(ai)
+&gt;       assert f["own:identity"] == f["own:revision"] == "completed" and f["own:decision"] == er.LOCATED_ABSENCE
+E       AssertionError: assert ('completed' == 'completed'
+E         
+E           completed and 'absent_by_discovery' == 'incomplete:l...d_region_only'
+E         
+E         - incomplete:located_region_only
+E         + absent_by_discovery)
+
+tests\test_ai_pilot_r19.py:284: AssertionError</failure></testcase><testcase classname="tests.test_ai_pilot_r19" name="test_missing_roi_gets_a_context_read_on_the_located_crop_not_the_sheet" time="1.182" /><testcase classname="tests.test_ai_pilot_r19" name="test_discovery_and_blind_timeouts_keep_the_last_good_evidence" time="1.258" /><testcase classname="tests.test_ai_pilot_r19" name="test_the_crop_absence_does_not_supersede_a_completed_revision" time="1.204" /></testsuite></testsuites>

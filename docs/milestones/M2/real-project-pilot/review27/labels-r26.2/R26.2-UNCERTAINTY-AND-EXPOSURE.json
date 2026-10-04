@@ -1,0 +1,674 @@
+{
+ "status": "AI-DRAFTED, SAME-ASSISTANT SECOND PASS AND INDEPENDENT OWNER-DELEGATED AI SOURCE REVIEW (Review 27) reference labels, FROZEN before any prediction; not human-signed, not blind",
+ "sample_sha256": "18b480631547270e9aca26df1d8576ba8924b8e7ec608fd180655a303cd335d9",
+ "labels_version": "r26-labels-2026-10-01.2",
+ "provenance": {
+  "drafted_by": "AI (Claude Opus 5.5 coding assistant) from local renders and text layers of the hash-checked staged copies",
+  "second_pass": "the same assistant (not independent)",
+  "independent_review": "owner-delegated independent AI source review (Codex reviewer, Independent M2 Review 27), separate from the drafting assistant; covered all 42 in-scope pages, all decision records, rotated / scanned items and the seeded subset; NOT human, NOT blind to the draft, no predictions consulted, 0 provider requests",
+  "independent_review_record": {
+   "file": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-27/INDEPENDENT-LABEL-REVIEW.json",
+   "sha256": "d85127c776c0f8d5078c5488d11cf6ef31781c2b4c15b7fb31f9d577817484e8"
+  },
+  "human_signoff": "none",
+  "blind": "no",
+  "model_requests": 0,
+  "not_visually_verified": [
+   "D27 (legacy .doc control): drafted from binary text runs; neither the drafter nor the independent reviewer verified it visually"
+  ]
+ },
+ "uncertainty": [
+  {
+   "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+   "draft_id": "D03",
+   "field": "reference",
+   "issue": "labelling convention: manufacturer product codes (CAP320, CAPT340, CAH330, CAB300) and the catalogue code SGTEXT are not treated as the document's own identity; the datasheet carries no document number. A reader accepting a product code as the document reference is scored as a false positive under this convention.",
+   "effect": "reference labelled 'absent' (negative) on every page"
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+   "draft_id": "D08",
+   "field": "reference",
+   "issue": "the sheet's identity is printed only as 'Sheet No. EML-04' beside 'PROJECT NO. P-49354'; there is no combined drawing number. The label uses the sheet number; a combined form such as 'P-49354-EML-04' is not printed.",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+   "draft_id": "D11",
+   "field": "reference",
+   "issue": "identity printed only as 'Sheet No. FAS-02' beside 'PROJECT NO. P-49354' (as D08)",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+   "draft_id": "D12",
+   "field": "reference",
+   "issue": "a set cover sheet: the printed identity is the set's DOCUMENT NO. 'BH2031_DIB_AMB_ID_MAIN'; the per-sheet number (only in the file name) is absent from the source",
+   "effect": "confidence medium; never filled from the file name"
+  },
+  {
+   "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+   "draft_id": "D15",
+   "field": "revision",
+   "issue": "no revision cell; the label takes the latest revision-table row (REV. 01, 25-7-2018)",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+   "draft_id": "D21",
+   "field": "reference",
+   "issue": "the only own number is the handwritten 'DRF No: 3561' of an internal supplier form",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+   "draft_id": "D24",
+   "field": "reference",
+   "issue": "the quotation reference printed is the internal project number 'EP-22510' (Qtn. Ref.); the enquiry number 2810 is the other candidate",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+   "draft_id": "D25",
+   "field": "reference",
+   "issue": "labelling convention: the certificate number is taken as the document's own identity (as D02); the earlier label sets recorded some CE certificates as no-record pages",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+   "draft_id": "D25",
+   "field": "pages 2-4",
+   "issue": "annex pages repeat the certificate number in their header; labelled as continuation (no-record) pages as D02 page 2",
+   "effect": "a reader emitting the header number on an annex page is scored by the evaluator's no-record rule"
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+   "draft_id": "D26",
+   "field": "reference",
+   "issue": "a specification section has no drawing / document number; the label takes the printed section number '28 20 00' as its own identity",
+   "effect": "confidence medium"
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+   "draft_id": "D26",
+   "field": "pages 2-4",
+   "issue": "continuation pages whose running header / footer repeat the section number and revision; labelled no-record as the other continuation pages",
+   "effect": "a reader emitting the running-header number on pages 2-4 is scored by the no-record rule"
+  },
+  {
+   "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+   "draft_id": "D27",
+   "field": "all",
+   "issue": "taken from raw text runs of the binary .doc without rendering; layout (e.g. which number is printed in which cell) cannot be verified visually",
+   "effect": "confidence medium"
+  }
+ ],
+ "labelling_conventions": [
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+   "draft_id": "D09",
+   "field": "reference",
+   "issue": "the trailing '-01' of the AMANA drawing number equals the revision 01; the label keeps the full printed literal as the identity",
+   "effect": "none on the revision label (printed revision cell 01)"
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+   "draft_id": "D19",
+   "field": "decision (pages 2-4)",
+   "issue": "the package decision (Revise & Resubmit) is printed only on the page-1 form; each enclosed sheet's own status block is empty, so the sheets are labelled UR at page level. A reader that propagates the cover decision to the sheets is scored against UR on those pages.",
+   "effect": "page-level convention, as in the earlier label sets"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "draft_id": "D22",
+   "field": "reference (page 1)",
+   "issue": "page 1 prints the identity as separate 'Proj. # 56' and 'Serial # 0284' cells; the label keeps the printed serial '0284' (the combined number appears on pages 2-3)",
+   "effect": "page-level literal"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "draft_id": "D22",
+   "field": "revision (page 3)",
+   "issue": "the drawing-list header prints 'Rev' with no value; labelled absent on that page",
+   "effect": "confidence medium on page 3"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "draft_id": "D22",
+   "field": "decision (page 4)",
+   "issue": "the enclosed sheet carries no decision of its own (UR at page level); the package decision Approved As Noted is on pages 1-2",
+   "effect": "page-level convention"
+  }
+ ],
+ "exposure": [
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+   "sha256": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": true,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+   "sha256": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": true,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+   "sha256": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": true,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+   "sha256": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": true,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+   "sha256": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+   "sha256": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+   "sha256": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+   "sha256": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+   "sha256": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+   "sha256": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+   "sha256": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+   "sha256": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+   "sha256": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+   "sha256": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+   "sha256": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "sha256": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "sha256": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "sha256": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+   "sha256": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23091/O&M/EM/Content.pdf",
+   "sha256": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+   "sha256": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "sha256": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+   "sha256": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+   "sha256": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+   "sha256": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": false,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+   "sha256": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": true,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  },
+  {
+   "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+   "sha256": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f",
+   "prior_predictions": "none (excluded by content hash from every earlier predicted / held-out set)",
+   "prior_renders": "Round 2 first-page render for labelling only (C:/t/r2x/renders), no prediction",
+   "screened_off_title_block": null,
+   "r26_renders": "full in-scope page renders and zoom crops made for labelling in C:/t/iso/work/r2x/r26/renders (hashes in R26-LABEL-EVIDENCE.json); no prediction"
+  }
+ ],
+ "off_title_block": {
+  "rule": "R21 sample rule: >= 4 of the 24 primary documents must carry a screened candidate off-title-block decision; if labelling finds fewer than 4 confirmed, top up from the screened pool before any prediction",
+  "screened_candidates_selected": [
+   "D01",
+   "D02",
+   "D03",
+   "D04"
+  ],
+  "screened_confirmed": [
+   "D04"
+  ],
+  "confirmed_off_title_block_decisions_total": [
+   "D04",
+   "D16",
+   "D17",
+   "D18",
+   "D19",
+   "D22"
+  ],
+  "projects_of_confirmed": [
+   "EP-19144",
+   "EP-23091",
+   "EP-23323",
+   "EP-26208"
+  ],
+  "reading_by_purpose": "6 confirmed off-title-block consultant decisions among the 24 primary documents (>= 4): the stratum's purpose (decisions an ROI / title-block-only reader can miss) is met",
+  "reading_strict": "only 1 of the 4 screened candidates is confirmed (the text screen's hits on D01, D02, D03 were note / certificate / marketing text): a strict reading leaves a shortfall of 3",
+  "top_up_performed": false,
+  "why_not": "the task freezes the 27-document sample (no replacement or enlargement); the confirmed total already meets the minimum by count; the strict-reading shortfall is disclosed for the reviewer",
+  "clustering": "3 of the confirmed decisions (D16, D17, D18) come from one project (EP-19144) and one consultant (ATK); per-project clustering is kept in the analysis (document-clustered bootstrap)",
+  "documents": [
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+    "draft_id": "D01",
+    "role": "primary:screened_off_title_block",
+    "screened": true,
+    "confirmed": false,
+    "basis": "the screen matched note text ('APPROVED.', 'ENGINEER'S APPROVAL ...'); the only decision boxes (APPROVAL client / architectural, local authority) are blank"
+   },
+   {
+    "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+    "draft_id": "D02",
+    "role": "primary:screened_off_title_block",
+    "screened": true,
+    "confirmed": false,
+    "basis": "the screen matched the authority authenticity text 'electronically approved without a signature'; there is no consultant decision"
+   },
+   {
+    "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+    "draft_id": "D03",
+    "role": "primary:screened_off_title_block",
+    "screened": true,
+    "confirmed": false,
+    "basis": "the screen matched 'third party approved to ... EN54' marketing text; the yellow product highlights are selections; no consultant decision anywhere"
+   },
+   {
+    "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+    "draft_id": "D04",
+    "role": "primary:screened_off_title_block",
+    "screened": true,
+    "confirmed": true,
+    "basis": "the consultant's decision is a hand tick on a printed option list in the form's mid-page 'FOR CONSULTANT USE' block, not in a drawing title-block strip"
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+    "draft_id": "D05",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision on the sheet"
+   },
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+    "draft_id": "D06",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+    "draft_id": "D07",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+    "draft_id": "D08",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+    "draft_id": "D09",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "status block present but empty; no decision"
+   },
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+    "draft_id": "D10",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+    "draft_id": "D11",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+    "draft_id": "D12",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+    "draft_id": "D13",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+    "draft_id": "D14",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+    "draft_id": "D15",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "draft_id": "D16",
+    "role": "primary",
+    "screened": false,
+    "confirmed": true,
+    "basis": "not in the screened pool (scan without text); the consultant's CODE B stamp and handwritten status sit in the drawing area outside the title-block strip. Reported as an additional confirmed off-title-block decision; it does not replace a screened slot."
+   },
+   {
+    "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+    "draft_id": "D17",
+    "role": "primary",
+    "screened": false,
+    "confirmed": true,
+    "basis": "not in the screened pool; the only decision is handwritten in the drawing field outside the title-block strip"
+   },
+   {
+    "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "draft_id": "D18",
+    "role": "primary",
+    "screened": false,
+    "confirmed": true,
+    "basis": "not in the screened pool; the CODE B stamp and the handwritten status are in the drawing field, outside the title-block strip"
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+    "draft_id": "D19",
+    "role": "primary",
+    "screened": false,
+    "confirmed": true,
+    "basis": "not in the screened pool; the only decision is the engineer's tick on the cover form (no drawing title block), outside any title-block strip"
+   },
+   {
+    "doc": "EP-23091/O&M/EM/Content.pdf",
+    "draft_id": "D20",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+    "draft_id": "D21",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no consultant decision"
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+    "draft_id": "D22",
+    "role": "primary",
+    "screened": false,
+    "confirmed": true,
+    "basis": "not in the screened pool; the decision is on the submittal form and the review-comments sheet (form status blocks), not in a drawing title-block strip"
+   },
+   {
+    "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+    "draft_id": "D23",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+    "draft_id": "D24",
+    "role": "primary",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision"
+   },
+   {
+    "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+    "draft_id": "D25",
+    "role": "control:pdf_over_4_pages",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision; long-PDF control (pages 5-10 beyond the reader's 4-page scope are not labelled)"
+   },
+   {
+    "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+    "draft_id": "D26",
+    "role": "control:pdf_over_4_pages",
+    "screened": true,
+    "confirmed": false,
+    "basis": "the screen matched 'Approved By' (revision-history sign-off) on page 1 and specification text on page 3; no decision"
+   },
+   {
+    "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+    "draft_id": "D27",
+    "role": "control:unsupported_input",
+    "screened": false,
+    "confirmed": false,
+    "basis": "no decision; unsupported input"
+   }
+  ],
+  "reviewer_interpretation_pre_run": {
+   "source": "Independent M2 Review 27, recorded before any prediction",
+   "rule_reading": "the minimum of 4 confirmed decisions is counted over the frozen 24 primary documents; the text screen was a selection aid",
+   "readable_decision_documents": [
+    "D04",
+    "D16",
+    "D17",
+    "D18",
+    "D19",
+    "D22"
+   ],
+   "decision_page_records": 7,
+   "source_supported_attribution": [
+    "D04",
+    "D16",
+    "D18",
+    "D19",
+    "D22"
+   ],
+   "attribution_inferred": [
+    "D17"
+   ],
+   "minimum_met": "yes: 5 documents with source-supported consultant / engineer attribution (>= 4) even without D17",
+   "screen_result_kept": "1 of the 4 screened candidates (D04) is a real decision",
+   "top_up": "none requested or performed"
+  },
+  "roi_population": {
+   "source": "ROI-POPULATION.json (frozen title_block.is_drawing_sheet on every in-scope page)",
+   "crop_eligible_decision_pages": [
+    "D16 p1",
+    "D17 p1",
+    "D18 p1"
+   ],
+   "whole_page_discovery_decision_pages": [
+    "D04 p1",
+    "D19 p1",
+    "D22 p1",
+    "D22 p2"
+   ],
+   "crop_eligible_projects": [
+    "EP-19144"
+   ],
+   "explicit_approval_stamps_among_crop_eligible": [
+    "D16",
+    "D18"
+   ],
+   "limitation": "only 3 crop-eligible decision sheets, one project, two with explicit stamps: a small diagnostic for ROI decision coverage, not evidence of general decision safety; eligibility does not prove what a runtime crop contains"
+  }
+ },
+ "disagreements": [],
+ "disagreements_note": "the second pass changed no label; no draft / review disagreement was recorded",
+ "unresolved_documents": "none left blank; documents with truth-relevant uncertainty are labelled with confidence 'medium' and listed under 'uncertainty' (the runner's predeclared rule excludes them from the critical-acceptance stop)",
+ "field_uncertainty": [
+  {
+   "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "draft_id": "D17",
+   "page": 1,
+   "field": "decision_actor",
+   "state": "inferred_unresolved",
+   "issue": "the handwritten 'CODE B APPROVED AS NOTED, RESUBMIT' is readable; who wrote it is not established (receipt stamp + handwriting similarity only)",
+   "scoring_effect": "none on the decision value: the frozen evaluator scores the literal decision value and does not score the actor",
+   "tripwire_effect": "none: the runner's predeclared exclusion reads only the document-level 'uncertainty' list, which is unchanged"
+  }
+ ],
+ "schema_limitation": "the frozen runner / evaluator know only document-level uncertainty (the 'uncertainty' list, which also excludes a document from the critical-acceptance stop). A field-level actor uncertainty cannot be expressed there without changing the stop population; it is therefore recorded in 'field_uncertainty', the decision value stays scored, and the stop policy is unchanged (as the task requires)"
+}

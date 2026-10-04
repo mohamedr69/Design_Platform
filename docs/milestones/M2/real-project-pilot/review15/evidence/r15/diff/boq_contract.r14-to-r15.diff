@@ -1,0 +1,151 @@
+--- r14/boq_contract.py
++++ r15/boq_contract.py
+@@ -1,7 +1,7 @@
+ """R14-02: the typed BOQ comparison and truth-join contract for the Round 2 exploration harness (replaces the lossy
+ comparison and first-candidate join of the submitted r2x_boq.py; the application's evidence_reader is not changed).
+ 
+-CONTRACT_VERSION r2x-boq-contract-2026-09-30.1
++CONTRACT_VERSION r2x-boq-contract-2026-09-30.r15.1  (r14.1 preserved in the Review 14 package; value comparisons unchanged)
+ 
+ Part identifiers (`part_state`, `parts_equal`)
+   * absent  : None, empty or whitespace only (a blank part cell). Two absent parts are equal ("a blank cell stays blank").
+@@ -17,19 +17,24 @@
+                  any other unit must match exactly (case-insensitive).
+   * text       : anything else (e.g. '1,5', 'LS', '2 sets of 3'); equal only as the same literal (upper, whitespace
+                  collapsed). A text value is never equal to a number.
+-Truth join (`join_rows`)
+-  * per source document hash and page, truth rows in print order (the label's row order, verified against geometry)
+-    and emitted rows ordered by their geometry (y of the row, or of its held region);
+-  * one-to-one, order-preserving alignment (dynamic programming). A pair is admissible only when the parts are equal
+-    (both present) or the descriptions are similar (token Jaccard >= 0.5); quantities add evidence but never decide;
+-  * a chosen pair is AMBIGUOUS (held) when an equally good alignment exists without it; ambiguous and unmatched rows
+-    are reported, never resolved by taking the first candidate."""
++Truth join (`join_rows`) -- R15-02: alignment never uses a SCORED value (part number or quantity)
++  * per source document hash and page;
++  * 1. GEOMETRY first: a truth row that carries a VERIFIED row position ('y', same render scale as the emitted rows)
++       is paired with the one emitted row within GEOMETRY_TOLERANCE of it ('matched_geometry'); two candidates on either
++       side -> held; a verified truth row with no emitted row near it is MISSED (it is never offered to another row);
++  * 2. the rest: truth rows in print order and emitted rows in geometry (y) order, aligned one-to-one and
++       order-preserving on DESCRIPTION similarity only (token Jaccard >= 0.5; the description is not a scored field);
++  * 3. a pair is HELD ('ambiguous', with every equally good truth candidate listed) when an equally good alignment gives
++       the emitted row another truth row -- e.g. a single emitted duplicate of two identical source rows. Held candidates
++       are reported, never resolved by a value; unmatched rows on both sides stay visible.
++  Consequence: a quantity misread can no longer select the truth row that makes it correct (Review 15 probe).
++"""
+ from __future__ import annotations
+ 
+ import re
+ from decimal import Decimal, InvalidOperation
+ 
+-CONTRACT_VERSION = "r2x-boq-contract-2026-09-30.1"
++CONTRACT_VERSION = "r2x-boq-contract-2026-09-30.r15.1"
+ COUNT_UNITS = {"no", "nos", "no.", "nos.", "pc", "pcs", "ea", "each", "unit", "units", "nr", "number"}
+ UNREADABLE = {"?", "unreadable", "illegible"}
+ _NUM = re.compile(r"^([+-]?)(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?\s*([A-Za-z][A-Za-z.]*)?$")
+@@ -94,27 +99,27 @@
+ 
+ 
+ # --- the join --------------------------------------------------------------------------------------------------------
++GEOMETRY_TOLERANCE = 22.0      # render pixels at the extractor's dpi (rows are ~45 px apart on the EP-8430 sheet)
++
++
+ def _pair_score(e: dict, t: dict) -> float:
+-    pe, pt = part_state(e.get("part_number")), part_state(t.get("part_number"))
+-    part_eq = pe[0] == "literal" and pe == pt
++    """Alignment evidence: description similarity only -- NOT the part number or the quantity (both are scored)."""
+     sim = description_similarity(e.get("description"), t.get("description"))
+-    if not part_eq and sim < 0.5:
+-        return 0.0                                                   # inadmissible
+-    return (3.0 if part_eq else 0.0) + 2.0 * sim + (0.5 if quantities_equal(e.get("quantity"), t.get("quantity")) else 0.0)
++    return sim if sim >= 0.5 else 0.0
+ 
+ 
+-def _align(emitted: list[dict], truth: list[dict], forbid: tuple | None = None) -> tuple[float, list]:
++def _align(emitted: list[dict], truth: list[dict], forbid: frozenset = frozenset()) -> tuple[float, list]:
+     n, m = len(emitted), len(truth)
+     best = [[0.0] * (m + 1) for _ in range(n + 1)]
+     for i in range(n - 1, -1, -1):
+         for j in range(m - 1, -1, -1):
+             s = _pair_score(emitted[i], truth[j])
+-            take = s + best[i + 1][j + 1] if s > 0 and (i, j) != forbid else float("-inf")
++            take = s + best[i + 1][j + 1] if s > 0 and (i, j) not in forbid else float("-inf")
+             best[i][j] = max(take, best[i + 1][j], best[i][j + 1])
+     pairs, i, j = [], 0, 0
+     while i < n and j < m:
+         s = _pair_score(emitted[i], truth[j])
+-        if s > 0 and (i, j) != forbid and abs(best[i][j] - (s + best[i + 1][j + 1])) < 1e-9:
++        if s > 0 and (i, j) not in forbid and abs(best[i][j] - (s + best[i + 1][j + 1])) < 1e-9:
+             pairs.append((i, j))
+             i, j = i + 1, j + 1
+         elif abs(best[i][j] - best[i + 1][j]) < 1e-9:
+@@ -124,22 +129,60 @@
+     return best[0][0], pairs
+ 
+ 
+-def join_rows(emitted: list[dict], truth: list[dict]) -> dict:
++def _candidates(e, t, i, j, score) -> list:
++    """Every truth index the emitted row i takes in some equally good alignment (j first); None = unpaired equally well."""
++    cands, forbid = [j], {(i, j)}
++    while True:
++        alt, pairs = _align(e, t, frozenset(forbid))
++        if abs(alt - score) > 1e-9:
++            return cands
++        mine = [jj for ii, jj in pairs if ii == i]
++        if not mine:
++            return cands + [None]
++        cands.append(mine[0])
++        forbid.add((i, mine[0]))
++
++
++def join_rows(emitted: list[dict], truth: list[dict], tolerance: float = GEOMETRY_TOLERANCE) -> dict:
+     """emitted: rows with 'page', 'y' (geometry), 'part_number', 'quantity', 'description' and an 'id';
+-    truth: label rows of kind 'line' with 'page', 'ordinal' (print order), 'part_number', 'quantity', 'description'.
+-    Returns {'pairs': [(emitted id, truth ordinal, 'matched'|'ambiguous')], 'unmatched_emitted': [...], 'unmatched_truth': [...]}."""
+-    out = {"pairs": [], "unmatched_emitted": [], "unmatched_truth": []}
++    truth: label rows of kind 'line' with 'page', 'ordinal' (print order), 'description' and, when VERIFIED, 'y'.
++    Returns {'pairs': [(emitted id, truth ordinal, 'matched_geometry'|'matched'|'ambiguous')],
++             'held': {emitted id: [candidate truth ordinals]}, 'unmatched_emitted': [...], 'unmatched_truth': [...]}."""
++    out = {"pairs": [], "held": {}, "unmatched_emitted": [], "unmatched_truth": []}
+     for page in sorted({r["page"] for r in emitted} | {r["page"] for r in truth}):
+-        e = sorted([r for r in emitted if r["page"] == page], key=lambda r: r["y"])
+-        t = sorted([r for r in truth if r["page"] == page], key=lambda r: r["ordinal"])
++        e_all = sorted([r for r in emitted if r["page"] == page], key=lambda r: r["y"])
++        t_all = sorted([r for r in truth if r["page"] == page], key=lambda r: r["ordinal"])
++        # 1. verified geometry
++        geo_t = [t for t in t_all if t.get("y") is not None]
++        used_e, used_t = set(), set()
++        for t in geo_t:
++            near = [x for x in e_all if abs(x["y"] - t["y"]) <= tolerance]
++            back = [tt for tt in geo_t if near and abs(near[0]["y"] - tt["y"]) <= tolerance]
++            if len(near) == 1 and len(back) == 1:
++                out["pairs"].append((near[0]["id"], t["ordinal"], "matched_geometry"))
++                used_e.add(near[0]["id"])
++            elif len(near) > 1 or len(back) > 1:
++                for x in near:
++                    out["held"].setdefault(x["id"], []).append(t["ordinal"])
++                    used_e.add(x["id"])
++            else:
++                out["unmatched_truth"].append(t["ordinal"])      # verified position, nothing emitted there: missed
++            used_t.add(t["ordinal"])
++        # 2. order + description for the rest (never a scored value)
++        e = [x for x in e_all if x["id"] not in used_e]
++        t = [x for x in t_all if x["ordinal"] not in used_t]
+         score, pairs = _align(e, t)
+         paired_e, paired_t = set(), set()
+         for i, j in pairs:
+-            alt, _ = _align(e, t, forbid=(i, j))
+-            state = "ambiguous" if abs(alt - score) < 1e-9 else "matched"
+-            out["pairs"].append((e[i]["id"], t[j]["ordinal"], state))
++            cands = _candidates(e, t, i, j, score)
++            if len(cands) == 1:
++                out["pairs"].append((e[i]["id"], t[j]["ordinal"], "matched"))
++                paired_t.add(j)
++            else:
++                out["pairs"].append((e[i]["id"], t[j]["ordinal"], "ambiguous"))
++                out["held"][e[i]["id"]] = [t[c]["ordinal"] for c in cands if c is not None]
++                paired_t.update(c for c in cands if c is not None)
+             paired_e.add(i)
+-            paired_t.add(j)
+         out["unmatched_emitted"] += [e[i]["id"] for i in range(len(e)) if i not in paired_e]
+         out["unmatched_truth"] += [t[j]["ordinal"] for j in range(len(t)) if j not in paired_t]
+     return out

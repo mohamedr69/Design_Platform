@@ -1,0 +1,52 @@
+{
+ "frozen_at_utc": "2026-09-30T04:03:00+00:00",
+ "status": "IMPLEMENTATION FROZEN -- VALIDATION / PACKAGING PENDING",
+ "application_baseline": {
+  "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "clean": true,
+  "changed": false,
+  "source_sha256": {
+   "backend/app/ai/evidence_reader.py": "22999476256a415a95f45dc865fc9858f1507e9ebebb60e74040dfcb6a70abd9",
+   "backend/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "backend/app/ai/ledger.py": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+   "backend/app/ai/provider.py": "d465961efb07b7f9df2597b37a228735238af433d950bf7095925e8cc43eb5ba",
+   "backend/scripts/m2_eval5.py": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "backend/scripts/m2_eval4.py": "65f3e096dd8ec93be38f50db445eeb0a9837c1acde605f5569a575f1f31f79b5",
+   "backend/scripts/m2_boq_eval.py": "550e1a3c8eafcc93f97d95e801854b713f39e4206e9b6a900e0a09d691cdbe25",
+   "backend/app/services/design_sheet_extractor.py": "b110d172df487aaadf24fef629e3278ff86776ff2c35bd1b524c44c97dcb8d8f",
+   "backend/app/services/document_control.py": "78e392c4b880b37c3750d24e54d5300e767fdd041bfcd15a6ac826bf731ed374"
+  }
+ },
+ "identities": {
+  "boq_contract": "r2x-boq-contract-2026-09-30.r16.1",
+  "boq_harness": "r2x-boq-harness-2026-09-30.r15.1",
+  "overlay": "r2x-overlay-2026-09-30.r15.1",
+  "replay_core": "r2x-boq-replay-core-2026-09-30.r16.1",
+  "evaluator": "m2-pilot-eval-2026-09-29.9 (unchanged)"
+ },
+ "unchanged_from_r15": {
+  "boq_harness.py": true,
+  "overlay.py": true
+ },
+ "files_sha256": {
+  "boq_contract.py": "ea1852741662adbd3d66dd73c699d4c6d179a397ac917e0fc2ef0fc90a1c199e",
+  "boq_harness.py": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf",
+  "dev/join_r16.py.txt": "df43007b2702aa252c5a695eb4df39ca1660a0da4337777ef1b187c814da3ebd",
+  "dev/patch_contract_r16.py": "57e8a19cd00270f43c97e7158440c895329393e1183af27816e16299448080f9",
+  "overlay.py": "8f57b872bf31154851bb02ca8f2a0284874a44a1439df50e71c254694e0bf3de",
+  "overlay_recheck_r16.py": "96cabf8ada49ddadfb3ee962badd0b8ab55d3eb92f226111031deafd1fefc923",
+  "probes/association_probe.parametrized.py": "7e968bb182bce6a322e4e0b9e0c10888538a3db7fc2e32cc0d540af928343b64",
+  "probes/association_probe.reviewer-original.py": "7dfe9f46707722ed7c96141145ff13ba9db9ebd6b0422cbc5f0605b10d542fb6",
+  "probes/review15_probes.parametrized.py": "5996759cb8cf5adf5e90b90f9f0792a2468d9a114438203aae816de0685cbe3a",
+  "probes/test_review16_contract.reviewer-original.py": "eb79ef1e1c650dd13bc85d5ebb15143b69488857091c734266468a6a256e4e6c",
+  "replay_boq_r16.py": "d54c1e52c4ae97e5d06b4a352e347078639477cd99eb78673b536af9c9f53ced",
+  "replay_core.py": "dbd88158c206c4db270f2f592ea6e3b86876717d5984bc33601d50d056a43689",
+  "tests/_budget_env.py": "3e79ab5e563ffd1b2d9378524ff6635fa0be9011a424cbf71b52bd9f3208eb82",
+  "tests/test_r15_budget.py": "6bb772388df7c73e13c0f8afc38966c3b95bb2c6305ac9ea4d16f6ac0ad97ca6",
+  "tests/test_r15_harness_app.py": "3963109ac55b041218965120d5e52d1b3a7f4544f709e212db2e7924c0e75956",
+  "tests/test_r15_join.py": "0cf1b6f7f779a45a5854634e063ecdd1daad3c59c49fafecc8893170fbf3759b",
+  "tests/test_r15_overlay.py": "60fa9d378f3962cabdd59844783156b0a7fda2b6b3b2874d9e4ab3ef4b06a545",
+  "tests/test_r16_boundaries.py": "1c689adae5f8939d4e19a73f4f49d886c2753b6334120ca6bf680a97f7997a3b",
+  "tests/test_r16_replay_integration.py": "69bc36c41ff60443cf43666e81e92d72b9cf4903e1ca2d157bb459cdc7c0751e"
+ }
+}

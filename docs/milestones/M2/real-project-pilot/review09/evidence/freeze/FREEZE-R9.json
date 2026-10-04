@@ -1,0 +1,85 @@
+{
+ "candidate_commit": "689d95e53cc369c2397600daf2a46a3de93d5214",
+ "base": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+ "commits_since_base": [
+  "689d95e53cc369c2397600daf2a46a3de93d5214 review09-candidate (final): evaluator .8 keeps target / association on judgements of unscored pages too",
+  "ec4f0fc218c00955017bca4c67d3cca962f7c248 review09-candidate: usable reads (R9-01), explicit fact association and evaluator .8 (R9-02), per-field source identity (R9-03), heading only without item evidence (R9-04), ledger amendment wording"
+ ],
+ "superseded_freeze": {
+  "ec4f0fc": "first freeze; superseded by the final commit before any result was reported (unscored-page judgements dropped target / association -- no score affected)"
+ },
+ "branch": "iso-baseline (isolated scratch repository C:/t/iso/ep-platform; core.autocrlf false)",
+ "history_kept": {
+  "e02a8c1": "Review 08 candidate (frozen-r8, the tree Review 09 inspected, unchanged)",
+  "1455f8b": "Review 07 evaluator amendment",
+  "c9a1a14": "Review 07 frozen application",
+  "review08 package": "docs/milestones/M2/real-project-pilot/review08 (unchanged)"
+ },
+ "trees": {
+  "frozen-r9": {
+   "head": "689d95e53cc369c2397600daf2a46a3de93d5214",
+   "clean": true,
+   "has_env": false
+  },
+  "frozen-r8 (reviewed Review 08 tree)": {
+   "head": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+   "clean": true,
+   "has_env": false
+  },
+  "scratch repository": {
+   "head": "689d95e53cc369c2397600daf2a46a3de93d5214",
+   "clean": true,
+   "has_env": true
+  }
+ },
+ "versions": {
+  "reader": "evidence-reader-2026-09-29.4",
+  "policy": "evidence-policy-2026-09-29.4",
+  "evaluator": "m2-pilot-eval-2026-09-29.8",
+  "ledger": "ai-ledger-2026-09-29.2 (unchanged; docstring wording only)",
+  "parser": "parse-2026-09-29.9 (unchanged)"
+ },
+ "changed_files": {
+  "backend/app/ai/evidence_reader.py": {
+   "sha256": "e9d7e8755de5f931fc963c1d50b4b5dd465bdfdc9f781467c191cfcf3a288e8a",
+   "bytes": 86555,
+   "kind": "application",
+   "crlf": true
+  },
+  "backend/app/ai/ledger.py": {
+   "sha256": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+   "bytes": 21618,
+   "kind": "application",
+   "crlf": false
+  },
+  "backend/scripts/m2_eval5.py": {
+   "sha256": "af6ab7a434be127abd7849a2420ac2bf27364d2fbcc439b6b666d4f0ae08a6de",
+   "bytes": 30196,
+   "kind": "evaluator script",
+   "crlf": false
+  },
+  "backend/tests/test_m2_eval5.py": {
+   "sha256": "60c0d2fe6609c9dd852a52ee0bfe137fe88b54d1d9aaf2325dd2820e2ca47424",
+   "bytes": 10465,
+   "kind": "test",
+   "crlf": false
+  },
+  "backend/tests/test_m2_review09.py": {
+   "sha256": "8790988c869356cf76941e2c63d59f6e41643c5f34c807bd4edc860596bb4d56",
+   "bytes": 28218,
+   "kind": "test",
+   "crlf": false
+  }
+ },
+ "diff": {
+  "file": "candidate-r9.diff",
+  "against": "e02a8c1b9ef093534df4bd427c7f2c5e7fc1403c",
+  "sha256": "3fd62de53b1dd4fa033466291bfc32f757bb29cec730f9e2e3a5035b565c8239"
+ },
+ "owner_checkout_head": "2221b4327c7dd140994cc2c98e89229431b34899",
+ "temporary_environment": {
+  "tests": "tests/conftest.py: temporary database, library, cache, uploads; AI off; frozen-r9 has no .env",
+  "temp": "TEMP=TMP=C:/t/iso/tmp; --basetemp under C:/t/iso/tmp",
+  "models": "none called; scripted providers only"
+ }
+}

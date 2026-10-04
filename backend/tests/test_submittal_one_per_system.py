@@ -152,6 +152,10 @@ def test_the_page_counts_submittals_by_their_latest_revision(client, db_session)
         _reading("BBY006-GME-MAS-EL-FA-0001", 0, "approved", system="FAS", maker="EDWARDS", relative="fas/R0.pdf"),
     ]
     submittal_reader.sync_register(db_session, project, submittal_reader.build_map(readings), None)
+    # sync_register leaves the commit to its caller (`check` commits right after it); the request below
+    # reads through its own connection, so the rows are committed first, as `check` would. The test used
+    # to pass only because the old in-memory harness shared one connection across sessions (M2 review 05).
+    db_session.commit()
     register = client.get(f"/projects/{project.id}/submittals").json()
     assert len(register["items"]) == 2
     assert {k: register["counts"][k] for k in ("total", "approved", "under_review", "rejected")} == \

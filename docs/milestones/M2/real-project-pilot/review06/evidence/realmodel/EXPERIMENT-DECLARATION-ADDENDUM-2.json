@@ -1,0 +1,9 @@
+{
+ "declared_at": "2026-09-29T00:58:14",
+ "amends": "EXPERIMENT-DECLARATION.json and ADDENDUM-1",
+ "reason": "time cap (6 h from 2026-09-28T23:29). AI-EV1 took 3,695 s and 134 calls on EP-29076 alone; EV2 across three projects plus the BOQ tracks would exceed the cap",
+ "change": "AI-EV2-broad runs on EP-29076 only (the one project AI-EV1 covered in full), cap 300 fresh requests enforced per call; the EV1/EV2 comparison is reported on EP-29076; EV1's partial coverage of EP-30088 / EP-30784 (stopped by its 200-call cap) is reported as partial, never as negatives",
+ "declared_before": "any AI-EV2 call",
+ "results_seen_when_declared": "EV1 call counts and timings only; no EV1 accuracy score had been computed",
+ "change_2": "AI_MAX_CALLS_PER_PROJECT_PER_DAY for AI-EV2 raised 150 -> 300 (= its run cap): the daily per-project count includes the copied EV0 calls and EV1 already reached it on EP-29076 (2 budget-stopped documents); EV1 is reported with its limit as run"
+}

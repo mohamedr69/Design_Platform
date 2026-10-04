@@ -1,0 +1,643 @@
+{
+ "declared_at_utc": "2026-10-01T03:33:27+00:00",
+ "name": "four-arm isolated accuracy experiment - FINAL proposal (R21 design, harness v4.3, labels r26)",
+ "status": "PROPOSAL / NOT EXECUTED / NO MODEL BUDGET APPROVED - submitted for the owner's budget decision; nothing may run before an explicit authorization",
+ "executed": false,
+ "new_model_budget_approved": false,
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "harness_dir": "C:/t/iso/work/r2x/r26",
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "scope_note": "the recorded Round 2 permission covers the cohort and provider; it is NOT a budget approval. A new request allowance for these scopes is required and NOT granted by this declaration",
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)",
+   "19144": "exploration (new)",
+   "22510": "exploration (new)",
+   "23091": "exploration (new)",
+   "23323": "exploration (new)",
+   "26208": "exploration (new)",
+   "27421": "exploration (new)",
+   "28745": "exploration (new)",
+   "30549": "exploration (new)"
+  },
+  "sealed": "not opened"
+ },
+ "code": {
+  "accepted_app": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "successor": {
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "tree": "C:/t/iso/cand-ai4",
+   "evidence_reader_sha256": "c04b173b0d68fc1fd96e603344387020bd38d1348a6542bf736b0ef88907d495"
+  },
+  "evaluator": {
+   "file": "C:/t/iso/frozen-r12/backend/scripts/m2_eval5.py",
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "version": "m2-pilot-eval-2026-09-29.9"
+  },
+  "harness": {
+   "dir": "C:/t/iso/work/r2x/review25/harness-v4.3",
+   "reviewed_package": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review25",
+   "frozen_harness_sha256": "c34f69aa2c961128334eb45ba7320fd882da5445b7342e51a038b9a09040e802",
+   "accepted_by": "Independent Review 26 (R25-01 accepted as corrected)",
+   "files": {
+    "arm_ev.py": "f67d2dc33e289a880ba1782bf1884ee5be4b65ff8468fc013e238c45508a6ac2",
+    "arm_a.py": "1197bc1841c6a7af7c3b06802e381b44b6d52708565f008ef951dd3ff69cffc6",
+    "coverage_v4.py": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+    "score_arms_v4.py": "75924b86949d8d823bd6a8fc3d9447658221b07021dc10b07a4c472131388218",
+    "provider_journal.py": "36314e358d4b90447df406cdb69caf333863a7bad224ae7b8a9f834784e1e0ce",
+    "dry_provider2.py": "aa726590fed0b1e2dbb7c51c2d6bc197e5f27b63811e4c60ee1d300d7ebb90d0",
+    "xtrack2.py": "076535460b061ebe724172c0f9c22c05e7b1f845f4f1092e24f1d4246e64a1dc",
+    "schedule_sim.py": "5f60804a4c58934f18a552a25d821f3d37de67024349d15f2e61b660b862d542"
+   },
+   "versions": {
+    "contract_version": "harness-contract-2026-09-30.v4",
+    "scorer_version": "score-arms-2026-09-30.v4",
+    "runner_version": "arm-ev-2026-10-01.v4.2",
+    "lifecycle_contract": "runner-lifecycle-2026-10-01.v2",
+    "journal_version": "provider-outcomes.v1",
+    "validator_revision": "provider-outcomes.v1/validator-2",
+    "scheduling_rule_version": "whole-project-reservation-2026-09-30.v4"
+   }
+  },
+  "a_runner_imports": {
+   "C:/t/iso/work/r2x/review22/harness-v4/dry_provider2.py": "e50dcfbc2cbff51f946350570f10be8392fcda85aa44206d6ae6e415176724e4",
+   "C:/t/iso/work/r2x/review22/harness-v4/xtrack2.py": "076535460b061ebe724172c0f9c22c05e7b1f845f4f1092e24f1d4246e64a1dc"
+  },
+  "durable_allowance": {
+   "file": "C:/t/iso/work/r2x/r16/boq_harness.py",
+   "sha256": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf"
+  }
+ },
+ "arms": {
+  "L1": {
+   "meaning": "whole-page discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L2": {
+   "meaning": "title-block (ROI) discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  },
+  "L3": {
+   "meaning": "whole-page discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L4": {
+   "meaning": "ROI discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  }
+ },
+ "doc_arms": [
+  "L1",
+  "L2",
+  "L3",
+  "L4"
+ ],
+ "common": {
+  "G": true,
+  "support": "v2",
+  "scheduling": "required_first",
+  "deadline": "min(provider timeout, remaining job time); 20 s floor; OCR bound"
+ },
+ "pairs": {
+  "ROI alone": [
+   "L1",
+   "L2"
+  ],
+  "X on whole page": [
+   "L1",
+   "L3"
+  ],
+  "X on ROI": [
+   "L2",
+   "L4"
+  ],
+  "ROI under X": [
+   "L3",
+   "L4"
+  ]
+ },
+ "sources": {
+  "stage": {
+   "root": "C:/t/r2x/r21-stage",
+   "manifest": "R21-STAGE.json",
+   "manifest_sha256": "e8277a6bb9774d7c48d9d1bfcb64e5d30f80a3f4553d407b7380a44e59f17e0b"
+  },
+  "sample": {
+   "documents": {
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+    "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+    "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+    "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+    "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+    "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+    "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+    "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+    "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+    "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+    "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+    "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+    "EP-23091/O&M/EM/Content.pdf": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+    "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+    "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+    "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+    "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+    "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+    "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+    "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f"
+   },
+   "documents_planned": [
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+     "sha256": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+     "sha256": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+     "pages": 2,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+     "sha256": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+     "sha256": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+     "sha256": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+     "sha256": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+     "sha256": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+     "sha256": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+     "sha256": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+     "sha256": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+     "sha256": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+     "sha256": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+     "sha256": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+     "sha256": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "sha256": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+     "sha256": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/O&M/EM/Content.pdf",
+     "sha256": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+     "sha256": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+     "sha256": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+     "sha256": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+     "sha256": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+     "sha256": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+     "pages": 10,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+     "sha256": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+     "pages": 52,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+     "sha256": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f",
+     "pages": null,
+     "extension": ".doc"
+    }
+   ],
+   "n_planned": 27,
+   "sample_sha256": "18b480631547270e9aca26df1d8576ba8924b8e7ec608fd180655a303cd335d9",
+   "rule_file_sha256": "18b480631547270e9aca26df1d8576ba8924b8e7ec608fd180655a303cd335d9"
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/r21-stage",
+  "manifest": "R21-STAGE.json",
+  "manifest_sha256": "e8277a6bb9774d7c48d9d1bfcb64e5d30f80a3f4553d407b7380a44e59f17e0b"
+ },
+ "labels": {
+  "dir": "labels-r26",
+  "register": "R26-REGISTER-LABELS.json",
+  "page": "R26-PAGE-LABELS.json",
+  "uncertainty": "R26-UNCERTAINTY-AND-EXPOSURE.json",
+  "files": {
+   "R26-REGISTER-LABELS.json": "23fad6bacb438ac77075438e9b5528b9cad9326352fde339f9cbc7e70bb8fe98",
+   "R26-PAGE-LABELS.json": "31b070ea5c8549880cde542e08263f4dc6eb2641218f08dc6c0ba369462807f7",
+   "R26-UNCERTAINTY-AND-EXPOSURE.json": "1bf8b654958b94744c9f54272555dd0de7f4e7f892c1b36bf1c5061815fd6d0f"
+  },
+  "manifest": "LABEL-MANIFEST.r26.json",
+  "manifest_sha256": "b29d93d162a375ca8d1d2a648c8522af8c3d132a6957c93a2b21e96c63812509",
+  "version": "r26-labels-2026-10-01.1",
+  "provenance": {
+   "drafted": "AI-drafted (Claude Opus 5.5 coding assistant)",
+   "reviewed": "AI self-review (same assistant, second pass) - not independent",
+   "human_signoff": "none",
+   "blind": "no"
+  },
+  "frozen_before_any_prediction": true
+ },
+ "provider": {
+  "adapter": "claude-code (the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  },
+  "actual_model": "recorded per response"
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "ledger": {
+  "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scopes": {
+   "A": {
+    "scope": "m2-four-arm-final-2026-10-01-A",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 8
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "m2-four-arm-final-2026-10-01-A",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 8}"
+    }
+   },
+   "L1": {
+    "scope": "m2-four-arm-final-2026-10-01-L1",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 345600,
+     "requests": 160
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "m2-four-arm-final-2026-10-01-L1",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 345600, \"requests\": 160}"
+    }
+   },
+   "L2": {
+    "scope": "m2-four-arm-final-2026-10-01-L2",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 345600,
+     "requests": 160
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "m2-four-arm-final-2026-10-01-L2",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 345600, \"requests\": 160}"
+    }
+   },
+   "L3": {
+    "scope": "m2-four-arm-final-2026-10-01-L3",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 345600,
+     "requests": 180
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "m2-four-arm-final-2026-10-01-L3",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 345600, \"requests\": 180}"
+    }
+   },
+   "L4": {
+    "scope": "m2-four-arm-final-2026-10-01-L4",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 345600,
+     "requests": 180
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "m2-four-arm-final-2026-10-01-L4",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 345600, \"requests\": 180}"
+    }
+   }
+  },
+  "caps": {
+   "A": 8,
+   "L1": 160,
+   "L2": 160,
+   "L3": 180,
+   "L4": 180
+  },
+  "sum_caps": 688,
+  "scope_family": "m2-four-arm-final-2026-10-01",
+  "note": "NEW scope family; the original 150-request experiment's remaining 22 requests are not used; each scope's limits are persisted on first use and cannot change without a recorded amendment"
+ },
+ "project_day": {
+  "limit": 60,
+  "rule_version": "whole-project-reservation-2026-09-30.v4",
+  "rule": "before a project-arm batch the runner checks the project's rolling 24 h capacity (60 minus every track's requests in the last 24 h, the A base included) against the batch's worst case (remaining durable allowance of every pending PDF); if it does not fit the project is persisted as deferred and zero requests are sent; a later --resume takes deferred projects in declared order"
+ },
+ "lifecycle": {
+  "contract": "runner-lifecycle-2026-10-01.v2",
+  "terminal_stops": [
+   "critical acceptance on a resolved label",
+   "three consecutive completed provider failures"
+  ],
+  "resume": "plain --resume continues deferral / interruption; a terminal stop is never resumed (exit 4); indeterminate provider evidence refuses (exit 5)"
+ },
+ "stop_rules": [
+  "critical acceptance by the arm's AI on a resolved label (eligible evidence only): terminal stop",
+  "three consecutive completed provider failures: terminal stop",
+  "any breaker / ledger / allowance / counter refusal: a budget stop, never raised",
+  "undeclared source, changed hash, sealed project, existing sandbox without --resume, existing allowance under a new tag, second writer, changed declaration: refuse before any dispatch"
+ ],
+ "cache_mode": "result cache on; arms start from copies of one A base; distinct reader / policy / prompt identities per arm: no cross-arm reuse",
+ "workload": {
+  "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review22/workload/R22-WORKLOAD.json",
+  "sha256": "773490100237ed72f41d8f744feac98cf4d159ec537b3287529f936aef13f41d",
+  "three_request_figures": {
+   "expected_workload_requests": 509,
+   "proposed_authorized_maximum_requests_IF_APPROVED": 688,
+   "uncapped_structural_maximum_requests": 1256,
+   "note": "688 is NOT approved by this package; 509 is an expectation under the stated assumptions; 1,256 is 12 x 26 PDFs x 4 arms + A's 8"
+  },
+  "revision_note": "see BUDGET-PROPOSAL (elapsed-limit revision; token caps may bind first under p90 inputs)"
+ }
+}

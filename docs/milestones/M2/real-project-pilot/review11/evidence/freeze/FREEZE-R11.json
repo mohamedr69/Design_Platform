@@ -1,0 +1,68 @@
+{
+ "candidate_commit": "a9773642c099b0924099bd8a86a72d4507137429",
+ "base": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+ "commits_since_base": [
+  "a9773642c099b0924099bd8a86a72d4507137429 review11-candidate: durable association context and persistent attempt order (R11-01A history pruning, R11-01B attempt-number collision)"
+ ],
+ "branch": "iso-baseline (isolated scratch repository C:/t/iso/ep-platform; core.autocrlf false)",
+ "history_kept": {
+  "a34d3f8": "Review 10 candidate (frozen-r10, the tree Review 11 inspected, unchanged)",
+  "689d95e": "Review 09 candidate",
+  "review10 package": "docs/milestones/M2/real-project-pilot/review10 (unchanged)"
+ },
+ "trees": {
+  "frozen-r11": {
+   "head": "a9773642c099b0924099bd8a86a72d4507137429",
+   "clean": true,
+   "has_env": false
+  },
+  "frozen-r10 (reviewed Review 10 tree)": {
+   "head": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+   "clean": true,
+   "has_env": false
+  },
+  "scratch repository": {
+   "head": "a9773642c099b0924099bd8a86a72d4507137429",
+   "clean": true,
+   "has_env": true
+  }
+ },
+ "versions": {
+  "reader": "evidence-reader-2026-09-29.6 (association context, attempt order)",
+  "policy": "evidence-policy-2026-09-29.4 (unchanged)",
+  "evaluator": "m2-pilot-eval-2026-09-29.9 (unchanged)",
+  "ledger": "ai-ledger-2026-09-29.2 (unchanged)",
+  "parser": "parse-2026-09-29.9 (unchanged)"
+ },
+ "changed_files": {
+  "backend/app/ai/evidence_reader.py": {
+   "sha256": "d9002bc155631d8aadfa2d88d2bf4d49b5da2b8b646ffb1ce74d748cf3cc84bd",
+   "bytes": 101300,
+   "kind": "application",
+   "crlf": true
+  },
+  "backend/tests/fixtures/evidence_reader_r10.py": {
+   "sha256": "4404abfa4d1c8d54f0b1b6a6bfa498b9a0fbb5b3529d8bc3441498be805e8e27",
+   "bytes": 90743,
+   "kind": "test",
+   "crlf": true
+  },
+  "backend/tests/test_m2_review11.py": {
+   "sha256": "9190999a493e3d46c5f50cd0a4967e5bfd50a6afdf4a1d57582e03281f1c3931",
+   "bytes": 11764,
+   "kind": "test",
+   "crlf": false
+  }
+ },
+ "diff": {
+  "file": "candidate-r9.diff",
+  "against": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+  "sha256": "bfb29ca9aab88f332a241a2b065fb3d40b6ce0c63c1adbcbb18085269bc5e7f4"
+ },
+ "owner_checkout_head": "2221b4327c7dd140994cc2c98e89229431b34899",
+ "temporary_environment": {
+  "tests": "tests/conftest.py: temporary database, library, cache, uploads; AI off; frozen-r11 has no .env",
+  "temp": "TEMP=TMP=C:/t/iso/tmp; --basetemp under C:/t/iso/tmp",
+  "models": "none called; scripted providers only"
+ }
+}

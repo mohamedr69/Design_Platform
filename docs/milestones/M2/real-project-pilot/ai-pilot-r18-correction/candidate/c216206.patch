@@ -1,0 +1,1184 @@
+From c216206df6812fb17b32719a28cdd4300d44a5c1 Mon Sep 17 00:00:00 2001
+From: ai-pilot <ai-pilot@local>
+Date: Wed, 30 Sep 2026 17:07:37 +0400
+Subject: [PATCH] ai-pilot successor (M2 review 18): R18-01 completion from
+ usable targeted evidence, R18-02 no targeted read after failed/refused
+ escalation, required-first scheduling, keyed test providers; E located
+ discovery + deadline-bound requests/OCR (flag-gated)
+
+Scratch worktree only (C:/t/iso/ep-platform); not the owner repository.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ backend/app/ai/evidence_reader.py         | 439 ++++++++++++++++++++--
+ backend/tests/_e_frame_shim.py            |  18 +
+ backend/tests/_keyed_provider.py          |  65 ++++
+ backend/tests/test_ai_pilot_2026_09_30.py |   9 +-
+ backend/tests/test_ai_pilot_r18.py        | 343 +++++++++++++++++
+ backend/tests/test_evidence_reader_r7.py  |  15 +-
+ backend/tests/test_m2_review08.py         |  22 +-
+ backend/tests/test_m2_review10.py         |  24 +-
+ 8 files changed, 890 insertions(+), 45 deletions(-)
+ create mode 100644 backend/tests/_e_frame_shim.py
+ create mode 100644 backend/tests/_keyed_provider.py
+ create mode 100644 backend/tests/test_ai_pilot_r18.py
+
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index 472508b..764842a 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -64,14 +64,25 @@ import os as _os  # noqa: E402
+ 
+ GUARD_ENABLED = _os.environ.get("AI_EVIDENCE_GUARD") == "1"
+ TARGETED_ENABLED = _os.environ.get("AI_EVIDENCE_TARGETED") == "1"
++# E  AI_EVIDENCE_EFFICIENT=1 (M2 review 18) located discovery for drawing sheets + job-deadline-bound request / OCR
++#                            timeouts; independent of G / T (compared on its own)
++EFFICIENT_ENABLED = _os.environ.get("AI_EVIDENCE_EFFICIENT") == "1"
+ if TARGETED_ENABLED and not GUARD_ENABLED:
+     raise RuntimeError("AI_EVIDENCE_TARGETED requires AI_EVIDENCE_GUARD (T = G + targeted verification)")
+ if GUARD_ENABLED:
+     EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+guard-rev-token-2026-09-30.1"
+ if TARGETED_ENABLED:
+-    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+region-support-2026-09-30.1"
+-    READER_VERSION = READER_VERSION + "+targeted-2026-09-30.1"
++    # .2 (M2 review 18): completion from usable evidence (R18-01), no targeted read after a failed / refused primary or
++    # escalation request (R18-02), required reads of every page before any optional targeted read (R18-03)
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
++    READER_VERSION = READER_VERSION + "+targeted-2026-09-30.2"
+     PROMPTS = {**PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"}
++if EFFICIENT_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+located-discovery-2026-09-30.1"
++    READER_VERSION = READER_VERSION + "+located-discovery-2026-09-30.1"
++    PROMPTS = {**PROMPTS, "discover_region": "discover-region-2026-09-30.1"}
++MIN_REQUEST_S = 20.0            # E: no request is started with less than this left of the job's elapsed budget
++LOCATED_LONG_SIDE_PX = 1568     # E: the located discovery crop's long side (the provider's native image size)
+ _BARE_REVISION = re.compile(r"^\s*(?:REV(?:ISION)?\.?\s*[-:]?\s*(?:\d{1,3}|[A-Z])|R\.?\s*\d{1,2})\s*$", re.I)
+ 
+ 
+@@ -340,8 +351,21 @@ class EvidenceRun:
+         if self.exhausted:
+             self.log.append({**entry, "cache_hit": False, "outcome": f"budget: {self.exhausted}"})
+             return None
++        timeout_s = None
++        if EFFICIENT_ENABLED:
++            # E: the job's remaining elapsed budget bounds the request (the provider kills the CLI process at its
++            # timeout); a request is not started with less than MIN_REQUEST_S left -- a budget stop, not a failure
++            remaining = getattr(self.budget, "remaining_s", None)
++            remaining = remaining() if callable(remaining) else None
++            if remaining is not None:
++                if remaining < MIN_REQUEST_S:
++                    self.exhausted = "elapsed_time"
++                    self.log.append({**entry, "cache_hit": False, "outcome": "budget: elapsed_time (under the minimum request time)"})
++                    return None
++                timeout_s = min(float(settings.ai_cli_timeout_s), remaining)
++                entry["timeout_s"] = round(timeout_s, 1)
+         request = AiRequest(task=task, system=SYSTEM, parts=parts, schema=schema, max_output_tokens=max_output,
+-                            idempotency_key=key, tier=tier)
++                            idempotency_key=key, tier=tier, timeout_s=timeout_s)
+         try:
+             reservation = self.budget.reserve(4000, max_output, escalation=tier == "standard")
+         except BudgetExceeded as exc:
+@@ -557,6 +581,7 @@ def read_document(run: EvidenceRun, pdf, *, sha256: str, records: list, observat
+     identity_found = any(r.get("reference") for r in records) or any(
+         o.get("kind") in IDENTITY_KINDS and (o.get("number") or o.get("identity") or o.get("reference")) for o in observations)
+     calls_before = run.calls
++    pending = []
+     for index in range(min(pdf.page_count, MAX_PAGES_PER_DOCUMENT)):
+         number = index + 1
+         page = pdf[index]
+@@ -577,14 +602,31 @@ def read_document(run: EvidenceRun, pdf, *, sha256: str, records: list, observat
+             coverage["pages"].append(entry)
+             continue
+         before = run.calls
+-        found = _read_page(run, page, sha256=sha256, number=number, facts=facts, reason=",".join(why),
+-                           ocr_lines=(ocr_lines or {}).get(index) or [])
+-        entry["calls"] = run.calls - before
++        if TARGETED_ENABLED:
++            found = _read_page_required(run, page, sha256=sha256, number=number, facts=facts, reason=",".join(why),
++                                        ocr_lines=(ocr_lines or {}).get(index) or [])
++            entry["calls"] = run.calls - before
++            coverage["pages"].append(entry)
++            if found.get("_pending"):
++                pending.append((entry, page, found))
++                continue
++        else:
++            found = _read_page(run, page, sha256=sha256, number=number, facts=facts, reason=",".join(why),
++                               ocr_lines=(ocr_lines or {}).get(index) or [])
++            entry["calls"] = run.calls - before
++            coverage["pages"].append(entry)
++        entry["outcome"] = found.pop("_outcome")
++        entry["fields"] = found.pop("_fields", {})
++        entry["requests"] = found.pop("_requests", {})
++        out.extend(found.pop("_observations"))
++    for entry, page, ctx in pending:          # T: the optional reads, after every page's required reads
++        before = run.calls
++        found = _finish_page(run, page, ctx, may_call=lambda: run.calls - calls_before < MAX_CALLS_PER_DOCUMENT)
++        entry["calls"] += run.calls - before
+         entry["outcome"] = found.pop("_outcome")
+         entry["fields"] = found.pop("_fields", {})
+         entry["requests"] = found.pop("_requests", {})
+         out.extend(found.pop("_observations"))
+-        coverage["pages"].append(entry)
+     coverage["calls"] = run.calls - calls_before
+     outcomes = [str(e.get("outcome")) for e in coverage["pages"]]
+     coverage["outcome"] = ("budget" if run.exhausted else
+@@ -632,8 +674,19 @@ def region_texts(page, region_display: tuple | None, ocr_lines: list, *, pad: fl
+     return out
+ 
+ 
+-def _local_ocr(page, clip) -> str:
++def _ocr_timeout(run) -> float:
++    """E: an OCR run inside a job gets at most 30 s and never the time the next request needs; 30 s otherwise."""
++    if not EFFICIENT_ENABLED or run is None:
++        return 30.0
++    remaining = getattr(getattr(run, "budget", None), "remaining_s", None)
++    left = remaining() if callable(remaining) else None
++    return 30.0 if left is None else max(0.0, min(30.0, left - MIN_REQUEST_S))
++
++
++def _local_ocr(page, clip, timeout: float = 30.0) -> str:
+     """Local Tesseract OCR of the read region (the application's own OCR configuration); '' on any failure."""
++    if timeout <= 0:
++        return ""
+     try:
+         import io
+ 
+@@ -643,12 +696,12 @@ def _local_ocr(page, clip) -> str:
+         from app.services import document_control
+         pix = page.get_pixmap(matrix=pymupdf.Matrix(300 / 72, 300 / 72), clip=clip)
+         img = Image.open(io.BytesIO(pix.tobytes("png")))
+-        return document_control._tesseract().image_to_string(img, config="--psm 6", timeout=30) or ""
++        return document_control._tesseract().image_to_string(img, config="--psm 6", timeout=timeout) or ""
+     except Exception:  # noqa: BLE001 -- no OCR is no support, never a failure of the read
+         return ""
+ 
+ 
+-def region_texts_v2(page, region_display: tuple | None, ocr_lines: list, *, pad: float = 0.35) -> list:
++def region_texts_v2(page, region_display: tuple | None, ocr_lines: list, *, pad: float = 0.35, ocr_timeout: float = 30.0) -> list:
+     """T only. As `region_texts`, but the text layer is clipped in the page's UNROTATED coordinates (a display rectangle
+     of a rotated page is mapped through the derotation matrix; `region_texts` clips with the display rectangle and so
+     reads the wrong area of a rotated page), and a region with no source text at all is OCR'd locally."""
+@@ -666,7 +719,7 @@ def region_texts_v2(page, region_display: tuple | None, ocr_lines: list, *, pad:
+     if inside:
+         out.append(("ocr", "\n".join(inside)))
+     if not out:
+-        local = _local_ocr(page, clip)
++        local = _local_ocr(page, clip, ocr_timeout)
+         if local.strip():
+             out.append(("ocr_local", local))
+     return out
+@@ -692,12 +745,13 @@ CONTEXT_WHAT = {"identity": "this document's OWN identity (document / drawing /
+ _EXPECTED_ROLE = {"identity": "own_identity", "revision": "own_revision"}
+ 
+ 
+-def _targeted_read(run, page, *, sha256: str, number: int, reason: str, field: str, region, ocr_lines):
+-    """T only: one independent context read (never shown any proposed value). Returns (reading, region, texts) or None."""
++def _targeted_read(run, page, *, sha256: str, number: int, reason: str, field: str, region, ocr_lines, context_clip=None):
++    """T only: one independent context read (never shown any proposed value). Returns (reading, region, texts) or None.
++    With no region: E's located discovery clip when there is one (never the full drawing sheet), else the page."""
+     import pymupdf
+ 
+-    if region is not None:
+-        clip = crop_clip(page, region, pad=1.5)
++    if region is not None or context_clip is not None:
++        clip = crop_clip(page, region, pad=1.5) if region is not None else pymupdf.Rect(context_clip)
+         scale = min(300 / 72, 2400 / max(clip.width, clip.height))
+         png = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip).tobytes("png")
+     else:
+@@ -716,7 +770,7 @@ def _targeted_read(run, page, *, sha256: str, number: int, reason: str, field: s
+     reading = {"source": "blind_context", "value": got.get("value", ""), "legible": bool(got.get("legible", False)),
+                "label": got.get("printed_label"), "role": got.get("role")}
+     use = new_region or region
+-    return reading, use, region_texts_v2(page, use, ocr_lines)
++    return reading, use, region_texts_v2(page, use, ocr_lines, ocr_timeout=_ocr_timeout(run))
+ 
+ 
+ # --- read outcomes (M2 review 08, R8-01) ------------------------------------------------------------------------------
+@@ -774,18 +828,21 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+     readings. Every read's outcome is recorded (`_fields`); the page outcome follows from them. The page's own
+     identity and the identities it references are different facts (component 'own' and 'refN'); nothing here
+     changes a record."""
++    if TARGETED_ENABLED:
++        ctx = _read_page_required(run, page, sha256=sha256, number=number, facts=facts, reason=reason, ocr_lines=ocr_lines)
++        return _finish_page(run, page, ctx) if ctx.get("_pending") else ctx
+     observations = []
+     fields: dict = {}
+     requests: dict = {}
+-    discovered = run.call(sha256=sha256, task="discover_page", page=number, reason=reason,
+-                          parts=[TextPart("task", DISCOVER_TEXT.format(page=number)), ImagePart("page", page_png(page))],
+-                          schema=DISCOVER_SCHEMA, max_output=800)
++    discovered, located = _discover(run, page, sha256=sha256, number=number, reason=reason, facts=facts, ocr_lines=ocr_lines)
+     if discovered is None:
+         outcome = _call_outcome(run)
+         return {"_outcome": "budget: " + (run.exhausted or "refused") if outcome == "budget" else "failed",
+                 "_observations": [], "_fields": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}},
+                 "_requests": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}}}
+     fields["discovery"] = requests["discovery"] = "ok"
++    if located:
++        fields["discovery:route"] = located["route"]
+     det_identity = facts.identities[0] if facts.identities else None
+     det_revision = facts.revisions[0] if facts.revisions else None
+     common = {"page": number, "kind": "ai_evidence", "version": READER_VERSION, "policy": EVIDENCE_POLICY_VERSION,
+@@ -797,9 +854,9 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+         readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
+-        texts = (region_texts_v2 if TARGETED_ENABLED else region_texts)(page, region, ocr_lines or [])
++        texts = region_texts(page, region, ocr_lines or [])
+         if not (disc_value or det_value):
+-            fields[key] = ABSENT_BY_DISCOVERY
++            fields[key] = _absent(located, field, facts)
+             continue
+         if region is None:
+             fields[key], requests[key] = "incomplete:no_region", "not_attempted"
+@@ -824,20 +881,6 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                 else:
+                     fields[key + ":escalation"] = _call_outcome(run)
+             fields[key] = _value_read_outcome(field, readings, requests[key])
+-        if TARGETED_ENABLED and (disc_value or det_value) and verdict["state"] != "validated" and not verdict.get("guard") \
+-                and not str(requests.get(key) or "").startswith(("failed", "budget")):
+-            got = _targeted_read(run, page, sha256=sha256, number=number, reason=reason, field=field, region=region, ocr_lines=ocr_lines or [])
+-            requests[key + ":targeted"] = _request_outcome(run, got[0] if got else None)
+-            if got is not None:
+-                reading, t_region, t_texts = got
+-                readings.append(reading)
+-                region, texts = t_region or region, t_texts or texts
+-                verdict = validate_value(field, readings, texts, det_value)
+-                if verdict["state"] == "validated" and reading.get("legible") and reading.get("role") != _EXPECTED_ROLE[field]:
+-                    verdict = {**verdict, "state": "candidate",
+-                               "reasons": verdict["reasons"] + [f"the targeted read gives the role {reading.get('role')!r}, not {_EXPECTED_ROLE[field]!r}"]}
+-                if fields.get(key) in ("incomplete:no_region", None) or requests.get(key) == "not_attempted":
+-                    fields[key] = _value_read_outcome(field, readings, requests[key + ":targeted"])
+         if verdict["state"] == "unreadable" and not disc_value:
+             continue
+         if field == "identity" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED and not verdict.get("guard"):
+@@ -904,7 +947,331 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                              "request": requests.get("own:decision"),
+                              "deterministic": next((r.get("status") for r in facts.records if r.get("status") not in (None, "UR")), None)})
+     else:
+-        fields["own:decision"] = ABSENT_BY_DISCOVERY
++        fields["own:decision"] = _absent(located, "decision", facts)
++    required = [fields.get(f) for f in REQUIRED_FIELDS]
++    complete = all(o in (COMPLETED, ABSENT_BY_DISCOVERY) for o in required)
++    outcome = ("evidence" if observations else "no_components") if complete else "partial"
++    return {"_outcome": outcome, "_observations": observations, "_fields": fields, "_requests": requests}
++
++
++# --- E: located discovery (M2 review 18) -------------------------------------------------------------------------------
++#
++# A full drawing sheet sent as the first request took 95-266 s on the Round 2 A0/A1 sheets and left nothing of the
++# 120 s job budget for the reads that verify it. With E, a drawing sheet (the application's own test:
++# title_block.is_drawing_sheet) is discovered from its title-block area only:
++#   1. the page's horizontal text runs (title_block.page_lines), else the title-block OCR words the deterministic
++#      reader cached, else -- bounded by the job's remaining time -- a local OCR of the application's title-block strip;
++#   2. the number / revision labels among them (title_block's own label patterns) inside the title-block zone
++#      (title_block._in_zone); the located area is their bounding box widened by 12 % of the sheet each way and
++#      clamped to at most 45 % of its area;
++#   3. no label: the application's title-block strip (right 28 % landscape / bottom 22 % portrait) -- never the full
++#      sheet.
++# The discovery crop is rendered at 1568 px on its long side; regions come back in the crop's 0..1000 and are mapped
++# to the page's. A field the crop does not show is NOT a verified absence: identity / revision absence and a decision
++# absence where the page's source text carries decision-block words are recorded `incomplete:located_region_only`.
++# Nothing here uses labels, file names, project numbers or expected values. Pages that are not drawing sheets are
++# discovered as before.
++
++DISCOVER_REGION_TEXT = ("This image is the title-block / header area of page {page} of a construction drawing (not the "
++                        "whole sheet). " + DISCOVER_TEXT.split(". ", 1)[1].replace("of the image", "of THIS image"))
++_DECISION_BLOCK_CUES = re.compile(r"NO\s+OBJECTION|APPROVED\s+AS\s+NOTED|REVISE\s+(?:AND|&)\s+RESUBMIT|\bREJECTED\b|NOT\s+APPROVED|"
++                                  r"\bAPPROVED\b(?!\s+(?:BY|FOR))|\bCODE\s+[A-D]\b", re.I)
++LOCATED_ABSENCE = "incomplete:located_region_only"
++
++
++def _absent(located: dict | None, field: str, facts) -> str:
++    """The outcome of a field discovery did not report: a verified absence only when discovery saw the whole page, or
++    (a decision) when the page's source text carries no decision-block words."""
++    if not located or not located.get("located") or located.get("whole_page"):
++        return ABSENT_BY_DISCOVERY
++    if field == "decision" and len((facts.text or "").strip()) >= 80 and not _DECISION_BLOCK_CUES.search(facts.text or ""):
++        return ABSENT_BY_DISCOVERY
++    return LOCATED_ABSENCE
++
++
++def locate_title_block(page, ocr_lines: list | None = None, *, ocr_timeout: float = 20.0) -> tuple:
++    """(display rect, route) of a drawing sheet's title-block area; (None, 'not_a_drawing_sheet') otherwise."""
++    import time as _time
++
++    import pymupdf
++
++    from app.services import title_block as tb
++
++    if not tb.is_drawing_sheet(page):
++        return None, "not_a_drawing_sheet"
++    w, h = page.rect.width, page.rect.height
++    strip = tb.title_block_strip(page)
++    lines, source = tb.page_lines(page), "text"
++    if len(lines) < 5 and ocr_lines:
++        lines, source = [tb.Line(*l[:5]) for l in ocr_lines if len(l) >= 5], "ocr_cached"
++    if len(lines) < 5 and ocr_timeout > 0:
++        # a scan: OCR the application's strip; if it shows no number label, the other side of the title-block zone
++        # (right edge <-> bottom edge) too -- all within the same time bound; never the full sheet
++        other = pymupdf.Rect(0, h * 0.78, w, h) if w >= h else pymupdf.Rect(w * 0.72, 0, w, h)
++        lines, source, deadline, by_strip = [], "ocr_local", _time.monotonic() + ocr_timeout, []
++        for rect in (strip, other):
++            left = deadline - _time.monotonic()
++            if left <= 1:
++                break
++            try:
++                from functools import partial
++
++                from app.services.document_control import _tesseract
++                got = tb.ocr_word_lines(page, rect, dpi=150, image_to_data=partial(_tesseract().image_to_data, timeout=left))
++            except Exception:  # noqa: BLE001 -- no OCR: the strip, never the full sheet
++                got = []
++            by_strip.append((rect, got))
++            lines += got
++            if any(tb._NUMBER_LABEL.match(l.text) for l in got):
++                break
++        if by_strip and not any(tb._NUMBER_LABEL.match(l.text) for l in lines):
++            strip = max(by_strip, key=lambda x: sum(len(l.text) for l in x[1]))[0]
++    numbers = [l for l in lines if tb._in_zone(l, w, h) and tb._NUMBER_LABEL.match(l.text)]
++    revisions = [l for l in lines if tb._in_zone(l, w, h) and tb._REV_LABEL.match(l.text)]
++    for group in (numbers + revisions, numbers):
++        if not numbers:
++            break
++        x0, y0 = min(l.x0 for l in group) - 0.12 * w, min(l.y0 for l in group) - 0.12 * h
++        x1, y1 = max(l.x1 for l in group) + 0.12 * w, max(l.y1 for l in group) + 0.12 * h
++        rect = pymupdf.Rect(max(0, x0), max(0, y0), min(w, x1), min(h, y1))
++        if rect.width * rect.height <= 0.45 * w * h:
++            return rect, f"located:labels:{source}"
++    return strip, f"located:strip:{source if lines else 'none'}"
++
++
++def _norm_to_page(page, clip, box):
++    """A region in 0..1000 of a crop, as 0..1000 of the page (region_from_norm's frame); None when invalid."""
++    if not box or len(box) != 4:
++        return None
++    try:
++        b = [float(v) for v in box]
++    except (TypeError, ValueError):
++        return None
++    if not (0 <= b[0] < b[2] <= 1000 and 0 <= b[1] < b[3] <= 1000):
++        return None
++    w, h = page.rect.width, page.rect.height
++    return [round((clip.x0 + b[0] / 1000 * clip.width) / w * 1000, 2), round((clip.y0 + b[1] / 1000 * clip.height) / h * 1000, 2),
++            round((clip.x0 + b[2] / 1000 * clip.width) / w * 1000, 2), round((clip.y0 + b[3] / 1000 * clip.height) / h * 1000, 2)]
++
++
++def _discover(run, page, *, sha256: str, number: int, reason: str, facts, ocr_lines):
++    """(discovered, located) -- `located` None when the page was discovered whole (always with E off)."""
++    if EFFICIENT_ENABLED:
++        import pymupdf
++
++        clip, route = locate_title_block(page, ocr_lines, ocr_timeout=_ocr_timeout(run))
++        if clip is not None:
++            scale = min(300 / 72, LOCATED_LONG_SIDE_PX / max(clip.width, clip.height))
++            png = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip).tobytes("png")
++            got = run.call(sha256=sha256, task="discover_region", page=number, reason=reason,
++                           parts=[TextPart("task", DISCOVER_REGION_TEXT.format(page=number)), ImagePart("title_block", png)],
++                           schema=DISCOVER_SCHEMA, max_output=800)
++            located = {"located": True, "route": route, "clip": [round(v, 2) for v in clip],
++                       "whole_page": clip.get_area() >= 0.98 * page.rect.get_area()}
++            if got is not None:
++                got = dict(got)
++                for k in ("own_identity_region", "own_revision_region", "decision_region"):
++                    got[k] = _norm_to_page(page, clip, got.get(k))
++            return got, located
++    discovered = run.call(sha256=sha256, task="discover_page", page=number, reason=reason,
++                          parts=[TextPart("task", DISCOVER_TEXT.format(page=number)), ImagePart("page", page_png(page))],
++                          schema=DISCOVER_SCHEMA, max_output=800)
++    return discovered, ({"located": False, "route": "full_page"} if EFFICIENT_ENABLED else None)
++
++
++# --- T .2: the targeted page reader (M2 review 18) ---------------------------------------------------------------------
++#
++# Scheduling contract (required-first, document level): for every triggered page of a document, discovery and every
++# REQUIRED primary read (identity blind read [+ EV2 escalation], revision blind read [+ escalation], decision blind read)
++# happen first, in page order (`_read_page_required`); only then, page by page, the OPTIONAL targeted context reads
++# (identity before revision) and the page's observations (`_finish_page`). An optional read is made only while the run
++# is not exhausted and the document is below MAX_CALLS_PER_DOCUMENT; the job budget / ledger refuse it like any other
++# request. So an optional read never takes a call or time a required read of the same document needed.
++#
++# Gate (R18-02): no targeted read for a field whose primary OR escalation request failed, was refused or was refused by
++# a budget (`own:<f>:targeted` = not_attempted:after_failure), or after a guard hold; exhaustion is never cleared.
++#
++# Completion (R18-01): after a targeted read the field's outcome is recomputed from usable evidence -- `completed` when
++# the targeted reading is legible, carries a value and reports the field's own role (a model's success response alone
++# never completes a field). The primary outcome is kept in `own:<f>:primary`, the targeted one in `own:<f>:targeted`
++# (completed | unusable:illegible | unusable:empty | unusable:wrong_role | failed:<kind> | budget |
++# not_attempted:<why>); requests keep `own:<f>` and `own:<f>:targeted` apart. A wrong-role reading is kept on the
++# observation but excluded from validation. Validation itself is validate_value, unchanged.
++
++
++def _read_page_required(run, page, *, sha256: str, number: int, facts, reason: str, ocr_lines=None) -> dict:
++    fields: dict = {}
++    requests: dict = {}
++    discovered, located = _discover(run, page, sha256=sha256, number=number, reason=reason, facts=facts, ocr_lines=ocr_lines)
++    if discovered is None:
++        outcome = _call_outcome(run)
++        return {"_outcome": "budget: " + (run.exhausted or "refused") if outcome == "budget" else "failed",
++                "_observations": [], "_fields": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}},
++                "_requests": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}}}
++    fields["discovery"] = requests["discovery"] = "ok"
++    if located:
++        fields["discovery:route"] = located["route"]
++    det_identity = facts.identities[0] if facts.identities else None
++    det_revision = facts.revisions[0] if facts.revisions else None
++    state = {}
++    spec = (("identity", "read_identity", discovered.get("own_identity"), discovered.get("own_identity_region"), det_identity),
++            ("revision", "read_revision", discovered.get("own_revision"), discovered.get("own_revision_region"), det_revision))
++    for field, task, disc_value, disc_region, det_value in spec:
++        key = f"own:{field}"
++        region = _det_region(facts, field) or region_from_norm(page, disc_region)
++        readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
++        texts = region_texts_v2(page, region, ocr_lines or [], ocr_timeout=_ocr_timeout(run))
++        st = state[field] = {"key": key, "region": region, "readings": readings, "texts": texts, "disc": disc_value, "det": det_value}
++        if not (disc_value or det_value):
++            fields[key] = _absent(located, field, facts)
++            st["absent"] = True
++            continue
++        if region is None:
++            fields[key], requests[key] = "incomplete:no_region", "not_attempted"
++            verdict = validate_value(field, readings, texts, det_value)
++        else:
++            blind = run.call(sha256=sha256, task=task, page=number, reason=reason,
++                             parts=[TextPart("task", READ_TEXTS[task]), ImagePart("crop", crop_png(page, region))],
++                             schema=READ_VALUE_SCHEMA, max_output=400)
++            requests[key] = _request_outcome(run, blind)
++            if blind is not None:
++                readings.append({"source": "blind_small", "value": blind.get("value", ""), "legible": blind.get("legible", False),
++                                 "label": blind.get("label_text")})
++            verdict = validate_value(field, readings, texts, det_value)
++            if blind is not None and run.variant == "EV2" and verdict["state"] in ("conflict", "candidate") and run.escalations < 2:
++                run.escalations += 1
++                strong = run.call(sha256=sha256, task=task, page=number, reason=reason + ",escalation", tier="standard",
++                                  parts=[TextPart("task", READ_TEXTS[task]), ImagePart("crop", crop_png(page, region))],
++                                  schema=READ_VALUE_SCHEMA, max_output=400)
++                if strong is not None:
++                    readings.append({"source": "blind_standard", "value": strong.get("value", ""), "legible": strong.get("legible", False)})
++                    verdict = validate_value(field, readings, texts, det_value)
++                else:
++                    fields[key + ":escalation"] = _call_outcome(run)
++            fields[key] = _value_read_outcome(field, readings, requests[key])
++        st["verdict"] = verdict
++    decision = None
++    if discovered.get("decision_options_printed") or discovered.get("decision_marked_option"):
++        readings = [{"source": "discovery", "options_printed": discovered.get("decision_options_printed") or [],
++                     "marked_option": discovered.get("decision_marked_option") or "", "mark_type": discovered.get("decision_mark_type"),
++                     "actor": discovered.get("decision_actor"), "legible": True}]
++        region = region_from_norm(page, discovered.get("decision_region"))
++        if region is None:
++            fields["own:decision"] = "incomplete:no_region"
++            requests["own:decision"] = "not_attempted"
++        else:
++            blind = run.call(sha256=sha256, task="read_decision", page=number, reason=reason,
++                             parts=[TextPart("task", READ_TEXTS["read_decision"]), ImagePart("crop", crop_png(page, region, pad=0.15))],
++                             schema=READ_DECISION_SCHEMA, max_output=400)
++            requests["own:decision"] = _request_outcome(run, blind)
++            if blind is not None:
++                readings.append({"source": "blind_small", **blind})
++            fields["own:decision"] = (requests["own:decision"] if blind is None else
++                                      COMPLETED if blind.get("legible", True) else "unusable:illegible")
++        decision = {"readings": readings, "region": region}
++    else:
++        fields["own:decision"] = _absent(located, "decision", facts)
++    return {"_pending": True, "number": number, "sha256": sha256, "reason": reason, "facts": facts, "ocr_lines": ocr_lines or [],
++            "discovered": discovered, "located": located, "fields": fields, "requests": requests, "state": state, "decision": decision,
++            "det_identity": det_identity}
++
++
++def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
++    """The optional targeted reads of one page (after every required read -- see the contract above), then its
++    observations. `may_call()`: the document still admits a call (read_document's per-document limit)."""
++    fields, requests, state, facts = ctx["fields"], ctx["requests"], ctx["state"], ctx["facts"]
++    number, sha256, reason, discovered, located = ctx["number"], ctx["sha256"], ctx["reason"], ctx["discovered"], ctx["located"]
++    det_identity = ctx["det_identity"]
++    context_clip = located.get("clip") if located and located.get("located") else None
++    for field in ("identity", "revision"):
++        st = state.get(field)
++        if not st or st.get("absent"):
++            continue
++        key, verdict = st["key"], st["verdict"]
++        if verdict["state"] == "validated" or verdict.get("guard"):
++            continue
++        failed = [o for o in (requests.get(key), fields.get(key + ":escalation")) if str(o or "").startswith(("failed", "budget"))]
++        if failed:
++            fields[key + ":targeted"] = "not_attempted:after_failure"
++            continue
++        if run.exhausted or (may_call is not None and not may_call()):
++            fields[key + ":targeted"] = "not_attempted:budget"
++            continue
++        fields[key + ":primary"] = fields[key]
++        got = _targeted_read(run, page, sha256=sha256, number=number, reason=reason, field=field, region=st["region"],
++                             ocr_lines=ctx["ocr_lines"], context_clip=context_clip)
++        requests[key + ":targeted"] = _request_outcome(run, got[0] if got else None)
++        if got is None:
++            fields[key + ":targeted"] = requests[key + ":targeted"]       # failed / budget: nothing changes
++            continue
++        reading, t_region, t_texts = got
++        usable = bool(reading.get("legible")) and bool(literal_key(field, reading.get("value")))
++        own_role = reading.get("role") == _EXPECTED_ROLE[field]
++        if usable and not own_role:
++            reading = {**reading, "excluded": f"role {reading.get('role')!r}, not {_EXPECTED_ROLE[field]!r}"}
++        st["readings"].append(reading)
++        fields[key + ":targeted"] = (COMPLETED if usable and own_role else "unusable:wrong_role" if usable else
++                                     "unusable:empty" if reading.get("legible") else "unusable:illegible")
++        if usable and own_role:
++            st["region"], st["texts"] = t_region or st["region"], t_texts or st["texts"]
++            fields[key] = COMPLETED
++        st["verdict"] = validate_value(field, [r for r in st["readings"] if not r.get("excluded")], st["texts"], st["det"])
++    common = {"page": number, "kind": "ai_evidence", "version": READER_VERSION, "policy": EVIDENCE_POLICY_VERSION,
++              "variant": run.variant, "profile": run.profile, "page_kind": discovered.get("page_kind")}
++    observations = []
++    own_identity = own_revision = None
++    for field in ("identity", "revision"):
++        st = state.get(field)
++        if not st or st.get("absent"):
++            continue
++        key, verdict, readings, region, det_value = st["key"], st["verdict"], st["readings"], st["region"], st["det"]
++        if verdict["state"] == "unreadable" and not st["disc"]:
++            continue
++        if field == "identity" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED and not verdict.get("guard"):
++            own_identity = verdict.get("value")
++        if field == "revision" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED:
++            own_revision = verdict.get("value")
++        roles = [n for n in discovered.get("other_numbers") or [] if det_value and literal_key(field, n.get("literal")) == literal_key(field, det_value)]
++        reasons = list(verdict["reasons"]) + ([f"discovery lists the deterministic value as a {roles[0].get('role')}"] if roles else [])
++        if fields[key] != COMPLETED:
++            reasons.append(f"read not completed ({fields[key]}): unverified")
++        observations.append({**common, "field": field, "component": "own", "role": "own", "value": verdict.get("value"),
++                             "value_literal": verdict.get("value_literal"), "value_normalized": verdict.get("value_normalized"),
++                             "candidates": verdict.get("candidates"), "state": verdict["state"], "reasons": reasons,
++                             "support": verdict.get("support"), "readings": readings, "region": list(region) if region else None,
++                             "deterministic": det_value, "read": fields[key], "request": requests.get(key),
++                             "targeted": fields.get(key + ":targeted"),
++                             # the component identity this revision was read for (R9-02): the page's final own identity
++                             **({"target": own_identity or det_identity} if field == "revision" else {})})
++    for o in [o for o in observations if o.get("field") == "identity" and "a bare revision token is not a document identity" in " ".join(o.get("reasons") or [])]:
++        observations.append({**common, "field": "revision", "component": "revtok", "role": "revision_token", "value": o.get("value"),
++                             "value_literal": o.get("value_literal"), "value_normalized": o.get("value_normalized"), "state": "observed_reference",
++                             "reasons": ["a revision token read in the identity position: raw revision evidence, no target"], "read": COMPLETED,
++                             "readings": o.get("readings")})
++    for i, other in enumerate(discovered.get("other_numbers") or []):
++        if other.get("literal"):
++            fields[f"ref{i}:identity"] = COMPLETED
++            observations.append({**common, "field": "identity", "component": f"ref{i}", "role": other.get("role") or "other",
++                                 "value": other["literal"], "value_literal": other["literal"],
++                                 "value_normalized": literal_key("identity", other["literal"]), "state": "observed_reference",
++                                 "reasons": ["referenced by the page, not its own identity"], "read": COMPLETED,
++                                 "readings": [{"source": "discovery", "value": other["literal"]}]})
++    decision = ctx["decision"]
++    if decision is not None:
++        target = own_identity or det_identity
++        verdict = validate_decision(decision["readings"], target)
++        reasons = list(verdict["reasons"])
++        state = verdict["state"]
++        if fields["own:decision"] != COMPLETED:
++            reasons.append(f"read not completed ({fields['own:decision']}): unverified")
++            state = "candidate" if state == "validated" else "unverified" if state in ("no_decision_marked", "not_a_decision") else state
++        region = decision["region"]
++        observations.append({**common, "field": "decision", "component": "own", "role": "own", "value": verdict.get("decision"),
++                             "state": state, "reasons": reasons, "target": target, "target_revision": own_revision,
++                             "legend": verdict.get("legend"), "actor": verdict.get("actor"), "readings": decision["readings"],
++                             "region": list(region) if region else None, "read": fields["own:decision"],
++                             "request": requests.get("own:decision"),
++                             "deterministic": next((r.get("status") for r in facts.records if r.get("status") not in (None, "UR")), None)})
+     required = [fields.get(f) for f in REQUIRED_FIELDS]
+     complete = all(o in (COMPLETED, ABSENT_BY_DISCOVERY) for o in required)
+     outcome = ("evidence" if observations else "no_components") if complete else "partial"
+diff --git a/backend/tests/_e_frame_shim.py b/backend/tests/_e_frame_shim.py
+new file mode 100644
+index 0000000..734c037
+--- /dev/null
++++ b/backend/tests/_e_frame_shim.py
+@@ -0,0 +1,18 @@
++"""A pytest plugin for running the EXISTING modules with E on (M2 review 18): those tests script discovery regions in
++the whole page's 0..1000 frame, while E's located discovery answers in the title-block crop's frame -- the same
++numbers then name another place, which is a property of the scripts, not of E. With this plugin E's locator returns
++the whole sheet as its located area (route `located:shim_whole_page`), so a scripted region keeps its meaning and every
++other part of E still runs (the discover_region task, located-absence outcomes, deadline-bound timeouts).
++Use: pytest -p tests._e_frame_shim ... (only for that run; E's own tests use the real locator)."""
++import pytest
++
++
++@pytest.fixture(autouse=True)
++def _e_whole_sheet_frame(monkeypatch, request):
++    from app.ai import evidence_reader as er
++    from app.services import title_block
++
++    if getattr(er, "EFFICIENT_ENABLED", False) and not request.module.__name__.endswith("test_ai_pilot_r18"):
++        monkeypatch.setattr(er, "locate_title_block", lambda page, ocr_lines=None, *, ocr_timeout=20.0:
++                            (page.rect, "located:shim_whole_page") if title_block.is_drawing_sheet(page) else (None, "not_a_drawing_sheet"))
++    yield
+diff --git a/backend/tests/_keyed_provider.py b/backend/tests/_keyed_provider.py
+new file mode 100644
+index 0000000..9a78946
+--- /dev/null
++++ b/backend/tests/_keyed_provider.py
+@@ -0,0 +1,65 @@
++"""A scripted provider keyed by (task, field, tier) -- M2 review 18 (R18-03).
++
++The positional `RecordingProvider` answers the n-th request with the n-th scripted answer, whatever was asked: with the
++targeted reader (T) an extra context read took the answer scripted for another field (review 18 reproduced it). Here
++every answer is selected by what the request is for:
++  task   the request's task; `discover` matches either discovery task (`discover_page`, E's `discover_region`)
++  field  identity / revision / decision for the value / decision reads; for `read_field_context` taken from the
++         request's own prompt ("OWN identity" / "OWN current revision"); None for discovery
++  tier   small / standard
++A value is one answer (reused) or a list (consumed in order for repeated requests of the same key); an exception with
++`kind` is a provider failure. A request nobody scripted fails the test (AssertionError) instead of receiving an
++unrelated answer. `requests` records every key asked, in order."""
++from __future__ import annotations
++
++from app.ai.provider import AiResponse, TextPart, Usage
++
++_FIELD = {"read_identity": "identity", "read_revision": "revision", "read_decision": "decision"}
++
++
++def key_of(request) -> tuple:
++    task = request.task
++    field = _FIELD.get(task)
++    if task == "read_field_context":
++        text = " ".join(p.text for p in request.parts if isinstance(p, TextPart))
++        field = "identity" if "OWN identity" in text else "revision" if "OWN current revision" in text else None
++    return task, field, request.tier
++
++
++class KeyedProvider:
++    name = "keyed"
++    ready = True
++    status = "a scripted provider keyed by task / field / tier (tests)"
++
++    def __init__(self, answers: dict) -> None:
++        self.answers = {k: (list(v) if isinstance(v, list) else v) for k, v in answers.items()}
++        self.requests: list[tuple] = []
++        self.calls = 0
++
++    def _lookup(self, key: tuple):
++        if key in self.answers:
++            return key
++        task, field, tier = key
++        if task.startswith("discover") and ("discover", field, tier) in self.answers:
++            return ("discover", field, tier)
++        raise AssertionError(f"unscripted request {key}: a keyed test scripts every request it expects")
++
++    def complete(self, request):
++        key = key_of(request)
++        self.calls += 1
++        self.requests.append(key)
++        slot = self._lookup(key)
++        answer = self.answers[slot]
++        if isinstance(answer, list):
++            if not answer:
++                raise AssertionError(f"no scripted answer left for {slot}")
++            answer = answer.pop(0)
++        if isinstance(answer, Exception):
++            return AiResponse(data=None, error=getattr(answer, "kind", "transport"), error_detail=str(answer), model="keyed")
++        return AiResponse(data=answer, usage=Usage(input_tokens=500, output_tokens=40), model="keyed", latency_ms=1)
++
++
++def failure(kind: str = "timeout") -> Exception:
++    e = RuntimeError(f"scripted {kind}")
++    e.kind = kind
++    return e
+diff --git a/backend/tests/test_ai_pilot_2026_09_30.py b/backend/tests/test_ai_pilot_2026_09_30.py
+index a2652d2..f543208 100644
+--- a/backend/tests/test_ai_pilot_2026_09_30.py
++++ b/backend/tests/test_ai_pilot_2026_09_30.py
+@@ -124,6 +124,9 @@ def _t(monkeypatch):
+     """T as the environment flags set it at import: guard + targeted + the targeted prompt's identity."""
+     monkeypatch.setattr(er, "GUARD_ENABLED", True)
+     monkeypatch.setattr(er, "TARGETED_ENABLED", True)
++    # these T tests script discovery regions in the whole page's frame: E (located discovery) is pinned off here and
++    # tested on its own in test_ai_pilot_r18 (M2 review 18)
++    monkeypatch.setattr(er, "EFFICIENT_ENABLED", False, raising=False)
+     monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"})
+ 
+ 
+@@ -157,7 +160,11 @@ def test_targeted_read_with_another_role_stays_held(db_session, monkeypatch):
+     provider = RecordingProvider([_discover("ABC-123", region=[]), _ctx("ABC-123", role="referenced_identity", region=BOX)])
+     out = er._read_page(_run(db_session, provider), page, sha256="d" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
+     ident = _own(out)
+-    assert ident["state"] == "candidate" and "referenced_identity" in " ".join(ident["reasons"])
++    # successor (M2 review 18): the wrong-role reading is kept on the observation, excluded from validation, and
++    # never completes the field (e5a0a94 appended it to the readings and downgraded a validation afterwards)
++    assert ident["state"] == "candidate" and ident["targeted"] == "unusable:wrong_role" and ident["read"] != "completed"
++    kept = [r for r in ident["readings"] if r["source"] == "blind_context"]
++    assert kept and "referenced_identity" in kept[0]["excluded"]
+ 
+ 
+ def test_targeted_disagreement_is_a_conflict_not_a_choice(db_session, monkeypatch):
+diff --git a/backend/tests/test_ai_pilot_r18.py b/backend/tests/test_ai_pilot_r18.py
+new file mode 100644
+index 0000000..30fe71d
+--- /dev/null
++++ b/backend/tests/test_ai_pilot_r18.py
+@@ -0,0 +1,343 @@
++"""M2 review 18 successor (isolated candidate): R18-01 completion from usable targeted evidence, R18-02 no targeted read
++after a failed / refused primary or escalation request, the required-first scheduling contract, E (located discovery,
++deadline-bound requests / OCR) and the guard's offline replay. Scripted, keyed providers only (tests/_keyed_provider);
++synthetic pages. Flags are set per test on the module (the reader reads them at call time)."""
++import pymupdf
++import pytest
++
++from app.ai import evidence_reader as er
++from app.ai.budget import JobBudget, Limits, open_budget
++
++from ._keyed_provider import KeyedProvider, failure
++from .test_m2_review08 import APPROVAL, attempt_page, decision_read, discover, doc_row, read, stage, value  # noqa: F401
++
++SHA = "8" * 64
++
++
++def _flags(monkeypatch, *, T=True, E=False):
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    monkeypatch.setattr(er, "TARGETED_ENABLED", T)
++    monkeypatch.setattr(er, "EFFICIENT_ENABLED", E)
++    monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1",
++                                        "discover_region": "discover-region-2026-09-30.1"})
++
++
++def ctx(value, role="own_identity", legible=True):
++    return {"value": value, "printed_label": "Drawing No", "role": role, "region": [0, 0, 1000, 1000], "legible": legible}
++
++
++def illegible():
++    return {"label_text": "", "value": "", "legible": False, "other_values_in_crop": []}
++
++
++def empty():
++    return {"label_text": "", "value": "", "legible": True, "other_values_in_crop": []}
++
++
++def _page(text="Drawing No X-SD-1  REV 02", size=(1684, 1190)):
++    doc = pymupdf.open()
++    page = doc.new_page(width=size[0], height=size[1])
++    page.insert_text((1300, 1100) if size[0] > 1300 else (400, 700), text, fontsize=9)
++    return doc, page
++
++
++def _sheet(number_line="DRAWING NO X-SD-1"):
++    """A drawing sheet with a text-layer title block of several runs (the locator reads >= 5 runs from the text layer)."""
++    doc = pymupdf.open()
++    page = doc.new_page(width=1684, height=1190)
++    for i, t in enumerate(["PROJECT  EXAMPLE TOWER", "CLIENT  EXAMPLE", "SCALE 1:100", "DRAWN  AB", "CHECKED  CD"]):
++        page.insert_text((1300, 1000 + 16 * i), t, fontsize=9)
++    page.insert_text((1300, 1100), number_line, fontsize=9)
++    return doc, page
++
++
++def _run(db, provider, variant="EV1", budget=None):
++    return er.EvidenceRun(db=db, project_id=None, provider=provider, budget=budget or open_budget(db, None), variant=variant, fresh=True)
++
++
++def _own(out, field="identity"):
++    return next(o for o in out["_observations"] if o["field"] == field and o["component"] == "own")
++
++
++def _selected(ai, key):
++    got = er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")
++    assert got["state"] == "current", got
++    return next(o for o in got["observations"] if er._field_key(o) == key)
++
++
++# --- R18-01: a genuine targeted recovery completes the field; persisted, reloaded and selected ---------------------------
++
++
++@pytest.mark.parametrize("primary", [illegible(), empty()], ids=["illegible", "empty"])
++def test_targeted_rescue_completes_the_field_and_is_selected_after_reload(doc_row, monkeypatch, primary):
++    _flags(monkeypatch)
++    p = KeyedProvider({("discover", None, "small"): discover("X-SD-1", revision="02"), ("read_identity", "identity", "small"): primary,
++                       ("read_revision", "revision", "small"): read("02"), ("read_field_context", "identity", "small"): ctx("X-SD-1")})
++    ai = stage(doc_row, None, provider=p)                   # evidence_stage, persisted, reloaded from the database
++    assert value(ai, "own:identity") == ("X-SD-1", "validated", 1, "completed")
++    f = attempt_page(ai)["fields"]
++    assert f["own:identity"] == "completed" and f["own:identity:targeted"] == "completed"
++    assert f["own:identity:primary"] == ("unusable:illegible" if not primary["legible"] else "unusable:empty")
++    req = attempt_page(ai)["requests"]
++    assert req["own:identity"] == "ok" and req["own:identity:targeted"] == "ok"
++    # the revision is associated with the identity the targeted read established (the page's completed target)
++    assert _selected(ai, "own:revision").get("target") == "X-SD-1"
++    assert [k[0] for k in p.requests][1:] == ["read_identity", "read_revision", "read_field_context"]
++
++
++def _good_first(doc_row):
++    stage(doc_row, None, provider=KeyedProvider({("discover", None, "small"): discover("X-SD-1", revision="02", decision=APPROVAL),
++                                                 ("read_identity", "identity", "small"): read("X-SD-1"),
++                                                 ("read_revision", "revision", "small"): read("02"),
++                                                 ("read_decision", "decision", "small"): decision_read()}))
++
++
++@pytest.mark.parametrize("answer, outcome", [
++    ({"value": "", "printed_label": "", "role": "own_identity", "region": [0, 0, 1000, 1000], "legible": True}, "unusable:empty"),
++    (ctx("X-SD-1", legible=False), "unusable:illegible"),
++    (failure("timeout"), "failed:timeout"),
++    (failure("refused"), "failed:refused"),
++    (ctx("X-SD-1", role="referenced_identity"), "unusable:wrong_role"),
++], ids=["empty", "illegible", "timeout", "refusal", "wrong_role"])
++def test_unsuccessful_targeted_reads_never_complete_and_keep_the_last_good(doc_row, monkeypatch, answer, outcome):
++    _flags(monkeypatch)
++    _good_first(doc_row)
++    p = KeyedProvider({("discover", None, "small"): discover("X-SD-1"), ("read_identity", "identity", "small"): illegible(),
++                       ("read_field_context", "identity", "small"): answer})
++    ai = stage(doc_row, None, provider=p)
++    f = attempt_page(ai)["fields"]
++    assert f["own:identity"] == "unusable:illegible" and f["own:identity:targeted"] == outcome
++    assert value(ai, "own:identity") == ("X-SD-1", "validated", 1, "completed"), "the last-good identity is kept"
++    assert value(ai, "own:decision")[:3] == ("ANN", "validated", 1)
++
++
++def test_a_disagreeing_targeted_read_completes_as_a_conflict_never_a_validation(doc_row, monkeypatch):
++    _flags(monkeypatch)
++    _good_first(doc_row)
++    ai = stage(doc_row, None, provider=KeyedProvider({("discover", None, "small"): discover("X-SD-1"),
++                                                       ("read_identity", "identity", "small"): illegible(),
++                                                       ("read_field_context", "identity", "small"): ctx("X-SD-7")}))
++    got = value(ai, "own:identity")
++    assert got[1] == "conflict" and got[2] == 2, "a completed disagreement supersedes as a conflict (accepted completed-read rule)"
++    assert attempt_page(ai)["fields"]["own:identity:targeted"] == "completed"
++
++
++def test_an_unsupported_targeted_read_completes_as_a_candidate_never_a_validation(doc_row, monkeypatch):
++    _flags(monkeypatch)
++    ai = stage(doc_row, None, provider=KeyedProvider({("discover", None, "small"): discover("X-SD-5"),
++                                                       ("read_identity", "identity", "small"): illegible(),
++                                                       ("read_field_context", "identity", "small"): ctx("X-SD-5")}))
++    got = value(ai, "own:identity")
++    assert got[:2] == ("X-SD-5", "candidate"), "X-SD-5 is printed nowhere on the page: agreement without support is a candidate"
++
++
++# --- R18-02: no targeted read after a failed / refused primary or escalation ----------------------------------------------
++
++
++def _ev2(db, answers, budget=None):
++    p = KeyedProvider(answers)
++    doc, page = _page("Drawing No X-SD-1 X-SD-2")
++    run = _run(db, p, variant="EV2", budget=budget)
++    out = er._read_page(run, page, sha256="a" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    return out, p, run
++
++
++def test_no_targeted_read_after_a_failed_standard_escalation(db_session, monkeypatch):
++    _flags(monkeypatch)
++    out, p, run = _ev2(db_session, {("discover", None, "small"): discover("X-SD-1"), ("read_identity", "identity", "small"): read("X-SD-2"),
++                                    ("read_identity", "identity", "standard"): failure("timeout")})
++    assert [k[:3] for k in p.requests][1:] == [("read_identity", "identity", "small"), ("read_identity", "identity", "standard")]
++    f = out["_fields"]
++    assert f["own:identity:escalation"] == "failed:timeout" and f["own:identity:targeted"] == "not_attempted:after_failure"
++    assert _own(out)["state"] == "conflict"
++
++
++def test_no_targeted_read_after_a_budget_refused_escalation_and_the_exhaustion_stays(db_session, monkeypatch):
++    _flags(monkeypatch)
++    tight = JobBudget(limits=Limits(100000, 100000, 2, 1000, 0.0, 120.0, 2, 0.0, 0.0, 0.0), calls_today_before=0)
++    out, p, run = _ev2(db_session, {("discover", None, "small"): discover("X-SD-1"), ("read_identity", "identity", "small"): read("X-SD-2")},
++                       budget=tight)
++    assert [k[0] for k in p.requests] == ["discover_page", "read_identity"], "the escalation never left the process"
++    assert out["_fields"]["own:identity:escalation"] == "budget" and out["_fields"]["own:identity:targeted"] == "not_attempted:after_failure"
++    assert run.exhausted == "calls_per_document", "the exhaustion is kept"
++
++
++def test_primary_timeout_control_suppresses_the_targeted_read(db_session, monkeypatch):
++    _flags(monkeypatch)
++    doc, page = _page("Drawing No X-SD-1")
++    p = KeyedProvider({("discover", None, "small"): discover("X-SD-1"), ("read_identity", "identity", "small"): failure("timeout")})
++    out = er._read_page(_run(db_session, p), page, sha256="b" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert out["_fields"]["own:identity"] == "failed:timeout" and out["_fields"]["own:identity:targeted"] == "not_attempted:after_failure"
++    assert [k[0] for k in p.requests] == ["discover_page", "read_identity"]
++
++
++# --- the scheduling contract: required reads before optional targeted reads --------------------------------------------
++
++
++def test_required_reads_come_before_the_optional_targeted_read(db_session, monkeypatch):
++    """Contract: discovery, then identity / revision / decision primary reads, then the optional targeted reads."""
++    _flags(monkeypatch)
++    doc, page = _page("Drawing No X-SD-1  REV 02  B = APPROVED AS NOTED")
++    p = KeyedProvider({("discover", None, "small"): discover("X-SD-9", revision="02", decision=APPROVAL),
++                       ("read_identity", "identity", "small"): read("X-SD-9"), ("read_revision", "revision", "small"): read("02"),
++                       ("read_decision", "decision", "small"): decision_read(), ("read_field_context", "identity", "small"): ctx("X-SD-9")})
++    er._read_page(_run(db_session, p), page, sha256="c" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert [k[0] for k in p.requests] == ["discover_page", "read_identity", "read_revision", "read_decision", "read_field_context"]
++
++
++def test_an_optional_read_cannot_take_the_budget_a_required_read_needs(db_session, monkeypatch):
++    """The e5a0a94 order (identity, its targeted read, revision, decision) with a 4-call budget spent the fourth call on
++    the optional read and refused the decision; required-first gives it to the decision and refuses the optional read."""
++    _flags(monkeypatch)
++    doc, page = _page("Drawing No X-SD-1  REV 02  B = APPROVED AS NOTED")
++    four = JobBudget(limits=Limits(100000, 100000, 4, 1000, 0.0, 120.0, 2, 0.0, 0.0, 0.0), calls_today_before=0)
++    p = KeyedProvider({("discover", None, "small"): discover("X-SD-9", revision="02", decision=APPROVAL),
++                       ("read_identity", "identity", "small"): read("X-SD-9"), ("read_revision", "revision", "small"): read("02"),
++                       ("read_decision", "decision", "small"): decision_read(), ("read_field_context", "identity", "small"): ctx("X-SD-9")})
++    out = er._read_page(_run(db_session, p, budget=four), page, sha256="d" * 64, number=1,
++                        facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    f = out["_fields"]
++    assert f["own:identity"] == f["own:revision"] == f["own:decision"] == "completed"
++    assert f["own:identity:targeted"] == "budget" and "read_field_context" not in [k[0] for k in p.requests]
++
++
++def test_every_page_s_required_reads_come_before_any_optional_read(db_session, monkeypatch):
++    """Document level: page 2's required reads are made before page 1's optional targeted read."""
++    _flags(monkeypatch)
++    pdf = pymupdf.open()
++    for _ in range(2):
++        pdf.new_page(width=1684, height=1190).insert_text((1300, 1100), "Drawing No X-SD-1", fontsize=9)
++    p = KeyedProvider({("discover", None, "small"): [discover("X-SD-9"), discover("X-SD-8")],
++                       ("read_identity", "identity", "small"): [read("X-SD-9"), read("X-SD-8")],
++                       ("read_field_context", "identity", "small"): [ctx("X-SD-9"), ctx("X-SD-8")]})
++    run = _run(db_session, p)
++    obs, cov = er.read_document(run, pdf, sha256="e" * 64, records=[], observations=[])
++    assert [k[0] for k in p.requests] == ["discover_page", "read_identity", "discover_page", "read_identity", "read_field_context", "read_field_context"]
++    assert [pg["page"] for pg in cov["pages"]] == [1, 2] and all(pg["fields"]["own:identity:targeted"] == "completed" for pg in cov["pages"])
++
++
++# --- E: located discovery, located absence, deadline-bound requests and OCR ----------------------------------------------
++
++
++def test_locator_uses_title_block_labels_then_the_strip_never_the_whole_sheet():
++    doc, page = _sheet()
++    clip, route = er.locate_title_block(page)
++    assert route == "located:labels:text" and clip.contains(pymupdf.Point(1310, 1097)) and clip.get_area() <= 0.45 * page.rect.get_area()
++    doc, bare = _sheet("GENERAL ARRANGEMENT")                   # no number / revision label anywhere
++    clip, route = er.locate_title_block(bare, ocr_timeout=0)
++    assert route.startswith("located:strip") and clip.width < bare.rect.width
++    doc, a4 = _page("DRAWING NO X-SD-1", size=(595, 842))
++    assert er.locate_title_block(a4) == (None, "not_a_drawing_sheet")
++
++
++def test_located_discovery_maps_its_regions_back_to_the_page(db_session, monkeypatch):
++    _flags(monkeypatch, T=True, E=True)
++    doc, page = _sheet()
++    clip, _ = er.locate_title_block(page)
++    # the value's place in the CROP's 0..1000 frame
++    box = [int((1300 - clip.x0) / clip.width * 1000) - 5, int((1090 - clip.y0) / clip.height * 1000) - 5,
++           int((1400 - clip.x0) / clip.width * 1000) + 5, int((1103 - clip.y0) / clip.height * 1000) + 5]
++    answer = {**discover("X-SD-1"), "own_identity_region": box}
++    p = KeyedProvider({("discover_region", None, "small"): answer, ("read_identity", "identity", "small"): read("X-SD-1")})
++    out = er._read_page(_run(db_session, p), page, sha256="f" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "validated" and ident["support"] == "text"
++    assert out["_fields"]["discovery:route"] == "located:labels:text"
++    assert out["_fields"]["own:revision"] == er.LOCATED_ABSENCE, "absent from a located crop is not a verified absence"
++    assert out["_fields"]["own:decision"] == "absent_by_discovery", "no decision-block words anywhere in the page's text"
++    assert [k[0] for k in p.requests] == ["discover_region", "read_identity"]
++
++
++def test_located_decision_absence_is_incomplete_where_the_page_prints_decision_words(db_session, monkeypatch):
++    _flags(monkeypatch, T=True, E=True)
++    doc, page = _page("DRAWING NO X-SD-1")
++    page.insert_text((100, 100), "B = APPROVED AS NOTED    stamp of the consultant, reviewed for the project", fontsize=9)
++    p = KeyedProvider({("discover_region", None, "small"): discover(""), ("read_field_context", "identity", "small"): ctx("", legible=False)})
++    out = er._read_page(_run(db_session, p), page, sha256="1" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert out["_fields"]["own:decision"] == er.LOCATED_ABSENCE and out["_outcome"] == "partial"
++
++
++def test_non_drawing_pages_are_discovered_whole_with_e(db_session, monkeypatch):
++    _flags(monkeypatch, T=True, E=True)
++    doc, page = _page("DRAWING NO X-SD-1", size=(595, 842))
++    p = KeyedProvider({("discover_page", None, "small"): discover(""), ("read_field_context", "identity", "small"): ctx("", legible=False)})
++    out = er._read_page(_run(db_session, p), page, sha256="2" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert out["_fields"]["discovery:route"] == "full_page" and out["_fields"]["own:identity"] == "absent_by_discovery"
++
++
++class _Clock:
++    """A job budget with a fixed remaining time (the application's JobBudget interface)."""
++
++    def __init__(self, remaining):
++        self.inner = JobBudget(limits=Limits(100000, 100000, 12, 1000, 0.0, 120.0, 2, 0.0, 0.0, 0.0), calls_today_before=0)
++        self.left = remaining
++
++    def remaining_s(self):
++        return self.left
++
++    def __getattr__(self, name):
++        return getattr(self.inner, name)
++
++
++class _Capture(KeyedProvider):
++    def complete(self, request):
++        self.timeouts = getattr(self, "timeouts", []) + [request.timeout_s]
++        return super().complete(request)
++
++
++def test_the_request_timeout_is_the_job_s_remaining_time_and_a_floor_stops_new_requests(db_session, monkeypatch):
++    _flags(monkeypatch, T=False, E=True)
++    p = _Capture({("discover_page", None, "small"): discover("")})
++    doc, page = _page("DRAWING NO X-SD-1", size=(595, 842))
++    run = _run(db_session, p, budget=_Clock(50.0))
++    er._read_page(run, page, sha256="3" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert p.timeouts == [50.0] and run.log[-1]["timeout_s"] == 50.0
++    p2 = _Capture({})
++    run2 = _run(db_session, p2, budget=_Clock(12.0))
++    out = er._read_page(run2, page, sha256="4" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert p2.calls == 0 and run2.exhausted == "elapsed_time" and out["_fields"]["discovery"] == "budget"
++    assert "minimum request time" in run2.log[-1]["outcome"]
++
++
++def test_e_off_keeps_the_provider_timeout_and_the_full_page(db_session, monkeypatch):
++    _flags(monkeypatch, T=False, E=False)
++    p = _Capture({("discover_page", None, "small"): discover("")})
++    doc, page = _page("DRAWING NO X-SD-1")
++    er._read_page(_run(db_session, p, budget=_Clock(50.0)), page, sha256="5" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="p")
++    assert p.timeouts == [None] and [k[0] for k in p.requests] == ["discover_page"]
++
++
++def test_ocr_inside_a_job_is_bounded_by_the_remaining_time(monkeypatch):
++    _flags(monkeypatch, T=True, E=True)
++    run = type("R", (), {"budget": _Clock(35.0)})()
++    assert er._ocr_timeout(run) == 15.0
++    run.budget.left = 10.0
++    assert er._ocr_timeout(run) == 0.0
++    called = []
++    monkeypatch.setattr("app.services.document_control._tesseract", lambda: called.append(1))
++    doc, page = _page("x")
++    assert er._local_ocr(page, page.rect, 0.0) == "" and not called, "no time left: no OCR is started"
++
++
++# --- G: the confirmed Rev.0 acceptance, replayed OFFLINE through the guard (no model call) -------------------------------
++
++# the stored readings of the accepted EV1 run (review 13 package, r2x-small-B, EP-17428 FA MS/Rev.01/1-7.pdf page 4,
++# sha256 535ffbda...): discovery and the blind read both gave "Rev.0" in the "Submittal No." cell, supported by the text
++REV0_READINGS = [{"source": "discovery", "value": "Rev.0", "legible": True},
++                 {"source": "blind_small", "value": "Rev.0", "legible": True, "label": "Submittal No."}]
++
++
++def test_offline_replay_of_the_confirmed_rev0_acceptance(monkeypatch):
++    texts = [("text", "Submittal No.: Rev.0")]
++    monkeypatch.setattr(er, "GUARD_ENABLED", False)
++    assert er.validate_value("identity", REV0_READINGS, texts, None)["state"] == "validated", "accepted behaviour reproduced"
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    got = er.validate_value("identity", REV0_READINGS, texts, None)
++    assert got["state"] == "candidate" and got["guard"] == "bare_revision_token"
++
++
++@pytest.mark.parametrize("value", ["FAS-09", "3105", "P10781", "AR-101", "2836", "E", "R1029-07-W&A-DWG-TYP-GRO-INT-9011-01"])
++def test_valid_short_identifiers_pass_the_guard(monkeypatch, value):
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    readings = [{"source": "discovery", "value": value, "legible": True}, {"source": "blind_small", "value": value, "legible": True}]
++    assert er.validate_value("identity", readings, [("text", f"No. {value}")], None)["state"] == "validated"
+diff --git a/backend/tests/test_evidence_reader_r7.py b/backend/tests/test_evidence_reader_r7.py
+index 0505614..058d6d0 100644
+--- a/backend/tests/test_evidence_reader_r7.py
++++ b/backend/tests/test_evidence_reader_r7.py
+@@ -81,13 +81,24 @@ def _read(value):
+ 
+ 
+ def test_escalation_keeps_the_earlier_disagreement(db_session):
++    """M2 review 18 (R18-03): answers keyed by task / field / tier. With T the conflict also gets one independent
++    context read (it disagrees with the blind reads): the disagreement is kept, never resolved by the extra reading."""
++    from ._keyed_provider import KeyedProvider
++
+     doc, page = _page()
+-    provider = RecordingProvider([_discover("X-SD-1"), _read("X-SD-2"), _read("X-SD-2")])
++    provider = KeyedProvider({("discover", None, "small"): _discover("X-SD-1"), ("read_identity", "identity", "small"): _read("X-SD-2"),
++                              ("read_identity", "identity", "standard"): _read("X-SD-2"),
++                              ("read_field_context", "identity", "small"): {"value": "X-SD-1", "printed_label": "Drawing No",
++                                                                            "role": "own_identity", "region": [0, 0, 1000, 1000], "legible": True}})
+     facts = er.PageFacts(1, page.get_text(), [], [])
+     out = er._read_page(_run(db_session, provider), page, sha256="a" * 64, number=1, facts=facts, reason="probe")
+     identity = next(o for o in out["_observations"] if o["field"] == "identity" and o["role"] == "own")
+-    assert [r["source"] for r in identity["readings"]] == ["discovery", "blind_small", "blind_standard"]
++    t_on = getattr(er, "TARGETED_ENABLED", False)
++    assert [r["source"] for r in identity["readings"]] == ["discovery", "blind_small", "blind_standard"] + (["blind_context"] if t_on else [])
+     assert identity["state"] == "conflict" and identity["candidates"] == ["X-SD-1", "X-SD-2"]
++    asked = [k[0] if not k[0].startswith("discover") else "discover" for k in provider.requests]
++    assert asked == ["discover", "read_identity", "read_identity"] + (["read_field_context"] if t_on else [])
++    assert [k[2] for k in provider.requests][:3] == ["small", "small", "standard"]
+ 
+ 
+ # --- literal and numeric semantics ----------------------------------------------------------------------------------------
+diff --git a/backend/tests/test_m2_review08.py b/backend/tests/test_m2_review08.py
+index 296eb82..cd79341 100644
+--- a/backend/tests/test_m2_review08.py
++++ b/backend/tests/test_m2_review08.py
+@@ -199,11 +199,25 @@ def test_a_budget_attempt_without_field_outcomes_never_overwrites_with_a_candida
+ 
+ 
+ def test_identity_completes_while_revision_times_out_and_decision_is_refused_by_budget(doc_row, tmp_path):
+-    ai = stage(doc_row, [discover("X-SD-1", revision="02", decision=APPROVAL), read("X-SD-1"), read("02"), decision_read()])
++    """M2 review 18 (R18-03): answers keyed by task / field / tier, so no request can receive another field's answer.
++    With T the optional context read of the unsupported X-SD-9 comes only after every required read (required-first):
++    by then the ledger has refused the decision read and the run is exhausted, so it is not attempted."""
++    from ._keyed_provider import KeyedProvider
++
++    t_on = getattr(er, "TARGETED_ENABLED", False)
++    ctx = lambda v, role: {"value": v, "printed_label": "", "role": role, "region": [0, 0, 1000, 1000], "legible": True}
++    first = KeyedProvider({("discover", None, "small"): discover("X-SD-1", revision="02", decision=APPROVAL),
++                           ("read_identity", "identity", "small"): read("X-SD-1"), ("read_revision", "revision", "small"): read("02"),
++                           ("read_decision", "decision", "small"): decision_read()})
++    ai = stage(doc_row, None, provider=first)
+     assert value(ai, "own:revision")[:2] == ("02", "validated")
++    assert not [k for k in first.requests if k[0] == "read_field_context"], "validated fields get no targeted read"
+     # step 2: a fresh ledger admits discovery, identity and revision (which times out); the decision read is refused
+     led = L.Ledger(str(tmp_path / "led.sqlite"), "r8", L.Limits(requests=3))
+-    inner = RecordingProvider([discover("X-SD-9", revision="03", decision=APPROVAL), read("X-SD-9"), timeout()])
++    inner = KeyedProvider({("discover", None, "small"): discover("X-SD-9", revision="03", decision=APPROVAL),
++                           ("read_identity", "identity", "small"): read("X-SD-9"), ("read_revision", "revision", "small"): timeout(),
++                           ("read_decision", "decision", "small"): decision_read(),
++                           ("read_field_context", "identity", "small"): ctx("X-SD-9", "own_identity")})
+     inner.name = "claude-code"
+     ai = stage(doc_row, None, provider=L.LedgerProvider(inner, led))
+     assert value(ai, "own:revision") == ("02", "validated", 1, "completed"), "the timed-out read replaces nothing"
+@@ -211,6 +225,10 @@ def test_identity_completes_while_revision_times_out_and_decision_is_refused_by_
+     assert value(ai, "own:identity")[0] == "X-SD-9" and value(ai, "own:identity")[2] == 2, "the completed read replaces"
+     f = attempt_page(ai)["fields"]
+     assert f["own:identity"] == "completed" and f["own:revision"] == "failed:timeout" and f["own:decision"] == "budget"
++    assert [k[0] for k in inner.requests][1:] == ["read_identity", "read_revision"], "the ledger refused the decision before the provider"
++    if t_on:
++        assert f.get("own:identity:targeted") == "not_attempted:budget", "no optional read after the budget stop"
++        assert f.get("own:revision:targeted") == "not_attempted:after_failure", "no targeted read after the timeout"
+ 
+ 
+ def test_one_component_completes_and_another_fails_without_contaminating_each_other(doc_row):
+diff --git a/backend/tests/test_m2_review10.py b/backend/tests/test_m2_review10.py
+index 9e95a6c..08fd3b9 100644
+--- a/backend/tests/test_m2_review10.py
++++ b/backend/tests/test_m2_review10.py
+@@ -58,11 +58,11 @@ def persist(d, ai):
+     return d.db.get(ProjectDocument, d.id).extracted["ai_evidence"]
+ 
+ 
+-def stage(d, answers):
++def stage(d, answers, provider=None):
+     d.db.query(ResultCache).delete()
+     d.db.commit()
+     row = d.db.get(ProjectDocument, d.id)
+-    er.evidence_stage(d.db, d.project, [(row, d.path)], provider=RecordingProvider(answers), variant="EV1", profile="default")
++    er.evidence_stage(d.db, d.project, [(row, d.path)], provider=provider or RecordingProvider(answers), variant="EV1", profile="default")
+     d.db.commit()
+     d.db.expire_all()
+     return d.db.get(ProjectDocument, d.id).extracted["ai_evidence"]
+@@ -163,12 +163,28 @@ def test_a_targetless_fact_read_before_any_identity_is_unresolved_once_one_is_re
+ # --- B: a missing identity never bypasses a known revision constraint ----------------------------------------------------
+ 
+ 
++def _keyed(identity_context=None, **answers):
++    """M2 review 18 (R18-03): answers keyed by task / field / tier. `identity_context`: T's context read of the identity
++    the deterministic reader names (no AI region): an illegible answer keeps this scenario 'without an AI identity'."""
++    from ._keyed_provider import KeyedProvider
++
++    keyed = {("discover", None, "small"): answers["discover"]}
++    if "revision" in answers:
++        keyed[("read_revision", "revision", "small")] = answers["revision"]
++    if "decision" in answers:
++        keyed[("read_decision", "decision", "small")] = answers["decision"]
++    if getattr(er, "TARGETED_ENABLED", False):
++        keyed[("read_field_context", "identity", "small")] = identity_context or {"value": "", "printed_label": "", "role": "other",
++                                                                                   "region": [0, 0, 1000, 1000], "legible": False}
++    return KeyedProvider(keyed)
++
++
+ def test_a_known_revision_constraint_holds_a_decision_without_an_ai_identity(det_row):
+-    ai = stage(det_row, [discover("", revision="02", decision=APPROVAL), read("02"), decision_read()])
++    ai = stage(det_row, None, provider=_keyed(discover=discover("", revision="02", decision=APPROVAL), revision=read("02"), decision=decision_read()))
+     dec = selected(ai, "own:decision")
+     assert (dec["value"], dec["state"], dec.get("target"), dec.get("target_revision")) == ("ANN", "validated", "X-SD-1", "02")
+     assert "own:identity" not in er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")["envelope"]["pages"]["1"]["fields"]
+-    ai = stage(det_row, [discover("", revision="03"), read("03")])          # the same target now reads revision 03
++    ai = stage(det_row, None, provider=_keyed(discover=discover("", revision="03"), revision=read("03")))   # the same target now reads revision 03
+     assert selected(ai, "own:revision").get("target") == "X-SD-1"
+     s = score(ai, reference="X-SD-1", revision="03")
+     assert ("ANN", "validated", "correct") not in s.judged("decision") and s.recovery["decision"] != "recovered_clean"
+-- 
+2.55.0.windows.5
+

@@ -1,0 +1,21 @@
+{
+ "workflow": [
+  "1. selection rule frozen (R21-SAMPLE.json, this task)",
+  "2. owner budget decision",
+  "3. AI-drafted labels from renders / text layer, page and region bound, decision location recorded; ambiguous items stay unresolved",
+  "4. independent owner-delegated AI source review of every decision label, every rotated / scanned item and a seeded 25 % subset; provenance kept (reviewer, render hashes); no human signature",
+  "5. the off-title-block minimum (>= 4 confirmed) checked; shortfall topped up from the screened pool in seed order, still before any prediction; the final count reported",
+  "6. labels and review FROZEN (hashes into the final declaration)",
+  "7. only then any prediction"
+ ],
+ "rules": [
+  "no prediction becomes truth",
+  "AI-drafted / AI-reviewed status stays on every label",
+  "unresolved labels are reported separately and never silently resolved"
+ ],
+ "files": {
+  "R21-REGISTER-LABELS.json": "288cb83f443dd3fcab364f7d5ff9ea56f371b3f2cf7cc9d0cc5a167e1b4ad558",
+  "R21-PAGE-LABELS.json": "2b2e87e1eb2b959ba7fbc329e3ab76bcda061012dd0cb7e5cce223218dc45759",
+  "R21-UNCERTAINTY-AND-EXPOSURE.json": "83431ae2e2dcb406854f3435608d6a4098834635133a033395864798564c4f16"
+ }
+}

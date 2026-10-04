@@ -1,0 +1,4792 @@
+{
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "register_evaluator": "m2-pilot-eval-2026-09-29.4",
+ "ai_context": {
+  "variant": null,
+  "declared": "no AI evidence stage in this run"
+ },
+ "documents": [
+  {
+   "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R1/01. Basement-4/BBY006-GME-SDW-FP-FA-BSM-B04-010025.pdf",
+   "ep": "30784",
+   "cohort": "regression",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+      "printed_revision": "01",
+      "decision": "UR",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "matched_register_ineligible",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tn",
+      "system": "tp",
+      "floor": "tp",
+      "title": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+     "status": "UR",
+     "printed_revision": "01",
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "single_component": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "single_component": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "BBY006-GME-SDW-FP-FA-BSM-B04-010025",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+   "ep": "30784",
+   "cohort": "regression",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "cover",
+      "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+      "printed_revision": "01",
+      "decision": "ANN",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 2,
+     "expected": {
+      "component": "sheet",
+      "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+      "printed_revision": "01",
+      "decision": "ANN",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "missed",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 3,
+     "expected": {
+      "component": "cover",
+      "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+      "printed_revision": "00",
+      "decision": "rejected",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 4,
+     "expected": {
+      "component": "sheet",
+      "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+      "printed_revision": "00",
+      "decision": "rejected",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+     "status": "ANN",
+     "printed_revision": "R1",
+     "expected": 0
+    },
+    {
+     "page": 2,
+     "how": "same_page",
+     "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+     "status": "UR",
+     "printed_revision": "01",
+     "expected": 1
+    },
+    {
+     "page": 3,
+     "how": "same_page",
+     "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+     "status": "rejected",
+     "printed_revision": "R0",
+     "expected": 2
+    },
+    {
+     "page": 4,
+     "how": "same_page",
+     "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+     "status": "rejected",
+     "printed_revision": "00",
+     "expected": 3
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R1",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "held",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "held",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "held_correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 3
+      }
+     ],
+     "association": {
+      "identity": 4,
+      "single_component": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 4,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 4,
+       "redundant": 2
+      },
+      "decision": {
+       "correct": 3,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 4
+      },
+      "revision:accepted": {
+       "correct": 4
+      },
+      "decision:accepted": {
+       "correct": 3
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 4
+      },
+      "revision": {
+       "recovered_clean": 4
+      },
+      "decision": {
+       "recovered_clean": 3,
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R1",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "held",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "held",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "held_correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "parser",
+       "group": "record:3",
+       "layer": "raw",
+       "expected": 3
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 3
+      }
+     ],
+     "association": {
+      "identity": 4,
+      "single_component": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 4,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 4,
+       "redundant": 2
+      },
+      "decision": {
+       "correct": 3,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 4
+      },
+      "revision:accepted": {
+       "correct": 4
+      },
+      "decision:accepted": {
+       "correct": 3
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 4
+      },
+      "revision": {
+       "recovered_clean": 4
+      },
+      "decision": {
+       "recovered_clean": 3,
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 4
+      },
+      "revision": {
+       "missed": 4
+      },
+      "decision": {
+       "missed": 4
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 4,
+       "expected": {
+        "component": "sheet",
+        "reference": "BBY006-GME-SDW-FP-FA-ZZZ-L02-010007",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30784/04- Drawings/06- DCD approved/PDF/785045SMOKECONTROLSYSTEMREVISEDPART02.pdf",
+   "ep": "30784",
+   "cohort": "regression",
+   "stratum": "approval_sample",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "bounded",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "SM-116",
+      "printed_revision": "01",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "SM-116",
+       "state": "observed",
+       "how": "identity",
+       "truth": "SM-116",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "SM-117",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:1",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:1",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-118",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-119",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:3",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:3",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-120",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:4",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:4",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-121",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:5",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:5",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-122",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 7,
+       "reader": "title_block",
+       "group": "obs:6",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 7,
+       "reader": "title_block",
+       "group": "obs:6",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-123",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 8,
+       "reader": "title_block",
+       "group": "obs:7",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 8,
+       "reader": "title_block",
+       "group": "obs:7",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-124",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 9,
+       "reader": "title_block",
+       "group": "obs:8",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 9,
+       "reader": "title_block",
+       "group": "obs:8",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-125",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 10,
+       "reader": "title_block",
+       "group": "obs:9",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 10,
+       "reader": "title_block",
+       "group": "obs:9",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-126",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 11,
+       "reader": "title_block",
+       "group": "obs:10",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 11,
+       "reader": "title_block",
+       "group": "obs:10",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-127",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 12,
+       "reader": "title_block",
+       "group": "obs:11",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 12,
+       "reader": "title_block",
+       "group": "obs:11",
+       "expected": null
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "unscored_page": 11
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "SM-116",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "SM-116",
+       "state": "observed",
+       "how": "identity",
+       "truth": "SM-116",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "SM-117",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:1",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:1",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-118",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-119",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:3",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 4,
+       "reader": "title_block",
+       "group": "obs:3",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-120",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:4",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 5,
+       "reader": "title_block",
+       "group": "obs:4",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-121",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:5",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 6,
+       "reader": "title_block",
+       "group": "obs:5",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-122",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 7,
+       "reader": "title_block",
+       "group": "obs:6",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 7,
+       "reader": "title_block",
+       "group": "obs:6",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-123",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 8,
+       "reader": "title_block",
+       "group": "obs:7",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 8,
+       "reader": "title_block",
+       "group": "obs:7",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-124",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 9,
+       "reader": "title_block",
+       "group": "obs:8",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 9,
+       "reader": "title_block",
+       "group": "obs:8",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-125",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 10,
+       "reader": "title_block",
+       "group": "obs:9",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 10,
+       "reader": "title_block",
+       "group": "obs:9",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-126",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 11,
+       "reader": "title_block",
+       "group": "obs:10",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 11,
+       "reader": "title_block",
+       "group": "obs:10",
+       "expected": null
+      },
+      {
+       "field": "identity",
+       "value": "SM-127",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 12,
+       "reader": "title_block",
+       "group": "obs:11",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 12,
+       "reader": "title_block",
+       "group": "obs:11",
+       "expected": null
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "unscored_page": 11
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "SM-116",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "SM-116",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+   "ep": "30784",
+   "cohort": "regression",
+   "stratum": "submittal",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "bounded",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "form",
+      "reference": "BBY006-GME-MAS-EL-FA-0004",
+      "printed_revision": "00",
+      "decision": "rejected",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 2,
+     "redundant_copies": 0,
+     "conflicting_emissions": true
+    },
+    {
+     "page": 3,
+     "expected": {
+      "component": "cover",
+      "reference": "EP-30627/SS/EML/ 1293",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "BBY006-GME-MAS-EL-FA-0004",
+     "status": "rejected",
+     "printed_revision": "R0",
+     "expected": 0
+    },
+    {
+     "page": 2,
+     "how": "cross_page",
+     "reference": "BBY006-GME-MAS-EL-FA-0004",
+     "status": "UR",
+     "printed_revision": null,
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-MAS-EL-FA-0004",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-MAS-EL-FA-0004",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "held",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-MAS-EL-FA-0004",
+       "state": "accepted",
+       "how": "cross_page",
+       "truth": "BBY006-GME-MAS-EL-FA-0004",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "EP-30627/SS/EML/ 1293",
+       "state": "observed",
+       "how": "identity",
+       "truth": "EP-30627/SS/EML/ 1293",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      }
+     ],
+     "association": {
+      "identity": 2,
+      "cross_page": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 2,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 2,
+       "redundant": 0
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      },
+      "decision:accepted": {
+       "correct": 1
+      },
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 2
+      },
+      "revision": {
+       "recovered_clean": 2
+      },
+      "decision": {
+       "recovered_clean": 1,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "BBY006-GME-MAS-EL-FA-0004",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "EP-30627/SS/EML/ 1293",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BBY006-GME-MAS-EL-FA-0004",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "BBY006-GME-MAS-EL-FA-0004",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "held",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "BBY006-GME-MAS-EL-FA-0004",
+       "state": "accepted",
+       "how": "cross_page",
+       "truth": "BBY006-GME-MAS-EL-FA-0004",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "EP-30627/SS/EML/ 1293",
+       "state": "observed",
+       "how": "identity",
+       "truth": "EP-30627/SS/EML/ 1293",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "text",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      }
+     ],
+     "association": {
+      "identity": 2,
+      "cross_page": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 2,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 2,
+       "redundant": 0
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      },
+      "decision:accepted": {
+       "correct": 1
+      },
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 2
+      },
+      "revision": {
+       "recovered_clean": 2
+      },
+      "decision": {
+       "recovered_clean": 1,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "BBY006-GME-MAS-EL-FA-0004",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "EP-30627/SS/EML/ 1293",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 2
+      },
+      "revision": {
+       "missed": 2
+      },
+      "decision": {
+       "missed": 1,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "BBY006-GME-MAS-EL-FA-0004",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "cover",
+        "reference": "EP-30627/SS/EML/ 1293",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30088/10. SD/recieved/Emergency Lighting Layout/Submission/R0/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-103-00.pdf",
+   "ep": "30088",
+   "cohort": "regression",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "ICC-DLRC-SPM-SD-MEP/EM-103",
+      "printed_revision": "00",
+      "decision": "UR",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/EM-103",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/EM-103",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/EM-103",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/EM-103",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/EM-103",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/EM-103",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/EM-103",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+   "ep": "30088",
+   "cohort": "regression",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "cover",
+      "reference": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+      "printed_revision": "01",
+      "decision": "ANN",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 2,
+     "expected": {
+      "component": "cover",
+      "reference": "ICC-DLRC-SPM-SD-MEP-0042",
+      "printed_revision": "00",
+      "decision": "rejected",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "missed"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    },
+    {
+     "page": 3,
+     "expected": {
+      "component": "sheet",
+      "reference": "ICC-DLRC-SPM-SD-MEP/FA-103",
+      "printed_revision": "01",
+      "decision": "UR",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tn",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+     "status": "ANN",
+     "printed_revision": "R1",
+     "expected": 0
+    },
+    {
+     "page": 3,
+     "how": "same_page",
+     "reference": "ICC-DLRC-SPM-SD-MEP/FA-103",
+     "status": "UR",
+     "printed_revision": "01",
+     "expected": 2
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R1",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-0042",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-0042",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 2
+      }
+     ],
+     "association": {
+      "identity": 4
+     },
+     "precision": {
+      "identity": {
+       "correct": 3,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 3,
+       "redundant": 1
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 2
+      },
+      "revision:accepted": {
+       "correct": 2
+      },
+      "decision:accepted": {
+       "correct": 1
+      },
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 3
+      },
+      "revision": {
+       "recovered_clean": 3
+      },
+      "decision": {
+       "recovered_clean": 1,
+       "missed": 1,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0042",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-103",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R1",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "ANN",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ANN",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "parser",
+       "group": "record:1",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-0042",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-0042",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 2,
+       "reader": "parser",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 1
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "state": "observed",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP/FA-103",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 2
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 3,
+       "reader": "title_block",
+       "group": "obs:2",
+       "layer": "raw",
+       "expected": 2
+      }
+     ],
+     "association": {
+      "identity": 4
+     },
+     "precision": {
+      "identity": {
+       "correct": 3,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 3,
+       "redundant": 1
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 2
+      },
+      "revision:accepted": {
+       "correct": 2
+      },
+      "decision:accepted": {
+       "correct": 1
+      },
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 3
+      },
+      "revision": {
+       "recovered_clean": 3
+      },
+      "decision": {
+       "recovered_clean": 1,
+       "missed": 1,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0042",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-103",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 3
+      },
+      "revision": {
+       "missed": 3
+      },
+      "decision": {
+       "missed": 2,
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-FA-0042",
+        "printed_revision": "01",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 2,
+       "expected": {
+        "component": "cover",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0042",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      },
+      {
+       "page": 3,
+       "expected": {
+        "component": "sheet",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-103",
+        "printed_revision": "01",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+   "ep": "30088",
+   "cohort": "regression",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "ICC-DLRC-SPM-SD-MEP/FA-100",
+      "printed_revision": "00",
+      "decision": "UR",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-100",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-100",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP/FA-100",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0084-00-COMMENTED-C.pdf",
+   "ep": "30088",
+   "cohort": "regression",
+   "stratum": "reply",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "ICC-DLRC-SPM-SD-MEP-0084",
+      "printed_revision": "00",
+      "decision": "rejected",
+      "register": true,
+      "revision_conflict": false
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tp",
+      "system": "tp",
+      "floor": "tp",
+      "title": "tp",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "ICC-DLRC-SPM-SD-MEP-0084",
+     "status": "rejected",
+     "printed_revision": "R0",
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-0084",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-0084",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/EM-104 I",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "expected": null
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "unscored_page": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      },
+      "decision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "recovered_clean": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0084",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP-0084",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "ICC-DLRC-SPM-SD-MEP-0084",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "R0",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "decision",
+       "value": "rejected",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "rejected",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "ICC-DLRC-SPM-SD-MEP/EM-104 I",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "expected": null
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "unscored_page",
+       "outcome": "unscored_page",
+       "page": 2,
+       "reader": "title_block",
+       "group": "obs:0",
+       "expected": null
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "unscored_page": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "decision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      },
+      "decision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "recovered_clean": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0084",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "recovered_clean"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "ICC-DLRC-SPM-SD-MEP-0084",
+        "printed_revision": "00",
+        "decision": "rejected"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-29076/06- Drawings/01- FA/Fire Alarm/17. 8th Floor Fire Alarm Layout/1. R0/1. Submission/PDF/25H-AAEM-SD-ELEC-FA-8F-016.pdf",
+   "ep": "29076",
+   "cohort": "exploration",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "25H-AAEM-SD-ELEC-FA-8F-016",
+      "printed_revision": "00",
+      "decision": "UR",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "matched_register_ineligible",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tn",
+      "system": "tp",
+      "floor": "missed",
+      "title": "wrong",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "25H-AAEM-SD-ELEC-FA-8F-016",
+     "status": "UR",
+     "printed_revision": "00",
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "state": "observed",
+       "how": "identity",
+       "truth": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-AAEM-SD-ELEC-FA-8F-016",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "state": "observed",
+       "how": "identity",
+       "truth": "25H-AAEM-SD-ELEC-FA-8F-016",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-AAEM-SD-ELEC-FA-8F-016",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-AAEM-SD-ELEC-FA-8F-016",
+        "printed_revision": "00",
+        "decision": "UR"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+   "ep": "29076",
+   "cohort": "exploration",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "LAC-653-PLN-R04-ELV-AI-164",
+      "printed_revision": "C1",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": false
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "LAC-653-PLN-RO4-ELV-Al-164",
+       "state": "held",
+       "how": "single_component",
+       "truth": "LAC-653-PLN-R04-ELV-AI-164",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 1
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "LAC-653-PLN-R04-ELV-AI-164",
+        "printed_revision": "C1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "LAC-653-PLN-RO4-ELV-Al-164",
+       "state": "held",
+       "how": "single_component",
+       "truth": "LAC-653-PLN-R04-ELV-AI-164",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 1
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "LAC-653-PLN-R04-ELV-AI-164",
+        "printed_revision": "C1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "LAC-653-PLN-R04-ELV-AI-164",
+        "printed_revision": "C1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+   "ep": "29076",
+   "cohort": "exploration",
+   "stratum": "approval_sample",
+   "extension": ".pdf",
+   "scan_like": true,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "page1",
+      "reference": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+      "printed_revision": "00",
+      "decision": "ANN",
+      "register": true,
+      "revision_conflict": false
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "missed",
+      "decision": "missed",
+      "system": "tp",
+      "floor": "tp",
+      "title": "tp",
+      "projection_revision": "differs"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+     "status": "UR",
+     "printed_revision": null,
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+        "printed_revision": "00",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+        "printed_revision": "00",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "page1",
+        "reference": "25H-S202-NCC-SD-MEP-ELE-FA-047-00",
+        "printed_revision": "00",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-29076/CDA/FA Civil_Defense_Requirements.pdf",
+   "ep": "29076",
+   "cohort": "exploration",
+   "stratum": "other",
+   "extension": ".pdf",
+   "scan_like": false,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {},
+   "ai_evidence_state": "none",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  }
+ ],
+ "totals": {
+  "register": {
+   "execution": {
+    "complete": 10,
+    "bounded": 2
+   },
+   "records": {
+    "matched_register_ineligible": 2,
+    "matched": 9,
+    "unregistered": 5,
+    "missing": 1
+   },
+   "emissions": {
+    "same_page": 11,
+    "cross_page": 1
+   },
+   "redundant_copies": 0,
+   "conflicting_emission_sets": 1,
+   "unvalidated_emitted_records": 0,
+   "register": {
+    "reference": {
+     "tp": 11,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 11,
+     "readable": 12,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.9167,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 10,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 10,
+     "readable": 12,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8333,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 6,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 3,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 6,
+     "readable": 9,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.6667,
+     "specificity_of_negatives": 1.0
+    },
+    "system": {
+     "tp": 4,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 0,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 4,
+     "readable": 4,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 1.0,
+     "specificity_of_negatives": null
+    },
+    "floor": {
+     "tp": 3,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 3,
+     "readable": 4,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.75,
+     "specificity_of_negatives": null
+    },
+    "title": {
+     "tp": 3,
+     "wrong": 1,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 0,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 4,
+     "readable": 4,
+     "precision_of_accepted": 0.75,
+     "recovery_of_readable": 0.75,
+     "specificity_of_negatives": null
+    },
+    "projection_revision": {
+     "tp": 10,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 0,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 10,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 1.0,
+     "specificity_of_negatives": null
+    }
+   },
+   "raw": {
+    "identity": {
+     "tp": 15,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 15,
+     "readable": 17,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8824,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 14,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 14,
+     "readable": 17,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8235,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 6,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 8,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 6,
+     "readable": 9,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.6667,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "critical": [],
+   "evidence": {
+    "identity": {
+     "tp": 15,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 2,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 15,
+     "readable": 17,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8824,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 14,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 14,
+     "readable": 17,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.8235,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 6,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 8,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 6,
+     "readable": 9,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.6667,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "evidence_introduced_errors": [],
+   "ai": {
+    "documents": 0,
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {},
+    "page_outcomes": {}
+   }
+  },
+  "raw": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 15,
+      "redundant": 3
+     },
+     "recovery_counts": {
+      "recovered_clean": 15,
+      "missed": 2
+     },
+     "asserted_distinct": 15,
+     "readable": 17,
+     "accepted_precision": 1.0,
+     "recovery": 0.8824,
+     "clean_recovery": 0.8824,
+     "evidence_recovery_incl_held": 0.8824
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 14,
+      "redundant": 5
+     },
+     "recovery_counts": {
+      "recovered_clean": 14,
+      "missed": 3
+     },
+     "asserted_distinct": 14,
+     "readable": 17,
+     "accepted_precision": 1.0,
+     "recovery": 0.8235,
+     "clean_recovery": 0.8235,
+     "evidence_recovery_incl_held": 0.8235
+    },
+    "decision": {
+     "precision_counts": {
+      "correct": 6,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "tn": 8,
+      "recovered_clean": 6,
+      "missed": 3
+     },
+     "asserted_distinct": 6,
+     "readable": 9,
+     "accepted_precision": 1.0,
+     "recovery": 0.6667,
+     "clean_recovery": 0.6667,
+     "evidence_recovery_incl_held": 0.6667
+    }
+   },
+   "association": {
+    "identity": 17,
+    "single_component": 4,
+    "unscored_page": 12,
+    "cross_page": 1
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "decision:accepted": {
+     "correct": 6
+    },
+    "identity:accepted": {
+     "correct": 11
+    },
+    "identity:observed": {
+     "correct": 4
+    },
+    "revision:accepted": {
+     "correct": 10
+    },
+    "revision:observed": {
+     "correct": 4
+    }
+   }
+  },
+  "evidence": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 15,
+      "redundant": 3
+     },
+     "recovery_counts": {
+      "recovered_clean": 15,
+      "missed": 2
+     },
+     "asserted_distinct": 15,
+     "readable": 17,
+     "accepted_precision": 1.0,
+     "recovery": 0.8824,
+     "clean_recovery": 0.8824,
+     "evidence_recovery_incl_held": 0.8824
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 14,
+      "redundant": 5
+     },
+     "recovery_counts": {
+      "recovered_clean": 14,
+      "missed": 3
+     },
+     "asserted_distinct": 14,
+     "readable": 17,
+     "accepted_precision": 1.0,
+     "recovery": 0.8235,
+     "clean_recovery": 0.8235,
+     "evidence_recovery_incl_held": 0.8235
+    },
+    "decision": {
+     "precision_counts": {
+      "correct": 6,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "tn": 8,
+      "recovered_clean": 6,
+      "missed": 3
+     },
+     "asserted_distinct": 6,
+     "readable": 9,
+     "accepted_precision": 1.0,
+     "recovery": 0.6667,
+     "clean_recovery": 0.6667,
+     "evidence_recovery_incl_held": 0.6667
+    }
+   },
+   "association": {
+    "identity": 17,
+    "single_component": 4,
+    "unscored_page": 12,
+    "cross_page": 1
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "decision:accepted": {
+     "correct": 6
+    },
+    "identity:accepted": {
+     "correct": 11
+    },
+    "identity:observed": {
+     "correct": 4
+    },
+    "revision:accepted": {
+     "correct": 10
+    },
+    "revision:observed": {
+     "correct": 4
+    }
+   }
+  },
+  "ai": {
+   "fields": {
+    "identity": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 17
+     },
+     "asserted_distinct": 0,
+     "readable": 17,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    },
+    "revision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "missed": 17
+     },
+     "asserted_distinct": 0,
+     "readable": 17,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "tn": 8,
+      "missed": 9
+     },
+     "asserted_distinct": 0,
+     "readable": 9,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {},
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {}
+  },
+  "introduced_ai_errors": [],
+  "ai_evidence_states": {
+   "none": 12
+  }
+ }
+}

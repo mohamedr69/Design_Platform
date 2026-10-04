@@ -1,0 +1,71 @@
+{
+ "after_first_invocation": {
+  "allowance_exists": false,
+  "capture_store_exists": false,
+  "files": [
+   "RUN-STATE.json",
+   "inv-1/out/RUN-REPORT.json"
+  ],
+  "invocations": [
+   {
+    "cli_version": null,
+    "comparison_state": null,
+    "deferred": null,
+    "earliest_retry": null,
+    "earliest_retry_utc": null,
+    "finished_utc": "2026-10-04T12:45:22+00:00",
+    "kind": "fresh",
+    "n": 1,
+    "out": "C:/t/r2x/r40-sandbox/r40d-cli-52050f/inv-1/out",
+    "outcome": null,
+    "resume_not_before": null,
+    "resume_not_before_utc": null,
+    "resume_policy": null,
+    "retry_at_full": null,
+    "retry_at_full_utc": null,
+    "run_state": null,
+    "started_utc": "2026-10-04T12:45:21+00:00",
+    "status": "refused"
+   }
+  ],
+  "run_folder_exists": true
+ },
+ "ai_ledger_after": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ai_ledger_before": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ai_ledger_unchanged": true,
+ "model_requests": 0,
+ "name": "CLI-version dead-end drill (dry)",
+ "reading": "a refusal of the runner's own CLI-version check at invocation 1 leaves a run folder (RUN-STATE.json, WRITER lock removed, the invocation recorded 'refused') WITHOUT an allowance or a capture store: 'run' is refused because the folder exists and 'resume' is refused because the allowance is missing; with the declared stamp the run could not continue and a new declaration (new stamp, new hash) would be needed. The owner's authorization is NOT consumed (the consumption comes after the version check). Mitigation: the owner confirms `claude --version` prints exactly '2.1.263 (Claude Code)' before invocation 1.",
+ "run_folder": "C:/t/r2x/r40-sandbox/r40d-cli-52050f",
+ "stamp": "r40d-cli-52050f",
+ "steps": [
+  {
+   "command": "run",
+   "injected": "CLI version refusal at invocation 1",
+   "result": "refused",
+   "why": "refused: CLI version '9.9.9 (Claude Code)' differs from the declared '2.1.263 (Claude Code)' [dry drill: the live check's refusal injected in-process]"
+  },
+  {
+   "command": "run",
+   "injected": null,
+   "result": "refused",
+   "why": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r40-sandbox/r40d-cli-52050f exists); use 'resume'"
+  },
+  {
+   "command": "resume",
+   "injected": null,
+   "result": "refused",
+   "why": "refused: the run's allowance.sqlite is missing; a resume never re-creates it"
+  }
+ ]
+}
