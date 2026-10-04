@@ -266,7 +266,8 @@ def _ask(project_id: int, png: bytes, sha: str, window: dict, budget, drawing: s
                  TextPart("labels", f"Drawing: {drawing}\n" + "\n".join(
                      f"{n}: {iid.split('|')[-1]}" for n, (iid, _x, _y) in enumerate(window["labels"], 1)))]
         result = assist.call_task(session, TASK, SYSTEM, parts, SCHEMA, 1500, prompt_version=PROMPT_VERSION,
-                                  model=s.drawing_review_model, timeout_s=s.drawing_review_timeout_s)
+                                  model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
+                                  timeout_s=s.drawing_review_timeout_s)
         db.commit()
         if result.data is None:
             return {"error": result.error or "no answer"}

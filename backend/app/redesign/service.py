@@ -1082,7 +1082,8 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, change: dict, symbols
         parts.append(TextPart("symbols this drawing uses (id: name)", "\n".join(
             f"{x['id']}: {x['name']}" + (f" ({x['code']})" if x["code"] else "") for x in symbols)))
         result = assist.call_task(session, A.TASK, A.SYSTEM, parts, A.SCHEMA, 800, prompt_version=A.PROMPT_VERSION,
-                                  model=s.drawing_review_model, timeout_s=s.drawing_review_timeout_s)
+                                  model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
+                                  timeout_s=s.drawing_review_timeout_s)
         db.commit()
         if result.data is None:
             return {"error": result.error or "no answer"}

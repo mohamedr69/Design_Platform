@@ -31,6 +31,57 @@ from app.core.config import get_settings
 # change answers; part of every cache key.
 PROMPT_VERSION = "2026-09-15.1"
 
+# Reasoning depths both Claude routes accept (CLI `--effort`, API
+# `output_config.effort`).
+EFFORTS = ("low", "medium", "high", "xhigh", "max")
+
+# The oldest Claude Code that serves a model, where one is known. Checked on
+# 2026-10-04: Claude Code 2.1.263 answers claude-opus-5-5 with "version 2.1.280
+# or newer is required"; 2.1.288 serves it. A model not listed has no known
+# minimum.
+CLI_MIN_VERSION: dict[str, tuple[int, int, int]] = {"claude-opus-5-5": (2, 1, 280)}
+
+
+def is_full_model_id(model: str | None) -> bool:
+    """A full model id ("claude-opus-5-5"), not an alias ("opus") that the CLI
+    resolves to whatever its version thinks is current (2.1.263: opus ->
+    claude-opus-5)."""
+    return bool(model) and model.startswith("claude-")
+
+
+def models_used(model_usage: dict | None, requested: str) -> tuple[str, dict[str, int], list[str]]:
+    """What the CLI says actually answered: (the model that answered, output
+    tokens per model, the models other than the requested one that took part).
+
+    Claude Code also runs a small Haiku model of its own on every call; that is
+    auxiliary, not a substitute, unless Haiku was asked for. Any other model
+    in `modelUsage` beside a full requested id is a substitute -- seen once on
+    2026-10-04: a claude-fable-5-1 call listing claude-opus-4-8 as well. With
+    an alias nothing can be called a substitute: the alias names no one model."""
+    per: dict[str, int] = {}
+    for name, entry in (model_usage or {}).items():
+        per[name] = int((entry or {}).get("outputTokens") or 0) if isinstance(entry, dict) else 0
+    wants_haiku = "haiku" in (requested or "")
+    main = [n for n in per if wants_haiku or "haiku" not in n]
+    counted = any(per[n] for n in main)
+    if requested in per:
+        used = requested
+    elif main:
+        used = max(main, key=lambda n: per[n])
+    else:
+        used = requested
+    substitutes = []
+    if is_full_model_id(requested):
+        substitutes = [n for n in main if n != requested and (per[n] > 0 or not counted)]
+    return used, per, substitutes
+
+
+def parse_version(text: str | None) -> tuple[int, int, int] | None:
+    import re
+
+    found = re.search(r"(\d+)\.(\d+)\.(\d+)", text or "")
+    return tuple(int(g) for g in found.groups()) if found else None  # type: ignore[return-value]
+
 
 @dataclass(frozen=True)
 class TextPart:
@@ -60,6 +111,10 @@ class AiRequest:
     # A model for this request only, overriding the tier's (a task that is
     # configured on its own, e.g. IFC_AI_MODEL). None: the tier's model.
     model: str | None = None
+    # The answer counts only from exactly this model: an alias is refused, no
+    # server-side fallback is allowed, and a reply that another model took
+    # part in is an error (`model_substituted`), never a result.
+    exact_model: bool = False
 
 
 @dataclass
@@ -76,10 +131,18 @@ class AiResponse:
     usage: Usage = field(default_factory=Usage)
     model: str = ""
     latency_ms: int = 0
-    # "transport" | "rate_limit" | "quota" | "invalid_response" | "refused" | "auth" | None
+    # "transport" | "rate_limit" | "quota" | "invalid_response" | "refused" | "auth"
+    # | "unavailable" (no program/route to call) | "unsupported_model" (the
+    # route cannot serve that model) | "model_substituted" (another model
+    # answered an exact-model request) | "invalid_request" | None
     error: str | None = None
     error_detail: str | None = None
     raw_text: str | None = None
+    # Output tokens per model that took part, as the route reports it, and
+    # whether a model other than the requested one did.
+    models_used: dict[str, int] = field(default_factory=dict)
+    substituted: bool = False
+    route_version: str | None = None
 
     @property
     def ok(self) -> bool:
@@ -236,6 +299,13 @@ class ClaudeProvider:
         model = request.model or self._models.get(request.tier, self._models["small"])
         if not self._credential:
             return AiResponse(data=None, error="auth", error_detail=self.status, model=model)
+        if request.exact_model and not is_full_model_id(model):
+            return AiResponse(data=None, error="unsupported_model", model=model,
+                              error_detail=f"{model!r} is an alias; this task needs a full model id")
+        effort = request.effort or self._effort
+        if effort not in EFFORTS:
+            return AiResponse(data=None, error="invalid_request", model=model,
+                              error_detail=f"effort {effort!r} is not one of {', '.join(EFFORTS)}")
         started = time.perf_counter()
         client = self._client
         if request.timeout_s:
@@ -245,10 +315,11 @@ class ClaudeProvider:
             max_tokens=request.max_output_tokens,
             system=request.system,
             messages=[{"role": "user", "content": self._content(request)}],
-            output_config={"format": {"type": "json_schema", "schema": request.schema},
-                           "effort": request.effort or self._effort},
+            output_config={"format": {"type": "json_schema", "schema": request.schema}, "effort": effort},
         )
-        fable = model.startswith("claude-fable")
+        # An exact-model request never opts into server-side fallbacks: an
+        # Opus answer to a Fable request would be a silent substitution.
+        fable = model.startswith("claude-fable") and not request.exact_model
         if fable:
             params.update(betas=[self.FALLBACK_BETA], fallbacks="default")
         try:
@@ -281,6 +352,17 @@ class ClaudeProvider:
             details = getattr(raw_usage, "output_tokens_details", None)
             usage.reasoning_tokens = getattr(details, "reasoning_tokens", None) if details is not None else None
 
+        # The model that served the reply, as the API says -- after a fallback
+        # it is not the one asked for.
+        served = getattr(message, "model", None)
+        served = served if isinstance(served, str) and served else model
+        substituted = is_full_model_id(model) and served != model
+        if substituted and request.exact_model:
+            return AiResponse(data=None, usage=usage, model=served, latency_ms=latency, error="model_substituted",
+                              error_detail=f"asked for {model}, answered by {served}",
+                              models_used={served: usage.output_tokens or 0}, substituted=True)
+        model = served
+
         if getattr(message, "stop_reason", None) == "refusal":
             return AiResponse(data=None, usage=usage, model=model, latency_ms=latency, error="refused",
                               error_detail="the model declined the request")
@@ -296,7 +378,8 @@ class ClaudeProvider:
         if getattr(message, "stop_reason", None) == "max_tokens":
             return AiResponse(data=None, usage=usage, model=model, latency_ms=latency, error="invalid_response",
                               error_detail="reply was cut off at max_tokens", raw_text=text)
-        return AiResponse(data=data, usage=usage, model=model, latency_ms=latency, raw_text=text)
+        return AiResponse(data=data, usage=usage, model=model, latency_ms=latency, raw_text=text,
+                          models_used={model: usage.output_tokens or 0}, substituted=substituted)
 
 
 class OpenAiProvider:
@@ -472,7 +555,16 @@ class ClaudeCodeProvider:
       uses the subscription even on a machine that also has a key set.
     - Sessions are not saved (`--no-session-persistence`).
 
-    Checked against Claude Code 2.1.263 on 2026-09-14.
+    - `--effort` carries the request's reasoning depth when it names one.
+    - The CLI's version is read once (`claude --version`) when a model with a
+      known minimum (`CLI_MIN_VERSION`) needs it; a CLI too old for the model
+      is `unsupported_model` before any call.
+    - What answered is read from `modelUsage`; an exact-model request that
+      another model took part in is `model_substituted`. `--fallback-model`
+      is never passed.
+    - No program at the configured path is `unavailable`, not `auth`.
+
+    Checked against Claude Code 2.1.263 on 2026-09-14 and 2.1.288 on 2026-10-04.
     """
 
     name = "claude-code"
@@ -482,10 +574,15 @@ class ClaudeCodeProvider:
 
         settings = get_settings()
         configured = (settings.ai_claude_cli or "claude").strip()
+        self._configured = configured
         self._cli = shutil.which(configured) or (configured if Path(configured).is_file() else None)
         self._models = {"small": settings.ai_model_small, "standard": settings.ai_model_standard}
         self._timeout = settings.ai_cli_timeout_s
         self._semaphore = threading.BoundedSemaphore(max(1, settings.ai_max_concurrency))
+        self._version: tuple[int, int, int] | None = None
+        self._version_text: str | None = None
+        self._version_read = False
+        self._version_lock = threading.Lock()
 
     @property
     def ready(self) -> bool:
@@ -494,9 +591,45 @@ class ClaudeCodeProvider:
     @property
     def status(self) -> str:
         if self._cli:
-            return f"Claude subscription through Claude Code, model {self._models['small']}"
-        return ("AI is enabled but Claude Code was not found: install it and sign in with `claude` on this server, "
-                "or set AI_CLAUDE_CLI to the path of claude.exe")
+            version = f" {self._version_text}" if self._version_text else ""
+            return f"Claude subscription through Claude Code{version}, model {self._models['small']}"
+        return (f"AI is enabled but Claude Code was not found at {self._configured}: install it and sign in with "
+                "`claude` as the user the server runs as, or set AI_CLAUDE_CLI to the path of claude.exe "
+                "(%LOCALAPPDATA% and ~ are expanded)")
+
+    def cli_version(self) -> tuple[int, int, int] | None:
+        """`claude --version`, read once; None when it cannot be read."""
+        import subprocess
+
+        with self._version_lock:
+            if not self._version_read and self._cli:
+                self._version_read = True
+                try:
+                    out = subprocess.run([self._cli, "--version"], capture_output=True, text=True, encoding="utf-8",
+                                         errors="replace", timeout=30)
+                    self._version = parse_version(out.stdout)
+                    self._version_text = (out.stdout or "").strip()[:60] or None
+                except Exception:  # noqa: BLE001 -- an unreadable version is "unknown", decided by the caller
+                    self._version = None
+            return self._version
+
+    def supports(self, model: str, *, exact: bool = False) -> tuple[bool, str | None]:
+        """Whether this CLI can serve `model`, before any call is made:
+        (True, None) or (False, the reason)."""
+        if not self._cli:
+            return False, self.status
+        if exact and not is_full_model_id(model):
+            return False, f"{model!r} is an alias; this task needs a full model id"
+        minimum = CLI_MIN_VERSION.get(model)
+        if minimum is None:
+            return True, None
+        version = self.cli_version()
+        need = ".".join(map(str, minimum))
+        if version is None:
+            return False, f"the Claude Code version could not be read; {model} needs {need} or newer"
+        if version < minimum:
+            return False, f"Claude Code {'.'.join(map(str, version))} does not serve {model}; {need} or newer is needed"
+        return True, None
 
     @staticmethod
     def _prompt(request: AiRequest, images: list[tuple[str, str]]) -> str:
@@ -514,6 +647,9 @@ class ClaudeCodeProvider:
     @staticmethod
     def _error_kind(text: str) -> str:
         lowered = text.lower()
+        if any(s in lowered for s in ("does not support this model", "unrecognized_model", "unrecognized model",
+                                      "or newer is required")):
+            return "unsupported_model"
         if any(s in lowered for s in ("not logged in", "please run /login", "invalid api key", "authentication", "oauth")):
             return "auth"
         if any(s in lowered for s in ("usage limit", "rate limit", "rate_limit", "overloaded", "limit reached")):
@@ -527,7 +663,14 @@ class ClaudeCodeProvider:
 
         model = request.model or self._models.get(request.tier, self._models["small"])
         if not self._cli:
-            return AiResponse(data=None, error="auth", error_detail=self.status, model=model)
+            return AiResponse(data=None, error="unavailable", error_detail=self.status, model=model)
+        if request.effort is not None and request.effort not in EFFORTS:
+            return AiResponse(data=None, error="invalid_request", model=model,
+                              error_detail=f"effort {request.effort!r} is not one of {', '.join(EFFORTS)}")
+        able, why = self.supports(model, exact=request.exact_model)
+        if not able:
+            return AiResponse(data=None, error="unsupported_model", error_detail=why, model=model,
+                              route_version=self._version_text)
         started = time.perf_counter()
         with tempfile.TemporaryDirectory(prefix="ep-ai-") as folder:
             images = []
@@ -538,6 +681,8 @@ class ClaudeCodeProvider:
             args = [self._cli, "-p", "--output-format", "json", "--model", model,
                     "--system-prompt", request.system, "--json-schema", json.dumps(request.schema),
                     "--no-session-persistence", "--disable-slash-commands", "--strict-mcp-config"]
+            if request.effort:
+                args += ["--effort", request.effort]
             args += ["--tools", "Read", "--allowedTools", "Read"] if images else ["--tools", ""]
             env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
             try:
@@ -547,7 +692,7 @@ class ClaudeCodeProvider:
                         errors="replace", cwd=folder, env=env, timeout=request.timeout_s or self._timeout,
                     )
             except subprocess.TimeoutExpired:
-                return AiResponse(data=None, error="transport", model=model,
+                return AiResponse(data=None, error="transport", model=model, route_version=self._version_text,
                                   error_detail=f"Claude Code did not answer within {request.timeout_s or self._timeout:.0f} s")
             except OSError as exc:
                 return AiResponse(data=None, error="transport", error_detail=f"Claude Code could not be started: {exc}", model=model)
@@ -565,16 +710,20 @@ class ClaudeCodeProvider:
             cached_input_tokens=raw_usage.get("cache_read_input_tokens"),
             reasoning_tokens=(raw_usage.get("output_tokens_details") or {}).get("thinking_tokens"),
         )
-        used = next((name for name in (reply.get("modelUsage") or {}) if "haiku" not in name), None) or model
+        used, per_model, substitutes = models_used(reply.get("modelUsage"), model)
+        common = dict(usage=usage, model=used, latency_ms=latency, models_used=per_model,
+                      substituted=bool(substitutes), route_version=self._version_text)
         if reply.get("is_error") or reply.get("subtype") != "success":
             detail = str(reply.get("result") or reply.get("subtype") or "Claude Code reported an error")[:500]
-            return AiResponse(data=None, usage=usage, model=used, latency_ms=latency, error=self._error_kind(detail),
-                              error_detail=detail)
+            return AiResponse(data=None, error=self._error_kind(detail), error_detail=detail, **common)
+        if substitutes and request.exact_model:
+            return AiResponse(data=None, error="model_substituted", **common,
+                              error_detail=f"asked for {model}, but {', '.join(substitutes)} also answered")
         data = reply.get("structured_output")
         if not isinstance(data, dict):
-            return AiResponse(data=None, usage=usage, model=used, latency_ms=latency, error="invalid_response",
-                              error_detail="the reply carried no structured output", raw_text=str(reply.get("result"))[:2000])
-        return AiResponse(data=data, usage=usage, model=used, latency_ms=latency, raw_text=str(reply.get("result"))[:2000])
+            return AiResponse(data=None, error="invalid_response", error_detail="the reply carried no structured output",
+                              raw_text=str(reply.get("result"))[:2000], **common)
+        return AiResponse(data=data, raw_text=str(reply.get("result"))[:2000], **common)
 
 
 _provider: AiProvider | None = None

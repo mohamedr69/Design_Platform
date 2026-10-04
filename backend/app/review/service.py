@@ -282,7 +282,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
             parts.append(ImagePart("image 1: FLS plan", fls_png))
             parts.append(ImagePart("image 2: IFC plan", P.crop(doc, index, plan, P.dpi_for(plan, 1700))))
             result = assist.call_task(session, TASK_FLS, A.SYSTEM_FLS + extra, parts, A.SHEET_SCHEMA, 3000,
-                                      prompt_version=version, model=s.drawing_review_model,
+                                      prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                       timeout_s=s.drawing_review_timeout_s)
             db.commit()
             if result.data is None:
@@ -295,7 +295,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
             names = sorted({r["name"] for w in sheet["windows"] for r in w["rooms"]})
             parts.append(TextPart("rooms named on the plan", ", ".join(names)[:3000]))
             result = assist.call_task(session, TASK_SHEET, A.SYSTEM_SHEET + extra, parts, A.SHEET_SCHEMA, 3000,
-                                      prompt_version=version, model=s.drawing_review_model,
+                                      prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                       timeout_s=s.drawing_review_timeout_s)
             db.commit()
             if result.data is None:
@@ -311,7 +311,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
             parts.append(ImagePart(f"image {k}", A.numbered(P.crop(doc, index, box, dpi), marks)))
             parts.append(TextPart(f"image {k} rooms", "\n".join(f"{r['n']}: {r['name']}" for r in w["rooms"])))
         result = assist.call_task(session, TASK_WINDOW, A.SYSTEM_WINDOW + extra, parts, A.WINDOW_SCHEMA, 6000,
-                                  prompt_version=version, model=s.drawing_review_model,
+                                  prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                   timeout_s=s.drawing_review_timeout_s)
         db.commit()
         if result.data is None:

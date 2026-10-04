@@ -245,20 +245,24 @@ def _log(session: AssistSession, *, task: str, model: str, response=None, cost: 
 
 def call_task(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
               prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
-              effort: str | None = None, model: str | None = None, timeout_s: float | None = None) -> CallResult:
+              effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
+              exact_model: bool = False) -> CallResult:
     """One structured call through the cache, the budget and the usage log,
     for a task defined outside this module (the single-clause review).
     `tier` "standard" asks the larger model (AI_MODEL_STANDARD); `ttl_days`
     overrides how long a stored answer is reused (AI_CACHE_TTL_DAYS);
     `effort` asks the API provider for more reasoning than AI_EFFORT;
-    `model` names the model for this task alone (the drawing review's Opus)."""
+    `model` names the model for this task alone (the drawing review's Opus);
+    `exact_model` makes the answer count only from exactly that model (no
+    alias, no fallback, a substituted reply is an error, never cached)."""
     return _call(session, task, system, parts, schema, max_output, prompt_version=prompt_version, tier=tier,
-                 ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s)
+                 ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s, exact_model=exact_model)
 
 
 def _call(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
           prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
-          effort: str | None = None, model: str | None = None, timeout_s: float | None = None) -> CallResult:
+          effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
+          exact_model: bool = False) -> CallResult:
     settings = get_settings()
     pinned = model
     model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)
@@ -267,11 +271,15 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
     ]).encode()).hexdigest()
     key = result_cache.cache_key(
         scope=SCOPE, document_sha256=session.document_sha256, evidence_fingerprint=evidence, task=task,
-        context={}, parser_version=PARSER_VERSION, prompt_version=prompt_version, schema_version=SCHEMA_VERSION,
+        # Effort and exactness change what may answer, so they are part of the
+        # key -- only when set, so the keys of every other task are unchanged.
+        context={k: v for k, v in (("effort", effort), ("exact_model", exact_model or None)) if v},
+        parser_version=PARSER_VERSION, prompt_version=prompt_version, schema_version=SCHEMA_VERSION,
         model=model,
     )
     request = AiRequest(task=task, system=system, parts=parts, schema=schema, max_output_tokens=max_output,
-                        idempotency_key=key, tier=tier, effort=effort, model=pinned, timeout_s=timeout_s)
+                        idempotency_key=key, tier=tier, effort=effort, model=pinned, timeout_s=timeout_s,
+                        exact_model=exact_model)
     flags = guard.scan_parts(parts)
     session.injection_flags.update(flags)
     from app.ai import evaluation

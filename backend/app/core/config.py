@@ -247,6 +247,11 @@ class Settings(BaseSettings):
         return self
 
     @model_validator(mode="after")
+    def _expand_cli(self) -> "Settings":
+        self.ai_claude_cli = expand_path(self.ai_claude_cli) or "claude"
+        return self
+
+    @model_validator(mode="after")
     def _find_tesseract(self) -> "Settings":
         self.tesseract_cmd = expand_path(self.tesseract_cmd)
         if not self.tesseract_cmd:
@@ -329,6 +334,9 @@ class Settings(BaseSettings):
     ai_read_effort: str = "high"
     # The Claude Code program for "claude-code": a name on the PATH or the full
     # path to claude.exe. Sign in once with `claude` as the user the server runs as.
+    # ~ and %VAR% are expanded, so one .env serves every Windows user
+    # (`%LOCALAPPDATA%\ep-platform\claude-2.1.288\claude.exe`), not just the one
+    # whose name was typed into it.
     ai_claude_cli: str = "claude"
     # One Claude Code call, start to finish (it starts a process and may read an image).
     ai_cli_timeout_s: float = 300.0
@@ -336,6 +344,11 @@ class Settings(BaseSettings):
     # the model, a few rooms a call. Its own model and limits -- a review is
     # ~80 vision calls, far past the per-document budget above.
     drawing_review_model: str = "claude-opus-5-5"
+    # Reasoning depth for those drawing looks (the review, the redesign's
+    # placements, the interface schedule's damper look). Sent to the CLI as
+    # --effort and to the API as output_config.effort; without it Claude Code
+    # used its own default and the API AI_EFFORT ("low").
+    drawing_review_effort: str = "high"
     drawing_review_max_calls: int = 300
     drawing_review_max_elapsed_s: float = 4 * 3600.0
     drawing_review_max_cost: float = 50.0
