@@ -1,0 +1,730 @@
+{
+ "mode": "AB",
+ "dry": false,
+ "started": "2026-10-03T22:51:09+0400",
+ "candidate": {
+  "manifest_sha256": "5345c1e7998a40c821ed830e736e163cf3bb261b1dcd350bc7b67fe2d3a48a21",
+  "version": "v2",
+  "backend_files_checked": 381,
+  "mismatch": 0
+ },
+ "live_source_sha256_before": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "iso_uploads_before": {
+  "EP-30880": -1,
+  "EP-30880/ifc": -1,
+  "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+  "EP-30880/ifc/60de2a377daa.dxf": 28233874
+ },
+ "scenarios": {
+  "A_success": {
+   "name": "A: 11 approved GC-01 changes",
+   "drawn": [
+    "3ddaa99cd7374341",
+    "1561933977450e28",
+    "34d7690b0446388c",
+    "45efbfb70918a4f0",
+    "if:e9335f7e336e:CT21",
+    "if:4110e452e77e:CT21",
+    "if:51ecea7f5a16:CT11",
+    "if:fe38e2f7e0d4:CT21",
+    "if:9c84428876e1:CT11",
+    "if:d6137c203008:CT21",
+    "if:3461d22b0bbb:CR1"
+   ],
+   "expected_markers": {
+    "CIRCLE": 11,
+    "TEXT": 18
+   },
+   "expected_counts": [
+    11,
+    0
+   ],
+   "source_sha256_before": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "result": {
+    "file": "FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg",
+    "path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg",
+    "changes": 11,
+    "drawing_id": 1,
+    "fingerprint": "ef39fc3db3532de6df2a5e35fce996ba275b7307196c8b14ce05768a428108b1",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "apply_id": "j0-658da456fa",
+    "run": "EP-30880/redesign/runs/j0-658da456fa",
+    "inserts": 11,
+    "erases": 0
+   },
+   "outcome": "made",
+   "seconds": 62.6,
+   "source_sha256_after": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "row": {
+    "output_status": "made",
+    "output_path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg",
+    "output_relative": null,
+    "output_changes": 11,
+    "output_error": ""
+   },
+   "outputs_new": [
+    "FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg"
+   ],
+   "run_folder": "j0-658da456fa",
+   "run_files": {
+    "autocad.log": 22444,
+    "ErrorReports": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+    "readback.dxf": 28249903,
+    "redesign.bak": 4380643,
+    "redesign.scr": 17727,
+    "verification.json": 3176
+   },
+   "standalone_markers": [
+    "EP-RD-OK:9dfc88469bf21d3b:11:0"
+   ],
+   "echoed_marker_lines": [
+    "\"\\nEP-RD-OK:9dfc88469bf21d3b:11:0\\n\""
+   ],
+   "verification": {
+    "ok": true,
+    "problems": [],
+    "log": {
+     "failures": [],
+     "ok": [
+      {
+       "inserts": 11,
+       "erases": 0
+      }
+     ],
+     "nosave": 0
+    },
+    "readback": {
+     "source_entities": 4807,
+     "output_entities": 4847,
+     "erased_as_expected": [],
+     "not_erased": [],
+     "unexpected_erasures": [],
+     "inserts_found": [
+      {
+       "id": "3ddaa99cd7374341",
+       "handle": "656DF",
+       "block": "HEAT DETECTOR"
+      },
+      {
+       "id": "1561933977450e28",
+       "handle": "656E5",
+       "block": "faw"
+      },
+      {
+       "id": "34d7690b0446388c",
+       "handle": "656E9",
+       "block": "XREF - title block a1 15-06-2022$0$BREAK GLASS WP"
+      },
+      {
+       "id": "45efbfb70918a4f0",
+       "handle": "656ED",
+       "block": "E WP"
+      },
+      {
+       "id": "if:e9335f7e336e:CT21",
+       "handle": "6571D",
+       "block": "CT2"
+      },
+      {
+       "id": "if:4110e452e77e:CT21",
+       "handle": "65722",
+       "block": "CT2"
+      },
+      {
+       "id": "if:51ecea7f5a16:CT11",
+       "handle": "6574C",
+       "block": "CT1"
+      },
+      {
+       "id": "if:fe38e2f7e0d4:CT21",
+       "handle": "65751",
+       "block": "CT2"
+      },
+      {
+       "id": "if:9c84428876e1:CT11",
+       "handle": "65756",
+       "block": "CT1"
+      },
+      {
+       "id": "if:d6137c203008:CT21",
+       "handle": "6575B",
+       "block": "CT2"
+      },
+      {
+       "id": "if:3461d22b0bbb:CR1",
+       "handle": "65785",
+       "block": "CR"
+      }
+     ],
+     "inserts_missing": [],
+     "unexpected_inserts": [],
+     "added_by_type": {
+      "INSERT": 11,
+      "CIRCLE": 11,
+      "TEXT": 18
+     }
+    },
+    "returncode": 0,
+    "nonce": "9dfc88469bf21d3b",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "copy_sha256": "32b90f6460ee6aa87b459d7cc1562dcc72f45eaa8c166b97e812304a79f100d1",
+    "expected": {
+     "erase": [],
+     "insert": [
+      {
+       "id": "3ddaa99cd7374341",
+       "block": "HEAT DETECTOR",
+       "point": [
+        717.287,
+        158.4159
+       ]
+      },
+      {
+       "id": "1561933977450e28",
+       "block": "faw",
+       "point": [
+        1095.4621,
+        899.0342
+       ]
+      },
+      {
+       "id": "34d7690b0446388c",
+       "block": "XREF - title block a1 15-06-2022$0$BREAK GLASS WP",
+       "point": [
+        713.7531,
+        160.389
+       ]
+      },
+      {
+       "id": "45efbfb70918a4f0",
+       "block": "E WP",
+       "point": [
+        718.0693,
+        158.3978
+       ]
+      },
+      {
+       "id": "if:e9335f7e336e:CT21",
+       "block": "CT2",
+       "point": [
+        714.565,
+        157.0897
+       ]
+      },
+      {
+       "id": "if:4110e452e77e:CT21",
+       "block": "CT2",
+       "point": [
+        721.219,
+        159.0692
+       ]
+      },
+      {
+       "id": "if:51ecea7f5a16:CT11",
+       "block": "CT1",
+       "point": [
+        721.2091,
+        157.5942
+       ]
+      },
+      {
+       "id": "if:fe38e2f7e0d4:CT21",
+       "block": "CT2",
+       "point": [
+        719.3,
+        154.0201
+       ]
+      },
+      {
+       "id": "if:9c84428876e1:CT11",
+       "block": "CT1",
+       "point": [
+        721.2221,
+        159.9883
+       ]
+      },
+      {
+       "id": "if:d6137c203008:CT21",
+       "block": "CT2",
+       "point": [
+        714.55,
+        162.0
+       ]
+      },
+      {
+       "id": "if:3461d22b0bbb:CR1",
+       "block": "CR",
+       "point": [
+        718.35,
+        154.0206
+       ]
+      }
+     ]
+    }
+   },
+   "script_library_refs": [
+    [
+     "CR",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CR.dwg"
+    ],
+    [
+     "CT1",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CT1.dwg"
+    ],
+    [
+     "CT2",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CT2.dwg"
+    ]
+   ],
+   "script_has_office_path": false,
+   "published": {
+    "path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg",
+    "sha256": "32b90f6460ee6aa87b459d7cc1562dcc72f45eaa8c166b97e812304a79f100d1",
+    "inside_isolated_uploads": true,
+    "differs_from_source": true
+   },
+   "markers_added_vs_expected": {
+    "added_by_type": {
+     "INSERT": 11,
+     "CIRCLE": 11,
+     "TEXT": 18
+    },
+    "expected": {
+     "CIRCLE": 11,
+     "TEXT": 18
+    }
+   },
+   "existing_entities_changed": {
+    "common": 4807,
+    "changed": 44,
+    "examples": [
+     {
+      "handle": "6478F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "62D6C",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63E6F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "641B9",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F39",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "643AB",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F0F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F24",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "635AA",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "644F7",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "633C6",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "52D3E",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64ACF",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F4E",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64A29",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64451",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "633CD",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "630E1",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64835",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "6459D",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F8D",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63D2F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "639A6",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "62C3A",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F78",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     }
+    ]
+   }
+  },
+  "B_missing_block": {
+   "name": "B: missing block first",
+   "drawn": [
+    "rdm2-missing-block",
+    "3ddaa99cd7374341",
+    "1561933977450e28",
+    "34d7690b0446388c",
+    "45efbfb70918a4f0",
+    "if:e9335f7e336e:CT21",
+    "if:4110e452e77e:CT21",
+    "if:51ecea7f5a16:CT11",
+    "if:fe38e2f7e0d4:CT21",
+    "if:9c84428876e1:CT11",
+    "if:d6137c203008:CT21",
+    "if:3461d22b0bbb:CR1"
+   ],
+   "expected_markers": {
+    "CIRCLE": 12,
+    "TEXT": 19
+   },
+   "expected_counts": [
+    12,
+    0
+   ],
+   "source_sha256_before": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "outcome": "ApplyError",
+   "error": "The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back.",
+   "trace_tail": [
+    "  File \"<PC-B user profile>\\AppData\\Local\\Temp\\claude\\g--dev--2--dev\\6f67ec6f-cb75-49d6-9946-10047734e054\\scratchpad\\rdm2\\iso2\\main\\code (2)\\backend\\app\\redesign\\service.py\", line 1661, in apply",
+    "    raise ApplyError(\"The redesigned copy did not verify, so it was not kept as a result: \"",
+    "app.redesign.service.ApplyError: The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back."
+   ],
+   "seconds": 12.9,
+   "source_sha256_after": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "row": {
+    "output_status": "failed",
+    "output_path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg",
+    "output_relative": null,
+    "output_changes": 11,
+    "output_error": "The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back."
+   },
+   "outputs_new": [],
+   "run_folder": "j0-081c40c47c",
+   "run_files": {
+    "autocad.log": 6433,
+    "ErrorReports": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5710,
+    "redesign.dwg": 4380643,
+    "redesign.scr": 18803,
+    "verification.json": 2074
+   },
+   "standalone_markers": [],
+   "echoed_marker_lines": [],
+   "verification": {
+    "ok": false,
+    "problems": [
+     "AutoCAD's completion marker is missing.",
+     "The redesigned copy is the same as the source: nothing was saved.",
+     "The redesigned copy could not be read back."
+    ],
+    "log": {
+     "failures": [],
+     "ok": [],
+     "nosave": 0
+    },
+    "readback": {},
+    "returncode": 0,
+    "nonce": "5fede6028d7e321e",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "expected": {
+     "erase": [],
+     "insert": [
+      {
+       "id": "rdm2-missing-block",
+       "block": "RDM2-MISSING-BLOCK",
+       "point": [
+        716.0,
+        158.0
+       ]
+      },
+      {
+       "id": "3ddaa99cd7374341",
+       "block": "HEAT DETECTOR",
+       "point": [
+        717.287,
+        158.4159
+       ]
+      },
+      {
+       "id": "1561933977450e28",
+       "block": "faw",
+       "point": [
+        1095.4621,
+        899.0342
+       ]
+      },
+      {
+       "id": "34d7690b0446388c",
+       "block": "XREF - title block a1 15-06-2022$0$BREAK GLASS WP",
+       "point": [
+        713.7531,
+        160.389
+       ]
+      },
+      {
+       "id": "45efbfb70918a4f0",
+       "block": "E WP",
+       "point": [
+        718.0693,
+        158.3978
+       ]
+      },
+      {
+       "id": "if:e9335f7e336e:CT21",
+       "block": "CT2",
+       "point": [
+        714.565,
+        157.0897
+       ]
+      },
+      {
+       "id": "if:4110e452e77e:CT21",
+       "block": "CT2",
+       "point": [
+        721.219,
+        159.0692
+       ]
+      },
+      {
+       "id": "if:51ecea7f5a16:CT11",
+       "block": "CT1",
+       "point": [
+        721.2091,
+        157.5942
+       ]
+      },
+      {
+       "id": "if:fe38e2f7e0d4:CT21",
+       "block": "CT2",
+       "point": [
+        719.3,
+        154.0201
+       ]
+      },
+      {
+       "id": "if:9c84428876e1:CT11",
+       "block": "CT1",
+       "point": [
+        721.2221,
+        159.9883
+       ]
+      },
+      {
+       "id": "if:d6137c203008:CT21",
+       "block": "CT2",
+       "point": [
+        714.55,
+        162.0
+       ]
+      },
+      {
+       "id": "if:3461d22b0bbb:CR1",
+       "block": "CR",
+       "point": [
+        718.35,
+        154.0206
+       ]
+      }
+     ]
+    }
+   },
+   "script_library_refs": [
+    [
+     "CR",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CR.dwg"
+    ],
+    [
+     "CT1",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CT1.dwg"
+    ],
+    [
+     "CT2",
+     "<SCRATCH>/rdm2/iso2/main/code (2)/backend/app/redesign/library/CT2.dwg"
+    ]
+   ],
+   "script_has_office_path": false,
+   "work_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "work_copy_equals_source": true
+  }
+ },
+ "live_source_sha256_after": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "iso_uploads_after": {
+  "EP-30880": -1,
+  "EP-30880/ifc": -1,
+  "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+  "EP-30880/ifc/60de2a377daa.dxf": 28233874,
+  "EP-30880/redesign": -1,
+  "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185212-462213Z d1 s66043c11fab9 j0-658da456fa.dwg": 4268883,
+  "EP-30880/redesign/runs": -1,
+  "EP-30880/redesign/runs/j0-081c40c47c": -1,
+  "EP-30880/redesign/runs/j0-081c40c47c/autocad.log": 6433,
+  "EP-30880/redesign/runs/j0-081c40c47c/ErrorReports": -1,
+  "EP-30880/redesign/runs/j0-081c40c47c/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+  "EP-30880/redesign/runs/j0-081c40c47c/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5710,
+  "EP-30880/redesign/runs/j0-081c40c47c/redesign.dwg": 4380643,
+  "EP-30880/redesign/runs/j0-081c40c47c/redesign.scr": 18803,
+  "EP-30880/redesign/runs/j0-081c40c47c/verification.json": 2074,
+  "EP-30880/redesign/runs/j0-658da456fa": -1,
+  "EP-30880/redesign/runs/j0-658da456fa/autocad.log": 22444,
+  "EP-30880/redesign/runs/j0-658da456fa/ErrorReports": -1,
+  "EP-30880/redesign/runs/j0-658da456fa/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+  "EP-30880/redesign/runs/j0-658da456fa/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+  "EP-30880/redesign/runs/j0-658da456fa/readback.dxf": 28249903,
+  "EP-30880/redesign/runs/j0-658da456fa/redesign.bak": 4380643,
+  "EP-30880/redesign/runs/j0-658da456fa/redesign.scr": 17727,
+  "EP-30880/redesign/runs/j0-658da456fa/verification.json": 3176,
+  "EP-30880/redesign/source-readback-66043c11fab9eaf5.dxf": 28233515
+ },
+ "temp_new": [
+  "5e314ad3-15b6-4313-a259-2642e306808e.tmp",
+  "ACAS{F575A04A-9EEE-0842-9C12-62861E8E1FF9}.ac$",
+  "UNDO{B2A2AD9D-4B3A-5D40-82AA-BF2D34943BE4}.ac$",
+  "accc63322",
+  "{F544EFFF-8F65-48DA-A4E6-E2DA3AF665F9}"
+ ],
+ "temp_changed": [
+  "6fb9820e-d167-48fe-becd-4d1e3415e2f4.tmp",
+  "atil.6009-94ae-cb16-11b8.tmp",
+  "claude",
+  "ogs"
+ ],
+ "temp_removed": [
+  "808450be-c03f-4d16-862a-5a468a9bccc0.tmp",
+  "UNDO{7850FA70-E1A6-8040-93D5-00D34E0BE678}.ac$",
+  "acdf90732ea.tmp",
+  "f8795883-ad52-4600-a88b-84d5be65fc6f.tmp"
+ ],
+ "temp_deleted_conclusive": [
+  "ACAS{F575A04A-9EEE-0842-9C12-62861E8E1FF9}.ac$",
+  "UNDO{B2A2AD9D-4B3A-5D40-82AA-BF2D34943BE4}.ac$"
+ ],
+ "temp_left_uncertain": [
+  "5e314ad3-15b6-4313-a259-2642e306808e.tmp",
+  "accc63322",
+  "{F544EFFF-8F65-48DA-A4E6-E2DA3AF665F9}"
+ ],
+ "finished": "2026-10-03T22:52:50+0400"
+}

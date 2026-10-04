@@ -141,8 +141,15 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _resolve_projects_root(self) -> "Settings":
         self.projects_root = expand_path(self.projects_root)
-        if not self.projects_root and self.projects_root_autodetect:
-            self.projects_root = find_synced_folder(self.projects_root_name)
+        # A shared .env can retain another Windows user's absolute OneDrive
+        # path. When that path is unavailable, use this machine's synced copy.
+        # Keep an unreachable explicit value only when no unambiguous synced
+        # library can be found, so callers still report the configured error.
+        if self.projects_root_autodetect and (
+                not self.projects_root or not Path(self.projects_root).is_dir()):
+            found = find_synced_folder(self.projects_root_name)
+            if found:
+                self.projects_root = found
         return self
 
     # Where documents uploaded through the platform are kept: a project's
@@ -325,6 +332,17 @@ class Settings(BaseSettings):
     ai_claude_cli: str = "claude"
     # One Claude Code call, start to finish (it starts a process and may read an image).
     ai_cli_timeout_s: float = 300.0
+    # Drawings Review (app.review): the FA IFC drawing's rooms looked at by
+    # the model, a few rooms a call. Its own model and limits -- a review is
+    # ~80 vision calls, far past the per-document budget above.
+    drawing_review_model: str = "claude-opus-5-5"
+    drawing_review_max_calls: int = 300
+    drawing_review_max_elapsed_s: float = 4 * 3600.0
+    drawing_review_max_cost: float = 50.0
+    drawing_review_timeout_s: float = 600.0
+    drawing_review_windows_per_call: int = 2
+    # Calls at once (each a Claude Code process); the provider caps it again at AI_MAX_CONCURRENCY.
+    drawing_review_parallel: int = 2
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

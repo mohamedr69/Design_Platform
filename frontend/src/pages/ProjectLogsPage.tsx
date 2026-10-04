@@ -5,6 +5,7 @@ import { PROJECT_EDITOR_ROLES } from "../lib/types";
 import { directoryRevision, groupRevisions, submittalDocuments, systemGroup, type LogDocument, type LogRevision } from "../lib/projectLog";
 import { useOnProjectChange } from "../lib/projectChanges";
 import { useAuth } from "../context/AuthContext";
+import { RequestMaterialDialog } from "../components/RequestMaterialDialog";
 import { SyncDocumentsCard } from "../components/SyncDocumentsCard";
 import { DeleteSubmittalDialog } from "../components/DeleteSubmittalDialog";
 import { ALL_SYSTEMS, DrawingsRegister } from "../components/registers/DrawingsRegister";
@@ -250,7 +251,7 @@ export function ProjectLogsPage() {
                 <input aria-label="Search documents" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search documents..." className="input w-60" />
                 <label className="flex items-center gap-2 text-sm">Status<select className="input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}><option value="">All statuses</option>{[...new Set(documents.map((doc) => doc.revisions[0].status))].sort().map((value) => <option key={value}>{value}</option>)}</select></label>
               </div>
-              {activeRegister === "samples" && <SampleBoardChecks checks={boardChecks} projectId={project.id} synced={Boolean(logs?.synced_at)} />}
+              {activeRegister === "samples" && <SampleBoardChecks checks={boardChecks} projectId={project.id} synced={Boolean(logs?.synced_at)} canEdit={canEdit} />}
               {(() => {
                 const columns = ["Document", "Reference number", "Latest revision", "Status", "Revision history", "Action"];
                 return <div className="overflow-x-auto rounded-lg border border-gray-200"><table className="w-full text-left text-sm">
@@ -276,7 +277,8 @@ export function ProjectLogsPage() {
 /** Every system shall have a sample board. One card a system: the board
  * sent (its transmittal, date and where it stands), loose sample material
  * only, or none found in the Transmittal folder. */
-function SampleBoardChecks({ checks, projectId, synced }: { checks: SampleBoardCheck[]; projectId: number; synced: boolean }) {
+function SampleBoardChecks({ checks, projectId, synced, canEdit }: { checks: SampleBoardCheck[]; projectId: number; synced: boolean; canEdit: boolean }) {
+  const [requesting, setRequesting] = useState(false);
   if (!synced || checks.length === 0) return null;
   const missing = checks.filter((check) => check.state !== "submitted").length;
   const tone = { submitted: "border-green-200 bg-green-50", material_only: "border-amber-200 bg-amber-50", missing: "border-rose-200 bg-rose-50" };
@@ -301,9 +303,21 @@ function SampleBoardChecks({ checks, projectId, synced }: { checks: SampleBoardC
                 {check.path && <> · <a className="font-medium text-brand-600 hover:underline" href={apiUrl(`/projects/${projectId}/logs/file?path=${encodeURIComponent(check.path)}`)} target="_blank" rel="noreferrer">View transmittal</a></>}
               </p>
             )}
+            {/* No fire alarm sample board among the transmittals: ask stores for the samples. */}
+            {canEdit && check.system_code === "FAS" && check.state !== "submitted" && (
+              <button
+                type="button"
+                onClick={() => setRequesting(true)}
+                className="mt-2 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700"
+                title="Draft the email asking stores to arrange the Fire Alarm & Emergency Lighting samples"
+              >
+                Request Material
+              </button>
+            )}
           </div>
         ))}
       </div>
+      {requesting && <RequestMaterialDialog projectId={projectId} onClose={() => setRequesting(false)} />}
     </section>
   );
 }

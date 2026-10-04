@@ -423,6 +423,13 @@ def test_the_frc_cables_are_chosen_by_brand_and_size_and_a_size_against_the_stan
     assert items[1]["description"] == "Fire rated cable, 2C x 2.5 mm2, for the voice evacuation & 24 VDC power systems"
     blocks = {title: [(l.catalog_no, l.manufacturer) for l in lines] for _l, title, lines in schedule_blocks(db_session.get(Project, project_id), "FRC")}
     assert list(blocks) == ["Fire Rated Cables"] and blocks["Fire Rated Cables"] == [("2Cx1.5mm", "FIREGUARD"), ("2Cx2.5mm", "FIREGUARD")]
+    # The cable schedule says the voltage drop calculation follows the shop drawings; another system's does not.
+    from app.services.submittal_package import build_schedule
+
+    project = db_session.get(Project, project_id)
+    note = "voltage drop calculation will be submitted after the shop drawings approval"
+    assert note in " ".join(build_schedule(project, "FRC")[0].get_text().split())
+    assert note not in " ".join(build_schedule(project, "FAS")[0].get_text().split())
     # One size for all four: one line.
     client.put(f"/projects/{project_id}/frc-cables", json={"brand": "FIREGUARD", "fire_alarm_loop": "2Cx1.5mm", "voice_evacuation": "2Cx1.5mm",
                                                             "power_24vdc": "2Cx1.5mm", "fire_telephone": "2Cx1.5mm"})

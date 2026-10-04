@@ -1,0 +1,30 @@
+_.FILEDIA
+0
+_.CMDDIA
+0
+(setvar "TILEMODE" 1)
+(setvar "CMDECHO" 0)
+(setvar "ATTREQ" 0)
+(setvar "ATTDIA" 0)
+(setvar "OSMODE" 0)
+(setq ep_layer (getvar "CLAYER"))
+(setq ep_units (getvar "INSUNITS"))
+(setq ep_nonce "b591d5bde2853178" ep_failed nil ep_saved nil ep_ins 0 ep_del 0)
+(defun ep_fail (what id) (setq ep_failed T) (princ (strcat "\n" "EP-RD" "-FAIL:" ep_nonce ":" what ":" id "\n")) (princ))
+(defun ep_new_insert (before blk id / e d) (setq e (entlast)) (if (and e (not (eq e before)) (setq d (entget e)) (= (cdr (assoc 0 d)) "INSERT") (= (strcase (cdr (assoc 2 d))) (strcase blk))) e (progn (ep_fail "insert" id) nil)))
+(defun ep_erase (h blk x y tol id / e d p) (setq e (handent h)) (if (and e (setq d (entget e)) (= (cdr (assoc 0 d)) "INSERT") (or (not blk) (= (strcase (cdr (assoc 2 d))) (strcase blk))) (/= (cdr (assoc 67 d)) 1) (= (strcase (cond ((cdr (assoc 410 d))) ("MODEL"))) "MODEL") (or (not x) (and (setq p (cdr (assoc 10 d))) (< (distance (list x y) (list (car p) (cadr p))) tol)))) (progn (entdel e) (if (entget e) (ep_fail "erase-verify" id) (setq ep_del (1+ ep_del)))) (ep_fail "erase-target" id)))
+(defun ep_make (lst id) (if (not (entmake lst)) (ep_fail "entmake" id)))
+(if (not (tblsearch "LAYER" "EP-REDESIGN-ADD")) (entmake (list (cons 0 "LAYER") (cons 100 "AcDbSymbolTableRecord") (cons 100 "AcDbLayerTableRecord") (cons 2 "EP-REDESIGN-ADD") (cons 70 0) (cons 62 3) (cons 6 "Continuous"))))
+(if (not (tblsearch "LAYER" "EP-REDESIGN-REMOVE")) (entmake (list (cons 0 "LAYER") (cons 100 "AcDbSymbolTableRecord") (cons 100 "AcDbLayerTableRecord") (cons 2 "EP-REDESIGN-REMOVE") (cons 70 0) (cons 62 1) (cons 6 "Continuous"))))
+(if (not (tblsearch "LAYER" "EP-REDESIGN-REPLACE")) (entmake (list (cons 0 "LAYER") (cons 100 "AcDbSymbolTableRecord") (cons 100 "AcDbLayerTableRecord") (cons 2 "EP-REDESIGN-REPLACE") (cons 70 0) (cons 62 30) (cons 6 "Continuous"))))
+(setvar "INSUNITS" 0)
+(if (not ep_failed) (ep_erase "5DD10" "CEILING SPEAKER" 1309.200000 155.930000 0.010000 "rdm2-erase-control"))
+(if (not ep_failed) (ep_make (list (cons 0 "CIRCLE") (cons 8 "EP-REDESIGN-REMOVE") (list 10 1309.450000 155.680000 0.0) (cons 40 0.600000) (cons 62 1)) "rdm2-erase-control"))
+(if (not ep_failed) (ep_make (list (cons 0 "TEXT") (cons 8 "EP-REDESIGN-REMOVE") (list 10 1310.110000 156.040000 0.0) (cons 40 0.250000) (cons 1 "REMOVE: validation: erase control") (cons 62 1)) "rdm2-erase-control"))
+(setvar "INSUNITS" ep_units)
+(setvar "CLAYER" ep_layer)
+(if (and (not ep_failed) (or (/= ep_ins 0) (/= ep_del 1))) (ep_fail "count" "all"))
+(if (not ep_failed) (progn (command "_.QSAVE") (setq ep_saved T)))
+(if ep_saved (princ (strcat "\n" "EP-RD" "-OK:" ep_nonce ":" (itoa ep_ins) ":" (itoa ep_del) "\n")) (princ (strcat "\n" "EP-RD" "-NOSAVE:" ep_nonce "\n")))
+_.QUIT
+_Y

@@ -1,0 +1,152 @@
+{
+ "generated_at": "2026-10-03T20:53:16+0400",
+ "all_pass": true,
+ "checks": {
+  "no_application_file_changes": {
+   "pass": true,
+   "files_compared": 740,
+   "changed": [],
+   "removed": [],
+   "added_inside_package": 79,
+   "added_outside_package": []
+  },
+  "no_source_drawing_or_upload_changes": {
+   "pass": true,
+   "files_compared": 1867,
+   "changed_or_removed": [],
+   "added": []
+  },
+  "live_db_files_metadata": {
+   "pass": true,
+   "note": "Live DB/WAL/SHM change through the owner's services (expected); content safety is check 8.",
+   "t0": {
+    "backend/ep_platform.db": {
+     "metadata_only": true,
+     "mtime_ns": 1791042296246430800,
+     "size": 332709888
+    },
+    "backend/ep_platform.db-wal": {
+     "metadata_only": true,
+     "mtime_ns": 1791042491536713900,
+     "size": 5730952
+    },
+    "backend/ep_platform.db-shm": {
+     "metadata_only": true,
+     "mtime_ns": 1791040413646092600,
+     "size": 32768
+    }
+   },
+   "t1": {
+    "backend/ep_platform.db": {
+     "metadata_only": true,
+     "mtime_ns": 1791045633735653400,
+     "size": 332709888
+    },
+    "backend/ep_platform.db-wal": {
+     "metadata_only": true,
+     "mtime_ns": 1791046385950203500,
+     "size": 5730952
+    },
+    "backend/ep_platform.db-shm": {
+     "metadata_only": true,
+     "mtime_ns": 1791040413646092600,
+     "size": 32768
+    }
+   }
+  },
+  "outer_repo_only_service_logs_changed": {
+   "pass": true,
+   "changed": [
+    "worker-g.stderr.log"
+   ],
+   "unexpected": [],
+   "added": []
+  },
+  "selected_source_hashes": {
+   "pass": true,
+   "now": {
+    "source_dwg": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "source_dxf": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f",
+    "review_pdf": "2dd28b0480adcd2beb47dab31558ee5dc88fec72334c0add48a1fd1a5a9f2dae",
+    "wall_index": "9e5a94c17fa2573faaed31c4c909673ac8ce49cbb420fcb6b1c82647d8ec6197",
+    "apply_script": "e2daf55bfe7edf4f9d0f93d0c646135b5eb4c9119bfd7b3af37e854ef9d019a0",
+    "apply_work_copy": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "lib_CT2": "7afd3a163ec433253eabab7864c27e258726f1c60d34348e2f12a9a84a664686"
+   },
+   "redesign_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "review_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "review_pdf_path": "EP-30880/review/66043c11fab9eaf5a1768ba2.pdf"
+  },
+  "evidence_image_bindings": {
+   "pass": true,
+   "images": 26,
+   "mismatched": []
+  },
+  "db_ids_referenced": {
+   "pass": true,
+   "change_ids_checked": 15,
+   "missing_change_ids": [],
+   "hash_prefixes_excluded": [
+    "2dd28b0480adcd2b",
+    "4a512056e70b64e6",
+    "66043c11fab9eaf5",
+    "9e5a94c17fa2573f",
+    "dbe7900f21033b2a",
+    "e2daf55bfe7edf4f"
+   ],
+   "jobs": {
+    "96": "fa_drawing_review/failed",
+    "99": "fa_drawing_review/succeeded",
+    "101": "fa_drawing_review/succeeded",
+    "102": "fa_redesign_plan/succeeded",
+    "103": "fa_redesign_apply/succeeded",
+    "118": "fa_redesign_apply/succeeded",
+    "119": "fa_redesign_apply/failed",
+    "120": "fa_redesign_plan/succeeded",
+    "121": "fa_redesign_apply/failed"
+   },
+   "ai_usage_ids_found": [
+    686,
+    687,
+    688,
+    689,
+    690,
+    728,
+    729
+   ],
+   "project_5_ep": "30880",
+   "ifc_drawing_1": "FIRE ALARM LAYOUT.dwg",
+   "activity_max_972": 972
+  },
+  "code_line_references": {
+   "pass": true,
+   "curated_checked": 30,
+   "failed": []
+  },
+  "live_db_not_changed_by_audit": {
+   "pass": true,
+   "live": {
+    "redesign_row": [
+     "planned",
+     "failed",
+     "2026-10-03 15:28:00.097343"
+    ],
+    "max_job_id": 121,
+    "max_activity_id": 972,
+    "max_ai_usage_id": 729,
+    "redesign_result_cache_rows": 33,
+    "probe_total_changes": 0
+   },
+   "note": "All audit DB access: backup API from a mode=ro source + mode=ro/query_only queries; snapshot total_changes 0."
+  },
+  "no_private_names_in_package": {
+   "pass": true,
+   "names_checked": 6,
+   "files_with_hits": []
+  },
+  "required_files_present": {
+   "pass": true,
+   "missing": []
+  }
+ }
+}

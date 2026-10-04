@@ -721,6 +721,12 @@ def sync_register(db: Session, project: Project, submittal_map: dict, user: User
                 also = [a["reference"] for a in rev_cell.get("also_filed_as") or []]
                 maker = maker_of(rev_cell.get("manufacturer")) or latest_maker
                 rev = revisions.get(name)
+                # A form with no reply on it reads "under review" -- but a
+                # revision the engineer has not marked submitted is still
+                # created; only the consultant's reply moves it on its own.
+                if (rev is not None and rev.status == SubmittalStatus.not_submitted
+                        and rev_status == SubmittalStatus.under_review and not rev_letter):
+                    rev_status = SubmittalStatus.not_submitted
                 if rev is None:
                     rev = ProjectSubmittalRevision(revision=name, status=rev_status, reply_code=rev_letter,
                                                    reference=rev_cell.get("reference"), also_filed_as=also,
@@ -755,6 +761,10 @@ def sync_register(db: Session, project: Project, submittal_map: dict, user: User
             if (submittal.status != status or submittal.reply_code != letter or moved_on or submittal.note != note
                     or submittal.reference != row["reference"]) and not changes and not new:
                 changes.append(f"{row['latest']} {row['latest_status']}")
+            latest_rev = revisions.get(revision)
+            if (latest_rev is not None and latest_rev.status == SubmittalStatus.not_submitted
+                    and status == SubmittalStatus.under_review and not letter):
+                status = SubmittalStatus.not_submitted
             submittal.status, submittal.reply_code, submittal.revision = status, letter, revision
             submittal.reference, submittal.document_path, submittal.note = row["reference"], cell["file"], note
             if moved_on or not submittal.manufacturer:

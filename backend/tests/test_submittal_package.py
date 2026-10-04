@@ -6,6 +6,8 @@ cover and dividers coming from the company's templates, and a section the
 platform cannot fill being carried as a divider rather than dropped.
 """
 
+import re
+
 import pymupdf
 import pytest
 
@@ -251,11 +253,17 @@ def test_the_package_carries_cover_index_and_a_divider_per_section(client, db_se
     labels = [label for label, _name, _a, _b in built.manifest]
     assert labels[0] == "Cover"
     assert labels[1] == "Index"
+    # Numbered as the package encloses them -- 01, 02, 03 -- not by the company index (1, 8, 10).
     assert "01 Company Profile -- divider" in labels
-    assert "08 Technical Data Sheet -- divider" in labels
-    assert "10 Trade License -- divider" in labels
+    assert "02 Technical Data Sheet -- divider" in labels
+    assert "03 Trade License -- divider" in labels
     # Sections that were not ticked are not in the package at all.
-    assert not any(label.startswith("02 ") for label in labels)
+    assert not any(label.startswith("04 ") for label in labels)
+    doc = pymupdf.open(stream=built.pdf, filetype="pdf")
+    index = doc[labels.index("Index")].get_text()
+    assert "02" in index and "Technical Data Sheet" in index and "08" not in index.split("Technical Data Sheet")[0][-6:]
+    divider = doc[[a for label, _n, a, _b in built.manifest if label == "03 Trade License -- divider"][0] - 1].get_text()
+    assert "03" in divider.splitlines() and "10" not in divider.splitlines()
 
 
 def test_the_cover_and_dividers_carry_this_project(client, db_session, tmp_path):
@@ -304,7 +312,7 @@ def test_a_missing_document_is_reported_not_silently_skipped(client, db_session,
     built = build_package(project, plan, library)
 
     assert any("Product Catalogue" in w for w in built.warnings)
-    assert any("07 Product Catalogue or Brochure -- divider" == label for label, _n, _a, _b in built.manifest)
+    assert any("01 Product Catalogue or Brochure -- divider" == label for label, _n, _a, _b in built.manifest)
 
 
 # --- the API ----------------------------------------------------------------
@@ -873,6 +881,29 @@ def test_country_of_origin_comes_from_the_company_reference_sheet(client, db_ses
     assert "MODEL" not in origins
 
 
+def test_the_manufacturers_letter_names_one_country_per_model(client, db_session, tmp_path):
+    """Kidde's COO letters stand over the sheet's set origins and its
+    mistakes, for Edwards parts; the sheet keeps the shipped-from."""
+    from app.services.submittal_package import read_origins
+
+    library = _library(tmp_path)
+    _coo_sheet(tmp_path, [
+        ["A", "PANEL ACCESSORIES", "4-CPU, 4-NET-TP, 3-CAB14B", "", "USA/MEXICO/CANADA", "NETHERLAND"],
+        ["", "757A-WB", "Weatherproof box", "", "CHINA", "NETHERLAND"],
+        ["", "TP606", "Back box", "", "LOCAL", ""],
+    ])
+
+    edwards = read_origins(library, "EDWARDS")
+    assert edwards["4CPU"] == ("MEXICO", "NETHERLAND")
+    assert edwards["4NETTP"] == ("USA", "NETHERLAND")
+    assert edwards["3CAB14B"] == ("CANADA", "NETHERLAND")
+    assert edwards["757AWB"] == ("INDIA", "NETHERLAND")
+    assert edwards["APS6A230"] == ("CHINA", "NETHERLAND")      # on the letter only: shipped as the sheet ships
+    assert edwards["TP606"] == ("LOCAL", "")                    # not the manufacturer's: the sheet stands
+    # another brand has no letter: the sheet as it is
+    assert read_origins(library, "MENVIER")["4CPU"] == ("USA/MEXICO/CANADA", "NETHERLAND")
+
+
 def test_a_row_covering_a_set_declares_every_part_it_names(client, db_session, tmp_path):
     """"PANEL ACCESSORIES" carries one origin for the parts listed in its
     description -- and those are the numbers a BOQ actually quotes, so
@@ -926,7 +957,7 @@ def test_country_of_origin_uses_the_same_blocks_as_the_schedule(client, db_sessi
     doc.close()
 
     assert "COUNTRY OF ORIGIN" in text
-    assert "MADE IN" in text and "SHIPPED FROM" in text
+    assert "COO" in text and "MADE IN" not in text and "SHIPPED FROM" not in text
     for _letter, title, _items in schedule_blocks(project, "FAS"):
         assert title.upper()[:40] in text.upper()
 
@@ -1032,8 +1063,8 @@ def test_the_battery_section_encloses_the_calculation(client, db_session, tmp_pa
     built = build_package(project, plan, library, system_code="FAS", battery_panels=[_Panel()])
 
     labels = [label for label, _n, _a, _b in built.manifest]
-    assert "06 Battery Calculation -- divider" in labels
-    assert "06 Battery Calculation" in labels
+    assert "01 Battery Calculation -- divider" in labels
+    assert "01 Battery Calculation" in labels
 
 
 def test_without_a_calculation_the_section_says_so(client, db_session, tmp_path):
@@ -1112,7 +1143,7 @@ def test_a_recorded_datasheet_is_taken_before_the_library_is_searched(client, db
 
 
 def test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_register_and_the_log(client, db_session, tmp_path, monkeypatch):
-    """The package goes to 02- Material Submittals/FA/R0/, and the tab, the
+    """The package goes to 02- Material Submittals/FA/R0/Submitted/, and the tab, the
     index and the log know it at once -- no scan, no model."""
     import app.routers.submittal as submittal_router
     from app.models import DocumentReading, ProjectDocument, ProjectSubmittal
@@ -1132,9 +1163,9 @@ def test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_regis
     resp = client.post(f"/projects/{project_id}/submittal/package",
                        json={"sections": [1, 8], "system_code": "FAS", "revision": "R0"})
     assert resp.status_code == 200 and resp.content.startswith(b"%PDF")
-    filed = root / "02- Material Submittals" / "FA" / "R0" / "EP-30785 - Material Submittal - FA - R0.pdf"
+    filed = root / "02- Material Submittals" / "FA" / "R0" / "Submitted" / "EP-30785 - Material Submittal - FA - R0.pdf"
     assert filed.is_file() and filed.read_bytes() == resp.content
-    assert resp.headers["X-Package-Filed"].replace("%20", " ") == "02- Material Submittals/FA/R0/EP-30785 - Material Submittal - FA - R0.pdf"
+    assert resp.headers["X-Package-Filed"].replace("%20", " ") == "02- Material Submittals/FA/R0/Submitted/EP-30785 - Material Submittal - FA - R0.pdf"
     assert resp.headers["X-Package-Reference"] == "EP-30785-MAS-FA"
 
     row = db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id).one()
@@ -1142,15 +1173,20 @@ def test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_regis
     reading = db_session.get(DocumentReading, row.reading_id)
     assert reading.kind == "submittal_form" and reading.reading["reference"] == "EP-30785-MAS-FA" and reading.calls == 0
     register = db_session.query(ProjectSubmittal).filter(ProjectSubmittal.project_id == project_id).one()
-    assert (register.reference, register.revision, register.status.value, register.system_code) == ("EP-30785-MAS-FA", "R0", "under_review", "FAS")
+    # created, not yet sent: it goes under review when the engineer marks it submitted
+    assert (register.reference, register.revision, register.status.value, register.system_code) == ("EP-30785-MAS-FA", "R0", "not_submitted", "FAS")
     logs = client.get(f"/projects/{project_id}/logs").json()
     assert [(m["reference"], m["revision"]) for m in logs["material_submittals"]] == [("EP-30785-MAS-FA", "R0")]
+    submitted = client.patch(f"/projects/{project_id}/submittals/{register.id}", json={"status": "under_review"})
+    assert submitted.status_code == 200 and submitted.json()["status"] == "under_review"
+    db_session.refresh(register)
+    assert register.status.value == "under_review"
 
     # R1 of the same submittal: its own folder, the register moves to R1, the index holds both.
     resp = client.post(f"/projects/{project_id}/submittal/package",
                        json={"sections": [1, 8], "system_code": "FAS", "revision": "R1"})
     assert resp.status_code == 200
-    assert (root / "02- Material Submittals" / "FA" / "R1" / "EP-30785 - Material Submittal - FA - R1.pdf").is_file()
+    assert (root / "02- Material Submittals" / "FA" / "R1" / "Submitted" / "EP-30785 - Material Submittal - FA - R1.pdf").is_file()
     db_session.refresh(register)
     assert register.revision == "R1"
     assert db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id).count() == 2
@@ -1226,7 +1262,7 @@ def test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_tak
                                                      "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"}])
     body = {"sections": [1, 8], "system_code": "FAS", "revision": "R0"}
     assert client.post(f"/projects/{project_id}/submittal/package", json=body).status_code == 200
-    filed = root / "02- Material Submittals" / "FA" / "R0" / "EP-30786 - Material Submittal - FA - R0.pdf"
+    filed = root / "02- Material Submittals" / "FA" / "R0" / "Submitted" / "EP-30786 - Material Submittal - FA - R0.pdf"
     assert filed.is_file()
 
     # R0 again: refused, with the way out.
@@ -1244,7 +1280,7 @@ def test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_tak
 
     # The next revision is welcome.
     assert client.post(f"/projects/{project_id}/submittal/package", json={**body, "revision": "R1"}).status_code == 200
-    assert (root / "02- Material Submittals" / "FA" / "R1" / "EP-30786 - Material Submittal - FA - R1.pdf").is_file()
+    assert (root / "02- Material Submittals" / "FA" / "R1" / "Submitted" / "EP-30786 - Material Submittal - FA - R1.pdf").is_file()
 
     # Deleting the submittal from the register: both filed revisions go from the folder, the index says removed, the register is empty.
     register = client.get(f"/projects/{project_id}/submittals").json()["items"]
@@ -1253,7 +1289,7 @@ def test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_tak
     assert gone.status_code == 200, gone.text
     result = gone.json()
     assert result["reference"] == "EP-30786-MAS-FA" and result["register_rows"] == 1 and len(result["files"]) == 2
-    assert not filed.exists() and not (root / "02- Material Submittals" / "FA" / "R1" / "EP-30786 - Material Submittal - FA - R1.pdf").exists()
+    assert not filed.exists() and not (root / "02- Material Submittals" / "FA" / "R1" / "Submitted" / "EP-30786 - Material Submittal - FA - R1.pdf").exists()
     assert {r.state for r in db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id)} == {"removed"}
     assert db_session.query(ProjectSubmittal).filter(ProjectSubmittal.project_id == project_id).count() == 0
     assert client.get(f"/projects/{project_id}/logs").json()["material_submittals"] == []
@@ -1263,3 +1299,277 @@ def test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_tak
     assert client.post(f"/projects/{project_id}/submittals/delete", json={"reference": "EP-30786-MAS-FA"}).status_code == 404
     # R0 can be prepared again after the deletion.
     assert client.post(f"/projects/{project_id}/submittal/package", json=body).status_code == 200
+
+
+# --- the datasheet section: 757A-WB, highlights, block dividers --------------
+
+
+def test_the_weatherproof_back_box_has_no_datasheet_and_no_warning(client, db_session, tmp_path):
+    _login_admin(client)
+    line = lambda part, desc: {  # noqa: E731
+        "system_code": "FAS", "group_heading": PANEL, "catalog_no": part,
+        "description": desc, "quantity": "1", "manufacturer": "EDWARDS",
+    }
+    project = _db_project(db_session, _project(client, [
+        line("4-CPU", "Central Processor Module"), line("757A-WB", "Weatherproof Box, Cast - RED"),
+    ]))
+    library = _datasheets(tmp_path)
+    _pdf(library.folder / "01- 757-7A-T WP + 757-WB WM.pdf", ["757A-WB Weatherproof Box"])
+
+    documents = datasheet_documents(project, {"EDWARDS": library}, "FAS")
+
+    assert [d.part_no for d in documents] == ["4-CPU"]
+
+
+def _datasheet(path):
+    """A two-page sheet in the Edwards layout: the title on page 1, the
+    Ordering Information table on page 2."""
+    doc = pymupdf.open()
+    page = doc.new_page(width=612, height=792)
+    page.insert_text((50, 150), "EST4 Central", fontsize=36)
+    page.insert_text((50, 192), "Processing Unit", fontsize=36)
+    page.insert_text((50, 215), "4-CPU", fontsize=18)
+    page.insert_text((50, 500), "Overview", fontsize=14)
+    page.insert_text((50, 520), "The 4-CPU controls all local panel responses.", fontsize=9)
+    page = doc.new_page(width=612, height=792)
+    page.insert_text((50, 80), "Ordering Information", fontsize=14)
+    for y, model, text in ((110, "4-CPU", "Central Processor Module"), (130, "4-OLD", "Fits the 4-CPU only"),
+                           (150, "4-MIC", "Paging microphone")):
+        page.insert_text((50, y), model, fontsize=9)
+        page.insert_text((200, y), text, fontsize=9)
+    page.insert_text((50, 300), "Specifications", fontsize=14)
+    page.insert_text((50, 320), "4-MIC", fontsize=9)
+    # another project's highlights
+    page.add_highlight_annot(page.search_for("4-OLD")[0])
+    page.add_highlight_annot(page.search_for("Specifications")[0])
+    doc.save(path)
+    doc.close()
+
+
+def _marked(page) -> list[str]:
+    """Each highlight's words: those whose middle lies inside it."""
+    out = []
+    for annot in page.annots() or []:
+        words = [w[4] for w in page.get_text("words")
+                 if annot.rect.contains(pymupdf.Point((w[0] + w[2]) / 2, (w[1] + w[3]) / 2))]
+        out.append(" ".join(words).strip(" ,"))
+    return out
+
+
+def test_only_the_title_and_the_ordering_table_are_highlighted(tmp_path):
+    from app.services.submittal_package import highlight_proposed
+
+    _datasheet(tmp_path / "filed.pdf")
+    with pymupdf.open(tmp_path / "filed.pdf") as doc:
+        missing = highlight_proposed(doc, ["4-CPU", "4-MIC"], ["4-CPU"])
+        first = _marked(doc[0])
+        second = list(zip(_marked(doc[1]), (round(a.rect.y0) for a in doc[1].annots())))
+    assert missing == []
+    # the title and its series line; not the 4-CPU in the overview's text
+    assert sorted(first) == ["4-CPU", "EST4 Central", "Processing Unit"]
+    # the proposed models in the table's Model column only: not 4-OLD (not proposed, its old mark gone),
+    # not the 4-CPU its description mentions, not the 4-MIC under Specifications
+    assert sorted(t for t, _y in second) == ["4-CPU", "4-MIC"] and all(y < 300 for _t, y in second)
+    # the library's file is untouched
+    with pymupdf.open(tmp_path / "filed.pdf") as doc:
+        assert len(list(doc[1].annots())) == 2
+
+
+def test_a_part_named_only_in_prose_is_reported_not_highlighted(tmp_path):
+    from app.services.submittal_package import highlight_proposed
+
+    _pdf(tmp_path / "s.pdf", ["Ordering Information", "The SIGA-CT2 module monitors one circuit."])
+    with pymupdf.open(tmp_path / "s.pdf") as doc:
+        assert highlight_proposed(doc, ["SIGA-CT2"], ["SIGA-CT2"]) == ["SIGA-CT2"]
+        assert not list(doc[0].annots())
+
+
+def test_the_proposed_models_are_highlighted_on_the_civil_defence_certificate(tmp_path):
+    from app.services.submittal_package import highlight_approvals
+
+    doc = pymupdf.open()
+    page = doc.new_page()
+    page.insert_text((50, 60), "DIRECTORATE GEN. OF DUBAI CIVIL DEFENSE", fontsize=10)
+    page.insert_text((50, 100), "MODELS: APS6A/230 BPSl0A/230 757-3A-TW 6833-4,", fontsize=9)
+    page.add_highlight_annot(page.search_for("757-3A-TW")[0])
+    other = doc.new_page()
+    other.insert_text((50, 60), "Company profile: APS6A/230", fontsize=10)
+    assert highlight_approvals(doc, ["APS6A/230", "BPS10A/230", "6833-4"]) == 1
+    marked = sorted(_marked(doc[0]))
+    assert marked == ["6833-4", "APS6A/230", "BPSl0A/230"]          # 757-3A-TW's old mark is gone
+    assert not list(doc[1].annots())                                 # not a certificate: left as filed
+
+
+def test_datasheets_go_in_by_schedule_block_each_behind_an_unnumbered_divider(client, db_session, tmp_path):
+    _login_admin(client)
+    line = lambda part, group: {  # noqa: E731
+        "system_code": "FAS", "group_heading": group, "catalog_no": part,
+        "description": part, "quantity": "1", "manufacturer": "EDWARDS",
+    }
+    project = _db_project(db_session, _project(client, [
+        line("SIGA-OSD", "Field Devices"),
+        line("4-CPU", "PROJECT : SKYBLADE / " + PANEL),
+        line("BPS10A/230", "Booster Power Supply"),
+    ]))
+    library = _library(tmp_path)
+    sheets = _datasheets(tmp_path)
+    _pdf(sheets.folder / "01- SIGA-OSD.pdf", ["SIGA-OSD Smoke Detector"])
+    _pdf(sheets.folder / "01- BPS10A.pdf", ["BPS10A Booster Power Supply", "BPS10A/230"])
+
+    plan = plan_package(project, {8}, library, tmp_path, {"EDWARDS": sheets}, system_code="FAS")
+    section = next(s for s in plan.sections if s.number == 8)
+    # the schedule's order: the panel, the booster, then the field devices
+    assert [d.part_no for d in section.documents] == ["4-CPU", "BPS10A/230", "SIGA-OSD"]
+
+    built = build_package(project, plan, library, system_code="FAS")
+    labels = [label for label, _n, _a, _b in built.manifest]
+    assert labels[labels.index("01 Technical Data Sheet -- divider") + 1].startswith("01 Technical Data Sheet -- PROJECT")
+    blocks = [m for m in built.manifest if m[0].startswith("01 Technical Data Sheet -- ") and m[0] != "01 Technical Data Sheet -- divider"]
+    assert len(blocks) == 3
+    doc = pymupdf.open(stream=built.pdf, filetype="pdf")
+    first = doc[blocks[0][2] - 1].get_text()
+    assert PANEL in first and "SKYBLADE /" not in first
+    assert "Initiating Devices" in doc[blocks[2][2] - 1].get_text()
+    for _label, _name, page, _last in blocks:
+        text = doc[page - 1].get_text()
+        assert not re.search(r"(?m)^\s*\d{2}\s*$", text), "a block divider carries no section number"
+        assert "PAGE 08" not in text
+    # the index lists the sections only
+    assert "Initiating Devices" not in doc[labels.index("Index")].get_text()
+
+
+def test_the_selected_batteries_go_in_behind_a_divider_of_their_own(client, db_session, tmp_path, monkeypatch):
+    from app.services import battery_materials
+    from app.services.battery_materials import SelectedBattery
+
+    _login_admin(client)
+    line = lambda part, group, desc: {  # noqa: E731
+        "system_code": "FAS", "group_heading": group, "catalog_no": part,
+        "description": desc, "quantity": "2", "manufacturer": "EDWARDS",
+    }
+    project = _db_project(db_session, _project(client, [
+        line("4-CPU", PANEL, "Central Processor Module"),
+        line("12V65A", PANEL, "Battery, 12 V @ 65 AH"),          # the BOQ's battery by capacity
+    ]))
+    library = _library(tmp_path)
+    sheets = _datasheets(tmp_path)
+    # a sheet that mentions the BOQ's battery: not its datasheet
+    _pdf(sheets.folder / "01- BPS10A.pdf", ["BPS10A Booster Power Supply", "12V65A battery"])
+    _pdf(sheets.folder / "12- Battery_Rocket" / "ES 65-12 V.pdf", ["ES 65-12", "12V - 65Ah"])
+    monkeypatch.setattr(battery_materials, "selected_batteries", lambda db, project, per_panel=False: [
+        SelectedBattery(catalog_no="ES65-12", description="Sealed lead-acid battery, 12 V @ 65 Ah",
+                        manufacturer="ROCKET", quantity=2, panels=["FACP-01"], headings=[PANEL],
+                        datasheet_library="EDWARDS", datasheet_path="12- Battery_Rocket/ES 65-12 V.pdf")])
+
+    plan = plan_package(project, {8}, library, tmp_path, {"EDWARDS": sheets}, system_code="FAS")
+    documents = next(s for s in plan.sections if s.number == 8).documents
+    assert [(d.part_no, d.block) for d in documents][-1] == ("ES65-12", "Batteries")
+    assert "12V65A" not in [d.part_no for d in documents]
+
+    built = build_package(project, plan, library, system_code="FAS")
+    labels = [label for label, _n, _a, _b in built.manifest]
+    at = labels.index("01 Technical Data Sheet -- Batteries")
+    assert built.manifest[at + 1][1] == "ES 65-12 V.pdf"
+
+
+def test_an_emergency_lighting_sheet_has_only_its_order_codes_marked(tmp_path):
+    """No title, no icons: the order codes, as the catalogue prints them --
+    under the equipment table's alias, without the "-M", a 0 for an O, and
+    an exit sign's accessories each on its own."""
+    from app.services.submittal_package import highlight_proposed
+
+    doc = pymupdf.open()
+    page = doc.new_page(width=612, height=792)
+    page.insert_text((50, 120), "Safety Luminaire", fontsize=36)
+    page.insert_text((50, 150), "RoundTech MR SEO", fontsize=18)
+    for y, text in ((300, "RT2RHE0200CGL3HIP RoundTech Med. Recessed IP65"), (320, "CTR400CGL2KS"),
+                    (340, "SL2MNM42D3D"), (360, "SL2RB"), (380, "CTR160CGL2KS"),
+                    (400, "Replaces the SL2RB of older ranges")):
+        page.insert_text((50, y), text, fontsize=9)
+    parts = ["RT2RHEO200CGL3HIPM", "CTR400CGL2KS-M", "SL2-42D3D-CGL-M +SL2PPLR+SL2RB", "NEXI300-3H-CGL-IPM"]
+    missing = highlight_proposed(doc, parts, parts, aliases={"SL2-42D3D-CGL-M": ["SL2MNM42D3D"]}, marking="parts")
+    assert sorted(_marked(doc[0])) == ["CTR400CGL2KS", "RT2RHE0200CGL3HIP", "SL2MNM42D3D", "SL2RB"]
+    assert missing == ["NEXI300-3H-CGL-IPM"]
+
+
+def test_a_family_sheet_is_an_option_codes_datasheet(tmp_path):
+    from app.services.datasheet_library import DatasheetLibrary
+
+    root = tmp_path / "MENVIER"
+    _pdf(root / "NEXI300-3H-CGL.pdf", ["NexiTech LED", "Self-contained emergency lighting"])
+    _pdf(root / "SIGA-CT2.pdf", ["Input module"])
+    library = DatasheetLibrary("MENVIER", root)
+    assert [m.filename for m in library.find("NEXI300-3H-CGL-IPM")] == ["NEXI300-3H-CGL.pdf"]
+    assert library.find("SIGA-CT20") == []          # a family ends at a separator
+
+
+def test_menvier_controllers_are_french_and_its_lights_romanian():
+    from app.services.origin_letters import by_range
+
+    assert by_range("MENVIER", "CTR400CGL2KS-M") == "FRANCE"
+    for part in ("SL2-42D3D-CGL-M", "NEXI300-3H-CGL-IPM", "RT2RHEO200CGL3HIPM", "SL2-42D3D-CGL-M +SL2PPLR+SL2RB"):
+        assert by_range("MENVIER", part) == "ROMANIA"
+    assert by_range("EDWARDS", "4-CPU") is None          # Kidde declares by model, not by range
+
+
+def test_the_emergency_lighting_warranty_names_its_system_and_maker(client, db_session):
+    from app.models import ProjectSystem
+    from app.services.submittal_package import warranty_replacements
+
+    _login_admin(client)
+    project = _db_project(db_session, _project(client))
+    project.systems = [ProjectSystem(name="Fire Alarm", brand="EDWARDS"),
+                       ProjectSystem(name="Emergency Light Monitoring", brand="MENVIER")]
+    db_session.commit()
+    els = warranty_replacements(project, 1, "ELS")
+    assert els("DRAFT WARRANTY FOR FIRE ALARM & VOICE EVACUATION SYSTEM") == "DRAFT WARRANTY FOR EMERGENCY LIGHTING SYSTEM"
+    assert els("all fire alarm system materials manufactured & supplied by M/s. EDWARDS are warranted") ==         "all emergency lighting system materials manufactured & supplied by M/s. MENVIER are warranted"
+    fas = warranty_replacements(project, 1, "FAS")
+    assert fas("supplied by M/s. EDWARDS") == "supplied by M/s. EDWARDS"
+
+
+def test_the_emergency_lighting_cover_names_eaton_and_its_discipline(client, db_session, tmp_path):
+    from app.models import ProjectSystem
+    from app.services.submittal_package import build_cover
+
+    _login_admin(client)
+    project = _db_project(db_session, _project(client))
+    project.systems = [ProjectSystem(name="Fire Alarm", brand="EDWARDS"),
+                       ProjectSystem(name="Emergency Light Monitoring", brand="MENVIER")]
+    db_session.commit()
+    root = _library(tmp_path)
+    doc = pymupdf.open()
+    page = doc.new_page(width=595.32, height=841.92)
+    page.insert_text((320, 545), "SYSTEM MANUFACTURER", fontsize=7.5)
+    page.insert_image(pymupdf.Rect(331, 556, 436, 584), pixmap=pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, 4, 4), 0))
+    page.insert_text((320, 606), "EST4 Life Safety Platform", fontsize=9)
+    page.insert_text((58, 746), "Electrical - Fire Alarm & Life Safety", fontsize=9.5)
+    doc.save(root / "templates" / "Cover Page - Material Submittal - R0.pdf")
+    doc.close()
+
+    els = build_cover(root, project, "R0", "Emergency Light Monitoring System", "ELS")[0]
+    text = els.get_text()
+    assert "EATON" in text and "Electrical - Emergency Light System" in text and "EST4" not in text
+    assert not [i for i in els.get_image_info() if 540 < i["bbox"][1] < 600]        # the Edwards logo is gone
+    fas = build_cover(root, project, "R0", "Fire Alarm System", "FAS")[0]
+    assert "EST4 Life Safety Platform" in fas.get_text() and fas.get_image_info()
+
+
+def test_the_cable_submittal_carries_every_chosen_cable_brands_datasheets(client, db_session, tmp_path, monkeypatch):
+    from app.services import frc_cables
+    from app.services.datasheet_library import DatasheetLibrary
+    from app.services.submittal_package import index_for
+
+    _login_admin(client)
+    project = _db_project(db_session, _project(client))
+    libraries = {}
+    for brand in ("FIREGUARD", "RAMCRO"):
+        _pdf(tmp_path / brand / f"{brand}.pdf", [f"{brand} fire rated cable"])
+        libraries[brand] = DatasheetLibrary(brand, tmp_path / brand)
+    # the monitored emergency lighting's cable is Ramcro's
+    monkeypatch.setattr(frc_cables, "monitoring_for", lambda row, project: ("RAMCRO", "2Cx1.5mm"))
+    index = index_for("FRC")
+    plan = plan_package(project, {index.datasheet}, _library(tmp_path), tmp_path, libraries,
+                        system_code="FRC", brand="FIREGUARD")
+    section = next(s for s in plan.sections if s.number == index.datasheet)
+    assert [d.name for d in section.documents] == ["FIREGUARD.pdf", "RAMCRO.pdf"] and section.note is None

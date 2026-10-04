@@ -1,0 +1,187 @@
+ M backend/app/ai/submittal_reader.py
+ M backend/app/compliance/assist.py
+ M backend/app/core/config.py
+ M backend/app/ifc/services/runners.py
+ M backend/app/main.py
+ M backend/app/models.py
+ M backend/app/routers/amplifier.py
+ M backend/app/routers/design.py
+ M backend/app/routers/projects.py
+ M backend/app/routers/submittal.py
+ M backend/app/schemas_design.py
+ M backend/app/services/amplifier_export.py
+ M backend/app/services/battery_pdf.py
+ M backend/app/services/datasheet_library.py
+ M backend/app/services/equipment_currents.py
+ M backend/app/services/jobs.py
+ M backend/app/services/power_export.py
+ M backend/app/services/project_deletion.py
+ M backend/app/services/project_folders.py
+ M backend/app/services/project_state.py
+ M backend/app/services/required_drawings.py
+ M backend/app/services/schedule_export.py
+ M backend/app/services/submittal_filing.py
+ M backend/app/services/submittal_package.py
+ M backend/app/services/submittal_replies.py
+ M backend/library/datasheets/MENVIER/NEXI300-3H-CGL.pdf
+ M backend/library/symbols/symbol_library.json
+ M backend/tests/test_amplifier_calculation.py
+ M backend/tests/test_battery_api.py
+ M backend/tests/test_document_sync.py
+ M backend/tests/test_drawing_log.py
+ M backend/tests/test_power_calculation.py
+ M backend/tests/test_project_state.py
+ M backend/tests/test_proposed_materials.py
+ M backend/tests/test_review_fixes.py
+ M backend/tests/test_submittal.py
+ M backend/tests/test_submittal_package.py
+ M frontend/src/App.tsx
+ M frontend/src/components/FloorScheduleTab.tsx
+ M frontend/src/lib/types.ts
+ M frontend/src/pages/ProjectAmplifierPage.tsx
+ M frontend/src/pages/ProjectBatteryPage.tsx
+ M frontend/src/pages/ProjectBoqPage.tsx
+ M frontend/src/pages/ProjectDrawingsPage.tsx
+ M frontend/src/pages/ProjectLogsPage.tsx
+ M frontend/src/pages/ProjectMaterialSubmittalPage.tsx
+ M frontend/src/pages/ProjectPowerPage.tsx
+ M frontend/src/pages/ProjectWorkspace.tsx
+ M frontend/vite.config.ts
+ M start.bat
+?? backend/alembic/versions/a3c5e7b9d1f3_shop_drawings_boq.py
+?? backend/alembic/versions/b4d6f8a0c2e4_draftsman_assignment.py
+?? backend/alembic/versions/c1e3a5b7d9f1_fa_interface_schedule.py
+?? backend/alembic/versions/c5e7a9b1d3f5_drawing_redesign.py
+?? backend/alembic/versions/d2f4b6c8e0a2_aps_cabinet_locations.py
+?? backend/alembic/versions/e3a5c7e9f1b3_drawing_review.py
+?? backend/alembic/versions/f4b6d8f0a2c4_review_rulings.py
+?? backend/app/interfaces/__init__.py
+?? backend/app/interfaces/detect.py
+?? backend/app/interfaces/export.py
+?? backend/app/interfaces/matrix.py
+?? backend/app/interfaces/pdf.py
+?? backend/app/interfaces/scan.py
+?? backend/app/interfaces/schedules.py
+?? backend/app/interfaces/service.py
+?? backend/app/interfaces/visual.py
+?? backend/app/redesign/__init__.py
+?? backend/app/redesign/ai.py
+?? backend/app/redesign/cad.py
+?? backend/app/redesign/library/CR.dwg
+?? backend/app/redesign/library/CT1.dwg
+?? backend/app/redesign/library/CT2.dwg
+?? backend/app/redesign/library/modules.json
+?? backend/app/redesign/service.py
+?? backend/app/redesign/walls.py
+?? backend/app/review/ai.py
+?? backend/app/review/fls.py
+?? backend/app/review/geometry.py
+?? backend/app/review/markup.py
+?? backend/app/review/pages.py
+?? backend/app/review/render.py
+?? backend/app/review/rulings.py
+?? backend/app/review/service.py
+?? backend/app/routers/draftsman.py
+?? backend/app/routers/drawing_review.py
+?? backend/app/routers/fa_interfaces.py
+?? backend/app/routers/redesign.py
+?? backend/app/routers/samples.py
+?? backend/app/routers/shop_boq.py
+?? backend/app/services/draftsman_assignment.py
+?? backend/app/services/origin_letters.py
+?? backend/app/services/sample_request.py
+?? backend/app/services/shop_boq.py
+?? backend/library/datasheets/RAMCRO/RAMCRO.pdf
+?? "backend/library/submittal/FIREGUARD/PREVIOUS APPROVAL/PREV-1.pdf"
+?? "backend/library/submittal/FIREGUARD/PREVIOUS APPROVAL/PREV-2.pdf"
+?? backend/tests/test_draftsman_assignment.py
+?? backend/tests/test_drawing_review.py
+?? backend/tests/test_fa_interfaces.py
+?? backend/tests/test_redesign.py
+?? backend/tests/test_sample_request.py
+?? backend/tests/test_shop_boq.py
+?? docs/milestones/redesign/RD-M1/BASELINE-MANIFEST.json
+?? docs/milestones/redesign/RD-M1/COMMANDS.md
+?? docs/milestones/redesign/RD-M1/CURRENT-PIPELINE.md
+?? docs/milestones/redesign/RD-M1/DATA-SAFETY-REPORT.md
+?? docs/milestones/redesign/RD-M1/FAILURE-INVENTORY.csv
+?? docs/milestones/redesign/RD-M1/FAILURE-INVENTORY.md
+?? docs/milestones/redesign/RD-M1/GOLDEN-CASE-SELECTION.md
+?? docs/milestones/redesign/RD-M1/INDEPENDENT-REVIEW.md
+?? docs/milestones/redesign/RD-M1/NEXT-MILESTONE-HANDOFF.md
+?? docs/milestones/redesign/RD-M1/PACKAGE-CHECK.json
+?? docs/milestones/redesign/RD-M1/PACKAGE-MANIFEST.json
+?? docs/milestones/redesign/RD-M1/RD-M1-REPORT.md
+?? docs/milestones/redesign/RD-M1/REPRODUCTION-RUNBOOK.md
+?? docs/milestones/redesign/RD-M1/TEST-RESULTS.md
+?? docs/milestones/redesign/RD-M1/crops/GC01-R02-pumproom-drawn-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R02-pumproom-drawn-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R03-pumproom-all-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R03-pumproom-all-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R04-FA101-left-edge-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R04-FA101-left-edge-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R05-FA101-right-edge-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R05-FA101-right-edge-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R06-remove-cross-room-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R06-remove-cross-room-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R07-pool-pumproom-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R07-pool-pumproom-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R08-fire-command-room-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R08-fire-command-room-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R09-lift-lobby-FTJ-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R09-lift-lobby-FTJ-B-plan.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R11-roof-left-cluster-A-source.png
+?? docs/milestones/redesign/RD-M1/crops/GC01-R11-roof-left-cluster-B-plan.png
+?? docs/milestones/redesign/RD-M1/evidence/E01-apply-script-job121.redacted.scr
+?? docs/milestones/redesign/RD-M1/evidence/E02-jobs-fa.json
+?? docs/milestones/redesign/RD-M1/evidence/E03-redesign-row.json
+?? docs/milestones/redesign/RD-M1/evidence/E04-changes-analysis.json
+?? docs/milestones/redesign/RD-M1/evidence/E05-library-paths.json
+?? docs/milestones/redesign/RD-M1/evidence/E06-review-changes.json
+?? docs/milestones/redesign/RD-M1/evidence/E07-interface-changes.json
+?? docs/milestones/redesign/RD-M1/evidence/E08-ai-variation.json
+?? docs/milestones/redesign/RD-M1/evidence/E09-ai-usage-redesign.json
+?? docs/milestones/redesign/RD-M1/evidence/E10-wall-index-layers.json
+?? docs/milestones/redesign/RD-M1/evidence/E11-effective-layers.json
+?? docs/milestones/redesign/RD-M1/evidence/E12-db-snapshot-info.json
+?? docs/milestones/redesign/RD-M1/evidence/E13-ifc-worker-log.redacted.txt
+?? docs/milestones/redesign/RD-M1/evidence/E14-activity-redesign.json
+?? docs/milestones/redesign/RD-M1/evidence/E15-sheet-geometry.json
+?? docs/milestones/redesign/RD-M1/evidence/E16-source-binding.json
+?? docs/milestones/redesign/RD-M1/evidence/E17-render-index.json
+?? docs/milestones/redesign/RD-M1/evidence/E18-reproduce-apply-input.json
+?? docs/milestones/redesign/RD-M1/evidence/scripts/ai_variation.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/analyse_changes.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/build_evidence.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/dump_case.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/effective_layer.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/findings.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/hash_tree.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/invisible_flag.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/package_check.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/patch_docs_review1.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/patch_findings_review1.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/patch_review2.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/q.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/render_case.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/reproduce_apply_input.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/snapshot_db.py
+?? docs/milestones/redesign/RD-M1/evidence/scripts/wall_layers.py
+?? docs/milestones/redesign/RD-M1/evidence/tests/test_drawing_review.txt
+?? docs/milestones/redesign/RD-M1/evidence/tests/test_fa_interfaces.txt
+?? docs/milestones/redesign/RD-M1/evidence/tests/test_ifc_worker_and_ai.txt
+?? docs/milestones/redesign/RD-M1/evidence/tests/test_redesign.txt
+?? docs/milestones/redesign/RD-M1/renders/GC01-R01-sheet-FA101-A-source.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R01-sheet-FA101-B-plan.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R10-sheet-FA117-roof-A-source.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R10-sheet-FA117-roof-B-plan.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R12-sheet-FA111-typical-A-source.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R12-sheet-FA111-typical-B-plan.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R13-sheet-FA112-mech-A-source.png
+?? docs/milestones/redesign/RD-M1/renders/GC01-R13-sheet-FA112-mech-B-plan.png
+?? frontend/src/components/RequestMaterialDialog.tsx
+?? frontend/src/components/drawings/AssignDraftsmanTab.tsx
+?? frontend/src/components/interfaces/InterfacesTab.tsx
+?? frontend/src/components/interfaces/api.ts
+?? frontend/src/pages/ProjectDrawingReviewPage.tsx
+?? frontend/src/pages/ProjectRedesignPage.tsx

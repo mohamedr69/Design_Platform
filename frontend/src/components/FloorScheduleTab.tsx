@@ -31,7 +31,21 @@ const SYSTEM_LABELS: Record<string, string> = {
   "": "Not recognised",
 };
 
-export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; canEdit: boolean }) {
+/** "floor": the BOQ Floor Wise, read off the engineer's workbook. "shop":
+ * the BOQ as per Shop Drawings -- made from the IFC BOQ, then edited by
+ * hand; the amplifier and power schedules read it. One table, two BOQs. */
+export type ScheduleKind = "floor" | "shop";
+
+export function FloorScheduleTab({
+  projectId,
+  canEdit,
+  kind = "floor",
+}: {
+  projectId: number;
+  canEdit: boolean;
+  kind?: ScheduleKind;
+}) {
+  const base = kind === "shop" ? "shop-boq" : "floor-schedule";
   const [data, setData] = useState<FloorSchedule | null>(null);
   const [check, setCheck] = useState<FloorScheduleCheck | null>(null);
   const [busy, setBusy] = useState(false);
@@ -42,9 +56,9 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
 
   const load = useCallback(async () => {
     try {
-      const body = await api.get<FloorSchedule>(`/projects/${projectId}/floor-schedule`);
+      const body = await api.get<FloorSchedule>(`/projects/${projectId}/${base}`);
       setData(body);
-      if (body.result) {
+      if (body.result && kind === "floor") {
         try {
           setCheck(await api.get<FloorScheduleCheck>(`/projects/${projectId}/floor-schedule/check`));
         } catch {
@@ -54,7 +68,26 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "The schedule could not be loaded");
     }
-  }, [projectId]);
+  }, [projectId, base, kind]);
+
+  async function make() {
+    if (
+      data?.result &&
+      !window.confirm(
+        "Make the BOQ as per Shop Drawings again from the IFC drawings? Every quantity changed by hand is replaced.",
+      )
+    )
+      return;
+    setBusy(true);
+    setError(null);
+    try {
+      setData(await api.post<FloorSchedule>(`/projects/${projectId}/shop-boq/make`));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "It could not be made");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   useEffect(() => {
     void load();
@@ -94,9 +127,16 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
   }
 
   async function clear() {
-    if (!window.confirm("Clear the floor-wise BOQ? The workbook itself is not touched.")) return;
+    if (
+      !window.confirm(
+        kind === "shop"
+          ? "Clear the BOQ as per Shop Drawings? The amplifier and power schedules go back to the BOQ Floor Wise."
+          : "Clear the floor-wise BOQ? The workbook itself is not touched.",
+      )
+    )
+      return;
     try {
-      await api.delete(`/projects/${projectId}/floor-schedule`);
+      await api.delete(`/projects/${projectId}/${base}`);
       setData(null);
       setCheck(null);
       setReplacing(false);
@@ -110,6 +150,99 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
   // it came from, where it is filed, and a Replace button. Handing another
   // one in is a deliberate act, not the first thing on the page.
   const linked = Boolean(result);
+  if (kind === "shop") {
+    return (
+      <div className="mt-4">
+        <section className="rounded-xl border border-gray-200 bg-white p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-bold text-navy-900">BOQ as per Shop Drawings</h2>
+              <p className="mt-1 max-w-2xl text-sm text-gray-600">
+                {linked ? (
+                  <>
+                    Made from the BOQ as per IFC Drawings
+                    {data?.source_path ? (
+                      <>
+                        {" "}(<span className="font-medium text-navy-900">{data.source_path}</span>)
+                      </>
+                    ) : null}
+                    , then edited here as the shop drawings have it. The amplifier and 24 V power schedules
+                    take their quantities from this BOQ. Click a quantity to type it, or step it with &minus; / +.
+                  </>
+                ) : (
+                  <>
+                    It starts as the BOQ as per IFC Drawings and is then edited here as the shop drawings move on.
+                    The amplifier and 24 V power schedules take their quantities from it.
+                  </>
+                )}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {linked && (
+                <a
+                  href={`${API_BASE_URL}/projects/${projectId}/shop-boq/export.pdf`}
+                  className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700"
+                >
+                  Export PDF
+                </a>
+              )}
+              {data?.updated_at && (
+                <span className="text-xs text-gray-500">changed {formatApiDate(data.updated_at, "short")}</span>
+              )}
+            </div>
+          </div>
+          {canEdit && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => void make()}
+                disabled={busy}
+                className={
+                  linked
+                    ? "rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700 disabled:opacity-60"
+                    : "rounded-lg bg-brand-600 px-4 py-1.5 text-sm font-semibold text-white disabled:opacity-60"
+                }
+              >
+                {busy ? "Making..." : linked ? "Make again from IFC" : "Make from the IFC drawings"}
+              </button>
+              {linked && (
+                <button onClick={() => void clear()} className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700">
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
+          {error && <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
+          {data?.filed_note && (
+            <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${linked ? "bg-sky-50 text-sky-900" : "bg-amber-50 text-amber-900"}`}>
+              {data.filed_note}
+            </p>
+          )}
+          {result?.warnings?.length ? (
+            <ul className="mt-3 space-y-1 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              {result.warnings.map((warning) => (
+                <li key={warning}>{warning}</li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
+        {result && (
+          <ScheduleTable
+            projectId={projectId}
+            base={base}
+            typed
+            result={result}
+            canEdit={canEdit}
+            onChanged={(next) => setData((was) => (was ? { ...was, result: next } : was))}
+          />
+        )}
+        {!result && !busy && (
+          <p className="mt-4 rounded-xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-400">
+            The BOQ as per Shop Drawings has not been made yet.
+          </p>
+        )}
+      </div>
+    );
+  }
   return (
     <div className="mt-4">
       <section className="rounded-xl border border-gray-200 bg-white p-5">
@@ -214,6 +347,7 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
       {result && (
         <ScheduleTable
           projectId={projectId}
+          base={base}
           result={result}
           canEdit={canEdit}
           onChanged={(next) => setData((was) => (was ? { ...was, result: next } : was))}
@@ -232,11 +366,17 @@ export function FloorScheduleTab({ projectId, canEdit }: { projectId: number; ca
 
 function ScheduleTable({
   projectId,
+  base,
+  typed = false,
   result,
   canEdit,
   onChanged,
 }: {
   projectId: number;
+  /** The API the table edits: "floor-schedule" or "shop-boq". */
+  base: string;
+  /** A quantity may be typed as well as stepped (the shop drawings BOQ). */
+  typed?: boolean;
   result: FloorScheduleResult;
   canEdit: boolean;
   onChanged: (next: FloorScheduleResult) => void;
@@ -276,7 +416,7 @@ function ScheduleTable({
     void (async () => {
       try {
         const options = await api.get<{ materials: FloorScheduleMaterial[]; by_line: Record<number, string[]> }>(
-          `/projects/${projectId}/floor-schedule/materials/by-line${system ? `?system=${encodeURIComponent(system)}` : ""}`,
+          `/projects/${projectId}/${base}/materials/by-line${system ? `?system=${encodeURIComponent(system)}` : ""}`,
         );
         if (live) {
           setMaterials(options.materials);
@@ -292,7 +432,7 @@ function ScheduleTable({
     return () => {
       live = false;
     };
-  }, [projectId, system]);
+  }, [projectId, system, base]);
 
   // The parts this line may be settled as, the ones its wording asks for
   // first. An order the server did not send leaves the list as it came.
@@ -319,12 +459,16 @@ function ScheduleTable({
    * quantity. */
   async function step(item: FloorScheduleItem, column: SheetColumn, by: number) {
     const values = column.floors.map((floor) => item.per_floor?.[floor] ?? 0);
-    const next = Math.max(0, Math.max(...values) + by);
+    await setTo(item, column, Math.max(0, Math.max(...values) + by));
+  }
+
+  async function setTo(item: FloorScheduleItem, column: SheetColumn, next: number) {
+    const values = column.floors.map((floor) => item.per_floor?.[floor] ?? 0);
     if (values.every((value) => value === next)) return;
     setSaving(`${item.row}:${column.heading}`);
     try {
       const body = await api.patch<FloorSchedule>(
-        `/projects/${projectId}/floor-schedule/items/${item.row}`,
+        `/projects/${projectId}/${base}/items/${item.row}`,
         { floors: column.floors, quantity: next },
       );
       if (body.result) onChanged(body.result);
@@ -337,7 +481,7 @@ function ScheduleTable({
     setSaving(`${item.row}:part`);
     try {
       const body = await api.patch<FloorSchedule>(
-        `/projects/${projectId}/floor-schedule/items/${item.row}/material`,
+        `/projects/${projectId}/${base}/items/${item.row}/material`,
         { part_no: part || null },
       );
       if (body.result) onChanged(body.result);
@@ -567,6 +711,7 @@ function ScheduleTable({
                                   canEdit={canEdit}
                                   busy={saving === `${item.row}:${column.heading}`}
                                   onStep={(by) => void step(item, column, by)}
+                                  onSet={typed ? (next) => void setTo(item, column, next) : undefined}
                                 />
                               </td>
                             );
@@ -733,6 +878,7 @@ function Stepper({
   canEdit,
   busy,
   onStep,
+  onSet,
 }: {
   value: number;
   /** Shown instead of the value: a typical column whose floors differ. */
@@ -742,7 +888,12 @@ function Stepper({
   canEdit: boolean;
   busy: boolean;
   onStep: (by: number) => void;
+  /** Given, the number is clicked to type a quantity. */
+  onSet?: (value: number) => void;
 }) {
+  const [typing, setTyping] = useState<string | null>(null);
+  // Enter commits and unmounts the input, which can fire its blur too: once only.
+  const committed = useRef(false);
   const shown = value ? (
     <>
       {label ?? count(value)}
@@ -756,6 +907,30 @@ function Stepper({
       <span className="mx-auto flex h-9 min-w-[4.5rem] items-center justify-center whitespace-nowrap rounded-lg border border-gray-100 bg-white px-2 tabular-nums text-navy-900">
         {shown}
       </span>
+    );
+  }
+  if (onSet && typing !== null) {
+    const commit = () => {
+      if (committed.current) return;
+      committed.current = true;
+      const next = Math.max(0, Math.round(Number(typing)));
+      setTyping(null);
+      if (typing.trim() !== "" && Number.isFinite(next) && next !== value) onSet(next);
+    };
+    return (
+      <input
+        autoFocus
+        inputMode="numeric"
+        aria-label="quantity"
+        value={typing}
+        onChange={(e) => setTyping(e.target.value.replace(/[^0-9]/g, ""))}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") commit();
+          if (e.key === "Escape") setTyping(null);
+        }}
+        className="mx-auto block h-9 w-[4.5rem] rounded-lg border border-brand-600 bg-white px-2 text-center tabular-nums text-navy-900 focus:outline-none"
+      />
     );
   }
   const reveal = "opacity-0 group-hover/cell:opacity-100 focus-visible:opacity-100 group-focus-within/cell:opacity-100";
@@ -774,7 +949,22 @@ function Stepper({
       >
         &minus;
       </button>
-      {shown}
+      {onSet ? (
+        <button
+          type="button"
+          title="Type the quantity"
+          onClick={() => {
+            committed.current = false;
+            setTyping(value ? String(value) : "");
+          }}
+          disabled={busy}
+          className="rounded px-1 hover:bg-gray-100"
+        >
+          {shown}
+        </button>
+      ) : (
+        shown
+      )}
       <button
         type="button"
         aria-label="one more"

@@ -1,0 +1,425 @@
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 16%]
+...................s.................................................... [ 21%]
+............................ssssssssssssss...............s.............. [ 27%]
+............sssssss..................................................... [ 32%]
+........................................................................ [ 37%]
+sss.....F............................................................... [ 43%]
+........................................................................ [ 48%]
+........................................................................ [ 54%]
+........................................................................ [ 59%]
+........................................................................ [ 64%]
+....F................................................................... [ 70%]
+..F.................................................s................... [ 75%]
+.............................................s.......................... [ 81%]
+........................................................................ [ 86%]
+............................s........................................... [ 91%]
+........................................................................ [ 97%]
+................................sssss                                    [100%]
+================================== FAILURES ===================================
+___ test_directory_upgrade_preserves_existing_project_and_adds_lookup_index ___
+
+self = <sqlalchemy.engine.base.Connection object at 0x00000210650FDD30>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x00000210473B2360>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002105F6E3A10>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteDDLCompiler object at 0x000002105FB882F0>
+parameters = [()]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x00000210473B2360>
+cursor = <sqlite3.Cursor object at 0x0000021064B57140>
+statement = '\nDROP TABLE users', parameters = ()
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002105F6E3A10>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError
+
+The above exception was the direct cause of the following exception:
+
+db_session = <sqlalchemy.orm.session.Session object at 0x000002105E893EC0>
+
+    def test_directory_upgrade_preserves_existing_project_and_adds_lookup_index(db_session):
+        user = db_session.query(User).first()
+        project = Project(ep_number="stage1-keep", created_by_id=user.id, project_name="Keep this project")
+        db_session.add(project)
+        db_session.commit()
+        db_session.close()
+        config = Config(str(ALEMBIC_INI))
+        with engine.begin() as connection:
+            config.attributes["connection"] = connection
+>           command.downgrade(config, "c4d5e6f7a8b9")
+
+tests\test_ep_archive_models.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\command.py:534: in downgrade
+    script.run_env()
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\script\base.py:550: in run_env
+    util.load_python_file(self.dir, "env.py")
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\util\pyfiles.py:114: in load_python_file
+    module = load_module_py(module_id, path)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\util\pyfiles.py:132: in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+alembic\env.py:68: in <module>
+    run_migrations_online()
+alembic\env.py:51: in run_migrations_online
+    context.run_migrations()
+<string>:8: in run_migrations
+    ???
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\runtime\environment.py:970: in run_migrations
+    self.get_context().run_migrations(**kw)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\runtime\migration.py:621: in run_migrations
+    step.migration_fn(**kw)
+alembic\versions\f2a8c4e01d76_specific_engineer_roles.py:71: in downgrade
+    with op.batch_alter_table("users", schema=None) as batch:
+..\..\..\..\..\..\..\..\Programs\Python\Python312\Lib\contextlib.py:144: in __exit__
+    next(self.gen)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\base.py:404: in batch_alter_table
+    impl.flush()
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\batch.py:160: in flush
+    batch_impl._create(self.impl)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\operations\batch.py:457: in _create
+    op_impl.drop_table(self.table)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\ddl\impl.py:457: in drop_table
+    self._exec(schema.DropTable(table, **kw))
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\alembic\ddl\impl.py:252: in _exec
+    return conn.execute(construct, params)
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1418: in execute
+    return meth(
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\sql\ddl.py:180: in _execute_on_connection
+    return connection._execute_ddl(
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1529: in _execute_ddl
+    ret = self._execute_context(
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x00000210473B2360>
+cursor = <sqlite3.Cursor object at 0x0000021064B57140>
+statement = '\nDROP TABLE users', parameters = ()
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002105F6E3A10>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed
+E       [SQL: 
+E       DROP TABLE users]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+<PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError
+_ test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it _
+
+client = <starlette.testclient.TestClient object at 0x0000021067E65A30>
+db_session = <sqlalchemy.orm.session.Session object at 0x0000021067FEC6B0>
+tmp_path = WindowsPath('<PC-B user profile>/AppData/Local/Temp/pytest-of-<PC-B user>/pytest-24/test_the_part_catalogue_knows_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021067DDDFA0>
+
+    def test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it(client, db_session, tmp_path, monkeypatch):
+        import app.routers.materials as materials_router
+        import app.services.part_catalog as catalog_module
+        from app.services.datasheet_library import DatasheetLibrary
+    
+        edwards = tmp_path / "EST4"
+        menvier = tmp_path / "MENVIER"
+        for path, lines in [
+            (edwards / "01- PANEL" / "01- 4-CPU.pdf", ["4-CPU Central Processor Module"]),
+            (edwards / "01- PANEL" / "3-SDDC2 & 3-SSDC2.pdf", ["Loop controllers"]),
+            (edwards / "02- Initiating Devices" / "China" / "01- SIGA-OSD-FCN.pdf", ["Smoke detector"]),
+            (edwards / "00- submittal" / "EST4 Technical Reference Manual.pdf", ["Manual"]),
+            (menvier / "CTR160CGL2KS-M.pdf", ["Menvier luminaire"]),
+        ]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            doc = pymupdf.open()
+            doc.new_page().insert_text((40, 50), "\n".join(lines), fontsize=9)
+            doc.save(path)
+            doc.close()
+        libraries = {"EDWARDS": DatasheetLibrary("EDWARDS", edwards), "MENVIER": DatasheetLibrary("MENVIER", menvier)}
+        monkeypatch.setattr(catalog_module, "get_libraries", lambda: libraries)
+        monkeypatch.setattr(materials_router, "get_libraries", lambda: libraries)
+        _login(client)
+        project_id = client.post("/projects", json={
+            "ep_number": "30791", "project_name": "Titania", "design_sheets": [],
+            "systems": [{"name": "Fire Alarm", "brand": "EDWARDS", "method_statement": True, "drawing": True},
+                        {"name": "Emergency Light Monitoring", "brand": "MENVIER", "method_statement": True, "drawing": True}],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[
+            {"system_code": "FAS", "group_heading": "Panel", "catalog_no": "4-CPU", "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "SIGA-PS", "description": "Photoelectric smoke detector", "quantity": "120", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "12", "description": "GRSW-10", "quantity": "1", "manufacturer": "EDWARDS"},
+        ])
+    
+        numbers = {e.part_no for e in part_catalog.catalog(db_session, "EDWARDS")}
+>       assert {"4-CPU", "3-SDDC2", "3-SSDC2", "SIGA-OSD-FCN", "SIGA-PS"} <= numbers    # datasheet names, the BOQ
+E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}
+E         
+E         Extra items in the left set:
+E         '3-SSDC2'
+E         '3-SDDC2'
+E         'SIGA-OSD-FCN'
+
+tests\test_proposed_materials.py:108: AssertionError
+___________ test_proposed_and_skipped_changes_stay_out_of_the_apply ___________
+
+gc = {'calls': {'autocad': 1, 'readback': 2}, 'client': <starlette.testclient.TestClient object at 0x0000021067EA43B0>, 'db...ion.Session object at 0x0000021064A98230>, 'drawing': <app.models.ProjectIfcDrawing object at 0x0000021067CBF290>, ...}
+
+    def test_proposed_and_skipped_changes_stay_out_of_the_apply(gc):
+        result = _apply(gc)
+        script = (gc["uploads"] / result["run"] / "redesign.scr").read_text(encoding="utf-8")
+        assert all(f'"{cid}"' in script for cid in ("m1", "m2", "r1", "rm"))
+        assert '"p1"' not in script and '"s1"' not in script
+        assert '"c1"' not in script                                     # its spot not confirmed
+>       assert gc["handles"]["other"] not in script                     # the skipped low-confidence REMOVE
+E       assert '45' not in '_.FILEDIA\n..._.QUIT\n_Y\n'
+E         
+E         '45' is contained here:
+E           e "dadf64445c4ddfe2" ep_failed nil ep_saved nil ep_ins 0 ep_del 0)
+E         ?           ++
+E           (defun ep_fail (what id) (setq ep_failed T) (princ (strcat "\n" "EP-RD" "-FAIL:" ep_nonce ":" what ":" id "\n")) (princ))
+E           (defun ep_new_insert (before blk id / e d) (setq e (entlast)) (if (and e (not (eq e before)) (setq d (entget e)) (= (cdr (assoc 0 d)) "INSERT") (= (strcase (cdr (assoc 2 d))) (strcase blk))) e (progn (ep_fail "insert" id) nil)))
+E           (defun ep_erase (h blk x y tol id / e d p) (setq e (handent h)) (if (and e (setq d (entget e)) (= (cdr (assoc 0 d)) "INSERT") (or (not blk) ...
+E         
+E         ...Full output truncated (42 lines hidden), use '-vv' to show
+
+tests\test_redesign_apply.py:244: AssertionError
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\..\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_ai_assist.py: 10 warnings
+tests/test_ai_evaluation.py: 6 warnings
+tests/test_ai_sheet_reader.py: 6 warnings
+tests/test_ai_verification.py: 12 warnings
+tests/test_amplifier_calculation.py: 11 warnings
+tests/test_auth.py: 11 warnings
+tests/test_battery_api.py: 21 warnings
+tests/test_boq_candidates.py: 4 warnings
+tests/test_boq_export.py: 5 warnings
+tests/test_boq_paste.py: 1 warning
+tests/test_boq_provenance.py: 5 warnings
+tests/test_boq_revisions.py: 9 warnings
+tests/test_calc_integrity.py: 3 warnings
+tests/test_company_library.py: 1 warning
+tests/test_compliance.py: 4 warnings
+tests/test_compliance_ai_autofill.py: 4 warnings
+tests/test_compliance_knowledge.py: 10 warnings
+tests/test_compliance_statements.py: 7 warnings
+tests/test_data_controls.py: 9 warnings
+tests/test_data_location.py: 2 warnings
+tests/test_datasheet_library.py: 6 warnings
+tests/test_design_api.py: 11 warnings
+tests/test_details_check.py: 3 warnings
+tests/test_divisions.py: 3 warnings
+tests/test_document_intake.py: 5 warnings
+tests/test_document_sync.py: 12 warnings
+tests/test_draftsman_assignment.py: 1 warning
+tests/test_drawing_log.py: 6 warnings
+tests/test_drawing_review.py: 5 warnings
+tests/test_drawings_module.py: 24 warnings
+tests/test_ep_archive_models.py: 6 warnings
+tests/test_ep_directory.py: 27 warnings
+tests/test_equipment_currents.py: 9 warnings
+tests/test_estimation.py: 2 warnings
+tests/test_fa_interfaces.py: 4 warnings
+tests/test_floor_aliases.py: 5 warnings
+tests/test_floor_schedule.py: 22 warnings
+tests/test_ifc_boq.py: 1 warning
+tests/test_ifc_platform.py: 14 warnings
+tests/test_ifc_worker_and_ai.py: 37 warnings
+tests/test_ifc_zip_import.py: 2 warnings
+tests/test_jobs_and_eligibility.py: 6 warnings
+tests/test_logs_register.py: 6 warnings
+tests/test_migrations.py: 1 warning
+tests/test_persistence.py: 2 warnings
+tests/test_power_calculation.py: 4 warnings
+tests/test_project_directory.py: 1 warning
+tests/test_project_folders.py: 1 warning
+tests/test_project_state.py: 8 warnings
+tests/test_projects.py: 38 warnings
+tests/test_proposed_materials.py: 14 warnings
+tests/test_rbac.py: 35 warnings
+tests/test_redesign_apply.py: 24 warnings
+tests/test_reextraction.py: 20 warnings
+tests/test_review_fixes.py: 11 warnings
+tests/test_sample_request.py: 3 warnings
+tests/test_schedule_materials.py: 3 warnings
+tests/test_shop_boq.py: 1 warning
+tests/test_stale_writes.py: 2 warnings
+tests/test_submittal.py: 13 warnings
+tests/test_submittal_one_per_system.py: 4 warnings
+tests/test_submittal_package.py: 51 warnings
+tests/test_sync_worker.py: 7 warnings
+tests/test_transmittals.py: 1 warning
+tests/test_user_activity.py: 10 warnings
+tests/test_user_delete.py: 6 warnings
+  <SCRATCH>\rdm2\cand\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_submittal_one_per_system.py::test_the_migration_merges_a_brands_register_rows_and_keeps_each_brand
+  <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: <SCRATCH>\rdm2\work\tests\junit-cand.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_ep_archive_models.py::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index
+FAILED tests/test_proposed_materials.py::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it
+FAILED tests/test_redesign_apply.py::test_proposed_and_skipped_changes_stay_out_of_the_apply
+SKIPPED [1] tests\test_brands.py:64: the Menvier library is not held on this machine
+SKIPPED [14] tests\test_datasheet_currents.py:196: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_datasheet_library.py:304: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:97: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:130: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:156: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:182: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:204: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:261: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_design_sheet_extractor.py:289: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_drf_extractor.py:200: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_drf_extractor.py:231: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_drf_extractor.py:268: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_reextraction.py:448: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_spec_finder.py:123: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_submittal_scanner.py:160: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [2] tests\test_ve_workbook_reader.py:293: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_ve_workbook_reader.py:319: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_ve_workbook_reader.py:334: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+SKIPPED [1] tests\test_ve_workbook_reader.py:343: Set EP_PLATFORM_LIVE_ARCHIVE_ROOT to run against the real archive
+3 failed, 1296 passed, 34 skipped, 1 deselected, 620 warnings in 1058.17s (0:17:38)
+exit=1 seconds=1067

@@ -141,7 +141,9 @@ def materials_by_system(project: Project, submittals: list) -> dict[str, dict]:
     for code, entry in out.items():
         state = _state_of([s["code"] for s in entry["submittals"]])
         approved = [s for s in entry["submittals"] if s["code"] in APPROVED_CODES]
-        entry.update({"status": state, "label": LABELS[state], "approved": bool(approved),
+        # a material submittal filed and not yet sent is "Created" (a shop drawing's stays "Not Submitted")
+        label = "Created" if state == "not_submitted" else LABELS[state]
+        entry.update({"status": state, "label": label, "approved": bool(approved),
                       "approved_as": approved[0] if approved else None})
     return out
 

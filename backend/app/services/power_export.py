@@ -198,7 +198,10 @@ def build(project, result: dict) -> pymupdf.Document:
             page, y = state["page"], state["y"]
         _text(page, LEFT + 6, y + 10, supply["name"], size=7.5, bold=True)
         _text(page, LEFT + 60, y + 10, f"{_amps(supply['current_ma'])} A", size=7.5)
-        _text(page, LEFT + 100, y + 10, ", ".join(supply["floors"])[:96], size=7, colour=_GREY)
+        where = (result.get("locations") or {}).get(supply["name"])
+        _text(page, LEFT + 100, y + 10, f"Location: {where}" if where else "Location: not set", size=7,
+              colour=(0, 0, 0) if where else _GREY)
+        _text(page, LEFT + 210, y + 10, ", ".join(supply["floors"])[:76], size=7, colour=_GREY)
         y += 14
         # The circuits of this supply, each with its load against the limit.
         for circuit in (c for c in circuits if c["supply"] == supply["name"]):

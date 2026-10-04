@@ -66,7 +66,7 @@ def for_revision(folder: str, replies: list[tuple[str, str, str]]) -> tuple[str 
     """The answer filed under `folder`, as (status, words). `folder` is
     the revision's own folder -- `.../FA/R0` -- so both halves sit under
     it. (None, None) when nothing was filed there."""
-    for where, filename, words in replies:
+    for where, filename, words in replies or []:
         if not where.startswith(folder):
             continue
         said = (words or "").lower()

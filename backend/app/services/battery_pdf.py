@@ -47,6 +47,17 @@ COLUMNS = [
     ("Standby total", 640.0),
     ("Alarm total", 720.0),
 ]
+# The table in two halves side by side, for a panel too long for one: the
+# columns of each half, from the half's left edge (label, x, width).
+HALF_COLUMNS = [
+    ("Part no.", 3.0, 66.0),
+    ("Description", 72.0, 128.0),
+    ("Qty", 204.0, 0),
+    ("Stby / unit", 224.0, 0),
+    ("Alm / unit", 260.0, 0),
+    ("Stby total", 294.0, 0),
+    ("Alm total", 330.0, 0),
+]
 ROW_HEIGHT = 24.5
 TABLE_TOP = 320.0
 TABLE_LEFT, TABLE_RIGHT = 56.0, 780.0
@@ -111,6 +122,32 @@ def _rows_per_page(first: bool) -> int:
     return max(1, int(available // ROW_HEIGHT))
 
 
+# The smallest row the table is drawn at to keep a panel on its one page:
+# 9.5 pt on A3 is a 5.9 pt line, still read without a magnifier.
+MIN_ROW = 9.5
+
+
+def _one_page(n: int) -> tuple[float, bool, int] | None:
+    """(row height, notes beside the table, halves) that fit a panel's `n`
+    loads on its one sheet: the template's rows when they fit; tighter rows;
+    the notes moved beside the table, under the sizing, so the table has the
+    page's height; then the table in two halves side by side. None only
+    when even that does not fit."""
+    table = TABLE_TOP + 45
+    under = PAGE[1] - FOOTER - NOTES_GAP - NOTES_HEIGHT - table - 14
+    if n * ROW_HEIGHT <= under:
+        return ROW_HEIGHT, False, 1
+    if n and under / n >= 13:
+        return under / n, False, 1
+    beside = PAGE[1] - FOOTER - 12 - table - 14
+    if n and beside / n >= 13:
+        return min(ROW_HEIGHT, beside / n), True, 1
+    per_half = -(-n // 2)
+    if beside / per_half >= MIN_ROW:
+        return min(ROW_HEIGHT, beside / per_half), True, 2
+    return None
+
+
 def _banner(page, manufacturer: str, title: str) -> None:
     page.draw_rect(pymupdf.Rect(0, 0, *PAGE), color=None, fill=BACKDROP)
     page.draw_rect(pymupdf.Rect(0, 0, PAGE[0], BANNER_HEIGHT), color=None, fill=BANNER)
@@ -121,24 +158,35 @@ def _banner(page, manufacturer: str, title: str) -> None:
     page.insert_text((42, 62), title, fontname="hebo", fontsize=20, color=WHITE)
 
 
-def _equipment_table(page, lines, table_top: float, card_right: float, continued: tuple[int, int] | None) -> float:
-    """Draw the connected-equipment card from `table_top`; return its bottom."""
-    bottom = max(612.9 if continued is None else 0, table_top + 40 + len(lines) * ROW_HEIGHT + 14)
+def _equipment_table(page, lines, table_top: float, card_right: float, continued: tuple[int, int] | None,
+                     row: float = ROW_HEIGHT, floor: float | None = None, halves: int = 1) -> float:
+    """Draw the connected-equipment card from `table_top`; return its bottom.
+    `row` is the row height (the type follows it); `floor` the lowest the
+    card's bottom may be (the template's, unless the notes moved aside);
+    `halves` 2 draws the rows in two tables side by side."""
+    per_half = -(-len(lines) // halves)
+    lowest = 612.9 if continued is None and floor is None else (floor or 0)
+    bottom = max(lowest, table_top + 40 + per_half * row + 14)
     page.draw_rect(pymupdf.Rect(EQUIPMENT_CARD[0], table_top - 37.1, card_right, bottom), color=None, fill=CARD)
     heading = "Connected equipment"
     if continued is not None:
         heading += f" (continued, sheet {continued[0]} of {continued[1]})"
     page.insert_text((58, table_top - 15), heading, fontname="hebo", fontsize=12, color=INK)
+    if halves == 2:
+        _half_tables(page, lines, table_top, row, per_half, bottom)
+        return bottom
+    size = min(7.6, row * 0.62)
     for label, x in COLUMNS:
         page.insert_text((x, table_top + 14), label, fontname="helv", fontsize=7.5, color=LABEL)
 
     y = table_top + 45
     for index, line in enumerate(lines):
         if index % 2:
-            page.draw_rect(pymupdf.Rect(TABLE_LEFT, y - 9, TABLE_RIGHT, y + 14), color=None, fill=STRIPE)
+            page.draw_rect(pymupdf.Rect(TABLE_LEFT, y - row * 0.37, TABLE_RIGHT, y + row * 0.57), color=None,
+                           fill=STRIPE)
         cells = [
-            (_fit(line.part_no or "-", "helv", 7.6, 95), 59.0),
-            (_fit(line.description or "", "helv", 7.6, 265), 160.0),
+            (_fit(line.part_no or "-", "helv", size, 95), 59.0),
+            (_fit(line.description or "", "helv", size, 265), 160.0),
             (_number(line.quantity), 433.0),
             (_number(line.standby_ma), 478.0),
             (_number(line.alarm_ma), 558.0),
@@ -146,9 +194,31 @@ def _equipment_table(page, lines, table_top: float, card_right: float, continued
             (_number(line.total_alarm_ma), 720.0),
         ]
         for text, x in cells:
-            page.insert_text((x, y), text, fontname="helv", fontsize=7.6, color=INK)
-        y += ROW_HEIGHT
+            page.insert_text((x, y), text, fontname="helv", fontsize=size, color=INK)
+        y += row
     return bottom
+
+
+def _half_tables(page, lines, table_top: float, row: float, per_half: int, bottom: float) -> None:
+    """The rows in two tables side by side, the first half on the left."""
+    width = (TABLE_RIGHT - TABLE_LEFT) / 2
+    size = min(6.8, row * 0.62)
+    page.draw_line((TABLE_LEFT + width, table_top + 2), (TABLE_LEFT + width, bottom - 10), color=STRIPE, width=1.2)
+    for half in range(2):
+        left = TABLE_LEFT + half * width + (4 if half else 0)
+        for label, x, _w in HALF_COLUMNS:
+            page.insert_text((left + x, table_top + 14), label, fontname="helv", fontsize=6.6, color=LABEL)
+        y = table_top + 45
+        for index, line in enumerate(lines[half * per_half:(half + 1) * per_half]):
+            if index % 2:
+                page.draw_rect(pymupdf.Rect(left, y - row * 0.37, left + width - 6, y + row * 0.57), color=None,
+                               fill=STRIPE)
+            values = [line.part_no or "-", line.description or "", _number(line.quantity), _number(line.standby_ma),
+                      _number(line.alarm_ma), _number(line.total_standby_ma), _number(line.total_alarm_ma)]
+            for value, (_label, x, w) in zip(values, HALF_COLUMNS):
+                text = _fit(value, "helv", size, w) if w else value
+                page.insert_text((left + x, y), text, fontname="helv", fontsize=size, color=INK)
+            y += row
 
 
 def _status_lines(panel) -> list[str]:
@@ -177,7 +247,11 @@ def _panel_page(doc, project: Project, panel, systems: str, manufacturer: str) -
     # sheet must say the load is a lower bound because of it.
     lines = [line for line in panel.lines if line.kind == "load"
              and (line.missing_current or (line.total_standby_ma or 0) > 0 or (line.total_alarm_ma or 0) > 0)]
-    first_rows = _rows_per_page(first=True)
+    # One panel, one page: the rows tightened, the notes moved aside, as far
+    # as it takes. Only a panel too long for that continues on more sheets.
+    fit = _one_page(len(lines))
+    row, beside, halves = fit if fit else (MIN_ROW, True, 2)
+    first_rows = len(lines) if fit else 2 * int((PAGE[1] - FOOTER - 12 - TABLE_TOP - 45 - 14) // MIN_ROW)
     more_rows = _rows_per_page(first=False)
     head, tail = lines[:first_rows], lines[first_rows:]
     continuation_sheets = -(-len(tail) // more_rows) if tail else 0
@@ -201,7 +275,8 @@ def _panel_page(doc, project: Project, panel, systems: str, manufacturer: str) -
     _field(page, 613, 745, 232, "Date", date.today().strftime("%d.%m.%Y"), 380)
 
     # --- connected equipment ------------------------------------------------
-    bottom = _equipment_table(page, head, TABLE_TOP, EQUIPMENT_CARD[2], None)
+    bottom = _equipment_table(page, head, TABLE_TOP, EQUIPMENT_CARD[2], None, row,
+                              floor=PAGE[1] - FOOTER - 12 if beside else None, halves=halves)
     if tail:
         page.insert_text(
             (58, bottom - 4),
@@ -256,15 +331,26 @@ def _panel_page(doc, project: Project, panel, systems: str, manufacturer: str) -
         y += 2
 
     # --- notes --------------------------------------------------------------
-    notes_top = bottom + NOTES_GAP
-    page.draw_rect(pymupdf.Rect(MARGIN_L, notes_top, MARGIN_R, notes_top + NOTES_HEIGHT), color=None, fill=CARD)
-    page.insert_text((58, notes_top + 24), "Calculation notes", fontname="hebo", fontsize=10, color=INK)
-    y = notes_top + 46
-    for note in NOTES:
-        for chunk in _wrap(note, "helv", 7.8, MARGIN_R - 58 - 16):
-            page.insert_text((58, y), chunk, fontname="helv", fontsize=7.8, color=INK)
-            y += 11
-        y += 3
+    if beside:
+        # under the sizing, in its card: the table has the page's height
+        y += 14
+        page.insert_text((827, y), "Calculation notes", fontname="hebo", fontsize=9, color=INK)
+        y += 14
+        for note in NOTES:
+            for chunk in _wrap(note, "helv", 6.8, SIZING_CARD[2] - 827 - 12):
+                page.insert_text((827, y), chunk, fontname="helv", fontsize=6.8, color=INK)
+                y += 9
+            y += 3
+    else:
+        notes_top = bottom + NOTES_GAP
+        page.draw_rect(pymupdf.Rect(MARGIN_L, notes_top, MARGIN_R, notes_top + NOTES_HEIGHT), color=None, fill=CARD)
+        page.insert_text((58, notes_top + 24), "Calculation notes", fontname="hebo", fontsize=10, color=INK)
+        y = notes_top + 46
+        for note in NOTES:
+            for chunk in _wrap(note, "helv", 7.8, MARGIN_R - 58 - 16):
+                page.insert_text((58, y), chunk, fontname="helv", fontsize=7.8, color=INK)
+                y += 11
+            y += 3
 
     # --- the rest of the equipment, a sheet at a time ------------------------
     for sheet in range(continuation_sheets):
@@ -336,8 +422,9 @@ def battery_calculation_pdf(
     manufacturer: str = "",
     manufacturers: dict[str, str] | None = None,
 ) -> bytes:
-    """One sheet per panel, in the template's layout; a panel with more
-    parts than the sheet holds continues on further sheets.
+    """One sheet per panel, in the template's layout: a long panel's rows
+    are tightened (and its table halved side by side) to stay on its sheet;
+    only one past even that continues on further sheets.
 
     `manufacturers` names the brand per panel key (see `panel_manufacturer`);
     `manufacturer` is the fallback for a panel not in it. Neither defaults to

@@ -178,6 +178,24 @@ export function ProjectAmplifierPage() {
     }
   }
 
+  /** The floor an APS cabinet is installed on: the engineer's decision. */
+  async function setLocation(cabinet: string, floor: string) {
+    setSaving(`location:${cabinet}`);
+    setError(null);
+    try {
+      setData(
+        await api.patch<AmplifierSchedule>(`/projects/${project.id}/design/amplifier/locations`, {
+          cabinet,
+          floor: floor || null,
+        }),
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "The cabinet's floor could not be set");
+    } finally {
+      setSaving(null);
+    }
+  }
+
   if (!result) {
     return <p className="mt-6 text-sm text-gray-400">{error ?? "Loading the amplifier schedule…"}</p>;
   }
@@ -225,7 +243,7 @@ export function ProjectAmplifierPage() {
       {view === "staircase" && result.staircase ? (
         result.staircase.columns.length === 0 ? (
           <p className="mt-4 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400">
-            No staircase speaker is on the floor-wise BOQ.
+            No staircase speaker is on the BOQ.
           </p>
         ) : (
           <StaircaseLoading
@@ -240,11 +258,18 @@ export function ProjectAmplifierPage() {
       ) : result.columns.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400">
           {result.staircase?.columns.length
-            ? "Every speaker on the floor-wise BOQ is a staircase's: see the Staircase speakers tab."
-            : "No speaker is proposed on the floor-wise BOQ yet."}
+            ? "Every speaker on the BOQ is a staircase's: see the Staircase speakers tab."
+            : "No speaker is proposed on the BOQ yet."}
         </p>
       ) : (
-        <Loading result={result} canEdit={canEdit} saving={saving} onTap={setTap} onCount={setCount} />
+        <Loading
+          result={result}
+          canEdit={canEdit}
+          saving={saving}
+          onTap={setTap}
+          onCount={setCount}
+          onLocation={setLocation}
+        />
       )}
 
       <Notes result={result} />
@@ -413,14 +438,17 @@ function Loading({
   saving,
   onTap,
   onCount,
+  onLocation,
 }: {
   result: AmplifierResult;
   canEdit: boolean;
   saving: string | null;
   onTap: (part: string, tap: number) => void;
   onCount: (floor: string, part: string, count: number) => void;
+  onLocation: (cabinet: string, floor: string) => void;
 }) {
   const [query, setQuery] = useState("");
+  const locations = result.locations ?? {};
 
   const cabinetOf = useMemo(
     () => new Map(result.amplifiers.map((a) => [a.name, a.cabinet])),
@@ -527,6 +555,10 @@ function Loading({
               <th className="px-3 py-3 text-right font-semibold">Total (W)</th>
               <th className="px-3 py-3 text-center font-semibold">{result.amplifier_part}</th>
               <th className="px-3 py-3 text-center font-semibold">APS</th>
+              <th className="px-3 py-3 text-center font-semibold">
+                APS location
+                <span className="block text-[11px] font-normal text-gray-400">(floor)</span>
+              </th>
             </tr>
             <tr className="border-t border-gray-100 bg-white">
               <th className="sticky left-0 z-10 bg-white px-5 py-2 text-left text-xs font-medium text-gray-400">
@@ -550,13 +582,13 @@ function Loading({
                   </select>
                 </th>
               ))}
-              <th colSpan={3} />
+              <th colSpan={4} />
             </tr>
           </thead>
           <tbody>
             {shown.length === 0 && (
               <tr>
-                <td colSpan={columns.length + 5} className="px-5 py-10 text-center text-sm text-gray-400">
+                <td colSpan={columns.length + 6} className="px-5 py-10 text-center text-sm text-gray-400">
                   No floor matches “{query}”.
                 </td>
               </tr>
@@ -638,6 +670,31 @@ function Loading({
                       >
                         {run.cabinet ?? "—"}
                       </td>
+                      <td
+                        rowSpan={run.rows}
+                        className={`px-3 py-2.5 text-center align-middle ${run.cabinet ? "bg-emerald-50/40" : ""}`}
+                      >
+                        {run.cabinet ? (
+                          <select
+                            aria-label={`Floor ${run.cabinet} is installed on`}
+                            value={locations[run.cabinet] ?? ""}
+                            disabled={!canEdit || saving === `location:${run.cabinet}`}
+                            onChange={(e) => onLocation(run.cabinet!, e.target.value)}
+                            className={`w-40 rounded-lg border bg-white px-2 py-1.5 text-sm focus:border-brand-400 focus:outline-none disabled:bg-gray-50 ${
+                              locations[run.cabinet] ? "border-emerald-300 text-navy-900" : "border-amber-300 text-amber-800"
+                            }`}
+                          >
+                            <option value="">Choose floor…</option>
+                            {result.floors.map((option) => (
+                              <option key={option.floor} value={option.floor}>
+                                {option.floor}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="text-gray-300">—</span>
+                        )}
+                      </td>
                     </>
                   )}
                 </tr>
@@ -660,6 +717,9 @@ function Loading({
               </td>
               <td className="px-3 py-3 text-center font-bold text-navy-900">{result.amplifiers.length}</td>
               <td className="px-3 py-3 text-center font-bold text-navy-900">{result.cabinets.length}</td>
+              <td className="px-3 py-3 text-center text-xs font-semibold text-gray-500">
+                {result.cabinets.filter((cabinet) => locations[cabinet.name]).length} of {result.cabinets.length} placed
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -969,7 +1029,7 @@ function StaircaseLoading({
   );
 }
 
-function Stepper({
+export function Stepper({
   value,
   canEdit,
   busy,
@@ -1048,8 +1108,8 @@ function Settings({ result, scheduleFile }: { result: AmplifierResult; scheduleF
   const rows = [
     {
       label: "Speaker quantities",
-      value: scheduleFile ?? "no floor-wise BOQ read",
-      note: "From the BOQ Floor Wise tab; changing a count here changes it there.",
+      value: scheduleFile ?? "no BOQ yet",
+      note: "From the BOQ as per Shop Drawings tab (the BOQ Floor Wise until that is made); changing a count here changes it there.",
     },
     {
       label: "Amplifier",
@@ -1100,7 +1160,7 @@ function Notes({ result }: { result: AmplifierResult }) {
       <div className="rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-sm font-bold text-navy-900">How this is worked out</h2>
         <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-gray-700">
-          <li>Speaker quantities come from the floor-wise BOQ; the tapping is chosen here.</li>
+          <li>Speaker quantities come from the BOQ as per Shop Drawings; the tapping is chosen here.</li>
           <li>A floor's load is the sum over speakers of count × tapping.</li>
           <li>
             Floors are added to an amplifier in the schedule's order until the next would take it over{" "}

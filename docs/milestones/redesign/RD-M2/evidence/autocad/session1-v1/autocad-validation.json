@@ -1,0 +1,436 @@
+{
+ "started": "2026-10-03T22:26:46+0400",
+ "code": "ISO/code (2)/backend (frozen candidate copy)",
+ "library_dir": "ISO/code (2)/backend/app/redesign/library",
+ "before": {
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "iso_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "iso_uploads": {
+   "EP-30880": -1,
+   "EP-30880/ifc": -1,
+   "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+   "EP-30880/ifc/60de2a377daa.dxf": 28233874
+  }
+ },
+ "scenarios": {
+  "A_success": {
+   "name": "A: approved GC-01 changes, current library",
+   "drawn": [
+    "3ddaa99cd7374341",
+    "1561933977450e28",
+    "34d7690b0446388c",
+    "45efbfb70918a4f0",
+    "if:e9335f7e336e:CT21",
+    "if:4110e452e77e:CT21",
+    "if:51ecea7f5a16:CT11",
+    "if:fe38e2f7e0d4:CT21",
+    "if:9c84428876e1:CT11",
+    "if:d6137c203008:CT21",
+    "if:3461d22b0bbb:CR1"
+   ],
+   "stored_library_paths_other_pc": 5,
+   "progress": [
+    "AutoCAD is making 11 approved changes on a copy",
+    "Checking what AutoCAD made"
+   ],
+   "outcome": "ApplyError",
+   "error": "The redesigned copy did not verify, so it was not kept as a result: More than one completion marker.; The redesigned copy could not be read back.",
+   "trace_tail": [
+    "  File \"<PC-B user profile>\\AppData\\Local\\Temp\\claude\\g--dev--2--dev\\6f67ec6f-cb75-49d6-9946-10047734e054\\scratchpad\\rdm2\\iso\\code (2)\\backend\\app\\redesign\\service.py\", line 1661, in apply",
+    "    raise ApplyError(\"The redesigned copy did not verify, so it was not kept as a result: \"",
+    "app.redesign.service.ApplyError: The redesigned copy did not verify, so it was not kept as a result: More than one completion marker.; The redesigned copy could not be read back."
+   ],
+   "seconds": 19.0,
+   "row": {
+    "output_status": "failed",
+    "output_path": "<office PC user profile>\\OneDrive - <org>\\Desktop\\dev\\ep-platform\\backend\\uploads\\EP-30880\\redesign\\FIRE ALARM LAYOUT R0 - Redesign 2026-10-02 1654.dwg",
+    "output_relative": "03- Drawings/Redesign/FIRE ALARM LAYOUT R0 - Redesign 2026-10-02 1654.dwg",
+    "output_changes": 11,
+    "output_error": "The redesigned copy did not verify, so it was not kept as a result: More than one completion marker.; The redesigned copy could not be read back."
+   },
+   "outputs_new": [],
+   "run_folder": "j0-01171f2fcb",
+   "run_files": {
+    "autocad.log": 22396,
+    "ErrorReports": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+    "redesign.bak": 4380643,
+    "redesign.dwg": 4257580,
+    "redesign.scr": 17685,
+    "verification.json": 1968
+   },
+   "log_markers": [
+    "EP-RD-OK:52a556553816824b:11:0"
+   ],
+   "log_errors": [],
+   "verification": {
+    "ok": false,
+    "problems": [
+     "More than one completion marker.",
+     "The redesigned copy could not be read back."
+    ],
+    "log": {
+     "failures": [],
+     "ok": [
+      {
+       "inserts": 11,
+       "erases": 0
+      },
+      {
+       "inserts": 11,
+       "erases": 0
+      }
+     ],
+     "nosave": 0
+    },
+    "readback": {},
+    "returncode": 0,
+    "nonce": "52a556553816824b",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "copy_sha256": "f8f8e3690ab590bf47d77fc3a3ec921e1105bc8fed7cbc600c85399967f9e87a",
+    "expected": {
+     "erase": [],
+     "insert": [
+      {
+       "id": "3ddaa99cd7374341",
+       "block": "HEAT DETECTOR",
+       "point": [
+        717.287,
+        158.4159
+       ]
+      },
+      {
+       "id": "1561933977450e28",
+       "block": "faw",
+       "point": [
+        1095.4621,
+        899.0342
+       ]
+      },
+      {
+       "id": "34d7690b0446388c",
+       "block": "XREF - title block a1 15-06-2022$0$BREAK GLASS WP",
+       "point": [
+        713.7531,
+        160.389
+       ]
+      },
+      {
+       "id": "45efbfb70918a4f0",
+       "block": "E WP",
+       "point": [
+        718.0693,
+        158.3978
+       ]
+      },
+      {
+       "id": "if:e9335f7e336e:CT21",
+       "block": "CT2",
+       "point": [
+        714.565,
+        157.0897
+       ]
+      },
+      {
+       "id": "if:4110e452e77e:CT21",
+       "block": "CT2",
+       "point": [
+        721.219,
+        159.0692
+       ]
+      },
+      {
+       "id": "if:51ecea7f5a16:CT11",
+       "block": "CT1",
+       "point": [
+        721.2091,
+        157.5942
+       ]
+      },
+      {
+       "id": "if:fe38e2f7e0d4:CT21",
+       "block": "CT2",
+       "point": [
+        719.3,
+        154.0201
+       ]
+      },
+      {
+       "id": "if:9c84428876e1:CT11",
+       "block": "CT1",
+       "point": [
+        721.2221,
+        159.9883
+       ]
+      },
+      {
+       "id": "if:d6137c203008:CT21",
+       "block": "CT2",
+       "point": [
+        714.55,
+        162.0
+       ]
+      },
+      {
+       "id": "if:3461d22b0bbb:CR1",
+       "block": "CR",
+       "point": [
+        718.35,
+        154.0206
+       ]
+      }
+     ]
+    }
+   },
+   "work_copy_sha256": "f8f8e3690ab590bf47d77fc3a3ec921e1105bc8fed7cbc600c85399967f9e87a",
+   "work_copy_equals_source": false,
+   "script_library_refs": [
+    [
+     "CR",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CR.dwg"
+    ],
+    [
+     "CT1",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CT1.dwg"
+    ],
+    [
+     "CT2",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CT2.dwg"
+    ]
+   ],
+   "script_has_other_pc_path": false
+  },
+  "B_missing_block": {
+   "name": "B: first insert's block missing",
+   "drawn": [
+    "rdm2-missing-block",
+    "3ddaa99cd7374341",
+    "1561933977450e28",
+    "34d7690b0446388c",
+    "45efbfb70918a4f0",
+    "if:e9335f7e336e:CT21",
+    "if:4110e452e77e:CT21",
+    "if:51ecea7f5a16:CT11",
+    "if:fe38e2f7e0d4:CT21",
+    "if:9c84428876e1:CT11",
+    "if:d6137c203008:CT21",
+    "if:3461d22b0bbb:CR1"
+   ],
+   "stored_library_paths_other_pc": 5,
+   "progress": [
+    "AutoCAD is making 12 approved changes on a copy",
+    "Checking what AutoCAD made"
+   ],
+   "outcome": "ApplyError",
+   "error": "The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back.",
+   "trace_tail": [
+    "  File \"<PC-B user profile>\\AppData\\Local\\Temp\\claude\\g--dev--2--dev\\6f67ec6f-cb75-49d6-9946-10047734e054\\scratchpad\\rdm2\\iso\\code (2)\\backend\\app\\redesign\\service.py\", line 1661, in apply",
+    "    raise ApplyError(\"The redesigned copy did not verify, so it was not kept as a result: \"",
+    "app.redesign.service.ApplyError: The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back."
+   ],
+   "seconds": 11.6,
+   "row": {
+    "output_status": "failed",
+    "output_path": "<office PC user profile>\\OneDrive - <org>\\Desktop\\dev\\ep-platform\\backend\\uploads\\EP-30880\\redesign\\FIRE ALARM LAYOUT R0 - Redesign 2026-10-02 1654.dwg",
+    "output_relative": "03- Drawings/Redesign/FIRE ALARM LAYOUT R0 - Redesign 2026-10-02 1654.dwg",
+    "output_changes": 11,
+    "output_error": "The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back."
+   },
+   "outputs_new": [],
+   "run_folder": "j0-e49aa63eae",
+   "run_files": {
+    "autocad.log": 6420,
+    "ErrorReports": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5710,
+    "redesign.dwg": 4380643,
+    "redesign.scr": 18761,
+    "verification.json": 2074
+   },
+   "log_markers": [],
+   "log_errors": [
+    "*Invalid*",
+    "; error: Function cancelled"
+   ],
+   "verification": {
+    "ok": false,
+    "problems": [
+     "AutoCAD's completion marker is missing.",
+     "The redesigned copy is the same as the source: nothing was saved.",
+     "The redesigned copy could not be read back."
+    ],
+    "log": {
+     "failures": [],
+     "ok": [],
+     "nosave": 0
+    },
+    "readback": {},
+    "returncode": 0,
+    "nonce": "54912c00e717f76f",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "expected": {
+     "erase": [],
+     "insert": [
+      {
+       "id": "rdm2-missing-block",
+       "block": "RDM2-MISSING-BLOCK",
+       "point": [
+        716.0,
+        158.0
+       ]
+      },
+      {
+       "id": "3ddaa99cd7374341",
+       "block": "HEAT DETECTOR",
+       "point": [
+        717.287,
+        158.4159
+       ]
+      },
+      {
+       "id": "1561933977450e28",
+       "block": "faw",
+       "point": [
+        1095.4621,
+        899.0342
+       ]
+      },
+      {
+       "id": "34d7690b0446388c",
+       "block": "XREF - title block a1 15-06-2022$0$BREAK GLASS WP",
+       "point": [
+        713.7531,
+        160.389
+       ]
+      },
+      {
+       "id": "45efbfb70918a4f0",
+       "block": "E WP",
+       "point": [
+        718.0693,
+        158.3978
+       ]
+      },
+      {
+       "id": "if:e9335f7e336e:CT21",
+       "block": "CT2",
+       "point": [
+        714.565,
+        157.0897
+       ]
+      },
+      {
+       "id": "if:4110e452e77e:CT21",
+       "block": "CT2",
+       "point": [
+        721.219,
+        159.0692
+       ]
+      },
+      {
+       "id": "if:51ecea7f5a16:CT11",
+       "block": "CT1",
+       "point": [
+        721.2091,
+        157.5942
+       ]
+      },
+      {
+       "id": "if:fe38e2f7e0d4:CT21",
+       "block": "CT2",
+       "point": [
+        719.3,
+        154.0201
+       ]
+      },
+      {
+       "id": "if:9c84428876e1:CT11",
+       "block": "CT1",
+       "point": [
+        721.2221,
+        159.9883
+       ]
+      },
+      {
+       "id": "if:d6137c203008:CT21",
+       "block": "CT2",
+       "point": [
+        714.55,
+        162.0
+       ]
+      },
+      {
+       "id": "if:3461d22b0bbb:CR1",
+       "block": "CR",
+       "point": [
+        718.35,
+        154.0206
+       ]
+      }
+     ]
+    }
+   },
+   "work_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "work_copy_equals_source": true,
+   "script_library_refs": [
+    [
+     "CR",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CR.dwg"
+    ],
+    [
+     "CT1",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CT1.dwg"
+    ],
+    [
+     "CT2",
+     "<SCRATCH>/rdm2/iso/code (2)/backend/app/redesign/library/CT2.dwg"
+    ]
+   ],
+   "script_has_other_pc_path": false
+  }
+ },
+ "after": {
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "iso_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "iso_uploads": {
+   "EP-30880": -1,
+   "EP-30880/ifc": -1,
+   "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+   "EP-30880/ifc/60de2a377daa.dxf": 28233874,
+   "EP-30880/redesign": -1,
+   "EP-30880/redesign/runs": -1,
+   "EP-30880/redesign/runs/j0-01171f2fcb": -1,
+   "EP-30880/redesign/runs/j0-01171f2fcb/autocad.log": 22396,
+   "EP-30880/redesign/runs/j0-01171f2fcb/ErrorReports": -1,
+   "EP-30880/redesign/runs/j0-01171f2fcb/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+   "EP-30880/redesign/runs/j0-01171f2fcb/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+   "EP-30880/redesign/runs/j0-01171f2fcb/redesign.bak": 4380643,
+   "EP-30880/redesign/runs/j0-01171f2fcb/redesign.dwg": 4257580,
+   "EP-30880/redesign/runs/j0-01171f2fcb/redesign.scr": 17685,
+   "EP-30880/redesign/runs/j0-01171f2fcb/verification.json": 1968,
+   "EP-30880/redesign/runs/j0-e49aa63eae": -1,
+   "EP-30880/redesign/runs/j0-e49aa63eae/autocad.log": 6420,
+   "EP-30880/redesign/runs/j0-e49aa63eae/ErrorReports": -1,
+   "EP-30880/redesign/runs/j0-e49aa63eae/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+   "EP-30880/redesign/runs/j0-e49aa63eae/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5710,
+   "EP-30880/redesign/runs/j0-e49aa63eae/redesign.dwg": 4380643,
+   "EP-30880/redesign/runs/j0-e49aa63eae/redesign.scr": 18761,
+   "EP-30880/redesign/runs/j0-e49aa63eae/verification.json": 2074
+  }
+ },
+ "temp_new_entries": [
+  "7ffd9892-4953-4461-8bb6-2030b34760b4.tmp",
+  "ACAS{9EAFCAB5-46DC-A44C-96F3-1D53303F9C86}.ac$",
+  "UNDO{329F6D00-8220-A146-8FBE-35F53E0D2AAA}.ac$",
+  "accc9482",
+  "{20517C06-2B98-4300-9824-9D7416868F26}"
+ ],
+ "temp_changed_entries": [
+  "atil.6009-94ae-cb16-11b8.tmp",
+  "claude",
+  "ogs"
+ ],
+ "finished": "2026-10-03T22:27:17+0400"
+}

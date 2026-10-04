@@ -40,6 +40,12 @@ from app.models import (
     ProjectChange,
     ProjectDocument,
     ProjectFloorSchedule,
+    ProjectShopBoq,
+    ProjectDraftsmanAssignment,
+    ProjectRedesign,
+    ProjectFaInterfaces,
+    ProjectDrawingReview,
+    ReviewRuling,
     ProjectFrcCables,
     ProjectIfcDrawing,
     ProjectProposedMaterial,
@@ -82,7 +88,8 @@ def delete_project(db: Session, project: Project) -> None:
     db.execute(delete(ShopDrawingCandidate).where(ShopDrawingCandidate.project_id == project_id))
     for model in (AiVerification, DocumentDependency, DocumentReading, BatteryPanelResult, SubmittalReply,
                   ProjectShopDrawing, ProjectBuildingFloor, ProjectFloorAlias, DrawingIssue, DrawingRequirementState, ShopDrawingEvent,
-                  ProjectFrcCables, ProjectProposedMaterial, ProjectFloorSchedule, ProjectAmplifierDesign, ProjectIfcDrawing,
+                  ProjectFrcCables, ProjectProposedMaterial, ProjectFloorSchedule, ProjectShopBoq, ProjectDraftsmanAssignment, ProjectRedesign, ProjectFaInterfaces,
+                  ReviewRuling, ProjectDrawingReview, ProjectAmplifierDesign, ProjectIfcDrawing,
                   BoqCandidate, BoqSnapshot, ProjectDocument, BackgroundJob, ResultCache, ProjectAction, ProjectChange):
         db.execute(delete(model).where(model.project_id == project_id))
     db.expire(project, ["boq_items"])

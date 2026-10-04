@@ -272,6 +272,9 @@ def build(project, result: dict) -> pymupdf.Document:
         y = state["y"]
         page.draw_rect(pymupdf.Rect(LEFT, y, RIGHT, y + 15), color=None, fill=_CAB)
         _text(page, LEFT + 6, y + 11, cabinet["name"], size=8, bold=True)
+        where = (result.get("locations") or {}).get(cabinet["name"])
+        _text(page, LEFT + 60, y + 11, f"Location: {where}" if where else "Location: not set", size=7.5,
+              colour=(0, 0, 0) if where else _GREY)
         _text(page, 0, y + 11,
               f"{len(cabinet['amplifiers'])} x {result.get('amplifier_part', '')}",
               size=7.5, colour=_GREY, right=RIGHT - 6)

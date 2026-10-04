@@ -1,4 +1,4 @@
-r"""The archive's EP folders, indexed once and then searched in the database.
+﻿r"""The archive's EP folders, indexed once and then searched in the database.
 
 Creating a project used to walk the synced OneDrive archive every time
 someone typed an EP number: thousands of folders over a synced drive, for
@@ -113,6 +113,43 @@ def absolute_path(root: Path, relative_path: str) -> Path:
     """Where a stored folder is *on this machine*: the relative path joined
     to this machine's archive root."""
     return Path(root) / relative_path
+
+
+def rebind_project_paths(db: Session, root: Path) -> list[tuple[str, str]]:
+    r"""Move stale absolute project paths to this machine's synced archive.
+
+    A shared database may contain ``C:\Users\other`` while this machine's
+    OneDrive lives below another profile. Only the suffix below the named
+    archive folder is portable. A path is changed only when its old path is
+    unreachable, the archive component can be identified, and the resulting
+    path exists inside ``root``. Missing projects and unrelated paths remain
+    untouched.
+    """
+    root = Path(root).resolve()
+    settings = get_settings()
+    archive_names = {" ".join(root.name.split()).casefold(),
+                     " ".join(settings.projects_root_name.split()).casefold()}
+    changed: list[tuple[str, str]] = []
+    for project in db.scalars(select(Project).where(Project.source_folder_path.isnot(None))):
+        stored = Path(project.source_folder_path)
+        if stored.is_dir():
+            continue
+        indexes = [i for i, part in enumerate(stored.parts)
+                   if " ".join(part.split()).casefold() in archive_names]
+        if not indexes:
+            continue
+        candidate = root.joinpath(*stored.parts[indexes[-1] + 1:]).resolve()
+        try:
+            candidate.relative_to(root)
+        except ValueError:
+            continue
+        if not candidate.is_dir():
+            continue
+        project.source_folder_path = str(candidate)
+        changed.append((str(project.ep_number), str(candidate)))
+    if changed:
+        db.commit()
+    return changed
 
 
 def archive_root() -> Path:
@@ -612,3 +649,4 @@ def start_refresh_thread(scan_now: bool = True) -> None:
 
 def stop_refresh() -> None:
     _stop_refresh.set()
+

@@ -170,6 +170,11 @@ def test_the_register_exports_and_is_editor_only(client, db_session, tmp_path, m
     assert client.post(f"/projects/{project_id}/submittals", json={"title": "X"}).status_code == 403
     assert client.patch(f"/projects/{project_id}/submittals/{sid}", json={"status": "approved"}).status_code == 403
     assert client.delete(f"/projects/{project_id}/submittals/{sid}").status_code == 403
+    # a design engineer may take a submittal out; deleting a whole project stays the managers'
+    make_user(db_session, "fa.designer@ep-platform.com", RoleEnum.fire_alarm_design_engineer)
+    login(client, "fa.designer@ep-platform.com")
+    assert client.delete(f"/projects/{project_id}").status_code == 403
+    assert client.delete(f"/projects/{project_id}/submittals/{sid}").status_code == 200
 
 
 def test_deleting_a_project_takes_its_submittals(client, db_session, tmp_path, monkeypatch):

@@ -17,7 +17,8 @@ const STATUS: Record<SubmittalStatus, { label: string; chip: string; dot: string
   approved: { label: "Approved", chip: "bg-green-50 text-green-700", dot: "bg-green-500" },
   under_review: { label: "Under Review", chip: "bg-blue-50 text-blue-700", dot: "bg-blue-500" },
   rejected: { label: "Rejected", chip: "bg-red-50 text-red-700", dot: "bg-red-500" },
-  not_submitted: { label: "Not Submitted", chip: "bg-gray-100 text-gray-600", dot: "bg-gray-400" },
+  // Prepared and filed, not yet sent to the consultant: "Submitted" sends it under review.
+  not_submitted: { label: "Created", chip: "bg-gray-100 text-gray-600", dot: "bg-gray-400" },
 };
 
 const STATUS_ORDER: SubmittalStatus[] = ["not_submitted", "under_review", "approved", "rejected"];
@@ -404,6 +405,16 @@ export function ProjectMaterialSubmittalPage() {
                             * comments to answer; the reply sheet is written
                             * beside the consultant's own, so it opens in a
                             * window of its own. */}
+                          {canEdit && !item.from_folder && item.status === "not_submitted" && (
+                            <button
+                              onClick={() => patch(item.id, { status: "under_review" })}
+                              disabled={busy}
+                              title="Sent to the contractor: the submittal goes under review"
+                              className="mr-2 rounded bg-brand-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
+                            >
+                              Submitted
+                            </button>
+                          )}
                           {item.status === "rejected" && item.reference && (
                             <a
                               href={`/projects/${project.id}/submittals/${encodeURIComponent(item.reference)}/${encodeURIComponent(item.revision)}/reply`}
@@ -579,6 +590,7 @@ export function ProjectMaterialSubmittalPage() {
 }
 
 const CELL: Record<SubmittalCellStatus, { label: string; className: string; title: string }> = {
+  NS: { label: "Created", className: "bg-gray-100 text-gray-600 ring-gray-200", title: "Created: not yet marked submitted" },
   UR: { label: "UR", className: "bg-blue-50 text-blue-700 ring-blue-200", title: "Under review: submitted, no consultant reply yet" },
   A: { label: "A", className: "bg-green-50 text-green-700 ring-green-200", title: "Approved" },
   ANN: { label: "ANN", className: "bg-emerald-50 text-emerald-700 ring-emerald-200", title: "Approved as noted" },

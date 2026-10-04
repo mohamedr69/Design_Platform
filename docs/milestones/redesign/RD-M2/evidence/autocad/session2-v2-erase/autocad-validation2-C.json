@@ -1,0 +1,357 @@
+{
+ "mode": "C",
+ "dry": false,
+ "started": "2026-10-03T22:54:45+0400",
+ "candidate": {
+  "manifest_sha256": "5345c1e7998a40c821ed830e736e163cf3bb261b1dcd350bc7b67fe2d3a48a21",
+  "version": "v2",
+  "backend_files_checked": 381,
+  "mismatch": 0
+ },
+ "live_source_sha256_before": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "iso_uploads_before": {
+  "EP-30880": -1,
+  "EP-30880/ifc": -1,
+  "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+  "EP-30880/ifc/60de2a377daa.dxf": 28233874
+ },
+ "scenarios": {
+  "C_erase_control": {
+   "name": "C: synthetic approved erase of 5DD10",
+   "drawn": [
+    "rdm2-erase-control"
+   ],
+   "expected_markers": {
+    "CIRCLE": 1,
+    "TEXT": 1
+   },
+   "expected_counts": [
+    0,
+    1
+   ],
+   "source_sha256_before": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "result": {
+    "file": "FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg",
+    "path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg",
+    "changes": 1,
+    "drawing_id": 1,
+    "fingerprint": "7c3523fd66b24a5d180d020914c3dc95779eaed2ba59ed954e781d3fedbfc813",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "apply_id": "j0-da71d13bc8",
+    "run": "EP-30880/redesign/runs/j0-da71d13bc8",
+    "inserts": 0,
+    "erases": 1
+   },
+   "outcome": "made",
+   "seconds": 60.2,
+   "source_sha256_after": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "row": {
+    "output_status": "made",
+    "output_path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg",
+    "output_relative": null,
+    "output_changes": 1,
+    "output_error": ""
+   },
+   "outputs_new": [
+    "FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg"
+   ],
+   "run_folder": "j0-da71d13bc8",
+   "run_files": {
+    "autocad.log": 5229,
+    "ErrorReports": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+    "ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+    "readback.dxf": 28233872,
+    "redesign.bak": 4380643,
+    "redesign.scr": 2784,
+    "verification.json": 751
+   },
+   "standalone_markers": [
+    "EP-RD-OK:b591d5bde2853178:0:1"
+   ],
+   "echoed_marker_lines": [
+    "\"\\nEP-RD-OK:b591d5bde2853178:0:1\\n\""
+   ],
+   "verification": {
+    "ok": true,
+    "problems": [],
+    "log": {
+     "failures": [],
+     "ok": [
+      {
+       "inserts": 0,
+       "erases": 1
+      }
+     ],
+     "nosave": 0
+    },
+    "readback": {
+     "source_entities": 4807,
+     "output_entities": 4808,
+     "erased_as_expected": [
+      "5DD10"
+     ],
+     "not_erased": [],
+     "unexpected_erasures": [],
+     "inserts_found": [],
+     "inserts_missing": [],
+     "unexpected_inserts": [],
+     "added_by_type": {
+      "CIRCLE": 1,
+      "TEXT": 1
+     }
+    },
+    "returncode": 0,
+    "nonce": "b591d5bde2853178",
+    "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+    "copy_sha256": "e2be681f928324dc68c067df48f5f75a588cf096ae8f9e22b397139577d4e5bd",
+    "expected": {
+     "erase": [
+      "5DD10"
+     ],
+     "insert": []
+    }
+   },
+   "script_library_refs": [],
+   "script_has_office_path": false,
+   "published": {
+    "path": "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg",
+    "sha256": "e2be681f928324dc68c067df48f5f75a588cf096ae8f9e22b397139577d4e5bd",
+    "inside_isolated_uploads": true,
+    "differs_from_source": true
+   },
+   "markers_added_vs_expected": {
+    "added_by_type": {
+     "CIRCLE": 1,
+     "TEXT": 1
+    },
+    "expected": {
+     "CIRCLE": 1,
+     "TEXT": 1
+    }
+   },
+   "existing_entities_changed": {
+    "common": 4806,
+    "changed": 44,
+    "examples": [
+     {
+      "handle": "64ACF",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "6478F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64982",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64A29",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "62C28",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F24",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "643AB",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63C8F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "6425F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F4E",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "52D3E",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "62C3A",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "633C6",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "634B8",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F39",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "6388F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "5F6E3",
+      "type": "ELLIPSE",
+      "attribs": [
+       "extrusion"
+      ]
+     },
+     {
+      "handle": "648DB",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F8D",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64451",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F63",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "64643",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "641B9",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "63F0F",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     },
+     {
+      "handle": "646E9",
+      "type": "INSERT",
+      "attribs": [
+       "name"
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "live_source_sha256_after": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "iso_uploads_after": {
+  "EP-30880": -1,
+  "EP-30880/ifc": -1,
+  "EP-30880/ifc/60de2a377daa.dwg": 4380643,
+  "EP-30880/ifc/60de2a377daa.dxf": 28233874,
+  "EP-30880/redesign": -1,
+  "EP-30880/redesign/FIRE ALARM LAYOUT R0 - Redesign 20261003-185546-312016Z d1 s66043c11fab9 j0-da71d13bc8.dwg": 4262410,
+  "EP-30880/redesign/runs": -1,
+  "EP-30880/redesign/runs/j0-da71d13bc8": -1,
+  "EP-30880/redesign/runs/j0-da71d13bc8/autocad.log": 5229,
+  "EP-30880/redesign/runs/j0-da71d13bc8/ErrorReports": -1,
+  "EP-30880/redesign/runs/j0-da71d13bc8/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5": -1,
+  "EP-30880/redesign/runs/j0-da71d13bc8/ErrorReports/9d6767a77b9d2cce90e03082e1302957689eeac5/cer.log": 5836,
+  "EP-30880/redesign/runs/j0-da71d13bc8/readback.dxf": 28233872,
+  "EP-30880/redesign/runs/j0-da71d13bc8/redesign.bak": 4380643,
+  "EP-30880/redesign/runs/j0-da71d13bc8/redesign.scr": 2784,
+  "EP-30880/redesign/runs/j0-da71d13bc8/verification.json": 751,
+  "EP-30880/redesign/source-readback-66043c11fab9eaf5.dxf": 28233515
+ },
+ "temp_new": [
+  "659312c9-09c2-4dc1-9123-35a0615d8313.tmp",
+  "UNDO{8E74B4BA-A40C-2D4B-B048-DAC202B39CDA}.ac$",
+  "acd9ad14b54.tmp"
+ ],
+ "temp_changed": [
+  "6fb9820e-d167-48fe-becd-4d1e3415e2f4.tmp",
+  "atil.6009-94ae-cb16-11b8.tmp",
+  "c63bb9c7-31c9-4380-ae79-ecc92ea8f00f.tmp",
+  "claude",
+  "ogs",
+  "vsimage.bmp"
+ ],
+ "temp_removed": [],
+ "temp_deleted_conclusive": [],
+ "temp_left_uncertain": [
+  "659312c9-09c2-4dc1-9123-35a0615d8313.tmp",
+  "acd9ad14b54.tmp",
+  "UNDO{8E74B4BA-A40C-2D4B-B048-DAC202B39CDA}.ac$ (locked: PermissionError)"
+ ],
+ "finished": "2026-10-03T22:56:14+0400"
+}

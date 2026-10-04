@@ -245,21 +245,23 @@ def _log(session: AssistSession, *, task: str, model: str, response=None, cost: 
 
 def call_task(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
               prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
-              effort: str | None = None) -> CallResult:
+              effort: str | None = None, model: str | None = None, timeout_s: float | None = None) -> CallResult:
     """One structured call through the cache, the budget and the usage log,
     for a task defined outside this module (the single-clause review).
     `tier` "standard" asks the larger model (AI_MODEL_STANDARD); `ttl_days`
     overrides how long a stored answer is reused (AI_CACHE_TTL_DAYS);
-    `effort` asks the API provider for more reasoning than AI_EFFORT."""
+    `effort` asks the API provider for more reasoning than AI_EFFORT;
+    `model` names the model for this task alone (the drawing review's Opus)."""
     return _call(session, task, system, parts, schema, max_output, prompt_version=prompt_version, tier=tier,
-                 ttl_days=ttl_days, effort=effort)
+                 ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s)
 
 
 def _call(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
           prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
-          effort: str | None = None) -> CallResult:
+          effort: str | None = None, model: str | None = None, timeout_s: float | None = None) -> CallResult:
     settings = get_settings()
-    model = settings.ai_model_standard if tier == "standard" else settings.ai_model_small
+    pinned = model
+    model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)
     evidence = hashlib.sha256(json.dumps([
         [p.label, p.text if hasattr(p, "text") else hashlib.sha256(p.png).hexdigest()] for p in parts
     ]).encode()).hexdigest()
@@ -269,7 +271,7 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
         model=model,
     )
     request = AiRequest(task=task, system=system, parts=parts, schema=schema, max_output_tokens=max_output,
-                        idempotency_key=key, tier=tier, effort=effort)
+                        idempotency_key=key, tier=tier, effort=effort, model=pinned, timeout_s=timeout_s)
     flags = guard.scan_parts(parts)
     session.injection_flags.update(flags)
     from app.ai import evaluation

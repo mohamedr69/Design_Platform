@@ -1,0 +1,79 @@
+{
+ "base": {
+  "passed": 1262,
+  "failed": 2,
+  "error": 0,
+  "skipped": 34
+ },
+ "cand": {
+  "passed": 1297,
+  "failed": 2,
+  "error": 0,
+  "skipped": 34
+ },
+ "base_total": 1298,
+ "cand_total": 1333,
+ "only_in_cand": [
+  "tests.test_redesign_apply::test_a_cancel_before_autocad_runs_nothing",
+  "tests.test_redesign_apply::test_a_cancel_while_autocad_works_stops_it_and_publishes_nothing",
+  "tests.test_redesign_apply::test_a_changed_source_is_refused",
+  "tests.test_redesign_apply::test_a_completed_apply_is_not_run_again_after_worker_recovery",
+  "tests.test_redesign_apply::test_a_failed_insert_stops_before_any_entdel_or_save",
+  "tests.test_redesign_apply::test_a_job_asked_for_before_the_approvals_changed_is_refused",
+  "tests.test_redesign_apply::test_a_missing_library_file_is_refused_before_autocad",
+  "tests.test_redesign_apply::test_a_script_cancelled_by_autocad_has_no_outcome_and_is_refused",
+  "tests.test_redesign_apply::test_a_skipped_low_confidence_remove_like_rd_m1_f003_is_never_drawn",
+  "tests.test_redesign_apply::test_a_spot_to_confirm_is_drawn_only_once_confirmed",
+  "tests.test_redesign_apply::test_a_stored_office_pc_path_never_reaches_the_script",
+  "tests.test_redesign_apply::test_an_erase_is_made_only_on_the_symbol_meant",
+  "tests.test_redesign_apply::test_an_existing_output_is_never_overwritten",
+  "tests.test_redesign_apply::test_an_insert_failure_in_autocad_publishes_nothing",
+  "tests.test_redesign_apply::test_an_older_absolute_path_from_another_pc_is_found_under_this_uploads_folder",
+  "tests.test_redesign_apply::test_an_unchanged_unreadable_or_incomplete_output_is_refused[badexit-faithful-exited with code 3]",
+  "tests.test_redesign_apply::test_an_unchanged_unreadable_or_incomplete_output_is_refused[nomarker-faithful-completion marker is missing]",
+  "tests.test_redesign_apply::test_an_unchanged_unreadable_or_incomplete_output_is_refused[ok-error-could not be read back]",
+  "tests.test_redesign_apply::test_an_unchanged_unreadable_or_incomplete_output_is_refused[ok-missing_insert-approved insert]",
+  "tests.test_redesign_apply::test_an_unchanged_unreadable_or_incomplete_output_is_refused[unchanged-faithful-same as the source]",
+  "tests.test_redesign_apply::test_an_unexpected_erasure_in_the_read_back_fails_the_apply",
+  "tests.test_redesign_apply::test_an_unknown_module_code_is_refused",
+  "tests.test_redesign_apply::test_approvals_changed_while_autocad_worked_are_not_published",
+  "tests.test_redesign_apply::test_ct1_ct2_and_cr_resolve_from_this_installations_library",
+  "tests.test_redesign_apply::test_nothing_approved_means_no_apply_job",
+  "tests.test_redesign_apply::test_only_explicitly_approved_changes_are_drawn",
+  "tests.test_redesign_apply::test_proposed_and_skipped_changes_stay_out_of_the_apply",
+  "tests.test_redesign_apply::test_the_approved_changes_are_made_checked_and_kept",
+  "tests.test_redesign_apply::test_the_core_consoles_echo_of_a_printed_marker_is_not_a_second_outcome",
+  "tests.test_redesign_apply::test_the_markers_are_this_runs_and_never_the_echo",
+  "tests.test_redesign_apply::test_the_output_is_stored_relative_and_read_back_safely",
+  "tests.test_redesign_apply::test_the_page_says_a_proposed_change_is_not_drawn_and_asks_for_approval_before_an_apply",
+  "tests.test_redesign_apply::test_the_same_approved_set_is_not_made_twice_by_a_second_job",
+  "tests.test_redesign_apply::test_the_source_is_read_back_by_the_same_converter_once_per_source",
+  "tests.test_redesign_apply::test_two_applies_in_the_same_minute_get_two_files"
+ ],
+ "only_in_base": [],
+ "state_changed": {},
+ "failed_or_error_base": {
+  "tests.test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "state": "failed",
+   "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: \nDROP TABLE users]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)",
+   "time": 2.269
+  },
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "state": "failed",
+   "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SDDC2'\n  '3-SSDC2'\n  'SIGA-OSD-FCN'",
+   "time": 1.528
+  }
+ },
+ "failed_or_error_cand": {
+  "tests.test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+   "state": "failed",
+   "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: \nDROP TABLE users]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)",
+   "time": 1.954
+  },
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "state": "failed",
+   "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SDDC2'\n  'SIGA-OSD-FCN'\n  '3-SSDC2'",
+   "time": 1.131
+  }
+ }
+}

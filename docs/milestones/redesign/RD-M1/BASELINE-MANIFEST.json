@@ -1,0 +1,537 @@
+{
+ "milestone": "RD-M1",
+ "taken_at_T0": "2026-10-03T19:46:01+0400",
+ "checked_at_T1": "2026-10-03T20:52:32+0400",
+ "repository": "G:\\dev (2)\\dev\\ep-platform",
+ "git_head": "13eb73ce85e5ac55c14303efe9d8511090ace723",
+ "git_branch": "main",
+ "outer_repository": {
+  "path": "G:\\dev (2)\\dev",
+  "head": "e2d8cfdb8376599562f6ec91f519c2efb7d43f54",
+  "branch": "master",
+  "gitlink_ep_platform": "d3bea8b481a04af0fff7fc4c1bc86abb48c6df80"
+ },
+ "working_tree_status_T0": [
+  " M backend/app/ai/submittal_reader.py",
+  " M backend/app/compliance/assist.py",
+  " M backend/app/core/config.py",
+  " M backend/app/ifc/services/runners.py",
+  " M backend/app/main.py",
+  " M backend/app/models.py",
+  " M backend/app/routers/amplifier.py",
+  " M backend/app/routers/design.py",
+  " M backend/app/routers/projects.py",
+  " M backend/app/routers/submittal.py",
+  " M backend/app/schemas_design.py",
+  " M backend/app/services/amplifier_export.py",
+  " M backend/app/services/battery_pdf.py",
+  " M backend/app/services/datasheet_library.py",
+  " M backend/app/services/equipment_currents.py",
+  " M backend/app/services/jobs.py",
+  " M backend/app/services/power_export.py",
+  " M backend/app/services/project_deletion.py",
+  " M backend/app/services/project_folders.py",
+  " M backend/app/services/project_state.py",
+  " M backend/app/services/required_drawings.py",
+  " M backend/app/services/schedule_export.py",
+  " M backend/app/services/submittal_filing.py",
+  " M backend/app/services/submittal_package.py",
+  " M backend/app/services/submittal_replies.py",
+  " M backend/library/datasheets/MENVIER/NEXI300-3H-CGL.pdf",
+  " M backend/library/symbols/symbol_library.json",
+  " M backend/tests/test_amplifier_calculation.py",
+  " M backend/tests/test_battery_api.py",
+  " M backend/tests/test_document_sync.py",
+  " M backend/tests/test_drawing_log.py",
+  " M backend/tests/test_power_calculation.py",
+  " M backend/tests/test_project_state.py",
+  " M backend/tests/test_proposed_materials.py",
+  " M backend/tests/test_review_fixes.py",
+  " M backend/tests/test_submittal.py",
+  " M backend/tests/test_submittal_package.py",
+  " M frontend/src/App.tsx",
+  " M frontend/src/components/FloorScheduleTab.tsx",
+  " M frontend/src/lib/types.ts",
+  " M frontend/src/pages/ProjectAmplifierPage.tsx",
+  " M frontend/src/pages/ProjectBatteryPage.tsx",
+  " M frontend/src/pages/ProjectBoqPage.tsx",
+  " M frontend/src/pages/ProjectDrawingsPage.tsx",
+  " M frontend/src/pages/ProjectLogsPage.tsx",
+  " M frontend/src/pages/ProjectMaterialSubmittalPage.tsx",
+  " M frontend/src/pages/ProjectPowerPage.tsx",
+  " M frontend/src/pages/ProjectWorkspace.tsx",
+  " M frontend/vite.config.ts",
+  " M start.bat",
+  "?? backend/alembic/versions/a3c5e7b9d1f3_shop_drawings_boq.py",
+  "?? backend/alembic/versions/b4d6f8a0c2e4_draftsman_assignment.py",
+  "?? backend/alembic/versions/c1e3a5b7d9f1_fa_interface_schedule.py",
+  "?? backend/alembic/versions/c5e7a9b1d3f5_drawing_redesign.py",
+  "?? backend/alembic/versions/d2f4b6c8e0a2_aps_cabinet_locations.py",
+  "?? backend/alembic/versions/e3a5c7e9f1b3_drawing_review.py",
+  "?? backend/alembic/versions/f4b6d8f0a2c4_review_rulings.py",
+  "?? backend/app/interfaces/__init__.py",
+  "?? backend/app/interfaces/detect.py",
+  "?? backend/app/interfaces/export.py",
+  "?? backend/app/interfaces/matrix.py",
+  "?? backend/app/interfaces/pdf.py",
+  "?? backend/app/interfaces/scan.py",
+  "?? backend/app/interfaces/schedules.py",
+  "?? backend/app/interfaces/service.py",
+  "?? backend/app/interfaces/visual.py",
+  "?? backend/app/redesign/__init__.py",
+  "?? backend/app/redesign/ai.py",
+  "?? backend/app/redesign/cad.py",
+  "?? backend/app/redesign/library/CR.dwg",
+  "?? backend/app/redesign/library/CT1.dwg",
+  "?? backend/app/redesign/library/CT2.dwg",
+  "?? backend/app/redesign/library/modules.json",
+  "?? backend/app/redesign/service.py",
+  "?? backend/app/redesign/walls.py",
+  "?? backend/app/review/ai.py",
+  "?? backend/app/review/fls.py",
+  "?? backend/app/review/geometry.py",
+  "?? backend/app/review/markup.py",
+  "?? backend/app/review/pages.py",
+  "?? backend/app/review/render.py",
+  "?? backend/app/review/rulings.py",
+  "?? backend/app/review/service.py",
+  "?? backend/app/routers/draftsman.py",
+  "?? backend/app/routers/drawing_review.py",
+  "?? backend/app/routers/fa_interfaces.py",
+  "?? backend/app/routers/redesign.py",
+  "?? backend/app/routers/samples.py",
+  "?? backend/app/routers/shop_boq.py",
+  "?? backend/app/services/draftsman_assignment.py",
+  "?? backend/app/services/origin_letters.py",
+  "?? backend/app/services/sample_request.py",
+  "?? backend/app/services/shop_boq.py",
+  "?? backend/library/datasheets/RAMCRO/RAMCRO.pdf",
+  "?? \"backend/library/submittal/FIREGUARD/PREVIOUS APPROVAL/PREV-1.pdf\"",
+  "?? \"backend/library/submittal/FIREGUARD/PREVIOUS APPROVAL/PREV-2.pdf\"",
+  "?? backend/tests/test_draftsman_assignment.py",
+  "?? backend/tests/test_drawing_review.py",
+  "?? backend/tests/test_fa_interfaces.py",
+  "?? backend/tests/test_redesign.py",
+  "?? backend/tests/test_sample_request.py",
+  "?? backend/tests/test_shop_boq.py",
+  "?? frontend/src/components/RequestMaterialDialog.tsx",
+  "?? frontend/src/components/drawings/AssignDraftsmanTab.tsx",
+  "?? frontend/src/components/interfaces/InterfacesTab.tsx",
+  "?? frontend/src/components/interfaces/api.ts",
+  "?? frontend/src/pages/ProjectDrawingReviewPage.tsx",
+  "?? frontend/src/pages/ProjectRedesignPage.tsx"
+ ],
+ "full_hash_baseline": {
+  "file": "BASELINE-T0.json (kept in the isolated area; not packaged: lists other projects' upload names)",
+  "sha256": "fc655e60647dff6af5faac9118576eac6a7cbc385a3c2eb1a7fea91f2957839b",
+  "counts": {
+   "ep_platform_git_visible": 740,
+   "ep_platform_ignored_relevant": 1870,
+   "outer_repo_git_visible": 25
+  }
+ },
+ "code_files": {
+  "backend/alembic/versions/c5e7a9b1d3f5_drawing_redesign.py": {
+   "mtime_ns": 1791034699103046200,
+   "sha256": "9d7f175a831a4a24f20ed1c16bc750ee5d5309126d7d3bb7951e07dc00f4c13d",
+   "size": 2099
+  },
+  "backend/app/compliance/assist.py": {
+   "mtime_ns": 1791034710922095700,
+   "sha256": "29a6ed034ed1d2d1e03514a81c7c9c294c5b82b977fb9cfd6809d520946a7e1e",
+   "size": 22156
+  },
+  "backend/app/core/config.py": {
+   "mtime_ns": 1791034712709071400,
+   "sha256": "107a17300624ce242595339462ec50e8af95905228aa0623b176b8a003e1fc1a",
+   "size": 22282
+  },
+  "backend/app/ifc/services/runners.py": {
+   "mtime_ns": 1791034716830947000,
+   "sha256": "fda6b746babb15410cb3e408c3ebd3d0947621bdefdada0c0f940bf58cea49a5",
+   "size": 16618
+  },
+  "backend/app/interfaces/__init__.py": {
+   "mtime_ns": 1791034719475181300,
+   "sha256": "ebefb04dd3758e5ec6581aeae77fd6280f4feb470787f53a87c215bd0e61cef4",
+   "size": 226
+  },
+  "backend/app/interfaces/detect.py": {
+   "mtime_ns": 1791034718822564700,
+   "sha256": "88a7a07df5dc8748ea840fcfc33223d74e0fbedb217e32bd1a2a2f403996a1c3",
+   "size": 12664
+  },
+  "backend/app/interfaces/export.py": {
+   "mtime_ns": 1791034718905640600,
+   "sha256": "a8847d6171a3e8246c8154d5c82f06f9e5a344e7aac11468fc50eda018f14790",
+   "size": 12832
+  },
+  "backend/app/interfaces/matrix.py": {
+   "mtime_ns": 1791034718984141200,
+   "sha256": "e6dcd92faa4b92d21e7653f86bbed6012de4e993d95fedcd83b6c1959f08c20c",
+   "size": 9522
+  },
+  "backend/app/interfaces/pdf.py": {
+   "mtime_ns": 1791034719067573600,
+   "sha256": "bb859583b408a23125cd37fa2635de837e7e45b321728e02fe11978d0bee0e99",
+   "size": 13223
+  },
+  "backend/app/interfaces/scan.py": {
+   "mtime_ns": 1791034719145057200,
+   "sha256": "c374dfda628b5202acbd44da89b9cd6e2b28a1166e43af46e253c24b19041263",
+   "size": 5320
+  },
+  "backend/app/interfaces/schedules.py": {
+   "mtime_ns": 1791034719231140000,
+   "sha256": "acc9c1653de1437154ffb351f28e20ea2ac124bd92b07d1451d50b2281780984",
+   "size": 7206
+  },
+  "backend/app/interfaces/service.py": {
+   "mtime_ns": 1791034719320653600,
+   "sha256": "1047d210cdb9d4508b7fada541ea0d6e0b3a5ef1065ac78e8bdffbd73753a542",
+   "size": 55493
+  },
+  "backend/app/interfaces/visual.py": {
+   "mtime_ns": 1791034719414703800,
+   "sha256": "eca4bda4eef15c143fd6fbb6f5dc28aaae19ffc05fbec2656fbfd58035489a07",
+   "size": 16727
+  },
+  "backend/app/redesign/__init__.py": {
+   "mtime_ns": 1791034721775662800,
+   "sha256": "2250f011d362ab32144ffc63b11652f7b5c4c8ef9aacf522d17ab93b1cd23674",
+   "size": 187
+  },
+  "backend/app/redesign/ai.py": {
+   "mtime_ns": 1791034721446332000,
+   "sha256": "be5b8f28cefe54083f46917a528f66d83a162135b6d1ac00a4d9696efa95dc9d",
+   "size": 4487
+  },
+  "backend/app/redesign/cad.py": {
+   "mtime_ns": 1791034721534165000,
+   "sha256": "031e760a7f7ccb6f19423215fb4b4682fc4525c8c9efe2f463917a85334b91ca",
+   "size": 9986
+  },
+  "backend/app/redesign/library/CR.dwg": {
+   "mtime_ns": 1791034721851000600,
+   "sha256": "d0b4cd2244d45ae5913a8e01b3eb1ff623333bdc5f03598a8d2f77f9536e888a",
+   "size": 40613
+  },
+  "backend/app/redesign/library/CT1.dwg": {
+   "mtime_ns": 1791034721920456200,
+   "sha256": "f43361eab514f2c718e9e1d5dca9d87fe4d58761411fcf6967c549f5f795e3b8",
+   "size": 39653
+  },
+  "backend/app/redesign/library/CT2.dwg": {
+   "mtime_ns": 1791034721984601800,
+   "sha256": "7afd3a163ec433253eabab7864c27e258726f1c60d34348e2f12a9a84a664686",
+   "size": 39365
+  },
+  "backend/app/redesign/library/modules.json": {
+   "mtime_ns": 1791034722046135500,
+   "sha256": "3dddf8e7a81794877aa28b515222580840ea5646a3a6f67b1b9acee07cec5c05",
+   "size": 728
+  },
+  "backend/app/redesign/service.py": {
+   "mtime_ns": 1791034721626643000,
+   "sha256": "69fa173ab5491fc12c6c1f37bf7521da4bc0ebd25e7622dd41eb8472e74ec212",
+   "size": 75159
+  },
+  "backend/app/redesign/walls.py": {
+   "mtime_ns": 1791034721702639900,
+   "sha256": "6433e5703d5c518c919519a9f9ae718c7efecfe60fe4e173ea0b21ec0a3cb1cc",
+   "size": 9004
+  },
+  "backend/app/review/ai.py": {
+   "mtime_ns": 1791034722602598700,
+   "sha256": "6e16c49d7c5534cdb63833473bf33a16ffa2c4a736dabeb292abbfab58f83c3d",
+   "size": 15134
+  },
+  "backend/app/review/fls.py": {
+   "mtime_ns": 1791034722682071700,
+   "sha256": "8ea424b04ef3590246da6298eeb41733ff0ed81aa6ff26ed878ce914c5587eb7",
+   "size": 3232
+  },
+  "backend/app/review/geometry.py": {
+   "mtime_ns": 1791034722760191900,
+   "sha256": "df696208fc9c4057f75ebecb80ceb06d9711e110c94ef8669919b72ba3d66547",
+   "size": 5607
+  },
+  "backend/app/review/markup.py": {
+   "mtime_ns": 1791034722837809900,
+   "sha256": "2ccb2d70a198e3b0cea5d0983a0530b340cd49e1c10baff6b4b9b9031eb5a237",
+   "size": 7221
+  },
+  "backend/app/review/pages.py": {
+   "mtime_ns": 1791034722914873400,
+   "sha256": "5b9b9e7c7f51a079bbe5d29cacc5ef6cef65005b7f259373c748797688659574",
+   "size": 7800
+  },
+  "backend/app/review/render.py": {
+   "mtime_ns": 1791034722992496300,
+   "sha256": "dc676dfd9f851e0537502d9d1e1b72d0db85d30d74e957c2164dd63fa4c72bf6",
+   "size": 4052
+  },
+  "backend/app/review/rulings.py": {
+   "mtime_ns": 1791034723070042700,
+   "sha256": "7fc8ef3a33c2b0ca5e1918b1cc656d004532dcffdb0af77b51b5d9e5e9cd5b00",
+   "size": 4489
+  },
+  "backend/app/review/service.py": {
+   "mtime_ns": 1791034723154743900,
+   "sha256": "30ca4d327eb18e7387a5aaa4ec8bf0a68e88e2cc18ea21bbd0aac9f3f0f1af18",
+   "size": 40832
+  },
+  "backend/app/routers/redesign.py": {
+   "mtime_ns": 1791034726569494100,
+   "sha256": "a7dfa7a7fce92c0ce1ba8cc10be140ae25f727baaa975984b762b7aa8ede2fc4",
+   "size": 9479
+  },
+  "backend/app/services/jobs.py": {
+   "mtime_ns": 1791034733389787500,
+   "sha256": "3b185e0ee0312bef2b2d7f7f54dabc1ea2a75ee0466d67c39add6629e11c3b9b",
+   "size": 22320
+  },
+  "backend/tests/conftest.py": {
+   "mtime_ns": 1791034987258216100,
+   "sha256": "f662082888a37b562ecfb590ae318eed470e2a398d9c725190f8b857727c4ffd",
+   "size": 4153
+  },
+  "backend/tests/test_drawing_review.py": {
+   "mtime_ns": 1791034989534351100,
+   "sha256": "2eaaa6e899b1f6d95c3f6485952ca9448dabc86d203ebe3af99bbfbb2d47dd7f",
+   "size": 26574
+  },
+  "backend/tests/test_fa_interfaces.py": {
+   "mtime_ns": 1791034990002349400,
+   "sha256": "fcdd92ccafb8e7b11e5bf41df784fff6db3f1adeb5a00a5a80b9c5fe1527245f",
+   "size": 28794
+  },
+  "backend/tests/test_ifc_worker_and_ai.py": {
+   "mtime_ns": 1791034990585515800,
+   "sha256": "4fbef3aeb148e58eb6376c3e52ff1a594199f306b62f82f45f62b34f0eeccc58",
+   "size": 45370
+  },
+  "backend/tests/test_redesign.py": {
+   "mtime_ns": 1791034991460647000,
+   "sha256": "60e0482c7a824bd3f50223599a31a108eb3f55c8273e2a3e6ab56be76ce37aaf",
+   "size": 20756
+  },
+  "frontend/src/pages/ProjectRedesignPage.tsx": {
+   "mtime_ns": 1791036068964158900,
+   "sha256": "d62938c60b74313b822550d58f616d1bbf805e7c8f1967c826f7eafa2567d1a5",
+   "size": 24742
+  }
+ },
+ "redesign_library": {
+  "backend/app/redesign/library/CR.dwg": {
+   "mtime_ns": 1791034721851000600,
+   "sha256": "d0b4cd2244d45ae5913a8e01b3eb1ff623333bdc5f03598a8d2f77f9536e888a",
+   "size": 40613
+  },
+  "backend/app/redesign/library/CT1.dwg": {
+   "mtime_ns": 1791034721920456200,
+   "sha256": "f43361eab514f2c718e9e1d5dca9d87fe4d58761411fcf6967c549f5f795e3b8",
+   "size": 39653
+  },
+  "backend/app/redesign/library/CT2.dwg": {
+   "mtime_ns": 1791034721984601800,
+   "sha256": "7afd3a163ec433253eabab7864c27e258726f1c60d34348e2f12a9a84a664686",
+   "size": 39365
+  },
+  "backend/app/redesign/library/modules.json": {
+   "mtime_ns": 1791034722046135500,
+   "sha256": "3dddf8e7a81794877aa28b515222580840ea5646a3a6f67b1b9acee07cec5c05",
+   "size": 728
+  }
+ },
+ "runtime": {
+  "python": "CPython 3.12.10 (Desktop venv launcher; G venv points to a missing Python 3.13)",
+  "node": "v24.14.0",
+  "vite": "^8.2.2",
+  "autocad": "AutoCAD 2027 Core Console, build 26.0.118.0.0",
+  "libs": {
+   "ezdxf": "1.4.4",
+   "pymupdf": "1.28.2",
+   "pillow": "12.3.0",
+   "sqlalchemy": "2.0.36",
+   "fastapi": "0.115.6",
+   "pytest": "8.3.4"
+  }
+ },
+ "database": {
+  "type": "SQLite WAL",
+  "live_path": "backend/ep_platform.db (relative DATABASE_URL, DATA_ROOT unset)",
+  "snapshot": {
+   "snapshot_sha256": "b50dfe2b14ae381158cb47778651f8ce9bcf3dbed985e7b3af81a0821a8df8f0",
+   "snapshot_size": 332709888,
+   "snapshot_started_utc": "2026-10-03T15:48:50Z",
+   "snapshot_finished_utc": "2026-10-03T15:49:01Z",
+   "method": "sqlite3.Connection.backup(pages=-1) from mode=ro source",
+   "integrity_check": [
+    [
+     "ok"
+    ]
+   ],
+   "alembic_version": [
+    "c5e7a9b1d3f5"
+   ],
+   "source_journal_mode": "wal",
+   "snapshot_total_changes_during_checks": 0,
+   "sqlite_version": "3.49.1"
+  },
+  "table_count": 77,
+  "table_counts": {
+   "activity_events": 970,
+   "ai_proposals": 5,
+   "ai_usage": 729,
+   "ai_verifications": 36,
+   "alembic_version": 1,
+   "background_jobs": 121,
+   "background_workers": 82,
+   "battery_panel_results": 40,
+   "boq_candidates": 19,
+   "boq_snapshots": 23,
+   "brand_suppliers": 2,
+   "compliance_audit": 1446,
+   "compliance_learned_answers": 84,
+   "compliance_statements": 5,
+   "datasheet_documents": 58,
+   "design_rules": 64,
+   "division_projects": 0,
+   "document_dependencies": 1251,
+   "document_readings": 195,
+   "drawing_issues": 66,
+   "drawing_requirement_states": 5,
+   "ep_archive_folders": 1178,
+   "ep_archive_roots": 1,
+   "equipment_currents": 56,
+   "estimation_projects": 0,
+   "extraction_issues": 43,
+   "extraction_runs": 51,
+   "ifc_block_aliases": 7641,
+   "ifc_device_types": 48,
+   "ifc_symbol_reviews": 40,
+   "ifc_symbols": 1546,
+   "knowledge_equivalences": 11842,
+   "knowledge_files": 5267,
+   "knowledge_imports": 1,
+   "knowledge_issues": 19293,
+   "knowledge_mapping_reviews": 0,
+   "knowledge_mappings": 147474,
+   "knowledge_models": 3364,
+   "knowledge_requirements": 62519,
+   "knowledge_response_sources": 130605,
+   "knowledge_responses": 77475,
+   "knowledge_sources": 1657,
+   "part_datasheet_links": 558,
+   "project_actions": 9,
+   "project_amplifier_design": 1,
+   "project_boq_items": 721,
+   "project_boq_revisions": 0,
+   "project_building_floors": 148,
+   "project_changes": 117,
+   "project_design_sheets": 16,
+   "project_designs": 1,
+   "project_documents": 2264,
+   "project_draftsman_assignment": 1,
+   "project_drawing_reviews": 2,
+   "project_fa_interfaces": 2,
+   "project_floor_aliases": 5,
+   "project_floor_schedule": 1,
+   "project_frc_cables": 1,
+   "project_ifc_drawings": 11,
+   "project_proposed_materials": 0,
+   "project_redesign": 1,
+   "project_shop_boq": 1,
+   "project_shop_drawings": 105,
+   "project_submittal_events": 35,
+   "project_submittal_revisions": 14,
+   "project_submittal_status_history": 19,
+   "project_submittals": 12,
+   "project_systems": 38,
+   "projects": 10,
+   "result_cache": 1139,
+   "review_rulings": 108,
+   "shop_drawing_candidates": 8,
+   "shop_drawing_events": 259,
+   "shop_drawing_revisions": 146,
+   "sqlite_sequence": 1,
+   "submittal_replies": 1,
+   "users": 7
+  }
+ },
+ "config_non_secret": {
+  "AI_ENABLED": true,
+  "AI_PROVIDER": "claude-code",
+  "drawing_review_model": "claude-opus-5-5",
+  "drawing_review_parallel": 2,
+  "drawing_review_timeout_s": 600,
+  "redesign_prompt_version": "drawing-redesign-2026-10-02.4",
+  "redesign_feature_flag": null,
+  "project_5_ai_policy": "allowed"
+ },
+ "services": {
+  "G_copy": {
+   "api": "127.0.0.1:8001",
+   "vite": [
+    5174,
+    5175
+   ],
+   "workers": [
+    "sync_worker",
+    "ifc_worker"
+   ]
+  },
+  "Desktop_copy": {
+   "api": "127.0.0.1:8000",
+   "vite": [
+    5173
+   ],
+   "workers": [
+    "sync_worker",
+    "document_worker",
+    "ifc_worker"
+   ]
+  }
+ },
+ "golden_case": {
+  "GC-01": {
+   "project_id": 5,
+   "ep": "30880",
+   "drawing_id": 1,
+   "redesign_id": 1,
+   "review_id": 1,
+   "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "files": {
+    "source_dwg": {
+     "path": "GC01:ifc/60de2a377daa.dwg",
+     "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+    },
+    "source_dxf": {
+     "path": "GC01:ifc/60de2a377daa.dxf",
+     "sha256": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f"
+    },
+    "review_pdf": {
+     "path": "GC01:review/66043c11fab9eaf5a1768ba2.pdf",
+     "sha256": "2dd28b0480adcd2beb47dab31558ee5dc88fec72334c0add48a1fd1a5a9f2dae"
+    },
+    "wall_index": {
+     "path": "GC01:redesign/walls-1-66043c11fab9eaf5-v1.pkl",
+     "sha256": "9e5a94c17fa2573faaed31c4c909673ac8ce49cbb420fcb6b1c82647d8ec6197"
+    },
+    "apply_script": {
+     "path": "GC01:redesign/work-1/redesign.scr",
+     "sha256": "e2daf55bfe7edf4f9d0f93d0c646135b5eb4c9119bfd7b3af37e854ef9d019a0"
+    },
+    "apply_work_copy": {
+     "path": "GC01:redesign/work-1/redesign.dwg",
+     "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+    },
+    "lib_CT2": {
+     "path": "backend/app/redesign/library/CT2.dwg",
+     "sha256": "7afd3a163ec433253eabab7864c27e258726f1c60d34348e2f12a9a84a664686"
+    }
+   }
+  }
+ }
+}

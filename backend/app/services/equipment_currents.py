@@ -58,6 +58,9 @@ MENVIER_DATASHEETS: list[tuple[str, str, str | None]] = [
     ("CTR160CGL2KS-M", "CTR160CGL2KS-M.pdf", "CTR160CGL2KS"),
     ("NEXI300-3H-CGL", "NEXI300-3H-CGL.pdf", None),
     ("NEXI300-3H-CGL-IP", "NEXI300-3H-CGL.pdf", None),
+    # The BOQ's spellings of two sheets' order codes (platform owner, 2 October 2026).
+    ("NEXI300-3H-CGL-IPM", "NEXI300-3H-CGL.pdf", "NEXI300-3H-CGL-IP"),
+    ("SL2NM65D3-M", "SL2-42D3D-CGL-M.pdf", "SL2MNM65D3D"),
 ]
 SEED_SOURCE = "Edwards EST3 / EST4 parts that draw no current; settled by the platform owner on 2026-09-16"
 

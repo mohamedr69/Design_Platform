@@ -122,6 +122,15 @@ class ExtraComponent(BaseModel):
     source: str = Field(min_length=3, max_length=500)
 
 
+class RemovedLine(BaseModel):
+    """A BOQ line taken out of this panel's battery calculation only -- the
+    BOQ keeps it. The line is its part number and which of the group's lines
+    of that part it is (1 for the first), so one of two identical lines can go."""
+
+    part_no: str = Field(min_length=1, max_length=64)
+    occurrence: int = Field(default=1, ge=1, le=1000)
+
+
 class PanelSettings(BaseModel):
     """What the engineer sets for one panel. A setting left empty follows the
     battery sizing rule, so a corrected rule still reaches it."""
@@ -132,6 +141,7 @@ class PanelSettings(BaseModel):
     alarm_minutes: float | None = Field(default=None, gt=0, le=240)
     panel_voltage: float | None = Field(default=None, gt=0, le=60)
     extra_components: list[ExtraComponent] = Field(default_factory=list)
+    removed_lines: list[RemovedLine] = Field(default_factory=list)
 
 
 class BatteryDesign(BaseModel):
@@ -360,6 +370,9 @@ class BatteryLineOut(BaseModel):
     # A load the engineer added to this panel (its index in the panel's
     # extra_components), not a BOQ line.
     extra_index: int | None = None
+    # A BOQ line: which of the group's lines of this part it is (1 for the
+    # first) -- what a removal from the calculation names (RemovedLine).
+    occurrence: int | None = None
 
 
 class BatterySetOut(BaseModel):
@@ -423,6 +436,9 @@ class BatteryPanelOut(BaseModel):
     # that succeeds.
     stale: bool = False
     error: str | None = None
+    # BOQ lines the engineer took out of this calculation (the BOQ keeps
+    # them), each to put back: {part_no, occurrence, description, quantity}.
+    removed: list[dict] = Field(default_factory=list)
 
 
 class BoqGroupOut(BaseModel):

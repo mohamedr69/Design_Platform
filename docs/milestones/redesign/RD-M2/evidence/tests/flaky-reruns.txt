@@ -1,0 +1,25 @@
+== base: the two suite failures, standalone
+E       sqlite3.IntegrityError: FOREIGN KEY constraint failed
+E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed
+2 failed, 3 warnings in 5.18s
+== cand: the two suite failures, standalone
+E       sqlite3.IntegrityError: FOREIGN KEY constraint failed
+E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed
+2 failed, 3 warnings in 4.89s
+== cand: test_ai_sheet_reader::test_the_first_read_runs_as_a_job_the_page_follows x5
+1 passed, 2 warnings in 2.05s
+1 passed, 2 warnings in 2.32s
+1 passed, 2 warnings in 2.12s
+        # a hundred polls allowed, and the test then failed for timing alone.
+1 failed, 3 warnings in 2.40s
+        # a hundred polls allowed, and the test then failed for timing alone.
+1 failed, 3 warnings in 32.74s
+== base: test_ai_sheet_reader::test_the_first_read_runs_as_a_job_the_page_follows x8
+1 failed, 2 warnings in 3.57s
+1 passed, 2 warnings in 2.21s
+1 passed, 2 warnings in 2.54s
+1 passed, 2 warnings in 1.95s
+1 passed, 2 warnings in 1.86s
+1 passed, 2 warnings in 1.87s
+1 passed, 2 warnings in 2.75s
+1 passed, 2 warnings in 2.50s

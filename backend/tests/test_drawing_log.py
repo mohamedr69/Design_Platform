@@ -341,7 +341,9 @@ def test_an_item_is_received_when_its_folder_holds_a_file(client, tmp_path):
     items = {i["key"]: i for g in out["groups"] for i in g["items"]}
     # The material approval first -- from the register, not a folder -- then the contractor's files.
     assert [g["name"] for g in out["groups"]] == ["Approvals", "Electrical IFC Drawings", "Mechanical IFC Drawings", "Others"]
-    assert out["total"] == 7 and out["received"] == 2 and out["not_received"] == 5
+    # ventilation and the architecture too: read for the FA interface schedule
+    assert out["total"] == 10 and out["received"] == 2 and out["not_received"] == 8
+    assert not items["hvac_ifc"]["received"] and not items["arch_ifc"]["received"]
     assert not items["material_approval"]["received"] and items["material_approval"]["kind"] == "approval"
     assert items["fa_ifc"]["received"] and items["fa_ifc"]["file_count"] == 1 and items["fa_ifc"]["received_date"]
     assert items["title_block"]["received"] and not items["sm_ifc"]["received"] and not items["acs_ifc"]["received"]
@@ -349,7 +351,7 @@ def test_an_item_is_received_when_its_folder_holds_a_file(client, tmp_path):
     # The approval speaks in approval words, a document in received words; and the list says how ready it is.
     assert (items["material_approval"]["status_label"], items["fa_ifc"]["status_label"], items["sm_ifc"]["status_label"]) == (
         "Not Approved", "Received", "Not Received")
-    assert out["readiness"] == "2 / 7 Ready"
+    assert out["readiness"] == "2 / 10 Ready"
 
     # An item that is no item, or another system's, is refused, not dropped.
     assert client.post(f"/projects/{project_id}/drawings/required/request",
@@ -382,12 +384,12 @@ def test_each_system_has_its_own_list(client, tmp_path):
     els = client.get(f"/projects/{project_id}/drawings/required?system=ELS").json()
     assert els["system"] == "ELS" and [g["name"] for g in els["groups"]] == ["Approvals", "Electrical Drawings", "Others"]
     items = {i["key"]: i for g in els["groups"] for i in g["items"]}
-    assert set(items) == {"material_approval", "els_lighting_ifc", "els_fa_ifc", "els_load_schedule"} and els["received"] == 1
+    assert set(items) == {"material_approval", "els_lighting_ifc", "els_fa_ifc", "els_fls", "els_load_schedule"} and els["received"] == 1
     assert items["els_load_schedule"]["format"] == "PDF / XLS" and items["els_load_schedule"]["received"]
     assert items["els_lighting_ifc"]["remarks"] == "Required for ELS design coordination"
 
     fas = client.get(f"/projects/{project_id}/drawings/required").json()
-    assert fas["system"] == "FAS" and fas["total"] == 7                     # the fire alarm list is its own
+    assert fas["system"] == "FAS" and fas["total"] == 10                     # the fire alarm list is its own
     sent = client.post(f"/projects/{project_id}/drawings/required/request", json={"system": "ELS", "keys": ["els_lighting_ifc"]}).json()
     assert "emergency lighting shop drawings" in sent["body"] and "(IFC / DWG)" in sent["body"]
     client.post(f"/projects/{project_id}/drawings/required/request/sent", json={"system": "ELS", "keys": ["els_lighting_ifc"]})

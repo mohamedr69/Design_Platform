@@ -399,21 +399,40 @@ def _project(db_session, systems):
     return project
 
 
-def test_fx06_a_long_equipment_table_continues_on_further_sheets(db_session, client):
+def test_fx06_every_panel_stays_on_its_one_sheet(db_session, client):
+    """A long panel's rows are tightened, then halved side by side: one
+    panel, one sheet (platform owner, 1 October 2026)."""
     from app.services.battery_pdf import battery_calculation_pdf
 
     project = _project(db_session, [("Fire Alarm", "EDWARDS")])
-    panel = _panel("k", 60, brand="EDWARDS")
+    panels = [_panel(f"k{n}", n, brand="EDWARDS") for n in (5, 20, 30, 60, 88)]
+
+    doc = pymupdf.open(stream=battery_calculation_pdf(project, panels), filetype="pdf")
+
+    assert doc.page_count == len(panels)
+    for page, panel in zip(doc, panels):
+        text = page.get_text()
+        assert all(line.part_no in text for line in panel.lines), "every part is on its panel's page"
+        assert "Calculation notes" in text and "continued" not in text
+        rows = [b for b in page.get_text("blocks") if b[4].strip().startswith("PART-")]
+        assert all(b[3] < page.rect.height - 30 for b in rows)
+
+
+def test_fx06_a_panel_past_one_sheet_continues_on_further_sheets(db_session, client):
+    from app.services.battery_pdf import battery_calculation_pdf
+
+    project = _project(db_session, [("Fire Alarm", "EDWARDS")])
+    panel = _panel("k", 100, brand="EDWARDS")
 
     doc = pymupdf.open(stream=battery_calculation_pdf(project, [panel], manufacturers={"k": "EDWARDS"}), filetype="pdf")
     text = "\n".join(page.get_text() for page in doc)
 
-    assert doc.page_count == 3
-    assert all(f"PART-{i:02d}" in text for i in range(60)), "every part is on a page"
+    assert doc.page_count == 2
+    assert all(f"PART-{i:02d}" in text for i in range(100)), "every part is on a page"
     assert "Calculation notes" in text
     # Neither the charger remark nor "below the requirement" goes out on the sheet.
     assert "Charger compatibility" not in text and "below the requirement" not in text
-    assert "(continued, sheet 2 of 3)" in text
+    assert "(continued, sheet 2 of 2)" in text
     # Nothing is drawn past the page: the last row of each page sits above its footer.
     for page in doc:
         rows = [b for b in page.get_text("blocks") if b[4].strip().startswith("PART-")]
@@ -474,7 +493,7 @@ def test_fx07_a_failed_stage_is_named(db_session, client, tmp_path, monkeypatch)
     monkeypatch.setattr(submittal_package, "build_schedule", broken)
     with pytest.raises(PackageBuildError) as failure:
         build_package(project, plan, None)
-    assert "05 Schedule of Material (generated) could not be produced (no such font)" in str(failure.value)
+    assert "Schedule of Material (generated) could not be produced (no such font)" in str(failure.value)
 
 
 # --- FX-10: a session in use does not expire ---------------------------------------

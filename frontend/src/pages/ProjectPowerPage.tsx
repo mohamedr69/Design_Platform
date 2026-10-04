@@ -12,6 +12,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import { Stepper } from "./ProjectAmplifierPage";
 
 import { API_BASE_URL, ApiError, api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
@@ -144,6 +145,44 @@ export function ProjectPowerPage() {
     }
   }
 
+  /** How many of a device a floor has belongs to the floor-wise BOQ, so this
+   * changes it there, as the amplifier tab does for a speaker. */
+  async function setCount(floor: string, part: string, count: number) {
+    setSaving(`${floor}:${part}`);
+    setError(null);
+    try {
+      setData(
+        await api.patch<PowerSchedule>(`/projects/${project.id}/design/power/counts`, {
+          floor,
+          part_no: part,
+          count: Math.max(0, count),
+        }),
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "The quantity could not be changed");
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  /** The floor a BPS is installed on: the engineer's decision. */
+  async function setLocation(supply: string, floor: string) {
+    setSaving(`location:${supply}`);
+    setError(null);
+    try {
+      setData(
+        await api.patch<PowerSchedule>(`/projects/${project.id}/design/power/locations`, {
+          supply,
+          floor: floor || null,
+        }),
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "The supply's floor could not be set");
+    } finally {
+      setSaving(null);
+    }
+  }
+
   if (!result) {
     return <p className="mt-6 text-sm text-gray-400">{error ?? "Loading the power schedule…"}</p>;
   }
@@ -175,10 +214,17 @@ export function ProjectPowerPage() {
 
       {result.columns.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400">
-          Nothing on the floor-wise BOQ runs on 24 V yet.
+          Nothing on the BOQ runs on 24 V yet.
         </p>
       ) : (
-        <Load result={result} canEdit={canEdit} saving={saving} onCurrent={setCurrent} />
+        <Load
+          result={result}
+          canEdit={canEdit}
+          saving={saving}
+          onCurrent={setCurrent}
+          onCount={setCount}
+          onLocation={setLocation}
+        />
       )}
 
       <Notes result={result} />
@@ -226,13 +272,18 @@ function Load({
   canEdit,
   saving,
   onCurrent,
+  onCount,
+  onLocation,
 }: {
   result: PowerResult;
   canEdit: boolean;
   saving: string | null;
   onCurrent: (part: string, milliamps: number) => void;
+  onCount: (floor: string, part: string, count: number) => void;
+  onLocation: (supply: string, floor: string) => void;
 }) {
   const [query, setQuery] = useState("");
+  const locations = result.locations ?? {};
   const matching = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return needle
@@ -334,6 +385,10 @@ function Load({
                 </span>
               </th>
               <th className="px-3 py-3 text-center font-semibold">{result.supply_part}</th>
+              <th className="px-3 py-3 text-center font-semibold">
+                BPS location
+                <span className="block text-[11px] font-normal text-gray-400">(floor)</span>
+              </th>
             </tr>
             <tr className="border-t border-gray-100 bg-white">
               <th className="sticky left-0 z-10 bg-white px-5 py-2 text-left text-xs font-medium text-gray-400">
@@ -357,13 +412,13 @@ function Load({
                   </select>
                 </th>
               ))}
-              <th colSpan={3} />
+              <th colSpan={4} />
             </tr>
           </thead>
           <tbody>
             {matching.length === 0 && (
               <tr>
-                <td colSpan={columns.length + 5} className="px-5 py-10 text-center text-sm text-gray-400">
+                <td colSpan={columns.length + 6} className="px-5 py-10 text-center text-sm text-gray-400">
                   No floor matches “{query}”.
                 </td>
               </tr>
@@ -389,8 +444,13 @@ function Load({
                     )}
                   </td>
                   {columns.map((column) => (
-                    <td key={column.key} className="px-3 py-2.5 text-center tabular-nums text-gray-700">
-                      {floor.counts[column.key] || <span className="text-gray-300">—</span>}
+                    <td key={column.key} className="px-2 py-1.5 text-center">
+                      <Stepper
+                        value={floor.counts[column.key] ?? 0}
+                        canEdit={canEdit}
+                        busy={saving === `${floor.floor}:${column.key}`}
+                        onStep={(by) => onCount(floor.floor, column.key, (floor.counts[column.key] ?? 0) + by)}
+                      />
                     </td>
                   ))}
                   <td className="px-3 py-2.5 text-right font-bold tabular-nums text-navy-900">
@@ -444,6 +504,33 @@ function Load({
                       )}
                     </td>
                   )}
+                  {run && (
+                    <td
+                      rowSpan={run.rows}
+                      className={`px-3 py-2.5 text-center align-middle ${run.supply ? "bg-violet-50/40" : ""}`}
+                    >
+                      {run.supply ? (
+                        <select
+                          aria-label={`Floor ${run.supply} is installed on`}
+                          value={locations[run.supply] ?? ""}
+                          disabled={!canEdit || saving === `location:${run.supply}`}
+                          onChange={(e) => onLocation(run.supply!, e.target.value)}
+                          className={`w-40 rounded-lg border bg-white px-2 py-1.5 text-sm focus:border-brand-400 focus:outline-none disabled:bg-gray-50 ${
+                            locations[run.supply] ? "border-violet-300 text-navy-900" : "border-amber-300 text-amber-800"
+                          }`}
+                        >
+                          <option value="">Choose floor…</option>
+                          {result.floors.map((option) => (
+                            <option key={option.floor} value={option.floor}>
+                              {option.floor}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="text-gray-300">—</span>
+                      )}
+                    </td>
+                  )}
                 </tr>
               );
             })}
@@ -462,7 +549,11 @@ function Load({
               <td className="px-3 py-3 text-right font-bold tabular-nums text-navy-900">
                 {ma(result.total_ma)}
               </td>
+              <td className="px-3 py-3 text-center font-bold text-navy-900">{result.circuits.length}</td>
               <td className="px-3 py-3 text-center font-bold text-navy-900">{result.supplies.length}</td>
+              <td className="px-3 py-3 text-center text-xs font-semibold text-gray-500">
+                {result.supplies.filter((supply) => locations[supply.name]).length} of {result.supplies.length} placed
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -526,7 +617,7 @@ function Notes({ result }: { result: PowerResult }) {
       <div className="rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-sm font-bold text-navy-900">How this is worked out</h2>
         <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-gray-700">
-          <li>Quantities come from the floor-wise BOQ; the current is chosen here, off the datasheet.</li>
+          <li>Quantities come from the BOQ as per Shop Drawings; the current is chosen here, off the datasheet.</li>
           <li>
             Everything on 24 V is counted: sounders, flashers, the flasher half of a speaker-flasher, and
             sounder bases. A plain speaker is on the amplifier's 70 V line and draws nothing here.

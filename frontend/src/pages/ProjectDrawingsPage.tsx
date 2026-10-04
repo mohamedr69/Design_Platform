@@ -8,6 +8,7 @@ import { RequiredDrawingsTab } from "../components/drawings/RequiredDrawingsTab"
 import { DrawingsLogTab } from "../components/drawings/DrawingsLogTab";
 import { ReviewIssuesTab } from "../components/drawings/ReviewIssuesTab";
 import { ActivityTab } from "../components/drawings/ActivityTab";
+import { AssignDraftsmanTab } from "../components/drawings/AssignDraftsmanTab";
 import type { DrawingsSummary, SystemSummary } from "../components/drawings/types";
 import { when } from "../components/drawings/types";
 
@@ -16,6 +17,7 @@ const TABS = [
   { key: "required", label: "Actions Required" },
   { key: "issues", label: "Review & Issues" },
   { key: "activity", label: "Activity / History" },
+  { key: "assign", label: "Assign Draftsman" },
 ] as const;
 type Tab = (typeof TABS)[number]["key"];
 
@@ -193,6 +195,7 @@ function DrawingsWorkspace() {
       )}
       {tab === "issues" && <ReviewIssuesTab projectId={project.id} canEdit={canEdit} system={shownCode} onOpenDrawing={goToDrawing} onChanged={loadSummary} />}
       {tab === "activity" && <ActivityTab projectId={project.id} system={shownCode} />}
+      {tab === "assign" && <AssignDraftsmanTab projectId={project.id} canEdit={canEdit} />}
     </div>
   );
 }

@@ -306,3 +306,44 @@ def test_the_power_schedule_is_worked_out_from_the_boq(client, db_session, tmp_p
 
     export = client.get(f"/projects/{project_id}/design/power/export.pdf")
     assert export.status_code == 200 and export.content.startswith(b"%PDF")
+
+
+def test_a_floors_device_count_is_edited_and_each_bps_is_put_on_a_floor(client, db_session, tmp_path):
+    from app.models import ProjectFloorSchedule
+
+    _login(client)
+    project_id = client.post("/projects", json={"ep_number": "30922", "project_name": "T",
+                                                "design_sheets": []}).json()["id"]
+    _upload(client, project_id, tmp_path)
+    row = db_session.query(ProjectFloorSchedule).filter(ProjectFloorSchedule.project_id == project_id).one()
+    result = dict(row.result)
+    items = [dict(item) for item in result["items"]]
+    items[0]["material"] = {"part_no": "G1ARN", "description": "horn", "manufacturer": "EDWARDS"}
+    result["items"] = items
+    row.result = result
+    db_session.commit()
+    client.put(f"/projects/{project_id}/design/power", json={"currents": {"G1ARN": 23}})
+
+    body = client.get(f"/projects/{project_id}/design/power").json()["result"]
+    ground = body["floors"][0]["floor"]
+    # the count is changed on the floor-wise BOQ: the power tab shows it, and so would every other
+    changed = client.patch(f"/projects/{project_id}/design/power/counts",
+                           json={"floor": ground, "part_no": "G1ARN", "count": 7})
+    assert changed.status_code == 200, changed.text
+    assert changed.json()["result"]["floors"][0]["counts"]["G1ARN"] == 7
+    db_session.expire_all()
+    edits = db_session.query(ProjectFloorSchedule).filter(ProjectFloorSchedule.project_id == project_id).one().edits
+    assert list(edits.values())[0][ground] == 7
+    assert client.patch(f"/projects/{project_id}/design/power/counts",
+                        json={"floor": ground, "part_no": "NOPE", "count": 1}).status_code == 404
+
+    # each BPS is put on a floor by the engineer
+    supply = changed.json()["result"]["supplies"][0]["name"]
+    url = f"/projects/{project_id}/design/power/locations"
+    assert client.patch(url, json={"supply": "BPS-99", "floor": ground}).status_code == 404
+    assert client.patch(url, json={"supply": supply, "floor": "Mars"}).status_code == 400
+    placed = client.patch(url, json={"supply": supply, "floor": ground}).json()["result"]
+    assert placed["locations"] == {supply: ground}
+    assert client.get(f"/projects/{project_id}/design/power").json()["result"]["locations"] == {supply: ground}
+    export = client.get(f"/projects/{project_id}/design/power/export.pdf")
+    assert export.status_code == 200

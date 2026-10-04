@@ -10,7 +10,9 @@ folder a file sits in, what it is and which system it belongs to:
     02- Material Submittals\FA\R0\Submitted\  what we sent
     02- Material Submittals\FA\R0\Received\   what came back, stamped
     03- Drawings\IFC\Electrical\{ACS, FA, Light, Power}\   the BOQ as per IFC files its FA drawings in FA
-    03- Drawings\IFC\Mechanical\{FF, SM}\
+    03- Drawings\IFC\Mechanical\{FF, SM, HVAC}\
+    03- Drawings\IFC\Architectural\       with FF, SM, HVAC and ACS: the FA interface schedule
+\
     03- Drawings\IFC\RCP\                 03- Drawings\IFC\Builder Work\
     03- Drawings\SD\{FA, ELS}\             the shop drawings we submit
     03- Drawings\SD\Approved\
@@ -93,12 +95,19 @@ def submittal_structure(codes: list[str]) -> list[str]:
 # drawings are ours on this project (`system_rules.drawings_in_scope`).
 DRAWINGS_STRUCTURE: tuple[str, ...] = (
     f"{DRAWINGS}/IFC/Electrical/ACS",
+    f"{DRAWINGS}/IFC/Electrical/GB",          # gate barriers: the FA interface schedule
     f"{DRAWINGS}/IFC/Electrical/FA",
     f"{DRAWINGS}/IFC/Electrical/Light",
     f"{DRAWINGS}/IFC/Electrical/Power",
     f"{DRAWINGS}/IFC/Electrical/Load Schedule",
     f"{DRAWINGS}/IFC/Mechanical/FF",
     f"{DRAWINGS}/IFC/Mechanical/SM",
+    # Ventilation and the architecture: read with FF, SM and ACS for the fire
+    # alarm interface schedule (BOQ > FA Interfaces, app.interfaces).
+    f"{DRAWINGS}/IFC/Mechanical/HVAC",
+    f"{DRAWINGS}/IFC/Architectural",
+    # Fire & life safety: escape routes and exits, for the exit / directional signs (Drawings Review).
+    f"{DRAWINGS}/IFC/FLS",
     f"{DRAWINGS}/IFC/RCP",
     f"{DRAWINGS}/IFC/Builder Work",
     # From the contractor before shop drawings start (Drawings > Actions Required).
@@ -307,12 +316,14 @@ def system_folder(system_code: str | None) -> str | None:
 
 def submittal_folder(project, system_code: str | None, revision: str) -> Path | None:
     """Where a material submittal of this system and revision is filed:
-    <project>/02- Material Submittals/<FA|ELS>/<R#>. None when the project
-    has no reachable folder or the system has no folder."""
+    <project>/02- Material Submittals/<FA|ELS>/<R#>/Submitted -- what we
+    send, beside the Received folder its reply is filed in
+    (app.services.submittal_replies). None when the project has no
+    reachable folder or the system has no folder."""
     folder = system_folder(system_code)
     if not project.source_folder_path or folder is None:
         return None
     root = Path(project.source_folder_path)
     if not _is_dir(root):
         return None
-    return root / MATERIAL_SUBMITTALS / folder / revision.strip().upper()
+    return root / MATERIAL_SUBMITTALS / folder / revision.strip().upper() / SUBMITTED

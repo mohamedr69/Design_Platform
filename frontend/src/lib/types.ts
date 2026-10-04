@@ -767,6 +767,14 @@ export interface BatteryLine {
   datasheet_page: number | null;
   /** Set for a load the engineer added to the panel (not a BOQ line). */
   extra_index: number | null;
+  /** A BOQ line: which of the group's lines of this part it is (1 for the first). */
+  occurrence?: number | null;
+}
+
+/** A BOQ line taken out of one panel's battery calculation only. */
+export interface RemovedLine {
+  part_no: string;
+  occurrence: number;
 }
 
 export interface BatterySet {
@@ -781,6 +789,8 @@ export interface BatterySet {
 }
 
 export interface BatteryPanel {
+  /** BOQ lines taken out of this calculation (the BOQ keeps them), to put back. */
+  removed?: (RemovedLine & { description: string; quantity: string | null })[];
   /** The previous calculation, shown because recalculating this panel failed (`error` says how). */
   stale?: boolean;
   error?: string | null;
@@ -877,6 +887,7 @@ export interface PanelSettings {
   alarm_minutes?: number | null;
   panel_voltage?: number | null;
   extra_components: ExtraComponent[];
+  removed_lines?: RemovedLine[];
 }
 
 export interface BatteryDesign {
@@ -1053,7 +1064,7 @@ export interface SubmittalRegister {
 
 /** How one revision of a submittal stands, as the AI read it: under review,
  * approved, approved as noted, revise and resubmit, rejected. */
-export type SubmittalCellStatus = "UR" | "A" | "ANN" | "RR" | "REJ";
+export type SubmittalCellStatus = "NS" | "UR" | "A" | "ANN" | "RR" | "REJ";
 
 export interface SubmittalMapCell {
   status: SubmittalCellStatus;
@@ -2215,6 +2226,8 @@ export interface AmplifierResult {
   floors: AmplifierFloorRow[];
   amplifiers: AmplifierUnit[];
   cabinets: { name: string; amplifiers: string[] }[];
+  /** {APS cabinet: floor}: where the engineer puts each cabinet. */
+  locations: Record<string, string>;
   amplifier_part: string;
   amplifier_watts: number;
   /** What one amplifier may be loaded to: its rating times the design
@@ -2294,6 +2307,8 @@ export interface PowerCircuit {
 }
 
 export interface PowerResult {
+  /** {BPS: floor}: where the engineer puts each booster power supply. */
+  locations: Record<string, string>;
   columns: PowerColumn[];
   floors: PowerFloorRow[];
   supplies: { name: string; floors: string[]; current_ma: number; over_limit: boolean; circuits: string[] }[];

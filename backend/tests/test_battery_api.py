@@ -556,3 +556,41 @@ def test_a_panel_is_recalculated_only_when_its_own_inputs_move(client, db_sessio
     fifth = client.get(f"/projects/{project_id}/design/battery").json()
     fixed = next(p for p in fifth["panels"] if p["kind"] == "panel")
     assert not fixed["stale"] and "3-SDDC2" not in fixed["missing_parts"]
+
+
+def test_a_part_is_taken_out_of_one_panels_battery_calculation_only(client):
+    _login_admin(client)
+    resp = client.post("/projects", json={"ep_number": "30785", "project_name": "Titania", "design_sheets": []})
+    project_id = resp.json()["id"]
+    line = lambda part, qty, desc: {"system_code": "FAS", "group_heading": PANEL, "catalog_no": part,  # noqa: E731
+                                    "description": desc, "quantity": qty}
+    client.put(f"/projects/{project_id}/boq", json=[
+        {"system_code": "FAS", "group_heading": PANEL, "description": "Main panel. Includes:", "quantity": "1"},
+        line("4-CPU", "1", "CPU"), line("4-USBHUB", "1", "USB hub"), line("4-USBHUB", "1", "USB hub (again)"),
+        line("12V65A", "2", "Battery, 12 V @ 65 AH"),
+    ])
+    _current(client, "4-CPU", 211, 211)
+    _current(client, "4-USBHUB", 560, 560)
+    panel = client.get(f"/projects/{project_id}/design/battery").json()["panels"][0]
+    assert panel["standby_ma"] == 211 + 560 * 2
+    hubs = [l for l in panel["lines"] if l["part_no"] == "4-USBHUB"]
+    assert [l["occurrence"] for l in hubs] == [1, 2]
+
+    # the second, duplicated line goes; the first stays
+    design = {"panels": {panel["key"]: {"extra_components": [],
+                                        "removed_lines": [{"part_no": "4-USBHUB", "occurrence": 2}]}}}
+    after = client.put(f"/projects/{project_id}/design/battery", json=design).json()["panels"][0]
+    assert after["standby_ma"] == 211 + 560
+    assert [l["occurrence"] for l in after["lines"] if l["part_no"] == "4-USBHUB"] == [1]
+    assert after["removed"] == [{"part_no": "4-USBHUB", "occurrence": 2, "description": "USB hub (again)",
+                                 "quantity": "1"}]
+    # the BOQ keeps it
+    assert sum(1 for i in client.get(f"/projects/{project_id}/boq").json() if i["catalog_no"] == "4-USBHUB") == 2
+    # and so does the PDF leave it out
+    pdf = client.get(f"/projects/{project_id}/design/battery/export.pdf")
+    assert pdf.status_code == 200
+
+    # put back
+    design["panels"][panel["key"]]["removed_lines"] = []
+    back = client.put(f"/projects/{project_id}/design/battery", json=design).json()["panels"][0]
+    assert back["standby_ma"] == 211 + 560 * 2 and back["removed"] == []

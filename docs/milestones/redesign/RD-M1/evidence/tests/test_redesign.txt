@@ -1,0 +1,53 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-8.3.4, pluggy-1.6.0 -- <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Scripts\python.exe
+rootdir: <PC-B user profile>\AppData\Local\Temp\claude\g--dev--2--dev\6f67ec6f-cb75-49d6-9946-10047734e054\scratchpad\rdm1\code\backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collecting ... collected 16 items
+
+tests/test_redesign.py::test_a_change_is_prepared_with_the_devices_near_it_numbered PASSED [  6%]
+tests/test_redesign.py::test_an_add_is_placed_where_the_model_points_with_the_drawings_own_symbol PASSED [ 12%]
+tests/test_redesign.py::test_a_replace_takes_the_old_symbols_place_and_a_remove_needs_a_symbol PASSED [ 18%]
+tests/test_redesign.py::test_the_answer_is_kept_only_where_it_is_well_formed PASSED [ 25%]
+tests/test_redesign.py::test_the_autocad_script_erases_inserts_at_the_true_scale_and_marks_each_change PASSED [ 31%]
+tests/test_redesign.py::test_a_block_drawn_away_from_its_base_point_is_inserted_so_it_is_seen_on_the_spot PASSED [ 37%]
+tests/test_redesign.py::test_a_sounder_flasher_is_the_strobe_symbol_and_a_sounder_the_wall_sounder PASSED [ 43%]
+tests/test_redesign.py::test_a_block_faces_the_side_its_sound_waves_are_on PASSED [ 50%]
+tests/test_redesign.py::test_a_wall_device_is_fixed_with_its_back_on_the_wall_face PASSED [ 56%]
+tests/test_redesign.py::test_two_devices_at_one_wall_share_it_side_by_side_without_passing_its_corner PASSED [ 62%]
+tests/test_redesign.py::test_an_ip_rated_emergency_light_is_the_drawings_e_made_weatherproof_as_a_new_block PASSED [ 68%]
+tests/test_redesign.py::test_interface_modules_are_the_samples_blocks_as_big_on_paper_and_drawn_only_once_approved PASSED [ 75%]
+tests/test_redesign.py::test_a_library_block_is_brought_in_from_its_file_only_by_the_first_insert_and_noted PASSED [ 81%]
+tests/test_redesign.py::test_a_typical_plans_floors_get_one_module_each_item_stacked_and_the_unplaceable_listed PASSED [ 87%]
+tests/test_redesign.py::test_a_module_goes_on_the_nearest_real_wall_turned_to_it_past_an_equipment_outline PASSED [ 93%]
+tests/test_redesign.py::test_coordination_is_always_done_the_engineers_moves_and_the_modules_notes_included PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\..\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=================================== PASSES ====================================
+============================= slowest 5 durations =============================
+0.01s call     tests/test_redesign.py::test_a_wall_device_is_fixed_with_its_back_on_the_wall_face
+
+(4 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ===========================
+PASSED tests/test_redesign.py::test_a_change_is_prepared_with_the_devices_near_it_numbered
+PASSED tests/test_redesign.py::test_an_add_is_placed_where_the_model_points_with_the_drawings_own_symbol
+PASSED tests/test_redesign.py::test_a_replace_takes_the_old_symbols_place_and_a_remove_needs_a_symbol
+PASSED tests/test_redesign.py::test_the_answer_is_kept_only_where_it_is_well_formed
+PASSED tests/test_redesign.py::test_the_autocad_script_erases_inserts_at_the_true_scale_and_marks_each_change
+PASSED tests/test_redesign.py::test_a_block_drawn_away_from_its_base_point_is_inserted_so_it_is_seen_on_the_spot
+PASSED tests/test_redesign.py::test_a_sounder_flasher_is_the_strobe_symbol_and_a_sounder_the_wall_sounder
+PASSED tests/test_redesign.py::test_a_block_faces_the_side_its_sound_waves_are_on
+PASSED tests/test_redesign.py::test_a_wall_device_is_fixed_with_its_back_on_the_wall_face
+PASSED tests/test_redesign.py::test_two_devices_at_one_wall_share_it_side_by_side_without_passing_its_corner
+PASSED tests/test_redesign.py::test_an_ip_rated_emergency_light_is_the_drawings_e_made_weatherproof_as_a_new_block
+PASSED tests/test_redesign.py::test_interface_modules_are_the_samples_blocks_as_big_on_paper_and_drawn_only_once_approved
+PASSED tests/test_redesign.py::test_a_library_block_is_brought_in_from_its_file_only_by_the_first_insert_and_noted
+PASSED tests/test_redesign.py::test_a_typical_plans_floors_get_one_module_each_item_stacked_and_the_unplaceable_listed
+PASSED tests/test_redesign.py::test_a_module_goes_on_the_nearest_real_wall_turned_to_it_past_an_equipment_outline
+PASSED tests/test_redesign.py::test_coordination_is_always_done_the_engineers_moves_and_the_modules_notes_included
+======================== 16 passed, 1 warning in 0.27s ========================

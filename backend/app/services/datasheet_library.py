@@ -438,11 +438,17 @@ class DatasheetLibrary:
             # A datasheet named for the part's family: 4-NET-TP is in
             # "4-NET.pdf", 4-AUDTELS in "4-AUDTEL.pdf" -- ahead of the CPU
             # datasheet that merely lists them among its accessories.
+            # The family's name ends where the part's options begin -- at a
+            # "-", "+" or "/" -- so NEXI300-3H-CGL-IPM is the NEXI300-3H-CGL
+            # sheet, and SIGA-CT2 is never claimed for SIGA-CT20.
             by_family = any(
-                len(t) >= 3 and "-" in t and key.startswith(t) for t in re.findall(r"[A-Z0-9]+(?:-[A-Z0-9]+)+", name)
+                len(t) >= 3 and "-" in t and key.startswith(t) and key[len(t):len(t) + 1] in ("", "-", "+", "/")
+                for t in re.findall(r"[A-Z0-9]+(?:-[A-Z0-9]+)+", name)
             )
             pages = [n for n, text in enumerate(entry.page_texts, start=1) if token.search(text)]
-            if not by_name and not pages:
+            # A sheet named for the part's family is its datasheet even when
+            # its text never prints the option code the BOQ quotes.
+            if not by_name and not pages and not by_family:
                 continue
             match = DatasheetMatch(
                 library=self.name,

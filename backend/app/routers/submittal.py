@@ -35,7 +35,7 @@ from app.models import (
     SubmittalStatus,
     User,
 )
-from app.routers.projects import CREATOR_ROLES, DELETER_ROLES, XLSX_MEDIA_TYPE, _get_project_or_404
+from app.routers.projects import CREATOR_ROLES, SUBMITTAL_DELETER_ROLES, XLSX_MEDIA_TYPE, _get_project_or_404
 from app.services import project_state
 from app.services.submittal_identity import brand_key
 from app.schemas_design import (
@@ -742,7 +742,7 @@ def _delete_for_good(db: Session, project: Project, user: User, *, reference: st
 def delete_submittal(
     project_id: int,
     submittal_id: int,
-    current_user: User = Depends(require_role(*DELETER_ROLES)),
+    current_user: User = Depends(require_role(*SUBMITTAL_DELETER_ROLES)),
     db: Session = Depends(get_db),
 ) -> SubmittalDeletedOut:
     """Delete a register row for good. A row with a reference takes its
@@ -757,7 +757,7 @@ def delete_submittal(
 def delete_submittal_by_reference(
     project_id: int,
     payload: SubmittalDeleteIn,
-    current_user: User = Depends(require_role(*DELETER_ROLES)),
+    current_user: User = Depends(require_role(*SUBMITTAL_DELETER_ROLES)),
     db: Session = Depends(get_db),
 ) -> SubmittalDeletedOut:
     """The same deletion, by reference (from the Logs tab, which lists the
@@ -858,9 +858,10 @@ def _as_the_register_stands(db: Session, project: Project, drawn: dict) -> dict:
             revisions = {_revision_number(r.revision): r for r in item.revisions}
             for label, cell in (row.get("cells") or {}).items():
                 rev = revisions.get(_revision_number(label))
-                code = project_state.cell_code(rev.status, rev.reply_code) if rev else "NS"
-                if code != "NS":
-                    cell["status"] = code
+                # a revision the register holds, at its status there -- "NS"
+                # included: created, not yet marked submitted
+                if rev is not None:
+                    cell["status"] = project_state.cell_code(rev.status, rev.reply_code)
             latest = (row.get("cells") or {}).get(row.get("latest") or "")
             if latest:
                 row["latest_status"] = latest["status"]

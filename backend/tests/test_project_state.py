@@ -183,3 +183,30 @@ def test_two_brands_filed_under_one_reference_are_two_log_rows(client, db_sessio
     rows = client.get(f"/projects/{pid}/logs").json()["material_submittals"]
     assert sorted(r["name"] for r in rows) == ["Fire Rated Cable — FRONTIER", "Fire Rated Cable — TIANJIE"]
     assert {r["reference"] for r in rows} == {"EP-30990-MAS-FRC"}
+
+
+def test_a_created_submittal_stays_created_until_marked_submitted(client, db_session):
+    """The platform files its package as created; the folder check that
+    follows reads the form -- no reply on it -- and must not call that
+    under review. Submitted is the engineer's word; a reply moves it on."""
+    pid = _project(client)
+    project = db_session.get(Project, pid)
+    r0 = _reading("EP-30990-MAS-FA", 0, system="FAS", maker="EDWARDS", relative="FA/R0/Submitted/R0.pdf")
+    _sync(db_session, project, [r0])
+    (row,) = db_session.query(ProjectSubmittal).filter(ProjectSubmittal.project_id == pid).all()
+    # as the filing leaves it: created
+    assert client.patch(f"/projects/{pid}/submittals/{row.id}", json={"status": "not_submitted"}).status_code == 200
+
+    _sync(db_session, project, [r0])
+    row = db_session.get(ProjectSubmittal, row.id)
+    assert row.status.value == "not_submitted" and row.revisions[0].status.value == "not_submitted"
+
+    assert client.patch(f"/projects/{pid}/submittals/{row.id}", json={"status": "under_review"}).json()["status"] == "under_review"
+    _sync(db_session, project, [r0])
+    assert db_session.get(ProjectSubmittal, row.id).status.value == "under_review"
+
+    # the consultant's reply moves it on (here printed on a form filed loose in
+    # the revision's folder; in the Submitted/Received layout it is the Received half)
+    _sync(db_session, project, [_reading("EP-30990-MAS-FA", 0, "resubmit", system="FAS", maker="EDWARDS",
+                                         relative="FA/R0/R0.pdf")])
+    assert db_session.get(ProjectSubmittal, row.id).status.value == "rejected"

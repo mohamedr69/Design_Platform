@@ -624,6 +624,83 @@ class ProjectFloorSchedule(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
 
 
+class ProjectRedesign(Base):
+    """Drawings Redesign of one fire alarm IFC drawing (app.redesign): the
+    accepted review changes, each placed on the drawing -- by the model,
+    adjusted by the engineer -- and the redesigned copy AutoCAD made."""
+
+    __tablename__ = "project_redesign"
+    __table_args__ = (UniqueConstraint("project_id", "drawing_id", name="uq_redesign_drawing"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), nullable=False, index=True)
+    drawing_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    # "none" | "planning" | "planned" | "failed"
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="none")
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # The DWG the changes are made on, by its hash: the one the review plotted.
+    source_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    changes: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    symbols: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    calls: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # The redesigned copy: "none" | "making" | "made" | "failed"
+    output_status: Mapped[str] = mapped_column(String(16), nullable=False, default="none")
+    output_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    output_path: Mapped[str | None] = mapped_column(Text, nullable=True)        # the platform's copy
+    output_relative: Mapped[str | None] = mapped_column(Text, nullable=True)    # where it was filed in the project folder
+    output_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    output_changes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
+
+
+class ProjectDraftsmanAssignment(Base):
+    """Drawings > Assign Draftsman: the ten things a draftsman is handed
+    before the shop drawings start, where each stands, and every time the
+    project was assigned (app.services.draftsman_assignment). One row per
+    project; the assignments are its log."""
+
+    __tablename__ = "project_draftsman_assignment"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), nullable=False, unique=True)
+    # The item keys the engineer said to go without, and the ones they
+    # marked ready that the platform cannot check for itself.
+    skipped: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    ready: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    draftsman_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    draftsman_email: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    # [{at, by, name, email, items: [{key, name, state, detail}], files: [names]}], newest last.
+    log: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
+
+
+class ProjectShopBoq(Base):
+    """The BOQ as per Shop Drawings: the floor-wise quantities the shop
+    drawings carry, the engineer's to edit.
+
+    Made from the BOQ as per IFC Drawings (`app.services.shop_boq`) and
+    then changed by hand as the shop drawings move on, in the floor-wise
+    schedule's own form (`app.services.floor_schedule.Schedule`, as JSON),
+    so the amplifier and power calculations read it as they read that.
+    One row per project.
+    """
+
+    __tablename__ = "project_shop_boq"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), nullable=False, unique=True)
+    result: Mapped[dict] = mapped_column(JSON, nullable=False)
+    # What it was made from: {"drawings": [{id, filename, revision}], "made_at"}.
+    source: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
+
+    # The page names its source as the workbook's file name is named.
+    file_name = "BOQ as per Shop Drawings"
+
+
 class ProjectAmplifierDesign(Base):
     """What a project sets its voice evacuation speakers to, and anything
     an engineer has adjusted by hand.
@@ -647,6 +724,9 @@ class ProjectAmplifierDesign(Base):
     # power calculation is the other half of the same design, so it is kept
     # on the same row rather than in a table of its own.
     currents: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    # {APS cabinet: floor} -- where the engineer puts each cabinet, with its
+    # amplifiers ("APS-1": "Ground floor"). Not derivable: it is a decision.
+    locations: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict, server_default="{}")
     created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
 
@@ -2275,3 +2355,88 @@ class EpArchiveFolder(Base):
     last_seen_scan_token: Mapped[str | None] = mapped_column(String(32), nullable=True)
 
     archive: Mapped["EpArchiveRoot"] = relationship(back_populates="folders")
+
+
+class ProjectFaInterfaces(Base):
+    """The project's Fire Alarm Interface Schedule (BOQ > FA Interfaces):
+    the third-party equipment the fire alarm system monitors or controls,
+    read off the other trades' IFC drawings (app.interfaces).
+
+    `sources` is what each drawing read showed -- one entry per file, with
+    its hash, sheets and the equipment its words name -- so a rescan reads
+    only the files that changed. What the engineer decided is kept apart,
+    in `decisions` (by row or verification item, keyed by where the item
+    is in its drawing, so a rescan keeps the answers) and `manual` (items
+    the engineer added, each with the drawing it was seen on). The
+    schedule itself is never stored: it is built from these on every read,
+    so its totals always match its lines."""
+
+    __tablename__ = "project_fa_interfaces"
+    __table_args__ = (UniqueConstraint("project_id", name="uq_project_fa_interfaces"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
+    sources: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    decisions: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    manual: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    scanned_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    scanned_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
+
+
+class ProjectDrawingReview(Base):
+    """The Drawings Review of one fire alarm IFC drawing (app.review): every
+    floor-plan sheet plotted, its named rooms looked at by the model against
+    the company's coverage rules, and the engineer's word on each finding.
+
+    `sheets` holds what the review read and what the model answered, sheet
+    by sheet and window by window, so a stopped review resumes where it was
+    and a finished one is read without asking again. `decisions` is the
+    engineer's: a finding accepted (an issue to fix) or dismissed, with why."""
+
+    __tablename__ = "project_drawing_reviews"
+    __table_args__ = (UniqueConstraint("project_id", "drawing_id", name="uq_project_drawing_review"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
+    drawing_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    # "idle" | "running" | "done" | "stopped" | "failed"
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="idle")
+    source_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    pdf_path: Mapped[str | None] = mapped_column(Text, nullable=True)
+    model: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    sheets: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    decisions: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    calls: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
+
+
+class ReviewRuling(Base):
+    """An engineer's word on a change the Drawings Review proposed -- not
+    needed, or confirmed -- kept company-wide and given to the model with
+    the coverage rules on every review after it, so the review learns what
+    the engineers want. A "not needed" ruling also settles the same change
+    in the same kind of room on the other floors at once."""
+
+    __tablename__ = "review_rulings"
+    __table_args__ = (UniqueConstraint("project_id", "drawing_id", "finding_id", name="uq_review_ruling_finding"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    drawing_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    finding_id: Mapped[str] = mapped_column(String(40), nullable=False)
+    # "dismissed" (not needed) | "accepted" (confirmed)
+    decision: Mapped[str] = mapped_column(String(16), nullable=False)
+    room: Mapped[str] = mapped_column(String(160), nullable=False, default="")
+    room_key: Mapped[str] = mapped_column(String(80), nullable=False, default="", index=True)
+    room_type: Mapped[str] = mapped_column(String(80), nullable=False, default="")
+    system: Mapped[str] = mapped_column(String(40), nullable=False)
+    action: Mapped[str] = mapped_column(String(16), nullable=False)
+    device: Mapped[str] = mapped_column(String(120), nullable=False, default="")
+    instruction: Mapped[str] = mapped_column(String(300), nullable=False, default="")
+    note: Mapped[str] = mapped_column(String(500), nullable=False, default="")
+    created_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, nullable=False)

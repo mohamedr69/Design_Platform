@@ -22,6 +22,7 @@ import { SyncDocumentsCard } from "../components/SyncDocumentsCard";
 import { FloorScheduleTab } from "../components/FloorScheduleTab";
 import IfcBoqTab from "../components/ifc/IfcBoqTab";
 import ComparisonTab from "../components/ifc/ComparisonTab";
+import InterfacesTab from "../components/interfaces/InterfacesTab";
 import { ExtractionReview } from "../components/ExtractionReview";
 import { AiCheckBadge, AiVerificationPanel } from "../components/AiVerificationPanel";
 import { StaleWriteNotice } from "../components/StaleWriteNotice";
@@ -38,12 +39,14 @@ const UNASSIGNED = " unassigned";
 /** Where a BOQ's quantities come from: the Design Sheet, the engineer's
  * floor-wise schedule, or the issued-for-construction drawings (fire alarm
  * for now; emergency lighting is next). */
-type SourceKey = "design" | "floor" | "ifc" | "compare";
+type SourceKey = "design" | "floor" | "ifc" | "shop" | "compare" | "interfaces";
 const SOURCES: { key: SourceKey; label: string; soon?: boolean }[] = [
   { key: "design", label: "As per Design Sheet" },
   { key: "floor", label: "BOQ Floor Wise" },
   { key: "ifc", label: "As per IFC Drawings" },
+  { key: "shop", label: "BOQ as per Shop Drawings" },
   { key: "compare", label: "Comparison" },
+  { key: "interfaces", label: "FA Interfaces" },
 ];
 
 const PAGE_SIZE = 25;
@@ -596,6 +599,8 @@ export function ProjectBoqPage() {
 
       {source === "floor" ? (
         <FloorScheduleTab projectId={project.id} canEdit={canEdit} />
+      ) : source === "shop" ? (
+        <FloorScheduleTab key="shop" projectId={project.id} canEdit={canEdit} kind="shop" />
       ) : source === "ifc" ? (
         <div className="mt-4">
           <IfcBoqTab projectId={project.id} canEdit={canEdit} />
@@ -603,6 +608,10 @@ export function ProjectBoqPage() {
       ) : source === "compare" ? (
         <div className="mt-4">
           <ComparisonTab projectId={project.id} />
+        </div>
+      ) : source === "interfaces" ? (
+        <div className="mt-4">
+          <InterfacesTab projectId={project.id} canEdit={canEdit} />
         </div>
       ) : (
         <>

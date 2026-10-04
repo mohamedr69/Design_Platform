@@ -1,0 +1,1818 @@
+diff -ruN '--exclude=__pycache__' base/backend/app/ifc/services/runners.py cand/backend/app/ifc/services/runners.py
+--- base/backend/app/ifc/services/runners.py	2026-10-03 17:38:36.000000000 +0400
++++ cand/backend/app/ifc/services/runners.py	2026-10-03 21:41:28.921318500 +0400
+@@ -272,8 +272,11 @@
+ 
+         project = session.get(Project, job.project_id)
+         p = job.params or {}
++        # an Apply is told what it was asked for and when, so a recovered or stale job
++        # refuses to run instead of making the drawing again (RD-M2)
+         step = redesign.plan if kind == "plan" else (
+-            lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), **kw))
++            lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), request=p,
++                                                                 job_id=job.id, job_created_at=job.created_at, **kw))
+         try:
+             return step(session, project, p["drawing_id"], check=ctx.check,
+                         progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage=kind))
+diff -ruN '--exclude=__pycache__' base/backend/app/redesign/cad.py cand/backend/app/redesign/cad.py
+--- base/backend/app/redesign/cad.py	2026-10-03 17:38:41.000000000 +0400
++++ cand/backend/app/redesign/cad.py	2026-10-03 21:38:23.182726000 +0400
+@@ -21,19 +21,43 @@
+ not enough: each block brings its own), so each insert is made once at 1 to
+ learn the factor, then at the scale wanted divided by it; -INSERT "_S" scale first works for every block, uniform or
+ not; ATTREQ 0 keeps the attributes at their defaults.
++
++Fail closed (RD-M2, 3 October 2026). A script line that errors only ends
++that line -- the Core Console reads on -- so every step is its own line,
++guarded by `ep_failed`, and checked by the next one:
++  * an insert is good only when (entlast) is a NEW INSERT of the expected
++    block; only that entity is measured and erased again -- never an
++    unknown one (RD-M1 F004);
++  * an erase is made only on an INSERT of the expected block, in model
++    space, at the expected insertion point;
++  * markers and notes must be made (entmake returns the list);
++  * QSAVE runs only when nothing failed and every insert and erase was
++    counted; otherwise nothing is saved.
++The outcome is printed as markers built at run time with (strcat ...), so
++the Core Console's echo of the script itself can never read as an outcome:
++  EP-RD-FAIL:<nonce>:<step>:<change>    a step that failed
++  EP-RD-OK:<nonce>:<inserts>:<erases>   saved, with what was counted
++  EP-RD-NOSAVE:<nonce>                  not saved
+ """
+ from __future__ import annotations
+ 
+ import math
++import secrets
+ import shutil
+ import subprocess
++import time
++from dataclasses import dataclass, field
+ from pathlib import Path
+ 
+ from app.ifc.dxf import convert
+ 
+ TIMEOUT_S = 1200
++POLL_S = 1.0
+ LAYERS = {"add": ("EP-REDESIGN-ADD", 3), "remove": ("EP-REDESIGN-REMOVE", 1), "replace": ("EP-REDESIGN-REPLACE", 30)}
+ LABEL = {"add": "ADD", "remove": "REMOVE", "replace": "REPLACE"}
++# An erased symbol must be within this of the insertion point the reading found, in drawing units.
++ERASE_TOLERANCE = 0.01
++MARK = "EP-RD"
+ 
+ 
+ class CadError(RuntimeError):
+@@ -49,13 +73,42 @@
+     return f"{float(value):.6f}"
+ 
+ 
+-def script_lines(changes: list[dict], marker: float, text_height: float) -> list[str]:
+-    """The AutoLISP for the changes. `changes`: {action, remove_handle,
+-    insert: {block, layer, scale, rotation, model: [x, y]} or None, at:
+-    [x, y] (where the marker goes), label}."""
++def _marker(kind: str, *rest: str) -> str:
++    """LISP that prints EP-RD-<kind>:<rest...> built at run time: the
++    script's own text never contains the joined marker."""
++    parts = " ".join(rest)
++    return f'(princ (strcat "\\n" "{MARK}" "-{kind}:" {parts} "\\n"))'
++
++
++def expected_counts(changes: list[dict]) -> tuple[int, int]:
++    """(inserts, erases) the script must count before it saves."""
++    return (sum(1 for c in changes if c.get("insert")), sum(1 for c in changes if c.get("remove_handle")))
++
++
++def script_lines(changes: list[dict], marker: float, text_height: float, nonce: str = "0") -> list[str]:
++    """The AutoLISP for the changes. `changes`: {id, action, remove_handle,
++    remove_block, remove_point, insert: {block, layer, scale, rotation,
++    model: [x, y], library} or None, at: [x, y] (where the marker goes),
++    label, note}."""
++    n_ins, n_del = expected_counts(changes)
+     lines = ["_.FILEDIA", "0", "_.CMDDIA", "0",
+              '(setvar "TILEMODE" 1)', '(setvar "CMDECHO" 0)', '(setvar "ATTREQ" 0)', '(setvar "ATTDIA" 0)',
+-             '(setvar "OSMODE" 0)', '(setq ep_layer (getvar "CLAYER"))', '(setq ep_units (getvar "INSUNITS"))']
++             '(setvar "OSMODE" 0)', '(setq ep_layer (getvar "CLAYER"))', '(setq ep_units (getvar "INSUNITS"))',
++             f"(setq ep_nonce {_q(nonce)} ep_failed nil ep_saved nil ep_ins 0 ep_del 0)",
++             f'(defun ep_fail (what id) (setq ep_failed T) {_marker("FAIL", "ep_nonce", chr(34) + ":" + chr(34), "what", chr(34) + ":" + chr(34), "id")} (princ))',
++             # the newest entity, when it is a new INSERT of the block; else the step fails
++             "(defun ep_new_insert (before blk id / e d) (setq e (entlast)) "
++             "(if (and e (not (eq e before)) (setq d (entget e)) (= (cdr (assoc 0 d)) \"INSERT\") "
++             "(= (strcase (cdr (assoc 2 d))) (strcase blk))) e (progn (ep_fail \"insert\" id) nil)))",
++             # an erase only of the expected symbol: an INSERT of the block, in model space, where it was read
++             "(defun ep_erase (h blk x y tol id / e d p) (setq e (handent h)) "
++             "(if (and e (setq d (entget e)) (= (cdr (assoc 0 d)) \"INSERT\") "
++             "(or (not blk) (= (strcase (cdr (assoc 2 d))) (strcase blk))) "
++             "(/= (cdr (assoc 67 d)) 1) (= (strcase (cond ((cdr (assoc 410 d))) (\"MODEL\"))) \"MODEL\") "
++             "(or (not x) (and (setq p (cdr (assoc 10 d))) (< (distance (list x y) (list (car p) (cadr p))) tol)))) "
++             "(progn (entdel e) (if (entget e) (ep_fail \"erase-verify\" id) (setq ep_del (1+ ep_del)))) "
++             "(ep_fail \"erase-target\" id)))",
++             "(defun ep_make (lst id) (if (not (entmake lst)) (ep_fail \"entmake\" id)))"]
+     for name, colour in LAYERS.values():
+         lines.append(f'(if (not (tblsearch "LAYER" {_q(name)})) (entmake (list (cons 0 "LAYER") '
+                      f'(cons 100 "AcDbSymbolTableRecord") (cons 100 "AcDbLayerTableRecord") (cons 2 {_q(name)}) '
+@@ -81,13 +134,13 @@
+                          "(entmake (reverse out)) (setq e (entnext e))) T)))")
+         x, y = make["at"]
+         new = _q(change["insert"]["block"])
+-        lines.append(f'(if (ep_copy {_q(make["from"])} {new}) (progn '
++        lines.append(f'(if (not ep_failed) (if (ep_copy {_q(make["from"])} {new}) (progn '
+                      # the letters as the block's own letter ("E"): its layer, colour and style
+                      f'(entmake (list (cons 0 "TEXT") (cons 8 (if ep_txt (cdr (assoc 8 ep_txt)) "0")) '
+                      f'(cons 62 (if (and ep_txt (assoc 62 ep_txt)) (cdr (assoc 62 ep_txt)) 0)) '
+                      f'(cons 7 (if ep_txt (cdr (assoc 7 ep_txt)) "Standard")) (list 10 {_n(x)} {_n(y)} 0.0) '
+                      f'(list 11 {_n(x)} {_n(y)} 0.0) (cons 40 {_n(make["height"])}) (cons 1 {_q(make["text"])}) '
+-                     f'(cons 72 1) (cons 73 0))) (entmake (list (cons 0 "ENDBLK")))))')
++                     f'(cons 72 1) (cons 73 0))) (entmake (list (cons 0 "ENDBLK"))))))')
+     # markers close together: their labels one under the other, not on top of each other
+     rows: list[tuple[float, float]] = []
+     lifts = []
+@@ -96,29 +149,37 @@
+         n = sum(1 for (x, y) in rows if abs(x - mx) < 12 * text_height and abs(y - my) < 3 * text_height)
+         rows.append((mx, my))
+         lifts.append(n)
+-    for change, lift in zip(changes, lifts):
++    for k, (change, lift) in enumerate(zip(changes, lifts)):
+         action = change["action"]
++        cid = _q(change.get("id") or f"#{k + 1}")
+         if change.get("remove_handle"):
+-            h = _q(change["remove_handle"])
+-            lines.append(f"(if (handent {h}) (entdel (handent {h})))")
++            point = change.get("remove_point")
++            px, py = (_n(point[0]), _n(point[1])) if point else ("nil", "nil")
++            blk = _q(change["remove_block"]) if change.get("remove_block") else "nil"
++            lines.append(f"(if (not ep_failed) (ep_erase {_q(change['remove_handle'])} {blk} {px} {py} "
++                         f"{_n(ERASE_TOLERANCE)} {cid}))")
+         insert = change.get("insert")
+         if insert:
+             x, y = insert["model"]
+-            if insert.get("layer"):
+-                lines.append(f'(if (tblsearch "LAYER" {_q(insert["layer"])}) (setvar "CLAYER" {_q(insert["layer"])}))')
+-            # AutoCAD scales an insert by the block's own units (by 1/25.4 for
+-            # one, by 39.37 for another): inserted once at 1 to learn that
+-            # factor, then again at the scale wanted divided by it.
++            block = _q(insert["block"])
+             point, rot = f"(list {_n(x)} {_n(y)} 0.0)", _n(insert.get("rotation") or 0)
+-            name = _q(insert["block"])
++            name = block
+             if insert.get("library"):
+                 # a block of the platform's library (the interface modules), brought in
+                 # from its file only where the drawing has none of the name: once
+-                name = f'(if (tblsearch "BLOCK" {name}) {name} {_q(insert["block"] + "=" + insert["library"])})'
+-            lines.append(f'(command "_.-INSERT" {name} "_S" 1.0 {point} {rot})')
+-            lines.append('(setq ep_f (cdr (assoc 41 (entget (entlast)))))')
+-            lines.append("(entdel (entlast))")
+-            lines.append(f'(command "_.-INSERT" {_q(insert["block"])} "_S" (/ {_n(insert["scale"])} ep_f) {point} {rot})')
++                name = f'(if (tblsearch "BLOCK" {block}) {block} {_q(insert["block"] + "=" + insert["library"])})'
++            layer = (f'(if (tblsearch "LAYER" {_q(insert["layer"])}) (setvar "CLAYER" {_q(insert["layer"])}))'
++                     if insert.get("layer") else "")
++            lines.append(f"(if (not ep_failed) (progn (setq ep_b (entlast)) {layer}))")
++            # AutoCAD scales an insert by the block's own units (by 1/25.4 for
++            # one, by 39.37 for another): inserted once at 1 to learn that
++            # factor -- that new insert, checked, is measured and erased again --
++            # then at the scale wanted divided by it, checked again.
++            lines.append(f'(if (not ep_failed) (command "_.-INSERT" {name} "_S" 1.0 {point} {rot}))')
++            lines.append(f"(if (not ep_failed) (if (setq ep_e (ep_new_insert ep_b {block} {cid})) "
++                         "(progn (setq ep_f (cdr (assoc 41 (entget ep_e)))) (entdel ep_e) (setq ep_b (entlast)))))")
++            lines.append(f'(if (not ep_failed) (command "_.-INSERT" {block} "_S" (/ {_n(insert["scale"])} ep_f) {point} {rot}))')
++            lines.append(f"(if (not ep_failed) (if (ep_new_insert ep_b {block} {cid}) (setq ep_ins (1+ ep_ins))))")
+             lines.append('(setvar "CLAYER" ep_layer)')
+         note = change.get("note")
+         if note:
+@@ -126,51 +187,117 @@
+             # rotation in radians, as AutoLISP has it; right-aligned on its point when it runs back to it
+             turn = f"(cons 50 {_n(math.radians(note.get('rotation') or 0))}) "
+             align = (f"(cons 72 2) (list 11 {_n(nx)} {_n(ny)} 0.0) " if note.get("align") == "right" else "")
+-            lines.append(f"(entmake (list (cons 0 \"TEXT\") (cons 8 {_q(note['layer'])}) (list 10 {_n(nx)} {_n(ny)} 0.0) "
+-                         f"(cons 40 {_n(note['height'])}) {turn}{align}(cons 1 {_q(note['text'][:60])})))")
++            lines.append(f"(if (not ep_failed) (ep_make (list (cons 0 \"TEXT\") (cons 8 {_q(note['layer'])}) "
++                         f"(list 10 {_n(nx)} {_n(ny)} 0.0) (cons 40 {_n(note['height'])}) {turn}{align}"
++                         f"(cons 1 {_q(note['text'][:60])})) {cid}))")
+         layer, colour = LAYERS[action]
+         mx, my = change["at"]
+-        lines.append(f"(entmake (list (cons 0 \"CIRCLE\") (cons 8 {_q(layer)}) (list 10 {_n(mx)} {_n(my)} 0.0) "
+-                     f"(cons 40 {_n(marker)}) (cons 62 {colour})))")
++        lines.append(f"(if (not ep_failed) (ep_make (list (cons 0 \"CIRCLE\") (cons 8 {_q(layer)}) "
++                     f"(list 10 {_n(mx)} {_n(my)} 0.0) (cons 40 {_n(marker)}) (cons 62 {colour})) {cid}))")
+         ty = my + marker * 0.6 - lift * text_height * 1.8
+-        lines.append(f"(entmake (list (cons 0 \"TEXT\") (cons 8 {_q(layer)}) (list 10 {_n(mx + marker * 1.1)} "
+-                     f"{_n(ty)} 0.0) (cons 40 {_n(text_height)}) (cons 1 {_q(change['label'][:120])}) "
+-                     f"(cons 62 {colour})))")
+-    lines += ['(setvar "INSUNITS" ep_units)', '(setvar "CLAYER" ep_layer)', "_.QSAVE", "_.QUIT", "_Y", ""]
++        lines.append(f"(if (not ep_failed) (ep_make (list (cons 0 \"TEXT\") (cons 8 {_q(layer)}) "
++                     f"(list 10 {_n(mx + marker * 1.1)} {_n(ty)} 0.0) (cons 40 {_n(text_height)}) "
++                     f"(cons 1 {_q(change['label'][:120])}) (cons 62 {colour})) {cid}))")
++    lines += ['(setvar "INSUNITS" ep_units)', '(setvar "CLAYER" ep_layer)',
++              # saved only when nothing failed and every insert and erase was counted
++              f'(if (and (not ep_failed) (or (/= ep_ins {n_ins}) (/= ep_del {n_del}))) (ep_fail "count" "all"))',
++              '(if (not ep_failed) (progn (command "_.QSAVE") (setq ep_saved T)))',
++              "(if ep_saved " + _marker("OK", "ep_nonce", chr(34) + ":" + chr(34), "(itoa ep_ins)", chr(34) + ":" + chr(34),
++                                        "(itoa ep_del)")
++              + " " + _marker("NOSAVE", "ep_nonce") + ")",
++              # not saved: QUIT discards the copy's changes; saved: nothing is left to ask
++              "_.QUIT", "_Y", ""]
+     return lines
+ 
+ 
+-def apply(source: Path, out: Path, changes: list[dict], marker: float, text_height: float, work: Path) -> str:
+-    """Copy `source`, make the changes on the copy, save it as `out`.
+-    Returns AutoCAD's log. Raises CadError when AutoCAD is not here or did
+-    not save."""
++@dataclass
++class CadRun:
++    """One AutoCAD run on the copy in `work`."""
++    work: Path
++    copy: Path
++    script: Path
++    log_path: Path
++    log: str
++    nonce: str
++    returncode: int | None
++    expected_inserts: int
++    expected_erases: int
++    seconds: float
++    source_sha256: str = ""
++    copy_sha256: str = ""
++    extra: dict = field(default_factory=dict)
++
++
++def _command(converter, copy: Path, script: Path) -> list[str]:
++    """The Core Console's command line (a seam for tests)."""
++    return [converter.path, "/i", str(copy), "/s", str(script), "/l", "en-US"]
++
++
++def _sha(path: Path) -> str:
++    import hashlib
++
++    h = hashlib.sha256()
++    with open(path, "rb") as f:
++        for chunk in iter(lambda: f.read(1 << 20), b""):
++            h.update(chunk)
++    return h.hexdigest()
++
++
++def run(source: Path, work: Path, changes: list[dict], marker: float, text_height: float, *,
++        check=None, nonce: str | None = None) -> CadRun:
++    """Copy `source` into `work` (a folder of this run's own), make the
++    changes on the copy and return the run -- its full log kept in
++    `work/autocad.log`. Nothing is promoted here: the caller verifies.
++    `check` is called before the run and about once a second while AutoCAD
++    works; when it raises (a cancel), AutoCAD is stopped and the error
++    passes on, the log kept."""
+     converter = convert.find_converter()
+     if converter is None or converter.kind != "accoreconsole":
+         raise CadError("Making the redesigned drawing needs AutoCAD (its Core Console) on the PC the IFC worker runs on.")
+     work = work.resolve()
+-    work.mkdir(parents=True, exist_ok=True)
++    work.mkdir(parents=True, exist_ok=False)          # a run's own folder, never shared
++    source = source.resolve()
+     copy = work / f"redesign{source.suffix.lower()}"
++    if copy == source:
++        raise CadError("AutoCAD must work on a copy, never on the source drawing.")
+     shutil.copyfile(source, copy)
+-    before = copy.stat().st_mtime
++    nonce = nonce or secrets.token_hex(8)
+     script = work / "redesign.scr"
+     # Plain LF line ends, as bytes (see convert._with_accoreconsole).
+-    script.write_bytes("\n".join(script_lines(changes, marker, text_height)).encode("utf-8"))
++    script.write_bytes("\n".join(script_lines(changes, marker, text_height, nonce)).encode("utf-8"))
++    n_ins, n_del = expected_counts(changes)
++    log_path = work / "autocad.log"
++    run_ = CadRun(work=work, copy=copy, script=script, log_path=log_path, log="", nonce=nonce, returncode=None,
++                  expected_inserts=n_ins, expected_erases=n_del, seconds=0.0, source_sha256=_sha(source))
++    if check:
++        check()
++    t0 = time.monotonic()
++    proc = subprocess.Popen(_command(converter, copy, script), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
++                            cwd=str(work), creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
++    out = b""
+     try:
+-        proc = subprocess.run([converter.path, "/i", str(copy), "/s", str(script), "/l", "en-US"],
+-                              capture_output=True, timeout=TIMEOUT_S, cwd=str(work),
+-                              creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+-    except subprocess.TimeoutExpired as exc:
+-        raise CadError(f"AutoCAD did not finish within {TIMEOUT_S // 60} minutes.") from exc
+-    log = convert._decode(proc.stdout) + convert._decode(proc.stderr)
+-    if copy.suffix.lower() == ".dxf":
+-        raise CadError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
+-    if not copy.is_file() or copy.stat().st_mtime <= before:
+-        raise CadError(f"AutoCAD did not save the redesigned drawing. Its last words:\n{convert._tail(log)}")
+-    out.parent.mkdir(parents=True, exist_ok=True)
+-    shutil.copyfile(copy, out)
+-    for leftover in work.iterdir():
++        while True:
++            try:
++                out, _err = proc.communicate(timeout=POLL_S)
++                break
++            except subprocess.TimeoutExpired:
++                if time.monotonic() - t0 > TIMEOUT_S:
++                    raise CadError(f"AutoCAD did not finish within {TIMEOUT_S // 60} minutes.") from None
++                if check:
++                    check()
++    except BaseException:
++        # cancelled, timed out or interrupted: AutoCAD stopped, its log kept, nothing promoted
++        proc.kill()
+         try:
+-            leftover.unlink()
+-        except OSError:
+-            pass
+-    return log
++            out, _err = proc.communicate(timeout=30)
++        except Exception:  # noqa: BLE001
++            out = out or b""
++        run_.log = convert._decode(out or b"")
++        log_path.write_text(run_.log, encoding="utf-8", errors="replace")
++        raise
++    run_.seconds = time.monotonic() - t0
++    run_.returncode = proc.returncode
++    run_.log = convert._decode(out or b"")
++    log_path.write_text(run_.log, encoding="utf-8", errors="replace")
++    run_.copy_sha256 = _sha(copy) if copy.is_file() else ""
++    return run_
+diff -ruN '--exclude=__pycache__' base/backend/app/redesign/service.py cand/backend/app/redesign/service.py
+--- base/backend/app/redesign/service.py	2026-10-03 17:38:41.000000000 +0400
++++ cand/backend/app/redesign/service.py	2026-10-03 21:59:49.100533000 +0400
+@@ -34,8 +34,8 @@
+ import statistics
+ from collections import Counter, defaultdict
+ from concurrent.futures import ThreadPoolExecutor, as_completed
+-from datetime import datetime
+-from pathlib import Path
++from datetime import datetime, timezone
++from pathlib import Path, PureWindowsPath
+ 
+ import pymupdf
+ from PIL import Image, ImageDraw
+@@ -67,6 +67,22 @@
+     pass
+ 
+ 
++class ApplyError(RedesignError):
++    """An Apply that cannot be made safely: refused before AutoCAD starts,
++    or its result not promoted."""
++
++
++class ApplyRefused(ApplyError):
++    """An Apply that must not run at all: already made, or asked for a
++    drawing or a set of approvals that has changed since (RD-M2). The
++    redesign's output is left as it is."""
++
++
++class ApplyStale(ApplyError):
++    """The approvals or placings changed while AutoCAD worked: the result
++    is kept only as evidence, never published (RD-M2)."""
++
++
+ def state(db: Session, project: Project, drawing_id: int) -> ProjectRedesign:
+     row = (db.query(ProjectRedesign)
+            .filter(ProjectRedesign.project_id == project.id, ProjectRedesign.drawing_id == drawing_id).first())
+@@ -404,6 +420,27 @@
+     return json.loads((LIBRARY / "modules.json").read_text(encoding="utf-8"))
+ 
+ 
++def module_library(code: str | None, change_id: str, library: Path | None = None) -> Path:
++    """The module's block file in THIS installation's library, by its
++    code -- never the path a change stored when it was placed, which is
++    another PC's on a copied database (RD-M1 F001; platform owner, RD-M2:
++    stored paths stay as history). Refused, before AutoCAD starts, for a
++    code the library does not list, a file outside the library folder, or
++    one that is missing."""
++    root = (library or LIBRARY).resolve()
++    codes = set(json.loads((root / "modules.json").read_text(encoding="utf-8"))["modules"]) \
++        if (root / "modules.json").is_file() else set()
++    if not code or not re.fullmatch(r"[A-Z0-9]{1,8}", code) or code not in codes:
++        raise ApplyError(f"Change {change_id}: module code {code!r} is not in this installation's Redesign library.")
++    path = (root / f"{code}.dwg").resolve()
++    if path.parent != root or path.suffix.lower() != ".dwg":
++        raise ApplyError(f"Change {change_id}: the {code} module's file is not inside the Redesign library.")
++    if not path.is_file():
++        raise ApplyError(f"Change {change_id}: the {code} module's file is missing from this installation's "
++                         "Redesign library.")
++    return path
++
++
+ def _paper_scale(sheet: dict) -> float | None:
+     """The scale a library block (the sample's, 1:100 in mm) is inserted at
+     so it is as big on this sheet's paper as on the sample's."""
+@@ -664,11 +701,23 @@
+     return n
+ 
+ 
++def requires_confirmation(c: dict) -> bool:
++    """An added symbol placed from a plot tied to the drawing worse than
++    CONFIRM_ABOVE_M, not moved by the engineer: its spot is the engineer's
++    to confirm before it is drawn."""
++    residual = c.get("residual")
++    return bool(c.get("insert") and c.get("action") == "add" and not c.get("moved")
++                and residual is not None and residual > CONFIRM_ABOVE_M)
++
++
+ def _drawn(c: dict) -> bool:
+-    """Made on the copy: an approved change, or a proposed one of the review's
+-    -- the interface modules only once approved."""
+-    return (c["status"] == "approved" or (c["status"] == "proposed" and c.get("source") != INTERFACE)) \
+-        and bool(c.get("remove") or c.get("insert"))
++    """Made on the copy: only a change the engineer explicitly approved
++    (platform owner, RD-M2: never a proposed, skipped or failed one, of
++    the review or of the interface schedule), with something to make, and
++    -- where its spot needs it -- the spot confirmed."""
++    if c.get("status") != "approved" or not (c.get("remove") or c.get("insert")):
++        return False
++    return not requires_confirmation(c) or c.get("confirmed") is True
+ 
+ 
+ # --- planning ---------------------------------------------------------------------------
+@@ -1195,9 +1244,11 @@
+ 
+ def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, status: str | None = None,
+            candidate: int | None = None, symbol: int | None = None, point: list[float] | None = None,
+-           rotation: float | None = None) -> dict:
++           rotation: float | None = None, confirmed: bool | None = None) -> dict:
+     """Approve, skip, move (a point on the change's picture, as fractions),
+-    pick another symbol to erase or to insert."""
++    pick another symbol to erase or to insert, or confirm a spot the plot
++    placed less exactly than CONFIRM_ABOVE_M (RD-M2: such a change is drawn
++    only once confirmed; placing it again clears the confirmation)."""
+     row = state(db, project, drawing_id)
+     changes = [dict(c) for c in row.changes or []]
+     change = next((c for c in changes if c["id"] == change_id), None)
+@@ -1231,6 +1282,7 @@
+             answer["y"] = (page[1] - box[1]) / (box[3] - box[1])
+         change["ai"] = answer
+         change["edited"] = True
++        change.pop("confirmed", None)
+         was = change["status"]
+         change["status"] = "pending"
+         drawing = db.get(ProjectIfcDrawing, drawing_id)
+@@ -1242,6 +1294,8 @@
+         coordinate(changes, {sh["index"]: sh for sh in review_row.sheets or []}, walls, row.symbols or [])
+         if was == "approved" and change["status"] == "proposed":
+             change["status"] = "approved"          # an approved change, adjusted, stays approved
++    if confirmed is not None:
++        change["confirmed"] = bool(confirmed)
+     if status:
+         change["status"] = status
+     row.changes = changes
+@@ -1279,13 +1333,27 @@
+     return {"m": 1.0, "mm": 1000.0, "cm": 100.0, "in": 39.37, "ft": 3.281}.get(units, 1.0)
+ 
+ 
+-def to_cad(changes: list[dict]) -> list[dict]:
++def to_cad(changes: list[dict], library: Path | None = None) -> list[dict]:
+     """The placed changes as AutoCAD makes them (app.redesign.cad): what to
+-    erase by handle, what to insert, where the marker goes and what it says."""
++    erase by handle (with the block and insertion point it must have), what
++    to insert, where the marker goes and what it says. An interface
++    module's block file is this installation's (module_library); the path
++    the change stored is never used."""
+     out = []
+-    for c in changes:
++    for k, c in enumerate(changes):
++        cid = str(c.get("id") or f"#{k + 1}")
+         remove, insert = c.get("remove"), c.get("insert")
++        if insert and insert.get("block") and (c.get("source") == INTERFACE or insert.get("library")):
++            code = (c.get("interface") or {}).get("code")
++            if not code:
++                raise ApplyError(f"Change {cid}: a library block with no module code.")
++            insert = {**insert, "library": module_library(code, cid, library).as_posix()}
+         handle = remove["handle"] if remove and remove.get("erasable") else None
++        remove_point = None
++        if handle:
++            candidate = next((x for x in c.get("candidates") or [] if x.get("n") == remove.get("n")
++                              and x.get("handle") == handle), None)
++            remove_point = (candidate or {}).get("insert_point")
+         label = f"{cad.LABEL[c['action']]}: {c['device'] or (insert or remove or {}).get('name') or ''}"
+         if remove and not remove.get("erasable"):
+             label += " (erase by hand)"
+@@ -1295,7 +1363,8 @@
+         if note:
+             face = c["interface"]
+             label = f"{cad.LABEL[c['action']]}: {face['code']} FOR {face['for']}"
+-        out.append({"action": c["action"], "remove_handle": handle,
++        out.append({"id": cid, "action": c["action"], "remove_handle": handle,
++                    "remove_block": (remove or {}).get("block") if handle else None, "remove_point": remove_point,
+                     "insert": insert if insert and insert.get("block") else None,
+                     "at": (insert or {}).get("seen") or (insert or remove)["model"], "label": label, "note": note})
+     return out
+@@ -1357,55 +1426,274 @@
+     return again
+ 
+ 
+-def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *, progress=None, check=None) -> dict:
+-    """Make the approved and proposed changes on a copy of the DWG the review
+-    plotted, and file it in the project folder (03- Drawings/Redesign)."""
++# --- Apply: fail closed, approved only, never twice (RD-M2, 3 October 2026) ----------------
++# Owner decisions: draw only explicitly approved changes; write a new, uniquely
++# named platform copy and never the project archive (a controlled promotion to
++# "03- Drawings/Redesign" is a later milestone); resolve CT1/CT2/CR from this
++# installation's library; refuse to publish when the approvals changed while
++# AutoCAD worked.
++
++RUNS = "runs"                    # <uploads>/EP-<n>/redesign/runs/<apply id>/: each Apply's own work folder
++
++
++def _drawn_fingerprint_part(c: dict) -> dict:
++    insert, remove = c.get("insert") or {}, c.get("remove") or {}
++    return {"id": c["id"], "status": c.get("status"), "confirmed": c.get("confirmed") is True,
++            "needs_confirmation": requires_confirmation(c), "action": c.get("action"),
++            "moved": bool(c.get("moved")), "edited": bool(c.get("edited")),
++            "code": (c.get("interface") or {}).get("code"),
++            "remove": {k: remove.get(k) for k in ("n", "handle", "block", "erasable")} if remove else None,
++            "insert": {k: insert.get(k) for k in ("block", "layer", "scale", "rotation", "model", "seen", "make")}
++            if insert else None}
++
++
++def content_fingerprint(row: ProjectRedesign, source_sha256: str | None) -> str:
++    """The decision snapshot an Apply works from: the source drawing, the
++    approved drawn set as it would be made, and every change's status and
++    confirmation -- any approval or placing changed makes another one."""
++    drawn = sorted((c for c in row.changes or [] if _drawn(c)), key=lambda c: str(c["id"]))
++    payload = {"source": source_sha256,
++               "drawn": [_drawn_fingerprint_part(c) for c in drawn],
++               "decisions": sorted([str(c["id"]), str(c.get("status")), c.get("confirmed") is True]
++                                   for c in row.changes or [])}
++    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
++
++
++def _snapshot(row: ProjectRedesign, source_sha256: str | None) -> dict:
++    return {"content": content_fingerprint(row, source_sha256),
++            "updated_at": row.updated_at.isoformat() if row.updated_at else None}
++
++
++def apply_request(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
++    """What an Apply job is asked for, kept in its params: the source and the
++    decision snapshot at the moment the engineer pressed the button."""
++    row = state(db, project, drawing.id)
++    return {"source_sha256": row.source_sha256, "fingerprint": content_fingerprint(row, row.source_sha256),
++            "drawn": sum(1 for c in row.changes or [] if _drawn(c))}
++
++
++def _refusal(db: Session, row: ProjectRedesign, request: dict, job_id: int | None, job_created_at) -> str | None:
++    """Why this Apply must not run at all, or None. Checked before anything
++    is touched, so a refusal leaves the redesign's output as it is."""
++    from app.models import BackgroundJob
++
++    if job_created_at is not None and row.output_status == "made" and row.output_at and row.output_at > job_created_at:
++        # a recovered job whose work finished before its worker stopped (RD-M1 F017)
++        return (f"Refused: this drawing's redesigned copy was already made at {row.output_at:%Y-%m-%d %H:%M:%S} UTC, "
++                "after this Apply was asked for. Nothing was run again.")
++    if request.get("source_sha256") and request["source_sha256"] != row.source_sha256:
++        return "Refused: the drawing changed since this Apply was asked for. Ask for a new Apply."
++    current = content_fingerprint(row, row.source_sha256)
++    if request.get("fingerprint") and request["fingerprint"] != current:
++        return ("Refused: approvals or placings changed since this Apply was asked for. "
++                "Check the changes and ask for a new Apply.")
++    done = (db.query(BackgroundJob)
++            .filter(BackgroundJob.project_id == row.project_id, BackgroundJob.kind == KIND_APPLY,
++                    BackgroundJob.status == "succeeded")
++            .order_by(BackgroundJob.id.desc()).all())
++    for job in done:
++        result = job.result or {}
++        if job.id != job_id and result.get("fingerprint") == current and result.get("drawing_id") == row.drawing_id \
++                and result.get("path") and output_file_for(result["path"], None) is not None:
++            return (f"Refused: this exact set of approved changes was already made by job {job.id} "
++                    f"({Path(result['path']).name}). Nothing was run again.")
++    return None
++
++
++def output_file_for(stored: str | None, ep_number: str | None) -> Path | None:
++    """A redesigned copy's file on this PC, from what the row stored: a path
++    relative to the uploads folder (RD-M2), or an older absolute one -- this
++    PC's, or another's whose part from EP-<n>/ on is taken against this
++    PC's uploads folder. None when it is not there, or would leave the
++    uploads folder."""
++    if not stored:
++        return None
++    root = storage.uploads_root().resolve()
++    win = PureWindowsPath(stored)
++    if win.is_absolute() or win.drive or stored.startswith(("/", "\\")):
++        parts = list(win.parts)
++        anchor = f"EP-{ep_number}" if ep_number else None
++        if anchor and anchor in parts:
++            candidate = root.joinpath(*parts[parts.index(anchor):])
++        else:
++            candidate = Path(stored)
++    else:
++        candidate = root.joinpath(*win.parts)
++    try:
++        resolved = candidate.resolve()
++    except OSError:
++        return None
++    if resolved != root and root not in resolved.parents:
++        return None
++    return resolved if resolved.is_file() else None
++
++
++def _unique_output(folder: Path, drawing: ProjectIfcDrawing, source_sha256: str, apply_id: str) -> Path:
++    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
++    stem = re.sub(r"\.(dwg|dxf)$", "", drawing.filename, flags=re.I)
++    safe = re.sub(r"[^A-Za-z0-9 ._()-]", "_", stem).strip() or "drawing"
++    return folder / f"{safe} {drawing.revision or 'R0'} - Redesign {stamp}Z d{drawing.id} s{source_sha256[:12]} {apply_id}.dwg"
++
++
++def _publish(copy: Path, dest: Path) -> None:
++    """The verified copy to its final name, created exclusively: an existing
++    file is never overwritten."""
++    dest.parent.mkdir(parents=True, exist_ok=True)
++    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
++    try:
++        fd = os.open(dest, flags)
++    except FileExistsError as exc:
++        raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
++    try:
++        with os.fdopen(fd, "wb") as out, open(copy, "rb") as src:
++            for chunk in iter(lambda: src.read(1 << 20), b""):
++                out.write(chunk)
++    except BaseException:
++        dest.unlink(missing_ok=True)
++        raise
++
++
++def _source_readback(source: Path, source_sha256: str, folder: Path) -> Path:
++    """The source DWG read back by the same converter as the copy will be --
++    so the two DXFs are compared like for like, not with a DXF another PC's
++    converter made -- once per source (kept by its hash)."""
++    from app.ifc.dxf import convert
++
++    target = folder / f"source-readback-{source_sha256[:16]}.dxf"
++    if not target.is_file():
++        folder.mkdir(parents=True, exist_ok=True)
++        part = folder / f".{target.name}.{os.getpid()}.part"
++        convert.convert_dwg_to_dxf(source, part)
++        os.replace(part, target)
++    return target
++
++
++def _readback(run, source: Path, folder: Path, expect: dict, check) -> dict | None:
++    """The saved copy and the source, both read back to DXF by the same
++    converter, compared by handle; None when either cannot be read."""
++    from app.ifc.dxf import convert
++
++    if not Path(run.copy).is_file():
++        return None
++    out_dxf = Path(run.work) / "readback.dxf"
++    check()
++    try:
++        source_dxf = _source_readback(source, run.source_sha256, folder)
++        check()
++        convert.convert_dwg_to_dxf(run.copy, out_dxf)
++    except Exception as exc:  # noqa: BLE001 -- unreadable: verification incomplete
++        log.warning("The redesigned copy could not be read back: %s", exc)
++        return None
++    check()
++    from app.redesign import verify as V
++
++    try:
++        return V.reconcile(source_dxf, out_dxf, expect)
++    except Exception as exc:  # noqa: BLE001
++        log.warning("The redesigned copy could not be compared: %s", exc)
++        return None
++
++
++def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *, progress=None, check=None,
++          request: dict | None = None, job_id: int | None = None, job_created_at=None) -> dict:
++    """Make the explicitly approved changes on a copy of the DWG the review
++    plotted, verify what AutoCAD made, and keep it as a new, uniquely named
++    platform copy (never the project archive). Refused before anything runs
++    when it was already made, or the drawing or the approvals changed since
++    it was asked for; not published when the approvals changed while
++    AutoCAD worked, or the copy does not verify."""
++    from app.redesign import verify as V
+     from app.review import render
++    from app.services import jobs
+ 
++    check = check or (lambda: None)
++    request = request or {}
+     drawing = db.get(ProjectIfcDrawing, drawing_id)
++    if drawing is None or drawing.project_id != project.id:
++        raise RedesignError("That drawing is not this project's")
+     row = state(db, project, drawing_id)
++    why = _refusal(db, row, request, job_id, job_created_at)
++    if why:
++        raise ApplyRefused(why)
++    check()
+     row.output_status, row.output_error = "making", None
+     db.commit()
++    run = None
+     try:
+         source = render.source_file(project, drawing)
+         if source.suffix.lower() != ".dwg":
+-            raise RedesignError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
+-        if row.source_sha256 and render._sha(source) != row.source_sha256:
+-            raise RedesignError("The drawing has changed since it was reviewed: review it again before redesigning.")
+-        metre = _units(drawing, db)
+-        refresh(db, project, drawing, row)
++            raise ApplyError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
++        source_sha = render._sha(source)
++        if row.source_sha256 and source_sha != row.source_sha256:
++            raise ApplyError("The drawing has changed since it was reviewed: review it again before redesigning.")
+         todo = [c for c in row.changes or [] if _drawn(c)]
+         if not todo:
+-            raise RedesignError("No change is placed to make: plan the redesign, or approve the changes first.")
+-        cad_changes = to_cad(todo)
++            raise ApplyError("No change is approved to make: approve the changes first (a proposed change is never drawn).")
++        stale = [c["id"] for c in todo if c.get("insert") and c["insert"].get("block")
++                 and ("seen" not in c["insert"] or "placed" not in c["insert"])]
++        if stale:
++            raise ApplyError(f"{len(stale)} approved change(s) were placed by an earlier version of the redesign: "
++                             "place them again before making the drawing.")
++        snap = _snapshot(row, row.source_sha256)
++        cad_changes = to_cad(todo)                   # module files resolved here, before AutoCAD
++        metre = _units(drawing, db)
++        apply_id = f"j{job_id or 0}-{hashlib.sha1(os.urandom(16)).hexdigest()[:10]}"
++        folder = (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign").resolve()
++        check()
+         if progress:
+-            progress(0, 1, f"AutoCAD is making {len(cad_changes)} change{'s' if len(cad_changes) != 1 else ''} on a copy")
+-        stamp = datetime.now().strftime("%Y-%m-%d %H%M")
+-        stem = re.sub(r"\.(dwg|dxf)$", "", drawing.filename, flags=re.I)
+-        name = f"{stem} {drawing.revision or 'R0'} - Redesign {stamp}.dwg"
+-        platform_copy = (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign" / name).resolve()
+-        cad.apply(source, platform_copy, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
+-                  work=platform_copy.parent / f"work-{row.id}")
+-        relative = None
+-        if project.source_folder_path:
+-            from app.services import document_control
+-
+-            target = Path(project.source_folder_path) / FOLDER / name
+-            try:
+-                os.makedirs(document_control._os_path(target.parent), exist_ok=True)
+-                with open(platform_copy, "rb") as src, open(document_control._os_path(target), "wb") as out:
+-                    out.write(src.read())
+-                relative = f"{FOLDER}/{name}"
+-            except OSError as exc:
+-                log.warning("The redesigned drawing could not be filed in the project folder: %s", exc)
+-        row.output_status, row.output_path, row.output_relative = "made", str(platform_copy), relative
++            progress(0, 3, f"AutoCAD is making {len(cad_changes)} approved change{'s' if len(cad_changes) != 1 else ''} on a copy")
++        run = cad.run(source, folder / RUNS / apply_id, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
++                      check=check)
++        check()
++        if progress:
++            progress(1, 3, "Checking what AutoCAD made")
++        expect = V.expectation(cad_changes)
++        log_ok = V.parse_log(run.log, run.nonce)
++        readback = _readback(run, source, folder, expect, check) if run.returncode == 0 and len(log_ok["ok"]) == 1 \
++            and not log_ok["failures"] else None
++        check()
++        result = V.verify(run, expect=expect, readback=readback)
++        (Path(run.work) / "verification.json").write_text(json.dumps(
++            {"ok": result.ok, "problems": result.problems, "log": result.log, "readback": result.readback,
++             "returncode": run.returncode, "nonce": run.nonce, "source_sha256": run.source_sha256,
++             "copy_sha256": run.copy_sha256, "expected": expect}, indent=1, default=str), encoding="utf-8")
++        if not result.ok:
++            raise ApplyError("The redesigned copy did not verify, so it was not kept as a result: "
++                             + "; ".join(result.problems)[:800])
++        check()
++        # the decision snapshot again, from the database: changed while AutoCAD worked -> not published
++        db.expire_all()
++        row = state(db, project, drawing_id)
++        if _snapshot(row, row.source_sha256) != snap:
++            raise ApplyStale("Approvals or placings changed while the drawing was being made: it was not published. "
++                             "Check the changes and make the drawing again.")
++        check()
++        dest = _unique_output(folder, drawing, source_sha, apply_id)
++        _publish(Path(run.copy), dest)
++        relative = dest.relative_to(storage.uploads_root().resolve()).as_posix()
++        row.output_status, row.output_error, row.output_path, row.output_relative = "made", None, relative, None
+         row.output_at, row.output_changes = utc_now(), len(cad_changes)
+         db.commit()
+-        return {"file": name, "filed": relative, "changes": len(cad_changes)}
++        Path(run.copy).unlink(missing_ok=True)       # published; the run folder keeps the script, log and checks
++        if progress:
++            progress(3, 3, "Made and checked")
++        return {"file": dest.name, "path": relative, "changes": len(cad_changes), "drawing_id": drawing_id,
++                "fingerprint": snap["content"], "source_sha256": source_sha, "apply_id": apply_id,
++                "run": Path(run.work).relative_to(storage.uploads_root().resolve()).as_posix(),
++                "inserts": run.expected_inserts, "erases": run.expected_erases}
++    except (jobs.Cancelled, jobs.Interrupted) as exc:
++        db.rollback()
++        row = state(db, project, drawing_id)
++        row.output_status = "cancelled" if isinstance(exc, jobs.Cancelled) else "interrupted"
++        row.output_error = "Cancelled: nothing was published; the run's log is kept." if isinstance(exc, jobs.Cancelled) \
++            else "Interrupted when the worker stopped: nothing was published."
++        db.commit()
++        raise
+     except Exception as exc:
+         db.rollback()
+         row = state(db, project, drawing_id)
+-        row.output_status, row.output_error = "failed", str(exc)[:1000]
++        row.output_status = "stale" if isinstance(exc, ApplyStale) else "failed"
++        row.output_error = str(exc)[:1000]
+         db.commit()
+         raise
+ 
+@@ -1430,8 +1718,10 @@
+         residual = c.get("residual")
+         out["coordinated"] = bool(c.get("coordinated"))
+         out["drawn"] = _drawn(c)
+-        out["confirm"] = bool(c.get("insert") and c["action"] == "add" and not c.get("moved")
+-                              and residual is not None and residual > CONFIRM_ABOVE_M)
++        out["requires_confirmation"] = requires_confirmation(c)
++        out["confirmed"] = c.get("confirmed") is True
++        # the spot still to be confirmed by the engineer before it can be drawn
++        out["confirm"] = out["requires_confirmation"] and not out["confirmed"]
+         changes.append(out)
+     counts = Counter(c["status"] for c in changes)
+     return {
+@@ -1441,9 +1731,11 @@
+         "started_at": row.started_at.isoformat() if row.started_at else None,
+         "finished_at": row.finished_at.isoformat() if row.finished_at else None,
+         "changes": changes, "symbols": [{k: s[k] for k in ("id", "name", "code", "block", "count")} for s in row.symbols or []],
+-        "counts": {k: counts.get(k, 0) for k in ("pending", "proposed", "approved", "skipped", "failed")},
++        "counts": {**{k: counts.get(k, 0) for k in ("pending", "proposed", "approved", "skipped", "failed")},
++                   "drawn": sum(1 for c in changes if c["drawn"])},
+         "output": {"status": row.output_status, "error": row.output_error, "relative": row.output_relative,
+-                   "file": Path(row.output_path).name if row.output_path else None,
++                   "file": PureWindowsPath(row.output_path).name if row.output_path else None,
++                   "available": output_file_for(row.output_path, project.ep_number) is not None,
+                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},
+         "folder": FOLDER,
+     }
+diff -ruN '--exclude=__pycache__' base/backend/app/redesign/verify.py cand/backend/app/redesign/verify.py
+--- base/backend/app/redesign/verify.py	1970-01-01 04:00:00.000000000 +0400
++++ cand/backend/app/redesign/verify.py	2026-10-03 21:38:53.148537500 +0400
+@@ -0,0 +1,124 @@
++"""What AutoCAD made, checked before it counts (RD-M2, 3 October 2026).
++
++An Apply is a success only when every check below passes; otherwise its
++copy stays in the run's folder as evidence and is never promoted:
++
++  1. AutoCAD exited with code 0;
++  2. its log carries this run's EP-RD-OK marker with the counts the script
++     expected, and no EP-RD-FAIL / EP-RD-NOSAVE marker of this run;
++  3. the copy exists and differs from the source;
++  4. read back (the copy converted to DXF and opened with ezdxf), compared
++     with the source drawing's own DXF by handle:
++       - every expected erase is gone, and nothing else in model space is;
++       - every expected insert is there: a new INSERT of its block at its
++         insertion point.
++
++The markers are bound to the run's nonce, so an echo of another run's
++script, or of this one's, never passes for an outcome."""
++from __future__ import annotations
++
++import math
++import re
++from dataclasses import dataclass, field
++from pathlib import Path
++
++INSERT_TOLERANCE = 0.001        # drawing units: the script writes six decimals
++
++
++@dataclass
++class Verification:
++    ok: bool = False
++    problems: list[str] = field(default_factory=list)
++    log: dict = field(default_factory=dict)
++    readback: dict = field(default_factory=dict)
++
++    def fail(self, message: str) -> None:
++        self.problems.append(message)
++
++
++def parse_log(log: str, nonce: str) -> dict:
++    nonce = re.escape(nonce)
++    fails = re.findall(rf"EP-RD-FAIL:{nonce}:([^:\s]+):([^\s]*)", log)
++    ok = re.findall(rf"EP-RD-OK:{nonce}:(\d+):(\d+)", log)
++    nosave = re.findall(rf"EP-RD-NOSAVE:{nonce}\b", log)
++    return {"failures": [{"step": s, "change": c} for s, c in fails],
++            "ok": [{"inserts": int(i), "erases": int(e)} for i, e in ok],
++            "nosave": len(nosave)}
++
++
++def expectation(cad_changes: list[dict]) -> dict:
++    return {"erase": sorted(c["remove_handle"] for c in cad_changes if c.get("remove_handle")),
++            "insert": [{"id": c.get("id"), "block": c["insert"]["block"], "point": list(c["insert"]["model"])}
++                       for c in cad_changes if c.get("insert")]}
++
++
++def _modelspace(doc) -> dict[str, object]:
++    return {e.dxf.handle: e for e in doc.modelspace()}
++
++
++def reconcile(source_dxf: Path, output_dxf: Path, expect: dict) -> dict:
++    """The output read back against the source, by handle."""
++    import ezdxf
++
++    src = _modelspace(ezdxf.readfile(source_dxf))
++    out = _modelspace(ezdxf.readfile(output_dxf))
++    gone = set(src) - set(out)
++    wanted_gone = set(expect["erase"])
++    new = [out[h] for h in set(out) - set(src)]
++    new_inserts = [e for e in new if e.dxftype() == "INSERT"]
++    found, missing = [], []
++    used: set[str] = set()
++    for item in expect["insert"]:
++        hit = next((e for e in new_inserts if e.dxf.handle not in used
++                    and e.dxf.name.upper() == item["block"].upper()
++                    and math.dist((e.dxf.insert.x, e.dxf.insert.y), item["point"]) <= INSERT_TOLERANCE), None)
++        if hit is None:
++            missing.append(item)
++        else:
++            used.add(hit.dxf.handle)
++            found.append({"id": item["id"], "handle": hit.dxf.handle, "block": item["block"]})
++    by_type: dict[str, int] = {}
++    for e in new:
++        by_type[e.dxftype()] = by_type.get(e.dxftype(), 0) + 1
++    return {"source_entities": len(src), "output_entities": len(out),
++            "erased_as_expected": sorted(gone & wanted_gone), "not_erased": sorted(wanted_gone - gone),
++            "unexpected_erasures": sorted(gone - wanted_gone), "inserts_found": found, "inserts_missing": missing,
++            "unexpected_inserts": sorted(e.dxf.handle for e in new_inserts if e.dxf.handle not in used),
++            "added_by_type": by_type}
++
++
++def verify(run, *, expect: dict, readback: dict | None) -> Verification:
++    """`run`: cad.CadRun; `readback`: reconcile()'s result, or None when
++    the copy could not be read back (then the Apply is not a success)."""
++    v = Verification()
++    if run.returncode != 0:
++        v.fail(f"AutoCAD exited with code {run.returncode}.")
++    log = parse_log(run.log, run.nonce)
++    v.log = log
++    for f in log["failures"]:
++        v.fail(f"AutoCAD reported a failed step: {f['step']} (change {f['change']}).")
++    if log["nosave"]:
++        v.fail("AutoCAD did not save the copy.")
++    if len(log["ok"]) != 1:
++        v.fail("AutoCAD's completion marker is missing." if not log["ok"] else "More than one completion marker.")
++    elif (log["ok"][0]["inserts"], log["ok"][0]["erases"]) != (run.expected_inserts, run.expected_erases):
++        v.fail(f"AutoCAD counted {log['ok'][0]['inserts']} inserts / {log['ok'][0]['erases']} erases; "
++               f"{run.expected_inserts} / {run.expected_erases} were expected.")
++    if not Path(run.copy).is_file():
++        v.fail("The redesigned copy is missing.")
++    elif not run.copy_sha256 or run.copy_sha256 == run.source_sha256:
++        v.fail("The redesigned copy is the same as the source: nothing was saved.")
++    if readback is None:
++        v.fail("The redesigned copy could not be read back.")
++    else:
++        v.readback = readback
++        if readback["not_erased"]:
++            v.fail(f"{len(readback['not_erased'])} symbol(s) to erase are still in the drawing.")
++        if readback["unexpected_erasures"]:
++            v.fail(f"{len(readback['unexpected_erasures'])} entity(ies) were erased that no approved change erases.")
++        if readback["inserts_missing"]:
++            v.fail(f"{len(readback['inserts_missing'])} approved insert(s) are not in the drawing.")
++        if readback["unexpected_inserts"]:
++            v.fail(f"{len(readback['unexpected_inserts'])} insert(s) are in the drawing that no approved change makes.")
++    v.ok = not v.problems
++    return v
+diff -ruN '--exclude=__pycache__' base/backend/app/routers/redesign.py cand/backend/app/routers/redesign.py
+--- base/backend/app/routers/redesign.py	2026-10-03 17:38:46.000000000 +0400
++++ cand/backend/app/routers/redesign.py	2026-10-03 21:41:38.593388400 +0400
+@@ -13,7 +13,6 @@
+ from __future__ import annotations
+ 
+ import re
+-from pathlib import Path
+ from urllib.parse import quote
+ 
+ from fastapi import APIRouter, Depends, HTTPException, Response, status
+@@ -67,7 +66,7 @@
+     return service.view(db, project, drawing_id)
+ 
+ 
+-def _start(db: Session, project, drawing, kind: str, user: User, what: str):
++def _start(db: Session, project, drawing, kind: str, user: User, what: str, extra: dict | None = None):
+     from app.routers import jobs as jobs_router
+     from app.routers.ifc_boq import _queue_note, _run_inline, _started
+ 
+@@ -76,7 +75,8 @@
+     if existing is not None:
+         return _started(db, existing, False)
+     job, created = jobs.enqueue(db, kind=kind, project_id=project.id, user_id=user.id, dedup_key=key,
+-                                params={"drawing_id": drawing.id, "user_id": user.id}, progress=_queue_note(db),
++                                params={"drawing_id": drawing.id, "user_id": user.id, **(extra or {})},
++                                progress=_queue_note(db),
+                                 message="")
+     if created:
+         activity.record(db, user, f"redesign.{what}", f"Started the redesign {what} of {drawing.filename} "
+@@ -100,7 +100,13 @@
+ def start_apply(project_id: int, drawing_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+                 db: Session = Depends(get_db)):
+     project = _get_project_or_404(db, project_id)
+-    return _start(db, project, _drawing(db, project, drawing_id), service.KIND_APPLY, current_user, "drawing")
++    drawing = _drawing(db, project, drawing_id)
++    # the source and the decision snapshot as they are now: the job refuses to run
++    # when either has changed by the time it starts (RD-M2)
++    request = service.apply_request(db, project, drawing)
++    if not request["drawn"]:
++        raise HTTPException(422, "No change is approved to make: approve the changes first (a proposed change is never drawn).")
++    return _start(db, project, drawing, service.KIND_APPLY, current_user, "drawing", extra=request)
+ 
+ 
+ class ChangeIn(BaseModel):
+@@ -111,6 +117,8 @@
+     # a point on the change's picture, as fractions of its width and height
+     point: list[float] | None = Field(default=None, min_length=2, max_length=2)
+     rotation: float | None = None
++    # the engineer confirms a spot placed less exactly than the plot allows (RD-M2)
++    confirmed: bool | None = None
+ 
+ 
+ @router.patch("/projects/{project_id}/redesign/{drawing_id}/changes/{change_id}")
+@@ -120,7 +128,7 @@
+     _drawing(db, project, drawing_id)
+     try:
+         service.adjust(db, project, drawing_id, change_id, status=body.status, candidate=body.candidate,
+-                       symbol=body.symbol, point=body.point, rotation=body.rotation)
++                       symbol=body.symbol, point=body.point, rotation=body.rotation, confirmed=body.confirmed)
+     except service.RedesignError as exc:
+         raise HTTPException(422, str(exc)) from exc
+     return service.view(db, project, drawing_id)
+@@ -174,10 +182,11 @@
+     project = _get_project_or_404(db, project_id)
+     _drawing(db, project, drawing_id)
+     row = service.state(db, project, drawing_id)
+-    if row.output_status != "made" or not row.output_path or not Path(row.output_path).is_file():
++    path = service.output_file_for(row.output_path, project.ep_number) if row.output_status == "made" else None
++    if path is None:
+         raise HTTPException(404, "No redesigned drawing has been made yet")
+-    name = Path(row.output_path).name
++    name = path.name
+     plain = re.sub(r"[^A-Za-z0-9 ._()-]", "_", name)
+-    return FileResponse(row.output_path, media_type="application/acad",
++    return FileResponse(path, media_type="application/acad",
+                         headers={"Content-Disposition": f"attachment; filename=\"{plain}\"; "
+                                                         f"filename*=UTF-8''{quote(name)}"})
+diff -ruN '--exclude=__pycache__' base/backend/tests/test_redesign.py cand/backend/tests/test_redesign.py
+--- base/backend/tests/test_redesign.py	2026-10-03 17:43:11.000000000 +0400
++++ cand/backend/tests/test_redesign.py	2026-10-03 21:42:50.608166500 +0400
+@@ -75,12 +75,17 @@
+     assert changes[1]["remove_handle"] is None and "(erase by hand)" in changes[1]["label"]
+     script = "\n".join(cad.script_lines(changes, marker=0.6, text_height=0.25))
+     assert '(setvar "TILEMODE" 1)' in script                      # model space, not the sheet layout
+-    assert '(entdel (handent "5DD03"))' in script and "BEEF" not in script
++    # erased only after it is checked to be the symbol meant (RD-M2); a symbol inside a block is not erased
++    assert '(if (not ep_failed) (ep_erase "5DD03" nil nil nil 0.010000 "#1"))' in script and "BEEF" not in script
++    assert "(entdel (entlast))" not in script and "(entdel (handent" not in script
+     # inserted once at 1 to learn the block's unit factor, then at the scale wanted divided by it
+-    assert '"_.-INSERT" "HEAT DETECTOR" "_S" 1.0 (list 1.000000 2.000000 0.0) 90.000000' in script
++    assert '(command "_.-INSERT" "HEAT DETECTOR" "_S" 1.0 (list 1.000000 2.000000 0.0) 90.000000)' in script
+     assert '(/ 1.000000 ep_f)' in script and '(setvar "CLAYER" "-fire alarm")' in script
+     assert script.count('(cons 0 "CIRCLE")') == 2 and '"EP-REDESIGN-REPLACE"' in script
+-    assert script.rstrip().endswith("_.QSAVE\n_.QUIT\n_Y") or "_.QSAVE" in script
++    # saved only when no step failed (RD-M2): never a bare QSAVE line
++    assert '(if (not ep_failed) (progn (command "_.QSAVE") (setq ep_saved T)))' in script
++    assert "_.QSAVE" not in script.splitlines()
++    assert script.rstrip().endswith("_.QUIT\n_Y")
+ 
+ 
+ def test_a_block_drawn_away_from_its_base_point_is_inserted_so_it_is_seen_on_the_spot():
+@@ -208,11 +213,12 @@
+     assert R._for({"tag": "B3-SEF-3"}, "Tag Not Identified") == "B3-SEF-3"
+     assert R._for({"tag": "Tag Not Identified", "description": 'Zone Control Valve (drawn: "\u00d8150 ZCV")',
+                    "equipment": "Zone Control Valve"}, "Tag Not Identified") == "ZCV"
+-    # proposed review changes are drawn; proposed modules wait for the engineer
++    # only a change the engineer approved is drawn, of the review or a module alike (platform owner, RD-M2)
+     placed = {"insert": {"block": "CR"}, "remove": None}
+-    assert R._drawn({**placed, "status": "proposed"})
++    assert not R._drawn({**placed, "status": "proposed"})
+     assert not R._drawn({**placed, "status": "proposed", "source": "interface"})
+     assert R._drawn({**placed, "status": "approved", "source": "interface"})
++    assert R._drawn({**placed, "status": "approved"})
+     # the engineer's word on a module survives bringing the schedule in again
+     old = {"id": "if:x:CR1", "status": "skipped", "source": "interface"}
+     merged = R._merge_interfaces([{"id": "f1", "status": "proposed"}, old],
+@@ -231,7 +237,10 @@
+     assert cad_change["note"]["text"] == "FOR B3-SEF-3" and cad_change["note"]["at"][0] > 10.35
+     script = "\n".join(cad.script_lines([cad_change], marker=0.6, text_height=0.25))
+     inserts = [line for line in script.splitlines() if '"_.-INSERT"' in line]
+-    assert '(if (tblsearch "BLOCK" "CR") "CR" "CR=C:/lib/CR.dwg")' in inserts[0]
++    # from this installation's library, never the path the change stored (RD-M1 F001, RD-M2)
++    here = (R.LIBRARY / "CR.dwg").resolve().as_posix()
++    assert f'(if (tblsearch "BLOCK" "CR") "CR" "CR={here}")' in inserts[0]
++    assert "C:/lib" not in script and change["insert"]["library"] == "C:/lib/CR.dwg"      # the stored value kept
+     assert "CR=" not in inserts[1]                               # never "redefine?": the block is there by then
+     assert '(cons 1 "FOR B3-SEF-3")' in script and '(cons 8 "fire alarm")' in script
+ 
+diff -ruN '--exclude=__pycache__' base/backend/tests/test_redesign_apply.py cand/backend/tests/test_redesign_apply.py
+--- base/backend/tests/test_redesign_apply.py	1970-01-01 04:00:00.000000000 +0400
++++ cand/backend/tests/test_redesign_apply.py	2026-10-03 22:01:05.036930700 +0400
+@@ -0,0 +1,584 @@
++"""Redesign Apply fails closed and draws only approved changes (RD-M2).
++
++AutoCAD is replaced by a small script that echoes the AutoLISP it is given
++(as the Core Console does) and prints the run's markers as told; the copy's
++read-back is the source DXF with the script's inserts and erases applied.
++No model, no live database, no real drawing."""
++from __future__ import annotations
++
++import hashlib
++import re
++import sys
++from datetime import timedelta
++from pathlib import Path
++
++import ezdxf
++import pytest
++
++from app.core.config import get_settings
++from app.core.timeutils import utc_now
++from app.redesign import cad
++from app.redesign import service as R
++from app.redesign import verify as V
++from tests.conftest import login
++
++settings = get_settings()
++OFFICE = "C:/Users/someone-else/OneDrive - Org/Desktop/dev/ep-platform/backend/app/redesign/library"
++
++FAKE_ACAD = r'''
++import os, re, sys, time
++copy, script = sys.argv[1], sys.argv[2]
++text = open(script, encoding="utf-8").read()
++print(text)                                   # the Core Console echoes what it reads
++nonce = re.search(r'\(setq ep_nonce "([0-9a-f]+)"', text).group(1)
++ins, dele = re.search(r'\(/= ep_ins (\d+)\) \(/= ep_del (\d+)\)', text).groups()
++mode = os.environ.get("FAKE_ACAD_MODE", "ok")
++if mode == "slow":
++    time.sleep(60)
++if mode in ("ok", "badexit", "nomarker"):
++    with open(copy, "ab") as f:
++        f.write(b"EDITED")
++if mode in ("ok", "badexit", "unchanged"):
++    print("EP-RD" + "-OK:" + nonce + ":" + ins + ":" + dele)
++if mode == "fail":
++    print("EP-RD" + "-FAIL:" + nonce + ":insert:m1")
++    print("EP-RD" + "-NOSAVE:" + nonce)
++sys.exit(3 if mode == "badexit" else 0)
++'''
++
++
++def _sha(path: Path) -> str:
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def _source_dxf(path: Path) -> dict:
++    doc = ezdxf.new()
++    for name in ("CT1", "CT2", "CR", "CEILING SPEAKER", "HEAT DETECTOR"):
++        doc.blocks.new(name).add_circle((0, 0), 0.1)
++    msp = doc.modelspace()
++    speaker = msp.add_blockref("CEILING SPEAKER", (5, 5))
++    other = msp.add_blockref("CEILING SPEAKER", (40, 40))
++    msp.add_line((0, 0), (50, 0))
++    doc.saveas(path)
++    return {"speaker": speaker.dxf.handle, "other": other.dxf.handle}
++
++
++def _module(cid: str, code: str, at: tuple[float, float], status="approved") -> dict:
++    return {"id": cid, "page": 0, "sheet": "FA 101", "floor": "B3", "room": "Pump Room", "system": "interface",
++            "system_name": "FA Interfaces", "action": "add", "device": f"{code} module", "instruction": f"{code} FOR PUMP",
++            "status": status, "source": "interface", "candidates": [], "remove": None, "moved": True, "edited": True,
++            "residual": 0.0, "interface": {"code": code, "for": "PUMP", "note_height": 0.3, "half": 0.2, "depth": 0.1},
++            "insert": {"block": code, "layer": "fa", "scale": 0.00175, "rotation": 90.0, "model": list(at), "seen": list(at),
++                       "placed": list(at), "offset": [0, 0], "library": f"{OFFICE}/{code}.dwg", "symbol": 800002}}
++
++
++def _review_add(cid: str, block: str, at, status="approved", residual=0.0, moved=False) -> dict:
++    return {"id": cid, "page": 0, "sheet": "FA 101", "floor": "B3", "room": "Pump Room", "system": "detection",
++            "system_name": "Detection", "action": "add", "device": "heat detector", "instruction": "Add H",
++            "status": status, "candidates": [], "remove": None, "moved": moved, "residual": residual, "confidence": "medium",
++            "insert": {"block": block, "layer": "fa", "scale": 1.0, "rotation": 0.0, "model": list(at), "seen": list(at),
++                       "placed": list(at), "offset": [0, 0]}}
++
++
++def _review_remove(cid: str, handle: str, at, status="approved", confidence="medium") -> dict:
++    return {"id": cid, "page": 0, "sheet": "FA 101", "floor": "B3", "room": "Electrical Room", "system": "speaker",
++            "system_name": "Speakers", "action": "remove", "device": "ceiling speaker", "instruction": "Remove CS",
++            "status": status, "confidence": confidence, "insert": None, "moved": False, "residual": 0.0,
++            "candidates": [{"n": 1, "handle": handle, "block": "CEILING SPEAKER", "insert_point": list(at), "page": [0, 0],
++                            "model": list(at), "erasable": True}],
++            "remove": {"n": 1, "handle": handle, "block": "CEILING SPEAKER", "name": "Ceiling Speaker", "page": [0, 0],
++                       "model": list(at), "erasable": True}}
++
++
++@pytest.fixture()
++def gc(client, db_session, monkeypatch, tmp_path):
++    """A project, its drawing (a stand-in DWG beside a real DXF) and a
++    redesign: four approved changes to make (two library modules, an add,
++    an erase) and three that must not be made."""
++    from app.ifc.dxf import convert
++    from app.models import ProjectIfcDrawing, ProjectRedesign
++
++    assert login(client, settings.default_admin_email, settings.default_admin_password).status_code == 200
++    pid = client.post("/projects", json={"ep_number": "40951", "project_name": "Tower", "design_sheets": []}).json()["id"]
++    monkeypatch.setattr(settings, "uploads_root", str(tmp_path / "uploads"))      # this test's own uploads
++    uploads = Path(settings.uploads_root).resolve()
++    ifc = uploads / "EP-40951" / "ifc"
++    ifc.mkdir(parents=True, exist_ok=True)
++    handles = _source_dxf(ifc / "d1.dxf")
++    dwg = ifc / "d1.dwg"
++    dwg.write_bytes(b"STAND-IN SOURCE DWG")
++    drawing = ProjectIfcDrawing(project_id=pid, filename="FA LAYOUT.dwg", stored_path="EP-40951/ifc/d1.dxf",
++                                revision="R0", meta={}, groups=[])
++    db_session.add(drawing)
++    db_session.commit()
++    changes = [_module("m1", "CT2", (10.0, 10.0)), _module("m2", "CR", (12.0, 10.0)),
++               _review_add("r1", "HEAT DETECTOR", (20.0, 20.0)),
++               _review_remove("rm", handles["speaker"], (5.0, 5.0)),
++               _review_add("p1", "HEAT DETECTOR", (30.0, 30.0), status="proposed"),           # never drawn
++               _review_remove("s1", handles["other"], (40.0, 40.0), status="skipped", confidence="low"),
++               _review_add("c1", "HEAT DETECTOR", (35.0, 35.0), residual=1.5)]                # spot to confirm
++    row = ProjectRedesign(project_id=pid, drawing_id=drawing.id, status="planned", source_sha256=_sha(dwg),
++                          changes=changes, symbols=[])
++    db_session.add(row)
++    db_session.commit()
++
++    fake = tmp_path / "fake_acad.py"
++    fake.write_text(FAKE_ACAD, encoding="utf-8")
++    calls = {"autocad": 0, "readback": 0}
++    monkeypatch.setattr(convert, "find_converter",
++                        lambda: convert.Converter("AutoCAD Core Console (test)", "accoreconsole", sys.executable))
++
++    def command(converter, copy, script):
++        calls["autocad"] += 1
++        return [sys.executable, str(fake), str(copy), str(script)]
++
++    monkeypatch.setattr(cad, "_command", command)
++
++    def readback(dwg_path, dxf_path, converter=None):
++        """The copy 'read back': the source DXF with the script's inserts and erases made."""
++        calls["readback"] += 1
++        mode = readback.mode
++        if mode == "error":
++            raise convert.ConversionError("unreadable")
++        doc = ezdxf.readfile(ifc / "d1.dxf")
++        script = Path(dwg_path).parent / "redesign.scr"
++        if not script.is_file():                      # the source itself, read back
++            doc.saveas(dxf_path)
++            return
++        text = script.read_text(encoding="utf-8")
++        msp = doc.modelspace()
++        for h in re.findall(r'\(ep_erase "([0-9A-F]+)"', text):
++            msp.delete_entity(doc.entitydb[h])
++        if mode == "extra_erasure":
++            msp.delete_entity(doc.entitydb[handles["other"]])
++        inserts = re.findall(r'\(command "_\.-INSERT" "([^"]+)" "_S" \(/ [0-9.]+ ep_f\) \(list ([-0-9.]+) ([-0-9.]+) 0\.0\)', text)
++        for k, (block, x, y) in enumerate(inserts):
++            if mode == "missing_insert" and k == 0:
++                continue
++            msp.add_blockref(block, (float(x), float(y)))
++        doc.saveas(dxf_path)
++
++    readback.mode = "faithful"
++    monkeypatch.setattr(convert, "convert_dwg_to_dxf", readback)
++    monkeypatch.setattr(R, "_units", lambda drawing, db: 1.0)
++    project = db_session.get(__import__("app.models", fromlist=["Project"]).Project, pid)
++    return {"pid": pid, "project": project, "drawing": drawing, "row_id": row.id, "dwg": dwg, "uploads": uploads,
++            "handles": handles, "calls": calls, "readback": readback, "db": db_session, "client": client}
++
++
++def _row(gc):
++    from app.models import ProjectRedesign
++
++    gc["db"].expire_all()
++    return gc["db"].get(ProjectRedesign, gc["row_id"])
++
++
++def _apply(gc, **kw):
++    return R.apply(gc["db"], gc["project"], gc["drawing"].id, None, **kw)
++
++
++def _outputs(gc) -> list[Path]:
++    folder = gc["uploads"] / "EP-40951" / "redesign"
++    return sorted(p for p in folder.glob("*.dwg")) if folder.is_dir() else []
++
++
++# --- 1-4: portable module resolution ---------------------------------------------------------
++
++
++def test_ct1_ct2_and_cr_resolve_from_this_installations_library():
++    for code in ("CT1", "CT2", "CR"):
++        path = R.module_library(code, "x")
++        assert path == (R.LIBRARY / f"{code}.dwg").resolve() and path.is_file() and path.parent == R.LIBRARY.resolve()
++
++
++def test_a_stored_office_pc_path_never_reaches_the_script():
++    changes = [_module("m1", "CT2", (10.0, 10.0)), _module("m2", "CT1", (11.0, 10.0)), _module("m3", "CR", (12.0, 10.0))]
++    script = "\n".join(cad.script_lines(R.to_cad(changes), marker=0.6, text_height=0.25, nonce="ab12"))
++    assert OFFICE not in script and "someone-else" not in script
++    for code in ("CT1", "CT2", "CR"):
++        assert f'"{code}={(R.LIBRARY / f"{code}.dwg").resolve().as_posix()}"' in script
++    assert all(c["insert"]["library"].startswith(OFFICE) for c in changes)          # the stored history is kept
++
++
++def test_an_unknown_module_code_is_refused():
++    for code in ("CT9", "../CR", "cr", "", None):
++        with pytest.raises(R.ApplyError):
++            R.module_library(code, "m9")
++    with pytest.raises(R.ApplyError, match="m9"):
++        R.to_cad([_module("m9", "CT9", (1.0, 1.0))])
++
++
++def test_a_missing_library_file_is_refused_before_autocad(gc, tmp_path, monkeypatch):
++    lib = tmp_path / "library"
++    lib.mkdir()
++    (lib / "modules.json").write_text('{"modules": {"CT2": {}, "CR": {}}}', encoding="utf-8")
++    (lib / "CR.dwg").write_bytes(b"x")
++    with pytest.raises(R.ApplyError, match="CT2 module's file is missing") as exc:
++        R.module_library("CT2", "m1", lib)
++    assert OFFICE not in str(exc.value)
++    monkeypatch.setattr(R, "LIBRARY", lib)
++    with pytest.raises(R.ApplyError, match="missing"):
++        _apply(gc)
++    assert gc["calls"]["autocad"] == 0 and _outputs(gc) == []
++    assert _row(gc).output_status == "failed"
++
++
++# --- 5-8: approved only, confirmation ---------------------------------------------------------
++
++
++def test_only_explicitly_approved_changes_are_drawn():
++    placed = {"action": "add", "insert": {"block": "B"}, "remove": None}
++    for status in ("proposed", "skipped", "failed", "pending", "rejected", "held", "uncertain", None, "APPROVED"):
++        assert not R._drawn({**placed, "status": status}), status
++        assert not R._drawn({**placed, "status": status, "source": "interface"}), status
++    assert R._drawn({**placed, "status": "approved"}) and R._drawn({**placed, "status": "approved", "source": "interface"})
++    assert not R._drawn({"action": "add", "insert": None, "remove": None, "status": "approved"})   # nothing to make
++
++
++def test_proposed_and_skipped_changes_stay_out_of_the_apply(gc):
++    result = _apply(gc)
++    script = (gc["uploads"] / result["run"] / "redesign.scr").read_text(encoding="utf-8")
++    assert all(f'"{cid}"' in script for cid in ("m1", "m2", "r1", "rm"))
++    assert '"p1"' not in script and '"s1"' not in script
++    assert '"c1"' not in script                                     # its spot not confirmed
++    assert gc["handles"]["other"] not in script                     # the skipped low-confidence REMOVE
++    assert (result["inserts"], result["erases"]) == (3, 1)
++
++
++def test_a_skipped_low_confidence_remove_like_rd_m1_f003_is_never_drawn():
++    change = _review_remove("d89599", "5DD10", (1309.45, 155.68), status="skipped", confidence="low")
++    assert not R._drawn(change)
++    assert not R._drawn({**change, "status": "proposed"})
++
++
++def test_a_spot_to_confirm_is_drawn_only_once_confirmed(gc):
++    c1 = next(c for c in _row(gc).changes if c["id"] == "c1")
++    assert R.requires_confirmation(c1) and not R._drawn(c1)
++    assert R._drawn({**c1, "confirmed": True})
++    assert not R.requires_confirmation({**c1, "moved": True})        # placed by the engineer: theirs
++    view = R.view(gc["db"], gc["project"], gc["drawing"].id)
++    shown = next(c for c in view["changes"] if c["id"] == "c1")
++    assert shown["confirm"] and not shown["drawn"] and view["counts"]["drawn"] == 4
++    R.adjust(gc["db"], gc["project"], gc["drawing"].id, "c1", confirmed=True)
++    view = R.view(gc["db"], gc["project"], gc["drawing"].id)
++    shown = next(c for c in view["changes"] if c["id"] == "c1")
++    assert shown["confirmed"] and not shown["confirm"] and shown["drawn"] and view["counts"]["drawn"] == 5
++
++
++# --- 9-12: fail-closed script, markers, output checks -------------------------------------------
++
++
++def _script(changes, nonce="0f0f") -> list[str]:
++    return cad.script_lines(R.to_cad(changes), marker=0.6, text_height=0.25, nonce=nonce)
++
++
++def test_a_failed_insert_stops_before_any_entdel_or_save():
++    lines = _script([_module("m1", "CT2", (10.0, 10.0)), _review_add("r1", "HEAT DETECTOR", (2.0, 2.0)),
++                     _review_remove("rm", "5DD10", (3.0, 3.0))])
++    body = [ln for ln in lines if ln.startswith("(") and not ln.startswith(("(defun", "(setq ep_", "(setvar", "(if (not (tblsearch"))]
++    text = "\n".join(lines)
++    assert "(entdel (entlast))" not in text
++    # the only entdel outside the erase check is of the insert just checked to be new and of the block
++    entdels = [ln for ln in lines if "(entdel " in ln and not ln.startswith("(defun ep_erase")]
++    assert entdels and all("(setq ep_e (ep_new_insert ep_b " in ln for ln in entdels)
++    # every step after the set-up is skipped once a step failed
++    steps = [ln for ln in body if not ln.startswith(("(if ep_saved", '(if (and (not ep_failed)'))]
++    assert steps and all(ln.startswith("(if (not ep_failed)") for ln in steps)
++    # each insert is checked before the next step
++    for k, ln in enumerate(lines):
++        if '(command "_.-INSERT"' in ln:
++            assert "(ep_new_insert ep_b " in lines[k + 1]
++    # saved only when nothing failed and every insert and erase was counted
++    assert "_.QSAVE" not in lines
++    assert '(if (and (not ep_failed) (or (/= ep_ins 2) (/= ep_del 1))) (ep_fail "count" "all"))' in lines
++    assert lines.index('(if (not ep_failed) (progn (command "_.QSAVE") (setq ep_saved T)))') > lines.index(
++        '(if (and (not ep_failed) (or (/= ep_ins 2) (/= ep_del 1))) (ep_fail "count" "all"))')
++    new_insert = next(ln for ln in lines if ln.startswith("(defun ep_new_insert"))
++    assert '(not (eq e before))' in new_insert and '(= (cdr (assoc 0 d)) "INSERT")' in new_insert and "(strcase blk)" in new_insert
++
++
++def test_an_insert_failure_in_autocad_publishes_nothing(gc, monkeypatch):
++    monkeypatch.setenv("FAKE_ACAD_MODE", "fail")
++    before = _sha(gc["dwg"])
++    with pytest.raises(R.ApplyError, match="insert"):
++        _apply(gc)
++    row = _row(gc)
++    assert row.output_status == "failed" and "did not verify" in row.output_error and row.output_path is None
++    assert _outputs(gc) == [] and _sha(gc["dwg"]) == before and gc["calls"]["readback"] == 0
++    run = next((gc["uploads"] / "EP-40951" / "redesign" / "runs").iterdir())
++    assert (run / "autocad.log").is_file() and (run / "verification.json").is_file()   # kept as evidence
++
++
++def test_an_erase_is_made_only_on_the_symbol_meant():
++    lines = _script([_review_remove("rm", "5DD10", (1309.45, 155.68))])
++    assert '(if (not ep_failed) (ep_erase "5DD10" "CEILING SPEAKER" 1309.450000 155.680000 0.010000 "rm"))' in lines
++    erase = next(ln for ln in lines if ln.startswith("(defun ep_erase"))
++    for check in ('(setq e (handent h))', '(= (cdr (assoc 0 d)) "INSERT")', "(strcase blk)", "(assoc 67 d)",
++                  '"MODEL"', "(distance (list x y)", '(ep_fail "erase-target" id)', '(ep_fail "erase-verify" id)'):
++        assert check in erase, check
++    # not erasable (inside a block): marked only
++    inside = _review_remove("rb", "BEEF", (1.0, 1.0))
++    inside["remove"]["erasable"] = False
++    assert "BEEF" not in "\n".join(_script([inside]))
++
++
++def test_an_unexpected_erasure_in_the_read_back_fails_the_apply(gc):
++    gc["readback"].mode = "extra_erasure"
++    with pytest.raises(R.ApplyError, match="erased that no approved change erases"):
++        _apply(gc)
++    assert _outputs(gc) == [] and _row(gc).output_status == "failed"
++
++
++def test_the_markers_are_this_runs_and_never_the_echo():
++    nonce = "a1b2c3d4"
++    echo = "\n".join(cad.script_lines([], marker=0.6, text_height=0.25, nonce=nonce))
++    assert V.parse_log(echo, nonce) == {"failures": [], "ok": [], "nosave": 0}           # the echoed script is no outcome
++    log = echo + f"\nEP-RD-OK:{nonce}:3:1\nEP-RD-OK:ffff:9:9\nEP-RD-FAIL:ffff:insert:x\n"
++    parsed = V.parse_log(log, nonce)
++    assert parsed["ok"] == [{"inserts": 3, "erases": 1}] and parsed["failures"] == []
++    parsed = V.parse_log(f"EP-RD-FAIL:{nonce}:erase-target:rm\nEP-RD-NOSAVE:{nonce}\n", nonce)
++    assert parsed["failures"] == [{"step": "erase-target", "change": "rm"}] and parsed["nosave"] == 1
++
++
++@pytest.mark.parametrize("mode,readback,message", [
++    ("unchanged", "faithful", "same as the source"),
++    ("nomarker", "faithful", "completion marker is missing"),
++    ("badexit", "faithful", "exited with code 3"),
++    ("ok", "error", "could not be read back"),
++    ("ok", "missing_insert", "approved insert"),
++])
++def test_an_unchanged_unreadable_or_incomplete_output_is_refused(gc, monkeypatch, mode, readback, message):
++    monkeypatch.setenv("FAKE_ACAD_MODE", mode)
++    gc["readback"].mode = readback
++    with pytest.raises(R.ApplyError, match=message):
++        _apply(gc)
++    assert _outputs(gc) == [] and _row(gc).output_status == "failed" and _row(gc).output_path is None
++
++
++# --- 13-15: unique names, no overwrite, relative paths ------------------------------------------
++
++
++def test_two_applies_in_the_same_minute_get_two_files(gc):
++    first = _apply(gc)
++    second = _apply(gc, job_id=None)
++    assert first["file"] != second["file"] and len(_outputs(gc)) == 2
++    for result in (first, second):
++        assert f"d{gc['drawing'].id}" in result["file"] and result["source_sha256"][:12] in result["file"]
++
++
++def test_an_existing_output_is_never_overwritten(tmp_path):
++    copy, dest = tmp_path / "copy.dwg", tmp_path / "out.dwg"
++    copy.write_bytes(b"new")
++    dest.write_bytes(b"earlier result")
++    with pytest.raises(R.ApplyError, match="already exists"):
++        R._publish(copy, dest)
++    assert dest.read_bytes() == b"earlier result"
++
++
++def test_the_output_is_stored_relative_and_read_back_safely(gc):
++    result = _apply(gc)
++    row = _row(gc)
++    assert row.output_status == "made" and row.output_path == result["path"]
++    assert not Path(row.output_path).is_absolute() and ":" not in row.output_path and not row.output_path.startswith("/")
++    assert row.output_relative is None                                             # never filed in the project archive
++    assert R.output_file_for(row.output_path, "40951") == (gc["uploads"] / row.output_path).resolve()
++    for bad in ("../../outside.dwg", "EP-40951/../../outside.dwg", "C:/Windows/win.ini", "/etc/passwd"):
++        assert R.output_file_for(bad, "40951") is None
++    client = gc["client"]
++    url = f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}/output.dwg"
++    response = client.get(url)
++    assert response.status_code == 200 and response.content.endswith(b"EDITED")
++    row.output_path = "../../../outside.dwg"
++    gc["db"].commit()
++    assert client.get(url).status_code == 404
++
++
++def test_an_older_absolute_path_from_another_pc_is_found_under_this_uploads_folder(gc):
++    legacy = gc["uploads"] / "EP-40951" / "redesign" / "FIRE ALARM LAYOUT R0 - Redesign 2026-10-02 1654.dwg"
++    legacy.parent.mkdir(parents=True, exist_ok=True)
++    legacy.write_bytes(b"made on another PC")
++    stored = r"C:\Users\someone-else\OneDrive - Org\Desktop\dev\ep-platform\backend\uploads\EP-40951\redesign" \
++             "\\" + legacy.name
++    assert R.output_file_for(stored, "40951") == legacy.resolve()
++    row = _row(gc)
++    row.output_status, row.output_path = "made", stored
++    gc["db"].commit()
++    response = gc["client"].get(f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}/output.dwg")
++    assert response.status_code == 200 and response.content == b"made on another PC"
++
++
++# --- 16-19: recovery, source, cancellation, snapshot ----------------------------------------------
++
++
++def test_a_completed_apply_is_not_run_again_after_worker_recovery(gc):
++    """RD-M1 F017: job 119 had made its drawing when its worker stopped; the
++    copied database still said 'running', and a new worker ran it again."""
++    from app.ifc.services import processing, runners
++    from app.models import BackgroundJob
++    from app.services import jobs
++
++    db = gc["db"]
++    created = utc_now() - timedelta(hours=26)
++    job = BackgroundJob(project_id=gc["pid"], kind=R.KIND_APPLY, status="running", progress={}, cancel_requested=False,
++                        created_at=created, started_at=created, heartbeat_at=created + timedelta(seconds=68),
++                        worker_id="ifc:OTHER-PC:1:1:0", attempts=0, params={"drawing_id": gc["drawing"].id, "user_id": 5})
++    db.add(job)
++    row = _row(gc)
++    row.output_status, row.output_path = "made", "EP-40951/redesign/earlier.dwg"
++    row.output_at = created + timedelta(seconds=76)
++    db.commit()
++    jobs.recover_stale(db, stale_after=timedelta(minutes=1))
++    db.refresh(job)
++    assert job.status == "queued" and job.attempts == 1                  # requeued, as before RD-M2
++    with pytest.raises(processing.ReadError, match="already made"):
++        runners.RUNNERS[R.KIND_APPLY](db, job, jobs.JobContext(job_id=job.id))
++    row = _row(gc)
++    assert gc["calls"]["autocad"] == 0 and row.output_status == "made" and row.output_path == "EP-40951/redesign/earlier.dwg"
++
++
++def test_the_same_approved_set_is_not_made_twice_by_a_second_job(gc):
++    from app.models import BackgroundJob
++
++    result = _apply(gc, job_id=1)
++    db = gc["db"]
++    db.add(BackgroundJob(project_id=gc["pid"], kind=R.KIND_APPLY, status="succeeded", progress={},
++                         cancel_requested=False, created_at=utc_now(), attempts=0, params={}, result=result))
++    db.commit()
++    with pytest.raises(R.ApplyRefused, match="already made by job"):
++        _apply(gc, job_id=99)
++    assert len(_outputs(gc)) == 1
++
++
++def test_a_changed_source_is_refused(gc):
++    request = R.apply_request(gc["db"], gc["project"], gc["drawing"])
++    with pytest.raises(R.ApplyRefused, match="drawing changed"):
++        _apply(gc, request={**request, "source_sha256": "0" * 64})
++    gc["dwg"].write_bytes(b"STAND-IN SOURCE DWG, EDITED SINCE THE REVIEW")
++    with pytest.raises(R.ApplyError, match="changed since it was reviewed"):
++        _apply(gc)
++    assert gc["calls"]["autocad"] == 0 and _outputs(gc) == []
++
++
++def test_a_cancel_before_autocad_runs_nothing(gc):
++    from app.services import jobs
++
++    def cancel():
++        raise jobs.Cancelled()
++
++    before = _sha(gc["dwg"])
++    with pytest.raises(jobs.Cancelled):
++        _apply(gc, check=cancel)
++    assert gc["calls"]["autocad"] == 0 and _outputs(gc) == [] and _sha(gc["dwg"]) == before
++    assert _row(gc).output_status == "none"                  # nothing started: the output left as it was
++
++
++def test_a_cancel_while_autocad_works_stops_it_and_publishes_nothing(gc, monkeypatch):
++    from app.services import jobs
++
++    monkeypatch.setenv("FAKE_ACAD_MODE", "slow")
++    monkeypatch.setattr(cad, "POLL_S", 0.2)
++    calls = {"n": 0}
++
++    def check():
++        calls["n"] += 1
++        if calls["n"] >= 5:                       # a few polls into the AutoCAD run
++            raise jobs.Cancelled()
++
++    before = _sha(gc["dwg"])
++    with pytest.raises(jobs.Cancelled):
++        _apply(gc, check=check)
++    row = _row(gc)
++    assert gc["calls"]["autocad"] == 1 and row.output_status == "cancelled" and "nothing was published" in row.output_error
++    assert _outputs(gc) == [] and _sha(gc["dwg"]) == before
++    run = next((gc["uploads"] / "EP-40951" / "redesign" / "runs").iterdir())
++    assert (run / "autocad.log").is_file()                     # the log kept
++
++
++def test_approvals_changed_while_autocad_worked_are_not_published(gc, monkeypatch):
++    from app.database import SessionLocal
++
++    original = R._readback
++
++    def engineer_approves_meanwhile(*args, **kw):
++        db = SessionLocal()
++        try:
++            from app.models import ProjectRedesign
++
++            row = db.get(ProjectRedesign, gc["row_id"])
++            row.changes = [{**c, "status": "approved"} if c["id"] == "p1" else c for c in row.changes]
++            db.commit()
++        finally:
++            db.close()
++        return original(*args, **kw)
++
++    monkeypatch.setattr(R, "_readback", engineer_approves_meanwhile)
++    with pytest.raises(R.ApplyStale, match="not published"):
++        _apply(gc)
++    row = _row(gc)
++    assert row.output_status == "stale" and _outputs(gc) == []
++
++
++def test_a_job_asked_for_before_the_approvals_changed_is_refused(gc):
++    request = R.apply_request(gc["db"], gc["project"], gc["drawing"])
++    row = _row(gc)
++    row.changes = [{**c, "status": "skipped"} if c["id"] == "r1" else c for c in row.changes]
++    gc["db"].commit()
++    with pytest.raises(R.ApplyRefused, match="approvals or placings changed"):
++        _apply(gc, request=request)
++    assert gc["calls"]["autocad"] == 0
++
++
++# --- 20: the successful path, end to end ---------------------------------------------------------
++
++
++def test_the_approved_changes_are_made_checked_and_kept(gc):
++    before = _sha(gc["dwg"])
++    result = _apply(gc)
++    row = _row(gc)
++    out = (gc["uploads"] / row.output_path)
++    assert row.output_status == "made" and row.output_changes == 4 and out.is_file()
++    assert out.read_bytes().endswith(b"EDITED") and _sha(gc["dwg"]) == before
++    run = gc["uploads"] / result["run"]
++    assert {p.name for p in run.iterdir()} >= {"redesign.scr", "autocad.log", "verification.json", "readback.dxf"}
++    assert not (run / "redesign.dwg").exists()                      # published, the work copy removed
++    import json
++
++    checks = json.loads((run / "verification.json").read_text(encoding="utf-8"))
++    assert checks["ok"] and checks["readback"]["unexpected_erasures"] == [] and len(checks["readback"]["inserts_found"]) == 3
++    assert checks["readback"]["erased_as_expected"] == [gc["handles"]["speaker"]]
++
++
++def test_the_page_says_a_proposed_change_is_not_drawn_and_asks_for_approval_before_an_apply(gc):
++    client = gc["client"]
++    base = f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}"
++    view = client.get(base).json()
++    assert view["counts"]["drawn"] == 4 and view["counts"]["proposed"] == 1
++    assert next(c for c in view["changes"] if c["id"] == "p1")["drawn"] is False
++    assert client.patch(f"{base}/changes/c1", json={"confirmed": True}).json()["counts"]["drawn"] == 5
++    started = client.post(f"{base}/apply/jobs")
++    assert started.status_code == 202
++    from app.models import BackgroundJob
++
++    job = gc["db"].query(BackgroundJob).filter(BackgroundJob.kind == R.KIND_APPLY).one()
++    assert job.params["source_sha256"] == _row(gc).source_sha256 and len(job.params["fingerprint"]) == 64
++    assert job.params["drawn"] == 5
++
++
++def test_nothing_approved_means_no_apply_job(gc):
++    row = _row(gc)
++    row.changes = [{**c, "status": "proposed"} for c in row.changes]
++    gc["db"].commit()
++    response = gc["client"].post(f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}/apply/jobs")
++    assert response.status_code == 422 and "approve" in response.json()["detail"]
++
++
++def test_the_source_is_read_back_by_the_same_converter_once_per_source(gc):
++    """Copy and source are compared like for like: both read back by this PC's converter,
++    the source once per hash (not the DXF another PC's converter made)."""
++    _apply(gc)
++    folder = gc["uploads"] / "EP-40951" / "redesign"
++    cached = list(folder.glob("source-readback-*.dxf"))
++    assert len(cached) == 1 and cached[0].name == f"source-readback-{_sha(gc['dwg'])[:16]}.dxf"
++    assert gc["calls"]["readback"] == 2                       # the source, then the copy
++    _apply(gc)
++    assert gc["calls"]["readback"] == 3                       # only the new copy
+diff -ruN '--exclude=__pycache__' base/frontend/src/pages/ProjectRedesignPage.tsx cand/frontend/src/pages/ProjectRedesignPage.tsx
+--- base/frontend/src/pages/ProjectRedesignPage.tsx	2026-10-03 18:01:08.964158900 +0400
++++ cand/frontend/src/pages/ProjectRedesignPage.tsx	2026-10-03 21:48:18.762146700 +0400
+@@ -5,9 +5,11 @@
+  *    placed by the model -- the point, the drawing's own symbol to insert,
+  *    the existing symbol to erase.
+  * 2. Adjust: the engineer approves each one, moves it (a click on its
+- *    picture), picks another symbol, or skips it.
+- * 3. Make: AutoCAD makes the changes on a copy of the DWG, each marked on an
+- *    EP-REDESIGN layer, filed in the project folder for the draftsman. */
++ *    picture), picks another symbol, or skips it. Only approved changes are
++ *    drawn (RD-M2); a spot placed less exactly is drawn once confirmed.
++ * 3. Make: AutoCAD makes the approved changes on a copy of the DWG, each
++ *    marked on an EP-REDESIGN layer; what it made is checked and kept as a
++ *    new platform copy (not filed in the project folder). */
+ import { useCallback, useEffect, useState } from "react";
+ 
+ import { useAuth } from "../context/AuthContext";
+@@ -60,9 +62,12 @@
+   moved: boolean;
+   confidence: string | null;
+   residual: number | null;
++  // the spot is to be confirmed before it can be drawn (RD-M2)
+   confirm: boolean;
++  requires_confirmation?: boolean;
++  confirmed?: boolean;
+   box?: number[];
+-  // the interface schedule's modules: drawn only once approved
++  // review change or interface module: either is drawn only once approved (RD-M2)
+   source?: string;
+   interface?: { code: string; for: string; equipment: string; tag: string };
+   drawn?: boolean;
+@@ -85,7 +90,15 @@
+   changes: Change[];
+   symbols: Symbol[];
+   counts: Record<string, number>;
+-  output: { status: string; error: string | null; relative: string | null; file: string | null; at: string | null; changes: number };
++  output: {
++    status: string;
++    error: string | null;
++    relative: string | null;
++    file: string | null;
++    at: string | null;
++    changes: number;
++    available?: boolean;
++  };
+   folder: string;
+ }
+ 
+@@ -222,11 +235,12 @@
+         <div className="max-w-3xl">
+           <h1 className="text-3xl font-bold text-navy-900">Drawings Redesign</h1>
+           <p className="mt-1 text-sm text-gray-600">
+-            The reviewed IFC drawing, copied with the changes accepted on Drawings Review made on it. The AI (Opus 5.5) places
+-            every ADD, REMOVE and REPLACE on the plan with the drawing&rsquo;s own symbols; you approve, move or skip each one; AutoCAD
+-            then makes them on a copy of the DWG &mdash; each marked on an EP-REDESIGN layer &mdash; filed in the project folder for the
+-            draftsman. Every module of the FA Interface Schedule (CR, CT1, CT2 &mdash; the shop drawing&rsquo;s own blocks) is placed beside
+-            its equipment too, and drawn once you approve it.
++            The reviewed IFC drawing, copied with the changes accepted on Drawings Review made on it. The AI (Opus 5.5) proposes
++            where every ADD, REMOVE and REPLACE goes, with the drawing&rsquo;s own symbols; you approve, move or skip each one. Only the
++            changes you approve are drawn: AutoCAD makes them on a copy of the DWG &mdash; each marked on an EP-REDESIGN layer &mdash;
++            checks what it made, and keeps it as a new platform copy to download (it is not filed in the project folder). Every module
++            of the FA Interface Schedule (CR, CT1, CT2 &mdash; the shop drawing&rsquo;s own blocks) is proposed beside its equipment too,
++            and drawn only once you approve it.
+           </p>
+         </div>
+         <div className="flex flex-wrap items-center gap-2">
+@@ -268,7 +282,7 @@
+               disabled={planJob.active || applyJob.active || ready === 0}
+               className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+             >
+-              {applyJob.active ? "AutoCAD is drawing…" : `Make redesigned drawing (${ready})`}
++              {applyJob.active ? "AutoCAD is drawing…" : `Make redesigned drawing (${ready} approved)`}
+             </button>
+           )}
+         </div>
+@@ -289,23 +303,29 @@
+         <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-5">
+           {(["proposed", "approved", "skipped", "failed"] as const).map((k) => (
+             <div key={k} className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+-              <div className="text-xs uppercase tracking-wide text-gray-500">{k === "proposed" ? "Placed, to approve" : k}</div>
++              <div className="text-xs uppercase tracking-wide text-gray-500">
++                {k === "proposed" ? "Proposed, not drawn until approved" : k === "approved" ? "Approved, to draw" : k}
++              </div>
+               <div className="text-2xl font-bold text-navy-900">{data.counts[k] ?? 0}</div>
+             </div>
+           ))}
+           <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+             <div className="text-xs uppercase tracking-wide text-gray-500">Redesigned drawing</div>
+-            {data.output.status === "made" ? (
++            {data.output.status === "made" && data.output.available !== false ? (
+               <div className="mt-1 text-sm">
+                 <a href={apiUrl(`/projects/${project.id}/redesign/${drawingId}/output.dwg`)} className="font-semibold text-brand-600 hover:underline">
+                   Download DWG
+                 </a>
+                 <div className="mt-0.5 break-all text-[11px] text-gray-500">
+-                  {data.output.changes} changes · {data.output.relative ? `filed in ${data.output.relative}` : "not filed (project folder not reachable)"}
++                  {data.output.changes} approved changes, checked · a platform copy, not filed in the project folder
+                 </div>
+               </div>
+-            ) : data.output.status === "failed" ? (
++            ) : data.output.status === "made" ? (
++              <div className="mt-1 text-xs text-amber-700">Made, but the file is not on this PC</div>
++            ) : ["failed", "stale", "cancelled", "interrupted"].includes(data.output.status) ? (
+               <div className="mt-1 text-xs text-red-700">{data.output.error}</div>
++            ) : data.output.status === "making" ? (
++              <div className="mt-1 text-sm text-gray-500">Being made…</div>
+             ) : (
+               <div className="mt-1 text-sm text-gray-400">Not made yet</div>
+             )}
+@@ -457,9 +477,8 @@
+             {c.source === "interface" && c.status === "failed" ? "draw by hand" : c.status}
+           </span>
+           {c.confidence && c.source !== "interface" && <span className="text-xs text-gray-400">AI confidence: {c.confidence}</span>}
+-          {c.source === "interface" && c.status === "proposed" && (
+-            <span className="text-xs text-amber-700">drawn once approved</span>
+-          )}
++          {c.status === "proposed" && <span className="text-xs text-amber-700">not drawn until approved</span>}
++          {c.status === "approved" && c.drawn && <span className="text-xs text-green-700">will be drawn</span>}
+         </div>
+         <div className="mt-1 text-sm text-gray-600">
+           {c.floor} ({c.sheet}) · {c.room || "—"}
+@@ -478,8 +497,20 @@
+           </div>
+         )}
+         {c.confirm && (
+-          <div className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
+-            Placed within about ±{(c.residual ?? 1).toFixed(1)} m on this sheet: check the spot, or click the picture to set it.
++          <div className="mt-1 flex flex-wrap items-center gap-2 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
++            <span>
++              Placed within about ±{(c.residual ?? 1).toFixed(1)} m on this sheet: not drawn until you confirm the spot, or click the
++              picture to set it.
++            </span>
++            {canEdit && (
++              <button
++                onClick={() => onChange({ confirmed: true })}
++                disabled={busy}
++                className="rounded border border-amber-600 px-2 py-0.5 font-semibold text-amber-800 disabled:opacity-50"
++              >
++                Confirm this spot
++              </button>
++            )}
+           </div>
+         )}
+         {c.insert && (

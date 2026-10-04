@@ -196,7 +196,7 @@ def test_the_tab_says_what_is_missing_before_a_schedule_is_read(client):
                                                 "design_sheets": []}).json()["id"]
     body = client.get(f"/projects/{project_id}/design/amplifier").json()
     assert body["schedule_file"] is None
-    assert any("No floor-wise BOQ has been read" in warning for warning in body["result"]["warnings"])
+    assert any("No BOQ as per Shop Drawings has been made" in warning for warning in body["result"]["warnings"])
 
 
 def test_the_speaker_database_is_offered_and_a_tapping_it_does_not_have_is_refused(client, tmp_path):
@@ -570,3 +570,36 @@ def test_without_the_staircase_rule_every_speaker_is_a_floors():
     schedule = _schedule(["GF"], [("Wall Speaker", "Speaker", "G4SRN", {"GF": 2})])
     result = calculate(schedule, taps=STAIR_TAPS).as_dict()
     assert [column["key"] for column in result["columns"]] == ["G4SRN"] and result["staircase"] is None
+
+
+def test_the_engineer_puts_each_aps_cabinet_on_a_floor(client, db_session, tmp_path):
+    from app.models import ProjectFloorSchedule
+
+    _login(client)
+    project_id = client.post("/projects", json={"ep_number": "30913", "project_name": "T",
+                                                "design_sheets": []}).json()["id"]
+    _upload_schedule(client, project_id, tmp_path)
+    row = db_session.query(ProjectFloorSchedule).filter(ProjectFloorSchedule.project_id == project_id).one()
+    result = dict(row.result)
+    items = [dict(item) for item in result["items"]]
+    items[0]["material"] = {"part_no": "EST-S186C", "description": "Ceiling speaker", "manufacturer": "EDWARDS"}
+    result["items"] = items
+    row.result = result
+    db_session.commit()
+    client.put(f"/projects/{project_id}/design/amplifier", json={"taps": {"EST-S186C": 1.5}})
+
+    body = client.get(f"/projects/{project_id}/design/amplifier").json()["result"]
+    assert body["locations"] == {}
+    floors = [f["floor"] for f in body["floors"]]
+    first = body["cabinets"][0]["name"]
+    url = f"/projects/{project_id}/design/amplifier/locations"
+    assert client.patch(url, json={"cabinet": "APS-99", "floor": floors[0]}).status_code == 404
+    assert client.patch(url, json={"cabinet": first, "floor": "Mars"}).status_code == 400
+    placed = client.patch(url, json={"cabinet": first, "floor": floors[0]})
+    assert placed.status_code == 200 and placed.json()["result"]["locations"] == {first: floors[0]}
+    # kept, and shown on every read
+    assert client.get(f"/projects/{project_id}/design/amplifier").json()["result"]["locations"] == {first: floors[0]}
+    # a tapping change keeps it; clearing removes it
+    client.put(f"/projects/{project_id}/design/amplifier", json={"taps": {"EST-S186C": 0.75}})
+    assert client.get(f"/projects/{project_id}/design/amplifier").json()["result"]["locations"] == {first: floors[0]}
+    assert client.patch(url, json={"cabinet": first, "floor": None}).json()["result"]["locations"] == {}

@@ -1,0 +1,190 @@
+diff --git a/backend/app/redesign/service.py b/backend/app/redesign/service.py
+index e7f9a0c..b8e161b 100644
+--- a/backend/app/redesign/service.py
++++ b/backend/app/redesign/service.py
+@@ -1,4 +1,4 @@
+-"""Drawings Redesign: after the review, the IFC drawing copied with the
++﻿"""Drawings Redesign: after the review, the IFC drawing copied with the
+ accepted changes made on it (platform owner, 2 October 2026).
+ 
+   plan     each accepted ADD / REMOVE / REPLACE of the review, placed: the
+@@ -39,6 +39,7 @@ from pathlib import Path, PureWindowsPath
+ 
+ import pymupdf
+ from PIL import Image, ImageDraw
++from sqlalchemy import text
+ from sqlalchemy.orm import Session
+ 
+ from app.ai.provider import ImagePart, TextPart, get_provider
+@@ -1535,6 +1536,25 @@ def _unique_output(folder: Path, drawing: ProjectIfcDrawing, source_sha256: str,
+     return folder / f"{safe} {drawing.revision or 'R0'} - Redesign {stamp}Z d{drawing.id} s{source_sha256[:12]} {apply_id}.dwg"
+ 
+ 
++def _locked_publish_row(db: Session, row_id: int) -> ProjectRedesign:
++    """Start the short publication transaction and lock this redesign row.
++
++    SQLite needs BEGIN IMMEDIATE: SELECT FOR UPDATE is a no-op there. Other
++    databases use a row lock. Approval PATCHes may run while AutoCAD works,
++    but cannot commit between the final snapshot comparison and publication.
++    """
++    db.rollback()  # discard the read transaction used by verification
++    if db.get_bind().dialect.name == "sqlite":
++        db.execute(text("BEGIN IMMEDIATE"))
++        row = db.get(ProjectRedesign, row_id, populate_existing=True)
++    else:
++        row = (db.query(ProjectRedesign).filter(ProjectRedesign.id == row_id)
++               .with_for_update().one_or_none())
++    if row is None:
++        raise ApplyStale("The redesign disappeared before its output could be published.")
++    return row
++
++
+ def _publish(copy: Path, dest: Path) -> None:
+     """The verified copy to its final name, created exclusively: an existing
+     file is never overwritten."""
+@@ -1661,22 +1681,40 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
+             raise ApplyError("The redesigned copy did not verify, so it was not kept as a result: "
+                              + "; ".join(result.problems)[:800])
+         check()
+-        # the decision snapshot again, from the database: changed while AutoCAD worked -> not published
+-        db.expire_all()
+-        row = state(db, project, drawing_id)
++        # Publication is one short serialized transaction. Approval PATCHes
++        # remain allowed while AutoCAD works, then wait here; none can commit
++        # between this snapshot comparison, exclusive file creation and the
++        # database state transition (RDM2-R1).
++        row = _locked_publish_row(db, row.id)
+         if _snapshot(row, row.source_sha256) != snap:
+             raise ApplyStale("Approvals or placings changed while the drawing was being made: it was not published. "
+                              "Check the changes and make the drawing again.")
+         check()
+         dest = _unique_output(folder, drawing, source_sha, apply_id)
+-        _publish(Path(run.copy), dest)
+-        relative = dest.relative_to(storage.uploads_root().resolve()).as_posix()
+-        row.output_status, row.output_error, row.output_path, row.output_relative = "made", None, relative, None
+-        row.output_at, row.output_changes = utc_now(), len(cad_changes)
+-        db.commit()
+-        Path(run.copy).unlink(missing_ok=True)       # published; the run folder keeps the script, log and checks
++        published = False
++        try:
++            _publish(Path(run.copy), dest)
++            published = True
++            relative = dest.relative_to(storage.uploads_root().resolve()).as_posix()
++            row.output_status, row.output_error, row.output_path, row.output_relative = "made", None, relative, None
++            row.output_at, row.output_changes = utc_now(), len(cad_changes)
++            db.commit()
++        except BaseException:
++            db.rollback()
++            if published:
++                dest.unlink(missing_ok=True)
++            raise
++        # Cleanup and progress reporting happen after the committed result and
++        # cannot turn it into a failed database state.
++        try:
++            Path(run.copy).unlink(missing_ok=True)
++        except OSError:
++            log.warning("Could not remove the published run copy %s", run.copy, exc_info=True)
+         if progress:
+-            progress(3, 3, "Made and checked")
++            try:
++                progress(3, 3, "Made and checked")
++            except Exception:
++                log.warning("Could not report final Apply progress", exc_info=True)
+         return {"file": dest.name, "path": relative, "changes": len(cad_changes), "drawing_id": drawing_id,
+                 "fingerprint": snap["content"], "source_sha256": source_sha, "apply_id": apply_id,
+                 "run": Path(run.work).relative_to(storage.uploads_root().resolve()).as_posix(),
+@@ -1739,3 +1777,4 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
+                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},
+         "folder": FOLDER,
+     }
++
+diff --git a/backend/tests/test_redesign_apply.py b/backend/tests/test_redesign_apply.py
+index 500b5bc..b3480d4 100644
+--- a/backend/tests/test_redesign_apply.py
++++ b/backend/tests/test_redesign_apply.py
+@@ -614,3 +614,85 @@ def test_a_script_cancelled_by_autocad_has_no_outcome_and_is_refused(tmp_path):
+     assert not result.ok
+     assert "AutoCAD's completion marker is missing." in result.problems
+     assert "The redesigned copy is the same as the source: nothing was saved." in result.problems
++
++# --- RDM2-R1: publication is serialized with approval writes -----------------------------
++
++
++def test_publication_lock_blocks_an_approval_write_until_the_result_commits(tmp_path):
++    """The lock used around final snapshot + publish is a real database lock,
++    not an in-process mutex: another session cannot commit an approval inside
++    the publication window."""
++    import threading
++    import time
++
++    from sqlalchemy import create_engine
++    from sqlalchemy.orm import sessionmaker
++    from app.models import ProjectRedesign
++
++    engine = create_engine(f"sqlite:///{tmp_path / 'publish-lock.db'}",
++                           connect_args={"check_same_thread": False, "timeout": 3})
++    ProjectRedesign.__table__.create(engine)
++    Sessions = sessionmaker(bind=engine)
++    setup = Sessions()
++    row = ProjectRedesign(project_id=1, drawing_id=1, status="planned", changes=[], symbols=[])
++    setup.add(row)
++    setup.commit()
++    row_id = row.id
++    setup.close()
++
++    publisher = Sessions()
++    locked = R._locked_publish_row(publisher, row_id)
++    assert locked.id == row_id
++    attempted = threading.Event()
++    committed = threading.Event()
++    errors = []
++
++    def approve():
++        other = Sessions()
++        try:
++            changed = other.get(ProjectRedesign, row_id)
++            changed.changes = [{"id": "late", "status": "approved"}]
++            attempted.set()
++            other.commit()
++            committed.set()
++        except Exception as exc:  # pragma: no cover - reported by the assertion
++            errors.append(exc)
++        finally:
++            other.close()
++
++    thread = threading.Thread(target=approve, daemon=True)
++    thread.start()
++    assert attempted.wait(1)
++    time.sleep(0.15)
++    assert not committed.is_set()                   # blocked inside the publication transaction
++    publisher.commit()
++    thread.join(2)
++    assert not errors and committed.is_set()
++    check = Sessions()
++    try:
++        assert check.get(ProjectRedesign, row_id).changes == [{"id": "late", "status": "approved"}]
++    finally:
++        check.close()
++        engine.dispose()
++
++
++def test_a_commit_failure_after_exclusive_publication_removes_the_output(gc, monkeypatch):
++    """A file does not remain published when its database state cannot commit."""
++    db = gc["db"]
++    real_commit = db.commit
++    failed = False
++
++    def fail_final_commit_once():
++        nonlocal failed
++        row = db.get(__import__("app.models", fromlist=["ProjectRedesign"]).ProjectRedesign, gc["row_id"])
++        if not failed and row.output_status == "made":
++            failed = True
++            raise RuntimeError("scripted final commit failure")
++        return real_commit()
++
++    monkeypatch.setattr(db, "commit", fail_final_commit_once)
++    with pytest.raises(RuntimeError, match="scripted final commit failure"):
++        _apply(gc)
++    assert failed and _outputs(gc) == []
++    row = _row(gc)
++    assert row.output_status == "failed" and "scripted final commit failure" in row.output_error

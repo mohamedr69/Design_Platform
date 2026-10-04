@@ -162,24 +162,25 @@ def _revision_number(revision: str) -> int:
 
 def _filed_revision(submittal: ProjectSubmittal, number: int, reference: str, manufacturer: str | None,
                     path: str, user: User | None) -> None:
-    """The filed package as revision `number` of its submittal, under review:
-    a revision filed again is the same revision, its status reset in place
-    and the old one kept in its history."""
+    """The filed package as revision `number` of its submittal, created and
+    not yet sent: it goes under review when the engineer marks it submitted
+    (platform owner, 2 October 2026). A revision filed again is the same
+    revision, its status reset in place and the old one kept in its history."""
     from app.core.timeutils import utc_now
     from app.models import ProjectSubmittalRevision, ProjectSubmittalStatusChange
 
     row = next((r for r in submittal.revisions if _revision_number(r.revision) == number), None)
     change = ProjectSubmittalStatusChange(previous_status=row.status.value if row is not None else None,
-                                          new_status=SubmittalStatus.under_review.value, reply_code=None,
+                                          new_status=SubmittalStatus.not_submitted.value, reply_code=None,
                                           source="filed", by_id=user.id if user else None, changed_at=utc_now())
     if row is None:
-        row = ProjectSubmittalRevision(revision=f"R{number:02d}", status=SubmittalStatus.under_review, also_filed_as=[],
+        row = ProjectSubmittalRevision(revision=f"R{number:02d}", status=SubmittalStatus.not_submitted, also_filed_as=[],
                                        updated_at=utc_now())
         submittal.revisions.append(row)
         row.history.append(change)
-    elif row.status != SubmittalStatus.under_review:
+    elif row.status != SubmittalStatus.not_submitted:
         row.history.append(change)
-    row.status, row.reply_code, row.reference = SubmittalStatus.under_review, None, reference
+    row.status, row.reply_code, row.reference = SubmittalStatus.not_submitted, None, reference
     row.manufacturer, row.document_path, row.updated_at = manufacturer or row.manufacturer, path, utc_now()
 
 
@@ -268,12 +269,12 @@ def file_package(db: Session, project: Project, user: User | None, *, pdf: bytes
     if submittal is None:
         submittal = ProjectSubmittal(project_id=project.id, title=title, reference=reference, system_code=code,
                                      brand_key=brand, manufacturer=manufacturer, revision=f"R{number}",
-                                     status=SubmittalStatus.under_review,
+                                     status=SubmittalStatus.not_submitted,
                                      document_path=str(path), created_by_id=user.id if user else None)
         db.add(submittal)
     elif _revision_number(submittal.revision) <= number:
         submittal.revision, submittal.document_path = f"R{number}", str(path)
-        submittal.status, submittal.reply_code = SubmittalStatus.under_review, None
+        submittal.status, submittal.reply_code = SubmittalStatus.not_submitted, None
         submittal.reference = reference
         submittal.manufacturer = submittal.manufacturer or manufacturer
     _filed_revision(submittal, number, reference, manufacturer, str(path), user)

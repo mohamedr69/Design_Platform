@@ -1,4 +1,9 @@
-"""The voice evacuation amplifier schedule, from the floor-wise BOQ.
+"""The voice evacuation amplifier schedule, from the BOQ as per Shop Drawings.
+
+The quantities are the BOQ as per Shop Drawings' (app.services.shop_boq)
+once the project has one -- the shop drawings are what is installed
+(platform owner, 1 October 2026); until then, the BOQ Floor Wise's, and
+the page says so. Both are kept in one form, so either is read the same way.
 
   GET /projects/{id}/design/amplifier          the schedule as it stands
   PUT /projects/{id}/design/amplifier          set tappings and hand counts
@@ -23,7 +28,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.deps import get_current_user, require_role
-from app.models import DesignRule, ProjectAmplifierDesign, ProjectFloorSchedule, User
+from app.models import DesignRule, ProjectAmplifierDesign, ProjectFloorSchedule, ProjectShopBoq, User
 from app.routers.projects import CREATOR_ROLES, _get_project_or_404
 from app.services import activity, amplifier_calculation
 
@@ -90,8 +95,33 @@ class PowerOut(BaseModel):
     updated_at: datetime | None
 
 
+Source = ProjectShopBoq | ProjectFloorSchedule
+
+
+def _source(db: Session, project) -> Source | None:
+    """The quantities the amplifier and power schedules are worked out
+    from: the BOQ as per Shop Drawings, else the BOQ Floor Wise."""
+    shop = db.query(ProjectShopBoq).filter(ProjectShopBoq.project_id == project.id).first()
+    if shop is not None and shop.result:
+        return shop
+    return db.query(ProjectFloorSchedule).filter(ProjectFloorSchedule.project_id == project.id).first()
+
+
+def _tab(schedule: Source | None) -> str:
+    return "BOQ as per Shop Drawings" if isinstance(schedule, ProjectShopBoq) else "BOQ Floor Wise"
+
+
+def _from_floor_wise(result, schedule: Source | None) -> None:
+    """Said on the page while the quantities are not the shop drawings'."""
+    if isinstance(schedule, ProjectFloorSchedule):
+        result.warnings.insert(0, (
+            "These quantities are the BOQ Floor Wise's: the BOQ as per Shop Drawings has not been made yet. "
+            "Open that tab on the BOQ page to make it from the IFC drawings; this schedule then follows it."
+        ))
+
+
 def _power(db: Session, project, design: ProjectAmplifierDesign | None,
-           schedule: ProjectFloorSchedule | None) -> PowerOut:
+           schedule: Source | None) -> PowerOut:
     from app.services import power_calculation
     from app.services.schedule_materials import sounder_bases
 
@@ -105,10 +135,15 @@ def _power(db: Session, project, design: ProjectAmplifierDesign | None,
     )
     if schedule is None:
         result.warnings.insert(0, (
-            "No floor-wise BOQ has been read for this project, so there are no devices to draw from a "
-            "power supply. Read the schedule on the BOQ page's BOQ Floor Wise tab."
+            "No BOQ as per Shop Drawings has been made for this project, so there are no devices to draw "
+            "from a power supply. Make it on the BOQ page's BOQ as per Shop Drawings tab."
         ))
-    return PowerOut(result=result.as_dict(), schedule_file=schedule.file_name if schedule else None,
+    _from_floor_wise(result, schedule)
+    out = result.as_dict()
+    names = {supply["name"] for supply in out["supplies"]}
+    out["locations"] = {supply: floor for supply, floor in ((design.locations if design else {}) or {}).items()
+                        if supply in names}
+    return PowerOut(result=out, schedule_file=schedule.file_name if schedule else None,
                     updated_at=design.updated_at if design else None)
 
 
@@ -118,12 +153,11 @@ def get_power(
     _current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> PowerOut:
-    """The 24 V power schedule the project's floor-wise BOQ makes."""
+    """The 24 V power schedule the project's BOQ as per Shop Drawings makes (see `_source`)."""
     project = _get_project_or_404(db, project_id)
     design = db.query(ProjectAmplifierDesign).filter(
         ProjectAmplifierDesign.project_id == project.id).first()
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
     return _power(db, project, design, schedule)
 
 
@@ -162,8 +196,7 @@ def set_power(
     design.created_by_id = current_user.id
     db.commit()
     db.refresh(design)
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
     out = _power(db, project, design, schedule)
     activity.record(db, current_user, "power.set",
                     f"Set the 24 V power schedule: {out.result['total_devices']} devices, "
@@ -172,6 +205,82 @@ def set_power(
                     project=project, entity_type="power",
                     detail={"currents": design.currents, "supplies": len(out.result["supplies"])})
     return out
+
+
+class CountIn(BaseModel):
+    """How many of one speaker sit on one floor."""
+
+    floor: str
+    part_no: str
+    count: int = Field(ge=0)
+
+
+@router.patch("/projects/{project_id}/design/power/counts", response_model=PowerOut)
+def set_power_count(
+    project_id: int,
+    payload: CountIn,
+    current_user: User = Depends(require_role(*CREATOR_ROLES)),
+    db: Session = Depends(get_db),
+) -> PowerOut:
+    """Change how many of a 24 V device a floor has -- on the floor-wise
+    BOQ, as the amplifier tab changes a speaker's."""
+    from app.services import power_calculation
+    from app.services.schedule_materials import sounder_bases
+
+    project = _get_project_or_404(db, project_id)
+    schedule = _schedule_or_404(db, project)
+    design = db.query(ProjectAmplifierDesign).filter(
+        ProjectAmplifierDesign.project_id == project.id).first()
+    result = power_calculation.calculate(
+        schedule.result or {}, currents=current_database(db),
+        chosen={key: float(value) for key, value in ((design.currents if design else {}) or {}).items()},
+        supply=_supply(db), module=_nac_module(db), bases=sounder_bases(db, project),
+    )
+    _set_floor_count(db, project, schedule, result.columns, payload, current_user, "24 V device", "power.count")
+    return _power(db, project, design, schedule)
+
+
+class SupplyLocationIn(BaseModel):
+    """Where one booster power supply is installed; null to clear it."""
+
+    supply: str = Field(max_length=40)
+    floor: str | None = Field(default=None, max_length=160)
+
+
+@router.patch("/projects/{project_id}/design/power/locations", response_model=PowerOut)
+def set_supply_location(
+    project_id: int,
+    payload: SupplyLocationIn,
+    current_user: User = Depends(require_role(*CREATOR_ROLES)),
+    db: Session = Depends(get_db),
+) -> PowerOut:
+    """The floor a BPS is installed on: the engineer's decision."""
+    project = _get_project_or_404(db, project_id)
+    design = db.query(ProjectAmplifierDesign).filter(
+        ProjectAmplifierDesign.project_id == project.id).first()
+    schedule = _source(db, project)
+    current = _power(db, project, design, schedule).result
+    if payload.supply not in {supply["name"] for supply in current["supplies"]}:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"{payload.supply} is not a supply of this schedule")
+    floor = (payload.floor or "").strip() or None
+    if floor is not None and floor not in {row["floor"] for row in current["floors"]}:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=f"{floor} is not a floor of this schedule")
+    if design is None:
+        design = ProjectAmplifierDesign(project_id=project.id)
+        db.add(design)
+    locations = dict(design.locations or {})
+    if floor is None:
+        locations.pop(payload.supply, None)
+    else:
+        locations[payload.supply] = floor
+    design.locations = locations
+    design.created_by_id = current_user.id
+    db.commit()
+    db.refresh(design)
+    activity.record(db, current_user, "power.location",
+                    f"Put {payload.supply} on {floor}" if floor else f"Cleared where {payload.supply} is",
+                    project=project, entity_type="power", detail={"supply": payload.supply, "floor": floor})
+    return _power(db, project, design, schedule)
 
 
 class DeviceCurrentOut(BaseModel):
@@ -205,10 +314,9 @@ def export_power(
     project = _get_project_or_404(db, project_id)
     design = db.query(ProjectAmplifierDesign).filter(
         ProjectAmplifierDesign.project_id == project.id).first()
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
     if schedule is None or not schedule.result:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No floor-wise BOQ has been read yet")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No BOQ as per Shop Drawings has been made yet")
     doc = power_export.build(project, _power(db, project, design, schedule).result)
     pdf = doc.tobytes()
     doc.close()
@@ -249,7 +357,7 @@ class AmplifierOut(BaseModel):
 
 
 def _out(db: Session, project, design: ProjectAmplifierDesign | None,
-         schedule: ProjectFloorSchedule | None) -> AmplifierOut:
+         schedule: Source | None) -> AmplifierOut:
     result = amplifier_calculation.calculate(
         (schedule.result if schedule else {}) or {},
         taps=speaker_database(db),
@@ -260,11 +368,18 @@ def _out(db: Session, project, design: ProjectAmplifierDesign | None,
     )
     if schedule is None:
         result.warnings.insert(0, (
-            "No floor-wise BOQ has been read for this project, so there are no speakers to load an "
-            "amplifier with. Read the schedule on the BOQ page's BOQ Floor Wise tab."
+            "No BOQ as per Shop Drawings has been made for this project, so there are no speakers to load "
+            "an amplifier with. Make it on the BOQ page's BOQ as per Shop Drawings tab."
         ))
+    _from_floor_wise(result, schedule)
+    out = result.as_dict()
+    # Where each APS cabinet is put: the engineer's, for the cabinets the
+    # schedule has now (a cabinet the loading no longer makes drops out).
+    names = {cabinet["name"] for cabinet in out["cabinets"]}
+    out["locations"] = {cabinet: floor for cabinet, floor in ((design.locations if design else {}) or {}).items()
+                        if cabinet in names}
     return AmplifierOut(
-        result=result.as_dict(),
+        result=out,
         schedule_file=schedule.file_name if schedule else None,
         updated_at=design.updated_at if design else None,
     )
@@ -282,10 +397,9 @@ def export_amplifier(
     project = _get_project_or_404(db, project_id)
     design = db.query(ProjectAmplifierDesign).filter(
         ProjectAmplifierDesign.project_id == project.id).first()
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
     if schedule is None or not schedule.result:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No floor-wise BOQ has been read yet")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No BOQ as per Shop Drawings has been made yet")
     doc = amplifier_export.build(project, _out(db, project, design, schedule).result)
     pdf = doc.tobytes()
     doc.close()
@@ -293,14 +407,6 @@ def export_amplifier(
     return Response(pdf, media_type="application/pdf",
                     headers={"Content-Disposition": f"attachment; filename=\"{name}\"; "
                                                     f"filename*=UTF-8''{quote(name)}"})
-
-
-class CountIn(BaseModel):
-    """How many of one speaker sit on one floor."""
-
-    floor: str
-    part_no: str
-    count: int = Field(ge=0)
 
 
 @router.patch("/projects/{project_id}/design/amplifier/counts", response_model=AmplifierOut)
@@ -312,20 +418,14 @@ def set_count(
 ) -> AmplifierOut:
     """Change how many speakers a floor has.
 
-    The change is made on the floor-wise BOQ, because that is where the
+    The change is made on the BOQ the schedule reads (`_source`), because that is where the
     quantity lives: the two tabs are two views of one number, and a
-    speaker added here appears on the BOQ Floor Wise tab as well. It is
+    speaker added here appears on that BOQ's tab as well. It is
     kept as a correction (`ProjectFloorSchedule.edits`), so re-reading the
     workbook does not undo it.
     """
-    from app.services import floor_schedule as floor_schedule_service
-
     project = _get_project_or_404(db, project_id)
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
-    if schedule is None or not schedule.result:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No floor-wise BOQ has been read yet")
-
+    schedule = _schedule_or_404(db, project)
     design = db.query(ProjectAmplifierDesign).filter(
         ProjectAmplifierDesign.project_id == project.id).first()
     result = amplifier_calculation.calculate(
@@ -337,17 +437,37 @@ def set_count(
     )
     # A staircase speaker's count is changed from its own tab the same way.
     columns = result.columns + (result.staircase.columns if result.staircase else [])
+    _set_floor_count(db, project, schedule, columns, payload, current_user, "speaker", "amplifier.count")
+    return _out(db, project, design, schedule)
+
+
+def _schedule_or_404(db: Session, project) -> Source:
+    schedule = _source(db, project)
+    if schedule is None or not schedule.result:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No BOQ as per Shop Drawings has been made yet")
+    return schedule
+
+
+def _set_floor_count(db: Session, project, schedule: Source, columns, payload: CountIn,
+                     current_user: User, what: str, action: str) -> None:
+    """How many of one part a floor has, set on the BOQ line the part is
+    ordered for -- the amplifier and power tabs and the BOQ they read (the
+    BOQ as per Shop Drawings, else the BOQ Floor Wise) are views of that one
+    number. On the BOQ Floor Wise it is kept as a correction (`edits`), so
+    re-reading the workbook does not undo it."""
+    from app.services import floor_schedule as floor_schedule_service
+
     column = next((c for c in columns if c.key == payload.part_no), None)
     if column is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND,
-                            detail=f"{payload.part_no} is not a speaker on this schedule")
+                            detail=f"{payload.part_no} is not a {what} on this schedule")
     if len(column.lines) != 1:
         # Two BOQ lines settled as the same part: which of them gained a
         # speaker is a question only the engineer can answer.
         raise HTTPException(
             status.HTTP_409_CONFLICT,
             detail=f"{payload.part_no} is ordered for {len(column.lines)} lines of the BOQ "
-                   f"({', '.join(column.lines)}). Change the quantity on the BOQ Floor Wise tab, "
+                   f"({', '.join(column.lines)}). Change the quantity on the {_tab(schedule)} tab, "
                    "where each line is its own row.",
         )
     line = next((item for item in schedule.result.get("items", [])
@@ -361,17 +481,16 @@ def set_count(
         )
     except KeyError as exc:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(exc.args[0])) from exc
-    edits = {key: dict(value) for key, value in (schedule.edits or {}).items()}
-    edits.setdefault(line["description"], {})[payload.floor] = payload.count
-    schedule.edits = edits
+    if isinstance(schedule, ProjectFloorSchedule):
+        edits = {key: dict(value) for key, value in (schedule.edits or {}).items()}
+        edits.setdefault(line["description"], {})[payload.floor] = payload.count
+        schedule.edits = edits
     schedule.created_by_id = current_user.id
     db.commit()
     db.refresh(schedule)
-    activity.record(db, current_user, "amplifier.count",
-                    f"Set {payload.part_no} on {payload.floor} to {payload.count}",
-                    project=project, entity_type="amplifier",
+    activity.record(db, current_user, action, f"Set {payload.part_no} on {payload.floor} to {payload.count}",
+                    project=project, entity_type=action.split(".")[0],
                     detail={"floor": payload.floor, "part_no": payload.part_no, "count": payload.count})
-    return _out(db, project, design, schedule)
 
 
 @router.get("/projects/{project_id}/design/amplifier", response_model=AmplifierOut)
@@ -380,12 +499,55 @@ def get_amplifier(
     _current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> AmplifierOut:
-    """The amplifier schedule the project's floor-wise BOQ makes."""
+    """The amplifier schedule the project's BOQ as per Shop Drawings makes (see `_source`)."""
     project = _get_project_or_404(db, project_id)
     design = db.query(ProjectAmplifierDesign).filter(
         ProjectAmplifierDesign.project_id == project.id).first()
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
+    return _out(db, project, design, schedule)
+
+
+class LocationIn(BaseModel):
+    """Where one APS cabinet is installed; null to clear it."""
+
+    cabinet: str = Field(max_length=40)
+    floor: str | None = Field(default=None, max_length=160)
+
+
+@router.patch("/projects/{project_id}/design/amplifier/locations", response_model=AmplifierOut)
+def set_location(
+    project_id: int,
+    payload: LocationIn,
+    current_user: User = Depends(require_role(*CREATOR_ROLES)),
+    db: Session = Depends(get_db),
+) -> AmplifierOut:
+    """The floor an APS cabinet -- and the amplifiers in it -- is installed
+    on: the engineer's decision, one of the building's floors."""
+    project = _get_project_or_404(db, project_id)
+    design = db.query(ProjectAmplifierDesign).filter(
+        ProjectAmplifierDesign.project_id == project.id).first()
+    schedule = _source(db, project)
+    current = _out(db, project, design, schedule).result
+    if payload.cabinet not in {cabinet["name"] for cabinet in current["cabinets"]}:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"{payload.cabinet} is not a cabinet of this schedule")
+    floor = (payload.floor or "").strip() or None
+    if floor is not None and floor not in {row["floor"] for row in current["floors"]}:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=f"{floor} is not a floor of this schedule")
+    if design is None:
+        design = ProjectAmplifierDesign(project_id=project.id)
+        db.add(design)
+    locations = dict(design.locations or {})
+    if floor is None:
+        locations.pop(payload.cabinet, None)
+    else:
+        locations[payload.cabinet] = floor
+    design.locations = locations          # a fresh dict: written
+    design.created_by_id = current_user.id
+    db.commit()
+    db.refresh(design)
+    activity.record(db, current_user, "amplifier.location",
+                    f"Put {payload.cabinet} on {floor}" if floor else f"Cleared where {payload.cabinet} is",
+                    project=project, entity_type="amplifier", detail={"cabinet": payload.cabinet, "floor": floor})
     return _out(db, project, design, schedule)
 
 
@@ -431,8 +593,7 @@ def set_amplifier(
     design.created_by_id = current_user.id
     db.commit()
     db.refresh(design)
-    schedule = db.query(ProjectFloorSchedule).filter(
-        ProjectFloorSchedule.project_id == project.id).first()
+    schedule = _source(db, project)
     out = _out(db, project, design, schedule)
     activity.record(db, current_user, "amplifier.set",
                     f"Set the amplifier schedule: {out.result['total_speakers']} speakers, "

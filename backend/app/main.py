@@ -72,6 +72,15 @@ async def lifespan(app: FastAPI):
         from app.services.jobs import fail_interrupted
 
         fail_interrupted(db)
+        # A shared database can carry another Windows user's absolute
+        # OneDrive paths. Rebind only projects whose same relative folder
+        # exists under this machine's detected archive root.
+        from app.services import ep_directory
+
+        try:
+            ep_directory.rebind_project_paths(db, ep_directory.archive_root())
+        except ep_directory.ArchiveUnavailable:
+            pass
     finally:
         db.close()
     # A new machine's first start: the knowledge base in `data base` is
@@ -215,6 +224,18 @@ from app.routers import floor_schedule as floor_schedule_router  # noqa: E402
 
 app.include_router(floor_schedule_router.router)
 
+from app.routers import shop_boq as shop_boq_router  # noqa: E402
+
+app.include_router(shop_boq_router.router)
+
+from app.routers import draftsman as draftsman_router  # noqa: E402
+
+app.include_router(draftsman_router.router)
+
+from app.routers import redesign as redesign_router  # noqa: E402
+
+app.include_router(redesign_router.router)
+
 from app.routers import amplifier as amplifier_router  # noqa: E402
 
 app.include_router(amplifier_router.router)
@@ -224,6 +245,16 @@ app.include_router(amplifier_router.router)
 from app.routers import ifc_boq as ifc_boq_router  # noqa: E402
 
 app.include_router(ifc_boq_router.router)
+# The BOQ page's "FA Interfaces" tab: the other trades' equipment the fire alarm
+# monitors or controls, floor by floor, from their IFC drawings.
+from app.routers import fa_interfaces as fa_interfaces_router  # noqa: E402
+app.include_router(fa_interfaces_router.router)
+# Logs > Samples: the Request Material email for a sample board not yet sent.
+from app.routers import samples as samples_router  # noqa: E402
+app.include_router(samples_router.router)
+# Drawings Review: the FA IFC drawing's rooms looked at by the model against the coverage rules.
+from app.routers import drawing_review as drawing_review_router  # noqa: E402
+app.include_router(drawing_review_router.router)
 from app.routers import drawings as drawings_router  # noqa: E402
 app.include_router(drawings_router.router)
 # The project's state for every page: the Home summary, actions, changes.

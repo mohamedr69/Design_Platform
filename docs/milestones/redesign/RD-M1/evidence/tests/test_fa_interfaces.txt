@@ -1,0 +1,15 @@
+..........                                                               [100%]
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\..\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_fa_interfaces.py::test_the_schedule_is_read_floor_by_floor_from_each_disciplines_drawings
+tests/test_fa_interfaces.py::test_a_viewer_reads_the_schedule_but_does_not_answer
+tests/test_fa_interfaces.py::test_the_plans_are_checked_against_the_equipment_schedule
+tests/test_fa_interfaces.py::test_one_piece_of_equipment_on_several_drawings_is_counted_once
+  <PC-B user profile>\AppData\Local\Temp\claude\g--dev--2--dev\6f67ec6f-cb75-49d6-9946-10047734e054\scratchpad\rdm1\code\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+10 passed, 5 warnings in 8.54s

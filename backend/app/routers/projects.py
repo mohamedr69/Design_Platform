@@ -81,6 +81,10 @@ CREATOR_ROLES = (RoleEnum.admin, RoleEnum.design_manager, *DESIGN_ROLES)
 # with the roles that own a project's lifecycle rather than everyone who can
 # create one -- a Design Engineer can start a project but not erase one.
 DELETER_ROLES = (RoleEnum.admin, RoleEnum.design_manager)
+# A material submittal is the design engineers' own document: they file it
+# and may take a mistaken one out again (the page warns, names the file
+# it removes from the project folder, and asks first).
+SUBMITTAL_DELETER_ROLES = CREATOR_ROLES
 
 XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 

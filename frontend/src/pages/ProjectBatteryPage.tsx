@@ -420,6 +420,16 @@ function PanelDetail({
   const brandName = ((data.selection_rule?.data.brand as string | undefined) ?? "").trim() || "catalogued";
   const lines = consuming(panel);
   const extras = settings?.extra_components ?? [];
+  const removedLines = settings?.removed_lines ?? [];
+  // A removal not saved yet is already off the table; one put back, already on it.
+  const pending = (line: BatteryLine) =>
+    line.occurrence != null && removedLines.some((r) => r.part_no === line.part_no && r.occurrence === line.occurrence);
+  const removedShown = [
+    ...(panel.removed ?? []).filter((r) => removedLines.some((x) => x.part_no === r.part_no && x.occurrence === r.occurrence)),
+    ...removedLines
+      .filter((r) => !(panel.removed ?? []).some((x) => x.part_no === r.part_no && x.occurrence === r.occurrence))
+      .map((r) => ({ ...r, description: "", quantity: null })),
+  ];
   const firstDatasheet = lines.find((l) => l.datasheet_path);
   const [editing, setEditing] = useState<Set<string>>(new Set());
   const [adding, setAdding] = useState(false);
@@ -536,7 +546,7 @@ function PanelDetail({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {lines.map((line, i) => {
+                {lines.filter((line) => !pending(line)).map((line, i) => {
                   const id = rowId(line, i);
                   return editing.has(id) && canEdit ? (
                     <EditRow
@@ -580,6 +590,19 @@ function PanelDetail({
                             Remove
                           </button>
                         )}
+                        {canEdit && line.extra_index === null && line.part_no && line.occurrence != null && (
+                          <button
+                            title="Take this line out of this panel's battery calculation only; the BOQ keeps it"
+                            onClick={() =>
+                              onEdit({
+                                removed_lines: [...removedLines, { part_no: line.part_no!, occurrence: line.occurrence! }],
+                              })
+                            }
+                            className="ml-3 text-gray-400 hover:text-red-600"
+                          >
+                            Remove
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
@@ -611,6 +634,36 @@ function PanelDetail({
               </tfoot>
             </table>
           </div>
+          {removedShown.length > 0 && (
+            <div className="mt-2 rounded-lg border border-dashed border-gray-200 px-3 py-2 text-xs text-gray-600">
+              <span className="font-semibold text-navy-900">Removed from this calculation</span> (the BOQ keeps them):
+              <ul className="mt-1 space-y-1">
+                {removedShown.map((r) => (
+                  <li key={`${r.part_no}#${r.occurrence}`} className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium text-navy-900">{r.part_no}</span>
+                    {r.occurrence > 1 && <span className="text-gray-400">(line {r.occurrence} of this part)</span>}
+                    {r.description && <span className="max-w-md truncate text-gray-500">{r.description}</span>}
+                    {r.quantity && <span className="text-gray-400">qty {r.quantity}</span>}
+                    {canEdit && (
+                      <button
+                        onClick={() =>
+                          onEdit({
+                            removed_lines: removedLines.filter(
+                              (x) => !(x.part_no === r.part_no && x.occurrence === r.occurrence),
+                            ),
+                          })
+                        }
+                        className="font-semibold text-brand-600 hover:underline"
+                      >
+                        Put back
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              {dirty && <p className="mt-1 text-amber-700">Save to recalculate the panel without them.</p>}
+            </div>
+          )}
           {panel.notes.length > 0 && (
             <ul className="mt-2 list-disc pl-5 text-xs text-gray-500">
               {panel.notes.map((n) => (

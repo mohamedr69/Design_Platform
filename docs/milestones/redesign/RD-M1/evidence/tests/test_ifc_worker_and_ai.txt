@@ -1,0 +1,12 @@
+.........................................                                [100%]
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\..\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  <PC-B user profile>\Desktop\dev\dev\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_ifc_worker_and_ai.py: 37 warnings
+  <PC-B user profile>\AppData\Local\Temp\claude\g--dev--2--dev\6f67ec6f-cb75-49d6-9946-10047734e054\scratchpad\rdm1\code\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+41 passed, 38 warnings in 65.88s (0:01:05)

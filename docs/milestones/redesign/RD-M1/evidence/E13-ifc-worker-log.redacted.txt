@@ -1,0 +1,128 @@
+# RD-M1 redacted copy of <outer repo>/ifc-worker-g.stderr.log as read at audit time; sha256 of the read bytes: b431805bed6321a8d54e64fc3c2da8eec2101a47df2c7c72265d77fff3b0587a (live log, still appended by the owner's worker)
+2026-10-03 19:15:01,388 INFO app.workers.ifc_worker: Running below normal priority
+2026-10-03 19:15:02,586 INFO app.workers.ifc_worker: IFC worker: 2 slot(s)
+2026-10-03 19:15:04,900 INFO app.workers.sync_worker: Worker ifc:PC-B:37964:1791040504:0 started (poll every 1.5 s)
+2026-10-03 19:15:04,901 INFO app.workers.sync_worker: Worker ifc:PC-B:37964:1791040504:1 started (poll every 1.5 s)
+2026-10-03 19:15:05,059 WARNING app.services.jobs: Job 119 was left running by a worker that stopped: requeued
+2026-10-03 19:15:05,067 INFO app.services.jobs: Worker ifc:PC-B:37964:1791040504:1 claimed job 119 (fa_redesign_apply, project 5)
+2026-10-03 19:16:03,065 ERROR app.services.jobs: Job 119 failed
+Traceback (most recent call last):
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 278, in run
+    return step(session, project, p["drawing_id"], check=ctx.check,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 276, in <lambda>
+    lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), **kw))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\redesign\service.py", line 1387, in apply
+    cad.apply(source, platform_copy, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
+  File "G:\dev (2)\dev\ep-platform\backend\app\redesign\cad.py", line 168, in apply
+    raise CadError(f"AutoCAD did not save the redesigned drawing. Its last words:\n{convert._tail(log)}")
+app.redesign.cad.CadError: AutoCAD did not save the redesigned drawing. Its last words:
+"CT2.dwg": Can't find file in search path:
+  G:\dev (2)\dev\ep-platform\backend\uploads\EP-30880\redesign\work-1\ (current directory)
+  <PC-B user profile>\AppData\Roaming\Autodesk\AutoCAD 2027\R26.0\enu\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\en-US\
+  C:\Program Files\Autodesk\AutoCAD 2027\fonts\
+  C:\Program Files\Autodesk\AutoCAD 2027\help\
+  C:\Program Files\Autodesk\AutoCAD 2027\Express\
+  C:\Program Files\Autodesk\ApplicationPlugins\AutoCAD-MCP-Server-2027.bundle\Contents\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\2027\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk FeaturedApps.bundle\Contents\Resources\
+  C:\Program Files\Autodesk\AutoCAD 2027\
+*Invalid*
+; error: Function cancelled
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\dev (2)\dev\ep-platform\backend\app\services\jobs.py", line 218, in execute
+    result = work(session, ctx)
+             ^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\workers\sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 283, in run
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: AutoCAD did not save the redesigned drawing. Its last words:
+"CT2.dwg": Can't find file in search path:
+  G:\dev (2)\dev\ep-platform\backend\uploads\EP-30880\redesign\work-1\ (current directory)
+  <PC-B user profile>\AppData\Roaming\Autodesk\AutoCAD 2027\R26.0\enu\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\en-US\
+  C:\Program Files\Autodesk\AutoCAD 2027\fonts\
+  C:\Program Files\Autodesk\AutoCAD 2027\help\
+  C:\Program Files\Autodesk\AutoCAD 2027\Express\
+  C:\Program Files\Autodesk\ApplicationPlugins\AutoCAD-MCP-Server-2027.bundle\Contents\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\2027\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk FeaturedApps.bundle\Contents\Resources\
+  C:\Program Files\Autodesk\AutoCAD 2027\
+*Invalid*
+; error: Function cancelled
+2026-10-03 19:16:03,241 INFO app.workers.sync_worker: Job 119 failed after 58 s
+2026-10-03 19:26:46,685 INFO app.services.jobs: Worker ifc:PC-B:37964:1791040504:1 claimed job 120 (fa_redesign_plan, project 5)
+2026-10-03 19:27:19,774 WARNING fontTools.ttLib.tables._h_e_a_d: 'created' timestamp out of range; ignoring top bytes
+2026-10-03 19:27:19,777 WARNING fontTools.ttLib.tables._h_e_a_d: 'created' timestamp seems very low; regarding as unix timestamp
+2026-10-03 19:27:19,779 WARNING fontTools.ttLib.tables._h_e_a_d: 'modified' timestamp out of range; ignoring top bytes
+2026-10-03 19:27:19,780 WARNING fontTools.ttLib.tables._h_e_a_d: 'modified' timestamp seems very low; regarding as unix timestamp
+2026-10-03 19:27:24,791 INFO app.workers.sync_worker: Job 120 succeeded after 38 s
+2026-10-03 19:27:33,857 INFO app.services.jobs: Worker ifc:PC-B:37964:1791040504:1 claimed job 121 (fa_redesign_apply, project 5)
+2026-10-03 19:28:00,770 ERROR app.services.jobs: Job 121 failed
+Traceback (most recent call last):
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 278, in run
+    return step(session, project, p["drawing_id"], check=ctx.check,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 276, in <lambda>
+    lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), **kw))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\redesign\service.py", line 1387, in apply
+    cad.apply(source, platform_copy, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
+  File "G:\dev (2)\dev\ep-platform\backend\app\redesign\cad.py", line 168, in apply
+    raise CadError(f"AutoCAD did not save the redesigned drawing. Its last words:\n{convert._tail(log)}")
+app.redesign.cad.CadError: AutoCAD did not save the redesigned drawing. Its last words:
+"CT2.dwg": Can't find file in search path:
+  G:\dev (2)\dev\ep-platform\backend\uploads\EP-30880\redesign\work-1\ (current directory)
+  <PC-B user profile>\AppData\Roaming\Autodesk\AutoCAD 2027\R26.0\enu\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\en-US\
+  C:\Program Files\Autodesk\AutoCAD 2027\fonts\
+  C:\Program Files\Autodesk\AutoCAD 2027\help\
+  C:\Program Files\Autodesk\AutoCAD 2027\Express\
+  C:\Program Files\Autodesk\ApplicationPlugins\AutoCAD-MCP-Server-2027.bundle\Contents\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\2027\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk FeaturedApps.bundle\Contents\Resources\
+  C:\Program Files\Autodesk\AutoCAD 2027\
+*Invalid*
+; error: Function cancelled
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\dev (2)\dev\ep-platform\backend\app\services\jobs.py", line 218, in execute
+    result = work(session, ctx)
+             ^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\workers\sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\dev (2)\dev\ep-platform\backend\app\ifc\services\runners.py", line 283, in run
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: AutoCAD did not save the redesigned drawing. Its last words:
+"CT2.dwg": Can't find file in search path:
+  G:\dev (2)\dev\ep-platform\backend\uploads\EP-30880\redesign\work-1\ (current directory)
+  <PC-B user profile>\AppData\Roaming\Autodesk\AutoCAD 2027\R26.0\enu\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\
+  C:\Program Files\Autodesk\AutoCAD 2027\support\en-US\
+  C:\Program Files\Autodesk\AutoCAD 2027\fonts\
+  C:\Program Files\Autodesk\AutoCAD 2027\help\
+  C:\Program Files\Autodesk\AutoCAD 2027\Express\
+  C:\Program Files\Autodesk\ApplicationPlugins\AutoCAD-MCP-Server-2027.bundle\Contents\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk AppManager.bundle\Contents\Windows\2027\
+  C:\Program Files (x86)\Autodesk\ApplicationPlugins\Autodesk FeaturedApps.bundle\Contents\Resources\
+  C:\Program Files\Autodesk\AutoCAD 2027\
+*Invalid*
+; error: Function cancelled
+2026-10-03 19:28:00,785 INFO app.workers.sync_worker: Job 121 failed after 27 s

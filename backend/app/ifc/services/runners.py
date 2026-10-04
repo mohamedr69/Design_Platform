@@ -226,7 +226,71 @@ def run_reprocess(session: Session, job: BackgroundJob, ctx: jobs.JobContext) ->
             "ai_verified": rep.ai_verified, "deterministic": rep.deterministic}
 
 
-RUNNERS = {READ: run_read, READ_ZIP: run_read_zip, REPROCESS: run_reprocess}
+def run_interfaces_scan(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
+    """fa_interfaces_scan: the other trades' IFC drawings read for the fire
+    alarm interface schedule (app.interfaces); a file read before and
+    unchanged is not read again."""
+    from app.interfaces import service
+
+    project = session.get(Project, job.project_id)
+    try:
+        return service.scan_project(
+            session, project, user_id=(job.params or {}).get("user_id"), check=ctx.check,
+            progress=lambda done, total, message, file: ctx.progress(done, max(total, 1), message, stage="read", file=file))
+    except (jobs.Cancelled, jobs.Interrupted):
+        raise
+    except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
+        raise _unexpected(job.id, exc) from exc
+
+
+def run_drawing_review(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
+    """fa_drawing_review: a fire alarm IFC drawing plotted and its rooms
+    looked at by the model (app.review); what it read is saved as it goes."""
+    from app.review import service as review
+
+    project = session.get(Project, job.project_id)
+    p = job.params or {}
+    try:
+        return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+                          progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+    except (jobs.Cancelled, jobs.Interrupted):
+        raise
+    except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
+        from app.review.render import RenderError
+
+        if isinstance(exc, RenderError):
+            raise processing.ReadError(str(exc)) from exc
+        raise _unexpected(job.id, exc) from exc
+
+
+def _redesign(kind: str):
+    """fa_redesign_plan / fa_redesign_apply: the reviewed drawing's accepted
+    changes placed by the model, and made by AutoCAD on a copy (app.redesign)."""
+    def run(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
+        from app.redesign import cad
+        from app.redesign import service as redesign
+
+        project = session.get(Project, job.project_id)
+        p = job.params or {}
+        step = redesign.plan if kind == "plan" else (
+            lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), **kw))
+        try:
+            return step(session, project, p["drawing_id"], check=ctx.check,
+                        progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage=kind))
+        except (jobs.Cancelled, jobs.Interrupted):
+            raise
+        except (redesign.RedesignError, cad.CadError) as exc:
+            raise processing.ReadError(str(exc)) from exc
+        except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
+            raise _unexpected(job.id, exc) from exc
+    return run
+
+
+INTERFACES_SCAN = "fa_interfaces_scan"
+DRAWING_REVIEW = "fa_drawing_review"
+REDESIGN_PLAN, REDESIGN_APPLY = "fa_redesign_plan", "fa_redesign_apply"
+RUNNERS = {READ: run_read, READ_ZIP: run_read_zip, REPROCESS: run_reprocess, INTERFACES_SCAN: run_interfaces_scan,
+           DRAWING_REVIEW: run_drawing_review, REDESIGN_PLAN: _redesign("plan"), REDESIGN_APPLY: _redesign("apply")}
 
 
 def _discard_staged(job: BackgroundJob) -> None:

@@ -461,11 +461,30 @@ def _battery_calculation(db: Session, project: Project) -> BatteryCalculationOut
                 settings = design.panels.get(key) or PanelSettings()
                 overridden = [f for f in SIZING_FIELDS if getattr(settings, f) is not None]
                 sizing = {f: getattr(settings, f) if f in overridden else defaults[f] for f in SIZING_FIELDS}
-                panel_lines = members[(panel_type.system_code, panel_type.heading)]
+                # The lines the engineer took out of this calculation go; the
+                # rest keep which of the group's lines of their part they are.
+                gone = {(part_key(r.part_no), r.occurrence) for r in settings.removed_lines}
+                panel_lines, occurrences, removed = [], [], []
+                seen: dict[str, int] = {}
+                for line in members[(panel_type.system_code, panel_type.heading)]:
+                    pk = part_key(line.catalog_no or "")
+                    occurrence = None
+                    if pk:
+                        seen[pk] = occurrence = seen.get(pk, 0) + 1
+                    if pk and (pk, occurrence) in gone:
+                        removed.append({"part_no": (line.catalog_no or "").strip(), "occurrence": occurrence,
+                                        "description": line.description, "quantity": line.quantity})
+                        continue
+                    panel_lines.append(line)
+                    occurrences.append(occurrence)
                 extras = [e.model_dump(mode="json") for e in settings.extra_components]
-                digest = calc_integrity.stable_hash(calc_integrity.panel_inputs(
+                inputs = calc_integrity.panel_inputs(
                     panel_type.heading, panel_type.system_code, instance, panel_type.kind, panel_lines, sizing, extras,
-                    currents, batteries))
+                    currents, batteries)
+                # 2: the lines carry their occurrence, to be taken out by it
+                inputs["lines_version"] = 2
+                inputs["occurrences"] = occurrences
+                digest = calc_integrity.stable_hash(inputs)
                 saved = saved_results.get(key)
                 if saved is not None and saved.input_hash == digest and saved.state == "fresh":
                     panel = BatteryPanelOut.model_validate(saved.result)
@@ -476,6 +495,9 @@ def _battery_calculation(db: Session, project: Project) -> BatteryCalculationOut
                             panel_type.heading, panel_type.system_code, panel_lines,
                             Sizing(**sizing), currents, batteries, extras=settings.extra_components, kind=panel_type.kind,
                         )
+                        # one line out for each line in, the added loads after them
+                        for out_line, occurrence in zip((l for l in panel.lines if l.extra_index is None), occurrences):
+                            out_line.occurrence = occurrence
                     except Exception as exc:  # noqa: BLE001 -- the previous figures stay visible, marked
                         if saved is None:
                             raise
@@ -491,6 +513,7 @@ def _battery_calculation(db: Session, project: Project) -> BatteryCalculationOut
                         saved.result = panel.model_dump(mode="json")
                     results_changed = True
                 panel.key, panel.instance = key, instance
+                panel.removed = removed
                 numbered[panel_type.kind] += 1
                 label = SIZED_KINDS[panel_type.kind]
                 default_name = (f"{label}-{numbered[panel_type.kind]:02d}"

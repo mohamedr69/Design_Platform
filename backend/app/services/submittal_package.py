@@ -7,9 +7,10 @@ package comes out the same way on every project, with no model in the loop.
 
 **The section list is the company's own.** It is read off
 `templates/Index & divider.pdf` in the submittal builder (the index page lists
-all seventeen), and a section keeps its number there whether or not this
-submittal includes it: a document controller expects Technical Data Sheet to
-be section 07 on every package, so leaving one out renumbers nothing.
+all seventeen). That number is the section's identity -- the checklist ticks
+it, the generated sections are found by it -- but **the package numbers what
+it encloses, in order**: 01, 02, 03 ... on the index and on each divider, with
+no gaps for the sections left out (platform owner, 2 October 2026).
 
 **Where a section's documents come from** is one of three places:
 
@@ -211,6 +212,12 @@ class PackageDocument:
     # once and names them all, rather than appearing once per part.
     covers: list[str] = field(default_factory=list)
     missing_reason: str | None = None
+    # The Schedule of Material block the sheet's parts are scheduled under:
+    # the datasheets go in by block, each block behind a divider of its own.
+    block: str | None = None
+    # The part numbers to highlight on the sheet -- the proposed materials,
+    # every other highlight it carries removed. None leaves it as filed.
+    highlight: list[str] | None = None
 
 
 @dataclass
@@ -243,10 +250,26 @@ class PackagePlan:
     library_path: str | None = None
     # The manufacturer the package is for; whose submittal-builder folder it draws on.
     brand: str | None = None
+    # The part numbers the Schedule of Material proposes: what is highlighted
+    # on the datasheets and the civil defence certificates.
+    proposed: list[str] = field(default_factory=list)
+    # How the catalogue prints a proposed part where the BOQ spells it
+    # otherwise (the equipment table's aliases): {part: [spellings]}.
+    aliases: dict[str, list[str]] = field(default_factory=dict)
+    # "titled": the sheet's title and its Ordering Information table (the
+    # fire alarm); "parts": the part numbers only, wherever a table lists
+    # them, and read loosely -- the emergency lighting's sheets print the
+    # order code without its "-M" and with a 0 for an O (platform owner).
+    marking: str = "titled"
 
     @property
     def selected_sections(self) -> list[PackageSection]:
         return [s for s in self.sections if s.selected]
+
+    def shown_number(self, section: PackageSection) -> int:
+        """The section's number in this package: its place among the
+        sections enclosed (1 for the first), not the company index's."""
+        return next(i for i, s in enumerate(self.selected_sections, 1) if s is section)
 
 
 # A spare copy left in the library ("... _copy.pdf", "... - Copy.pdf") is the
@@ -389,12 +412,18 @@ def datasheet_documents(project: Project, libraries: dict, system_code: str | No
     seen_paths: set[str] = set()
     wanted = (system_code or "").strip().upper() or None
 
+    from app.services import battery_materials
+
     for item in project.boq_items:
         if wanted and (item.system_code or "").strip().upper() != wanted:
             continue
         part = (item.catalog_no or "").strip()
         key = re.sub(r"[^A-Z0-9]", "", part.upper())
-        if not key or key in seen_parts:
+        if not key or key in seen_parts or key in NO_DATASHEET:
+            continue
+        # The BOQ's battery by capacity ("12V65A") is not what is proposed:
+        # the calculation's selection is, with its own datasheet (below).
+        if battery_materials.is_battery_line(item):
             continue
         seen_parts.add(key)
 
@@ -407,7 +436,10 @@ def datasheet_documents(project: Project, libraries: dict, system_code: str | No
                 library, match = mapped
                 absolute = Path(library.folder) / match.path
         for library in ([] if match is not None else libraries_for(item.manufacturer, libraries)):
-            found = library.find(part)
+            # An option code's sheet is its family's: SL2NM65D3-M is in the
+            # sheet that lists SL2NM65D3.
+            trimmed = part.rsplit("-", 1)[0] if "-" in part else ""
+            found = library.find(part) or (library.find(trimmed) if len(re.sub(r"[^A-Z0-9]", "", trimmed.upper())) >= 6 else [])
             if found:
                 # Best first. A text match is kept: Edwards documents several
                 # parts on one sheet, so 3-ZA20A is in ZA.pdf and 4-MIC is in
@@ -437,7 +469,53 @@ def datasheet_documents(project: Project, libraries: dict, system_code: str | No
             name=absolute.name, path=key_path,
             source=f"{match.library} datasheet library", part_no=part, covers=[part],
         ))
+    documents += _battery_datasheets(project, libraries, wanted, seen_paths)
     return documents
+
+
+BATTERIES_BLOCK = "Batteries"
+
+
+def _battery_datasheets(project: Project, libraries: dict, wanted: str | None, seen_paths: set[str]) -> list[PackageDocument]:
+    """The datasheet of every battery the battery calculation selects --
+    the panels', the APS' and the BPS' -- each once, behind a divider of
+    their own (platform owner, 2 October 2026). The fire alarm's only."""
+    from sqlalchemy.orm import Session as _Session
+
+    from app.services import battery_materials
+    from app.services.datasheet_library import libraries_for
+    from app.services.system_rules import canonical
+
+    session = _Session.object_session(project)
+    if session is None or (wanted and canonical(wanted) != "FAS"):
+        return []
+    out: list[PackageDocument] = []
+    for battery in battery_materials.selected_batteries(session, project):
+        absolute = None
+        if battery.datasheet_library and battery.datasheet_path:
+            library = libraries.get(battery.datasheet_library) or next(
+                (lib for name, lib in libraries.items() if name.upper() == battery.datasheet_library.upper()), None)
+            if library is not None:
+                absolute = Path(library.folder) / battery.datasheet_path
+        if absolute is None or not absolute.is_file():
+            for library in libraries_for(battery.manufacturer, libraries) or list(libraries.values()):
+                found = library.find(battery.catalog_no)
+                if found:
+                    absolute = Path(library.folder) / found[0].path
+                    break
+        if absolute is None or not absolute.is_file():
+            out.append(PackageDocument(name=battery.catalog_no, part_no=battery.catalog_no, block=BATTERIES_BLOCK,
+                                       missing_reason="No datasheet on file for the selected battery."))
+            continue
+        if str(absolute) in seen_paths:
+            for existing in out:
+                if existing.path == str(absolute):
+                    existing.covers.append(battery.catalog_no)
+            continue
+        seen_paths.add(str(absolute))
+        out.append(PackageDocument(name=absolute.name, path=str(absolute), source="battery datasheet",
+                                   part_no=battery.catalog_no, covers=[battery.catalog_no], block=BATTERIES_BLOCK))
+    return out
 
 
 def plan_package(
@@ -459,6 +537,11 @@ def plan_package(
     index = index_for(system_code)
     plan = PackagePlan()
     plan.brand = brand
+    plan.proposed = _proposed(project, system_code)
+    plan.aliases = _aliases(project, plan.proposed)
+    from app.services.system_rules import canonical as _canonical
+
+    plan.marking = "parts" if _canonical(system_code) == "ELS" else "titled"
     if index is FRC_INDEX and not brand:
         plan.warnings.append("Choose the cable brand on the Proposed Materials tab (Fire Rated Cables): the package draws on the brand's folder of the submittal builder.")
     if library_root is None or not library_root.is_dir():
@@ -515,15 +598,26 @@ def plan_package(
             section.producer = "warranty"
             section.documents.append(PackageDocument(name="Warranty Certificate", source="generated"))
         elif number == index.datasheet and index.library_datasheets:
-            # The cable brand's whole datasheet library.
-            library = next((lib for name_, lib in (datasheet_libraries or {}).items() if brand and name_.upper() == brand.upper()), None)
-            if library is not None:
+            # Every chosen cable brand's whole datasheet library: the fire
+            # rated cable's, and the emergency lighting's monitoring cable's
+            # (Ramcro) where the project has one.
+            missing_brands = []
+            for cable_brand in _cable_brands(project, brand):
+                library = next((lib for name_, lib in (datasheet_libraries or {}).items()
+                                if name_.upper() == cable_brand.upper()), None)
+                if library is None:
+                    missing_brands.append(cable_brand)
+                    continue
                 for pdf in _pdfs_in(library.folder):
-                    section.documents.append(PackageDocument(name=pdf.name, path=str(pdf), source="datasheet library"))
-            if not section.documents:
+                    section.documents.append(PackageDocument(name=pdf.name, path=str(pdf),
+                                                             source=f"{cable_brand} datasheet library"))
+            if missing_brands:
+                section.note = f"No datasheet library is on file for {' & '.join(missing_brands)}."
+            elif not section.documents:
                 section.note = f"No datasheet library is on file for {brand}." if brand else "Choose the cable brand first."
         elif number == index.datasheet:
-            section.documents = datasheet_documents(project, datasheet_libraries or {}, system_code, datasheet_links)
+            section.documents = _by_block(project, system_code, datasheet_documents(
+                project, datasheet_libraries or {}, system_code, datasheet_links))
             if not section.documents:
                 section.note = (
                     f"The BOQ quotes no {system_code} part numbers to find datasheets for."
@@ -546,6 +640,98 @@ def plan_package(
     return plan
 
 
+def _cable_brands(project: Project, brand: str | None) -> list[str]:
+    """The fire rated cable submittal's brands: the cable's, and the
+    monitoring cable's where the project has a monitored emergency lighting
+    system -- each once."""
+    from sqlalchemy.orm import Session as _Session
+
+    from app.services import frc_cables
+
+    brands = [brand] if brand else []
+    session = _Session.object_session(project)
+    if session is not None:
+        row = frc_cables.get(session, project)
+        if row is not None and row.brand:
+            brands.append(row.brand)
+        monitoring = frc_cables.monitoring_for(row, project)
+        if monitoring and monitoring[0]:
+            brands.append(monitoring[0])
+    return list(dict.fromkeys(b.strip().upper() for b in brands if b and b.strip()))
+
+
+def _aliases(project: Project, parts: list[str]) -> dict[str, list[str]]:
+    """The equipment table's other spellings of the proposed parts -- the
+    catalogue's order code for the BOQ's ("SL2-65D3D-CGL-M" is SL2MNM65D3D)."""
+    from sqlalchemy.orm import Session as _Session
+
+    from app.services import equipment_currents
+
+    session = _Session.object_session(project)
+    if session is None:
+        return {}
+    try:
+        table = equipment_currents.index(session)
+    except Exception:  # noqa: BLE001 -- nothing extra is matched rather than the package failing
+        return {}
+    out = {}
+    pieces = [piece.strip() for part in parts for piece in part.split("+") if piece.strip()]
+    for part in dict.fromkeys([*parts, *pieces]):
+        row = table.get(equipment_currents.key_of(part))
+        names = [a for a in (getattr(row, "aliases", None) or []) if a]
+        if names:
+            out[part] = names
+    return out
+
+
+def _proposed(project: Project, system_code: str | None) -> list[str]:
+    """The Schedule of Material's part numbers, each once, in its order."""
+    try:
+        blocks = schedule_blocks(project, system_code)
+    except Exception:  # noqa: BLE001 -- nothing is highlighted rather than the package failing
+        return []
+    out, seen = [], set()
+    for _letter, _title, items in blocks:
+        for item in items:
+            part = (getattr(item, "catalog_no", None) or "").strip()
+            key = re.sub(r"[^A-Z0-9]", "", part.upper())
+            if key and key not in seen:
+                seen.add(key)
+                out.append(part)
+    return out
+
+
+def _by_block(project: Project, system_code: str | None, documents: list[PackageDocument]) -> list[PackageDocument]:
+    """The datasheets in Schedule of Material order, each with its block
+    (a sheet serving parts of two blocks goes with the first), and the
+    schedule's part numbers to highlight on it. A sheet whose parts are on
+    no block keeps its place after the rest, with no block."""
+    try:
+        blocks = schedule_blocks(project, system_code)
+    except Exception:  # noqa: BLE001 -- the datasheets still go in, in BOQ order
+        return documents
+    first: dict[str, int] = {}
+    proposed: list[str] = []
+    for index, (_letter, _title, items) in enumerate(blocks):
+        for item in items:
+            part = (getattr(item, "catalog_no", None) or "").strip()
+            key = re.sub(r"[^A-Z0-9]", "", part.upper())
+            if key and key not in first:
+                first[key] = index
+                proposed.append(part)
+    for document in documents:
+        parts = document.covers or ([document.part_no] if document.part_no else [])
+        found = [first[k] for k in (re.sub(r"[^A-Z0-9]", "", p.upper()) for p in parts) if k in first]
+        if found and document.block is None:
+            document.block = blocks[min(found)][1]
+        if document.path:
+            document.highlight = list(proposed)
+    # the schedule's blocks in order, then the batteries, then what is on no block
+    order = {title: index for index, (_l, title, _i) in enumerate(blocks)}
+    order.setdefault(BATTERIES_BLOCK, len(order))
+    return sorted(documents, key=lambda d: order.get(d.block, len(order)))
+
+
 # --- building ---------------------------------------------------------------
 
 
@@ -563,8 +749,34 @@ _FONT_FILES = {
     "gothicb": r"C:\Windows\Fonts\GOTHICB.TTF",
     "arialb": r"C:\Windows\Fonts\arialbd.ttf",
     "arialn": r"C:\Windows\Fonts\arialn.ttf",
+    "arial": r"C:\Windows\Fonts\arial.ttf",
 }
-_FALLBACK = {"gothic": "helv", "gothicb": "hebo", "arialb": "hebo", "arialn": "helv"}
+_FALLBACK = {"gothic": "helv", "gothicb": "hebo", "arialb": "hebo", "arialn": "helv", "arial": "helv"}
+
+# The manufacturer a brand is made by, as the cover names it: Menvier is Eaton's.
+_COVER_MAKERS = {"MENVIER": "EATON", "MENIVIER": "EATON"}
+
+
+def _cover_maker(project: Project, code: str | None) -> tuple[str, str, str] | None:
+    """(the manufacturer's name in place of the template's Edwards logo, the
+    line under it, the discipline) for a system the template does not show;
+    None for the fire alarm, whose cover the template is."""
+    from sqlalchemy.orm import Session as _Session
+
+    if code == "ELS":
+        from app.routers.projects import _brand_for
+
+        brand = (_brand_for("ELS", list(project.systems)) or "MENVIER").strip().upper()
+        return _COVER_MAKERS.get(brand, brand), "Emergency Lighting System", "Electrical - Emergency Light System"
+    if code == "FRC":
+        from app.services import frc_cables
+
+        session = _Session.object_session(project)
+        row = frc_cables.get(session, project) if session is not None else None
+        brands = [b for b in [row.brand if row else None, (frc_cables.monitoring_for(row, project) or (None,))[0]] if b]
+        names = " & ".join(dict.fromkeys(b.strip().upper() for b in brands)) or "FIRE RATED CABLE"
+        return names, "Fire Rated Cables", "Electrical - Fire Rated Cable"
+    return None
 
 
 def _font(page, name: str) -> tuple[str, str | None]:
@@ -621,7 +833,8 @@ def _project_title(project: Project) -> str:
     return (project.project_name or f"EP-{project.ep_number}").strip()
 
 
-def build_cover(library_root: Path, project: Project, revision: str, systems: str) -> pymupdf.Document | None:
+def build_cover(library_root: Path, project: Project, revision: str, systems: str,
+                system_code: str | None = None) -> pymupdf.Document | None:
     """The cover page, from the company's template.
 
     The template is the approved artwork -- logo, layout, the supplier block
@@ -653,6 +866,31 @@ def build_cover(library_root: Path, project: Project, revision: str, systems: st
     # Searched with its label's spacing so a bare "R0" elsewhere is not hit.
     _replace(page, "R0", revision, 9.5, _rgb(0x1F242B), "arialn")
     _replace(page, "06-09-2026", date.today().strftime("%d-%m-%Y"), 9.5, _rgb(0x1F242B), "arialn")
+
+    # The system's own manufacturer and discipline: the template is the fire
+    # alarm's (Edwards, EST4); the emergency lighting is Eaton's, the cables
+    # the brands chosen (platform owner, 2 October 2026).
+    from app.services.system_rules import canonical
+
+    maker = _cover_maker(project, canonical(system_code))
+    if maker is not None:
+        name, line, discipline = maker
+        label = next(iter(page.search_for("SYSTEM MANUFACTURER")), None)
+        logo = next((pymupdf.Rect(info["bbox"]) for info in page.get_image_info()
+                     if label is not None and abs(info["bbox"][0] - label.x0) < 30
+                     and 0 < info["bbox"][1] - label.y1 < 40), None)
+        if logo is not None:
+            page.add_redact_annot(logo, fill=False)
+            page.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_REMOVE, graphics=pymupdf.PDF_REDACT_LINE_ART_NONE,
+                                  text=pymupdf.PDF_REDACT_TEXT_NONE)
+            fontname, fontfile = _font(page, "gothicb")
+            size = 18.0
+            while size > 9 and pymupdf.get_text_length(name, fontname="hebo", fontsize=size) > 220:
+                size -= 0.5
+            page.insert_text((label.x0, logo.y1 - 6), name, fontname=fontname, fontfile=fontfile, fontsize=size,
+                             color=_rgb(0x4D4D4F))
+        _replace(page, "EST4 Life Safety Platform", line, 9, _rgb(0x8C8C8E), "arial")
+        _replace(page, "Electrical - Fire Alarm & Life Safety", discipline, 9.5, _rgb(0x1F242B), "arialn")
     return doc
 
 
@@ -660,8 +898,8 @@ def build_index(library_root: Path, plan: PackagePlan, project: Project) -> pymu
     """The index page, listing the sections this package carries.
 
     Drawn rather than taken from the template, because the template's index
-    lists all seventeen and this one lists what was chosen. Section numbers
-    stay the template's.
+    lists all seventeen and this one lists what was chosen, numbered in
+    order (`PackagePlan.shown_number`).
     """
     doc = pymupdf.open()
     page = doc.new_page(width=595.32, height=841.92)
@@ -678,7 +916,7 @@ def build_index(library_root: Path, plan: PackagePlan, project: Project) -> pymu
     y = top + 24
     for section in plan.selected_sections:
         page.draw_rect(pymupdf.Rect(44, y, 551, y + 26), color=(0.85, 0.85, 0.85), width=0.5)
-        page.insert_text((56, y + 17), f"{section.number:02d}", fontname="helv", fontsize=9.5)
+        page.insert_text((56, y + 17), f"{plan.shown_number(section):02d}", fontname="helv", fontsize=9.5)
         page.insert_text((100, y + 17), section.name[:58], fontname="helv", fontsize=9.5)
         status = "Enclosed" if section.found else "To be filled"
         page.insert_text((420, y + 17), status, fontname="helv", fontsize=9, color=(0.35, 0.35, 0.35))
@@ -697,7 +935,8 @@ def _centre(page, bbox, text: str, size: float, colour, font: str = "hebo") -> N
     while size > 5 and pymupdf.get_text_length(text, fontname=font, fontsize=size) > 470:
         size -= 0.5
     width = pymupdf.get_text_length(text, fontname=font, fontsize=size)
-    page.insert_text((middle - width / 2, bbox[3] - (bbox[3] - bbox[1]) * 0.14), text,
+    # a line longer than the one it replaces is kept on the page
+    page.insert_text((max(36.0, min(middle - width / 2, page.rect.width - 36 - width)), bbox[3] - (bbox[3] - bbox[1]) * 0.14), text,
                      fontname=font, fontsize=size, color=colour)
 
 
@@ -741,7 +980,7 @@ def build_divider(library_root: Path, number: int, project: Project, name: str |
         if span["text"].strip()
     ]
     # The big pale number, and the section title under it.
-    printed = next((s for s in spans if s["text"].strip().isdigit() and s["size"] > 40), None)
+    printed = max((s for s in spans if re.fullmatch(r"\d{1,2}", s["text"].strip())), key=lambda s: s["size"], default=None)
     title = next((s for s in spans if 15 < s["size"] < 40), None)
 
     if borrowed and title is not None:
@@ -757,6 +996,273 @@ def build_divider(library_root: Path, number: int, project: Project, name: str |
 
     _replace(page, "IVY GARDEN 2 - 1B+G+5P+34+R RESIDENTIAL BUILDING", _project_title(project).upper()[:60], 11)
     return divider
+
+
+def _blank(page, bbox) -> None:
+    page.add_redact_annot(pymupdf.Rect(bbox), fill=False)
+    try:
+        page.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_NONE, graphics=pymupdf.PDF_REDACT_LINE_ART_NONE)
+    except TypeError:
+        page.apply_redactions()
+
+
+def build_block_divider(library_root: Path, project: Project, number: int, section: str, block: str) -> pymupdf.Document | None:
+    """A divider inside the datasheet section, one per Schedule of Material
+    block (the panel, the BPS, the APS ...): the section's divider artwork
+    with the block's name for its title, and **no number** -- it divides the
+    section, it is not a section of the index (platform owner, 1 October 2026)."""
+    divider = build_divider(library_root, number, project, section)
+    if divider is None:
+        return None
+    # A BOQ heading read with the sheet's project line before it
+    # ("PROJECT : BINGHATTI TITANIA / Booster Power Supply") is the block's name after it.
+    block = re.sub(r"^\s*PROJECT\s*:[^/]*/\s*", "", block, flags=re.IGNORECASE) or block
+    page = divider[0]
+    spans = [
+        span
+        for b in page.get_text("dict")["blocks"]
+        for line in b.get("lines", [])
+        for span in line["spans"]
+        if span["text"].strip()
+    ]
+    wanted = section.split("(")[0].strip().lower()
+    title = next((sp for sp in spans if sp["text"].strip().lower().startswith(wanted)), None) \
+        or next((sp for sp in spans if 15 < sp["size"] < 40), None)
+    for span in spans:
+        text = span["text"].strip()
+        if span is title:
+            _centre(page, span["bbox"], block, span["size"], _rgb(span["color"]))
+        elif re.fullmatch(r"\d{1,2}", text) or re.fullmatch(r"PAGE\s*\d{1,2}", text, re.IGNORECASE):
+            _blank(page, span["bbox"])
+        elif text.upper() == "SUBMITTAL SECTION":
+            _centre(page, span["bbox"], section.upper(), span["size"], _rgb(span["color"]), font="helv")
+    return divider
+
+
+# What a datasheet's own highlights are: text markup someone added to the
+# filed copy, for another project. Removed before the proposed parts are marked.
+_MARKUP = {pymupdf.PDF_ANNOT_HIGHLIGHT, pymupdf.PDF_ANNOT_UNDERLINE, pymupdf.PDF_ANNOT_STRIKE_OUT,
+           pymupdf.PDF_ANNOT_SQUIGGLY}
+_EDGE = "()[]{},;:.'\"*"
+
+
+def _part_keys(part: str) -> set[str]:
+    """How a part may be printed: whole, and without its "/230" -- the APS
+    sheet says APS6A where the BOQ quotes APS6A/230."""
+    keys = {re.sub(r"[^A-Z0-9]", "", part.upper())}
+    head = part.split("/")[0]
+    if head != part and len(re.sub(r"[^A-Z0-9]", "", head.upper())) >= 4:
+        keys.add(re.sub(r"[^A-Z0-9]", "", head.upper()))
+    return {k for k in keys if k}
+
+
+_ORDERING = re.compile(r"^\s*ordering\s+information\b", re.IGNORECASE)
+_APPROVAL = re.compile(r"CIVIL\s+DEFEN[CS]E", re.IGNORECASE)
+# The sections a civil defence certificate is filed in: Certifications,
+# Previous Approvals, Others Documents (Certificates, Approvals Etc). The
+# rest -- the company profile, the test reports -- are not read for one.
+_CERTIFICATE_SECTION = re.compile(r"certif|approv|other", re.IGNORECASE)
+
+
+def _text_lines(page, textpage=None) -> list[tuple[str, float, pymupdf.Rect]]:
+    """(text, largest type size, box) of every line on the page."""
+    out = []
+    for block in page.get_text("dict", textpage=textpage)["blocks"]:
+        for line in block.get("lines", []):
+            spans = [span for span in line["spans"] if span["text"].strip()]
+            if spans:
+                out.append(("".join(span["text"] for span in line["spans"]).strip(),
+                            max(span["size"] for span in spans), pymupdf.Rect(line["bbox"])))
+    return out
+
+
+def _ordering_regions(page, lines) -> list[pymupdf.Rect]:
+    """The Ordering Information sections on a page: from the heading down to
+    the next heading of its size in its column, else the foot of the page.
+    A heading in the sheet's main column (right of the sidebar) keeps the
+    section to that column."""
+    width, height = page.rect.width, page.rect.height
+    regions = []
+    for text, size, box in lines:
+        if not _ORDERING.match(text) or len(text) > 60:
+            continue
+        left = box.x0 - 12 if box.x0 > width * 0.25 else 0
+        bottom = height
+        for other, other_size, other_box in lines:
+            if (other_box.y0 > box.y1 + 2 and other_box.y0 < bottom and abs(other_size - size) <= 1.5
+                    and other_box.x0 >= left - 5 and not _ORDERING.match(other)):
+                bottom = other_box.y0
+        regions.append(pymupdf.Rect(left, box.y0 - 2, width, bottom))
+    return regions
+
+
+def _title_boxes(page, lines) -> list[pymupdf.Rect]:
+    """The datasheet's title on its first page: the large lines in its top
+    half ("EST4 LCD Display Module") and the series line under them ("4-LCD
+    Series") -- every line at least about half the size of the largest."""
+    lines = [line for line in lines if line[2].y0 < page.rect.height * 0.5]
+    largest = max((size for _t, size, _b in lines), default=0)
+    if largest < 20:
+        return []
+    return [box for _t, size, box in lines if size >= largest * 0.45]
+
+
+def _loose(key: str) -> str:
+    """A key as a scanned or retyped sheet may print it: O and 0 alike."""
+    return key.replace("O", "0")
+
+
+def _spellings(part: str, aliases: dict[str, list[str]] | None, loose: bool) -> set[str]:
+    """Every key a part may be printed under: its own, the equipment
+    table's aliases, and -- read loosely -- without the "-M" brand suffix
+    (CTR400CGL2KS-M is printed CTR400CGL2KS) and with an "IPM" order code's
+    M off (RT2RHEO200CGL3HIPM is printed RT2RHE0200CGL3HIP)."""
+    if "+" in part:
+        # a body with its accessories ("SL2-42D3D-CGL-M+SL23I"): each piece
+        # is printed on its own
+        return set().union(*(_spellings(piece.strip(), aliases, loose) for piece in part.split("+") if piece.strip()))
+    keys = set(_part_keys(part))
+    for alias in (aliases or {}).get(part, []):
+        keys |= _part_keys(alias)
+    if loose:
+        if part.strip().upper().endswith("-M"):
+            keys |= _part_keys(part.strip()[:-2])
+        keys |= {k[:-1] for k in keys if k.endswith("IPM")}
+        keys = {_loose(k) for k in keys}
+    return {k for k in keys if len(k) >= 4}
+
+
+def _wanted(parts: list[str], aliases: dict[str, list[str]] | None = None, loose: bool = False) -> dict[str, list[str]]:
+    """{printed key: the proposed parts printed under it} -- one key can be
+    two parts' (the same luminaire body under two exit signs)."""
+    wanted: dict[str, list[str]] = {}
+    for part in parts:
+        for key in _spellings(part, aliases, loose):
+            wanted.setdefault(key, [])
+            if part not in wanted[key]:
+                wanted[key].append(part)
+    return wanted
+
+
+def _first(words) -> list:
+    """The words that open their line -- a table row's order code, the
+    description following it on the same line."""
+    seen: set[tuple[int, int]] = set()
+    out = []
+    for w in words:
+        if (w[5], w[6]) not in seen:
+            seen.add((w[5], w[6]))
+            out.append(w)
+    return out
+
+
+def _word_key(word: str, loose: bool = False) -> str:
+    key = re.sub(r"[^A-Z0-9]", "", word.strip(_EDGE).upper())
+    return _loose(key) if loose else key
+
+
+def _clear(page) -> None:
+    for annot in list(page.annots() or []):
+        if annot.type[0] in _MARKUP:
+            page.delete_annot(annot)
+
+
+def _inside(words, box: pymupdf.Rect) -> list:
+    """The words whose middle lies in the box."""
+    return [w for w in words if box.contains(pymupdf.Point((w[0] + w[2]) / 2, (w[1] + w[3]) / 2))]
+
+
+def _alone(words) -> list:
+    """The words that are their line's only word -- a table cell's part
+    number, not one a sentence mentions."""
+    per_line: dict[tuple[int, int], int] = {}
+    for w in words:
+        per_line[(w[5], w[6])] = per_line.get((w[5], w[6]), 0) + 1
+    return [w for w in words if per_line[(w[5], w[6])] == 1]
+
+
+def highlight_proposed(doc: pymupdf.Document, parts: list[str], own: list[str], *,
+                       aliases: dict[str, list[str]] | None = None, marking: str = "titled") -> list[str]:
+    """A datasheet as the package carries it: every highlight it was filed
+    with removed, then two things marked (platform owner, 2 October 2026) --
+    the sheet's title on its first page, and the proposed part numbers in
+    its Ordering Information table, nowhere else. A sheet with no Ordering
+    Information section has its proposed part numbers marked where they
+    stand alone on a line (a table cell) instead. Returns the sheet's own
+    parts (`own`) marked nowhere, for the package to say so. The document is
+    the in-memory copy: the library's file is never written.
+
+    `marking` "parts" (the emergency lighting): no title, and the proposed
+    order codes marked in whatever table lists them, read loosely and under
+    their aliases (`_spellings`).
+
+    Each page's text is extracted once and every look at it reads that:
+    a package of forty sheets is otherwise minutes of the same extraction."""
+    loose = marking == "parts"
+    titles = marking == "titled"
+    wanted = _wanted(parts, aliases, loose)
+    hit: set[str] = set()
+    titled: set[str] = set()
+    pages = []                                   # (page, its words, its Ordering Information regions)
+    for index, page in enumerate(doc):
+        _clear(page)
+        textpage = page.get_textpage()
+        words = page.get_text("words", textpage=textpage)
+        plain = textpage.extractText()
+        ordering = titles and "rdering" in plain
+        lines = _text_lines(page, textpage) if (titles and index == 0) or ordering else []
+        if titles and index == 0:
+            for box in _title_boxes(page, lines):
+                page.add_highlight_annot(box)
+                inside = _inside(words, box)
+                titled.update(_word_key(w[4]) for w in inside)
+                # the title as one run too: "ES 65-12" is ES65-12
+                titled.add(_word_key("".join(w[4] for w in inside)))
+        pages.append((page, words, _ordering_regions(page, lines) if ordering else []))
+    sections = any(regions for _p, _w, regions in pages)
+    for page, words, regions in pages:
+        if sections:
+            # the Model # column: a part number that is its cell's only word,
+            # not one the description beside it mentions
+            candidates = [w for region in regions for w in _alone(_inside(words, region))]
+        elif loose:
+            # a table's order code: its cell's only word, or its row's first
+            candidates = list({id(w): w for w in [*_alone(words), *_first(words)]}.values())
+        else:
+            candidates = _alone(words)
+        for x0, y0, x1, y1, word, *_rest in candidates:
+            key = _word_key(word, loose)
+            if key in wanted:
+                page.add_highlight_annot(pymupdf.Rect(x0, y0, x1, y1))
+                hit.update(wanted[key])
+    # the sheet's own parts marked nowhere -- not in its table, not in its title
+    proposed = {part for named in wanted.values() for part in named}
+    return [part for part in own
+            if part not in hit and part in proposed
+            and not any(k in t for k in _spellings(part, aliases, loose) for t in titled)]
+
+
+def highlight_approvals(doc: pymupdf.Document, parts: list[str], *,
+                        aliases: dict[str, list[str]] | None = None, marking: str = "titled") -> int:
+    """The civil defence approval certificates in a document: on each page
+    of one, the highlights it was filed with removed and the proposed part
+    numbers in its models list marked. Returns how many pages were such
+    certificates (0: the document is left as filed)."""
+    loose = marking == "parts"
+    wanted = _wanted(parts, aliases, loose)
+    pages = 0
+    for page in doc:
+        textpage = page.get_textpage()
+        if not _APPROVAL.search(textpage.extractText()):
+            continue
+        pages += 1
+        _clear(page)
+        for x0, y0, x1, y1, word, *_rest in page.get_text("words", textpage=textpage):
+            # the certificates are scans read back to text: "BPSl0A" is BPS10A
+            misread = re.sub(r"(?<=[A-Z0-9])l(?=[0-9A-Z])", "1", word)
+            if _word_key(word, loose) in wanted or _word_key(misread, loose) in wanted:
+                page.add_highlight_annot(pymupdf.Rect(x0, y0, x1, y1))
+    return pages
 
 
 # What the BOQ's ungrouped lines are: the detectors, sounders, call points
@@ -776,6 +1282,10 @@ TELEPHONE_BLOCK = "Fire Telephone"
 BMS_BLOCK = "BMS Gateway"
 MODULES_BLOCK = "Modules"
 BACK_BOXES_BLOCK = "Back Boxes"
+# Parts scheduled with no datasheet of their own in the package: the
+# weatherproof back box goes in with its speaker/strobe (platform owner,
+# 1 October 2026). Keys as part numbers compare (letters and digits).
+NO_DATASHEET = {"757AWB"}
 OTHER_FIELD_BLOCK = "Other Field Devices"
 FIELD_BLOCKS = (INITIATING_BLOCK, NOTIFICATION_BLOCK, TELEPHONE_BLOCK, BMS_BLOCK, MODULES_BLOCK, BACK_BOXES_BLOCK, OTHER_FIELD_BLOCK)
 
@@ -1049,6 +1559,14 @@ def build_schedule(project: Project, system_code: str | None = None) -> pymupdf.
                 page.insert_text((x, y + 12), text, fontname="helv", fontsize=size)
             y += 18
         y += 8   # air between blocks, as the design sheet has
+    from app.services.system_rules import canonical
+
+    if canonical(system_code) == "FRC":
+        # The cable sizes stand on the route lengths, which the shop drawings
+        # settle (platform owner, 2 October 2026).
+        room(30)
+        page.insert_text((left + 6, y + 14), "NOTE: The voltage drop calculation will be submitted after the shop "
+                         "drawings approval.", fontname="hebo", fontsize=8.5, color=_RED)
     return doc
 
 
@@ -1129,7 +1647,7 @@ def build_package(
             raise PackageBuildError(f"{stage} could not be produced ({exc})") from exc
 
     if library_root is not None and library_root.is_dir():
-        cover = attempt("The cover page", lambda: build_cover(library_root, project, revision, systems))
+        cover = attempt("The cover page", lambda: build_cover(library_root, project, revision, systems, system_code))
         if cover is not None:
             append("Cover", COVER_TEMPLATE, cover)
             cover.close()
@@ -1141,9 +1659,10 @@ def build_package(
     index.close()
 
     for section in plan.selected_sections:
-        label = f"{section.number:02d} {section.name}"
+        shown = plan.shown_number(section)
+        label = f"{shown:02d} {section.name}"
         if library_root is not None and library_root.is_dir():
-            divider = attempt(f"The divider for {label}", lambda: build_divider(library_root, section.number, project, section.name))
+            divider = attempt(f"The divider for {label}", lambda: build_divider(library_root, shown, project, section.name))
             if divider is not None:
                 append(f"{label} -- divider", "divider", divider)
                 divider.close()
@@ -1165,12 +1684,29 @@ def build_package(
             page.close()
             continue
 
+        divided: set[str] = set()
         for document in section.documents:
             if not document.path:
                 warnings.append(f"{label}: {document.name} -- {document.missing_reason or 'not found'}")
                 continue
+            if document.block and document.block not in divided and library_root is not None and library_root.is_dir():
+                divided.add(document.block)
+                block = attempt(f"The divider for {document.block}",
+                                lambda: build_block_divider(library_root, project, section.number, section.name, document.block))
+                if block is not None:
+                    append(f"{label} -- {document.block}", "divider", block)
+                    block.close()
             try:
                 with pymupdf.open(document.path) as source:
+                    if document.highlight is not None:
+                        own = document.covers or ([document.part_no] if document.part_no else [])
+                        where = "printed on it" if plan.marking == "parts" else "in its Ordering Information"
+                        for part in highlight_proposed(source, document.highlight, own,
+                                                       aliases=plan.aliases, marking=plan.marking):
+                            warnings.append(f"{label}: {document.name} -- {part} is not {where} to highlight.")
+                    elif plan.proposed and _CERTIFICATE_SECTION.search(section.name):
+                        # a civil defence certificate: the proposed models marked on it
+                        highlight_approvals(source, plan.proposed, aliases=plan.aliases, marking=plan.marking)
                     append(label, document.name, source)
             except Exception as exc:  # noqa: BLE001
                 warnings.append(f"{label}: {document.name} could not be read ({exc}).")
@@ -1184,7 +1720,8 @@ def build_package(
         "subject": f"Material Submittal - {systems}",
         "creator": "Engineering Project Platform",
     })
-    pdf = attempt("The finished package", lambda: out.tobytes(deflate=True, garbage=3))
+    # garbage=1: the same file as 3 here (each document goes in once), in a fifth of the time
+    pdf = attempt("The finished package", lambda: out.tobytes(deflate=True, garbage=1))
     pages = out.page_count
     out.close()
     return BuiltPackage(pdf=pdf, manifest=manifest, warnings=warnings, pages=pages)
@@ -1353,6 +1890,19 @@ def read_origins(library_root: Path | None, brand: str | None = None) -> dict[st
         for key in keys:
             if key and len(key) >= 3 and key not in origins:
                 origins[key] = where
+    # The manufacturer's own letter names one country per model where the
+    # sheet may give a set's ("USA/MEXICO/CANADA"): its country stands; the
+    # sheet's shipped-from stays (app.services.origin_letters).
+    from collections import Counter
+
+    from app.services import origin_letters
+
+    declared = origin_letters.declared(brand)
+    if declared:
+        shipped = Counter(s for _m, _d, _made, s in read_origin_rows(library_root, brand) if s).most_common(1)
+        usual = shipped[0][0] if shipped else ""
+        for key, country in declared.items():
+            origins[key] = (country, (origins.get(key) or ("", ""))[1] or usual)
     return origins
 
 
@@ -1399,7 +1949,8 @@ def build_country_of_origin(
     library = boq_provenance.part_library(session) if session is not None else {}
     doc = pymupdf.open()
     page = doc.new_page(width=841.92, height=595.32)
-    columns = [("SL.", 42), ("MODEL", 82), ("DESCRIPTION", 214), ("MADE IN", 566), ("SHIPPED FROM", 688)]
+    # The country of origin only: where it is shipped from is not declared (platform owner, 2 October 2026).
+    columns = [("SL.", 42), ("MODEL", 82), ("DESCRIPTION", 214), ("COO", 660)]
     left, right = 36, 806
 
     def header(first: bool) -> float:
@@ -1434,13 +1985,17 @@ def build_country_of_origin(
             room(20)
             page.draw_rect(pymupdf.Rect(left, y, right, y + 18), color=(0.87, 0.87, 0.87), width=0.4)
             key = origin_key(item, origins, library)
-            made_in, shipped = origins.get(key, ("", ""))
+            made_in, _shipped = origins.get(key, ("", ""))
+            if not made_in:
+                # the manufacturer's declaration for the part's range (Menvier: France / Romania)
+                from app.services import origin_letters
+
+                made_in = origin_letters.by_range(brand or getattr(item, "manufacturer", None), item.catalog_no) or ""
             cells = [
                 (f"{letter}{number}", 42),
                 ((item.catalog_no or "-")[:18], 82),
-                ((item.description or "")[:78], 214),
-                (made_in[:22], 566),
-                (shipped[:20], 688),
+                ((item.description or "")[:100], 214),
+                (made_in[:26], 660),
             ]
             for text, x in cells:
                 page.insert_text((x, y + 12), text, fontname="helv", fontsize=7.5)
@@ -1623,8 +2178,17 @@ def warranty_replacements(project: Project, years: int = WARRANTY_YEARS, system_
     from app.services import system_rules
 
     period = _YEAR_WORDS.get(years, f"{years} YEARS")
-    brand = next((s.brand for s in project.systems if s.brand), None)
-    cable = system_rules.canonical(system_code) == "FRC"
+    code = system_rules.canonical(system_code)
+    # The manufacturer of this system -- the emergency lighting's is not the
+    # fire alarm's.
+    from app.routers.projects import _brand_for
+
+    brand = (_brand_for(system_code, list(project.systems)) if code else None) or next(
+        (s.brand for s in project.systems if s.brand), None)
+    cable = code == "FRC"
+    # A warranty for another system than the draft's fire alarm: its name in
+    # place of the draft's (platform owner, 2 October 2026).
+    system_names = {"ELS": ("EMERGENCY LIGHTING SYSTEM", "emergency lighting system materials")}.get(code or "")
     if cable:
         from sqlalchemy.orm import Session as _Session
 
@@ -1655,6 +2219,9 @@ def warranty_replacements(project: Project, years: int = WARRANTY_YEARS, system_
         if re.match(r"^REF\s*NO", stripped, re.I):
             return re.sub(r"(:\s*).*$", rf"\g<1>EP-{project.ep_number}", stripped)
         new = re.sub(r"\b(ONE|TWO|THREE|FOUR|FIVE)\s+YEARS?\b", period, text, flags=re.I)
+        if system_names:
+            new = re.sub(r"FIRE ALARM\s*&\s*VOICE EVACUATION SYSTEM", system_names[0], new, flags=re.I)
+            new = re.sub(r"fire alarm system materials", system_names[1], new, flags=re.I)
         if cable:
             new = re.sub(r"FIRE ALARM\s*&\s*VOICE EVACUATION SYSTEM", "FIRE RATED CABLE", new, flags=re.I)
             new = re.sub(r"fire alarm system materials", "fire rated cable materials", new, flags=re.I)

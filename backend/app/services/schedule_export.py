@@ -56,7 +56,7 @@ def cell(per_floor: dict, floors: list[str]) -> str:
     return f"{shown} x{len(floors)}" if len(floors) > 1 else shown
 
 
-def build(project, result: dict) -> pymupdf.Document:
+def build(project, result: dict, name: str = "BOQ FLOOR WISE") -> pymupdf.Document:
     """The schedule as it is shown, system by system."""
     doc = pymupdf.open()
     columns = sheet_columns(result)
@@ -76,7 +76,7 @@ def build(project, result: dict) -> pymupdf.Document:
             continue
         for shown in pages:
             page = doc.new_page(width=WIDTH, height=HEIGHT)
-            page.insert_text((LEFT, 40), "BOQ FLOOR WISE", fontname="hebo", fontsize=15, color=_RED)
+            page.insert_text((LEFT, 40), name, fontname="hebo", fontsize=15, color=_RED)
             page.insert_text((LEFT, 56), title.upper()[:110], fontname="helv", fontsize=8, color=_GREY)
             heading = SYSTEM_NAMES.get(system, system)
             if len(pages) > 1 and shown:
@@ -148,6 +148,6 @@ def build(project, result: dict) -> pymupdf.Document:
                              fontname="hebo", fontsize=7)
     if doc.page_count == 0:
         page = doc.new_page(width=WIDTH, height=HEIGHT)
-        page.insert_text((LEFT, 60), "BOQ FLOOR WISE", fontname="hebo", fontsize=15, color=_RED)
+        page.insert_text((LEFT, 60), name, fontname="hebo", fontsize=15, color=_RED)
         page.insert_text((LEFT, 84), "No schedule has been read yet.", fontname="helv", fontsize=9, color=_GREY)
     return doc
