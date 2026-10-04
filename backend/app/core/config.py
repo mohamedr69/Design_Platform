@@ -372,6 +372,20 @@ class Settings(BaseSettings):
     # leaves it "not synced" until the engineer asks to download and read.
     # An unchanged file read before is never opened again either way.
     fa_read_cloud_only_files: bool = True
+    # The FA Interfaces drawing workflow (fa_interfaces_run): drawing agents (one
+    # per drawing, the damper look on drawing_review_model at drawing_review_effort)
+    # running FA_AGENT_PARALLEL drawings at once -- each opens its drawing in a child
+    # process, about 2 GB for EP-30880's, so this is a memory bound too; and the Fable
+    # orchestrator reviewing their reports, its own model, effort, time, input size,
+    # and a budget reserved apart from the agents'. A review that cannot run leaves the
+    # run provisional and says so; it is retried at most FA_ORCHESTRATOR_RETRIES_PER_DAY.
+    fa_agent_parallel: int = 2
+    fa_orchestrator_model: str = "claude-fable-5-1"
+    fa_orchestrator_effort: str = "high"
+    fa_orchestrator_timeout_s: float = 900.0
+    fa_orchestrator_max_input_tokens: int = 150_000
+    fa_orchestrator_max_output_tokens: int = 8_000
+    fa_orchestrator_retries_per_day: int = 3
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

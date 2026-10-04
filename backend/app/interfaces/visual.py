@@ -19,9 +19,11 @@ a drawing read again unchanged is not looked at again.
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import math
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
 
 from app.ai.provider import ImagePart, TextPart, get_provider
 from app.compliance import assist
@@ -137,6 +139,27 @@ def _ask(project_id: int, png: bytes, sha: str, window: dict, budget, drawing: s
         db.close()
 
 
+def _drawing(project, src: dict, cache_folder) -> Path | None:
+    """The DXF the look is drawn from: a DWG's converted copy, by its hash; a
+    drawing filed as DXF, itself -- only while it is still the file read."""
+    sha = src.get("sha256") or ""
+    copy = cache_folder(project) / f"{sha[:24]}.dxf"
+    if sha and copy.is_file():
+        return copy
+    rel = src.get("relative_path") or ""
+    if not (sha and rel.lower().endswith(".dxf") and project.source_folder_path):
+        return None
+    path = Path(project.source_folder_path) / rel
+    try:
+        digest = hashlib.sha256()
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                digest.update(chunk)
+    except OSError:
+        return None
+    return path if digest.hexdigest() == sha else None
+
+
 def check(db, project, sources: list[dict], *, progress=None, check=None, limits=None) -> int:
     """Look at the damper labels of every smoke management and ventilation
     drawing read, on the drawing; each source's `visual` is filled in place.
@@ -164,8 +187,14 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
         if (old.get("version") == VERSION and old.get("sha256") == src.get("sha256")
                 and old.get("status") == "complete" and expected <= answered):
             continue
-        dxf = cache_folder(project) / f"{src['sha256'][:24]}.dxf"
-        if not dxf.is_file():
+        dxf = _drawing(project, src, cache_folder)
+        if dxf is None:
+            # nothing to draw the look from: said, never skipped silently
+            src["visual"] = {"version": VERSION, "sha256": src.get("sha256"), "items": {}, "windows": 0,
+                             "expected": len(expected), "missing": sorted(expected),
+                             "unread": {iid: "no_drawing_copy: the drawing read is not on this PC any more"
+                                        for iid in sorted(expected)},
+                             "status": "incomplete"}
             continue
         metre = _METRE.get((src.get("result") or {}).get("units", "m"), 1.0)
         if progress:

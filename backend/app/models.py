@@ -2398,6 +2398,37 @@ class ProjectFaInterfaces(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
 
 
+class FaInterfaceRun(Base):
+    """One run of the FA Interfaces drawing workflow (FI-P1 r2 Part C): the
+    drawings it read (`manifest`), one accountable report per drawing
+    (`agent_reports`, the Opus drawing agents) and per package
+    (`package_reports`), the Fable orchestrator's review of them (`review`,
+    with `review_inputs` frozen so a review can be retried on exactly what it
+    was given), and what the run may become: provisional until the review is
+    complete and an engineer accepts it."""
+
+    __tablename__ = "fa_interface_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
+    job_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="running")
+    started_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    created_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    manifest: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    agent_reports: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    package_reports: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    review_state: Mapped[str] = mapped_column(String(24), nullable=False, default="not_started")
+    review: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    review_inputs: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    publication_state: Mapped[str] = mapped_column(String(24), nullable=False, default="provisional")
+    sources_digest: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    accepted_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    accepted_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
 class ProjectDrawingReview(Base):
     """The Drawings Review of one fire alarm IFC drawing (app.review): every
     floor-plan sheet plotted, its named rooms looked at by the model against

@@ -66,7 +66,7 @@ FINISHED = ("succeeded", "failed", "cancelled")
 # The kinds the worker processes run, by lane; the API never runs these itself.
 LANES: dict[str, tuple[str, ...]] = {
     "sync": ("sync_documents",),
-    "ifc": ("ifc_read", "ifc_read_zip", "ifc_reprocess", "fa_interfaces_scan", "fa_drawing_review",
+    "ifc": ("ifc_read", "ifc_read_zip", "ifc_reprocess", "fa_interfaces_scan", "fa_interfaces_run", "fa_drawing_review",
             "fa_redesign_plan", "fa_redesign_apply"),
 }
 WORKER_KINDS = tuple(kind for kinds in LANES.values() for kind in kinds)

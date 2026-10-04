@@ -62,9 +62,10 @@ def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depe
     if not project.source_folder_path:
         raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
     key = f"{KIND}:{project.id}"
-    existing = jobs.active_by_key(db, key)
-    if existing is not None:
-        return _started(db, existing, False)
+    for active in (key, f"fa_interfaces_run:{project.id}"):
+        existing = jobs.active_by_key(db, active)
+        if existing is not None:
+            return _started(db, existing, False)
     job, created = jobs.enqueue(db, kind=KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
                                 params={"user_id": current_user.id, "hydrate": bool(hydrate)},
                                 progress=_queue_note(db), message="")
@@ -76,6 +77,90 @@ def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depe
         db.expire_all()
         job = db.get(type(job), job.id)
     return _started(db, job, created)
+
+
+RUN_KIND = "fa_interfaces_run"
+
+
+@router.post("/projects/{project_id}/fa-interfaces/runs/jobs", status_code=status.HTTP_202_ACCEPTED)
+def start_run(project_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
+    """Queue the drawing workflow (the IFC worker): read, drawing agents, package
+    reports, the Fable orchestrator's review. One read of a project at a time:
+    a read or a run already queued or running is returned instead."""
+    from app.routers import jobs as jobs_router
+    from app.routers.ifc_boq import _queue_note, _run_inline, _started
+
+    project = _get_project_or_404(db, project_id)
+    if not project.source_folder_path:
+        raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
+    for key in (f"{KIND}:{project.id}", f"{RUN_KIND}:{project.id}"):
+        existing = jobs.active_by_key(db, key)
+        if existing is not None:
+            return _started(db, existing, False)
+    key = f"{RUN_KIND}:{project.id}"
+    job, created = jobs.enqueue(db, kind=RUN_KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
+                                params={"user_id": current_user.id}, progress=_queue_note(db), message="")
+    if created:
+        activity.record(db, current_user, "fa_interfaces.run", "Ran the FA interfaces drawing workflow",
+                        project=project, entity_type="project", entity_id=project.id)
+    if created and jobs_router.RUN_INLINE:
+        _run_inline(job.id)
+        db.expire_all()
+        job = db.get(type(job), job.id)
+    return _started(db, job, created)
+
+
+@router.get("/projects/{project_id}/fa-interfaces/runs/latest")
+def latest_run(project_id: int, _current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.interfaces import workflow
+
+    project = _get_project_or_404(db, project_id)
+    return {"run": workflow.view(workflow.latest(db, project))}
+
+
+def _run_or_404(db: Session, project, run_id: int):
+    from app.models import FaInterfaceRun
+
+    run = db.get(FaInterfaceRun, run_id)
+    if run is None or run.project_id != project.id:
+        raise HTTPException(404, "That run is not this project's")
+    return run
+
+
+@router.post("/projects/{project_id}/fa-interfaces/runs/{run_id}/accept")
+def accept_run(project_id: int, run_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+               db: Session = Depends(get_db)):
+    """The engineer accepts a reviewed, complete run: its readings are published.
+    A provisional run (review missing, coverage incomplete, a conflict open) is refused."""
+    from app.interfaces import workflow
+
+    project = _get_project_or_404(db, project_id)
+    run = _run_or_404(db, project, run_id)
+    try:
+        workflow.accept(db, project, run, current_user.id)
+    except service.SourcesChanged as exc:
+        raise HTTPException(409, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    activity.record(db, current_user, "fa_interfaces.accept_run", f"Accepted FA interfaces run {run.id}",
+                    project=project, entity_type="project", entity_id=project.id)
+    db.commit()
+    return {"run": workflow.view(run), "schedule": service.build(db, project)}
+
+
+@router.post("/projects/{project_id}/fa-interfaces/runs/{run_id}/retry-review")
+def retry_review(project_id: int, run_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+                 db: Session = Depends(get_db)):
+    """The Fable orchestrator's review again, on the run's own evidence."""
+    from app.interfaces import workflow
+
+    project = _get_project_or_404(db, project_id)
+    run = _run_or_404(db, project, run_id)
+    try:
+        workflow.retry_review(db, project, run)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {"run": workflow.view(run)}
 
 
 class PublishCurrent(BaseModel):

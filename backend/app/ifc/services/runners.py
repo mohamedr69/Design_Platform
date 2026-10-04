@@ -291,10 +291,31 @@ def _redesign(kind: str):
     return run
 
 
+def run_interfaces_run(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
+    """fa_interfaces_run: the FA Interfaces drawing workflow -- read, drawing
+    agents, package reports, the Fable orchestrator's review, a provisional
+    or complete-candidate run (app.interfaces.workflow)."""
+    from app.interfaces import service, workflow
+
+    project = session.get(Project, job.project_id)
+    try:
+        return workflow.run_workflow(
+            session, project, user_id=(job.params or {}).get("user_id"), job_id=job.id, check=ctx.check,
+            progress=lambda done, total, message, file: ctx.progress(done, max(total, 1), message, stage="run", file=file))
+    except (jobs.Cancelled, jobs.Interrupted):
+        raise
+    except (service.SourceUnreachable, service.SourcesChanged) as exc:
+        raise processing.ReadError(f"{exc}. Nothing was changed.") from exc
+    except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
+        raise _unexpected(job.id, exc) from exc
+
+
 INTERFACES_SCAN = "fa_interfaces_scan"
+INTERFACES_RUN = "fa_interfaces_run"
 DRAWING_REVIEW = "fa_drawing_review"
 REDESIGN_PLAN, REDESIGN_APPLY = "fa_redesign_plan", "fa_redesign_apply"
 RUNNERS = {READ: run_read, READ_ZIP: run_read_zip, REPROCESS: run_reprocess, INTERFACES_SCAN: run_interfaces_scan,
+           INTERFACES_RUN: run_interfaces_run,
            DRAWING_REVIEW: run_drawing_review, REDESIGN_PLAN: _redesign("plan"), REDESIGN_APPLY: _redesign("apply")}
 
 

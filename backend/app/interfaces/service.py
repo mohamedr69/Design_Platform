@@ -307,7 +307,8 @@ def _read_fa_ifc(src: dict, old: dict | None, *, check) -> dict:
 
 
 def scan_project(db: Session, project: Project, user_id: int | None = None, progress=None, check=None,
-                 hydrate: bool | None = None, job_id: int | None = None) -> dict:
+                 hydrate: bool | None = None, job_id: int | None = None, look: bool = True,
+                 advance: bool = True) -> dict:
     """Read the project's drawings into the schedule's evidence (FI-P1 r3 Stage 0.1).
 
     The folder is listed first (stat only). An unreachable folder fails the job
@@ -419,7 +420,7 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
                 e["duplicate_of"] = first_of[e["sha256"]]
             else:
                 first_of[e["sha256"]] = e["relative_path"]
-    if any(visual.wanted(s) for s in read_now):
+    if look and any(visual.wanted(s) for s in read_now):
         try:
             visual.check(db, project, read_now, check=check,
                          progress=(lambda d, t, m, f=None: progress(d, t, m, f)) if progress else None)
@@ -429,7 +430,9 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
             if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)):
                 raise
             log.warning("The dampers could not be looked at on the drawings: %s", exc)
-    publish = _advance(row.published, sources, listing, fa_in_force(db, project), job_id)
+    # the legacy read publishes by the S7 rules; the drawing workflow publishes only on the
+    # engineer's acceptance of a reviewed run (fa_interfaces_run)
+    publish = _advance(row.published, sources, listing, fa_in_force(db, project), job_id) if advance else None
     stamp = utc_now()
     values = {"sources": sources, "scanned_at": stamp, "scanned_by_id": user_id, "generation": seen + 1}
     if publish is not None:
