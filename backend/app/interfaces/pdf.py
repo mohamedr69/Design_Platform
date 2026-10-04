@@ -117,14 +117,22 @@ def build(view: dict) -> pymupdf.Document:
     # --- summary ---------------------------------------------------------------------------
     new_page("Summary")
     scanned = (view.get("scanned_at") or "")[:16].replace("T", " ") or "not read yet"
+    from app.interfaces.export import evidence_note
+
+    known = view.get("totals_known", True)
+
+    def num(value) -> str:
+        return str(value) if known else "—"
+
     facts = [
-        ("Interface lines (one per item per floor)", str(t["items"])),
-        ("Monitoring signals", str(t["monitoring"])),
-        ("Control signals", str(t["control"])),
-        ("Interface points", str(t["interface_points"])),
-        ("FA modules, estimated", f"{t['module_qty']}  (CT1 {t['modules']['CT1']} · CT2 {t['modules']['CT2']} · "
-                                  f"CR {t['modules']['CR']})"),
-        ("Items still to verify (not counted)", str(t["to_verify"])),
+        ("Schedule", evidence_note(view)),
+        ("Interface lines (one per item per floor)", num(t["items"])),
+        ("Monitoring signals", num(t["monitoring"])),
+        ("Control signals", num(t["control"])),
+        ("Interface points", num(t["interface_points"])),
+        ("FA modules, estimated", (f"{t['module_qty']}  (CT1 {t['modules']['CT1']} · CT2 {t['modules']['CT2']} · "
+                                   f"CR {t['modules']['CR']})") if known else "—"),
+        ("Items still to verify (not counted)", num(t["to_verify"])),
         ("Drawings read", scanned),
         ("Interface matrix", view["matrix"]["name"]),
     ]
@@ -144,6 +152,7 @@ def build(view: dict) -> pymupdf.Document:
     heading("DRAWINGS RECEIVED")
     table_head(cols)
     status = {"available": "Received", "missing": "Missing", "failed": "Not read", "not_provided": "Not provided"}
+    badge = {c.get("discipline"): c.get("badge_text") for c in view["coverage"]}
     for c in view["coverage"]:
         files = c["files"] or [None]
         for i, f in enumerate(files):
@@ -152,8 +161,10 @@ def build(view: dict) -> pymupdf.Document:
             name = "-" if f is None else (f"{f['filename']} {f.get('revision') or ''}".strip()
                                          + (" (superseded)" if f["status"] == "superseded" else "")
                                          + (" (not read)" if f["status"] == "failed" else "")
-                                         + (" (not read yet)" if f["status"] == "unread" else ""))
-            table_row([c["name"] if i == 0 else "", status.get(c["status"], c["status"]) if i == 0 else "", name,
+                                         + (" (not read yet)" if f["status"] == "unread" else "")
+                                         + (" (last known, not counted)" if f["status"] == "stale" else ""))
+            shown = badge.get(c.get("discipline")) or status.get(c["status"], c["status"])
+            table_row([c["name"] if i == 0 else "", shown if i == 0 else "", name,
                        "" if f is None else f["items"], (c["folder"] or c["purpose"]) if i == 0 else ""], cols,
                       fill=_WARN if c["status"] in ("missing", "failed") and i == 0 else None)
     state["y"] += 14

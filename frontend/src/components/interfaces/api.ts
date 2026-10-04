@@ -61,9 +61,14 @@ export interface VerificationItem {
 export interface CoverageFile {
   filename: string
   relative_path: string | null
-  kind: 'folder' | 'fa_ifc' | 'schedule'
+  kind: 'folder' | 'fa_ifc' | 'schedule' | 'unsupported'
   revision: string | null
-  status: 'read' | 'failed' | 'superseded' | 'unread'
+  /** read = verified now; stale = last known only, never counted (FI-P1 r3) */
+  status: 'read' | 'failed' | 'superseded' | 'unread' | 'stale' | 'unsupported' | 'removed'
+  reason: string | null
+  present: boolean
+  cloud_only: boolean
+  last_known_at: string | null
   error: string | null
   modified: string | null
   size: number | null
@@ -73,14 +78,30 @@ export interface CoverageFile {
   lifts: number
 }
 
+export type CoverageBadge =
+  | 'unreachable'
+  | 'no_folder'
+  | 'not_synced'
+  | 'missing_last_known'
+  | 'missing'
+  | 'received_not_read'
+  | 'received_unreadable'
+  | 'received'
+  | 'received_fa_only'
+
 export interface Coverage {
   discipline: string
   name: string
   folder: string | null
   purpose: string
+  /** "available" only when the package's files are in the folder now */
   status: 'available' | 'missing' | 'failed' | 'not_provided'
-  /** a drawing of it was read into the schedule */
+  /** a drawing of it is read and verified now */
   read: boolean
+  received: boolean
+  badge: CoverageBadge
+  badge_text: string
+  pending: number
   files: CoverageFile[]
 }
 
@@ -159,6 +180,42 @@ export interface InterfaceSchedule {
   conflicts: string[]
   excluded_found: { equipment: string; source: string; sheet: string; count: number; text: string }[]
   matrix: { name: string; rules: MatrixRule[]; unclear_rows: number[] }
+  /** FI-P1 r3 S8: what this schedule is built from */
+  view_state: 'current' | 'provisional' | 'unverified' | 'not_read'
+  primary: 'current' | 'published' | 'none'
+  view_reasons: string[]
+  publish_offered: boolean
+  totals_known: boolean
+  published_at: string | null
+  published_basis: 'complete_scan' | 'engineer_accepted' | 'seeded' | null
+  published_by: string | null
+  published_reason: string | null
+  current_sources_digest: string
+  current_summary: { totals: InterfaceSchedule['totals']; rows: number } | null
+  last_known: LastKnown[]
+  decisions_not_applied: Record<string, number>
+  evidence: {
+    root: 'ok' | 'unreachable' | 'not_configured' | 'ifc_root_missing'
+    read_current: number
+    stale: number
+    failed: number
+    unread: number
+    removed: number
+    superseded: number
+    unsupported: number
+    cloud_only: number
+    changed_since_read: number
+    listing_failed: string[]
+  }
+}
+
+export interface LastKnown {
+  package: string
+  relative_path: string
+  filename: string | null
+  reason: string | null
+  last_known_at: string | null
+  counts_by_key: Record<string, number>
 }
 
 export type DecisionAction = 'reject' | 'restore' | 'confirm' | 'resolve' | 'dismiss' | 'reopen'
@@ -184,6 +241,12 @@ export const interfacesApi = {
   addManual: (projectId: number, body: Omit<ManualItem, 'id'> & { discipline?: string | null }) =>
     platform.post<InterfaceSchedule>(`${base(projectId)}/manual`, body),
   removeManual: (projectId: number, id: string) => platform.delete<InterfaceSchedule>(`${base(projectId)}/manual/${id}`),
+  /** "Download and read": OneDrive cloud-only files brought down and read */
+  hydratePath: (projectId: number) => `${base(projectId)}/scan/jobs?hydrate=true`,
+  publishCurrent: (projectId: number, body: { reason: string; expected_sources_digest: string; override?: boolean }) =>
+    platform.post<InterfaceSchedule>(`${base(projectId)}/publish-current`, body),
+  confirmRemoved: (projectId: number, relativePaths: string[]) =>
+    platform.post<InterfaceSchedule>(`${base(projectId)}/sources/confirm-removed`, { relative_paths: relativePaths }),
   exportUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.xlsx`),
   exportPdfUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.pdf`),
 }

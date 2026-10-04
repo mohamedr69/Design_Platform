@@ -367,6 +367,11 @@ class Settings(BaseSettings):
     fa_render_restarts: int = 1
     fa_render_hatching_timeout_s: float = 2.0
     fa_render_in_process: bool = False
+    # A OneDrive cloud-only placeholder (Files On-Demand) that is new or
+    # changed: opened by a read, which makes OneDrive bring it down; false
+    # leaves it "not synced" until the engineer asks to download and read.
+    # An unchanged file read before is never opened again either way.
+    fa_read_cloud_only_files: bool = True
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

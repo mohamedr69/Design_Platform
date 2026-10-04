@@ -2381,6 +2381,20 @@ class ProjectFaInterfaces(Base):
     manual: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     scanned_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
     scanned_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # The published schedule's evidence (FI-P1 r3 S7): the readings it was
+    # built from -- never its output, so the engineer's answers apply to it
+    # live -- shown, labelled "not verified now", whenever the evidence
+    # behind it cannot be verified now. Moved by a complete read
+    # (complete_scan), by the engineer (engineer_accepted), or seeded once
+    # from the readings saved before it existed (seeded).
+    published: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    published_basis: Mapped[str | None] = mapped_column(String(24), nullable=True)
+    published_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    published_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Bumped by every write of the evidence (a read, a publication, a confirmed
+    # removal), each of which only commits over the generation it started from.
+    generation: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, onupdate=utc_now, nullable=False)
 
 

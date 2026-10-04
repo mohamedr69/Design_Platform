@@ -500,14 +500,36 @@ def _place_module(change: dict, sheet: dict, symbols: list[dict], answer: dict, 
     _place(change, sheet, symbols, answer, walls if answer.get("facing") else None)
 
 
-def _interface_changes(db: Session, project: Project, sheets: dict[int, dict], occurrences: list[dict],
-                       top: set[str] | None, symbols: list[dict], walls=None) -> list[dict]:
-    """A change per module of the interface schedule: placed beside its
-    equipment where the drawing has the plan it is on; a note to draw it by
-    hand where not."""
+def interfaces_verified(db: Session, project: Project) -> tuple[bool, dict]:
+    """Whether the interface schedule is verified now (FI-P1 r3 C4): its view
+    is current and built from current readings. Otherwise its rows are last
+    known evidence and no module is placed from them."""
     from app.interfaces import service as I
 
     built = I.build(db, project)
+    return built.get("view_state") == "current" and built.get("primary") == "current", built
+
+
+def keep_interfaces(previous: list[dict]) -> dict[str, dict]:
+    """C4: the interface changes as the engineer left them, copied exactly,
+    for a plan made while the interface schedule is not verified now."""
+    return {c["id"]: json.loads(json.dumps(c)) for c in previous or [] if c.get("source") == INTERFACE}
+
+
+def restore_kept(changes: list[dict], kept: dict[str, dict]) -> list[dict]:
+    """The kept interface changes put back byte for byte, whatever placing and
+    coordinating the review's changes did around them."""
+    return [json.loads(json.dumps(kept[c["id"]])) if c.get("id") in kept else c for c in changes]
+
+
+def _interface_changes(db: Session, project: Project, sheets: dict[int, dict], occurrences: list[dict],
+                       top: set[str] | None, symbols: list[dict], walls=None, built: dict | None = None) -> list[dict]:
+    """A change per module of the interface schedule: placed beside its
+    equipment where the drawing has the plan it is on; a note to draw it by
+    hand where not. Made only from a verified schedule (`verified: true`)."""
+    from app.interfaces import service as I
+
+    built = built if built is not None else I.build(db, project)
     floors = I.Floors(db, project)
     plans = []
     for sh in sheets.values():
@@ -550,7 +572,8 @@ def _interface_changes(db: Session, project: Project, sheets: dict[int, dict], o
                             "instruction": f"{code} FOR {who}: {r['equipment']} ({r['system']})", "at": None,
                             "status": "failed", "candidates": [], "remove": None, "insert": None, "placeholder": False,
                             "note": "", "error": why, "moved": False, "confidence": None, "residual": None,
-                            "source": INTERFACE, "interface": {"row": r["id"], "code": code, "for": who,
+                            "source": INTERFACE, "verified": True,
+                            "interface": {"row": r["id"], "code": code, "for": who,
                                                               "equipment": r["equipment"], "tag": r["tag"]}}
             continue
         # one change per module of the item on that plan: a typical plan's floors are one
@@ -623,13 +646,18 @@ def add_interfaces(db: Session, project: Project, drawing_id: int) -> dict:
     if drawing is None or drawing.project_id != project.id:
         raise RedesignError("That drawing is not this project's")
     row = state(db, project, drawing.id)
+    verified, built = interfaces_verified(db, project)
+    if not verified:
+        reasons = "; ".join(built.get("view_reasons") or []) or "read the drawings again"
+        raise RedesignError(f"The FA interface schedule is not verified now ({built.get('view_state')}: {reasons}). "
+                            "The interface changes are kept as they were.")
     review_row, _view = _review(db, project, drawing)
     sheets = {sh["index"]: sh for sh in review_row.sheets or []}
     occurrences = _occurrences(resolved_drawing(db, drawing, with_occurrences=True))
     top, blocks, sizes = _top_level(drawing, _measured(occurrences))
     symbols = _all_symbols(occurrences, blocks, sizes, sheets)
     walls = _walls(project, drawing, row.source_sha256 or review_row.source_sha256, build=True)
-    generated = _interface_changes(db, project, sheets, occurrences, top, symbols, walls)
+    generated = _interface_changes(db, project, sheets, occurrences, top, symbols, walls, built=built)
     changes = [dict(c) for c in _merge_interfaces(row.changes or [], generated, {c["id"]: c for c in row.changes or []})]
     for c in changes:
         if c.get("source") == INTERFACE and c.get("moved") and c.get("insert") and not c.get("on_wall") and c.get("ai"):
@@ -1138,16 +1166,25 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
             changes.append(_prepare(finding, sheets[finding["page"]], occurrences, top))
         say(0, 1, "Reading the drawing's walls (once per drawing)")
         walls = _walls(project, drawing, review_row.source_sha256, build=True, check=check)
-        say(0, 1, "Placing the interface schedule's modules")
+        kept: dict[str, dict] = {}
         try:
-            changes = _merge_interfaces(changes, _interface_changes(db, project, sheets, occurrences, top, symbols, walls),
-                                        before)
+            verified, built = interfaces_verified(db, project)
+            if verified:
+                say(0, 1, "Placing the interface schedule's modules")
+                changes = _merge_interfaces(changes, _interface_changes(db, project, sheets, occurrences, top, symbols,
+                                                                        walls, built=built), before)
+            else:
+                # C4: last-known evidence places nothing, and what the engineer settled stays as it is
+                kept = keep_interfaces(row.changes or [])
+                changes = changes + [json.loads(json.dumps(c)) for c in kept.values()]
+                say(0, 1, f"Interface schedule not verified now ({built.get('view_state')}): "
+                          "interface changes kept as they were")
         except Exception as exc:  # noqa: BLE001 -- the review's changes are placed all the same
             log.warning("The interface modules could not be placed: %s", exc)
         row.changes, row.symbols, row.source_sha256 = changes, symbols, review_row.source_sha256
         db.commit()
 
-        todo = [c for c in changes if c["status"] == "pending"]
+        todo = [c for c in changes if c["status"] == "pending" and c["id"] not in kept]
         budget = review._budget(db, project)
         pdf = str(storage.absolute(review_row.pdf_path))
         done = 0
@@ -1179,10 +1216,13 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
         finally:
             pool.shutdown(wait=False, cancel_futures=True)
         coordinate(changes, sheets, walls, symbols)
+        if kept:
+            changes = restore_kept(changes, kept)
         row.changes = [dict(c) for c in changes]
         row.status, row.finished_at = "planned", utc_now()
         db.commit()
-        return {"changes": len(changes), "placed": sum(1 for c in changes if c["status"] == "proposed")}
+        return {"changes": len(changes), "placed": sum(1 for c in changes if c["status"] == "proposed"),
+                "interfaces_kept": len(kept)}
     except Exception as exc:
         db.rollback()
         row = state(db, project, drawing_id)

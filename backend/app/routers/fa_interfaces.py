@@ -4,6 +4,9 @@ floor by floor, from their IFC drawings (app.interfaces).
 
   GET    /projects/{id}/fa-interfaces                  the schedule, its summaries, what is left to verify, the drawings read
   POST   /projects/{id}/fa-interfaces/scan/jobs        read the IFC drawings again (the IFC worker): HTTP 202 and the job
+                                                        (?hydrate=true: bring down OneDrive cloud-only files and read them)
+  POST   /projects/{id}/fa-interfaces/publish-current  the engineer publishes what is read and current now (with why)
+  POST   /projects/{id}/fa-interfaces/sources/confirm-removed   files missing from a present folder, removed on purpose
   POST   /projects/{id}/fa-interfaces/decisions        an engineer's answer on a line or a verification item
   POST   /projects/{id}/fa-interfaces/manual           an item the drawings did not give, with the drawing it is on
   DELETE /projects/{id}/fa-interfaces/manual/{mid}     ... taken out again
@@ -46,9 +49,12 @@ def get_schedule(project_id: int, _current_user: User = Depends(get_current_user
 
 
 @router.post("/projects/{project_id}/fa-interfaces/scan/jobs", status_code=status.HTTP_202_ACCEPTED)
-def start_scan(project_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
+def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+               db: Session = Depends(get_db)):
     """Queue the read of every discipline's IFC drawings for the IFC worker.
-    The same request while one is queued or running returns that job."""
+    The same request while one is queued or running returns that job.
+    `hydrate`: OneDrive cloud-only files are brought down and read even when
+    FA_READ_CLOUD_ONLY_FILES is off (the page's "Download and read")."""
     from app.routers.ifc_boq import _queue_note, _run_inline, _started
     from app.routers import jobs as jobs_router
 
@@ -60,7 +66,8 @@ def start_scan(project_id: int, current_user: User = Depends(require_role(*CREAT
     if existing is not None:
         return _started(db, existing, False)
     job, created = jobs.enqueue(db, kind=KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
-                                params={"user_id": current_user.id}, progress=_queue_note(db), message="")
+                                params={"user_id": current_user.id, "hydrate": bool(hydrate)},
+                                progress=_queue_note(db), message="")
     if created:
         activity.record(db, current_user, "fa_interfaces.scan", "Read the IFC drawings for the FA interface schedule",
                         project=project, entity_type="project", entity_id=project.id)
@@ -69,6 +76,59 @@ def start_scan(project_id: int, current_user: User = Depends(require_role(*CREAT
         db.expire_all()
         job = db.get(type(job), job.id)
     return _started(db, job, created)
+
+
+class PublishCurrent(BaseModel):
+    reason: str = Field(min_length=1, max_length=1000)
+    expected_sources_digest: str = Field(min_length=64, max_length=64)
+    override: bool = False
+
+
+@router.post("/projects/{project_id}/fa-interfaces/publish-current")
+def publish_current(project_id: int, body: PublishCurrent, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+                    db: Session = Depends(get_db)):
+    """The engineer publishes the schedule built from what is read and current
+    now (FI-P1 r3 S7/C5): the way out when a drawing keeps failing, or the
+    only evidence is the fire alarm IFC drawing. The page sends the digest of
+    what it showed; anything changed since is refused."""
+    project = _get_project_or_404(db, project_id)
+    try:
+        result = service.publish_current(db, project, current_user.id, reason=body.reason,
+                                         expected_sources_digest=body.expected_sources_digest, override=body.override)
+    except service.SourcesChanged as exc:
+        raise HTTPException(409, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    activity.record(db, current_user, "fa_interfaces.publish",
+                    f"Published the FA interface schedule from {result['published_sources']} current drawing(s): "
+                    f"{body.reason.strip()[:200]}" + (" (override)" if body.override else ""),
+                    project=project, entity_type="project", entity_id=project.id)
+    db.commit()
+    return service.build(db, project)
+
+
+class ConfirmRemoved(BaseModel):
+    relative_paths: list[str] = Field(min_length=1, max_length=500)
+
+
+@router.post("/projects/{project_id}/fa-interfaces/sources/confirm-removed")
+def confirm_removed(project_id: int, body: ConfirmRemoved, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+                    db: Session = Depends(get_db)):
+    """Files missing from a folder that is there, or a folder gone, removed on
+    purpose (C5). A file the sync has not brought down cannot be confirmed away."""
+    project = _get_project_or_404(db, project_id)
+    try:
+        n = service.confirm_removed(db, project, current_user.id, body.relative_paths)
+    except service.SourcesChanged as exc:
+        raise HTTPException(409, str(exc)) from exc
+    if not n:
+        raise HTTPException(422, "None of those files is missing from its folder: only a missing file, or a missing "
+                                 "folder's files, can be confirmed as removed")
+    activity.record(db, current_user, "fa_interfaces.confirm_removed",
+                    f"Confirmed {n} drawing(s) removed from the IFC folders", project=project,
+                    entity_type="project", entity_id=project.id)
+    db.commit()
+    return service.build(db, project)
 
 
 class Decision(BaseModel):

@@ -35,10 +35,11 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from app.core.config import get_settings
 from app.core.timeutils import utc_now
 from app.ifc import storage
 from app.ifc.dxf import sheets as S
-from app.interfaces import detect, scan, visual
+from app.interfaces import detect, evidence, scan, visual
 from app.interfaces import schedules as SCH
 from app.interfaces.matrix import (ACS, ARCH, BY_KEY, DISCIPLINE_NAMES, FF, GB, HVAC, MATRIX_NAME, RULES, SM,
                                    UNCLEAR_ROWS, modules)
@@ -98,50 +99,62 @@ def _stem(name: str) -> tuple[str, int]:
     return (_REVISION.sub("", base).strip().upper() if m else base.strip().upper()), rev
 
 
-def discover(db: Session, project: Project) -> list[dict]:
+class SourceUnreachable(Exception):
+    """The project folder cannot be reached (or the project has none): a read
+    of it would say nothing, so nothing is written."""
+
+
+class SourcesChanged(Exception):
+    """The schedule's evidence changed while it was being read (another read,
+    a confirmation, a publication): this one is not written over it."""
+
+
+def fa_in_force(db: Session, project: Project) -> dict[str, dict]:
+    """The fire alarm IFC drawings in force, by the path the schedule files them
+    under: their evidence is the drawing register and the DXF on this PC, never
+    the project folder."""
+    from app.ifc.services import revisions
+
+    out: dict[str, dict] = {}
+    for fa in revisions.in_force(db, project.id):
+        path = storage.dxf_path(fa)
+        exists = path.is_file()
+        out[fa.archive_path or fa.filename] = {
+            "path": str(path), "dxf_exists": exists, "sha256": fa.source_sha256, "filename": fa.filename,
+            "revision": fa.revision or "R0", "fa_drawing_id": fa.id,
+            "size": path.stat().st_size if exists else None,
+            "mtime": fa.uploaded_at.timestamp() if fa.uploaded_at else None}
+    return out
+
+
+def discover(db: Session, project: Project, listing: "evidence.Listing | None" = None) -> list[dict]:
     """Every drawing the schedule reads, discipline by discipline: the
     files in each IFC folder (a later revision of the same drawing stands
     for it -- the earlier is listed as superseded), and the fire alarm IFC
-    drawings in force for their architecture."""
+    drawings in force for their architecture. Stat only (evidence.take)."""
+    listing = listing or evidence.take(project, DISCIPLINES)
     out: list[dict] = []
-    root = Path(project.source_folder_path) if project.source_folder_path else None
     for d in DISCIPLINES:
-        if root is None:
+        fs = listing.folders.get(d.code)
+        if fs is None:
             continue
-        folder = root / d.folder
-        files: list[tuple[Path, float, int]] = []
-        for dirpath, _dirs, names in os.walk(document_control._os_path(folder)):
-            for name in names:
-                if not name.lower().endswith((".dwg", ".dxf")) or name.startswith("~$") or name.lower().endswith(_SKIP_FILE):
-                    continue
-                full = Path(dirpath) / name
-                try:
-                    st = os.stat(full)
-                except OSError:
-                    continue
-                files.append((full, st.st_mtime, st.st_size))
-        latest: dict[str, tuple[int, float, str]] = {}
-        for full, mtime, _size in files:
-            drawing, rev = _stem(full.name)
+        latest: dict[str, tuple] = {}
+        for item in fs.supported:
+            drawing, rev = _stem(item.filename)
             # a DXF beside its DWG is the same drawing: the DWG is the issued file
-            rank = (rev, mtime, 1 if full.suffix.lower() == ".dwg" else 0)
+            rank = (rev, item.mtime, 1 if item.filename.lower().endswith(".dwg") else 0)
             if drawing not in latest or rank > latest[drawing][:3]:
-                latest[drawing] = (*rank, str(full))
-        for full, mtime, size in sorted(files, key=lambda f: f[0].name.lower()):
-            drawing, _rev = _stem(full.name)
-            relative = _relative(root, full)
-            out.append({"discipline": d.code, "kind": "folder", "path": str(full), "relative_path": relative,
-                        "filename": full.name, "size": size, "mtime": mtime,
-                        "superseded": latest[drawing][3] != str(full)})
-    from app.ifc.services import revisions
-
-    for fa in revisions.in_force(db, project.id):
-        path = storage.dxf_path(fa)
-        out.append({"discipline": ARCH, "kind": "fa_ifc", "path": str(path),
-                    "relative_path": fa.archive_path or fa.filename, "filename": fa.filename,
-                    "revision": fa.revision or "R0", "fa_drawing_id": fa.id, "sha256": fa.source_sha256,
-                    "size": path.stat().st_size if path.is_file() else None,
-                    "mtime": fa.uploaded_at.timestamp() if fa.uploaded_at else None, "superseded": False})
+                latest[drawing] = (*rank, item.relative_path)
+        for item in sorted(fs.supported, key=lambda i: i.filename.lower()):
+            drawing, _rev = _stem(item.filename)
+            out.append({"discipline": d.code, "kind": "folder", "path": item.path, "relative_path": item.relative_path,
+                        "filename": item.filename, "size": item.size, "mtime": item.mtime,
+                        "cloud_only": item.cloud_only, "superseded": latest[drawing][3] != item.relative_path})
+    for rel, fa in fa_in_force(db, project).items():
+        out.append({"discipline": ARCH, "kind": "fa_ifc", "path": fa["path"], "relative_path": rel,
+                    "filename": fa["filename"], "revision": fa["revision"], "fa_drawing_id": fa["fa_drawing_id"],
+                    "sha256": fa["sha256"], "size": fa["size"], "mtime": fa["mtime"], "dxf_exists": fa["dxf_exists"],
+                    "superseded": False})
     return out
 
 
@@ -174,106 +187,415 @@ def state(db: Session, project: Project) -> ProjectFaInterfaces:
     return row
 
 
-def scan_project(db: Session, project: Project, user_id: int | None = None, progress=None, check=None) -> dict:
-    """Stage 1 for every drawing: a file read before, unchanged (same hash,
-    same reading rules), is not read again."""
+_READING = ("result", "visual", "read_at", "converted_in")
+_STATE = ("retired_by", "stale_reason", "last_known", "error", "removed_at", "confirmed_by_id")
+
+
+def _pub(src: dict) -> dict:
+    return {k: v for k, v in src.items() if k not in ("path", "dxf_exists")}
+
+
+def _bare(entry: dict) -> dict:
+    """An entry without its reading or its state: what the file is."""
+    return {k: v for k, v in entry.items() if k not in _READING + _STATE + ("status",)}
+
+
+def _last_known(old: dict | None) -> dict | None:
+    """The last good reading an entry carries: its own when it is read, else the
+    one it kept when it stopped being current."""
+    if not old:
+        return None
+    if old.get("status") == "read" and old.get("result") is not None:
+        return {"result": old.get("result"), "visual": old.get("visual"), "sha256": old.get("sha256"),
+                "read_at": old.get("read_at"),
+                "scan_version": (old.get("result") or {}).get("scan_version")
+                or (old.get("result") or {}).get("schedule_version")}
+    return old.get("last_known")
+
+
+def _not_current(pub: dict, old: dict | None, reason: str, error: str | None = None, *, never_read: str) -> dict:
+    """S4.2: a file that has a last good reading becomes stale (kept, not counted);
+    one that never had one is `never_read` (failed / unread)."""
+    known = _last_known(old)
+    if known is not None:
+        out = {**_bare(pub), "status": "stale", "stale_reason": reason, "last_known": known}
+    else:
+        out = {**_bare(pub), "status": never_read}
+        if reason == "not_synced":
+            out["stale_reason"] = "not_synced"
+    if error:
+        out["error"] = error[:500]
+    return out
+
+
+def _gone_reason(old: dict, listing: "evidence.Listing", folder_of: dict[str, "evidence.FolderState"]) -> str:
+    """Why a previously listed file is not listed now (S4.1 precedence, C1)."""
+    if listing.root == "ifc_root_missing":
+        return "ifc_root_missing"
+    fs = folder_of.get(old.get("discipline"))
+    if fs is None or fs.state == "absent_or_empty":
+        return "folder_missing"
+    if fs.failed_for(old.get("relative_path") or ""):
+        return "listing_failed"
+    return "missing"
+
+
+def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: bool, check, converter_box: list) -> dict:
+    """One listed drawing (S4.2 E1/E2/E3): carried forward unchanged without
+    opening it (C6), or hashed (a cloud-only file is downloaded by that) and read."""
     from app.ifc.dxf import convert
 
+    pub = _pub(src)
+    if (old and old.get("status") == "read" and old.get("size") == src.get("size") and old.get("mtime") == src.get("mtime")
+            and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
+        return {**old, **pub}
+    if src.get("cloud_only") and not open_cloud:
+        return _not_current(pub, old, "not_synced", never_read="unread")
+    path = Path(src["path"])
+    try:
+        sha = _sha256(path)
+    except OSError as exc:
+        if src.get("cloud_only"):
+            return _not_current(pub, old, "not_synced", f"OneDrive could not bring the file down: {exc}", never_read="unread")
+        return _not_current(pub, old, "read_failed", f"The file could not be opened: {exc}", never_read="failed")
+    if (old and old.get("status") == "read" and old.get("sha256") == sha
+            and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
+        return {**old, **pub, "sha256": sha}          # touched, not changed
+    entry = {**_bare(pub), "sha256": sha}
+    try:
+        dxf = path
+        if path.suffix.lower() == ".dwg":
+            dxf = cache_folder(project) / f"{sha[:24]}.dxf"
+            if not dxf.is_file():
+                converter_box[0] = converter_box[0] or convert.find_converter()
+                if converter_box[0] is None:
+                    raise RuntimeError("No DWG converter on the PC the IFC worker runs on: install AutoCAD or the "
+                                       "free ODA File Converter, or file the drawing as DXF too.")
+                dxf.parent.mkdir(parents=True, exist_ok=True)
+                started = datetime.now()
+                convert.convert_dwg_to_dxf(path, dxf, converter_box[0])
+                entry["converted_in"] = round((datetime.now() - started).total_seconds(), 1)
+        result = scan.read(str(dxf), src["discipline"], check=check)
+        return {**entry, "status": "read", "result": result, "read_at": utc_now().isoformat()}
+    except Exception as exc:  # noqa: BLE001 -- one drawing that cannot be read is named; the rest are read
+        from app.services import jobs
+
+        if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)):
+            raise
+        return _not_current(entry, old, "read_failed", str(exc) or type(exc).__name__, never_read="failed")
+
+
+def _read_fa_ifc(src: dict, old: dict | None, *, check) -> dict:
+    """A fire alarm IFC drawing in force (S4.2 F1-F3)."""
+    pub = _pub(src)
+    if not src.get("dxf_exists"):
+        return _not_current(pub, old, "read_failed",
+                            "The drawing's DXF is not on this PC: import the fire alarm IFC drawing again.",
+                            never_read="failed")
+    if (old and old.get("status") == "read" and old.get("sha256") == src.get("sha256")
+            and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
+        return {**old, **pub}
+    try:
+        result = scan.read(str(src["path"]), src["discipline"], check=check)
+        return {**_bare(pub), "status": "read", "result": result, "read_at": utc_now().isoformat()}
+    except Exception as exc:  # noqa: BLE001
+        from app.services import jobs
+
+        if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)):
+            raise
+        return _not_current(pub, old, "read_failed", str(exc) or type(exc).__name__, never_read="failed")
+
+
+def scan_project(db: Session, project: Project, user_id: int | None = None, progress=None, check=None,
+                 hydrate: bool | None = None, job_id: int | None = None) -> dict:
+    """Read the project's drawings into the schedule's evidence (FI-P1 r3 Stage 0.1).
+
+    The folder is listed first (stat only). An unreachable folder fails the job
+    with nothing written. A file read before and unchanged (same size and time)
+    is carried forward without opening it. Every other file is read, and every
+    entry moves by the transition table of CORRECTION-R3 S4 with conditions
+    C1/C3/C6. A missing file is not "removed" unless the engineer confirms it or
+    a newer revision of it is read. The whole result is written in one commit,
+    only if no one else wrote the evidence meanwhile. The published schedule
+    moves to this reading only when every rule of S7/C2 holds."""
     row = state(db, project)
     # A first read makes the project's row: committed now, not held open through
     # minutes of reading while the job's progress is written beside it.
     db.commit()
-    before = {(s.get("discipline"), s.get("relative_path")): s for s in row.sources or []}
-    found = discover(db, project)
+    seen = row.generation or 0
+    listing = evidence.take(project, DISCIPLINES)
+    if listing.root in ("not_configured", "unreachable"):
+        raise SourceUnreachable("The project folder cannot be reached from the IFC worker"
+                                if listing.root == "unreachable" else "This project has no folder")
+    settings = get_settings()
+    open_cloud = settings.fa_read_cloud_only_files if hydrate is None else bool(hydrate)
+    before = {(e.get("discipline"), e.get("relative_path")): e for e in row.sources or []}
+    found = discover(db, project, listing)
     todo = [s for s in found if not s["superseded"]]
-    converter = None
-    done: list[dict] = []
-    for i, src in enumerate(found):
+    done: dict[tuple, dict] = {}
+    converter_box: list = [None]
+    for src in found:
         if check:
             check()
+        key = (src["discipline"], src["relative_path"])
+        old = before.get(key)
         if src["superseded"]:
-            done.append({**_public(src), "status": "superseded"})
+            done[key] = {**_bare(_pub(src)), "status": "superseded", "last_known": _last_known(old)}
             continue
         n = todo.index(src) + 1
         if progress:
             progress(n - 1, len(todo), f"Reading {src['filename']} ({DISCIPLINE_NAMES[src['discipline']]})", src["filename"])
-        path = Path(src["path"])
-        try:
-            sha = src.get("sha256") if src["kind"] == "fa_ifc" and src.get("sha256") else _sha256(path)
-        except OSError as exc:
-            done.append({**_public(src), "status": "failed", "error": f"The file could not be opened: {exc}"})
-            continue
-        old = before.get((src["discipline"], src["relative_path"]))
-        if (old and old.get("sha256") == sha and old.get("status") == "read"
-                and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
-            done.append({**old, **_public(src), "sha256": sha})
-            continue
-        entry = {**_public(src), "sha256": sha}
-        try:
-            dxf = path
-            if src["kind"] == "folder" and path.suffix.lower() == ".dwg":
-                dxf = cache_folder(project) / f"{sha[:24]}.dxf"
-                if not dxf.is_file():
-                    converter = converter or convert.find_converter()
-                    if converter is None:
-                        raise RuntimeError("No DWG converter on the PC the IFC worker runs on: install AutoCAD or the "
-                                           "free ODA File Converter, or file the drawing as DXF too.")
-                    dxf.parent.mkdir(parents=True, exist_ok=True)
-                    started = datetime.now()
-                    convert.convert_dwg_to_dxf(path, dxf, converter)
-                    entry["converted_in"] = round((datetime.now() - started).total_seconds(), 1)
-            elif not dxf.is_file():
-                raise RuntimeError("The drawing's DXF is not on this PC: import the fire alarm IFC drawing again.")
-            result = scan.read(str(dxf), src["discipline"], check=check)
-            done.append({**entry, "status": "read", "result": result, "read_at": utc_now().isoformat()})
-        except Exception as exc:  # noqa: BLE001 -- one drawing that cannot be read is named; the rest are read
-            from app.services import jobs
+        if src["kind"] == "fa_ifc":
+            done[key] = _read_fa_ifc(src, old, check=check)
+        else:
+            done[key] = _read_folder_file(db, project, src, old, open_cloud=open_cloud, check=check,
+                                          converter_box=converter_box)
+    # C3: an older revision is retired only by a newer one that was read
+    read_stems: dict[tuple, tuple[str, int]] = {}
+    for e in done.values():
+        if e.get("status") == "read" and e.get("kind") == "folder":
+            stem, rev = _stem(e["filename"])
+            if (e["discipline"], stem) not in read_stems or rev > read_stems[(e["discipline"], stem)][1]:
+                read_stems[(e["discipline"], stem)] = (e["relative_path"], rev)
 
-            if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)):
-                raise
-            done.append({**entry, "status": "failed", "error": str(exc) or type(exc).__name__})
-    done.extend(_read_schedules(project))
-    if any(visual.wanted(s) for s in done):
+    def successor(entry: dict) -> str | None:
+        """A read revision of the same drawing newer than this one (C1/C3)."""
+        stem, rev = _stem(entry.get("filename") or "")
+        found = read_stems.get((entry.get("discipline"), stem))
+        return found[0] if found and found[1] > rev else None
+
+    for e in done.values():
+        if e.get("status") == "superseded":
+            e["retired_by"] = successor(e)
+    # files the pipeline cannot read: listed, never counted
+    for code, fs in listing.folders.items():
+        for item in fs.unsupported:
+            done[(code, item.relative_path)] = {
+                "discipline": code, "kind": "unsupported", "relative_path": item.relative_path,
+                "filename": item.filename, "size": item.size, "mtime": item.mtime, "cloud_only": item.cloud_only,
+                "status": "unsupported"}
+    done.update(_read_schedules(project, listing, before))
+    # entries not listed now (S4.2 E4-E6, EL; F4/F5; C1)
+    now = utc_now().isoformat()
+    in_force = {e["relative_path"] for e in done.values() if e.get("kind") == "fa_ifc"}
+    for key, old in before.items():
+        if key in done:
+            continue
+        kind = old.get("kind")
+        if old.get("status") == "removed":
+            done[key] = old
+        elif kind == "fa_ifc":
+            replaced = bool(in_force)
+            done[key] = {**_bare(old), "status": "superseded" if replaced else "removed",
+                         "retired_by": "a newer fire alarm IFC drawing is in force" if replaced else None,
+                         "last_known": _last_known(old), "removed_at": None if replaced else now}
+        elif kind == "unsupported":
+            # gone from a folder that is there: removed; a folder not seen: still listed, not present
+            if _gone_reason(old, listing, listing.folders) == "missing":
+                done[key] = {**_bare(old), "status": "removed", "removed_at": now}
+            else:
+                done[key] = {**_bare(old), "status": "unsupported", "present": False}
+        elif kind == "schedule":
+            continue                                    # decided in _read_schedules
+        else:
+            reason = _gone_reason(old, listing, listing.folders)
+            newer = successor(old)
+            if reason == "missing" and newer:
+                done[key] = {**_bare(old), "status": "removed", "retired_by": newer,
+                             "last_known": _last_known(old), "removed_at": now}
+            else:
+                done[key] = _not_current(old, old, reason, never_read="stale")
+                if done[key]["status"] == "stale" and "stale_reason" not in done[key]:
+                    done[key]["stale_reason"] = reason
+    sources = list(done.values())
+    read_now = [e for e in sources if e.get("status") == "read"]
+    # S5: the same bytes at two paths -- said, not changed: each path is still read and counted as today
+    order = {d.code: i for i, d in enumerate(DISCIPLINES)}
+    first_of: dict[str, str] = {}
+    for e in sorted(read_now, key=lambda e: (order.get(e.get("discipline"), 99), e.get("relative_path") or "")):
+        e.pop("duplicate_of", None)
+        if e.get("sha256"):
+            if e["sha256"] in first_of:
+                e["duplicate_of"] = first_of[e["sha256"]]
+            else:
+                first_of[e["sha256"]] = e["relative_path"]
+    if any(visual.wanted(s) for s in read_now):
         try:
-            visual.check(db, project, done, check=check,
+            visual.check(db, project, read_now, check=check,
                          progress=(lambda d, t, m, f=None: progress(d, t, m, f)) if progress else None)
-        except Exception as exc:  # noqa: BLE001 -- the reading stands; the labels are scheduled as read, said so
+        except Exception as exc:  # noqa: BLE001 -- the reading stands; the dampers stay held, said so
             from app.services import jobs
 
             if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)):
                 raise
             log.warning("The dampers could not be looked at on the drawings: %s", exc)
-    row.sources = done
-    row.scanned_at = utc_now()
-    row.scanned_by_id = user_id
+    publish = _advance(row.published, sources, listing, fa_in_force(db, project), job_id)
+    stamp = utc_now()
+    values = {"sources": sources, "scanned_at": stamp, "scanned_by_id": user_id, "generation": seen + 1}
+    if publish is not None:
+        values.update(published=publish, published_at=stamp, published_basis="complete_scan",
+                      published_by_id=user_id, published_reason=None)
+    changed = (db.query(ProjectFaInterfaces)
+               .filter(ProjectFaInterfaces.id == row.id, ProjectFaInterfaces.generation == seen)
+               .update(values, synchronize_session=False))
+    if changed != 1:
+        db.rollback()
+        raise SourcesChanged("The schedule's drawings changed while they were being read (another read, a "
+                             "confirmation or a publication): read the drawings again")
     db.commit()
+    db.expire(row)
     if progress:
         progress(len(todo), len(todo), "Read", None)
-    return {"drawings": len(todo), "read": sum(1 for s in done if s["status"] == "read"),
-            "failed": [{"filename": s["filename"], "error": s.get("error")} for s in done if s["status"] == "failed"]}
+    return {"drawings": len(todo), "read": len(read_now), "published": publish is not None,
+            "failed": [{"filename": s["filename"], "error": s.get("error")} for s in sources
+                       if s.get("status") == "failed" or (s.get("status") == "stale" and s.get("error"))]}
+
+
+def _advance(published: dict | None, sources: list[dict], listing: "evidence.Listing", fa_now: dict,
+             job_id: int | None) -> dict | None:
+    """S7 auto-advance with C1/C2: the published schedule moves to this reading
+    only when the folder was fully listed, every drawing present now is read,
+    every drawing of the published schedule is read now or retired for good,
+    and the reading is not empty."""
+    if listing.root != "ok":
+        return None                                                           # A1
+    folders = list(listing.folders.values()) + ([listing.mechanical] if listing.mechanical else [])
+    if any(fs.state == "listing_failed" or fs.failed_dirs for fs in folders):
+        return None                                                           # A2
+    if evidence.not_current_present(sources, listing, fa_now):
+        return None                                                           # A3
+    read_now = [e for e in sources if e.get("status") == "read"]
+    if not read_now:
+        return None                                                           # C2: never publish an empty reading
+    by_key = {(e.get("kind"), e.get("discipline"), e.get("relative_path")): e for e in sources}
+    files = listing.files()
+    for s in (published or {}).get("sources") or []:                          # A4
+        now = by_key.get((s.get("kind"), s.get("discipline"), s.get("relative_path")))
+        # read now and current (its content may have changed and been read again), or retired for good
+        if now is not None and evidence.current_now(now, listing, fa_now, files):
+            continue
+        if not evidence.retired(now):
+            return None
+    return evidence.snapshot(sources, job_id)
+
+
+def publish_current(db: Session, project: Project, user_id: int, *, reason: str, expected_sources_digest: str,
+                    override: bool = False) -> dict:
+    """S7 / C5: the engineer publishes what is read and current now -- the way
+    out when a drawing keeps failing, or a project's only evidence is its fire
+    alarm IFC drawing. Refuses an empty set, or one with drawings still in
+    the cloud, unless overridden with a reason."""
+    row = state(db, project)
+    seen = row.generation or 0
+    listing = evidence.take(project, DISCIPLINES)
+    if listing.root not in ("ok", "ifc_root_missing"):
+        raise ValueError("The project folder cannot be reached: nothing current to publish")
+    if not (reason or "").strip():
+        raise ValueError("Say why the current reading is published")
+    folders = list(listing.folders.values()) + ([listing.mechanical] if listing.mechanical else [])
+    if any(fs.state == "listing_failed" or fs.failed_dirs for fs in folders):
+        raise ValueError("Part of the drawings folder could not be listed: read the drawings again first")
+    fa_now = fa_in_force(db, project)
+    files = listing.files() if listing.root == "ok" else {}
+    current = [e for e in row.sources or [] if evidence.current_now(e, listing, fa_now, files)]
+    if evidence.digest(current) != expected_sources_digest:
+        raise SourcesChanged("The drawings changed since the page was shown: look again before publishing")
+    if not current and not override:
+        raise ValueError("Nothing is read and current: an empty schedule is published only on purpose (override)")
+    cloud = [e for e in row.sources or [] if e.get("stale_reason") == "not_synced" and e.get("status") in ("stale", "unread")]
+    if cloud and not override:
+        raise ValueError(f"{len(cloud)} drawing(s) are still in the cloud (not synced): read them first, or override")
+    stamp = utc_now()
+    changed = (db.query(ProjectFaInterfaces)
+               .filter(ProjectFaInterfaces.id == row.id, ProjectFaInterfaces.generation == seen)
+               .update({"published": evidence.snapshot(current), "published_at": stamp,
+                        "published_basis": "engineer_accepted", "published_by_id": user_id,
+                        "published_reason": reason.strip()[:1000], "generation": seen + 1},
+                       synchronize_session=False))
+    if changed != 1:
+        db.rollback()
+        raise SourcesChanged("The schedule's drawings changed meanwhile: look again before publishing")
+    db.commit()
+    db.expire(row)
+    return {"published_sources": len(current)}
+
+
+def confirm_removed(db: Session, project: Project, user_id: int, relative_paths: list[str]) -> int:
+    """C5: the engineer says files missing from a present folder (or a folder
+    gone) were removed on purpose. Sync states cannot be confirmed away."""
+    row = state(db, project)
+    seen = row.generation or 0
+    wanted = set(relative_paths)
+    stamp = utc_now().isoformat()
+    sources, n = [], 0
+    for e in row.sources or []:
+        if (e.get("relative_path") in wanted and e.get("status") == "stale"
+                and e.get("stale_reason") in ("missing", "folder_missing")):
+            e = {**e, "status": "removed", "removed_at": stamp, "confirmed_by_id": user_id}
+            n += 1
+        sources.append(e)
+    if not n:
+        return 0
+    changed = (db.query(ProjectFaInterfaces)
+               .filter(ProjectFaInterfaces.id == row.id, ProjectFaInterfaces.generation == seen)
+               .update({"sources": sources, "generation": seen + 1}, synchronize_session=False))
+    if changed != 1:
+        db.rollback()
+        raise SourcesChanged("The schedule's drawings changed meanwhile: look again")
+    db.commit()
+    db.expire(row)
+    return n
 
 
 SCHEDULE = "SCHED"
 
 
-def _read_schedules(project: Project) -> list[dict]:
+def _read_schedules(project: Project, listing: "evidence.Listing", before: dict) -> dict[tuple, dict]:
     """The mechanical equipment schedules (Excel) in the project's mechanical
-    IFC folders: a moment each, read every time."""
-    if not project.source_folder_path:
-        return []
-    root = Path(project.source_folder_path)
-    out = []
-    for path in SCH.discover(root):
-        try:
-            st = os.stat(path)
-            entry = {"discipline": SCHEDULE, "kind": "schedule", "relative_path": _relative(root, path),
-                     "filename": path.name, "size": st.st_size, "mtime": st.st_mtime, "superseded": False}
-        except OSError:
+    IFC folders: read again unless unchanged, hashed so the published
+    reading's identity changes with them (C8). A workbook not listed now
+    moves by the folder rules (S4.2), never silently out."""
+    out: dict[tuple, dict] = {}
+    if listing.root == "ok" and listing.mechanical is not None:
+        for item in listing.mechanical.workbooks:
+            key = (SCHEDULE, item.relative_path)
+            old = before.get(key)
+            pub = {"discipline": SCHEDULE, "kind": "schedule", "relative_path": item.relative_path,
+                   "filename": item.filename, "size": item.size, "mtime": item.mtime, "cloud_only": item.cloud_only,
+                   "superseded": False}
+            if (old and old.get("status") == "read" and old.get("size") == item.size and old.get("mtime") == item.mtime
+                    and (old.get("result") or {}).get("schedule_version") == SCH.SCHEDULE_VERSION and old.get("sha256")):
+                out[key] = {**old, **pub}
+                continue
+            if item.cloud_only and not get_settings().fa_read_cloud_only_files:
+                out[key] = _not_current(pub, old, "not_synced", never_read="unread")
+                continue
+            path = Path(item.path)
+            try:
+                sha = _sha256(path)
+                out[key] = {**pub, "sha256": sha, "status": "read", "result": SCH.read(path),
+                            "read_at": utc_now().isoformat()}
+            except Exception as exc:  # noqa: BLE001 -- a workbook that cannot be opened is named, the rest read
+                reason = "not_synced" if item.cloud_only and isinstance(exc, OSError) else "read_failed"
+                out[key] = _not_current(pub, old, reason, f"The workbook could not be read: {exc}",
+                                        never_read="unread" if reason == "not_synced" else "failed")
+    for key, old in before.items():
+        if old.get("kind") != "schedule" or key in out:
             continue
-        try:
-            out.append({**entry, "status": "read", "result": SCH.read(path), "read_at": utc_now().isoformat()})
-        except Exception as exc:  # noqa: BLE001 -- a workbook that cannot be opened is named, the rest read
-            out.append({**entry, "status": "failed", "error": f"The workbook could not be read: {exc}"})
+        if old.get("status") == "removed":
+            out[key] = old
+            continue
+        if listing.root == "ifc_root_missing":
+            reason = "ifc_root_missing"
+        elif listing.mechanical is None or listing.mechanical.state == "absent_or_empty":
+            reason = "folder_missing"
+        elif listing.mechanical.failed_for(old.get("relative_path") or ""):
+            reason = "listing_failed"
+        else:
+            reason = "missing"
+        entry = _not_current(old, old, reason, never_read="stale")
+        entry.setdefault("stale_reason", reason)
+        out[key] = entry
     return out
 
 
@@ -422,16 +744,116 @@ def _row(rule_key: str, *, floor: str, floors: Floors, tag: str | None, location
 
 def build(db: Session, project: Project) -> dict:
     """The schedule, its summaries and what is left to verify, from the
-    drawings read and the engineer's answers."""
+    drawings read and the engineer's answers -- the **primary** view (S8):
+    built from the readings current now, or, when the evidence behind the
+    published schedule is not verified now, from the published readings,
+    said so. Decisions and manual items always apply live to either view.
+    Stale readings are listed apart and never counted."""
     row = state(db, project)
     floors = Floors(db, project)
+    listing = evidence.take(project, DISCIPLINES)
+    fa_now = fa_in_force(db, project)
+    sources = row.sources or []
+    view = evidence.choose(sources, row.published, listing, fa_now)
+    current = _assemble(row, view.current, floors)
+    if view.primary == "published":
+        primary = _assemble(row, (row.published or {}).get("sources") or [], Floors(db, project))
+    elif view.primary == "none":
+        primary = _assemble(row, [], Floors(db, project), manual=False)
+    else:
+        primary = current
+    files = listing.files() if listing.root == "ok" else {}
+    current_keys = {(e.get("discipline"), e.get("relative_path")) for e in view.current}
+    out = {
+        "project": {"id": project.id, "ep_number": project.ep_number, "name": project.project_name},
+        "scanned_at": row.scanned_at.isoformat() if row.scanned_at else None,
+        "coverage": coverage(row, listing, fa_now, view, current_keys),
+        **primary,
+        "view_state": view.view_state, "primary": view.primary, "view_reasons": view.reasons,
+        "publish_offered": view.publish_offered,
+        "totals_known": view.primary != "none",
+        "published_at": row.published_at.isoformat() if row.published_at else None,
+        "published_basis": row.published_basis,
+        "published_by": _user_name(db, row.published_by_id),
+        "published_reason": row.published_reason,
+        "current_sources_digest": evidence.digest(view.current),
+        "current_summary": ({"totals": current["totals"], "rows": len(current["rows"])}
+                            if listing.root == "ok" else None),
+        "last_known": _last_known_list(sources, current_keys, listing.root),
+        "decisions_not_applied": _decisions_not_applied(row, sources, current_keys),
+        "evidence": _evidence_counts(sources, listing, current_keys, files),
+    }
+    return out
+
+
+def _user_name(db: Session, user_id: int | None) -> str | None:
+    if not user_id:
+        return None
+    from app.models import User
+
+    user = db.get(User, user_id)
+    return (user.full_name or user.email) if user else None
+
+
+def _last_known_list(sources: list[dict], current_keys: set, root: str = "ok") -> list[dict]:
+    """The readings kept for audit that do not count now (S8.3)."""
+    out = []
+    for e in sources:
+        if (e.get("discipline"), e.get("relative_path")) in current_keys or e.get("kind") == "unsupported":
+            continue
+        if e.get("status") == "read":
+            # read at the last scan, not verifiable now: the folder unseen, or the file changed since
+            reason = "changed_since_read" if root == "ok" or e.get("kind") == "fa_ifc" else root
+            known = {"result": e.get("result"), "read_at": e.get("read_at")}
+        elif e.get("status") == "stale" and e.get("last_known"):
+            known, reason = e["last_known"], e.get("stale_reason")
+        else:
+            continue
+        counts: dict[str, int] = {}
+        for it in (known.get("result") or {}).get("items", []):
+            counts[it["key"]] = counts.get(it["key"], 0) + 1
+        out.append({"package": e.get("discipline"), "relative_path": e.get("relative_path"), "filename": e.get("filename"),
+                    "reason": reason, "last_known_at": known.get("read_at"), "counts_by_key": counts})
+    return out
+
+
+def _decisions_not_applied(row: ProjectFaInterfaces, sources: list[dict], current_keys: set) -> dict[str, int]:
+    """Engineer decisions kept on readings that do not count now, per package."""
+    not_current = {(e.get("discipline"), e.get("relative_path")) for e in sources
+                   if (e.get("discipline"), e.get("relative_path")) not in current_keys and e.get("kind") != "unsupported"}
+    out: dict[str, int] = {}
+    for decision_id in (row.decisions or {}):
+        parts = decision_id.split("|")
+        if len(parts) >= 2 and (parts[0], parts[1]) in not_current:
+            out[parts[0]] = out.get(parts[0], 0) + 1
+    return out
+
+
+def _evidence_counts(sources: list[dict], listing: "evidence.Listing", current_keys: set, files: dict) -> dict:
+    counts = {"root": listing.root, "read_current": len(current_keys), "stale": 0, "failed": 0, "unread": 0,
+              "removed": 0, "superseded": 0, "unsupported": 0, "cloud_only": 0, "changed_since_read": 0,
+              "listing_failed": sorted({d for fs in listing.folders.values() for d in fs.failed_dirs}
+                                       | {fs.folder for fs in listing.folders.values() if fs.state == "listing_failed"})}
+    for e in sources:
+        status = e.get("status")
+        if status == "read" and (e.get("discipline"), e.get("relative_path")) not in current_keys:
+            counts["changed_since_read"] += 1
+        elif status in counts and status != "read":
+            counts[status] += 1
+        if e.get("cloud_only"):
+            counts["cloud_only"] += 1
+    return counts
+
+
+def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", *, manual: bool = True) -> dict:
+    """The schedule from a set of readings and the engineer's live answers."""
     groups: list[dict] = []
     conflicts: list[str] = []
     excluded_found: list[dict] = []
     equipment: list[dict] = []
     tags_on_plans: dict[str, dict] = {}
     # The discipline's own drawing first: it stands over the architecture for the same item.
-    read = [s for s in row.sources or [] if s.get("status") == "read"]
+    read = [s for s in readings if s.get("status") == "read"]
     sched = Schedule([s for s in read if s["discipline"] == SCHEDULE], floors)
     sources = sorted((s for s in read if s["discipline"] != SCHEDULE), key=lambda s: _PRIORITY.get(s["discipline"], 9))
     for src in sources:
@@ -457,8 +879,9 @@ def build(db: Session, project: Project) -> dict:
             g["decision"] = {k: v for k, v in d.items() if k != "status"}
         if g["status"] == "resolved":
             rows.extend(_resolved_rows(g, d, floors))
-    for m in row.manual or []:
-        rows.extend(_manual_rows(m, floors))
+    if manual:
+        for m in row.manual or []:
+            rows.extend(_manual_rows(m, floors))
 
     for k, where in floors.unregistered.items() if floors.registry else ():
         conflicts.append(f"The floor \"{floors.name(k)}\" ({'; '.join(where[:2])}) is not in the Building Floor Registry: "
@@ -471,9 +894,6 @@ def build(db: Session, project: Project) -> dict:
         r["no"] = i
     open_groups = [g for g in groups if g["status"] == "open"]
     return {
-        "project": {"id": project.id, "ep_number": project.ep_number, "name": project.project_name},
-        "scanned_at": row.scanned_at.isoformat() if row.scanned_at else None,
-        "coverage": coverage(db, project, row),
         "floors": floors.listed(),
         "rows": scheduled,
         "rejected": [r for r in rows if r["status"] == "rejected"],
@@ -1006,75 +1426,120 @@ def totals(rows: list[dict], to_verify: int) -> dict:
 # --- coverage: which drawings were received ---------------------------------------------------------
 
 
-def received(db: Session, project: Project, row: ProjectFaInterfaces) -> list[dict]:
-    """The drawings and schedules in the project's IFC folders now, as the
-    folder sync sees them -- a stat each, nothing read -- each with its last
-    reading while the file is unchanged, else "unread". A drawing is received
-    when it is filed, not when a reading of it finished (EP-30880: a reading
-    stopped on the dampers left every discipline "missing" with its drawings
-    in the folder). The folder out of reach: the last reading's list."""
-    saved = row.sources or []
-    root = Path(project.source_folder_path) if project.source_folder_path else None
-    if root is None or not os.path.isdir(document_control._os_path(root)):
-        return saved
-    found = discover(db, project)
-    for path in SCH.discover(root):
-        try:
-            st = os.stat(path)
-        except OSError:
+BADGES = {
+    "unreachable": "Unreachable", "no_folder": "No project folder", "not_synced": "Not synced",
+    "missing_last_known": "Missing, last known kept", "missing": "Missing",
+    "received_not_read": "Received, not read", "received_unreadable": "Received, not readable (PDF)",
+    "received": "Received", "received_fa_only": "Received (fire alarm IFC only)",
+}
+_RECEIVED = ("received_not_read", "received_unreadable", "received", "received_fa_only")
+
+
+def _file_row(e: dict, *, present: bool, status: str, reason: str | None = None) -> dict:
+    result = e.get("result") or ((e.get("last_known") or {}).get("result") if status == "stale" else None) or {}
+    sheets = result.get("sheets", []) if e.get("kind") != "schedule" else []
+    return {"filename": e.get("filename"), "relative_path": e.get("relative_path"), "kind": e.get("kind"),
+            "revision": e.get("revision"), "status": status, "reason": reason or e.get("stale_reason"),
+            "error": e.get("error"), "present": present, "cloud_only": bool(e.get("cloud_only")),
+            "last_known_at": (e.get("last_known") or {}).get("read_at") if status == "stale" else None,
+            "modified": datetime.fromtimestamp(e["mtime"]).isoformat() if e.get("mtime") else None,
+            "size": e.get("size"),
+            "sheets": len(sheets) if e.get("kind") != "schedule" else len(result.get("items", [])),
+            "plans": sum(1 for s in sheets if _sheet_kind(s) == "plan"),
+            "items": (len(result.get("items", [])) if e.get("kind") != "schedule"
+                      else sum(len(i["tags"]) for i in result.get("items", []))),
+            "lifts": len({l["label"] for l in result.get("lifts", [])})}
+
+
+def _package(code: str, name: str, folder: str | None, purpose: str, entries: list[dict], listed: list,
+             listing: "evidence.Listing", current_keys: set, fa_present: list[str]) -> dict:
+    """One package's badge (S9 ordered, C8) and its files."""
+    by_path = {e.get("relative_path"): e for e in entries}
+    files, present_supported, present_unsupported, pending = [], 0, 0, 0
+    for item in listed:
+        e = by_path.get(item.relative_path)
+        supported = item.filename.lower().endswith(evidence.SUPPORTED + evidence.WORKBOOKS)
+        if not supported:
+            present_unsupported += 1
+            files.append(_file_row(e or {"filename": item.filename, "relative_path": item.relative_path,
+                                         "kind": "unsupported", "size": item.size, "mtime": item.mtime},
+                                   present=True, status="unsupported"))
             continue
-        found.append({"discipline": SCHEDULE, "kind": "schedule", "relative_path": _relative(root, path),
-                      "filename": path.name, "size": st.st_size, "mtime": st.st_mtime, "superseded": False})
-    before = {(s.get("discipline"), s.get("relative_path")): s for s in saved}
-    out = []
-    for src in found:
-        if src["superseded"]:
-            out.append({**_public(src), "status": "superseded"})
-            continue
-        old = before.get((src["discipline"], src["relative_path"]))
-        if (old and old.get("status") in ("read", "failed")
-                and (old.get("size"), old.get("mtime")) == (src.get("size"), src.get("mtime"))):
-            out.append({**old, **_public(src)})
+        present_supported += 1
+        if e is not None and (code, item.relative_path) in current_keys:
+            files.append(_file_row({**e, "cloud_only": item.cloud_only}, present=True, status="read"))
+        elif e is not None and e.get("status") == "superseded":
+            files.append(_file_row(e, present=True, status="superseded"))
         else:
-            out.append({**_public(src), "status": "unread"})
-    return out
+            pending += 1
+            if e is None:
+                files.append(_file_row({"filename": item.filename, "relative_path": item.relative_path, "kind": "folder",
+                                        "size": item.size, "mtime": item.mtime}, present=True, status="unread"))
+            elif e.get("status") == "read":
+                files.append(_file_row(e, present=True, status="stale", reason="changed_since_read"))
+            else:
+                files.append(_file_row(e, present=True, status=e.get("status") or "unread"))
+    listed_paths = {i.relative_path for i in listed}
+    fa_current = 0
+    for e in entries:
+        if e.get("relative_path") in listed_paths:
+            continue
+        if e.get("kind") == "fa_ifc" and e.get("relative_path") in fa_present:
+            is_current = (code, e.get("relative_path")) in current_keys
+            fa_current += is_current
+            if not is_current:
+                pending += 1
+            files.append(_file_row(e, present=True, status="read" if is_current else (e.get("status") if e.get("status") != "read" else "stale")))
+            continue
+        if e.get("status") in ("removed",) or e.get("kind") == "unsupported":
+            continue
+        status = "stale" if e.get("status") in ("read", "stale", "failed", "unread", "superseded") else e.get("status")
+        files.append(_file_row(e, present=False, status=status,
+                               reason=e.get("stale_reason") or ("changed_since_read" if e.get("status") == "read" else None)))
+    for path in fa_present:
+        if path not in by_path:
+            pending += 1
+            files.append(_file_row({"filename": path.rsplit("/", 1)[-1], "relative_path": path, "kind": "fa_ifc"},
+                                   present=True, status="unread"))
+    kept = any(not f["present"] and f["status"] == "stale" for f in files)
+    if listing.root in ("unreachable", "not_configured", "ifc_root_missing"):
+        badge = ("received_fa_only" if fa_current else
+                 {"unreachable": "unreachable", "not_configured": "no_folder", "ifc_root_missing": "not_synced"}[listing.root])
+    elif not present_supported and not present_unsupported and not fa_present:
+        badge = "missing_last_known" if kept else "missing"
+    elif pending:
+        badge = "received_not_read"
+    elif not present_supported and not fa_present:
+        badge = "received_unreadable"
+    else:
+        badge = "received"
+    received = badge in _RECEIVED
+    return {"discipline": code, "name": name, "folder": folder, "purpose": purpose,
+            "status": "available" if received else "missing", "received": received,
+            "read": any((code, e.get("relative_path")) in current_keys for e in entries),
+            "badge": badge, "badge_text": BADGES[badge] + (f" ({pending})" if badge == "received_not_read" else ""),
+            "pending": pending, "files": files}
 
 
-def coverage(db: Session, project: Project, row: ProjectFaInterfaces) -> list[dict]:
-    """Per discipline: whether its drawings were received (filed in its
-    folder), whether any was read into the schedule, and each file with
-    what reading it gave."""
-    listed = received(db, project, row)
+def coverage(row: ProjectFaInterfaces, listing: "evidence.Listing", fa_now: dict, view: "evidence.View",
+             current_keys: set) -> list[dict]:
+    """Per discipline: whether its drawings were received **now** (S9: only the
+    current listing decides; saved readings never make a package Received),
+    whether any is read and current, and each file with what it gave."""
+    sources = row.sources or []
     out = []
     for d in DISCIPLINES:
-        files = [s for s in listed if s.get("discipline") == d.code]
-        out.append({
-            "discipline": d.code, "name": DISCIPLINE_NAMES[d.code], "folder": d.folder, "purpose": d.purpose,
-            "status": "available" if files else "missing",
-            "read": any(f.get("status") == "read" for f in files),
-            "files": [{"filename": f["filename"], "relative_path": f.get("relative_path"), "kind": f.get("kind"),
-                       "revision": f.get("revision"), "status": f.get("status"), "error": f.get("error"),
-                       "modified": datetime.fromtimestamp(f["mtime"]).isoformat() if f.get("mtime") else None,
-                       "size": f.get("size"),
-                       "sheets": len((f.get("result") or {}).get("sheets", [])),
-                       "plans": sum(1 for s in (f.get("result") or {}).get("sheets", []) if _sheet_kind(s) == "plan"),
-                       "items": len((f.get("result") or {}).get("items", [])),
-                       "lifts": len({l["label"] for l in (f.get("result") or {}).get("lifts", [])})}
-                      for f in files],
-        })
-    files = [s for s in listed if s.get("discipline") == SCHEDULE]
-    out.append({
-        "discipline": SCHEDULE, "name": "Equipment Schedules", "folder": f"{DRAWINGS}/IFC/Mechanical (Excel)",
-        "purpose": "Schedules of fans, FAHU, AHU ...: the plans' fans and air handling units checked against them",
-        "status": "available" if files else "missing",
-        "read": any(f.get("status") == "read" for f in files),
-        "files": [{"filename": f["filename"], "relative_path": f.get("relative_path"), "kind": "schedule", "revision": None,
-                   "status": f.get("status"), "error": f.get("error"),
-                   "modified": datetime.fromtimestamp(f["mtime"]).isoformat() if f.get("mtime") else None,
-                   "size": f.get("size"), "sheets": len((f.get("result") or {}).get("items", [])), "plans": 0,
-                   "items": sum(len(i["tags"]) for i in (f.get("result") or {}).get("items", [])), "lifts": 0}
-                  for f in files]})
+        fs = listing.folders.get(d.code)
+        listed = (fs.supported + fs.unsupported) if fs else []
+        out.append(_package(d.code, DISCIPLINE_NAMES[d.code], d.folder, d.purpose,
+                            [e for e in sources if e.get("discipline") == d.code], listed, listing, current_keys,
+                            list(fa_now) if d.code == ARCH else []))
+    listed = listing.mechanical.workbooks if listing.mechanical else []
+    out.append(_package(SCHEDULE, "Equipment Schedules", f"{DRAWINGS}/IFC/Mechanical (Excel)",
+                        "Schedules of fans, FAHU, AHU ...: the plans' fans and air handling units checked against them",
+                        [e for e in sources if e.get("discipline") == SCHEDULE], listed, listing, current_keys, []))
     out.append({"discipline": "MATRIX", "name": "Interface Matrix", "folder": None, "status": "available", "read": True,
+                "received": True, "badge": "received", "badge_text": "Received", "pending": 0,
                 "purpose": f"{MATRIX_NAME}: {len(RULES)} rows" + (f"; rows {', '.join(map(str, UNCLEAR_ROWS))} not legible "
                                                                    "on the copy transcribed" if UNCLEAR_ROWS else ""),
                 "files": []})

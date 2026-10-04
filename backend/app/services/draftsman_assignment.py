@@ -101,9 +101,16 @@ def _interfaces(db: Session, project: Project) -> tuple[bool, str]:
     from app.interfaces import service
 
     view = service.build(db, project)
+    if view.get("primary") != "current":
+        # C7: last published or nothing -- not evidence the drawings show now
+        state = "last published, not verified now" if view.get("primary") == "published" else "not read completely"
+        why = "; ".join(view.get("view_reasons") or [])
+        return False, f"The FA interface schedule is {state}" + (f" ({why})" if why else "") + " (BOQ > FA Interfaces)."
     rows = len(view.get("rows") or [])
     if not rows:
         return False, "The FA interfaces have not been read off the IFC drawings yet (BOQ > FA Interfaces)."
+    if view.get("view_state") != "current":
+        return True, f"{rows} interfaces, floor-wise (provisional: {'; '.join(view.get('view_reasons') or [])})"
     return True, f"{rows} interfaces, floor-wise"
 
 

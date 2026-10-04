@@ -233,12 +233,17 @@ def run_interfaces_scan(session: Session, job: BackgroundJob, ctx: jobs.JobConte
     from app.interfaces import service
 
     project = session.get(Project, job.project_id)
+    params = job.params or {}
     try:
         return service.scan_project(
-            session, project, user_id=(job.params or {}).get("user_id"), check=ctx.check,
+            session, project, user_id=params.get("user_id"), check=ctx.check, job_id=job.id,
+            hydrate=True if params.get("hydrate") else None,
             progress=lambda done, total, message, file: ctx.progress(done, max(total, 1), message, stage="read", file=file))
     except (jobs.Cancelled, jobs.Interrupted):
         raise
+    except (service.SourceUnreachable, service.SourcesChanged) as exc:
+        # said as it is: nothing was written
+        raise processing.ReadError(f"{exc}. Nothing was changed.") from exc
     except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
         raise _unexpected(job.id, exc) from exc
 

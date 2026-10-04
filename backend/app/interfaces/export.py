@@ -28,13 +28,32 @@ SCHEDULE_HEADERS = ["S.No", "Floor", "Location", "Equipment Tag", "Equipment Typ
 SCHEDULE_WIDTHS = [6, 20, 18, 18, 26, 42, 18, 16, 11, 11, 40, 40, 40, 6, 6, 6, 12, 40, 36, 16, 34]
 
 
+def evidence_note(view: dict) -> str:
+    """What the schedule's evidence is, said on every sheet and page (FI-P1 r3 S10)."""
+    primary, state = view.get("primary", "current"), view.get("view_state", "current")
+    reasons = "; ".join(view.get("view_reasons") or [])
+    if primary == "published":
+        at = (view.get("published_at") or "")[:16].replace("T", " ")
+        return f"LAST PUBLISHED {at}, NOT VERIFIED NOW" + (f" ({reasons})" if reasons else "")
+    if primary == "none":
+        return "NOT READ COMPLETELY: no schedule" + (f" ({reasons})" if reasons else "")
+    if state != "current":
+        return "PROVISIONAL" + (f" ({reasons})" if reasons else "")
+    return "Current: every drawing verified now"
+
+
 def workbook(view: dict) -> io.BytesIO:
     wb = Workbook()
     wb.remove(wb.active)
     p = view["project"]
     title = f"EP-{p['ep_number']} {p.get('name') or ''} - Fire Alarm Interface Schedule".strip()
     scanned = (view.get("scanned_at") or "")[:16].replace("T", " ") or "not read yet"
-    info = f"Drawings read {scanned}; exported {datetime.now():%Y-%m-%d %H:%M}; interface matrix: {view['matrix']['name']}"
+    info = (f"{evidence_note(view)} | Drawings read {scanned}; exported {datetime.now():%Y-%m-%d %H:%M}; "
+            f"interface matrix: {view['matrix']['name']}")
+    known = view.get("totals_known", True)
+
+    def num(value):
+        return value if known else "—"
 
     def sheet(name: str, headers: list[str], widths: list[int], *, heading: str | None = None):
         ws = wb.create_sheet(name[:31])
@@ -66,8 +85,8 @@ def workbook(view: dict) -> io.BytesIO:
                                        "Floor plans", "Items found", "Remarks"],
                [24, 14, 40, 44, 9, 17, 8, 11, 11, 60])
     for d in view["coverage"]:
-        status = {"available": "Available", "missing": "Missing", "failed": "Could not be read",
-                  "not_provided": "Not provided"}.get(d["status"], d["status"])
+        status = d.get("badge_text") or {"available": "Available", "missing": "Missing", "failed": "Could not be read",
+                                         "not_provided": "Not provided"}.get(d["status"], d["status"])
         if not d["files"]:
             ws.append([d["name"], status, d["folder"] or "-", "-", "", "", "", "", "", d["purpose"]])
             ws.cell(ws.max_row, 2).fill = PatternFill("solid", fgColor=STATUS_FILL.get(d["status"], "FFFFFF"))
@@ -76,7 +95,11 @@ def workbook(view: dict) -> io.BytesIO:
             remarks = f.get("error") or ("Superseded by a later revision in the folder: not read"
                                          if f["status"] == "superseded" else
                                          "Received, not read yet: read the drawings again"
-                                         if f["status"] == "unread" else d["purpose"])
+                                         if f["status"] == "unread" else
+                                         f"Last known only, not counted ({f.get('reason') or 'not current'})"
+                                         if f["status"] == "stale" else
+                                         "Not readable by the schedule (PDF or other): not counted"
+                                         if f["status"] == "unsupported" else d["purpose"])
             if f.get("lifts"):
                 remarks += f"; {f['lifts']} lift labels"
             ws.append([d["name"], status, d["folder"] or "Fire alarm IFC drawing in force", f["filename"],
@@ -132,8 +155,9 @@ def workbook(view: dict) -> io.BytesIO:
     floor_total()
     t = view["totals"]
     if rows:
-        ws.append(["", "BUILDING TOTAL", "", "", f"{t['items']} lines", "", "", "", t["monitoring"], t["control"], "", "",
-                   "", t["modules"]["CT1"], t["modules"]["CT2"], t["modules"]["CR"], t["module_qty"]])
+        ws.append(["", "BUILDING TOTAL", "", "", f"{num(t['items'])} lines", "", "", "", num(t["monitoring"]),
+                   num(t["control"]), "", "", "", num(t["modules"]["CT1"]), num(t["modules"]["CT2"]),
+                   num(t["modules"]["CR"]), num(t["module_qty"])])
         band(ws, HEAD_FILL)
         for c in ws[ws.max_row]:
             c.font = HEAD_FONT
@@ -166,16 +190,16 @@ def workbook(view: dict) -> io.BytesIO:
     # F. Overall totals
     ws = sheet("F. Totals", ["Item", "Value", "Basis"], [40, 12, 70])
     for label, value, basis in (
-        ("Interface lines", t["items"], "One line per item per floor"),
-        ("Total monitoring signals", t["monitoring"], "Sum of the lines' monitoring signals"),
-        ("Total control signals", t["control"], "Sum of the lines' control signals"),
-        ("Total interface points", t["interface_points"], "Monitoring + control"),
-        ("Monitoring modules (CT1 + CT2)", t["monitoring_modules"], "From the matrix's Required Contact: CT2 is one dual-input module"),
-        ("  of which CT1", t["modules"]["CT1"], "Single-input monitor module"),
-        ("  of which CT2", t["modules"]["CT2"], "Dual-input monitor module"),
-        ("Control modules (CR)", t["control_modules"], "Relay module; a lift takes two (2NO.CR FOR EACH LIFT)"),
-        ("Total estimated FA modules", t["module_qty"], "Estimate: confirm against the FA panel's module configuration"),
-        ("Items still to verify (not counted)", t["to_verify"], "G. Verification Required"),
+        ("Interface lines", num(t["items"]), "One line per item per floor"),
+        ("Total monitoring signals", num(t["monitoring"]), "Sum of the lines' monitoring signals"),
+        ("Total control signals", num(t["control"]), "Sum of the lines' control signals"),
+        ("Total interface points", num(t["interface_points"]), "Monitoring + control"),
+        ("Monitoring modules (CT1 + CT2)", num(t["monitoring_modules"]), "From the matrix's Required Contact: CT2 is one dual-input module"),
+        ("  of which CT1", num(t["modules"]["CT1"]), "Single-input monitor module"),
+        ("  of which CT2", num(t["modules"]["CT2"]), "Dual-input monitor module"),
+        ("Control modules (CR)", num(t["control_modules"]), "Relay module; a lift takes two (2NO.CR FOR EACH LIFT)"),
+        ("Total estimated FA modules", num(t["module_qty"]), "Estimate: confirm against the FA panel's module configuration"),
+        ("Items still to verify (not counted)", num(t["to_verify"]), "G. Verification Required"),
     ):
         ws.append([label, value, basis])
 
@@ -229,6 +253,17 @@ def workbook(view: dict) -> io.BytesIO:
         ws.append([r["no"], r["name"], r["contacts"], r["monitoring"] or "-", r["control"] or "-", r["alarm"] or "-",
                    r["supervisory"] or "-", r["action"] or "-", "Excluded" if r["excluded"] else "Yes"])
     wrap(ws)
+
+    # Last known, not current: kept for audit, never counted (FI-P1 r3 S10)
+    if view.get("last_known"):
+        ws = sheet("Last known, not current", ["Package", "Drawing", "Why not current", "Last read", "Labels by type"],
+                   [18, 50, 30, 18, 70],
+                   heading=f"{title} -- last known readings, NOT counted in this schedule")
+        for k in view["last_known"]:
+            ws.append([k.get("package"), k.get("filename") or k.get("relative_path"), k.get("reason") or "",
+                       (k.get("last_known_at") or "")[:16].replace("T", " "),
+                       ", ".join(f"{key} {n}" for key, n in sorted((k.get("counts_by_key") or {}).items()))])
+        wrap(ws)
 
     buf = io.BytesIO()
     wb.save(buf)

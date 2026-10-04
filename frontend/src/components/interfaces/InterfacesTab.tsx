@@ -42,6 +42,10 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
     if (job.status === 'failed') setError(job.error ?? 'The drawings could not be read')
     void load()
   })
+  const hydrate = useJob(projectId, SCAN_KIND, interfacesApi.hydratePath(projectId), (job) => {
+    if (job.status === 'failed') setError(job.error ?? 'The drawings could not be read')
+    void load()
+  })
 
   const act = useCallback(
     async (fn: () => Promise<InterfaceSchedule>) => {
@@ -135,15 +139,41 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
       )}
       {(error || scan.error) && <ErrorBox message={error || scan.error || ''} onClose={() => setError('')} />}
 
+      <EvidenceBanner
+        data={data}
+        canEdit={canEdit}
+        busy={busy || scan.active || hydrate.active}
+        onPublish={(reason, override) =>
+          act(() =>
+            interfacesApi.publishCurrent(projectId, { reason, expected_sources_digest: data.current_sources_digest, override }),
+          )
+        }
+        onHydrate={() => void hydrate.start()}
+      />
+
       <CoverageStrip coverage={data.coverage} onOpen={() => setTab('drawings')} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <Stat label="Interface lines" value={t.items} tone="blue" />
-        <Stat label="Monitoring signals" value={t.monitoring} />
-        <Stat label="Control signals" value={t.control} />
-        <Stat label="FA modules (est.)" value={<span title={`CT1 ${t.modules.CT1} · CT2 ${t.modules.CT2} · CR ${t.modules.CR}`}>{t.module_qty}</span>} />
-        <Stat label="To verify (not counted)" value={t.to_verify} tone={t.to_verify ? 'amber' : 'green'} />
+        <Stat label="Interface lines" value={known(data, t.items)} tone="blue" />
+        <Stat label="Monitoring signals" value={known(data, t.monitoring)} />
+        <Stat label="Control signals" value={known(data, t.control)} />
+        <Stat
+          label="FA modules (est.)"
+          value={
+            data.totals_known ? <span title={`CT1 ${t.modules.CT1} · CT2 ${t.modules.CT2} · CR ${t.modules.CR}`}>{t.module_qty}</span> : '—'
+          }
+        />
+        <Stat label="To verify (not counted)" value={known(data, t.to_verify)} tone={t.to_verify ? 'amber' : 'green'} />
       </div>
+
+      {data.last_known.length > 0 && (
+        <LastKnownCard
+          data={data}
+          canEdit={canEdit}
+          busy={busy}
+          onConfirm={(paths) => act(() => interfacesApi.confirmRemoved(projectId, paths))}
+        />
+      )}
 
       {(data.conflicts.length > 0 || data.matrix.unclear_rows.length > 0) && (
         <Card className="border-amber-200 bg-amber-50/60 px-4 py-3 text-sm text-amber-900">
@@ -202,6 +232,155 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
   )
 }
 
+/* ------------------------------------------------------------------ evidence (FI-P1 r3) */
+
+/** A total the page can vouch for, or "—": never a 0 that only means "not known". */
+function known(data: InterfaceSchedule, value: number): number | string {
+  return data.totals_known ? value : '—'
+}
+
+function when(at: string | null): string {
+  return at ? new Date(at + 'Z').toLocaleString() : ''
+}
+
+/** What the schedule on the page is built from, said before anything else:
+ *  the drawings as verified now, a provisional reading, or the last published
+ *  schedule shown because its drawings cannot be verified now. */
+function EvidenceBanner({
+  data,
+  canEdit,
+  busy,
+  onPublish,
+  onHydrate,
+}: {
+  data: InterfaceSchedule
+  canEdit: boolean
+  busy: boolean
+  onPublish: (reason: string, override: boolean) => Promise<boolean>
+  onHydrate: () => void
+}) {
+  if (data.view_state === 'current') return null
+  const reasons = data.view_reasons.join('; ')
+  let tone = 'border-amber-200 bg-amber-50 text-amber-900'
+  let title = 'Provisional'
+  let text = reasons
+  if (data.primary === 'published') {
+    tone = 'border-rose-200 bg-rose-50 text-rose-900'
+    title = `Last published ${when(data.published_at)} — not verified now`
+    text = `${reasons}. The schedule below is the last published one${data.published_basis === 'seeded' ? ' (taken over from the readings saved before publishing existed)' : ''}; nothing in it is verified against the drawings now.`
+  } else if (data.primary === 'none') {
+    tone = 'border-rose-200 bg-rose-50 text-rose-900'
+    title = 'Not read completely: no schedule yet'
+    text = `${reasons}. No totals are shown until the drawings are read.`
+  }
+  const notSynced = data.evidence.cloud_only > 0 || data.coverage.some((c) => c.files.some((f) => f.reason === 'not_synced'))
+  const canPublish = canEdit && data.evidence.root !== 'unreachable' && data.evidence.root !== 'not_configured' && data.view_state !== 'not_read'
+  const publish = () => {
+    const reason = window.prompt('Publish the schedule built from the drawings read and verified now. Why?')
+    if (!reason?.trim()) return
+    void onPublish(reason, false).then((ok) => {
+      if (!ok && window.confirm('It was refused (see the message). Publish anyway, on purpose?')) void onPublish(reason, true)
+    })
+  }
+  return (
+    <Card className={`flex flex-wrap items-start justify-between gap-3 px-4 py-3 text-sm ${tone}`}>
+      <div className="min-w-0 max-w-3xl">
+        <div className="font-semibold">{title}</div>
+        <div className="mt-0.5">{text}</div>
+        {data.current_summary && data.primary !== 'current' && (
+          <div className="mt-1 text-xs">
+            Verified now: {data.evidence.read_current} drawing(s), {data.current_summary.rows} line(s), {data.current_summary.totals.interface_points}{' '}
+            interface point(s).
+          </div>
+        )}
+        {data.published_at && data.primary === 'current' && (
+          <div className="mt-1 text-xs">
+            Published {when(data.published_at)}
+            {data.published_by ? ` by ${data.published_by}` : ''}
+            {data.published_reason ? `: ${data.published_reason}` : ''}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {canEdit && notSynced && (
+          <Button variant="secondary" onClick={onHydrate} disabled={busy}>
+            Download and read
+          </Button>
+        )}
+        {canPublish && (data.publish_offered || data.primary !== 'current') && (
+          <Button variant="secondary" onClick={publish} disabled={busy}>
+            Publish current
+          </Button>
+        )}
+      </div>
+    </Card>
+  )
+}
+
+const REASON_TEXT: Record<string, string> = {
+  read_failed: 'could not be read again',
+  not_synced: 'not synced (cloud-only)',
+  folder_missing: 'its folder is missing or empty',
+  ifc_root_missing: 'the drawings folder is not synced',
+  listing_failed: 'its folder could not be listed',
+  missing: 'missing from its folder',
+  changed_since_read: 'changed since it was read',
+}
+
+/** Readings kept for audit that count for nothing now (FI-P1 r3 S8.3). */
+function LastKnownCard({
+  data,
+  canEdit,
+  busy,
+  onConfirm,
+}: {
+  data: InterfaceSchedule
+  canEdit: boolean
+  busy: boolean
+  onConfirm: (paths: string[]) => Promise<boolean>
+}) {
+  const removable = data.last_known.filter((k) => k.reason === 'missing' || k.reason === 'folder_missing')
+  const notApplied = Object.values(data.decisions_not_applied).reduce((a, b) => a + b, 0)
+  return (
+    <Card className="border-slate-300 bg-slate-50 px-4 py-3 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="font-semibold text-slate-700">Last known, not current — not counted</div>
+        {canEdit && removable.length > 0 && (
+          <Button
+            variant="ghost"
+            disabled={busy}
+            onClick={() => {
+              if (window.confirm(`Confirm that ${removable.length} drawing(s) were removed from the folders on purpose?`))
+                void onConfirm(removable.map((k) => k.relative_path))
+            }}
+          >
+            Confirm removed ({removable.length})
+          </Button>
+        )}
+      </div>
+      <ul className="mt-1 space-y-0.5 text-slate-600">
+        {data.last_known.map((k) => (
+          <li key={`${k.package}-${k.relative_path}`}>
+            <span className="font-medium">{k.filename ?? k.relative_path}</span> ({k.package}) — {REASON_TEXT[k.reason ?? ''] ?? k.reason}
+            {k.last_known_at ? `; last read ${when(k.last_known_at)}` : ''}
+            {Object.keys(k.counts_by_key).length > 0 && (
+              <span className="text-xs text-slate-500">
+                {' '}
+                · {Object.entries(k.counts_by_key).map(([key, n]) => `${key.replace(/_/g, ' ')} ${n}`).join(', ')}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+      {notApplied > 0 && (
+        <div className="mt-1 text-xs text-slate-500">
+          {notApplied} engineer decision(s) are kept on these drawings and apply again when they are read and current.
+        </div>
+      )}
+    </Card>
+  )
+}
+
 /* ------------------------------------------------------------------ coverage */
 
 const COVERAGE_STYLE: Record<Coverage['status'], string> = {
@@ -217,6 +396,18 @@ const COVERAGE_TEXT: Record<Coverage['status'], string> = {
   not_provided: 'Not provided',
 }
 
+const BADGE_STYLE: Partial<Record<Coverage['badge'], string>> = {
+  received: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+  received_fa_only: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+  received_not_read: 'bg-amber-50 text-amber-800 ring-amber-600/20',
+  received_unreadable: 'bg-amber-50 text-amber-800 ring-amber-600/20',
+  missing: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+  missing_last_known: 'bg-slate-100 text-slate-700 ring-slate-500/20',
+  unreachable: 'bg-slate-100 text-slate-700 ring-slate-500/20',
+  no_folder: 'bg-slate-100 text-slate-700 ring-slate-500/20',
+  not_synced: 'bg-slate-100 text-slate-700 ring-slate-500/20',
+}
+
 function CoverageStrip({ coverage, onOpen }: { coverage: Coverage[]; onOpen: () => void }) {
   return (
     <Card className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 text-sm">
@@ -224,8 +415,8 @@ function CoverageStrip({ coverage, onOpen }: { coverage: Coverage[]; onOpen: () 
       {coverage.map((c) => (
         <span key={c.discipline} className="inline-flex items-center gap-1.5">
           <span className="text-slate-600">{c.name}</span>
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${COVERAGE_STYLE[c.status]}`}>
-            {COVERAGE_TEXT[c.status]}
+          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${BADGE_STYLE[c.badge] ?? COVERAGE_STYLE[c.status]}`}>
+            {c.badge_text ?? COVERAGE_TEXT[c.status]}
           </span>
         </span>
       ))}
@@ -831,7 +1022,9 @@ function DrawingsTab({ data }: { data: InterfaceSchedule }) {
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-4 py-2.5">
             <div>
               <span className="font-semibold">{c.name}</span>
-              <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${COVERAGE_STYLE[c.status]}`}>{COVERAGE_TEXT[c.status]}</span>
+              <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${BADGE_STYLE[c.badge] ?? COVERAGE_STYLE[c.status]}`}>
+                {c.badge_text ?? COVERAGE_TEXT[c.status]}
+              </span>
               <div className="text-xs text-slate-500">{c.purpose}</div>
             </div>
             {c.folder && <div className="font-mono text-xs text-slate-500">{c.folder}</div>}
@@ -863,12 +1056,20 @@ function DrawingsTab({ data }: { data: InterfaceSchedule }) {
                       </td>
                       <td className="px-4 py-2 text-xs">
                         {f.status === 'read'
-                          ? 'Read'
+                          ? f.cloud_only
+                            ? 'Read (cloud-only, unchanged)'
+                            : 'Read'
                           : f.status === 'superseded'
                             ? 'Superseded: a later revision is read'
                             : f.status === 'unread'
-                              ? 'Not read yet: read the drawings'
-                              : 'Could not be read'}
+                              ? f.reason === 'not_synced'
+                                ? 'Not synced: download and read'
+                                : 'Not read yet: read the drawings'
+                              : f.status === 'stale'
+                                ? `Last known only, not counted (${REASON_TEXT[f.reason ?? ''] ?? f.reason ?? 'not current'})`
+                                : f.status === 'unsupported'
+                                  ? 'Not readable (PDF or other): not counted'
+                                  : 'Could not be read'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-xs">{f.modified ? new Date(f.modified).toLocaleString() : '-'}</td>
                       <td className="px-4 py-2 text-right tabular-nums">{f.sheets}</td>
