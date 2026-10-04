@@ -811,3 +811,166 @@ def test_A3_a_source_missing_claim_on_a_package_with_files_still_lowers_the_run(
     run = _latest(w)
     assert out["publication_state"] == "provisional"
     assert "Fable (run) names 1 missing or suspect item(s)" in run["publication_reasons"]
+
+
+# --- the independent review of ac314de (R3-1, R3-2, R3-3, R3-5, R3-7, R3-8) ---------------------------------------
+
+
+def _gb_drawing(path, points):
+    """Another gate barrier drawing of the ground floor in the layout's frame: a fire
+    alarm connection point at each of `points`."""
+    doc = ezdxf.new("R2018")
+    doc.header["$INSUNITS"] = 6
+    msp = doc.modelspace()
+    for text, x, y in LANDMARK_WORDS:
+        msp.add_text(text, height=0.2).set_placement((x, y))
+    for x, y in points:
+        msp.add_text("FIRE ALARM CABLE", height=0.12).set_placement((x, y))
+        msp.add_text("GATE BARRIER", height=0.12).set_placement((x + 0.5, y + 0.5))
+    _sheet(doc, "BGF", "GROUND FLOOR PLAN GATEBARRIER SYSTEM LAYOUT", (1182.99, 142.21), 96.95)
+    doc.saveas(path)
+
+
+@pytest.mark.parametrize("name", ["AAA OTHER GB.dxf", "ZZZ OTHER GB.dxf"])
+def test_R3_5_two_gate_drawings_agree_only_when_their_points_pair_one_to_one_in_either_file_order(gb, name):
+    _gate_layout(gb.folder / "GATEBARRIER SYSTEM LAYOUT.dxf")          # two points 5.2 m apart
+    # one point between the layout's two (within reach of both), one 40 m away: no one-to-one pairing
+    _gb_drawing(gb.folder / name, [(1163.40, 179.37), (1203.40, 179.37)])
+    view = _read(gb)
+    assert not [r for r in view["rows"] if r["key"] == "gate_barrier"]
+    (held,) = [g for g in view["verification"] if g["id"].startswith("GATE|")]
+    assert held["conflict"] and len(held["drawings"]) == 2
+    assert not any("the drawings agree" in c for c in view["conflicts"])
+
+
+def test_R3_5_drawings_whose_points_pair_one_to_one_still_agree():
+    def pts(*xy):
+        return [{"anchor": p} for p in xy]
+    pair = service._gate_points_pair
+    assert pair(pts((0, 0), (5, 0)), pts((5.5, 0), (0.5, 0)), 3.0)
+    assert not pair(pts((0, 0), (5, 0)), pts((2.5, 0), (45, 0)), 3.0)        # one-way "any" would pass this
+    assert not pair(pts((2.5, 0), (45, 0)), pts((0, 0), (5, 0)), 3.0)
+    assert not pair(pts((0, 0), (1, 0)), pts((0.5, 0), (0.6, 0), (9, 0)), 3.0)
+    assert pair(pts((0, 0), (2, 0)), pts((1, 0), (-2, 0)), 2.5)             # one first-fit would miss
+
+
+def test_R3_3_a_governing_choice_reopens_when_a_new_drawing_joins_its_conflict(gb):
+    _gate_layout(gb.folder / "GATEBARRIER SYSTEM LAYOUT.dxf")
+    _shop(gb)
+    view = _read(gb)
+    (c,) = [g for g in view["verification"] if g["id"].startswith("GATE|")]
+    layout = next(d["relative_path"] for d in c["drawings"] if d["points"] == 2)
+    done = _decide(gb, id=c["id"], action="govern", relative_path=layout, reason="issued", authority="RFI-1").json()
+    assert len([r for r in done["rows"] if r["key"] == "gate_barrier"]) == 2
+    _gate_layout(gb.folder / "GATEBARRIER ELSEWHERE.dxf", shift=(40.0, 0.0))  # a third drawing, other points
+    view = _read(gb)
+    assert not [r for r in view["rows"] if r["key"] == "gate_barrier"]     # nothing counted until chosen again
+    (g,) = [x for x in view["verification"] if x["id"] == c["id"]]
+    assert g["decision_not_applied"] and len(g["drawings"]) == 3 and "joined" in g["reason"]
+    again = _decide(gb, id=c["id"], action="govern", relative_path=layout, reason="still the IFC", authority="RFI-2")
+    assert len([r for r in again.json()["rows"] if r["key"] == "gate_barrier"]) == 2
+
+
+def test_R3_3_a_governing_choice_that_did_not_record_its_drawings_is_not_applied(gb):
+    _gate_layout(gb.folder / "GATEBARRIER SYSTEM LAYOUT.dxf")
+    _shop(gb)
+    view = _read(gb)
+    (c,) = [g for g in view["verification"] if g["id"].startswith("GATE|")]
+    layout = next(d["relative_path"] for d in c["drawings"] if d["points"] == 2)
+    row = gb.db.query(ProjectFaInterfaces).filter_by(project_id=gb.pid).one()
+    row.decisions = {c["id"]: {"status": "governed", "relative_path": layout, "reason": "x", "authority": "y"}}
+    gb.db.commit()
+    view = gb.client.get(f"/projects/{gb.pid}/fa-interfaces").json()
+    assert not [r for r in view["rows"] if r["key"] == "gate_barrier"]
+    assert [g for g in view["verification"] if g["id"] == c["id"] and g.get("decision_not_applied")]
+
+
+def test_R3_1_a_package_whose_drawings_were_all_removed_is_empty_for_the_review(w):
+    ff = _ff(w)
+    _damper_drawing(ff / "FF LAYOUT.dxf")
+    _run(w)
+    (ff / "FF LAYOUT.dxf").unlink()                                          # removed on purpose
+    w.db.expire_all()
+    service.scan_project(w.db, w.db.get(Project, w.pid), look=False, advance=False)
+    rel = next(e["relative_path"] for e in _row(w).sources if e.get("filename") == "FF LAYOUT.dxf")
+    assert w.client.post(f"/projects/{w.pid}/fa-interfaces/sources/confirm-removed",
+                         json={"relative_paths": [rel]}).status_code == 200
+    w.models.review = _names_absent(lambda ps: [p["package"] for p in ps if p["package"] == "FF"])
+    w.models.requests.clear()
+    out = _run(w)
+    run = _latest(w)
+    assert not [q for q in w.models.requests
+                if q.task == workflow.TASK_REVIEW and q.parts[0].label == "package_review:FF"]
+    assert out["publication_state"] == "complete_candidate", run["publication_reasons"]
+
+
+def test_R3_2_a_restored_look_rejected_damper_is_counted_once_beside_its_twin(w, monkeypatch):
+    monkeypatch.setattr(settings, "fa_agent_parallel", 1)
+    monkeypatch.setattr(settings, "drawing_review_parallel", 1)
+    sm = w.root / "03- Drawings" / "IFC" / "Mechanical" / "SM"
+    sm.mkdir(parents=True, exist_ok=True)
+    (w.hvac / "VENTILATION LAYOUT.dxf").unlink()
+    _msd_drawing(sm / "SMOKE LAYOUT.dxf", [(719.25, 154.4)])
+    _msd_drawing(w.hvac / "VENTILATION LAYOUT.dxf", [(719.25, 154.4)])
+    real = w.models.complete
+
+    def complete(request):
+        out = real(request)
+        if request.task == visual.TASK and any("SMOKE" in getattr(p, "text", "") for p in request.parts):
+            out = P.AiResponse(data={"labels": [{**a, "damper": False, "what": "not a damper"}
+                                                for a in out.data["labels"]]}, model=request.model,
+                               usage=P.Usage(input_tokens=900, output_tokens=60))
+        return out
+    w.models.complete = complete
+    _run(w)
+    view = w.client.get(f"/projects/{w.pid}/fa-interfaces").json()
+    dampers = [r for r in view["rows"] if r["key"] == "motorized_smoke_fire_damper"]
+    rejected = [r for r in view["rejected"] if r["key"] == "motorized_smoke_fire_damper"]
+    assert len(dampers) == 1 and len(rejected) == 1
+    after = w.client.post(f"/projects/{w.pid}/fa-interfaces/decisions",
+                          json={"id": rejected[0]["id"], "action": "restore"}).json()
+    again = [r for r in after["rows"] if r["key"] == "motorized_smoke_fire_damper"]
+    assert len(again) == 1                                                  # one damper at one symbol: once
+    assert again[0]["location_state"] == "symbol" and again[0]["equipment_anchor"] != again[0]["label_anchor"]
+    assert "also drawn on" in again[0]["evidence"]
+
+
+def test_R3_7_an_api_reply_that_does_not_say_its_model_is_not_an_exact_answer():
+    import dataclasses
+
+    import anthropic
+
+    class Msgs:
+        def create(self, **params):
+            return SimpleNamespace(model=None, stop_reason="end_turn",
+                                   usage=SimpleNamespace(input_tokens=5, output_tokens=3, cache_read_input_tokens=0,
+                                                         output_tokens_details=None),
+                                   content=[SimpleNamespace(type="text", text='{"answer": "ok"}')])
+        stream = None
+
+    class Client:
+        messages = Msgs()
+        beta = SimpleNamespace(messages=Msgs())
+
+        def with_options(self, **kw):
+            return self
+    p = object.__new__(P.ClaudeProvider)
+    p._anthropic, p._client, p._models, p._effort = anthropic, Client(), {"small": "x", "standard": "y"}, "high"
+    p._semaphore, p._credential = threading.BoundedSemaphore(1), True
+    req = P.AiRequest(task="t", system="s", parts=[P.TextPart("a", "b")], schema={"type": "object"},
+                      max_output_tokens=100, model="claude-fable-5-1", exact_model=True, effort="high")
+    out = p.complete(req)
+    assert out.data is None and out.error == "model_unverified"
+    assert p.complete(dataclasses.replace(req, exact_model=False)).error is None   # only an exact request needs it
+
+
+def test_R3_8_a_folder_part_not_listed_at_accept_is_said_as_such_not_as_changed_drawings(w, monkeypatch):
+    out = _run(w)
+    assert out["publication_state"] == "complete_candidate"
+    real = evidence.attributes
+    monkeypatch.setattr(evidence, "attributes",
+                        lambda path: evidence.ATTR_RECALL_ON_OPEN if str(path).rstrip("\\/").endswith("HVAC")
+                        else real(path))
+    r = _accept(w, _latest(w)["run_id"])
+    assert r.status_code == 422 and "could not be listed" in r.json()["detail"]
+    assert _row(w).published is None

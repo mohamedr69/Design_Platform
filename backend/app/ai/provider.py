@@ -364,6 +364,10 @@ class ClaudeProvider:
         # The model that served the reply, as the API says -- after a fallback
         # it is not the one asked for.
         served = getattr(message, "model", None)
+        if request.exact_model and not (isinstance(served, str) and served):
+            # an exact answer counts only when the reply shows that model answering (R3-7, as F9 for the CLI)
+            return AiResponse(data=None, usage=usage, model=model, latency_ms=latency, error="model_unverified",
+                              error_detail=f"asked for {model}; the reply does not say which model answered")
         served = served if isinstance(served, str) and served else model
         substituted = is_full_model_id(model) and served != model
         if substituted and request.exact_model:

@@ -88,3 +88,30 @@ fixed, and covered by a test that fails on `180fd1f` and passes now
 
 Contract amendments added: **A3 (narrowed)** as above; **A7 (A5/W4):** settling any conflict between
 drawings -- governing, a count, or not an interface -- needs a reason and an authority.
+
+## Round 3: the independent review of `ac314de` (PASS WITH CONDITIONS)
+
+Report: `fi-p1-work/review3/REPORT.md`. Each finding was reproduced by the
+reviewer's probe on `ac314de`, fixed, and covered by a test that fails on
+`ac314de` and passes now (`evidence/r3-tests-before.txt`: 8 of 9 fail before;
+the 9th is the file-order twin of R3-5, held before too).
+`evidence/review3-probes-after-r3fix.txt`: every `OK_*` probe passes; every
+defect probe now fails.
+
+| id | sev | disposition | regression tests |
+|---|---|---|---|
+| R3-5 | MAJOR | **Fixed.** Two gate drawings of a floor "agree" only when their connection points pair one to one (equal counts and a perfect matching within the tolerance, `_gate_points_pair`) for every pair of drawings, in a frame verified the same. The drawings are taken in sorted order and the counted one is chosen by settled points then path, so file names never decide. Otherwise the conflict is held. | `test_R3_5_*` (both file orders; the matching itself, incl. a case first-fit would miss) |
+| R3-3 | MINOR | **Fixed.** `govern` records the drawings it was made on; when a drawing joins the floor's conflict since (or a choice did not record them), the choice is not applied, the conflict is open again with the reason, nothing is counted until it is chosen again. No live database holds a governed gate decision (checked read-only). | `test_R3_3_*` (2) |
+| R3-1 | MINOR | **Fixed.** A package whose drawings are all removed or superseded has no live drawing: no package review (FP1) is asked for it, and it counts as empty for A3-r. | `test_R3_1_*` |
+| R3-2 | MINOR | **Fixed.** A damper the look set aside and the engineer restored takes part in the union like any drawn item, on the floors it was restored for: counted once beside its twin on another drawing ("also drawn on"), at its symbol. Floors not restored stay listed as rejected. | `test_R3_2_*` |
+| R3-7 | MINOR | **Fixed.** On the API route an exact-model request whose reply does not say which model answered is `model_unverified`, as on the CLI route (F9). | `test_R3_7_*` |
+| R3-8 | MINOR | **Fixed.** Accept says "the drawings changed" (409) only when the whole folder was listed; a part not listed is refused with that reason (422). | `test_R3_8_*` |
+| R3-6 | MINOR (validation risk) | **Carried into the bounded real-model validation:** it records, per run, whether Fable's comments on unread PDFs and limitations keep the run provisional, and with which items. Not changed in code: the contract keeps every orchestrator signal able to lower a run. | -- (needs a real model) |
+
+Behaviours the reviewer recorded as allowed by the contract (unchanged): the legacy
+"read the drawings" scan still advances the published schedule with a gate conflict
+open (nothing is counted from the held conflict); a Retry can spend Fable calls on a
+run that cannot become a candidate.
+
+Amendments: **A1** now rests on the one-to-one agreement (R3-5); **A7** extends to a
+drawing joining a governed conflict (R3-3).

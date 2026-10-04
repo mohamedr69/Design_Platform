@@ -890,7 +890,8 @@ def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", 
     conflicts.extend(_repeated_tags(tags_on_plans))
     decisions: dict = row.decisions or {}
     held_conflicts: list[dict] = []
-    rows = _equipment_rows(equipment, floors, conflicts, sched, held_conflicts)
+    restored = {k for k, d in decisions.items() if d.get("status") == "confirmed"}
+    rows = _equipment_rows(equipment, floors, conflicts, sched, held_conflicts, restored=restored)
     gate_rows, gate_groups = _gate_rows([e for e in equipment if e.get("gate")], floors, conflicts, decisions)
     rows.extend(gate_rows)
     groups.extend(gate_groups)
@@ -1228,8 +1229,17 @@ def _paired(entries: list[dict], sids: list[str], tolerance: float) -> bool:
     return True
 
 
+def _row_base(e: dict) -> str:
+    """A drawn item's row identity, before its floor: drawing, sheet, kind, and its
+    tag or its label's point -- never where the item stands."""
+    x, y = e["anchor"]
+    anchor = (detect.tag_key(e["tag"]) if e["tag"] else
+              f"{x:.1f},{y:.1f}" if e.get("visual") or e.get("visual_reject") else f"{round(x)},{round(y)}")
+    return f"{e['src']['discipline']}|{e['src']['relative_path']}|{e['sheet']}|{e['key']}|{anchor}"
+
+
 def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str], sched: Schedule,
-                    held_conflicts: list | None = None) -> list[dict]:
+                    held_conflicts: list | None = None, restored: set[str] | None = None) -> list[dict]:
     """A line per item per floor it stands for. One piece of equipment shown
     on several drawings is counted once: per floor and kind, the untagged
     items of the drawing that shows the most are counted -- the discipline's
@@ -1237,6 +1247,7 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
     are its evidence, said in one note."""
     equipment = [e for e in equipment if not e.get("gate")]   # gate barriers: _gate_rows
     held_conflicts = held_conflicts if held_conflicts is not None else []
+    restored = restored or set()
     shown: dict[tuple[str, str], dict[str, int]] = {}
     source: dict[str, dict] = {}
     tagged_by: dict[tuple[str, str], set[str]] = {}       # (kind, floor) -> the drawings that tag it there
@@ -1247,8 +1258,12 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
                 tagged_by.setdefault((e["key"], k), set()).add(f"{e['src']['discipline']}|{e['src']['relative_path']}")
     for e in equipment:
         e["skip"] = set()
-        if e["tag"] or e.get("visual_reject"):
-            continue                    # a tagged item is its own; one the look set aside is never counted
+        # floors where the look set it aside and the engineer has not restored it: listed, never counted.
+        # Restored, it is counted as any drawn item -- once, beside its twin on another drawing (R3-2)
+        e["out"] = ({k for k in e["keys"] if f"{_row_base(e)}|{k}" not in restored}
+                    if e.get("visual_reject") else set())
+        if e["tag"] or not set(e["keys"]) - e["out"]:
+            continue                    # a tagged item is its own
         sid = f"{e['src']['discipline']}|{e['src']['relative_path']}"
         # Its name written beside a tagged item of the same kind on the same sheet: that item.
         x, y = e["anchor"]
@@ -1261,10 +1276,10 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
         if shadowed:
             e["skip"] = shadowed
             shadow.setdefault((e["key"], e["label"]), set()).update(shadowed)
-        if not set(e["keys"]) - shadowed:
+        if not set(e["keys"]) - shadowed - e["out"]:
             continue
         source[sid] = e
-        for k in set(e["keys"]) - e["skip"]:
+        for k in set(e["keys"]) - e["skip"] - e["out"]:
             by = shown.setdefault((e["key"], k), {})
             by[sid] = by.get(sid, 0) + 1
     for (key, label), keys in shadow.items():
@@ -1281,8 +1296,8 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
             continue
         sids = sorted(by, key=lambda sid: _PRIORITY.get(source[sid]["src"]["discipline"], 9))
         metre = _METRE.get((source[sids[0]]["src"].get("result") or {}).get("units"), 1.0)
-        entries = [e for e in equipment if not e["tag"] and not e.get("visual_reject")
-                   and kf[1] in set(e["keys"]) - e["skip"] and e["key"] == kf[0]]
+        entries = [e for e in equipment if not e["tag"]
+                   and kf[1] in set(e["keys"]) - e["skip"] - e["out"] and e["key"] == kf[0]]
         # F7: the pair's frame (landmarks), and this floor's sheets viewed the same in both
         why = None
         for i, a in enumerate(sids):
@@ -1321,9 +1336,7 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
     for e in equipment:
         skipped = e["skip"]
         x, y = e["anchor"]                     # the label's point: the row's identity, never its location
-        anchor = (detect.tag_key(e["tag"]) if e["tag"] else
-                  f"{x:.1f},{y:.1f}" if e.get("visual") or e.get("visual_reject") else f"{round(x)},{round(y)}")
-        base = f"{e['src']['discipline']}|{e['src']['relative_path']}|{e['sheet']}|{e['key']}|{anchor}"
+        base = _row_base(e)
         size = e["detail"] if e["detail"].startswith("Ø") else ""
         room = e["detail"] if e["detail"] and not size else ""
         typical = len(e["keys"]) > 1
@@ -1403,6 +1416,26 @@ def _gate_points(entries: list[dict]) -> list[dict]:
             for e in entries]
 
 
+def _gate_points_pair(xs: list[dict], ys: list[dict], tolerance: float) -> bool:
+    """Whether two drawings' gate connection points pair up one to one, each
+    pair within `tolerance` (R3-5): equal counts and a perfect matching --
+    symmetric, so neither drawing's extra or distant point is overlooked."""
+    if len(xs) != len(ys):
+        return False
+    near = [[j for j, q in enumerate(ys) if math.dist(list(p["anchor"]), list(q["anchor"])) <= tolerance] for p in xs]
+    partner: dict[int, int] = {}
+
+    def place(i: int, seen: set[int]) -> bool:
+        for j in near[i]:
+            if j not in seen:
+                seen.add(j)
+                if j not in partner or place(partner[j], seen):
+                    partner[j] = i
+                    return True
+        return False
+    return all(place(i, set()) for i in range(len(xs)))
+
+
 def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decisions: dict) -> tuple[list, list]:
     """W-5: gate barriers, floor by floor. One drawing's settled connection points
     are one barrier each (a CR each, its action by its lane). Several drawings on a
@@ -1420,8 +1453,12 @@ def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decision
         gid = f"GATE|{k}|conflict"
         decision = decisions.get(gid) or {}
         governing = decision.get("relative_path") if decision.get("status") == "governed" else None
-        sids = list(per)
+        sids = sorted(per)                    # never decided by the order the files were listed in
         chosen, agreed = None, False
+        # a choice holds for the drawings the engineer weighed when making it: a drawing that joins the
+        # conflict since (or a choice that did not record them) reopens it (R3-3)
+        weighed = set(decision.get("drawings") or [])
+        joined = governing is not None and not {sid.split("|", 1)[1] for sid in sids} <= weighed
         if len(sids) == 1:
             chosen = sids[0]
         else:
@@ -1429,15 +1466,11 @@ def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decision
             metre = _METRE.get((first["src"].get("result") or {}).get("units"), 1.0)
             same_frame = all(geometry.aligned(_landmarks(per[a][0]), _landmarks(per[b][0]), metre)["aligned"]
                              for i, a in enumerate(sids) for b in sids[i + 1:])
-
-            def matched(xs, ys):
-                return len(xs) == len(ys) and all(
-                    any(math.dist(list(p["anchor"]), list(q["anchor"])) <= GATE_MATCH_M * metre for q in ys) for p in xs)
-
-            if same_frame and all(matched(per[sids[0]], per[sid]) for sid in sids[1:]):
-                chosen = max(sids, key=lambda sid: sum(1 for e in per[sid] if e["gate"]["settled"]))
+            if same_frame and all(_gate_points_pair(per[a], per[b], GATE_MATCH_M * metre)
+                                  for i, a in enumerate(sids) for b in sids[i + 1:]):
+                chosen = max(sids, key=lambda sid: (sum(1 for e in per[sid] if e["gate"]["settled"]), sid))
                 agreed = True
-            elif governing:
+            elif governing and not joined:
                 chosen = next((sid for sid in sids if sid.split("|", 1)[1] == governing), None)
         if len(sids) > 1 and not agreed:
             summary = "; ".join(f"{per[sid][0]['label']}: {len(per[sid])} connection point(s) at "
@@ -1460,8 +1493,11 @@ def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decision
                                    "connection_points": _gate_points(per[sid])} for sid in sids]}
             if governing and chosen is None:
                 group["decision_not_applied"] = True
-                group["reason"] = (f"The engineer chose {governing} to govern, but it is not among this floor's "
-                                   "drawings now: say again which drawing governs; until then none is counted.")
+                group["reason"] = (f"The engineer chose {governing} to govern, but "
+                                   + ("a drawing has joined this floor's conflict since (or the choice did not record "
+                                      "the drawings it was made on)" if joined else
+                                      "it is not among this floor's drawings now")
+                                   + ": say again which drawing governs; until then none is counted.")
             groups.append(group)
             if chosen is None:
                 conflicts.append(f"Gate barriers on {floors.name(k)}: {summary} -- held until the governing drawing "

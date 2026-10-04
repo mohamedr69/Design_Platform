@@ -318,7 +318,9 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
             raise HTTPException(422, "Say on whose authority that drawing governs (the consultant's confirmation, "
                                      "the site's): its barriers are then counted as interfaces")
         record({"status": "governed", "relative_path": body.relative_path, "reason": body.reason.strip(),
-                "authority": body.authority.strip()})
+                "authority": body.authority.strip(),
+                # the drawings weighed: one joining later reopens the choice (R3-3)
+                "drawings": sorted(d["relative_path"] for d in item["drawings"])})
         what = f"{item['equipment']} on {item['ref']}: {body.relative_path} governs ({body.authority.strip()[:80]})"
     elif body.action in ("resolve", "dismiss", "reopen"):
         item = items.get(body.id)

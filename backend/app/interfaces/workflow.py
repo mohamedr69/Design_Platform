@@ -259,6 +259,12 @@ def package_reports(view: dict, reports: list[dict]) -> list[dict]:
 # --- 4. the orchestrator -----------------------------------------------------------------------------------------
 
 
+def live_sources(pkg: dict) -> list[dict]:
+    """A package's drawings still in it: one removed or superseded on purpose
+    has left the evidence (R3-1)."""
+    return [s for s in pkg.get("sources") or [] if s.get("status") not in ("removed", "superseded")]
+
+
 def _package_input(run_id: int, pkg: dict, view: dict) -> dict:
     conflicts = [g for g in pkg["held_items"] if g["conflict"]]
     return {"scope": f"package:{pkg['package']}", "run_id": run_id, "package": pkg["package"],
@@ -434,7 +440,7 @@ def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None
     `frozen`: a Retry -- the inputs the first review was given, sent again."""
     s = get_settings()
     packages = copy.deepcopy(run.package_reports or [])   # never edited in place: the JSON column would not see it
-    due = [p for p in packages if p["sources"]]
+    due = [p for p in packages if live_sources(p)]          # a package whose drawings all left has nothing to review
     limits = Limits.from_settings()
     limits = dataclasses.replace(limits, max_input_tokens_per_task=s.fa_orchestrator_max_input_tokens,
                                  max_output_tokens_per_task=s.fa_orchestrator_max_output_tokens,
@@ -493,7 +499,7 @@ def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
     # A package with no drawing at all is already known here, and the prompt asks Fable to name it:
     # saying so again is not a signal. A package holding only unread files is (a coverage limitation).
     empty = {p["package"] for p in run.package_reports or []
-             if not p.get("sources") and not p.get("unsupported_files") and not p.get("stale")}
+             if not live_sources(p) and not p.get("unsupported_files") and not p.get("stale")}
     parts =[(f"package {k}", r) for k, r in sorted((review_.get("fp1") or {}).items())] + [("run", review_.get("fp2") or {})]
     for scope, r in parts:
         proposal = r.get("proposal") or {}
@@ -815,7 +821,11 @@ def accept(db: Session, project: Project, run: FaInterfaceRun, user_id: int) -> 
     if reasons:
         run.publication_state, run.publication_reasons = "provisional", reasons
         db.commit()
-        if listing.root == "ok" and evidence.digest(current) != run.sources_digest:
+        listed = listing.root == "ok" and not any(
+            fs.state == "listing_failed" or fs.failed_dirs
+            for fs in list(listing.folders.values()) + ([listing.mechanical] if listing.mechanical else []))
+        # "changed" only when the whole folder was listed; a part not listed is said as such (R3-8)
+        if listed and evidence.digest(current) != run.sources_digest:
             raise service.SourcesChanged("The drawings changed since this run: run again before accepting")
         raise ValueError("This run cannot be accepted now: " + "; ".join(reasons))
     stamp = utc_now()
