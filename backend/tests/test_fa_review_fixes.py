@@ -974,3 +974,20 @@ def test_R3_8_a_folder_part_not_listed_at_accept_is_said_as_such_not_as_changed_
     r = _accept(w, _latest(w)["run_id"])
     assert r.status_code == 422 and "could not be listed" in r.json()["detail"]
     assert _row(w).published is None
+
+
+@pytest.mark.parametrize("copy", ["AAA COPY.dxf", "ZZZ COPY.dxf"])
+def test_R4_1_agreeing_gate_drawings_tied_on_settled_points_count_the_first_by_path_stably(gb, copy):
+    _gate_layout(gb.folder / "GATEBARRIER SYSTEM LAYOUT.dxf")
+    _gate_layout(gb.folder / copy)                                          # the same drawing under another name
+    view = _read(gb)
+    gates = [r for r in view["rows"] if r["key"] == "gate_barrier"]
+    first = min("GATEBARRIER SYSTEM LAYOUT.dxf", copy)
+    assert len(gates) == 2 and all(first in r["id"] for r in gates)
+    assert any("the drawings agree" in c for c in view["conflicts"])
+    # the engineer's answer on a counted row keeps applying when the drawings are read again
+    entry = next(r for r in gates if r["role"] == "entry")
+    _decide(gb, id=entry["id"], action="reject", reason="not ours")
+    again = _read(gb)
+    assert entry["id"] in {r["id"] for r in again["rejected"]}
+    assert [r["id"] for r in again["rows"] if r["key"] == "gate_barrier"] == [r["id"] for r in gates if r is not entry]

@@ -1468,7 +1468,11 @@ def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decision
                              for i, a in enumerate(sids) for b in sids[i + 1:])
             if same_frame and all(_gate_points_pair(per[a], per[b], GATE_MATCH_M * metre)
                                   for i, a in enumerate(sids) for b in sids[i + 1:]):
-                chosen = max(sids, key=lambda sid: (sum(1 for e in per[sid] if e["gate"]["settled"]), sid))
+                # agreeing drawings: the one settling the most points is counted; on a tie the first by
+                # discipline priority, then path -- the order the sources are read in, so the counted rows
+                # (and the engineer's answers on them) stay with the same drawing (R4-1)
+                chosen = min(sids, key=lambda sid: (-sum(1 for e in per[sid] if e["gate"]["settled"]),
+                                                    _PRIORITY.get(sid.split("|", 1)[0], 9), sid.split("|", 1)[1]))
                 agreed = True
             elif governing and not joined:
                 chosen = next((sid for sid in sids if sid.split("|", 1)[1] == governing), None)

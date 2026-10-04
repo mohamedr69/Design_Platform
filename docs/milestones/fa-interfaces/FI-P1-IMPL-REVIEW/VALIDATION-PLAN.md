@@ -115,11 +115,23 @@ group `GATE|GF|conflict` with both GB drawings, 0 gate CR rows.
    the review `missing`/`partial` and the run provisional — a correct outcome,
    reported as such.
 5. Live DB row unchanged; no original document modified.
+6. **Fable on coverage limitations (R3-6), measured, not presumed.** For FP1
+   and FP2, record every `coverage_assessment` dispute, `rework_request` and
+   `missing_or_suspect` item that names an unread file (the SM / ACS / GB
+   PDFs), a label without a settled block symbol, or another stated
+   limitation, with its package, issue and detail; and whether each one is
+   among the run's `publication_reasons`. The criterion is that this is
+   recorded completely, not a particular outcome: a run kept provisional
+   only by such items is reported as that finding (the contract lets every
+   orchestrator signal lower a run; whether limitations should is an owner
+   decision before any full run), never as a pass or a failure of the
+   counts.
 
 ## Recorded per request
 
 task, requested model, models used, effort, exact flag, input / output tokens
-(from the response), cache hit, duration, window or package. Token totals are
+(from the response), cache hit, duration, window or package. For the orchestrator's calls also: the limitation-related items
+of criterion 6 and the publication reasons they produced. Token totals are
 taken from the sandbox `ai_usage` table (it has no run id; the sandbox holds
 only this run).
 

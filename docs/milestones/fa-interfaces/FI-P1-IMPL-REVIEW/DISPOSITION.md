@@ -115,3 +115,10 @@ run that cannot become a candidate.
 
 Amendments: **A1** now rests on the one-to-one agreement (R3-5); **A7** extends to a
 drawing joining a governed conflict (R3-3).
+
+## Round 4: the re-review of `c0f8185` (PASS WITH CONDITIONS, no blocker)
+
+| id | sev | disposition | tests |
+|---|---|---|---|
+| R4-1 | MINOR | **Fixed.** Agreeing gate drawings tied on settled points: the counted one is the first by discipline priority, then path -- the order sources are read in, as before `ac314de` -- so counted rows and the engineer's answers on them stay with the same drawing. Stated in the code; A1 amended with this rule. | `test_R4_1_*` (both name orders; a reject keeps applying); both fail on `c0f8185` (`evidence/r4-tests-before.txt`) |
+| R3-6 (condition 1) | -- | **Done.** `VALIDATION-PLAN.md` success criterion 6 and the per-request record now measure Fable's comments on unread files and limitations and whether they lower the run. | -- |
