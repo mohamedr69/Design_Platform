@@ -317,7 +317,8 @@ function lookText(a: AgentReport): string {
   const unread = Object.entries(l.unread)
     .map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`)
     .join(', ')
-  return `${l.labels_looked}${of} damper labels looked at (${l.model_requested}, ${l.effort})${unread ? `; held: ${unread}` : ''}`
+  const reused = l.looked_this_run !== undefined && l.looked_this_run < l.labels_looked ? `, ${l.labels_looked - l.looked_this_run} from an earlier run` : ''
+  return `${l.labels_looked}${of} damper labels looked at (${l.model_requested}, ${l.effort}${reused})${unread ? `; held: ${unread}` : ''}`
 }
 
 /** The latest run: one report per drawing agent and per package, the Fable

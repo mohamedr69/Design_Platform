@@ -264,6 +264,8 @@ export interface AgentReport {
     labels_looked: number
     unread: Record<string, number>
     status: string | null
+    /** asked in this run; the rest answered by an earlier run on the same file */
+    looked_this_run?: number
   } | null
   duration_s: number
   error: string | null

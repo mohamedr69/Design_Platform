@@ -141,7 +141,7 @@ def source_id(entry: dict) -> str:
 
 
 def _agent_report(run_id: int, entry: dict, *, looked: dict | None, model_ok: bool, model_why: str | None,
-                  started: float, error: str | None = None) -> dict:
+                  started: float, error: str | None = None, looked_now: int = 0) -> dict:
     """One drawing's accountable report (r1 CONTRACTS §8, as built here)."""
     result = entry.get("result") or (entry.get("last_known") or {}).get("result") or {}
     items = result.get("items", [])
@@ -184,7 +184,9 @@ def _agent_report(run_id: int, entry: dict, *, looked: dict | None, model_ok: bo
         "gate_points": {"total": len(gates), "settled": sum(1 for g in gates if g.get("settled"))},
         "look": ({"model_requested": s.drawing_review_model, "effort": s.drawing_review_effort,
                   "windows": v.get("windows"), "labels_expected": v.get("expected"),
-                  "labels_looked": len(v.get("items") or {}), "unread": unread, "status": v.get("status")}
+                  "labels_looked": len(v.get("items") or {}), "unread": unread, "status": v.get("status"),
+                  # asked in this run; the rest were answered by an earlier run on the same file
+                  "looked_this_run": looked_now}
                  if needs_look else None),
         "duration_s": round(time.monotonic() - started, 1),
         "error": _cut(error, REASON_MAX) if error else None,
@@ -202,9 +204,9 @@ def _run_agent(run_id: int, project_id: int, entry: dict, model_ok: bool, model_
     db = SessionLocal()
     try:
         src = copy.deepcopy(entry)
-        visual.check(db, db.get(Project, project_id), [src], check=check)
+        n = visual.check(db, db.get(Project, project_id), [src], check=check)
         return _agent_report(run_id, entry, looked=src.get("visual"), model_ok=True, model_why=None,
-                             started=started), src.get("visual")
+                             started=started, looked_now=n), src.get("visual")
     except Exception as exc:  # noqa: BLE001 -- one agent failing is that drawing, said in its report
         from app.services import jobs
 

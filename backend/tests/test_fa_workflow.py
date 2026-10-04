@@ -128,6 +128,7 @@ def test_a_reviewed_complete_run_is_a_candidate_and_published_only_when_the_engi
     # one accountable report per drawing; one per package
     (agent,) = run["agent_reports"]
     assert agent["coverage_state"] == "complete" and agent["look"]["labels_looked"] == 2
+    assert agent["look"]["looked_this_run"] == 2
     assert agent["look"]["model_requested"] == OPUS and agent["look"]["effort"] == "high"
     assert {p["package"] for p in run["package_reports"]} >= {"HVAC"}
     # the drawing agent asked Opus exactly at high effort; Fable reviewed the package (FP1) and the run (FP2)
@@ -277,3 +278,13 @@ def test_a_drawing_that_can_no_longer_be_drawn_is_held_with_its_reason_never_ski
     assert (v["status"], v["windows"], v["expected"], len(v["missing"])) == ("incomplete", 0, 2, 2)
     assert all(why.startswith("no_drawing_copy") for why in v["unread"].values())
     assert len(w.models.requests) == looks                              # nothing asked about a different file
+
+
+def test_a_second_run_on_unchanged_drawings_reuses_the_looks_and_says_so(w):
+    _run(w)
+    looks = len([r for r in w.models.requests if r.task == visual.TASK])
+    _run(w)
+    (agent,) = _latest(w)["agent_reports"]
+    assert agent["coverage_state"] == "complete" and agent["look"]["labels_looked"] == 2
+    assert agent["look"]["looked_this_run"] == 0                        # answered by the first run, not asked again
+    assert len([r for r in w.models.requests if r.task == visual.TASK]) == looks
