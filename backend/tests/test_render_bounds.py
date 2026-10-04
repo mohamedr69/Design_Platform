@@ -111,6 +111,27 @@ def test_a_drawing_that_cannot_be_opened_is_unavailable_not_a_crash(tmp_path):
             session.picture(0)                        # decided once; no new process per window
 
 
+def test_a_child_that_cannot_start_is_unavailable_and_closing_is_safe(tmp_path, monkeypatch):
+    dxf = _drawing(tmp_path / "sm.dxf", big_pattern=False)
+
+    class NoStart:
+        def __init__(self, *a, **k):
+            self._popen = None
+
+        def start(self):
+            raise RuntimeError("An attempt has been made to start a new process before bootstrapping")
+
+    import multiprocessing as mp
+
+    real = mp.get_context("spawn")
+    monkeypatch.setattr(render.mp, "get_context", lambda kind: type("Ctx", (), {
+        "Queue": staticmethod(real.Queue), "Process": staticmethod(NoStart)})())
+    with render.RenderSession(dxf, [WINDOW], 1.0, limits=LIMITS) as session:
+        with pytest.raises(render.RenderUnavailable, match="could not be started"):
+            session.picture(0)
+    assert session._proc is None                      # __exit__ did not raise
+
+
 def test_in_process_rollback_draws_the_same_picture(tmp_path):
     dxf = _drawing(tmp_path / "sm.dxf", big_pattern=False)
     inline = render.RenderLimits(in_process=True)

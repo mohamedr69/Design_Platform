@@ -295,7 +295,7 @@ class RenderSession:
 
     def close(self) -> None:
         proc, self._proc = self._proc, None
-        if proc is not None:
+        if proc is not None and getattr(proc, "_popen", None) is not None:   # never started: nothing to stop
             try:
                 self._requests.put_nowait(None)
             except Exception:  # noqa: BLE001
@@ -308,7 +308,7 @@ class RenderSession:
 
     def _kill(self) -> None:
         proc, self._proc = self._proc, None
-        if proc is not None and proc.is_alive():
+        if proc is not None and getattr(proc, "_popen", None) is not None and proc.is_alive():
             proc.terminate()
             proc.join(5)
 
@@ -353,7 +353,12 @@ class RenderSession:
         self._proc = ctx.Process(target=_serve, daemon=True,
                                  args=(self.dxf, self.boxes, self.metre, self.limits.hatching_timeout_s,
                                        self._requests, self._replies, self._delay_s))
-        self._proc.start()
+        try:
+            self._proc.start()
+        except Exception as exc:  # noqa: BLE001 -- e.g. spawned from a module without a __main__ guard
+            self._proc = None
+            self._dead = f"the drawing process could not be started: {type(exc).__name__}: {exc}"[:300]
+            raise RenderUnavailable(self._dead) from exc
         try:
             kind, _index, detail = self._wait(self.limits.plan_timeout_s, "opening the drawing")
         except RenderTimeout as exc:
