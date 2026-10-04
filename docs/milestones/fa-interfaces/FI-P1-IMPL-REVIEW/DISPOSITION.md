@@ -120,5 +120,17 @@ drawing joining a governed conflict (R3-3).
 
 | id | sev | disposition | tests |
 |---|---|---|---|
-| R4-1 | MINOR | **Fixed.** Agreeing gate drawings tied on settled points: the counted one is the first by discipline priority, then path -- the order sources are read in, as before `ac314de` -- so counted rows and the engineer's answers on them stay with the same drawing. Stated in the code; A1 amended with this rule. | `test_R4_1_*` (both name orders; a reject keeps applying); both fail on `c0f8185` (`evidence/r4-tests-before.txt`) |
+| R4-1 | MINOR | **Fixed.** Agreeing gate drawings tied on settled points: the counted one is the first by discipline priority, then relative path (case-sensitive; a fixed rule, not the read order, which sorts names case-insensitively -- R5-1) -- so counted rows and the engineer's answers on them stay with the same drawing. Stated in the code; A1 amended with this rule. | `test_R4_1_*` (both name orders; a reject keeps applying); both fail on `c0f8185` (`evidence/r4-tests-before.txt`) |
 | R3-6 (condition 1) | -- | **Done.** `VALIDATION-PLAN.md` success criterion 6 and the per-request record now measure Fable's comments on unread files and limitations and whether they lower the run. | -- |
+
+## Round 5: the re-review of `03b13ed` -- **PASS** (FI-P1 independently cleared)
+
+- **R5-1 (MINOR, not a condition):** the R4-1 tie-break sorts by case-sensitive path, while
+  the read order sorts names case-insensitively, so the comment's "the read order" claim was
+  wrong for lower-case names and subfolders. Counts unchanged; the choice is stable. The
+  comment and this document now state the rule as it is. No behaviour change.
+- **Full suite on `03b13ed`:** 3 failed, 1418 passed, 35 skipped. Two are the baseline pair.
+  The third, `test_ai_sheet_reader::test_the_first_read_runs_as_a_job_the_page_follows`
+  (`KeyError: 'status'` in a timed job poll), is an existing flake: 2/10 failures on the
+  pre-FI-P1 code `abd48fd` and 2/10 on `03b13ed`, run alone
+  (`evidence/flake-ai-sheet-reader.txt`). FI-P1 does not touch it.
