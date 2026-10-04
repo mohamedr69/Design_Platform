@@ -1,0 +1,173 @@
+{
+  "prior_1455f8b": {
+    "reader": "evidence-reader-2026-09-29.2",
+    "ledger": "ai-ledger-2026-09-29.1",
+    "failed_profile_switch": {
+      "requested_profile": "promoted",
+      "returned": {
+        "state": "current (the only accessor; the request is ignored)",
+        "profile": "default",
+        "observations": [
+          {
+            "field": "identity",
+            "value": "X-SD-1",
+            "state": "validated"
+          },
+          {
+            "field": "decision",
+            "value": "approved",
+            "state": "validated"
+          }
+        ]
+      }
+    },
+    "blind_timeout_replaces_good_page": {
+      "page_outcome": "evidence",
+      "field_outcomes": null,
+      "new_observations": [
+        {
+          "field": "identity",
+          "value": "X-SD-1",
+          "state": "candidate",
+          "reasons": [
+            "discovery only: no blind reading of the region"
+          ]
+        }
+      ],
+      "after_merge": {
+        "state": "current (the only accessor; the request is ignored)",
+        "profile": "default",
+        "observations": [
+          {
+            "field": "identity",
+            "value": "X-SD-1",
+            "state": "candidate"
+          }
+        ]
+      }
+    },
+    "budget_envelope_does_not_guard_page_overwrite": {
+      "state": "current (the only accessor; the request is ignored)",
+      "profile": "default",
+      "observations": [
+        {
+          "field": "identity",
+          "value": "X-SD-NEW",
+          "state": "candidate"
+        }
+      ]
+    },
+    "heading_validated_without_verified_fields": {
+      "state": "validated",
+      "part": "unverified",
+      "quantity": "unverified",
+      "reasons": [
+        "the reading calls the row a heading"
+      ]
+    },
+    "scope_reopened_with_looser_limit": {
+      "reopen_with_requests_2": "opened",
+      "second_request_dispatched_if_wrapped": true,
+      "handle_without_limits_uses": {
+        "requests": 1
+      },
+      "reserve_on_stored_policy": "refused (requests)",
+      "totals": {
+        "requests": 2,
+        "refused": 1,
+        "in_flight": 1
+      }
+    }
+  },
+  "candidate_r8": {
+    "reader": "evidence-reader-2026-09-29.3",
+    "ledger": "ai-ledger-2026-09-29.2",
+    "failed_profile_switch": {
+      "requested_profile": "promoted",
+      "returned": {
+        "state": "pending",
+        "profile": null,
+        "observations": []
+      }
+    },
+    "blind_timeout_replaces_good_page": {
+      "page_outcome": "partial",
+      "field_outcomes": {
+        "discovery": "ok",
+        "own:identity": "failed:timeout",
+        "own:revision": "absent_by_discovery",
+        "own:decision": "absent_by_discovery"
+      },
+      "new_observations": [
+        {
+          "field": "identity",
+          "value": "X-SD-1",
+          "state": "candidate",
+          "reasons": [
+            "discovery only: no blind reading of the region",
+            "read not completed (failed:timeout): unverified"
+          ]
+        }
+      ],
+      "after_merge": {
+        "state": "current",
+        "profile": "default",
+        "observations": [
+          {
+            "field": "decision",
+            "value": "approved",
+            "state": "validated"
+          },
+          {
+            "field": "identity",
+            "value": "X-SD-1",
+            "state": "validated"
+          }
+        ]
+      }
+    },
+    "budget_envelope_does_not_guard_page_overwrite": {
+      "state": "current",
+      "profile": "default",
+      "observations": [
+        {
+          "field": "decision",
+          "value": "approved",
+          "state": "validated"
+        },
+        {
+          "field": "identity",
+          "value": "X-SD-1",
+          "state": "validated"
+        }
+      ]
+    },
+    "heading_validated_without_verified_fields": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item data: reader part 'P-1'"
+      ],
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    },
+    "scope_reopened_with_looser_limit": {
+      "reopen_with_requests_2": "LedgerConfigMismatch: ledger scope 'fixed-scope': the supplied limits differ from its persisted policy {'requests': {'supplied': 2, 'stored': 1}}; use the stored policy, or amend it explicitly (Ledger.amend_limits)",
+      "second_request_dispatched_if_wrapped": false,
+      "handle_without_limits_uses": {
+        "requests": 1
+      },
+      "reserve_on_stored_policy": "refused (requests)",
+      "totals": {
+        "requests": 1,
+        "refused": 1,
+        "in_flight": 0
+      }
+    }
+  }
+}

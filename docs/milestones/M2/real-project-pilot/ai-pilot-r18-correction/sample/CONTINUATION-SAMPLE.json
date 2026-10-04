@@ -1,0 +1,112 @@
+{
+ "seed": "m2-ai-pilot-r18-continuation-2026-09-30",
+ "rule": "Continuation sample (frozen before any new prediction): 7 PDF documents.\n  controls (4, EXPOSED, predicted in the ai-accuracy-pilot): the sheets whose S discovery exhausted the 120 s job budget\n    or hit the 300 s provider timeout -- BH2031 (A1, 265.9 s discovery), TEL-00 ST-B+R (A1 portrait, 145.4 s),\n    DCH-...-74028 (A0, 95.0 s + budget), DJ-295 (A3, discovery timeout 300 s; not a drawing sheet by the application's\n    test, so E does not locate it -- the deadline-bound timeout is what it controls)\n  new (3, never predicted): drawing-size PDFs (long side > 1300 pt, the application's drawing-sheet test), 1-2 pages,\n    from the 415-document exploration manifest (hash-checked), not in the small batch or the pilot sample; order =\n    sha256(seed | doc_key); one per project, projects without a control first. Sealed projects are not in the manifest.\nWrites CONTINUATION-SAMPLE.json.",
+ "manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+ "pilot_sample_sha256": "3822df9ef792e6c6277e0bec3271dcee06dcdc6a15291a3e03ab0b25b6bf1917",
+ "small_batch_sha256": "7039daa3f04935a35d9a272076be16510d4eb0a8885651f83f07af51f44d7139",
+ "pool_size": 109,
+ "documents": [
+  {
+   "doc_key": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+   "ep": "17428",
+   "stratum": "drawing_ifc_input",
+   "sha256": "500833f7db2b83beb195c6ef404769d57b66dc66769aac0e8bbd27a22be36dba",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\VARIATION - NEW ID - OFFICES\\FA EM INPUT\\210307_DIB_AMB_ Tender Package\\2. Drawings\\PDF\\BH2031-ID-OFF-23-109-00_H.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ],
+   "role": "control_exposed",
+   "why": "S discovery 265.9 s, then elapsed-budget stop"
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+   "ep": "23323",
+   "stratum": "approval_sample",
+   "sha256": "b713d5e56599da949cb14fa5fabb1607acdee31c617ab55a7d3de663fdde3a8c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\Inputs\\Amana - Life and Safety\\File-4\\Structure Drawings\\Steel\\B03 - Vehicle Repair Yard\\01-Approval Drawings\\PDF\\DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    842,
+    1191
+   ],
+   "role": "control_exposed",
+   "why": "S discovery timed out (300 s)"
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "stratum": "approval_sample",
+   "sha256": "e740af95461002eb9851c86c5b77a9a672720f1dc9ba71428acfb2f4f05f6088",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 DWGS\\Approved SD\\TELEPHONE APPRVED SHOP DRGS\\TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "pages": 1,
+   "scan_like": true,
+   "first_page_size_pt": [
+    1684,
+    2388
+   ],
+   "role": "control_exposed",
+   "why": "S discovery 145.4 s, then elapsed-budget stop"
+  },
+  {
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+   "ep": "30549",
+   "stratum": "reply",
+   "sha256": "1e98dc27bfaf7905570bce6c71a27beff7150877d0715c2c73d824944314e8bc",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-30549\\Inputs\\DUTCO DOC\\05.05.2026\\01. ARCHITECTURE\\A. ARCHITECTURAL FOLDER\\DRAWINGS\\AR-74000_WET AREAS\\DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    3370,
+    2384
+   ],
+   "role": "control_exposed",
+   "why": "S discovery 95.0 s, revision read refused by the elapsed budget"
+  },
+  {
+   "doc_key": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf",
+   "ep": "27421",
+   "stratum": "shop_drawing",
+   "sha256": "87c43a7d1395c25d8cd31ffb0668c5e7d1b51e45ded3e3b4a9b20b8eff299bcf",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-27421\\EP-27421 Shop Drawings\\EMERGENCY LIGHTING LAYOUT\\EM-SCH\\EML-09-SCH.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ],
+   "role": "new"
+  },
+  {
+   "doc_key": "EP-26208/EP-26208 drawing/Shop dwg/CBS System/Rev-0/B16/ELEC-B16-EM-101.pdf",
+   "ep": "26208",
+   "stratum": "shop_drawing",
+   "sha256": "2253a7db7b41bbaca0e472a45728e73b40924d867a7e9ac5aac1e71e56e26100",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-26208\\EP-26208 drawing\\Shop dwg\\CBS System\\Rev-0\\B16\\ELEC-B16-EM-101.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    2384,
+    1684
+   ],
+   "role": "new"
+  },
+  {
+   "doc_key": "EP-16830/Drawing/Shop dwg/Structure Cabling/Cafe/REV-1/pdf/819-TL-101 LATEST-CAFE DWG.pdf",
+   "ep": "16830",
+   "stratum": "shop_drawing",
+   "sha256": "273f8052cef38513e771562667dc73f650b278b6f655ded714a0f45b441ecaf4",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\Drawing\\Shop dwg\\Structure Cabling\\Cafe\\REV-1\\pdf\\819-TL-101 LATEST-CAFE DWG.pdf",
+   "pages": 1,
+   "scan_like": false,
+   "first_page_size_pt": [
+    3370,
+    2384
+   ],
+   "role": "new"
+  }
+ ]
+}

@@ -1,0 +1,1218 @@
+{
+ "scorer": "score-arms-2026-09-30.v4",
+ "contract": "harness-contract-2026-09-30.v4",
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "declaration_sha256": "0277ca771bff5d411175695036d4e7beefcb280321155c23f50496387e903af2",
+ "tags": {
+  "A": "r21dry-A",
+  "L1": "r21dry-L1",
+  "L2": "r21dry-L2",
+  "L3": "r21dry-L3",
+  "L4": "r21dry-L4"
+ },
+ "planned": [
+  "EP-16830/synth/rot270-sheet.pdf",
+  "EP-16830/synth/long-6pages.pdf",
+  "EP-17428/synth/a4-letter.pdf",
+  "EP-17428/synth/stamp-outside.pdf",
+  "EP-17428/synth/note.docx"
+ ],
+ "max_pages": 4,
+ "arms": {
+  "A": {
+   "eligibility": {
+    "EP-16830/synth/rot270-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/long-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/a4-letter.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/stamp-outside.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "precision_numerator": 9,
+     "precision_denominator": 9
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "precision_numerator": 8,
+     "precision_denominator": 8
+    },
+    "decision": {
+     "recovery": {
+      "missed": 2,
+      "tn": 8
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r21dry-A",
+   "context": {
+    "variant": null
+   },
+   "usage": {
+    "requests": 0,
+    "cache_hits": 0,
+    "outcomes": {},
+    "input_tokens_total_incl_cached": 0,
+    "output_tokens": 0,
+    "requests_without_token_usage": 0,
+    "by_task": {},
+    "cost": "UNKNOWN"
+   }
+  },
+  "L1": {
+   "eligibility": {
+    "EP-16830/synth/rot270-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/long-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/a4-letter.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/stamp-outside.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "precision_numerator": 9,
+     "precision_denominator": 9
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "precision_numerator": 8,
+     "precision_denominator": 8
+    },
+    "decision": {
+     "recovery": {
+      "missed": 2,
+      "tn": 8
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r21dry-L1",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 5,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 5
+    },
+    "input_tokens_total_incl_cached": 50,
+    "output_tokens": 25,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_page": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_identity": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_revision": {
+      "n": 1,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "share_refusals": 0,
+     "per_ep": {
+      "16830": 3,
+      "17428": 2
+     },
+     "requests_io": 5
+    },
+    "not_attempted": [],
+    "deferred": null,
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": []
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": []
+     }
+    ],
+    "seconds": 0.9,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L2": {
+   "eligibility": {
+    "EP-16830/synth/rot270-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/long-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/a4-letter.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/stamp-outside.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "precision_numerator": 9,
+     "precision_denominator": 9
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "precision_numerator": 8,
+     "precision_denominator": 8
+    },
+    "decision": {
+     "recovery": {
+      "missed": 2,
+      "tn": 8
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r21dry-L2",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 5,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 5
+    },
+    "input_tokens_total_incl_cached": 50,
+    "output_tokens": 25,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_region": {
+      "n": 1,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_revision": {
+      "n": 1,
+      "latency_ms_median": 1
+     },
+     "evidence:discover_page": {
+      "n": 1,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "share_refusals": 0,
+     "per_ep": {
+      "16830": 3,
+      "17428": 2
+     },
+     "requests_io": 5
+    },
+    "not_attempted": [],
+    "deferred": null,
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": []
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": []
+     }
+    ],
+    "seconds": 1.0,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L3": {
+   "eligibility": {
+    "EP-16830/synth/rot270-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/long-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/a4-letter.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/stamp-outside.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "precision_numerator": 9,
+     "precision_denominator": 9
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "precision_numerator": 8,
+     "precision_denominator": 8
+    },
+    "decision": {
+     "recovery": {
+      "missed": 2,
+      "tn": 8
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r21dry-L3",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
+    ]
+   },
+   "usage": {
+    "requests": 7,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 7
+    },
+    "input_tokens_total_incl_cached": 70,
+    "output_tokens": 35,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_page": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_identity": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_revision": {
+      "n": 1,
+      "latency_ms_median": 1
+     },
+     "evidence:read_field_context": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "share_refusals": 1,
+     "per_ep": {
+      "16830": 5,
+      "17428": 2
+     },
+     "requests_io": 7
+    },
+    "not_attempted": [],
+    "deferred": null,
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": []
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": []
+     }
+    ],
+    "seconds": 1.2,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L4": {
+   "eligibility": {
+    "EP-16830/synth/rot270-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/long-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/a4-letter.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/stamp-outside.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "recovered_clean": 9,
+      "missed": 1
+     },
+     "precision_numerator": 9,
+     "precision_denominator": 9
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 8,
+      "missed": 2
+     },
+     "precision_numerator": 8,
+     "precision_denominator": 8
+    },
+    "decision": {
+     "recovery": {
+      "missed": 2,
+      "tn": 8
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r21dry-L4",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 7,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 7
+    },
+    "input_tokens_total_incl_cached": 70,
+    "output_tokens": 35,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_region": {
+      "n": 1,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:read_revision": {
+      "n": 1,
+      "latency_ms_median": 1
+     },
+     "evidence:read_field_context": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     },
+     "evidence:discover_page": {
+      "n": 1,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "share_refusals": 1,
+     "per_ep": {
+      "16830": 5,
+      "17428": 2
+     },
+     "requests_io": 7
+    },
+    "not_attempted": [],
+    "deferred": null,
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": []
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": []
+     }
+    ],
+    "seconds": 1.1,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  }
+ },
+ "coverage": {
+  "L1": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 0,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "unusable": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     },
+     "own:revision": {
+      "unusable": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     },
+     "own:decision": {
+      "discovery_absent": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     }
+    },
+    "complete_ids": [],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/rot270-sheet.pdf": "no_transport_stop",
+    "EP-16830/synth/long-6pages.pdf": "no_transport_stop",
+    "EP-17428/synth/a4-letter.pdf": "no_transport_stop",
+    "EP-17428/synth/stamp-outside.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/rot270-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "unusable",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/long-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "2": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "3": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "4": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/a4-letter.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "discovery_absent",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/stamp-outside.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L2": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 0,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "unusable": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     },
+     "own:revision": {
+      "unusable": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     },
+     "own:decision": {
+      "located_incomplete": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     }
+    },
+    "complete_ids": [],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/rot270-sheet.pdf": "no_transport_stop",
+    "EP-16830/synth/long-6pages.pdf": "no_transport_stop",
+    "EP-17428/synth/a4-letter.pdf": "no_transport_stop",
+    "EP-17428/synth/stamp-outside.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/rot270-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "unusable",
+       "own:decision": "located_incomplete"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/long-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "2": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "3": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "4": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/a4-letter.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "discovery_absent",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/stamp-outside.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L3": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 0,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "unusable": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     },
+     "own:revision": {
+      "unusable": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     },
+     "own:decision": {
+      "discovery_absent": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     }
+    },
+    "complete_ids": [],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/rot270-sheet.pdf": "no_transport_stop",
+    "EP-16830/synth/long-6pages.pdf": "no_transport_stop",
+    "EP-17428/synth/a4-letter.pdf": "transport_stop: budget: per-arm project share (2)",
+    "EP-17428/synth/stamp-outside.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/rot270-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "unusable",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/long-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "2": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "3": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "4": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/a4-letter.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "discovery_absent",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/stamp-outside.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L4": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 0,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "unusable": 2,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2
+     },
+     "own:revision": {
+      "unusable": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     },
+     "own:decision": {
+      "located_incomplete": 1,
+      "not_selected_by_policy": 5,
+      "unsupported:beyond_reader_scope": 2,
+      "discovery_absent": 1
+     }
+    },
+    "complete_ids": [],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/rot270-sheet.pdf": "no_transport_stop",
+    "EP-16830/synth/long-6pages.pdf": "no_transport_stop",
+    "EP-17428/synth/a4-letter.pdf": "transport_stop: budget: per-arm project share (2)",
+    "EP-17428/synth/stamp-outside.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/rot270-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "unusable",
+       "own:decision": "located_incomplete"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/long-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "2": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "3": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "4": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/a4-letter.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "unusable",
+       "own:revision": "discovery_absent",
+       "own:decision": "discovery_absent"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/stamp-outside.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  }
+ },
+ "pairs": {
+  "ROI alone": {
+   "arms": [
+    "L1",
+    "L2"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [],
+    "own:revision": [],
+    "own:decision": []
+   },
+   "required_complete_in_both": [],
+   "required_complete_in_scope_in_both": []
+  },
+  "X on whole page": {
+   "arms": [
+    "L1",
+    "L3"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [],
+    "own:revision": [],
+    "own:decision": []
+   },
+   "required_complete_in_both": [],
+   "required_complete_in_scope_in_both": []
+  },
+  "X on ROI": {
+   "arms": [
+    "L2",
+    "L4"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [],
+    "own:revision": [],
+    "own:decision": []
+   },
+   "required_complete_in_both": [],
+   "required_complete_in_scope_in_both": []
+  },
+  "ROI under X": {
+   "arms": [
+    "L3",
+    "L4"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [],
+    "own:revision": [],
+    "own:decision": []
+   },
+   "required_complete_in_both": [],
+   "required_complete_in_scope_in_both": []
+  }
+ },
+ "no_business_change": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": true
+ },
+ "valid_accuracy_claims": {
+  "A": true,
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": true
+ }
+}

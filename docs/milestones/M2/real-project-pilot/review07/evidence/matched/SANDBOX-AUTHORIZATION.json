@@ -1,0 +1,50 @@
+{
+ "written_at": "2026-09-29T07:18:05",
+ "scope": "M2 review 07 matched real-model run, isolated sandbox only (C:/t/r7), no live effect",
+ "source_of_authorization": "the live application's recorded per-project AI policy (projects.ai_policy), read read-only at the time above; no new owner reply was received in this task, so nothing beyond the recorded policies is assumed",
+ "recorded_policies": [
+  {
+   "id": 1,
+   "ep_number": "30784",
+   "ai_policy": "allowed"
+  },
+  {
+   "id": 2,
+   "ep_number": "30880",
+   "ai_policy": "allowed"
+  },
+  {
+   "id": 3,
+   "ep_number": "29076",
+   "ai_policy": "allowed"
+  },
+  {
+   "id": 4,
+   "ep_number": "30088",
+   "ai_policy": "allowed"
+  }
+ ],
+ "authorized_projects_for_this_run": [
+  "29076",
+  "30088",
+  "30784"
+ ],
+ "excluded": {
+  "30880": "allowed by policy but has no labels in the exposed sets (nothing to score)",
+  "every other exposed / Round 2 project": "no recorded policy -> not authorized; not sent to a model"
+ },
+ "provider_use": {
+  "provider": "claude-code (the provider the live configuration names)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "use": "document evidence reading (EV0 application path, EV1, EV2) on staged copies; no BOQ calls in this run"
+ },
+ "not_changed": [
+  "live projects.ai_policy (read only)",
+  "live .env",
+  "live services",
+  "production project registration"
+ ]
+}

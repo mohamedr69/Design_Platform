@@ -539,7 +539,10 @@ def test_the_catalog_check_reads_the_cell_twice_and_keeps_what_each_pass_read(mo
     line = dse.ExtractedBoqLine(catalog_no="SL2MNM65D3C-M", description="Exit", quantity="1", group_heading=None, confidence=70.0,
                                 page=1, y_px=100.0, raw_quantity="1", catalog_confidence=70.0, table_span=(0, 600))
     dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
-    assert not line.catalog_uncertain, "one pass agreed, the other read a fragment"
+    # M2 review 05 (R5-04): a strip read at 70 % that a pass on the same pixels repeats is not confirmed -- the
+    # agreement is correlated, and the row is held with its readings (it used to be accepted here).
+    assert line.catalog_uncertain and line.catalog_check["agreement"] == "correlated"
+    assert line.catalog_no == "SL2MNM65D3C-M", "held as read, nothing substituted"
 
 
 def test_a_multiline_catalog_cell_is_read_as_a_block_and_a_near_miss_holds_it(monkeypatch):
@@ -587,11 +590,18 @@ def test_fragments_do_not_confirm_a_part_and_a_whole_matching_reading_does(monke
     answers = iter(["757-7A-T", "757-7A-T"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
     line = line_for("WSTIA-T"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
     assert line.catalog_uncertain and "another part number" in line.catalog_check["reason"]
-    # a clear matching whole reading: confirmed, even beside a clipped fragment
+    # a whole matching reading beside a clipped fragment: under 90 % the match is the same engine on the same pixels,
+    # so it is recorded as correlated agreement and held (M2 review 05, R5-04); a strip without a confidence of its
+    # own is still confirmed by a whole matching reading
     answers = iter(["-L210DI", "SL210DI"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
     line = line_for("SL210DI"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
+    assert line.catalog_uncertain and line.catalog_check["agreement"] == "correlated" and not line.catalog_check["confirmed"]
+    answers = iter(["-L210DI", "SL210DI"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
+    line = line_for("SL210DI"); line.catalog_confidence = None; dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
     assert not line.catalog_uncertain and line.catalog_check["confirmed"]
     # a cut identity read literally by every pass is confirmed as printed: nothing is completed
     answers = iter(["SIGA-OSHD-FC", "SIGA-OSHD-FC"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
     line = line_for("SIGA-OSHD-FC"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
-    assert not line.catalog_uncertain and line.catalog_no == "SIGA-OSHD-FC"
+    # ... and held, not confirmed: the sheet prints SIGA-OSHD-FCN (EP-30784 FAS page 2); both passes repeating the
+    # strip's cut reading is the correlated agreement the pilot accepted (M2 review 05, R5-04). Nothing is completed.
+    assert line.catalog_uncertain and line.catalog_no == "SIGA-OSHD-FC" and line.catalog_check["agreement"] == "correlated"

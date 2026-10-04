@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="16" skipped="0" tests="48" time="2.700" timestamp="2026-10-03T19:49:34.174928+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="test_literal_compare_r32" name="test_f023_wide_spaced_digits_are_whitespace_insensitive" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_f067_cmw_drawing_number_exact_and_case" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_lacasa_r0n_references_whitespace_and_suffix_base_form" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_mat_116_en_dash_and_minus_variants" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_fa_6001_and_em_104_spacing" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_g1_labelled_tail_either_form" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_revision_numbers_by_value_letters_as_written" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_arabic_literals_are_byte_compared_after_whitespace_only" time="0.003" /><testcase classname="test_literal_compare_r32" name="test_decision_vocabulary" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_d1_resubmission_tolerance[rejected]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_d1_resubmission_tolerance[revise and resubmit]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_d1_resubmission_tolerance[Resubmit]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_d1_tolerance_needs_the_flag_and_never_accepts_plain_approved" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_the_task_examples" time="0.002"><failure message="AssertionError: 0 1&#10;assert '01' == 'R1'&#10;  &#10;  - R1&#10;  + 01">def test_h1_the_task_examples():
+        for value, norm in (("0 1", "R1"), ("0 0", "R0"), ("REV 0 1", "R1"), ("R 01", "R1"), ("Rev. 0 2", "R2")):
+&gt;           assert C.norm_revision(value) == norm, value
+E           AssertionError: 0 1
+E           assert '01' == 'R1'
+E             
+E             - R1
+E             + 01
+
+test_literal_compare_r32.py:148: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[01-0 1-R1]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}&#10;assert (False)">truth = '01', predicted = '0 1', norm = 'R1'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[00-0 0-R0]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '00', 'truth_norm': 'R0'}&#10;assert (False)">truth = '00', predicted = '0 0', norm = 'R0'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '00', 'truth_norm': 'R0'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[01-REV 0 1-R1]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REV01', 'truth_norm': 'R1'}&#10;assert (False)">truth = '01', predicted = 'REV 0 1', norm = 'R1'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REV01', 'truth_norm': 'R1'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[01-R 01-R1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[02-Rev. 0 2-R2]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REV.02', 'truth_norm': 'R2'}&#10;assert (False)">truth = '02', predicted = 'Rev. 0 2', norm = 'R2'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REV.02', 'truth_norm': 'R2'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[00-R 0 0-R0]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'R00', 'truth_norm': 'R0'}&#10;assert (False)">truth = '00', predicted = 'R 0 0', norm = 'R0'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'R00', 'truth_norm': 'R0'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[10-1 0-R10]" time="0.002"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '10', 'truth_norm': 'R10'}&#10;assert (False)">truth = '10', predicted = '1 0', norm = 'R10'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '10', 'truth_norm': 'R10'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[01-0\xa01-R1]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}&#10;assert (False)">truth = '01', predicted = '0\xa01', norm = 'R1'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[01-0\t1-R1]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}&#10;assert (False)">truth = '01', predicted = '0\t1', norm = 'R1'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '01', 'truth_norm': 'R1'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[03-0\u20093-R3]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '03', 'truth_norm': 'R3'}&#10;assert (False)">truth = '03', predicted = '0\u20093', norm = 'R3'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '03', 'truth_norm': 'R3'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[1-Revision 0 1-R1]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REVISION01', 'truth_norm': 'R1'}&#10;assert (False)">truth = '1', predicted = 'Revision 0 1', norm = 'R1'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'REVISION01', 'truth_norm': 'R1'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[Rev. 0-r. 0 0-R0]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'R.00', 'truth_norm': 'R0'}&#10;assert (False)">truth = 'Rev. 0', predicted = 'r. 0 0', norm = 'R0'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': 'R.00', 'truth_norm': 'R0'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[00- 0  0 -R0]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '00', 'truth_norm': 'R0'}&#10;assert (False)">truth = '00', predicted = ' 0  0 ', norm = 'R0'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '00', 'truth_norm': 'R0'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse[12-1 2-R12]" time="0.001"><failure message="AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '12', 'truth_norm': 'R12'}&#10;assert (False)">truth = '12', predicted = '1 2', norm = 'R12'
+
+    @pytest.mark.parametrize("truth, predicted, norm", [
+        ("01", "0 1", "R1"), ("00", "0 0", "R0"), ("01", "REV 0 1", "R1"), ("01", "R 01", "R1"), ("02", "Rev. 0 2", "R2"),
+        ("00", "R 0 0", "R0"), ("10", "1 0", "R10"), ("01", "0\u00a01", "R1"), ("01", "0\t1", "R1"), ("03", "0\u20093", "R3"),
+        ("1", "Revision 0 1", "R1"), ("Rev. 0", "r. 0 0", "R0"), ("00", " 0  0 ", "R0"), ("12", "1 2", "R12")])
+    def test_h1_whitespace_inside_a_revision_number_is_removed_before_the_parse(truth, predicted, norm):
+        r = C.compare(truth, predicted, "revision")
+&gt;       assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"] == norm, r
+E       AssertionError: {'kind': 'different', 'match': False, 'predicted_norm': '12', 'truth_norm': 'R12'}
+E       assert (False)
+
+test_literal_compare_r32.py:158: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-0 1 2]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-1 0]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[00-0 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[02-0 2 0]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[1-1 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[10-0 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-R EV 01]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-0-1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-0 - 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-0 \u2013 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-01A]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[01-0 1 A]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_adversarial_values_stay_different[A-A 1]" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_non_numeric_values_keep_the_fallback" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_arabic_revision_handling_is_unchanged" time="0.001" /><testcase classname="test_literal_compare_r32" name="test_h1_only_values_with_inner_whitespace_change" time="0.125"><failure message="AssertionError: assert ({'0 0', '0 1', '0 2', '0 3'} &lt;= set()&#10;  &#10;  Extra items in the left set:&#10;  '0 0'&#10;  '0 1'&#10;  '0 3'&#10;  '0 2')">frozen = ([{'compilation': False, 'doc_key': 'EP-3563/EP-3563 FA Submittal/R3/Consultant Comment.pdf', 'drawing_set': False, 'e...eet'], ['kind', 'dewan-design-drawing-civil-defence-stamp', 'civil defence approved dewan design drawing'], ...], ...})
+
+    def test_h1_only_values_with_inner_whitespace_change(frozen):
+        fixtures, truth = frozen
+        values = {f["prediction"]["value"] for f in fixtures if f["field"] == "revision" and f["prediction"]["value"] is not None}
+        for rec in truth["rows"].values():
+            if rec["field"] == "revision":
+                values |= {v for v in [rec.get("literal"), *(rec.get("candidates") or []), *(rec.get("alternates") or [])] if v}
+        values |= {"0 1", "0 0", "REV 0 1", "R 01", "Rev. 0 2", "R 0 0", "1 0", "0 1 2", "A 1", "R EV 1", "01", "Rev. 0", "REV.02", "r1"}
+        changed = {v for v in values if C.norm_revision(v) != _review34_norm_revision(v)}
+        for v in values - changed:
+            assert C.norm_revision(v) == _review34_norm_revision(v)
+        for v in changed:
+            inner = C._WS_RE.sub(" ", str(v).strip())
+            assert " " in inner and re.fullmatch(r"R\d+", C.norm_revision(v)), v
+&gt;       assert {"0 0", "0 1", "0 2", "0 3"} &lt;= changed and len(values) &gt; 40
+E       AssertionError: assert ({'0 0', '0 1', '0 2', '0 3'} &lt;= set()
+E         
+E         Extra items in the left set:
+E         '0 0'
+E         '0 1'
+E         '0 3'
+E         '0 2')
+
+test_literal_compare_r32.py:203: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_the_53_ws_inside_number_rows_now_equal_their_truth" time="0.002"><failure message="AssertionError: ('FX-00032', {'kind': 'different', 'match': False, 'predicted_norm': '02', 'truth_norm': 'R2'})&#10;assert (False)">frozen = ([{'compilation': False, 'doc_key': 'EP-3563/EP-3563 FA Submittal/R3/Consultant Comment.pdf', 'drawing_set': False, 'e...eet'], ['kind', 'dewan-design-drawing-civil-defence-stamp', 'civil defence approved dewan design drawing'], ...], ...})
+
+    def test_h1_the_53_ws_inside_number_rows_now_equal_their_truth(frozen):
+        fixtures, truth = frozen
+        ws = [f for f in fixtures if f["variant"] == "ws_inside_number"]
+        assert len(ws) == 53 and {f["field"] for f in ws} == {"revision"} and {f["intent"] for f in ws} == {"correct"}
+        assert {f["prediction"]["value"] for f in ws} == {"0 0", "0 1", "0 2", "0 3"}
+        for f in ws:
+            rec = truth["rows"][f["truth_key"]]
+            assert rec["truth_kind"] == "value" and f["expected_harness"]["judge"]["verdict"] == "critical_false_acceptance"
+            r = C.compare_row(rec, f["prediction"]["value"])
+&gt;           assert r["match"] and r["kind"] == "normalised" and r["truth_norm"] == r["predicted_norm"], (f["id"], r)
+E           AssertionError: ('FX-00032', {'kind': 'different', 'match': False, 'predicted_norm': '02', 'truth_norm': 'R2'})
+E           assert (False)
+
+test_literal_compare_r32.py:215: AssertionError</failure></testcase><testcase classname="test_literal_compare_r32" name="test_h1_every_wrong_value_control_keeps_its_frozen_verdict" time="1.426" /><testcase classname="test_literal_compare_r32" name="test_h1_every_revision_wrong_value_control_is_still_a_critical" time="0.526" /><testcase classname="test_literal_compare_r32" name="test_h1_not_scorable_rows_stay_excluded_and_never_read_as_absent" time="0.064" /></testsuite></testsuites>

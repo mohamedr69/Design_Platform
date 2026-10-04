@@ -1,0 +1,1135 @@
+{
+ "after": {
+  "ai_ledger": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+   "scopes": 17
+  },
+  "forbidden_files": [],
+  "harness_listing_sha256": "99fc9f29a48f3e40a684f26c1c828bdbd913d2707cb6fe4cee99a125f33ce14e",
+  "harness_pycache": [],
+  "package_listing_sha256": "ab12fff78563a0cca2217a6cfc223024ece98fec4b43ba5769904784d893f4f6",
+  "run_folder_exists": false,
+  "token_env_present": false
+ },
+ "before": {
+  "ai_ledger": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+   "scopes": 17
+  },
+  "forbidden_files": [],
+  "harness_listing_sha256": "99fc9f29a48f3e40a684f26c1c828bdbd913d2707cb6fe4cee99a125f33ce14e",
+  "harness_pycache": [],
+  "package_listing_sha256": "ab12fff78563a0cca2217a6cfc223024ece98fec4b43ba5769904784d893f4f6",
+  "run_folder_exists": false,
+  "token_env_present": false
+ },
+ "binding_manifest": {
+  "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/BINDING-MANIFEST-R39.json",
+  "sha256": "a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b"
+ },
+ "checks": {
+  "10_dispatch_guard": {
+   "consume_through_check_is_preview": {
+    "authorized": false,
+    "reason": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v2\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)"
+   },
+   "guarded_provider": {
+    "detail": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v2\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)",
+    "dispatched": 0,
+    "error": "dispatch_refused",
+    "inner_built": false,
+    "refused": 1
+   },
+   "no_declaration": {
+    "authorized": false,
+    "reason": "refused: no verified declaration (path and 64-hex sha256 are both required)"
+   },
+   "preview_in_memory_declaration": {
+    "authorized": false,
+    "reason": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v2\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)"
+   },
+   "result": "REFUSED",
+   "run_file_absent": {
+    "authorized": false,
+    "reason": "refused: the declaration is missing or does not hash to the verified sha256"
+   },
+   "validate_without_authorization": {
+    "authorized": false,
+    "reason": "refused: the authorization is not a JSON object"
+   }
+  },
+  "11_scope_command": {
+   "create_without_authorization": {
+    "output": "scope/SCOPE-CREATE-REFUSED-OUTPUT.json",
+    "refused": "refused: no owner dispatch authorization (C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/OWNER-DISPATCH-AUTHORIZATION.json does not exist)",
+    "returncode": 3
+   },
+   "ledger_after": {
+    "entries": 483,
+    "limit_amendments": 0,
+    "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+    "scopes": 17
+   },
+   "ledger_before": {
+    "entries": 483,
+    "limit_amendments": 0,
+    "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+    "scopes": 17
+   },
+   "preview": {
+    "ledger_unchanged": true,
+    "output": "scope/SCOPE-PREVIEW-OUTPUT.json",
+    "returncode": 0
+   },
+   "result": "PASSED"
+  },
+  "1_validate_declaration_as_written": {
+   "expected": "REFUSED (placeholder digest)",
+   "reason": "refused: the declaration binds no owner token digest",
+   "result": "REFUSED"
+  },
+  "2_validate_declaration_in_memory_dummy_digest": {
+   "dummy_digest": "63 zeros and a one, held in memory only; no token's digest; never written",
+   "in_memory_run_copy": {
+    "bytes_differ_only_in_the_digest": true,
+    "note": "the procedure the owner follows (fill_owner_digest), on an in-memory copy; no RUN file was written",
+    "sha256_of_the_in_memory_copy": "1bf8d90a7056e129dcfa4b8bc00981b4823c8cdec32f68ecf78ffaeace18daaa"
+   },
+   "ledger": {
+    "limits": {
+     "elapsed_s": 604800,
+     "input_tokens": 16300000,
+     "output_tokens": 3260000,
+     "per_request_input": 90000,
+     "per_request_output": 20000,
+     "requests": 556
+    },
+    "path": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+    "scope": "m2-fresh-validation-r32-v2-2026-10-04",
+    "wrap_provider": true
+   },
+   "normalised": {
+    "application_env": {
+     "DRAWINGS_AI_REVIEW_ENABLED": "false"
+    },
+    "authorization_path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/OWNER-DISPATCH-AUTHORIZATION.json",
+    "bounds_ref": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/PROJECT-REQUEST-BOUNDS.json",
+     "sha256": "99be01fbf25ed6e6219cc6b09b56aa9cd728ad9b30379e6b4b157aa394131721"
+    },
+    "caps": {
+     "B": 240,
+     "C": 240,
+     "P": 36,
+     "R": 40
+    },
+    "contract": "r39-live-contract-4",
+    "decision_coverage_gate": "C_GE_B_ONLY",
+    "lane_switches": {
+     "B": {
+      "AI_EVIDENCE_VARIANT": "off"
+     },
+     "C": {
+      "AI_EVIDENCE_ADJUDICATE": "1",
+      "AI_EVIDENCE_ASSOC": "1",
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_DECISION_REGION": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_IDGUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     },
+     "P": {},
+     "R": {
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     }
+    },
+    "lane_task_kinds": {
+     "B": [
+      "read_submittal_form"
+     ],
+     "C": [
+      "discover_page",
+      "locate_decision",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ],
+     "P": [
+      "discover_page",
+      "locate_decision",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ],
+     "R": [
+      "discover_page",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ]
+    },
+    "model_identity": {
+     "cli_path": "claude",
+     "cli_version": "2.1.263 (Claude Code)",
+     "provider": "claude-code",
+     "small": "claude-sonnet-5",
+     "standard": "claude-opus-5"
+    },
+    "parent": {
+     "elapsed_s": 604800,
+     "input_tokens": 16300000,
+     "output_tokens": 3260000,
+     "total": 556
+    },
+    "project_window": {
+     "limit": 60,
+     "window_s": 86400
+    },
+    "resume_policy": "full",
+    "run_folder": "C:/t/r2x/r40-sandbox/r32-v2",
+    "sandbox_base": "C:/t/r2x/r40-sandbox",
+    "stamp": "r32-v2"
+   },
+   "provider_env_keys": [
+    "AI_CACHE_TTL_DAYS",
+    "AI_CLAUDE_CLI",
+    "AI_CLI_TIMEOUT_S",
+    "AI_EFFORT",
+    "AI_LEDGER_LIMITS",
+    "AI_LEDGER_PATH",
+    "AI_LEDGER_SCOPE",
+    "AI_MAX_CALLS_PER_DOCUMENT",
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_MAX_CONCURRENCY",
+    "AI_MAX_COST_PER_JOB",
+    "AI_MAX_ELAPSED_S_PER_JOB",
+    "AI_MAX_ESCALATIONS_PER_DOCUMENT",
+    "AI_MAX_INPUT_TOKENS_PER_TASK",
+    "AI_MAX_OUTPUT_TOKENS_PER_TASK",
+    "AI_MAX_RETRIES",
+    "AI_MODEL_SMALL",
+    "AI_MODEL_STANDARD",
+    "AI_PRICE_CACHED_INPUT_PER_MILLION",
+    "AI_PRICE_INPUT_PER_MILLION",
+    "AI_PRICE_OUTPUT_PER_MILLION",
+    "AI_PROVIDER",
+    "AI_READ_EFFORT",
+    "AI_READ_MAX_CALLS_PER_DOCUMENT",
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_READ_MAX_ELAPSED_S",
+    "AI_TIMEOUT_S"
+   ],
+   "result": "PASSED"
+  },
+  "3_negative_probes": {
+   "all_as_expected": true,
+   "count": 48,
+   "float_strings_refused_by_integer_string_check": true,
+   "rows": [
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "budget.lane_allowances",
+       {
+        "B": 241,
+        "C": 240,
+        "P": 36,
+        "R": 40
+       }
+      ]
+     ],
+     "probe": "lane allowance B 241",
+     "reason": "refused: the declared lane allowances {'B': 241, 'C': 240, 'R': 40, 'P': 36} are not the plan's {'B': 240, 'C': 240, 'R': 40, 'P': 36}",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "budget.lane_allowances",
+       {
+        "B": 240,
+        "C": 240,
+        "R": 40
+       }
+      ]
+     ],
+     "probe": "lane allowances without P",
+     "reason": "refused: the declared lane allowances {'B': 240, 'C': 240, 'R': 40} are not the plan's {'B': 240, 'C': 240, 'R': 40, 'P': 36}",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 600
+       }
+      ]
+     ],
+     "probe": "parent total 600 (parent / lane inconsistency)",
+     "reason": "refused: the parent total must be 556 = the sum of the lane allowances",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 556
+       }
+      ]
+     ],
+     "probe": "parent missing elapsed_s",
+     "reason": "refused: budget.parent must bind exactly {total, input_tokens, output_tokens, elapsed_s} as positive integers",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "elapsed_s": 600000,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 556
+       }
+      ],
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 600000,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 556
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 600000, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}"
+      ]
+     ],
+     "probe": "parent elapsed 600000 with the ledger equal (bounds computed for another elapsed bound)",
+     "reason": "refused: PROJECT-REQUEST-BOUNDS was computed for another elapsed bound",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3000000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 556
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3000000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}"
+      ]
+     ],
+     "probe": "ledger output_tokens differs from the parent",
+     "reason": "refused: the single ledger scope is the backstop of the parent budget: its requests / input_tokens / output_tokens / elapsed_s limits must equal the parent's",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 555
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 555}"
+      ]
+     ],
+     "probe": "ledger requests 555 (not the parent total)",
+     "reason": "refused: the single ledger scope is the backstop of the parent budget: its requests / input_tokens / output_tokens / elapsed_s limits must equal the parent's",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 61,
+        "window_s": 86400
+       }
+      ]
+     ],
+     "probe": "project window limit 61",
+     "reason": "refused: project_window must be {limit 1..60, window_s 86400} ({'limit': 61, 'window_s': 86400})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 60,
+        "window_s": 3600
+       }
+      ]
+     ],
+     "probe": "project window 3600 s",
+     "reason": "refused: project_window must be {limit 1..60, window_s 86400} ({'limit': 60, 'window_s': 3600})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 30,
+        "window_s": 86400
+       }
+      ]
+     ],
+     "probe": "project window limit 30 (bounds computed for another window)",
+     "reason": "refused: PROJECT-REQUEST-BOUNDS was computed for another project window",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "83"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY 83 (below the minimum 84)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '83' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "60"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY 60 (the tree default)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '60' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "83"
+      ]
+     ],
+     "probe": "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY 83",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY = '83' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": [
+      "AI_MAX_CALLS_PER_PROJECT_PER_DAY = '96.0' is not an integer string"
+     ],
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "96.0"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY '96.0' (float string)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '96.0' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "84"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY '84' (the minimum)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "integer_string_check": [
+      "AI_MAX_CALLS_PER_DOCUMENT = '12.0' is not an integer string"
+     ],
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "12.0"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT '12.0' (float string; R39-18 / R40-08: the harness accepts it)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "integer_string_check": [
+      "AI_MAX_ELAPSED_S_PER_JOB = '120.0' is not an integer string"
+     ],
+     "mutations": [
+      [
+       "provider_env.AI_MAX_ELAPSED_S_PER_JOB",
+       "120.0"
+      ]
+     ],
+     "probe": "AI_MAX_ELAPSED_S_PER_JOB '120.0' (float string; R39-18 / R40-08: the harness accepts it)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "11"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT 11 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_DOCUMENT = '11': the bounds assume 12",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "13"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT 13 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_DOCUMENT = '13': the bounds assume 12",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_ELAPSED_S_PER_JOB",
+       "119"
+      ]
+     ],
+     "probe": "AI_MAX_ELAPSED_S_PER_JOB 119 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_ELAPSED_S_PER_JOB = '119': the bounds assume 120",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "model_identity.models.small",
+       "sonnet"
+      ],
+      [
+       "provider_env.AI_MODEL_SMALL",
+       "sonnet"
+      ]
+     ],
+     "probe": "alias 'sonnet' pinned and configured",
+     "reason": "refused: model_identity.models.small must be a full model id, not an alias ('sonnet')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "model_identity.models.standard",
+       "opus"
+      ],
+      [
+       "provider_env.AI_MODEL_STANDARD",
+       "opus"
+      ]
+     ],
+     "probe": "alias 'opus' pinned and configured",
+     "reason": "refused: model_identity.models.standard must be a full model id, not an alias ('opus')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_MODEL_SMALL",
+       "sonnet"
+      ]
+     ],
+     "probe": "AI_MODEL_SMALL 'sonnet' against the pin claude-sonnet-5",
+     "reason": "refused: provider_env AI_MODEL_SMALL 'sonnet' differs from model_identity.models.small 'claude-sonnet-5'",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "model_identity.provider",
+       "claude"
+      ]
+     ],
+     "probe": "provider 'claude' in model_identity",
+     "reason": "refused: model_identity.provider must be 'claude-code' and equal AI_PROVIDER",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "model_identity.cli.path",
+       "C:/other/claude.exe"
+      ]
+     ],
+     "probe": "CLI path differs from AI_CLAUDE_CLI",
+     "reason": "refused: model_identity.cli.path must equal AI_CLAUDE_CLI",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "model_identity.cli.version",
+       "2.1.263"
+      ]
+     ],
+     "probe": "CLI version '2.1.263' (not the exact version line; the contract accepts any non-empty line, the runner compares it with `claude --version` at every invocation)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "provider_env.AI_LEDGER_SCOPE",
+       "m2-other-scope"
+      ]
+     ],
+     "probe": "AI_LEDGER_SCOPE differs from ledger.scope (scope mismatch)",
+     "reason": "refused: provider_env AI_LEDGER_PATH / AI_LEDGER_SCOPE / AI_LEDGER_LIMITS differ from the declared ledger",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "ledger.scope",
+       "m2-other-scope"
+      ]
+     ],
+     "probe": "ledger.scope differs from AI_LEDGER_SCOPE (scope mismatch)",
+     "reason": "refused: provider_env AI_LEDGER_PATH / AI_LEDGER_SCOPE / AI_LEDGER_LIMITS differ from the declared ledger",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "run.folder",
+       "C:/t/r2x/r40-sandbox/another"
+      ]
+     ],
+     "probe": "run folder elsewhere",
+     "reason": "refused: the declaration's run folder must be C:/t/r2x/r40-sandbox/r32-v2 (one run folder per declaration)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "run.sandbox_base",
+       "C:/t/r2x/sandbox"
+      ],
+      [
+       "run.folder",
+       "C:/t/r2x/sandbox/r32-v2"
+      ]
+     ],
+     "probe": "sandbox base not C:/t/r2x/r<NN>-sandbox",
+     "reason": "refused: run.sandbox_base must be declared as C:/t/r2x/r<NN>-sandbox ('C:/t/r2x/sandbox')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "run.stamp",
+       "a"
+      ],
+      [
+       "run.folder",
+       "C:/t/r2x/r40-sandbox/a"
+      ]
+     ],
+     "probe": "stamp 'a' (too short)",
+     "reason": "refused: a stamp is 3-64 characters A-Z a-z 0-9 . _ - ('a')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "authorization.path",
+       "C:/t/OWNER-DISPATCH-AUTHORIZATION.json"
+      ]
+     ],
+     "probe": "authorization path elsewhere",
+     "reason": "refused: the declaration must bind the pinned authorization path C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/OWNER-DISPATCH-AUTHORIZATION.json",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ]
+     ],
+     "probe": "digest upper-case hex",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "000000000000000000000000000000000000000000000000000000000000000"
+      ]
+     ],
+     "probe": "digest 63 characters",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "TO-BE-NAMED-BY-OWNER-BUDGET-AUTHORIZATION"
+      ]
+     ],
+     "probe": "digest = the placeholder",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "ledger.wrap_provider",
+       false
+      ]
+     ],
+     "probe": "wrap_provider false",
+     "reason": "refused: ledger must bind path, scope, limits and wrap_provider true (LedgerProvider writes to the declared scope)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "application_env",
+       null
+      ]
+     ],
+     "probe": "application_env missing",
+     "reason": "refused: the declaration does not bind 'application_env' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "application_env",
+       {
+        "DRAWINGS_AI_REVIEW_ENABLED": "true"
+       }
+      ]
+     ],
+     "probe": "application_env DRAWINGS_AI_REVIEW_ENABLED true",
+     "reason": "refused: application_env must be exactly {'DRAWINGS_AI_REVIEW_ENABLED': 'false'} (extra [], missing [], wrong value ['DRAWINGS_AI_REVIEW_ENABLED'])",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "application_env",
+       {
+        "DRAWINGS_AI_REVIEW_ENABLED": "false",
+        "OTHER": "x"
+       }
+      ]
+     ],
+     "probe": "application_env with an extra key",
+     "reason": "refused: application_env must be exactly {'DRAWINGS_AI_REVIEW_ENABLED': 'false'} (extra ['OTHER'], missing [], wrong value [])",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "decision_coverage_gate",
+       "C_GE_B_AND_C_GE_R"
+      ]
+     ],
+     "probe": "decision coverage gate binding R (plan v2 C_GE_B_AND_C_GE_R)",
+     "reason": "refused: decision_coverage_gate must be 'C_GE_B_ONLY' (owner ruling A-10): refused: decision coverage gate 'C_GE_B_AND_C_GE_R' binds R into eligibility -- superseded by the owner's ruling A-10 (C >= B only; C >= R is a mandatory diagnostic)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "decision_coverage_gate",
+       "C_GE_R"
+      ]
+     ],
+     "probe": "decision coverage gate unknown id",
+     "reason": "refused: decision_coverage_gate must be 'C_GE_B_ONLY' (owner ruling A-10): refused: unknown decision coverage gate definition 'C_GE_R' (only 'C_GE_B_ONLY' is bound, A-10)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "resume_policy",
+       "soonest"
+      ]
+     ],
+     "probe": "resume_policy 'soonest'",
+     "reason": "refused: resume_policy must be one of ('full', 'earliest') ('soonest')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "resume_policy",
+       "earliest"
+      ]
+     ],
+     "probe": "resume_policy 'earliest' (allowed by contract 4; this declaration binds 'full')",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "lane_task_kinds.B",
+       [
+        "read_submittal_form",
+        "drawings_reply_match"
+       ]
+      ]
+     ],
+     "probe": "lane_task_kinds widened (B + drawings_reply_match)",
+     "reason": "refused: lane_task_kinds must equal the task kinds of the declared switches (REQUEST-PATHS.md): {'B': ['read_submittal_form'], 'C': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'R': ['discover_page', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'P': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision']} ({'B': ['read_submittal_form', 'drawings_reply_match'], 'C': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'P': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'R': ['discover_page', 'read_decision', 'read_field_context', 'read_identity', 'read_revision']})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "lane_switches.P",
+       {
+        "AI_EVIDENCE_VARIANT": "EV1"
+       }
+      ]
+     ],
+     "probe": "lane P with switches",
+     "reason": "refused: lane P re-sends captured payloads and takes no switches ({})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": [
+      "AI_EVIDENCE_VARIANT = 'EV1' is not an integer string"
+     ],
+     "mutations": [
+      [
+       "provider_env.AI_EVIDENCE_VARIANT",
+       "EV1"
+      ]
+     ],
+     "probe": "provider_env with an AI_EVIDENCE_* key",
+     "reason": "refused: provider_env may hold only AI_* provider settings, never ['AI_EVIDENCE_VARIANT']",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "contract",
+       "r38-live-contract-3"
+      ]
+     ],
+     "probe": "contract 3",
+     "reason": "refused: the declaration is not contract r39-live-contract-4 ('r38-live-contract-3')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "integer_string_check": "ok",
+     "mutations": [
+      [
+       "dry_exercise",
+       true
+      ]
+     ],
+     "probe": "a dry exercise flag",
+     "reason": "refused: not a live declaration",
+     "result": "REFUSED"
+    }
+   ]
+  },
+  "3b_integer_strings_of_the_declaration": {
+   "problems": [],
+   "result": "PASSED"
+  },
+  "4_verify_binding": {
+   "binding_manifest": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review39\\BINDING-MANIFEST-R39.json",
+   "files_verified": 239,
+   "result": "PASSED",
+   "sha256": "a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b"
+  },
+  "5_verify_bounds": {
+   "population_gate": "DISPATCH_ELIGIBLE",
+   "required_minimum": {
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 84,
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 84
+   },
+   "result": "PASSED",
+   "run_set_documents": 24,
+   "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+   "verified": true
+  },
+  "6_lane_environment_checks_offline": {
+   "lanes": {
+    "B": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "sandbox_tmp": "C:/t/r2x/r40-sandbox/r40d-env-B",
+     "tree": "C:/t/iso/frozen-r12/backend"
+    },
+    "C": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "sandbox_tmp": "C:/t/r2x/r40-sandbox/r40d-env-C",
+     "tree": "C:/t/iso/cand-r29/backend"
+    },
+    "P": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "sandbox_tmp": "C:/t/r2x/r40-sandbox/r40d-env-P",
+     "tree": "C:/t/iso/cand-r29/backend"
+    },
+    "R": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "sandbox_tmp": "C:/t/r2x/r40-sandbox/r40d-env-R",
+     "tree": "C:/t/iso/cand-r29/backend"
+    }
+   },
+   "result": "PASSED",
+   "what": "the live lane's own checks (verify_lane_environment mode live, verify_application_env, drawing_ai_review.enabled()) with the environment runner_r32.lane_env('live') builds from the declaration: every declared value parses into the application's settings (R39-18 class)"
+  },
+  "7_runner_live_subprocess_without_run_file_or_token": {
+   "command": "python -B runner_r32.py run --mode live --declaration C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/FRESH-VALIDATION-DECLARATION-R32-V2.RUN.json --declaration-sha 1bf8d90a7056e129dcfa4b8bc00981b4823c8cdec32f68ecf78ffaeace18daaa --run-set C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json --binding C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/BINDING-MANIFEST-R39.json --binding-sha a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b",
+   "note": "the frozen hash is never given to the runner; the sha given is that of the in-memory RUN copy, whose file does not exist",
+   "result": "REFUSED",
+   "returncode": 1,
+   "run_file_exists": false,
+   "run_folder_created": false,
+   "stderr_last_line": "preflight_r32.Refused: refused: live mode needs the declaration and its exact sha256",
+   "token_presented": false,
+   "working_directory": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32"
+  },
+  "8_runner_live_in_process_in_memory_run_copy": {
+   "reason": "refused: the declared ledger scope 'm2-fresh-validation-r32-v2-2026-10-04' does not exist (it is created only under the owner's authorization, never by this harness)",
+   "result": "REFUSED",
+   "run_folder_created": false,
+   "stage": "after the binding (239 files), the declaration contract 4, the HEADs, the truth and population gate, the run set and the bounds recomputation: the declared ledger scope does not exist (created only by the owner, create_scope_r40.py)"
+  },
+  "9_runner_live_in_process_scope_pretended": {
+   "reason": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v2\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)",
+   "result": "REFUSED",
+   "run_folder_created": false,
+   "stage": "every preflight step passed (the scope check patched to pretend the scope exists); the guard preview refused: no authorization file at the pinned path; before the run folder, the WRITER lock, the CLI version check and any consumption"
+  }
+ },
+ "declaration": {
+  "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/FRESH-VALIDATION-DECLARATION-R32-V2.json",
+  "sha256": "f38fb281f30b4ca45fea1c801d58f37d83ffdaa2b61cd406d9a087e8e51725af"
+ },
+ "finished_utc": "2026-10-04T11:57:06+00:00",
+ "harness": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32",
+ "invariants": {
+  "ai_ledger_483_17_0_before_and_after": true,
+  "dummy_digest_never_written": true,
+  "harness_unchanged_no_pycache": true,
+  "model_requests": 0,
+  "no_authorization_run_or_token_file": true,
+  "no_token_in_the_environment": true,
+  "package_unchanged_by_the_preflight_outside_its_outputs": true,
+  "run_folder_never_created": true
+ },
+ "name": "PREFLIGHT-RESULTS (ORCH-09 dry preflight of declaration-r32-v2)",
+ "ok": true,
+ "started_utc": "2026-10-04T11:55:54+00:00"
+}

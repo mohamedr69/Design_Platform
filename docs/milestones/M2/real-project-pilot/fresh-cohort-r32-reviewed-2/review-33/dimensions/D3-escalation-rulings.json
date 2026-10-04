@@ -1,0 +1,152 @@
+{
+ "dimension": "D3",
+ "agent": "R33-D3 (ORCH-03.1/D3), Claude Opus 5.5, effort high",
+ "status": "independent Claude AI rulings for the preparation review; NOT owner decisions, NOT human sign-off; they authorise nothing",
+ "D-004": {
+  "rows": [
+   "F069/p1/identity",
+   "F069/p3/identity",
+   "F069/identity (document)"
+  ],
+  "question": "Is 'Refrence : EP-15744' on the F069 quotations the project/job number, so that identity is absent, or is the identity ambiguous? May the role printed on F062 ('Project ID') and F068 ('Oracle Job No. / OM No.') settle it?",
+  "page_evidence": {
+   "C:/t/r2x/r32-stage/renders/F069-p1.png": "Al Arabia 'Design Sheet', To M/s Al Abdouli Group, Date 5-Aug-18, Validity 20 Days, 'Refrence : EP-15744', Project 'Command Of Military Works 17045 at Al minhad', Subject 'Quotation for Fire Alarm System'. No other candidate own number on the page.",
+   "C:/t/r2x/r32-stage/renders/F069-p3.png": "Second Al Arabia 'Design Sheet', Date 4-Aug-18, 'Refrence : EP-15744', Project 'CMW 17045 at Al Awir', Subject 'Quotation for Emergency Lighting System'. The same value is printed on two different quotations of different dates in the same staged file.",
+   "C:/t/r2x/r32-stage/renders/F062-p1.png": "Al Arabia DOCUMENT TRANSMITTAL to M/s Al Abdouli Group: 'AASS Ref. : TR/3544/18', 'Project ID : EP-15744', Document No. 'EP-15744/SM/FAS/201'.",
+   "C:/t/r2x/r32-stage/renders/F068-p1.png": "Al Arabia PROJECTS TESTING AND COMMISSIONING REQUEST FORM (rotated): 'Oracle Job No. / OM No.' EP-15744, Job Title CMW 17045."
+  },
+  "facts": "The issuer of the quotations (Al Arabia) prints EP-15744 as its own Project ID and Oracle Job No. on other staged documents of the same project, and prints the same value on both quotations of F069. On the F069 pages themselves the value sits under a 'Refrence' label and nothing on those pages states its role.",
+  "ruling": "AMBIGUOUS. Frozen section 2 makes 'ambiguous' the state for a readable value whose role cannot be established from the page; frozen section 3 never lets a job number be the identity but gives no rule that lets other documents establish the role on this page. Reading the role from F062/F068 is exactly the addition that topic (h2) makes to section 3, and (h2) is not an owner-approved amendment. The F062/F068 evidence and the repeat on two quotations make 'present' indefensible, and they corroborate that EP-15744 is the issuer's job number, but under the frozen text they do not convert the page to 'absent'. 'Absent' would be the right state only if the owner adopts (h2) as an amendment to section 3.",
+  "resulting_rows": {
+   "F069/p1/identity": {
+    "state": "ambiguous",
+    "candidates": [
+     {
+      "literal": "EP-15744",
+      "printed_label": "Refrence",
+      "role": "not established on the page (issuer's job/project number on F062/F068)"
+     }
+    ],
+    "association": "resolved",
+    "excluded_from_scoring": true
+   },
+   "F069/p3/identity": {
+    "state": "ambiguous",
+    "candidates": [
+     {
+      "literal": "EP-15744",
+      "printed_label": "Refrence",
+      "role": "not established on the page"
+     }
+    ],
+    "association": "resolved",
+    "excluded_from_scoring": true
+   },
+   "other_identities": "EP-15744 may additionally be recorded as an other identity (role: issuer project/job number per F062/F068) without changing the state."
+  },
+  "document_level": {
+   "F069/identity": {
+    "resolved_for_scoring": "no",
+    "carries_fact": "no"
+   }
+  },
+  "count_impact": "None on the gate: identity population stays 57 (carries_fact is no under every option). The identity resolved_for_scoring 'yes' set is unchanged (F069 stays out); under the alternative 'absent' it would gain F069 (67 -> 68 in the reviewer's document-field count).",
+  "package_defect": "The reviewed file R32-LABELS-REVIEWED-1.json stores F069 p1/p3 identity as state 'present', literal 'EP-15744' (draft values kept for unresolved rows by apply_rulings_r32.py) while the final response and D-004 record 'ambiguous'. When D-004 is closed the ruled state must be written (finding D3-08).",
+  "alternative_if_owner_adopts_h2": {
+   "state": "absent",
+   "other_identities": "EP-15744 (project/job number)",
+   "F069/identity": {
+    "resolved_for_scoring": "yes",
+    "carries_fact": "no"
+   }
+  }
+ },
+ "D-005": {
+  "rows": [
+   "F019/p1/revision",
+   "F019/revision (document)",
+   "F019 revision question"
+  ],
+  "question": "F019 p1: cell 'Rev. no.' 00 versus revision table latest row 01 dated 09-05-16 and title-block DATE 09-05-16. Does frozen section 4 cell-first give present '00', or is it ambiguous?",
+  "page_evidence": {
+   "C:/t/r2x/r32-stage/crops/F019-p1-0.03_0.84_0.2_1-r90.png": "Title block: DATE 09-05-16, DRAWN AHMED, SCALE 1:150 @ A1, CHKD MJ, APPD MJ; 'DWG. NO: FAM-PIV-MAH-SPD-FA-2633-007'; 'Rev. no.' 00. Dewan REVIEW NOTE stamp with red arrow to APPROVED AS NOTED, 16.5.16.",
+   "C:/t/r2x/r32-stage/renders/F019-p1.png": "Revision table (upside down in the render, read on a working rotation): REV 00, 05-03-16, ISSUED FOR APPROVAL, AHMED, MJ; REV 01, 09-05-16, AS PER CONSULTANT COMMENTS, AHMED, MJ.",
+   "C:/t/r2x/r32-stage/crops/F019-p1-0.38_0.86_0.44_0.99-r90.png": "Same revision-table rows (dates and descriptions)."
+  },
+  "facts": "Both candidates are printed and legible. The 'Rev. no.' cell says 00; the table's latest row is 01 and its date equals the title-block DATE. The page does not state which is current; the dates suggest the cell was not updated, but that is an inference from dates.",
+  "ruling": "PRESENT '00' under the frozen conventions. Frozen section 4 names the revision cell or title-block REV field the primary source and uses the revision table only 'when only a revision-history table is printed'. The frozen text therefore establishes which candidate is the field, so section 2's 'ambiguous' (cannot be established which candidate is the field) does not apply. The topic (i) sentence that would make a cell/table conflict ambiguous is an amendment to section 4; until the owner adopts it, it cannot govern. Disclosure: the page carries contrary evidence (table row 01 dated as the title block), so a prediction of '01' is plausible; the owner may prefer the (i) amendment, which would make the row ambiguous and remove F019 from the revision population.",
+  "resulting_rows": {
+   "F019/p1/revision": {
+    "state": "present",
+    "literal": "00",
+    "printed_label": "Rev. no.",
+    "semantic_role": "title-block revision cell (frozen section 4 primary source)",
+    "association": "resolved",
+    "region": [
+     0.04,
+     0.86,
+     0.43,
+     0.99
+    ],
+    "note": "revision table latest row 01 (09-05-16, AS PER CONSULTANT COMMENTS) and title-block DATE 09-05-16 recorded as a note; no inference from dates",
+    "excluded_from_scoring": false
+   }
+  },
+  "document_level": {
+   "F019/revision": {
+    "resolved_for_scoring": "yes",
+    "carries_fact": "yes"
+   }
+  },
+  "count_impact": "Revision population 38 -> 39 (F019, project 3563); identity 57 and decision 38 unchanged. Equals FIELD-POPULATION upper_bound_if_resolved revision 39. Under the owner alternative (topic i adopted): ambiguous, F019 revision no/no, population stays 38.",
+  "alternative_if_owner_adopts_topic_i": {
+   "state": "ambiguous",
+   "candidates": [
+    "00 (cell)",
+    "01 (latest table entry)"
+   ],
+   "F019/revision": {
+    "resolved_for_scoring": "no",
+    "carries_fact": "no"
+   }
+  }
+ },
+ "carried_over": [
+  {
+   "item": "count-once alias F031 -> F001",
+   "verdict": "CONFIRMED (render identity) with caveat",
+   "evidence": "Pixel comparison of the bound renders: F001-p1 vs F031-p1 and F001-p2 vs F031-p2: 0 differing pixels (1272x1800). F031 has two more pages: p3 is a Dewan 'Comments Resolution Sheet' (Submittal No.: MAT - 116, Rev.: 02, contractor responses, consultant handwritten remarks) and p4; F031 p3 carries identity MAT - 116 and revision 02, the same values as F001 p1. Staged sha256 differ (F001 d701f99d..., F031 4f1ffdfc...).",
+   "ruling": "Count once is defensible: F031 adds no field value that F001 lacks. But condition (c)(ii) as written ('in-scope pages that carry the field facts are render-identical') is not literally met for F031 p3. Topic (c)(ii) is itself an unrecorded amendment to frozen section 1 (byte-identical only). Record it as an amendment with this caveat; without it the populations are identity 59, revision 40, decision 39 (F031 +1 each, F059 +1 identity and revision)."
+  },
+  {
+   "item": "count-once alias F059 -> F046",
+   "verdict": "CONFIRMED",
+   "evidence": "F046-p1 vs F059-p1 (1800x1272): 77,603 pixels differ by any amount (anti-aliasing), 1,183 by more than 64 grey levels, all inside x 0.842-0.883, y 0.856-0.912. A side-by-side view shows the Al Arabia round seal left of the title block on F046 only; title-block text identical (FIRE ALARM SCHEMATIC DIAGRAM, DATE 07-09-2023, JOB.NO. 19-23, DWG-NO:FA- 6001, REV - 0). Neither page has a decision.",
+   "ruling": "Render-identical except a company seal that carries no field fact: count once is defensible under (c)(ii), which remains an unrecorded amendment to frozen section 1."
+  },
+  {
+   "item": "page-keyed scoring of compilation files F002, F035, F043 (and F069)",
+   "verdict": "CONFIRMED as necessary",
+   "evidence": "F035 p1-p4 are four different submittals (p1 ENGINEER'S COMMENTS B; p2 Ref. No. CRWN-ELEC-MAT-024 with Al Burj B- Approved As Noted; p3 MUSE handwritten mixed outcome; p4 Hosmac No Objection with Comments). F043 p1 is a Military Works Arabic letter and p2-p4 the CMW General Specifications Annexure B with 'Rev. 0' in the running header. F002 holds TAK and SAIFCO components (B. Approved as noted on p1, (B) Proceed as Noted on p2/p4).",
+   "ruling": "A file-level value would compare one prediction against several documents' truths; page-keyed scoring is required and consistent with frozen section 7 (carries when at least one page has the field present and resolved). It is a scorer rule that must be bound in the declaration (no bound scorer for r32 labels was found). D-003 (F043 revision no/no -> yes/yes) follows frozen section 7 and is accepted; it adds 1 to the revision population (37 -> 38)."
+  },
+  {
+   "item": "whitespace-insensitive literal comparison (F023, F067, LACASA '- R0n', 'FA- 6001', 'EM- 104')",
+   "verdict": "CONFIRMED (labels comply with frozen section 3)",
+   "evidence": "F023 'MAS Ref. No. 273 / MT / MEP 2 1 7' printed with wide letter-spacing; F067 'CMW-17045-C001-01-E-0001' with a half-width gap after 'C001-' (D-006); F005/F007/F011 '...-0004- R00' style with a space; F040 'DWG-NO:EM- 104'; F046/F059 'DWG-NO:FA- 6001'.",
+   "ruling": "Keeping the printed form in the label is what frozen section 3 requires. Comparing whitespace-insensitively is a scorer rule, not a convention change, and does not alter any population; it must be stated and implemented in the bound scorer."
+  },
+  {
+   "item": "LACASA/Scale '- R0n' suffix convention",
+   "verdict": "CONFIRMED",
+   "evidence": "F005 '...-CCTV-2025-0004- R00', F006 '...-LC-2025-007- R02', F007 '...-TEL-2025-0009- R00', F011 '...-TEL-2025-0010- R00': the only revision source on these pages is the unlabelled suffix of the Reference.",
+   "ruling": "Frozen section 4 'embedded only' records the suffix as present with association uncertain, and frozen section 7 counts only resolved values, so these documents do not carry the revision fact. Counting the suffixes would contradict sections 4 and 7: it is a convention change that requires an explicit owner decision (it would add up to 8 revision documents: F002 'B R1', F003, F004, F005, F006, F007, F011, F015)."
+  },
+  {
+   "item": "resubmission_required on mixed-option rows",
+   "verdict": "CONFIRMED (marks) / amendment not recorded",
+   "evidence": "All 9 rows checked on the image: F001 p2 and F031 p2 tick on 'Approved as noted / Resubmit'; F017, F022, F026, F033 p1 Dewan stamp mark on 'APPROVED AS NOTED / RESUBMIT'; F030 p1 'Code B+Resubmit', p3 register 'B+R', p4 Mirage block 'B+R' with B 'Approved with comments' highlighted.",
+   "ruling": "Class 'approved as noted' with resubmission_required yes is defensible (the approval option is chosen, separate revise and reject options exist and are unmarked). But frozen section 5 lists 'resubmit' as a marker of 'revise and resubmit', so (d1) is an interpretation that departs from the literal frozen text and is not recorded as an amendment; the scorer tolerance for these rows is not defined in any bound scorer. Record (d1) as an amendment and define the tolerance (which predicted classes count as correct) in the declaration."
+  }
+ ]
+}

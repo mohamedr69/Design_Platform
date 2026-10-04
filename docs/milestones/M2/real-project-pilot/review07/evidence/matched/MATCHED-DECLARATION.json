@@ -1,0 +1,61 @@
+{
+ "declared_at": "2026-09-29T07:18:05",
+ "purpose": "M2 review 07 F: a small matched experiment on the frozen candidate (exposed exploration data; not sealed, not a generalization claim)",
+ "frozen_candidate": {
+  "commit": "c9a1a1459c30115daf8bb40f47aba542f2b6079a",
+  "worktree": "C:/t/iso/frozen-r7",
+  "freeze_manifest_sha256": "90523bf7981a15f0e87317e72d8f86a5e17a82b22501db03f96c511a0867ab4f"
+ },
+ "authorization": "SANDBOX-AUTHORIZATION.json (recorded policies; projects 29076, 30088, 30784)",
+ "selection": {
+  "seed": "m2-review07-matched-2026-09-29",
+  "rule": "4 labelled PDFs per authorized project, drawn by the seed from the sorted list; truth and predictions not consulted",
+  "files_sha256": {
+   "EP-29076/CDA\\FA Civil_Defense_Requirements.pdf": "39c2897b4c7621fa79834465d6eeca4ae8d29af0da9760f3f326825a2012c0cb",
+   "EP-29076/06- Drawings\\01- FA\\Fire Alarm\\17. 8th Floor Fire Alarm Layout\\1. R0\\1. Submission\\PDF\\25H-AAEM-SD-ELEC-FA-8F-016.pdf": "296a9b66edcf944d917a1a0a9d7ea27d20c922e0225dbf637d1682d631dfa244",
+   "EP-29076/06- Drawings\\01- FA\\03- SD\\00- APPROVED\\25H-S202-NCC-SD-MEP-ELE-FA-047_Code B\\25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf": "648e15718b8f69d68e9375d47fd9cbeb1e29e4da8b9abb708b972ac9ac5075f1",
+   "EP-29076/06- Drawings\\10- MEP C1 30-03-2026\\MEP\\26.03.16 25h385_MEP_C1\\Drgs\\PDF\\03-Elec\\04-Low Current\\LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf": "d53d5f4b35954463efa7db1b2181d9e54ffcd036a2176fc5967f72a1aff5063b",
+   "EP-30088/10. SD\\recieved\\Fire alarm layout\\Received\\R01\\ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf": "23cbee28ecb40d80ad7310f954c11cba8313b44c655c2c08adc755d01734f8d3",
+   "EP-30088/04. Drawings\\SD\\recieved\\TransferNow-20260908BGEp3fee\\Emergency Lighting Layout\\Received\\ICC-DLRC-SPM-SD-MEP-0084-00-COMMENTED-C.pdf": "fb1630480f71fd6d6f35c613b4dfbe12950eaae7e7073249ebe45a4e24a0a9f9",
+   "EP-30088/10. SD\\recieved\\Emergency Lighting Layout\\Submission\\R0\\06-02-2025_EML\\ICC-DLRC-SPM-SD-MEPEM-103-00.pdf": "e4c39ae89feda615bee530d688769460320b85e712e62364db57e341bcd84f22",
+   "EP-30088/10. SD\\recieved\\Fire alarm layout\\Submitted\\R00\\PDF\\ICC-DLRC-SPM-SD-MEPFA-100.pdf": "9239dd5363bf6f820d3c10600a3ceea3cd89f246962bc86d524ffa018cca56f4",
+   "EP-30784/04- Drawings\\08-Shop Drawing\\1.FAVE\\recieved\\BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf": "232e571db94db50cde43cdaeefb18d53955dbb48a22aa8892c056c79b9b7c83e",
+   "EP-30784/04- Drawings\\06- DCD approved\\PDF\\785045SMOKECONTROLSYSTEMREVISEDPART02.pdf": "8f25950ffb2b1c2fe7604c83256c594ac0b4ed19d15fe1d6d0196e790d61d39f",
+   "EP-30784/04- Drawings\\08-Shop Drawing\\1.FAVE\\R1\\01. Basement-4\\BBY006-GME-SDW-FP-FA-BSM-B04-010025.pdf": "019d18293cda65cd2bf746443180c20c1d3883ac02e186f72fde904072270920",
+   "EP-30784/03- MS\\03- FRC\\03- TIANJIE\\BBY006_1.PDF": "898bd65728e3af65ab5a933390a19d610423ccfecf8a544401aa26f2522b94cc"
+  }
+ },
+ "matrix": {
+  "profile": "default",
+  "variants": [
+   "AI-EV0-baseline (application AI path; evidence stage off)",
+   "AI-EV1-targeted (EV0 state + evidence reader EV1, policy .2)",
+   "AI-EV2-broad (EV0 state + evidence reader EV2, policy .2)"
+  ],
+  "same_source_hashes": true,
+  "not_run": [
+   "promoted profile with a model",
+   "BOQ with a model",
+   "any unauthorized project"
+  ]
+ },
+ "ledger": {
+  "path": "C:\\t\\r7\\ledger\\matched.sqlite",
+  "scope": "r7-matched",
+  "limits": {
+   "requests": 120,
+   "per_request_input": 70000,
+   "per_request_output": 20000,
+   "input_tokens": 3000000,
+   "output_tokens": 400000,
+   "elapsed_s": 10800
+  },
+  "enforcement": "reserve-before-dispatch on an adapter-aware estimate (calibrated p95); per-call actual usage settled; breaker opens on a per-request or aggregate breach and stops further dispatch. The claude-code CLI cannot enforce output/input limits itself: a request already made can exceed the per-request estimate; it is recorded and stops the rest."
+ },
+ "stop_conditions": [
+  "an auth / refused outcome, or 5 consecutive transport failures -> stop that track, keep what was written",
+  "the ledger refuses (cap or breaker) -> remaining pages / documents recorded as budget stops, never negatives",
+  "any sandbox assertion failing -> abort before any call"
+ ],
+ "cost": "unknown (no configured prices); not zero"
+}

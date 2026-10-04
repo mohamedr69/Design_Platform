@@ -1,0 +1,161 @@
+{
+  "code": "C:\\t\\iso\\work\\r2x\\r16",
+  "mixed_geometry": {
+    "join": {
+      "pairs": [
+        [
+          "anchor",
+          2,
+          "matched_geometry"
+        ],
+        [
+          "below-anchor",
+          3,
+          "matched"
+        ]
+      ],
+      "held": {},
+      "held_reasons": {},
+      "unmatched_emitted": [],
+      "unmatched_truth": [
+        1
+      ],
+      "intervals": {
+        "1": [
+          {
+            "interval": 0,
+            "truth": [
+              1
+            ],
+            "emitted": []
+          },
+          {
+            "interval": 1,
+            "truth": [
+              3
+            ],
+            "emitted": [
+              "below-anchor"
+            ]
+          }
+        ]
+      }
+    },
+    "crossed_verified_anchor": false,
+    "join_without_anchor_emitted": {
+      "pairs": [
+        [
+          "below-anchor",
+          3,
+          "matched"
+        ]
+      ],
+      "held": {},
+      "held_reasons": {},
+      "unmatched_emitted": [],
+      "unmatched_truth": [
+        2,
+        1
+      ],
+      "intervals": {
+        "1": [
+          {
+            "interval": 0,
+            "truth": [
+              1
+            ],
+            "emitted": []
+          },
+          {
+            "interval": 1,
+            "truth": [
+              3
+            ],
+            "emitted": [
+              "below-anchor"
+            ]
+          }
+        ]
+      }
+    },
+    "crossed_without_anchor_emitted": false,
+    "above_anchor_control": {
+      "pairs": [
+        [
+          "anchor",
+          2,
+          "matched_geometry"
+        ],
+        [
+          "above-anchor",
+          1,
+          "matched"
+        ]
+      ],
+      "held": {},
+      "held_reasons": {},
+      "unmatched_emitted": [],
+      "unmatched_truth": [
+        3
+      ],
+      "intervals": {
+        "1": [
+          {
+            "interval": 0,
+            "truth": [
+              1
+            ],
+            "emitted": [
+              "above-anchor"
+            ]
+          },
+          {
+            "interval": 1,
+            "truth": [
+              3
+            ],
+            "emitted": []
+          }
+        ]
+      }
+    }
+  },
+  "geometry_ambiguity": {
+    "join": {
+      "pairs": [],
+      "held": {
+        "a": [
+          6
+        ],
+        "b": [
+          6
+        ]
+      },
+      "held_reasons": {
+        "a": "geometry: more than one emitted row within tolerance of a verified row",
+        "b": "geometry: more than one emitted row within tolerance of a verified row"
+      },
+      "unmatched_emitted": [],
+      "unmatched_truth": [],
+      "intervals": {
+        "1": [
+          {
+            "interval": 0,
+            "truth": [],
+            "emitted": []
+          },
+          {
+            "interval": 1,
+            "truth": [],
+            "emitted": []
+          }
+        ]
+      }
+    },
+    "consumer": "replay_core.replay_sheet (the r16 reporting path)",
+    "replay_outcomes": {
+      "a": "held_ambiguous_join",
+      "b": "held_ambiguous_join"
+    }
+  }
+}

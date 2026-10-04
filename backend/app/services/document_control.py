@@ -358,13 +358,17 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # covers and scanned transmittals are promoted to records only on the
 # evaluation path (EXTRACTION_PROMOTE_OBSERVATIONS), else kept as
 # observations; a reference cut at a hyphen is flagged incomplete.
-PARSER_VERSION = "parse-2026-09-28.4"
+PARSER_VERSION = "parse-2026-09-28.6"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
 # approval request), SDW, DWG and SD a shop drawing, SAR a sample. MS is a
 # method statement and is not one of these.
-_CODES = r"(MAS|MAR|SDW|DWG|SD|SAR)"
+# MAT: a material submittal in Emaar / Voltas and EFECO numbering ("EBF-DCP-6374-VL-MAT-ELV-0003", "A23-EFE-MAT-E-00033";
+# real-project pilot, 2026-09-28).
+# MTG: a material sample tag in CSCEC numbering ("R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020"), a sample; the tag form
+# also prints the material submittal it belongs to ("…-MAR-…-1009"), which is not the tag (M2 review 05).
+_CODES = r"(MAS|MAR|MAT|MTG|SDW|DWG|SD|SAR)"
 # A reference may go on past a slash with the sheets it covers -- the
 # submission "…-SD-MEP-FA-0054" lists "…-SD-MEP/FA-104 A~104 M", the reply
 # answers "…-SD-MEP/FA-100,101,102,104&105", a sheet is "…-SD-MEP/FA-104-M".
@@ -378,14 +382,17 @@ _SHEETS = r"(?:/[A-Z0-9]{1,6}-\d{1,5}(?:[ -]?[A-Z](?![A-Z0-9]))?(?:\s*[,&~]\s*\d
 # on the next line ("…-SD-MEP-" / "0042", a cover's own fields read by OCR)
 # is never glued on -- that made a serial of a base and unfolded the reply
 # behind EP-30088's FA-0042 cover.
-_SEGMENT = r"(?:-[A-Z0-9]+|-\n[A-Z][A-Z0-9]*)"
-REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
+# The wrapped segment is never the next field's label: a scanned form wraps "…-PJW-ZZZ-" over its
+# "Rev.01" label, and joining the two read "…-ZZZ-Rev" as the number (M2 review 05, pilot P-10).
+_SEGMENT = r"(?:-[A-Z0-9]+|-\n(?!(?:REV|REVISION|DATE|REF|NO|PAGE|SHEET|TITLE)\b)[A-Z][A-Z0-9]*)"
+# The code itself may follow a wrapped hyphen ("EBF-DCP-6374-VL-" / "MAT-ELV-0003"), like any segment.
+REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-\n?" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
 # A date written "6-Mar-2026" has the shape of a MAR reference and is not
 # one: a number, a month, a year. A real reference with a numeric prefix
 # ("123-MAR-001") has no year where the year would be.
 _DATE_SHAPED = re.compile(r"^\d{1,2}-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-(?:\d{2}|\d{4})$", re.I)
-_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "SAR": "samples", "SDW": "drawings", "DWG": "drawings",
-                     "SD": "drawings"}
+_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "MAT": "submittals", "SAR": "samples", "MTG": "samples", "SDW": "drawings",
+                     "DWG": "drawings", "SD": "drawings"}
 
 
 def is_date_shaped(reference: str | None) -> bool:
@@ -410,6 +417,27 @@ class ReferenceCandidate:
     # was read is the start of it, not the whole, and is marked so rather
     # than guessed at.
     incomplete: bool = False
+    # Where the page names this reference as another document's -- "REFER TO DWG No. …", "Refer to …
+    # for comments", "see drawing …" -- it is a cross-reference: never the page's own identity (M2
+    # review 05, pilot P-07 / P-08).
+    cross_reference: bool = False
+    # Where the page's own label precedes it on its line ("Ref No : …", "Reference: …").
+    labelled: bool = False
+    # Where the text right before it on its line is a lone letter or the tail of another hyphenated
+    # run ("R 1029-…", "…-CO-EL V-EL-MTG-…"): a scanner's text layer split the number, and where it
+    # starts is not known (pilot P-10). Read, and marked so rather than guessed at.
+    uncertain_start: bool = False
+    # Named as what the page is about, not as the page: a letter's or a comment sheet's "Subject: … Ref. X",
+    # a clause's citation "(Ref: X)" (A23 comment sheet, Voltas quotation; M2 review 05).
+    about: bool = False
+    # A form's own control number printed in its footer ("R1029-CSCEC-FM-MAR-001_R01" over "Version Date"):
+    # the template's identity, on every page made from it (MTG-1020 page 6; M2 review 05).
+    template: bool = False
+
+    @property
+    def identity_candidate(self) -> bool:
+        """Whether this may be the page's own number at all."""
+        return not (self.cross_reference or self.about or self.template)
 
     @property
     def category(self) -> str:
@@ -426,25 +454,96 @@ def reference_candidates(text: str) -> list[ReferenceCandidate]:
     out = []
     for match in REF.finditer(text):
         raw = match.group()
+        start = match.start()
+        # OCR of a form glues the field's label to its value ("Reference25H-S202-…",
+        # "No.R1029-…"): the label is not part of the number (pilot P-01).
+        glued = _GLUED_LABEL.match(raw)
+        if glued:
+            raw = raw[glued.end():]
+            start += glued.end()
         reference = raw.replace("-\n", "-").rstrip("-.")
+        # OCR reads the zero of a revision suffix as the letter O ("-RO", "-R0O"):
+        # the suffix is a revision, not part of the number (pilot P-03).
+        reference = _OCR_REVISION_SUFFIX.sub(lambda m: "-R" + m.group(1).upper().replace("O", "0"), reference)
         if is_date_shaped(reference):
             continue
         base = reference.split("/", 1)[0]
         kind = "sheets" if "/" in reference else "serial" if re.search(r"-\d{2,}[A-Z]?$", base, re.I) else "other"
-        out.append(ReferenceCandidate(reference, match.group(1).upper(), match.start(), match.end(), kind,
-                                      incomplete=raw.rstrip(".").endswith("-")))
+        before = text[text.rfind("\n", 0, start) + 1:start]
+        out.append(ReferenceCandidate(reference, match.group(1).upper(), start, match.end(), kind,
+                                      incomplete=raw.rstrip(".").endswith("-"),
+                                      cross_reference=bool(_CROSS_REFERENCE.search(before)),
+                                      labelled=bool(_OWN_LABEL.search(before) or glued),
+                                      uncertain_start=bool(_SPLIT_START.search(before)),
+                                      about=bool(_SUBJECT_LINE.search(before) or _CITATION.search(before)),
+                                      template=bool(_TEMPLATE_AFTER.search(text[match.end():match.end() + 60]))))
     return out
 
 
+_CROSS_REFERENCE = re.compile(r"(?:\brefer(?:ence\s+to|\s+to)?|\bsee|\bas\s+per)\b\s*(?:the\s+)?"
+                              r"(?:(?:dwg|drawing|sheet|detail)s?\.?\s*(?:no\.?|number)?\s*[:.]?\s*)?$", re.I)
+_OWN_LABEL = re.compile(r"(?:\bref(?:erence)?\.?\s*(?:no\.?)?|\bour\s+ref\.?|\bsubmittal\s+no\.?|\bdoc(?:ument)?\.?\s*no\.?)"
+                        r"\s*[:|.]?\s*$", re.I)
+_SPLIT_START = re.compile(r"(?:^|[\s|:])[A-Za-z] $|-[A-Z0-9]+ $")
+_SUBJECT_LINE = re.compile(r"^\W{0,3}Subject\b", re.I)
+_CITATION = re.compile(r"\(\s*ref(?:erence)?\.?\s*(?:no\.?)?\s*[:#]?\s*$", re.I)
+_TEMPLATE_AFTER = re.compile(r"^_R\d+\b|^[^\n]{0,12}\n\s*Version\s+(?:Date|No)\b", re.I)
+
+# A revision that is not the document's: a form's own edition ("Form No.: F-013 / Rev.0", a footer
+# "LAC-SM-Feb. 2014 (Rev.02)") and a table's column header ("DRAWING No. / DOCUMENTS No. Rev" over the
+# reference drawings). EP-19977's Emaar form read R0 from its template; NCC FA-047 read R2 from its footer;
+# NCC FA-031's sheet read R1 from its reference table (M2 review 05).
+_FORM_EDITION = re.compile(r"\bForm\s*(?:No|Ref)\b|\bAppendix\s+[A-Z]\d*\b|\bPage\s*\d+\s*of\s*\d+|\bVersion\s+Date\b|\bIssue\s+Date\b", re.I)
+_TABLE_HEADER = re.compile(r"\b(?:DRAWING\s*No|DOCUMENTS?\s*No|DESCRIPTION|TITLE|SHEET)\b", re.I)
+
+
+def page_revision(text: str):
+    """The page's own revision field as a REV match (group 1 the number), or None: the first REV that is
+    not a form's edition, a table's column header or a date under the label."""
+    for found in REV.finditer(text):
+        line_start = text.rfind("\n", 0, found.start()) + 1
+        previous_start = text.rfind("\n", 0, max(line_start - 1, 0)) + 1
+        line_end = text.find("\n", found.start())
+        line = text[line_start:len(text) if line_end < 0 else line_end]
+        if text[max(0, found.start() - 1):found.start()] == "(" or _FORM_EDITION.search(text[previous_start:len(text) if line_end < 0 else line_end]):
+            continue
+        rest = line.replace(line[found.start() - line_start:], "")
+        if _TABLE_HEADER.search(line) and not re.search(r"\d", rest):
+            continue
+        return found
+    return None
+
+
+_GLUED_LABEL = re.compile(r"^(?:Reference|Ref\.?|No\.?)(?=[A-Z0-9]*\d)", re.I)
+_OCR_REVISION_SUFFIX = re.compile(r"-R([O0]{1,2}\d{0,2}|\d{0,2}[O0]{1,2})$", re.I)
+# A drawing-number field's value is a number, never the next field's label:
+# an empty "Drawing No:" in front of "Reference No: …" read "Reference" as
+# the number (pilot P-02).
+_FIELD_LABEL = re.compile(r"^(?:Reference|Ref|Rev|Revision|Date|Title|Sheet|Scale|No|Number|Drawn|Checked|Approved)\b\.?\s*(?:No\.?)?\s*:?$", re.I)
+
+
+def drawing_number(text: str):
+    """The first drawing-number field whose value holds a digit and is not a
+    field label, as a match (group 1 is the number); None for none."""
+    for match in DRAW_REF.finditer(text):
+        value = match.group(1).strip()
+        if re.search(r"\d", value) and not _FIELD_LABEL.match(value):
+            return match
+    return None
+
+
 def first_reference(text: str) -> ReferenceCandidate | None:
-    """The first reference on the page that is not a date; None for none."""
-    found = reference_candidates(text)
+    """The first reference on the page that is not a date and not a cross-reference to another
+    document ("REFER TO DWG No. …"); None for none."""
+    found = [c for c in reference_candidates(text) if c.identity_candidate]
     return found[0] if found else None
 # The trailing guard rejects a numbered list item. A CAD title block keeps
 # labels and values in separate text runs, so the line after the "REV" label
 # is whatever the export put next -- on every EP-30784 shop drawing that is
 # the general notes, whose "1.)" was read as revision 1.
-REV = re.compile(r"\b(?:MAS\s+|MAR\s+|SDW\s+|DWG\s+|SD\s+|SAR\s+)?REV(?:ISION)?\.?\s*[:.-]?\s*\n?\s*R?\s*(\d{1,3})\b(?!\s*\.?\))", re.I)
+# The number is not the start of a date: "Rev.\n10.09.2024" is a date under the label, not revision 10
+# (JAM-SD-FA-002, M2 review 05, pilot P-07).
+REV = re.compile(r"\b(?:MAS\s+|MAR\s+|SDW\s+|DWG\s+|SD\s+|SAR\s+)?REV(?:ISION)?\.?\s*[:.-]?\s*\n?\s*R?\s*(\d{1,3})\b(?!\s*\.?\))(?![./-]\d)", re.I)
 
 # Shop drawings are filed one folder per submission (.../1.FAVE/R1/05. Ground
 # Floor/...). The sheet's own title block carries the *drawing's* revision,
@@ -604,7 +703,7 @@ def submission_cover(text: str) -> Cover | None:
         return None
     category = _COVER_CATEGORY[heading.group(1)[:4].upper()]
     candidates = reference_candidates(text)
-    serials = [c for c in candidates if c.kind == "serial" and c.category == category]
+    serials = [c for c in candidates if c.kind == "serial" and c.category == category and c.identity_candidate]
     if not serials:
         return None
     # The submission's own number: written by its label where the form
@@ -613,7 +712,7 @@ def submission_cover(text: str) -> Cover | None:
                      if re.search(r"(?:\bNo\.?|Reference|Ref\.?)\s*:?\s*$", text[max(0, c.start - 24):c.start], re.I)), None)
     cover = labelled or serials[0]
     listed = tuple(dict.fromkeys(" ".join(c.reference.split()) for c in candidates if c.kind == "sheets"))
-    revision_match = REV.search(text)
+    revision_match = page_revision(text)
     revision = f"R{int(revision_match.group(1))}" if revision_match else None
     description = None
     first_sheet = next((c for c in candidates if c.kind == "sheets"), None)
@@ -1030,14 +1129,56 @@ def floor_name(title: str, *, whole: bool = True) -> str | None:
         # A title block exports its runs separately, so a floor can come
         # back with the gaps still in it ("LIFT MACHINE ROOM  FLOOR PLAN").
         if found: return " ".join(found.group().split())
-    # Last resort: the whole line, where it is a floor and nothing else
-    # ("GROUND FLOOR PLAN"). Never for a file name -- a hundred characters
-    # of drawing number and description is not a floor, and printed as one
-    # it filled the column.
-    return " ".join(title.split()) if whole and "FLOOR" in title.upper() else None
+    # Last resort: the word the title prints in front of FLOOR, as printed ("FIRST FLOOR", "HC FLOOR",
+    # "MEZZANINE FLOOR"). Not the whole line: "FIRST FLOOR FIRE ALARM LAYOUT" kept whole became the
+    # floor "FIRST FIRE ALARM" downstream (M2 review 05, pilot P-05); what a floor word means -- its
+    # level, its elevation, an alias -- is not read here. Never for a file name -- a hundred characters
+    # of drawing number and description is not a floor, and printed as one it filled the column.
+    if not whole or "FLOOR" not in title.upper():
+        return None
+    # A line that is a floor and nothing else stays whole ("LIFT MACHINE ROOM FLOOR PLAN").
+    if not _SYSTEM_WORDS.search(title):
+        return " ".join(title.split())
+    found = re.search(r"\b([A-Z][A-Z.]*|\d+[A-Z]*)\s+FLOOR\b", title, re.I)
+    return f"{found.group(1)} FLOOR".upper() if found and found.group(1).upper() not in _NOT_A_FLOOR_WORD else None
 
 
-def parse_page(text: str, path: str, modified: datetime, page: int) -> list[ControlledDocument]:
+# What a title names beside its floor: the system and the kind of sheet, never part of the floor.
+_SYSTEM_WORDS = re.compile(r"\b(?:FIRE|ALARM|LAYOUT|EMERGENCY|LIGHTING|LIGHT|SYSTEM|DETECTION|VOICE|EVACUATION|PAVA|PA/VA"
+                           r"|SCHEMATIC|DETAILS?|RISER|CABLES?|SPEAKERS?|BATTERY|CBS|ELS|FAS)\b", re.I)
+
+
+# Words a title puts before FLOOR that do not name one ("THE FLOOR", "RAISED FLOOR" is a floor type).
+_NOT_A_FLOOR_WORD = {"THE", "EACH", "EVERY", "PER", "ALL", "RAISED", "FALSE", "ACCESS", "ON", "OF", "AND", "TO", "FOR"}
+
+
+# A form's listing of what it carries: the numbers under it are the listed items, not the page's own.
+_LISTING_HEADER = re.compile(r"Attachment\s+Details|Shop\s*drawing\s+Reference|\bITEM\b[^\n]{0,6}Document\s+No", re.I)
+
+
+def _is_transmittal_form(text: str) -> bool:
+    """A document transmittal (the scanned acknowledgement of one): its heading and the form's own field
+    labels. The numbers it lists are the items it carries (pilot P-09); its own number is the TR number,
+    read by `transmittals`, never the first reference on it."""
+    from app.services import transmittals
+
+    return bool(transmittals._OCR_HEADING.search(text)) and sum(1 for cue in transmittals._OCR_FORM_CUES if cue.search(text)) >= 2
+
+
+# A covering sheet sent with a document -- a fax cover, a transmittal letter -- names the document it
+# carries ("kindly find attached … material submittal reference # A23-EFE-MAT-E-0033"); it is not that
+# document (EFECO fax, EP-13777; M2 review 05).
+_COVERING_SHEET = re.compile(r"\bFACSIMILE\s+TRANSMITTAL\b|\bFAX\s+(?:COVER|TRANSMITTAL)\b", re.I)
+
+
+def _listed(text: str, candidate: ReferenceCandidate) -> bool:
+    header = _LISTING_HEADER.search(text)
+    return bool(header) and candidate.start > header.start()
+
+
+def parse_page(text: str, path: str, modified: datetime, page: int, sheet=None) -> list[ControlledDocument]:
+    """`sheet`: the page's title block read by position (`title_block.read_page`), for a drawing sheet
+    with a text layer; its own number and REV cell stand for the page's (M2 review 05, P-06 / P-07)."""
     # A drawing schedule defines required rows, not an approved drawing itself.
     if re.search(r"DWG\s*NO", text, re.I) and "FIRE ALARM" in text.upper() and "EML SUBMISSION" in text.upper():
         schedule = []
@@ -1049,16 +1190,21 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
                 schedule.append(ControlledDocument(code, title, path, modified, re.sub(r"\s+", " ", ref.strip()), "R0", "UR", floor_name(title), page=page, source="drawing schedule", category="drawings"))
         return schedule
     candidate = first_reference(text)
-    drawing_match = DRAW_REF.search(text)
+    drawing_match = drawing_number(text)
     # A reply sheet quotes the reference it answers. Registering it would
     # displace the submission form carrying that reference, so it is only
     # ever read for the decision it may carry (source="reply"), and
     # _scan_document_control attaches that to the submission itself.
     if REPLY_SHEET.search(text) and not SUBMISSION_FORM.search(text):
+        # The reply's own header names the submission it answers ("Ref No : …-010029"); the comments
+        # quote others ("Refer to …-010034 for comments"), which are never its reference (pilot P-08).
+        # A reply whose only numbers are quoted ones names nothing of its own.
+        replies = [c for c in reference_candidates(text) if c.identity_candidate]
+        candidate = next((c for c in replies if c.labelled), replies[0] if replies else None)
         if candidate is None: return []
         decision, evidence = read_decision(text)
         reference = re.sub(r"-R\d+$", "", candidate.reference, flags=re.I)
-        revision_match = REV.search(text) or re.search(r"\bR\.?\s*(\d{1,3})\b", text)
+        revision_match = page_revision(text) or re.search(r"\bR\.?\s*(\d{1,3})\b", text)
         return [ControlledDocument(
             None, "Reply to consultant comments", path, modified, reference,
             f"R{int(revision_match.group(1))}" if revision_match else "R0",
@@ -1093,22 +1239,55 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
         revision_source = "cover" if cover.revision else "folder" if category == "drawings" and folder_revision(path) else "default"
         return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page,
                                    category=category, listed=listed, raw_system=raw_system, revision_source=revision_source)]
+    if _is_transmittal_form(text) or _COVERING_SHEET.search(text):
+        return []
+    own = sheet.number if sheet is not None and sheet.number and not SUBMISSION_FORM.search(text) else None
+    drawing_value = drawing_match.group(1).strip() if drawing_match else None
+    if own:
+        # The title block's own number cell (title_block): the page's identity, whatever the text lists
+        # first. In the controlled numbering it is read as a reference; otherwise as a drawing number.
+        controlled = [c for c in reference_candidates(own) if c.start == 0 and c.reference.upper() == own.upper().rstrip("-.")]
+        candidate = controlled[0] if controlled else None
+        drawing_value = None if controlled else own
+    elif candidate is not None and _listed(text, candidate):
+        # The first number sits in the form's listing of what it carries (an attachment, a listed
+        # drawing): the page's own number was not read -- a scanned cover whose reference line OCR lost.
+        own_before = [c for c in reference_candidates(text) if c.identity_candidate and not _listed(text, c)]
+        candidate = own_before[0] if own_before else None
+        if candidate is None:
+            return []
     match = candidate
     if match:
         reference = candidate.reference
         category = candidate.category
         # A catalogue quoting a submittal number is not a submission form.
-        required = r"material[s]?\s+submittal|MAS\s+Reference" if category == "submittals" else r"sample\s+approval|SAR\s+Reference" if category == "samples" else r"drawing\s*(?:title|no|number|submittal)|shop\s*drawing"
+        required = r"material[s]?\s+submittal|MAS\s+Reference" if category == "submittals" else r"sample\s+(?:approval|tag)|SAR\s+Reference" if category == "samples" else r"drawing\s*(?:title|no|number|submittal)|shop\s*drawing"
         # A method statement transmittal names its material submittal's
         # number; it is not one (EP-29495 files both under -MS- and -MAR-).
         if category == "submittals" and re.search(r"method\s+statement|risk\s+assessment", text, re.I): return []
         if not re.search(required, text, re.I) and not re.search(r"consultant.*(?:reply|comment|status)|review\s*status", text, re.I): return []
-    elif drawing_match and re.search(r"FIRE\s*ALARM|EMERGENCY\s*LIGHT|VOICE\s*EVACUATION", text, re.I):
-        reference, category = drawing_match.group(1).strip(), "drawings"
-        if not TITLE.search(text): return []
+    elif drawing_value and re.search(r"FIRE\s*ALARM|EMERGENCY\s*LIGHT|VOICE\s*EVACUATION", text, re.I):
+        reference, category = drawing_value, "drawings"
+        if not TITLE.search(text) and not own: return []
     else:
         return []
-    revision_match = REV.search(text)
+    flags: list[str] = []
+    # A drawing sheet whose title block was read by position: its REV cell is the printed revision, and
+    # the text's REV runs -- the revision history's, the reference table's, a date under the label -- are
+    # not read at all (P-06). A sheet whose REV cell and latest revision-history row disagree prints no
+    # one revision: both are kept (the observation), the record is flagged, and its revision comes from
+    # what else there is (P-06: BBY006 L58 R01 prints REV. NO. 00 over a history whose latest row is 01).
+    geometry = sheet is not None and category == "drawings" and not SUBMISSION_FORM.search(text) \
+        and bool(sheet.number or sheet.revision)
+    revision_match = None if geometry else page_revision(text)
+    if geometry and sheet.revision:
+        if sheet.conflict:
+            flags.append("revision_conflict")
+        elif re.fullmatch(r"\d{1,3}", sheet.revision):
+            revision_match = re.match(r"(\d+)", sheet.revision)
+        else:
+            # Printed as letters ("AB", "C1"): kept as printed; the register's R-number is not made of it.
+            flags.append("printed_revision_unmapped")
     suffix = re.search(r"-R(\d+)$", reference.split("/", 1)[0], re.I)
     # The drawing's own revision first; the folder only where it prints
     # none. A resubmission is filed with the comments it answers -- a
@@ -1131,9 +1310,13 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
     if category == "drawings" and not SUBMISSION_FORM.search(text):
         # A drawing sheet: read the title block by position (see title_block).
         block_title, layout = title_block(text, reference)
+        if geometry and sheet.title:
+            # The sheet's own Drawing Title cell, read by position: it names the system and the floor the
+            # sheet is of, where the run after the number in the export order is whatever came next (R5-01).
+            block_title, layout = sheet.title, None
         # The revision the block prints, kept as printed beside the one
         # above: on a sheet filed under R1 that still says 00, both are facts.
-        printed = printed_revision(text, reference)
+        printed = sheet.revision if geometry else printed_revision(text, reference)
     else:
         block_title = None
     title_match = re.search(r"(?:Material\s+Submittal\s+for|Sample\s+Approval\s+Request\s+for)\s+([^\n]+)", text, re.I) if category != "drawings" else TITLE.search(text)
@@ -1167,9 +1350,12 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
     # Floor Plan" -- so without this it reached the log as a drawing of no
     # floor at all, and those basements looked undrawn.
     floor = floor_name(title) or floor_name(Path(path).stem, whole=False)
-    flags = ("reference_incomplete",) if candidate is not None and candidate.incomplete else ()
+    if candidate is not None and candidate.incomplete:
+        flags.append("reference_incomplete")
+    if candidate is not None and candidate.uncertain_start and not own:
+        flags.append("reference_uncertain")
     return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page, category=category,
-                               printed_revision=printed, revision_source=revision_source, flags=flags)]
+                               printed_revision=printed, revision_source=revision_source, flags=tuple(flags))]
 
 
 def normalize_floor(value: str) -> str:
@@ -1510,8 +1696,10 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
             visited.append(number)
             try:
                 text = page_text(page, index, page_texts)
+                sheet = _sheet_of(page, text, number, observations)
                 with timed("deterministic_extract"):
-                    found = parse_page(text, filename, modified, number)
+                    # Passed only where a title block was read: `parse_page` is a seam tests replace.
+                    found = parse_page(text, filename, modified, number, **({"sheet": sheet} if sheet is not None else {}))
                 # The approval block lists every option and fills the box
                 # beside the one chosen. As text that is a list of choices
                 # and settles nothing -- rightly, since a list is not an
@@ -1565,6 +1753,19 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                             renders.clear()
                             with timed("deterministic_extract"):
                                 ocr_found = parse_page(ocr_text, filename, modified, number)
+                            if not found and not ocr_found and scan and _LISTING_HEADER.search(ocr_text) \
+                                    and not _is_transmittal_form(ocr_text):
+                                # A scanned cover whose own reference line the full-page OCR lost, while it
+                                # read the attachments listed under it (NCC LACASA covers): the header band
+                                # read once more, on its own, at the same scale -- bounded, cached by content.
+                                band = _ocr_band_text(page, sha256, index)
+                                counted("ocr_band_retries")
+                                band_found = parse_page(band + "\n" + ocr_text, filename, modified, number)
+                                observations.append({"page": number, "kind": "ocr_retry", "region": "header band",
+                                                     "used": bool(band_found)})
+                                if band_found:
+                                    ocr_found, ocr_text = band_found, band + "\n" + ocr_text
+                            with timed("deterministic_extract"):
                                 decision, evidence = read_decision(ocr_text)
                                 if not found and not ocr_found and scan and index < 2:
                                     # A scanned copy of a document transmittal
@@ -1579,6 +1780,18 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                                             ocr_found = sent
                                         elif sent:
                                             observations.append({"page": number, "kind": "transmittal", "records": [observed_record(r) for r in sent]})
+                                    elif _is_transmittal_form(ocr_text):
+                                        # A transmittal whose TR number OCR did not read as one ("18/0127/26";
+                                        # re-reads gave "7R", "1R", "TR" -- no read settles it): what was read
+                                        # is kept as read, and no number is made of it (pilot P-09).
+                                        observations.append({"page": number, "kind": "transmittal", "records": [],
+                                                             "reference": None, "flags": ["reference_unread"],
+                                                             "raw_reference": transmittals.raw_reference(ocr_text)})
+                            if sheet is not None and sheet.number:
+                                # The title block gave the sheet's own number: OCR of its images adds a stamp or
+                                # a decision, never another identity -- a callout's "DWG No. …-FA-00104" on the
+                                # ICT sheet SA-H2-BEST-ICT-00100a is not the sheet (M2 review 05).
+                                ocr_found = [r for r in ocr_found if re.sub(r"\s+", "", r.reference).upper() == re.sub(r"\s+", "", sheet.number).upper()]
                             if not found: found = ocr_found
                             if ocr_found or decision != "UR":
                                 counted("ocr_pages_used")   # the OCR text changed what was read
@@ -1687,6 +1900,56 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                 "profile": extraction_profile(promote)}
     reading = Reading(tuple(records), tuple(dict.fromkeys(warnings)), coverage, observations)
     return reading if full else (reading.records, reading.notes)
+
+
+def _controlled_number(value: str) -> bool:
+    found = reference_candidates(value)
+    return bool(found) and found[0].start == 0 and found[0].reference.upper() == value.upper().rstrip("-.")
+
+
+def _sheet_of(page, text: str, number: int, observations: list):
+    """The page's title block read by position, for a drawing-sized page with a text layer; its facts kept
+    as an observation of the page. A failure here leaves the page to the text reader, noted."""
+    from app.services import title_block
+
+    if len(text.strip()) < 80 or not title_block.is_drawing_sheet(page):
+        return None
+    try:
+        with timed("title_block"):
+            sheet = title_block.read_page(page, controlled=_controlled_number)
+    except Exception as exc:  # noqa: BLE001 -- geometry failed: the text reader stands, as before
+        observations.append({"page": number, "kind": "title_block", "version": title_block.TITLE_BLOCK_VERSION,
+                             "error": f"{type(exc).__name__}: {exc}"[:200]})
+        return None
+    if sheet is not None:
+        observations.append({"page": number, **sheet.observation()})
+    return sheet
+
+
+OCR_BAND_VARIANT = "band-1"
+
+
+def _ocr_band_text(page, sha256: str | None, index: int) -> str:
+    """The header band of a scanned page (8-32 % of its height, full width), OCRed on its own at the
+    reader's render scale; cached by content like the page (variant `OCR_BAND_VARIANT`)."""
+    from PIL import Image
+
+    from app.services import page_cache
+
+    cached = page_cache.get_ocr(sha256, index, OCR_BAND_VARIANT) if sha256 else None
+    if cached is not None:
+        counted("ocr_cache_hits")
+        return cached
+    rect = page.rect
+    scale = _render_scale(page)
+    clip = pymupdf.Rect(0, rect.height * 0.08, rect.width, rect.height * 0.32)
+    with timed("ocr_render"):
+        pixels = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip)
+        image = Image.open(io.BytesIO(pixels.tobytes("png")))
+    text = _ocr_images(page, [image])[0]
+    if sha256:
+        page_cache.put_ocr(sha256, index, text, OCR_BAND_VARIANT)
+    return text
 
 
 def _sheet_numbers(reference: str) -> set[str]:

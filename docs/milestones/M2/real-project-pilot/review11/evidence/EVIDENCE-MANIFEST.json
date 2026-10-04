@@ -1,0 +1,342 @@
+{
+ "package": "M2 Review 11 correction",
+ "date": "2026-09-29",
+ "candidate": {
+  "commit": "a9773642c099b0924099bd8a86a72d4507137429",
+  "repository": "C:/t/iso/ep-platform",
+  "frozen_tree": "C:/t/iso/frozen-r11",
+  "base": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+  "commits_since_base": [
+   "a9773642c099b0924099bd8a86a72d4507137429 review11-candidate: durable association context and persistent attempt order (R11-01A history pruning, R11-01B attempt-number collision)"
+  ],
+  "changed_files_sha256_at_a977364": {
+   "backend/app/ai/evidence_reader.py": "d9002bc155631d8aadfa2d88d2bf4d49b5da2b8b646ffb1ce74d748cf3cc84bd",
+   "backend/tests/fixtures/evidence_reader_r10.py": "4404abfa4d1c8d54f0b1b6a6bfa498b9a0fbb5b3529d8bc3441498be805e8e27",
+   "backend/tests/test_m2_review11.py": "9190999a493e3d46c5f50cd0a4967e5bfd50a6afdf4a1d57582e03281f1c3931"
+  }
+ },
+ "owner_candidate_c_freeze": {
+  "files": 11,
+  "failures": []
+ },
+ "copied_from": {
+  "tests/test_m2_review11.py": "C:\\t\\iso\\frozen-r11\\backend\\tests\\test_m2_review11.py",
+  "tests/fixtures/evidence_reader_r10.py": "C:\\t\\iso\\frozen-r11\\backend\\tests\\fixtures\\evidence_reader_r10.py",
+  "prior/before_fix_on_a34d3f8.txt": "C:\\t\\iso\\work\\r11\\prior\\before_fix_on_a34d3f8.txt",
+  "prior/review11_module_on_a34d3f8.txt": "C:\\t\\iso\\work\\r11\\prior\\review11_module_on_a34d3f8.txt",
+  "prior/r11__review11_module_on_a34d3f8.xml": "C:\\t\\iso\\work\\r11\\prior\\r11__review11_module_on_a34d3f8.xml",
+  "rescore/rescore_r11.py": "C:\\t\\iso\\work\\r11\\rescore_r11.py",
+  "rescore/make_rescore10.py": "C:\\t\\iso\\work\\r11\\make_rescore10.py",
+  "rescore/SUMMARY.json": "C:\\t\\iso\\work\\r11\\eval9-reader6\\SUMMARY.json",
+  "rescore/ASSOCIATIONS.json": "C:\\t\\iso\\work\\r11\\eval9-reader6\\ASSOCIATIONS.json",
+  "rescore/rescore_run.log": "C:\\t\\iso\\work\\r11\\rescore_run.log",
+  "freeze/FREEZE-R11.json": "C:\\t\\iso\\work\\r11\\freeze\\FREEZE-R11.json",
+  "freeze/candidate-r11.diff": "C:\\t\\iso\\work\\r11\\freeze\\candidate-r11.diff",
+  "freeze/freeze_r11.py": "C:\\t\\iso\\work\\r11\\freeze_r11.py",
+  "freeze/make_freeze_r11.py": "C:\\t\\iso\\work\\r11\\make_freeze_r11.py",
+  "patches/er_patch_r11.py": "C:\\t\\iso\\work\\r11\\er_patch_r11.py",
+  "package_r11.py": "C:\\t\\iso\\work\\r11\\package_r11.py",
+  "verify/make_verify_r11.py": "C:\\t\\iso\\work\\r11\\make_verify_r11.py",
+  "focused/modcounts.py": "C:\\t\\iso\\work\\r11\\modcounts.py",
+  "probes/after/retention-probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\after\\retention-probe-results.json",
+  "probes/after/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\after\\summary.txt",
+  "probes/assoc_after/association-probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\assoc_after\\association-probe-results.json",
+  "probes/assoc_after/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\assoc_after\\summary.txt",
+  "probes/assoc_before/association-probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\assoc_before\\association-probe-results.json",
+  "probes/assoc_before/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\assoc_before\\summary.txt",
+  "probes/association_probe_after.py": "C:\\t\\iso\\work\\r11\\probes\\association_probe_after.py",
+  "probes/association_probe_before.py": "C:\\t\\iso\\work\\r11\\probes\\association_probe_before.py",
+  "probes/before/retention-probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\before\\retention-probe-results.json",
+  "probes/before/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\before\\summary.txt",
+  "probes/old_after/probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\old_after\\probe-results.json",
+  "probes/old_after/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\old_after\\summary.txt",
+  "probes/old_before/probe-results.json": "C:\\t\\iso\\work\\r11\\probes\\old_before\\probe-results.json",
+  "probes/old_before/summary.txt": "C:\\t\\iso\\work\\r11\\probes\\old_before\\summary.txt",
+  "probes/probes_old_after.py": "C:\\t\\iso\\work\\r11\\probes\\probes_old_after.py",
+  "probes/probes_old_before.py": "C:\\t\\iso\\work\\r11\\probes\\probes_old_before.py",
+  "probes/retention_probe_after.py": "C:\\t\\iso\\work\\r11\\probes\\retention_probe_after.py",
+  "probes/retention_probe_before.py": "C:\\t\\iso\\work\\r11\\probes\\retention_probe_before.py",
+  "suite/full_frozen_hermetic.log": "C:\\t\\iso\\work\\r11\\suite\\full_frozen_hermetic.log",
+  "suite/r11__suite_full_frozen_hermetic.xml": "C:\\t\\iso\\work\\r11\\suite\\r11__suite_full_frozen_hermetic.xml",
+  "focused/r11__compat_persistence_boq_extraction_ai.xml": "C:\\t\\iso\\work\\r11\\focused\\r11__compat_persistence_boq_extraction_ai.xml",
+  "focused/r11__review11_module.xml": "C:\\t\\iso\\work\\r11\\focused\\r11__review11_module.xml",
+  "focused/r11__reviewer_nine_module_set.xml": "C:\\t\\iso\\work\\r11\\focused\\r11__reviewer_nine_module_set.xml",
+  "investigation/compare_failures.py": "C:\\t\\iso\\work\\r11\\investigation\\compare_failures.py",
+  "investigation/failure-comparison.json": "C:\\t\\iso\\work\\r11\\investigation\\failure-comparison.json",
+  "investigation/frozen-r10-run1.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r10-run1.xml",
+  "investigation/frozen-r10-run2.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r10-run2.xml",
+  "investigation/frozen-r10-run3.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r10-run3.xml",
+  "investigation/frozen-r10-test_sync_worker-module.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r10-test_sync_worker-module.xml",
+  "investigation/frozen-r11-run1.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r11-run1.xml",
+  "investigation/frozen-r11-run2.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r11-run2.xml",
+  "investigation/frozen-r11-run3.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r11-run3.xml",
+  "investigation/frozen-r11-test_sync_worker-module.xml": "C:\\t\\iso\\work\\r11\\investigation\\frozen-r11-test_sync_worker-module.xml",
+  "investigation/isolated_runs.txt": "C:\\t\\iso\\work\\r11\\investigation\\isolated_runs.txt",
+  "investigation/module_delta.py": "C:\\t\\iso\\work\\r11\\investigation\\module_delta.py",
+  "investigation/module_delta.txt": "C:\\t\\iso\\work\\r11\\investigation\\module_delta.txt",
+  "investigation/prior_full_suite_times.txt": "C:\\t\\iso\\work\\r11\\investigation\\prior_full_suite_times.txt",
+  "investigation/prior_times.py": "C:\\t\\iso\\work\\r11\\investigation\\prior_times.py",
+  "investigation/timing.py": "C:\\t\\iso\\work\\r11\\investigation\\timing.py",
+  "investigation/timing.txt": "C:\\t\\iso\\work\\r11\\investigation\\timing.txt"
+ },
+ "files": {
+  "focused/modcounts.py": {
+   "sha256": "11b553ec4b4134354a246985912ee8c11f5712dec507d63992f59e5087dd7458",
+   "bytes": 511
+  },
+  "focused/r11__compat_persistence_boq_extraction_ai.xml": {
+   "sha256": "1a2a20b163452919862fd039eb24f059962e998a43aa5725f24691be2274f674",
+   "bytes": 19808
+  },
+  "focused/r11__review11_module.xml": {
+   "sha256": "abed4fa99867f4b3dd83e35d402d54ee0d42f3110f6ae39375452d64e800cdf7",
+   "bytes": 1513
+  },
+  "focused/r11__reviewer_nine_module_set.xml": {
+   "sha256": "d9b69c11b296c46378023573ab4248818781079ac6e28d8bbce2c327b96f9de4",
+   "bytes": 21910
+  },
+  "freeze/candidate-r11.diff": {
+   "sha256": "bfb29ca9aab88f332a241a2b065fb3d40b6ce0c63c1adbcbb18085269bc5e7f4",
+   "bytes": 131953
+  },
+  "freeze/FREEZE-R11.json": {
+   "sha256": "f3c8da3c804fac0e79b4ced31e81e982427241ed0ed39b2a360920290a1a315b",
+   "bytes": 2462
+  },
+  "freeze/freeze_r11.py": {
+   "sha256": "144dc346f26a3aeb5f4dc89eb0a252c4d56269c4e93a7790fc147f46aacb3509",
+   "bytes": 3299
+  },
+  "freeze/make_freeze_r11.py": {
+   "sha256": "7d1189dcbc135a65a9c5472acbe8704ad474473836a5c20ec71aef8dc5a3a1dc",
+   "bytes": 2552
+  },
+  "investigation/compare_failures.py": {
+   "sha256": "e3db10e93c6bbef5c76d68a23f9510bbe69ccf20d4f4fbb27e085e1422a9edcc",
+   "bytes": 1497
+  },
+  "investigation/failure-comparison.json": {
+   "sha256": "fe90915086ab73c69f392e7a6c6ca43f07c772b812d6efc9b33a34044e8b6010",
+   "bytes": 1580
+  },
+  "investigation/frozen-r10-run1.xml": {
+   "sha256": "c1cac51159828766b7a81168b020f2b46d4cad36286da82c60ca723eefb359f5",
+   "bytes": 342
+  },
+  "investigation/frozen-r10-run2.xml": {
+   "sha256": "ca380391026f424a1357555e83bfda2c2ddb9f8decabf6826a9b3c2889a94edf",
+   "bytes": 342
+  },
+  "investigation/frozen-r10-run3.xml": {
+   "sha256": "cc72c0a09949d5f7134300cf16dce07f44700daece541c19c7b036098b11119e",
+   "bytes": 342
+  },
+  "investigation/frozen-r10-test_sync_worker-module.xml": {
+   "sha256": "8965220d87bc11f83f199b658c5edd8fcbf01cf406be87e2afd279e8bb3d00c1",
+   "bytes": 2452
+  },
+  "investigation/frozen-r11-run1.xml": {
+   "sha256": "a3a3ee17eda10717b87f0689d9fafd1607a122ad47681003f91ed875b714b4f9",
+   "bytes": 342
+  },
+  "investigation/frozen-r11-run2.xml": {
+   "sha256": "e9b6fc26250d296e66d51053db3c12d0bbe468a5e924e707e161128d7dea7e2b",
+   "bytes": 342
+  },
+  "investigation/frozen-r11-run3.xml": {
+   "sha256": "891c86074af10fe7934c0b81460001ae99f0e866c01575e7b6160841d3f159dd",
+   "bytes": 342
+  },
+  "investigation/frozen-r11-test_sync_worker-module.xml": {
+   "sha256": "14dae6e862a0fc6e5d918de6f979c7df727007371100b8b5352e2217e0f92281",
+   "bytes": 2452
+  },
+  "investigation/isolated_runs.txt": {
+   "sha256": "7a36644cfdc9e4d88b03b964cf9d235e851925bf089495d13699807d7be4baef",
+   "bytes": 568
+  },
+  "investigation/module_delta.py": {
+   "sha256": "a5f896b6daab88ccf5532d610af65c3ed7e740957eb8ce3775cacbe7a0e27c5d",
+   "bytes": 679
+  },
+  "investigation/module_delta.txt": {
+   "sha256": "a5a3d00589f8ffba3666055db6e843762c3793ee8fd50c1ba7902d0ecf60edb9",
+   "bytes": 65
+  },
+  "investigation/prior_full_suite_times.txt": {
+   "sha256": "a26ba632735ef69baa81bb5da37ef501d875e6b8c95f272a4f3ac73ab259a9d3",
+   "bytes": 257
+  },
+  "investigation/prior_times.py": {
+   "sha256": "86f7010c2e958c99866330c3c0f0032439cb6243b99a530b753fad4452205229",
+   "bytes": 938
+  },
+  "investigation/timing.py": {
+   "sha256": "731edb9781e9a08ad3d0d5008b2bdb435cfec209e7e8c0547f52476813b67372",
+   "bytes": 926
+  },
+  "investigation/timing.txt": {
+   "sha256": "ee90b935ec9cccc3a0e6723511d57ada545c44304de014246c0050cebc366138",
+   "bytes": 420
+  },
+  "package_r11.py": {
+   "sha256": "d30452f405372fcfda80a5d607089ce876330555ab3036c4f16f3089c443095a",
+   "bytes": 4143
+  },
+  "patches/er_patch_r11.py": {
+   "sha256": "03d3b900f4235fcace0f7248c123ebc32198a298de27047e8e767dc3202d4022",
+   "bytes": 20580
+  },
+  "prior/before_fix_on_a34d3f8.txt": {
+   "sha256": "5b8fc195ed3b6f876eee6bcc003e5fcd8eccda15561793e7d346cf83d1d458b0",
+   "bytes": 1202
+  },
+  "prior/r11__review11_module_on_a34d3f8.xml": {
+   "sha256": "567012b8ad5b5819fb7ebc747217a9ec583b354fdfa0fe9daa9c74052087226e",
+   "bytes": 5458
+  },
+  "prior/review11_module_on_a34d3f8.txt": {
+   "sha256": "fae0a75a7b90b9cc277ef1067014d7163c6111e228fb6f480055ec7473fd565c",
+   "bytes": 1202
+  },
+  "probes/after/retention-probe-results.json": {
+   "sha256": "84af88332953a715133da611a33d81c5bad6e779973499f082708e5345ffb949",
+   "bytes": 12434
+  },
+  "probes/after/summary.txt": {
+   "sha256": "94a454a90a7b144de6211909dba8afa5c6dae2aadc2c93bc1bd640e674b5e337",
+   "bytes": 2025
+  },
+  "probes/assoc_after/association-probe-results.json": {
+   "sha256": "fd7f721031f923e3e4fdffc879c5790afe21f6c25fcaefaafac1ece8ff5c64b9",
+   "bytes": 37944
+  },
+  "probes/assoc_after/summary.txt": {
+   "sha256": "b8522608f3c22d437f74cfa30d9faf30cc298781a8565d264c7cba61704e311f",
+   "bytes": 4348
+  },
+  "probes/assoc_before/association-probe-results.json": {
+   "sha256": "00b5716ff8d5127c666a43beee6ead9f87bd66760f0573bc4169e223d6030189",
+   "bytes": 35781
+  },
+  "probes/assoc_before/summary.txt": {
+   "sha256": "b8522608f3c22d437f74cfa30d9faf30cc298781a8565d264c7cba61704e311f",
+   "bytes": 4348
+  },
+  "probes/association_probe_after.py": {
+   "sha256": "6498f732aa880a77059407a2ac9fb23e615877fca7b93b1d19951d4ece17687c",
+   "bytes": 4052
+  },
+  "probes/association_probe_before.py": {
+   "sha256": "4fd8c2ad35544bb68c50514d4263e887ad604250c9f3d873a63dedd7e44dee60",
+   "bytes": 4053
+  },
+  "probes/before/retention-probe-results.json": {
+   "sha256": "2413a1eb8d9bbd90adf731f1fbbc5cb1941d5e07daf50b06bfb5bb22f18f9e8a",
+   "bytes": 11202
+  },
+  "probes/before/summary.txt": {
+   "sha256": "bc809c65a01223d9bd4aa263a7ef8f44522ff1d692c65143c248b463d1b1e678",
+   "bytes": 2015
+  },
+  "probes/old_after/probe-results.json": {
+   "sha256": "eabc13e6bcc0dc9d6e7effa242c9d521a787692632091fbd1f93e742a4fb9506",
+   "bytes": 58979
+  },
+  "probes/old_after/summary.txt": {
+   "sha256": "924eea3245746392b7f0a8d9f8eb12ddeda3bf1c9905f8e1373e1f9a5ffa6743",
+   "bytes": 3691
+  },
+  "probes/old_before/probe-results.json": {
+   "sha256": "31cc3db18480a43f56d0e2af8e0d3fc9e036ee08211bf0bb79a22d556d3cf119",
+   "bytes": 55723
+  },
+  "probes/old_before/summary.txt": {
+   "sha256": "d9b76033ef36dc199a41661f4434cc3bf9dff879610ebccb041e680fec51d38c",
+   "bytes": 3691
+  },
+  "probes/probes_old_after.py": {
+   "sha256": "5d572f828a2dcb3fc10bc1cf371c875b52b688ac482426673f62ddf084ce877b",
+   "bytes": 5739
+  },
+  "probes/probes_old_before.py": {
+   "sha256": "553c7f66e825a2675eac2a3183f2ac3d797d24799a06bc130d9a215d1bad19d1",
+   "bytes": 5740
+  },
+  "probes/retention_probe_after.py": {
+   "sha256": "ab57ddcb943a2ee8a6de74b598db6b192ee3623c49c1de32c000160004ce4f48",
+   "bytes": 3916
+  },
+  "probes/retention_probe_before.py": {
+   "sha256": "e9075e246f361ed180f30086d4f7a27c344c4588b803b4d58781f932f289b1a2",
+   "bytes": 3917
+  },
+  "rescore/ASSOCIATIONS.json": {
+   "sha256": "2c1e6a844662df6ddf05cb87a33699be6d72911835cab781c57c33d4200d1db3",
+   "bytes": 556
+  },
+  "rescore/make_rescore10.py": {
+   "sha256": "0224a1a81c6f6e08f2aa20f046c308a83621b132c5b43009a4143b61ec800f78",
+   "bytes": 2121
+  },
+  "rescore/rescore_r11.py": {
+   "sha256": "97f5a1a7c31b78ceb96100e43629762c5ffb2bda21c1962b79cc62614c5cb5dc",
+   "bytes": 8122
+  },
+  "rescore/rescore_run.log": {
+   "sha256": "1cb7159493703b91622e9df94e93c185d737261b2cfcea01b3ed6d493acd6211",
+   "bytes": 4953
+  },
+  "rescore/SUMMARY.json": {
+   "sha256": "021ed662507147fd4f889a53de4e4ab7bc9502212afcb807efcb8bc045640f9a",
+   "bytes": 13751
+  },
+  "suite/full_frozen_hermetic.log": {
+   "sha256": "3a0cb87b7d1f8b3a5e93ec908c372808ae60e279c5edefd810b05b2cadaa4754",
+   "bytes": 26479
+  },
+  "suite/r11__suite_full_frozen_hermetic.xml": {
+   "sha256": "a976f03d0385ec036554faf354be6e5218bc96461b67b9ea11ffeafafdad577f",
+   "bytes": 243400
+  },
+  "tests/fixtures/evidence_reader_r10.py": {
+   "sha256": "4404abfa4d1c8d54f0b1b6a6bfa498b9a0fbb5b3529d8bc3441498be805e8e27",
+   "bytes": 90743
+  },
+  "tests/test_m2_review11.py": {
+   "sha256": "9190999a493e3d46c5f50cd0a4967e5bfd50a6afdf4a1d57582e03281f1c3931",
+   "bytes": 11764
+  },
+  "verify/make_verify_r11.py": {
+   "sha256": "e22f5da3f4ed900d1d1f2ed8790c3a87273f8d9be823620a8e027b83643ca418",
+   "bytes": 1144
+  }
+ },
+ "package_files": {
+  "CONTRACT.md": {
+   "sha256": "a8568b1dc1c2d39d7a9e2c8f8a30742ccc0440bf18c01472d5eb69bb9d2fba80",
+   "bytes": 7385
+  },
+  "DISPOSITIONS.md": {
+   "sha256": "e2f47563cfc12579b8390209a79b9b47e4511526055595764e63b28167342974",
+   "bytes": 6654
+  },
+  "PROVENANCE-AND-FREEZE.md": {
+   "sha256": "73cbc9f921318766c535adee12b85ddd66aa05888e103d3b5809a7d7a57bf091",
+   "bytes": 3998
+  },
+  "REGRESSION.md": {
+   "sha256": "51a75275cfa344559f4f5b884696b0df18e6361f5a2236f13c68089870e8bef6",
+   "bytes": 10220
+  },
+  "REVIEW-11-REPORT.md": {
+   "sha256": "a985776937ec7c4a98a23a33918377ba9cc148266bd358841a7f34dcc0122456",
+   "bytes": 5788
+  },
+  "SEQUENCES.md": {
+   "sha256": "a57b8eed5e0f0d8d8bd232c99e6d16e5443b06c4b9a0385cf946e68feb113152",
+   "bytes": 2910
+  }
+ }
+}

@@ -1,0 +1,1353 @@
+{
+ "application_ai_limits": {
+  "bound": {
+   "AI_CACHE_TTL_DAYS": "90",
+   "AI_MAX_CALLS_PER_DOCUMENT": "12",
+   "AI_MAX_CALLS_PER_PROJECT_PER_DAY": "60",
+   "AI_MAX_CONCURRENCY": "2",
+   "AI_MAX_COST_PER_JOB": "0.5",
+   "AI_MAX_ELAPSED_S_PER_JOB": "120.0",
+   "AI_MAX_ESCALATIONS_PER_DOCUMENT": "2",
+   "AI_MAX_INPUT_TOKENS_PER_TASK": "6000",
+   "AI_MAX_OUTPUT_TOKENS_PER_TASK": "800",
+   "AI_MAX_RETRIES": "3",
+   "AI_PRICE_CACHED_INPUT_PER_MILLION": "0.0",
+   "AI_PRICE_INPUT_PER_MILLION": "0.0",
+   "AI_PRICE_OUTPUT_PER_MILLION": "0.0",
+   "AI_READ_EFFORT": "high",
+   "AI_READ_MAX_CALLS_PER_DOCUMENT": "60",
+   "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": "600",
+   "AI_READ_MAX_ELAPSED_S": "1800.0"
+  },
+  "silent_stops": [
+   "the evidence reader opens one JobBudget per document: at most 12 calls (the reader's own MAX_CALLS_PER_DOCUMENT 8 binds first), 120 s elapsed per document job, at most 2 escalations, 6,000 estimated input / 800 output tokens per task; a limit that trips stops that document's reading silently (recorded as a budget stop in the attempt, not a harness stop)",
+   "the application's own 60 calls per project per rolling 24 h counts AiUsage rows in the lane's sandbox; C and R sandboxes are copies of B's database, so B's calls count toward C's and R's limit",
+   "B's submittal-form reader uses the ai_read_* limits (60 calls per document, 600 per project per day, 1,800 s)"
+  ],
+  "statement": "bound in provider_env at the candidate and baseline tree defaults (equal in both config.py files; no .env file exists in either tree; sandbox_env strips every AI_* variable of the operator's environment); every other AI setting stays at its tree default"
+ },
+ "authorities": {
+  "applied": [
+   "A-03",
+   "A-06",
+   "A-08"
+  ],
+  "register": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md",
+   "sha256": "01df9af0eacc38db93cbe262077bb2952806ac80ca50dc68f242711d04e02a96"
+  },
+  "summary": {
+   "A-01": "Review 32 verdict: cohort preparation only",
+   "A-02": "owner cohort access, staging, rendering, drafting and preparation for EP-3563, 22349, 27331, 15744, 26687, 29255 (no dispatch)",
+   "A-03": "Claude-only workflow; Opus 5.5 High implementation agents, one write-capable agent at a time",
+   "A-04": "AI-ACCURACY-POLICY section 8 amendment R32-01 (AI-reviewed reference set)",
+   "A-05": "concentration rule replacement (stratum leg removed; project, contractor, layout legs)",
+   "A-06": "project and provider ELIGIBILITY for the six cohort projects only: frozen staged sandbox copies, verified hashes, no OneDrive modification, no production or live-service writes, no sealed project, no use outside this final frozen declaration; NOT dispatch, ledger scope, budget, B/C/R/P execution, production use, M2 acceptance or M3",
+   "A-07": "Review 33 rulings adopted without overrides (reviewed-2 is the reference set; 57/38/38)",
+   "A-08": "the authorized sequence stops at ORCH-07 before any ledger scope, request, budget, run, default, M2 acceptance or M3"
+  }
+ },
+ "authorization": {
+  "file_fields": {
+   "authorized_by": "owner",
+   "declaration_sha256": "the sha256 of the runnable (digest-filled) declaration file",
+   "nonce": "a fresh one-run nonce, 16-128 characters [A-Za-z0-9_-], one per invocation",
+   "owner_token_sha256": "the same digest the runnable declaration binds"
+  },
+  "invocation": {
+   "harness_copy": "C:/t/iso/work/r2x/r36/harness-r32 is the copy BINDING-MANIFEST-R36 binds as harness_r36; PILOT/review36/scripts/harness-r32 is byte-identical (harness_r36_package)",
+   "resume": "the same with 'resume' (a new authorization with a fresh nonce first)",
+   "run": "python runner_r32.py run --mode live --declaration <absolute path of the runnable declaration in PILOT/declaration-r32/> --declaration-sha <its sha256> --run-set C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json --binding C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/BINDING-MANIFEST-R36.json --binding-sha 5a1a6aad63df91bbf6de1eb9d80fff44e4e05a2f70642bfa58f216ebf06fe568",
+   "working_directory": "C:/t/iso/work/r2x/r36/harness-r32"
+  },
+  "nonce_rule_verbatim": {
+   "lines": "49-53",
+   "sha256": "0658e2a82b7daf9fe0d9229b6c8926f2aaf04df0c9f9e2533cf484704004b9e7",
+   "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/LIVE-RUN-CONTRACT.md",
+   "text": [
+    "**One run, one nonce.**",
+    "- The runner checks everything without writing (`action=\"preview\"`), creates or re-opens the run folder, then **consumes** the nonce (`action=\"consume\"`): an `O_EXCL` record `<run folder>/authorization/consumed-<first 32 hex of sha256(nonce)>.json` with the nonce digest, the authorization file's own sha256, the declaration hash, the stamp and the invocation number. The authorization's hash is also written into `RUN-STATE.json`.",
+    "- A nonce that already has a record is refused (reuse).",
+    "- Every lane process, and every request through `GuardedProvider`, requires (`action=\"verify\"`) the record of **its own invocation** with the **same** authorization hash: an edited, replaced, reused or withdrawn authorization stops the next request.",
+    "- A **resume is a new invocation** and needs the owner's new authorization (a fresh nonce) for the same declaration. A refused live invocation leaves no run folder, so a later authorized `run` is not blocked."
+   ]
+  },
+  "one_invocation_per_authorization": "run and every resume each consume one authorization with a fresh nonce into <run folder>/authorization/consumed-<sha256(nonce)[:32]>.json (O_EXCL)",
+  "owner_token_sha256": "TO-BE-NAMED-BY-OWNER-BUDGET-AUTHORIZATION",
+  "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32/OWNER-DISPATCH-AUTHORIZATION.json",
+  "placeholder_rule": "owner_token_sha256 holds an explicit placeholder, not a digest: preflight_r32.validate_declaration and dispatch_guard_r32 refuse it ('the declaration binds no owner token digest'). No token exists and none was generated. The owner names the 64-hex sha256 of a token the owner chooses in the budget authorization; the runnable declaration is this file with that one value replaced and nothing else changed (build_declaration_r37.fill_owner_digest); its own sha256 is the hash the runner, the lanes, the guard and the authorization file use",
+  "runbook": [
+   "R35-07 / R35-10: the owner creates the ledger scope NEW and EMPTY with exactly ledger.limits and a closed breaker, immediately before the first invocation (the ledger measures elapsed_s from the scope's creation); the harness never creates a scope",
+   "R35-07: before each invocation the scope's dispatch entries are reconciled with the allowance charges (allowance.sqlite) and any difference stops the run until explained",
+   "R35-06: the owner withdraws or replaces OWNER-DISPATCH-AUTHORIZATION.json at the end of every invocation",
+   "R35-06 / R35-08: live lanes are started only by runner_r32 (never lane_r32 directly, never a hand-made lane configuration)",
+   "R35-19: absolute paths for --declaration, --binding and --run-set; no python -O; PYTHONDONTWRITEBYTECODE=1; GIT_OPTIONAL_LOCKS=0 (the HEAD check runs git status in the candidate and baseline trees)",
+   "R35-07: the run folder is never moved or deleted",
+   "after a crashed runner the operator removes WRITER.lock only once no runner process is alive",
+   "R35-09: a budget stop or provider-failure stop is not undone by a resume; resume is refused after a terminal comparison (RESULT, INVALID) and after a complete run"
+  ],
+  "status": "none; owner decision pending",
+  "token_holder": "owner",
+  "token_presentation": "the owner presents the token in the environment variable R34_OWNER_DISPATCH_TOKEN at each invocation; it is compared by digest and never written to any file"
+ },
+ "authorization_status": "none; owner decision pending",
+ "binding_manifest_sha256": "5a1a6aad63df91bbf6de1eb9d80fff44e4e05a2f70642bfa58f216ebf06fe568",
+ "budget_approved": false,
+ "caps": {
+  "B": 240,
+  "C": 240,
+  "P": 36,
+  "R": 40
+ },
+ "caps_detail": {
+  "enforcement": "allowance_r32 reserves before dispatch per lane (never refunded, never raised) and the ledger scope's 'requests' limit 556 is the cumulative backstop",
+  "equal_allowance_B_C": "B 240 = C 240 (8 per document x 30 documents): the request gate is defined at equal caps (R31-03)",
+  "per_document_cap_basis": "8 requests per document x 30 documents = 240; the run set holds 24 documents (192 at 8 per document)",
+  "total": 556
+ },
+ "cohort": {
+  "access_authority": {
+   "entry": "A-02",
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/AUTHORIZATION-2026-10-02.md",
+   "sha256": "fd20167ac9b1b37290ed76e1c688be1351842d6551900e2fe236acb2dbcd721d"
+  },
+  "eligibility_authority": "A-06 (project and provider eligibility; C-9)",
+  "onedrive": "originals never modified; the run reads only frozen staged sandbox copies",
+  "project_verification": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-VERIFICATION.json",
+   "sha256": "4cecf2fca13fe9d46eb1aa2f547b58fe5b584fea46446ca4597cda44dabdf1c4"
+  },
+  "projects": [
+   "EP-3563",
+   "EP-22349",
+   "EP-27331",
+   "EP-15744",
+   "EP-26687",
+   "EP-29255"
+  ],
+  "sealed": "none opened; excluded",
+  "selection": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FROZEN-SELECTION.json",
+   "seed": "m2-r30-pool-2026-10-02",
+   "sha256": "bf71779a612afb1207ac96cb7925979ae3682ea815d137b05eab8968212a5d21"
+  },
+  "staging": {
+   "evidence_index": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/EVIDENCE-INDEX.json",
+    "sha256": "0d0db4f8dbb0143cd4756986024dd43c531ffee2f17a1dd784e9d4bd32ba08b8"
+   },
+   "renders": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/RENDERS.json",
+    "sha256": "175a3a10ac871540dbbeb87f1ec7d2e68b369186d05a60bf5dd751b18e51e8be"
+   },
+   "root": "C:/t/r2x/r32-stage",
+   "source_manifest": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json",
+    "sha256": "951e8697a69c3576c24ecdaf0b28de563d35ae7e99addca1fc60e3992df0e259"
+   }
+  },
+  "verification": "10 of 10, no replacement"
+ },
+ "controls": {
+  "executable_definitions": {
+   "negative": "canonical, not yet drawn, decision resolved_for_scoring yes, every in-scope decision row a scorable ABSENT (blank_decision_area or no_decision_area): the adapter's decision_control == 'negative'",
+   "unsupported": "canonical, not yet drawn, at least one in-scope page with a field labelled 'unsupported' or 'illegible'"
+  },
+  "negative_controls_drawn": 4,
+  "negative_decision": {
+   "composition": "the 4 negative controls (F051, F042, F047, F066) plus the 4 revision top-ups (F060, F043, F057, F046), whose decision truth is a resolved absence",
+   "documents": 8,
+   "pool_ids": [
+    "F042",
+    "F043",
+    "F046",
+    "F047",
+    "F051",
+    "F057",
+    "F060",
+    "F066"
+   ]
+  },
+  "positive_decision": 16,
+  "unsupported_control_shortfall": {
+   "deviation": "plan v2 section 2.3 deviation: no canonical pool document has an in-scope page labelled unsupported or illegible in r32-labels-reviewed-2; NO substitute is drawn; unsupported-input behaviour is not validated by this run; any substitute is an owner decision, from the pool only, and a new declaration",
+   "found": 0,
+   "required": 2
+  }
+ },
+ "cost": {
+  "rule": "never treated as zero; no authoritative price is configured for the declared provider (claude-code on the owner's subscription; AI_PRICE_* 0.0)",
+  "status": "unknown"
+ },
+ "declared_at_utc": "2026-10-03T17:14:03+00:00",
+ "disclosures": [
+  "matched margin: the projected matched populations are identity 23, revision 16, decision 16 against the minimum of 12 (margins 11 / 4 / 4); a document that B or C does not attempt or cannot read, an allowance or day-limit refusal, or a silent application limit can take revision or decision below 12, and the field then fails the matched-population gate (R33-10, R34-09); Review 33's own approximation put P(matched < 12) at 1.7 / 20 / 55 % for 10 / 20 / 30 % per-document loss",
+  "the first processing of the real cohort PDFs by the application happens in live B; no dry run processed a cohort document with an application reader (R34-18)",
+  "every metric carries the statement 'reference set independently AI-reviewed (Claude agents), not human-signed' (AI-ACCURACY-POLICY-AMENDMENT-R32-01)",
+  "concentration rule v2: a net gain of 1 in a field is never ELIGIBLE; a net gain of 2 is ELIGIBLE only when the two documents differ in project (= contractor) and layout key; a gain confined to one project or one layout key (for decision: the EMAAR template, 6 of 16 decision documents) is never ELIGIBLE; losses elsewhere can make a spread gain concentrated; within-group churn (+3 -2) is flagged by neither leg; net 0 fields do not block; the contractor leg equals the project leg in this cohort and the cross-project issuing subcontractor is not measured (R35-15, R34-07)",
+  "budget stops and provider-failure stops are not undone by a resume; a project-day refusal is permanent for the run (R35-09)",
+  "the application's internal AI limits act as silent stops (application_ai_limits.silent_stops; R35-16)",
+  "one ledger scope serves all four lanes: lane token and elapsed thresholds are not enforced per lane (R35-10)",
+  "H2: any text containing 'rejected' maps to {revise and resubmit, rejected}; 13 'Code D - Rejected' wrong-value controls are accepted on the wired path (26 on the pair), unchanged by the H1 fix",
+  "H3: a code letter without its legend is unrecognised and becomes a critical (not reachable)",
+  "H4: the ABSENT branch forgives another page's identity on a compilation (F002 p3 only; F002 is not in the run set)",
+  "H5: a wrong value equal to another page's identity of the same document is missed, never a critical; scope 11 of 24 run-set documents",
+  "earlier evaluator-scored results (the four-arm run and before) are not comparable one to one with r32 harness scores (dashes, labelled revisions, the F043 'Rev. 0' rows, (g)(1) tails, (d1) rows, compilations, cross-page credit, the decision vocabulary)",
+  "'application reachable' in the evaluator analysis was read from the code, not from application output",
+  "consent-record qualification (A-02, R33-15): the owner's recorded answer is 'I authorize this' to a dialog option worded by the assistant (stated in the A-02 register entry, not in the consent record itself); 'and preparation' is the scope the label review rests on; A-03's owner message is not reproduced verbatim; the record's 'does NOT cover any provider or model request' carries no 'through the application or harness' qualifier although Claude agents read the staged images; this declaration records no owner confirmation of these points (R33-15's optional owner action)",
+  "the selection universe was 3,046 against 2,455 in the feasibility basis; the difference leaves the accepted feasibility basis unchanged (R33-25)",
+  "extension capacity was 34 of 36 (extension 1) and 22 of 36 (extension 2); no extension was drawn; an alternate for capacity would need a new owner decision (A-02 open point, R33-19)",
+  "the label review is a same-model-family AI review under amendment R32-01: drafting (Claude Opus 5.5) and review (separate Claude agents) are AI, not human sign-off, and of the same family as the evaluated extraction models; the 98-item image re-check (0 rows refuted) was a same-model sample re-read (R33-02, R33-26)",
+  "R33-12: the PACKAGE-CHECK files of the cohort packet and review31 are not bound by their manifests (disclosed, not re-bound)",
+  "R33-13: the 149 words.json files of the packet are unbound",
+  "R33-16: 930 of 959 databases were read in the earlier census",
+  "R33-17: the extension order uses the pool seed, not the declared extension seeds (no extension was drawn)",
+  "R33-18: the duplicate rule leaves 68 distinct documents in the pool",
+  "R33-20: parallel writers (the seven batch label reviewers; Review 33's D1-D4) relied on the orchestrator's reading of A-03",
+  "R33-21: A-03's list of documents naming Codex is incomplete (M2-REVIEW-RESPONSE.md lines 1070 and 1098)",
+  "R33-22: the r26.2 labels were opened after their freeze (earlier package; disclosed)",
+  "R33-14: the packet verifier ran the validator from the drafter's folder",
+  "R33-15: see the consent-record qualification above",
+  "the dry exercise of this declaration ran the bound code relocated to C:/t/r2x/r37-sandbox (a test twin, not bound) with reader 'none': it exercises the chain and the scorer and is not a result"
+ ],
+ "dispatch_order": [
+  "preflight (binding manifest and every bound file, the declaration contract, run set, candidate and baseline HEADs clean, truth and population gate, the declared ledger scope exists with exactly the declared limits and a closed breaker, the dispatch guard preview)",
+  "B: sandbox_ingest_r32 registers exactly the 24 run-set documents (no processing); lane B processes them with the tripwire after every document; B's final database sha256 recorded",
+  "C-from-B state check: C's and R's sandboxes are copies of B's final database; state_check.check_c_start must pass for each (B INVALID means C never starts)",
+  "C: the evidence stage on each run-set document with C's switches; tripwire after every document",
+  "R: served from C's capture by content key; requests C never made are dispatched once as reference-only",
+  "P: the probe over C's answered dispatches",
+  "offline scoring: score_lane_r32 per lane, then score_bcr_r32.evaluate with the candidate-level outcome"
+ ],
+ "elapsed_bounds": {
+  "B_hours": 72,
+  "C_hours": 72,
+  "R_and_P_hours_after_C": 24,
+  "enforced": "only the scope's elapsed_s 604,800 s (168 h), which the application's ledger measures from the scope's CREATION (scopes.created_at), not from its first use; per-lane elapsed bounds are declared, not enforced (R35-10); every resume and any delay between creating the scope and the first invocation count"
+ },
+ "emission_rules": {
+  "rules": {
+   "a": "a register decision is emitted only for the statuses approved, ANN and rejected",
+   "b": "the revision is printed_revision; failing that, the business revision is emitted only when its source is printed, cover or suffix (in the application's R<n> form); folder and default revisions are never emitted",
+   "c": "held, not asserted: an identity whose reference is flagged incomplete or uncertain; every fact of a pending-evidence record; decision candidates",
+   "d": "a fact without a page goes to page 1",
+   "e": "AI path (C and R only): only the current envelope for the row's sha256, profile, variant and policy is used; identities whose role is not own are dropped; non-validated observations are held; a dependent fact whose application association is held:* is held",
+   "f": "deterministic observations are emitted as observed; a transmittal's listed record numbers become observed identity facts on that page (never critical, but the row becomes recovered_mixed and y = 0)"
+  },
+  "source": "Verification 36 R36-07 (bound emission semantics of evaluator .10; application semantics, not .10 judging)"
+ },
+ "estimated_usage": {
+  "documents": 24,
+  "lanes": {
+   "B": {
+    "basis": "plan v2 expected 6 (four-arm A base: 4 read_submittal_form requests over 26 PDFs); conservative: one form read per decision-bearing document",
+    "cap": 240,
+    "conservative": 16,
+    "planning": 6
+   },
+   "C": {
+    "basis": "planning: 2 requests per page read (pages read = min(4, in-scope pages)), at most 8 per document; low: plan v2 rate 4.5 per document; conservative: 8 per document (MAX_CALLS_PER_DOCUMENT)",
+    "cap": 240,
+    "conservative": 192,
+    "low": 108,
+    "planning": 112
+   },
+   "P": {
+    "basis": "seeded 15 % of C's answered dispatches, re-sent once",
+    "cap": 36,
+    "conservative": 29,
+    "planning": 17
+   },
+   "R": {
+    "basis": "served C's capture by content key; reference-only requests only; plan v2 expected 10; conservative: the R cap",
+    "cap": 40,
+    "conservative": 40,
+    "planning": 10
+   },
+   "total": {
+    "cap": 556,
+    "conservative": 277,
+    "planning": 145
+   }
+  },
+  "model": "* C (and R's own requests) -- the evidence reader reads at most MAX_PAGES_PER_DOCUMENT = 4 pages and makes at most\n    MAX_CALLS_PER_DOCUMENT = 8 calls per document (candidate app/ai/evidence_reader.py). Planning: 2 requests per page\n    read (one discovery, one value read), capped at 8 per document. Low: plan v2's rate (135 per 30 documents = 4.5 per\n    document). Structural maximum: 8 per document.\n  * B -- the accepted path makes AI requests only where the baseline reads a submittal form (read_submittal_form).\n    Planning: plan v2's 6. Per-project day-limit check: at most one form read per decision-bearing document (16 in all).\n  * R -- served C's capture by content key; only requests C never made are dispatched (reference-only). Planning: plan\n    v2's 10, split by C's planning share; maximum the R cap 40.\n  * P -- a seeded 15 % of C's answered dispatches, re-sent once. Planning 15 % of C planning; maximum 15 % of C maximum\n    (cap 36).\n  * Tokens -- planning: requests x the per-request ledger average of the four-arm-final scopes (L1-L4 for the evidence\n    lanes, A for B); conservative: requests x the ledger's own calibrated p95 of its largest task (discover_page 45,544 /\n    10,870; read_submittal_form 25,057 / 3,881 for B).",
+  "per_project": {
+   "EP-15744": {
+    "B_conservative": 0,
+    "B_plus_C_max": 8,
+    "B_plus_C_planning": 8,
+    "C_low": 4.5,
+    "C_max": 8,
+    "C_planning": 8,
+    "P_max": 1.2,
+    "P_planning": 1.2,
+    "R_max": 8,
+    "R_planning": 0.7,
+    "all_lanes_conservative": 17.2,
+    "all_lanes_planning": 9.9,
+    "decision_bearing": 0,
+    "documents": 1,
+    "in_scope_pages": 4,
+    "pages_read_by_c": 4,
+    "pool_ids": [
+     "F043"
+    ]
+   },
+   "EP-22349": {
+    "B_conservative": 2,
+    "B_plus_C_max": 42,
+    "B_plus_C_planning": 24,
+    "C_low": 22.5,
+    "C_max": 40,
+    "C_planning": 22,
+    "P_max": 6.0,
+    "P_planning": 3.3,
+    "R_max": 40,
+    "R_planning": 2.0,
+    "all_lanes_conservative": 88.0,
+    "all_lanes_planning": 29.3,
+    "decision_bearing": 2,
+    "documents": 5,
+    "in_scope_pages": 11,
+    "pages_read_by_c": 11,
+    "pool_ids": [
+     "F038",
+     "F035",
+     "F051",
+     "F042",
+     "F047"
+    ]
+   },
+   "EP-26687": {
+    "B_conservative": 3,
+    "B_plus_C_max": 59,
+    "B_plus_C_planning": 21,
+    "C_low": 31.5,
+    "C_max": 56,
+    "C_planning": 18,
+    "P_max": 8.4,
+    "P_planning": 2.7,
+    "R_max": 40,
+    "R_planning": 1.6,
+    "all_lanes_conservative": 107.4,
+    "all_lanes_planning": 25.3,
+    "decision_bearing": 3,
+    "documents": 7,
+    "in_scope_pages": 9,
+    "pages_read_by_c": 9,
+    "pool_ids": [
+     "F072",
+     "F039",
+     "F040",
+     "F060",
+     "F057",
+     "F046",
+     "F066"
+    ]
+   },
+   "EP-27331": {
+    "B_conservative": 6,
+    "B_plus_C_max": 54,
+    "B_plus_C_planning": 52,
+    "C_low": 27.0,
+    "C_max": 48,
+    "C_planning": 46,
+    "P_max": 7.2,
+    "P_planning": 6.9,
+    "R_max": 40,
+    "R_planning": 4.1,
+    "all_lanes_conservative": 101.2,
+    "all_lanes_planning": 63.0,
+    "decision_bearing": 6,
+    "documents": 6,
+    "in_scope_pages": 23,
+    "pages_read_by_c": 23,
+    "pool_ids": [
+     "F037",
+     "F009",
+     "F032",
+     "F021",
+     "F030",
+     "F020"
+    ]
+   },
+   "EP-29255": {
+    "B_conservative": 2,
+    "B_plus_C_max": 18,
+    "B_plus_C_planning": 8,
+    "C_low": 9.0,
+    "C_max": 16,
+    "C_planning": 6,
+    "P_max": 2.4,
+    "P_planning": 0.9,
+    "R_max": 16,
+    "R_planning": 0.5,
+    "all_lanes_conservative": 36.4,
+    "all_lanes_planning": 9.4,
+    "decision_bearing": 2,
+    "documents": 2,
+    "in_scope_pages": 3,
+    "pages_read_by_c": 3,
+    "pool_ids": [
+     "F006",
+     "F015"
+    ]
+   },
+   "EP-3563": {
+    "B_conservative": 3,
+    "B_plus_C_max": 27,
+    "B_plus_C_planning": 15,
+    "C_low": 13.5,
+    "C_max": 24,
+    "C_planning": 12,
+    "P_max": 3.6,
+    "P_planning": 1.8,
+    "R_max": 24,
+    "R_planning": 1.1,
+    "all_lanes_conservative": 54.6,
+    "all_lanes_planning": 17.9,
+    "decision_bearing": 3,
+    "documents": 3,
+    "in_scope_pages": 6,
+    "pages_read_by_c": 6,
+    "pool_ids": [
+     "F033",
+     "F016",
+     "F018"
+    ]
+   }
+  },
+  "per_request_basis": {
+   "B": {
+    "input_per_request": 11682.2,
+    "input_total": 46729,
+    "output_per_request": 1379.8,
+    "output_total": 5519,
+    "requests": 4,
+    "scopes": [
+     "m2-four-arm-final-2026-10-01-A"
+    ]
+   },
+   "evidence_lanes": {
+    "input_per_request": 11816.4,
+    "input_total": 2717782,
+    "output_per_request": 1789.7,
+    "output_total": 411638,
+    "requests": 230,
+    "scopes": [
+     "m2-four-arm-final-2026-10-01-L1",
+     "m2-four-arm-final-2026-10-01-L2",
+     "m2-four-arm-final-2026-10-01-L3",
+     "m2-four-arm-final-2026-10-01-L4"
+    ]
+   }
+  },
+  "plan_v2_expected_for_comparison": {
+   "B": "about 6",
+   "C": "about 135",
+   "P": "about 20",
+   "R": "about 10",
+   "note": "for up to 30 documents, from the four-arm sample (Review 33 asked for a re-estimate on the r32 run set: this section)"
+  },
+  "statement": "estimates, not limits and not measurements; the caps and the ledger limits are the bounds",
+  "tokens": {
+   "B": {
+    "conservative_input": 400912,
+    "conservative_output": 62096,
+    "planning_input": 70093,
+    "planning_output": 8279
+   },
+   "C": {
+    "conservative_input": 8744448,
+    "conservative_output": 2087040,
+    "planning_input": 1323437,
+    "planning_output": 200446
+   },
+   "P": {
+    "conservative_input": 1320776,
+    "conservative_output": 315230,
+    "planning_input": 200879,
+    "planning_output": 30425
+   },
+   "R": {
+    "conservative_input": 1821760,
+    "conservative_output": 434800,
+    "planning_input": 118164,
+    "planning_output": 17897
+   },
+   "total": {
+    "conservative_input": 12287896,
+    "conservative_output": 2899166,
+    "planning_input": 1712573,
+    "planning_output": 257047
+   }
+  }
+ },
+ "evaluator": {
+  "bound_functions": [
+   "record_groups",
+   "observation_groups",
+   "ai_groups (with ai_envelope and evidence_reader.evidence_for), through tripwire_r32.facts_from_row"
+  ],
+  "candidate_unchanged": "no candidate correction; a .10 judging verdict would first need a candidate correction (R1 to R6, R7 optional) with its own review",
+  "file": {
+   "path": "C:/t/iso/cand-r29/backend/scripts/m2_eval6.py",
+   "sha256": "268d86231260392dc5592a6937803b8fcd15a41e9590b442f3f0a70dc57b4b4f"
+  },
+  "judging": "every verdict, metric, tripwire, coverage figure, control and gate comes from lane_judge_r32 + literal_compare_r32; .10 judging is never bound; plan v2 section 4 step 7 is read this way",
+  "not_bound": [
+   "evaluate",
+   "associate_group",
+   "judge_group",
+   "score_layer",
+   "_same"
+  ],
+  "offline_test": {
+   "binding": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/BINDING-MANIFEST-R35.json",
+    "sha256": "1de0773a23a38b39ffad770cf23d9d61d7e7ca1187693bbc29dbaccbcbbd62cb"
+   },
+   "package_manifest": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/evidence/EVIDENCE-MANIFEST.json",
+    "sha256": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7"
+   },
+   "verified_by": "Verification 36 (with conditions, closed by review36 and Verification 37)"
+  },
+  "role": "EMISSION ONLY (Verification 36 section 6 item 1)",
+  "version": "m2-pilot-eval-2026-10-02.10"
+ },
+ "executed": false,
+ "forbidden_after_authorization": [
+  "selecting a default variant",
+  "M2 acceptance by this run",
+  "starting M3",
+  "production use or production database writes",
+  "any OneDrive change",
+  "opening a sealed project",
+  "any project outside the six",
+  "any use outside this declaration",
+  "raising, resetting or re-creating a cap, the allowance or the ledger limits",
+  "human sign-off claims for AI-reviewed labels"
+ ],
+ "gates": {
+  "candidate_outcome": "ELIGIBLE FOR A SEPARATE SELECTION DECISION only when all three fields are ELIGIBLE; otherwise the first of INVALID > NOT ELIGIBLE > INCOMPLETE among the field outcomes; a comparison state other than INVALID / INCOMPLETE (PREPARATION BLOCKED, NOT DISPATCHABLE) is the outcome",
+  "concentration": "rule v2 (concentration-r32-2026-10-03.2): NOT ELIGIBLE when more than half of a positive net gain comes from one project, contractor or layout key (any size); or failures >= 2 (once per document) with more than half in one group whose net gain is negative; or any C false acceptance on a negative decision control; decision type and stratum report-only",
+  "decision_coverage": "completed reads + verified absences of C >= those of B and >= those of R; wrong absences and located_incomplete never count; NOT_SCORABLE rows never count",
+  "default_selection": "never by this run (default_selected is always None)",
+  "outcomes": [
+   "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+   "NOT ELIGIBLE",
+   "INCOMPLETE",
+   "INVALID",
+   "PREPARATION BLOCKED"
+  ],
+  "per_field": {
+   "accepted_precision_min": 0.98,
+   "clean_recovery_min": 0.9,
+   "matched_min": 12
+  },
+  "request_gate": "at equal caps (B 240 = C 240): net correct facts x 8 >= extra requests (C's total including what it inherits from B, minus B's total), no new false acceptance, and the project-stratified bootstrap interval (2,000 resamples, seed m2-r30-bootstrap-2026-10-02) of the net gain per document excluding zero; no unequal-cap version exists",
+  "safety": "zero critical acceptance on resolved truth in C (a resolved-truth critical stops C: RESULT, NOT ELIGIBLE)"
+ },
+ "harness": {
+  "accepted_by": "Verification 37 (ORCH-06C VERIFIED); H1 closed",
+  "binding_manifest": {
+   "entries": 155,
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/BINDING-MANIFEST-R36.json",
+   "sha256": "5a1a6aad63df91bbf6de1eb9d80fff44e4e05a2f70642bfa58f216ebf06fe568",
+   "supersedes": "review34/BINDING-MANIFEST-R34.json 3d0f8bfe... for the harness code; every other review34 binding entry is carried unchanged"
+  },
+  "bound_code_used_as_is": "the bound code runs unchanged from C:/t/iso/work/r2x/r36/harness-r32 (its SANDBOX_BASE C:/t/r2x/r34-sandbox); a relocated copy would be a new binding (Verification 37 item 1)",
+  "changed_module": {
+   "literal_compare_r32.py": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/literal_compare_r32.py",
+    "replaces": "ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6",
+    "sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09"
+   },
+   "test_literal_compare_r32.py": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/test_literal_compare_r32.py",
+    "sha256": "66e0ddcf92ae4aaf350ca1143ad4f22f62ab777e12700c978652b276fdbb34c6"
+   }
+  },
+  "concentration_rule": {
+   "code": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/concentration_r32.py",
+    "sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe"
+   },
+   "document": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/CONCENTRATION-RULE-R32.md",
+    "sha256": "0affc814506ea1bd8bff5d0ce1ea0c398809fedf070de782243d787158d580c2"
+   },
+   "version": "concentration-r32-2026-10-03.2"
+  },
+  "contracts": {
+   "adapter_contract": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/ADAPTER-CONTRACT.md",
+    "sha256": "871c103d45b9f1b4a4d6f159a804c3bfda242b84e6c6c2e794f37aa97465148a"
+   },
+   "live_run_contract": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/LIVE-RUN-CONTRACT.md",
+    "sha256": "0658e2a82b7daf9fe0d9229b6c8926f2aaf04df0c9f9e2533cf484704004b9e7"
+   },
+   "run_set_rule": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-RULE.md",
+    "sha256": "9ee2ccecce2eb26722c51fa74b93dbcb94a1e70fd59ac46b92530dd3f832dad0"
+   },
+   "scorer_changes": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/SCORER-CHANGES.md",
+    "sha256": "c261b5eb6ca4561e638e6c3c218fefb30d115cb871ec19e19f2c50ca8bdb642d"
+   }
+  },
+  "h1_whatif": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/H1-WHATIF-RESULT.json",
+   "sha256": "19b14ab3b23eb0be818ddb6c131a88bff116abb13ce5b7eac932313f925343aa"
+  },
+  "lineage": {
+   "review31": {
+    "binding": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BINDING-MANIFEST.json",
+     "sha256": "2dfef08e94710cadff155cf460fb131184941cc511419ec16acf95ce08d55fba"
+    },
+    "manifest": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "d5fe164918741014ded7425cda7679bd310a97b07511dd85bb65ec642077c460"
+    }
+   },
+   "review33": {
+    "accepted_by": "Review 34 (with corrections RC-1 to RC-6, closed by review34)",
+    "manifest": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review33/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "c5001c95420ac76150f320f04b1edfc5785264d00662d97e8f92ec83c6c95919"
+    }
+   },
+   "review34": {
+    "accepted_by": "Review 35",
+    "binding": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/BINDING-MANIFEST-R34.json",
+     "sha256": "3d0f8bfe37d55a4c0490e054c0d710f4bb1d2ac839dffd08daaafca19063ea27"
+    },
+    "manifest": {
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "64d5ba0dda43fc86736eb56558a8eaa2e083231e28c4efd52eceb06abe5d7a86"
+    }
+   }
+  },
+  "modules": {
+   "allowance_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/allowance_r32.py",
+    "sha256": "803a65bbff254c567fcd7e578948c017e0cb6e19cd38d151de3da3e0e3fb1af5"
+   },
+   "capture_store": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/capture_store.py",
+    "sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3"
+   },
+   "concentration_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/concentration_r32.py",
+    "sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe"
+   },
+   "converter_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/converter_r32.py",
+    "sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704"
+   },
+   "dispatch_guard_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/dispatch_guard_r32.py",
+    "sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863"
+   },
+   "labels_adapter_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/labels_adapter_r32.py",
+    "sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab"
+   },
+   "lane_judge_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/lane_judge_r32.py",
+    "sha256": "a0b6b7c83262ddb2d1337d5ed17296a5aa6fa26cc6ebbee18afcb3cf48f0ca45"
+   },
+   "lane_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/lane_r32.py",
+    "sha256": "b46f5e0b41ce0e6f046054d1072696c62c1740ccc272fb3ef7890b74d4104ed2"
+   },
+   "preflight_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/preflight_r32.py",
+    "sha256": "011c462cf02a1d90f8bbcaa5c468aa994550031016f2055699a62b636c02f511"
+   },
+   "run_set_selector_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/run_set_selector_r32.py",
+    "sha256": "5c923ec85f90173b13836b04d81d6e96a6f498e4ce52a6a9a4f7e16851acba53"
+   },
+   "runner_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/runner_r32.py",
+    "sha256": "22c71319087d412bd72666add99660936c9999d2eb075ceee716d715cb9b5672"
+   },
+   "sandbox_child_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/sandbox_child_r32.py",
+    "sha256": "39bf11bc6a81a364f483c5668e22ebdb618f8605cb666fd9e16ae3a83d323d68"
+   },
+   "sandbox_ingest_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/sandbox_ingest_r32.py",
+    "sha256": "3e0e906df9aa1d387bc8a018142e122c1c9545f54f6d2aa311718c75e45e92a6"
+   },
+   "score_bcr_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/score_bcr_r32.py",
+    "sha256": "3436fe7df06ef15c0d5c0fdaabf728b6216b34909d00ef4be0a3b7eb9217fb63"
+   },
+   "score_lane_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/score_lane_r32.py",
+    "sha256": "c25f4d8994631b0fe5b52c1eb4d5bb0f7227f15a4b26c671e72e9c7e31c3c915"
+   },
+   "state_check": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/state_check.py",
+    "sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3"
+   },
+   "stop_rules": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/stop_rules.py",
+    "sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996"
+   },
+   "tripwire_r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/tripwire_r32.py",
+    "sha256": "42dc6226700852f84762bdd7759bb7592de72778fe92aaad7f7993db291f14d0"
+   }
+  },
+  "package": "PILOT/review36/",
+  "package_manifest": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/evidence/EVIDENCE-MANIFEST.json",
+   "sha256": "5e9508136663a1dac096bcc697345a527726705ad6c96e46c52839371c9de9d0"
+  }
+ },
+ "interpretations": {
+  "cross_page_rule_scope": {
+   "documents": [
+    "F006",
+    "F009",
+    "F016",
+    "F020",
+    "F021",
+    "F030",
+    "F032",
+    "F037",
+    "F038",
+    "F039",
+    "F040"
+   ],
+   "of_run_set": 24
+  },
+  "not_scorable": "F069 p2 and p4 (and every NOT_SCORABLE row) never enter y",
+  "one_failure_per_document_field": true,
+  "review33_c2": [
+   "(c)(ii) count-once for render-identical duplicates without an added field fact: ADOPTED by Review 33 as an amendment to convention section 1 for this cohort (F031 -> F001 with the caveat that F031 has pages 3 and 4, which add no field value; F059 -> F046); byte-identical F052 -> F038 and F070 -> F067 under frozen section 1; populations 57/38/38 (59/40/39 without it)",
+   "(d1) mixed options such as 'Approved as noted / Resubmit', 'Code B+Resubmit' and 'B+R' are class 'approved as noted' with the literal kept and resubmission_required = yes (9 rows); the scorer tolerates a prediction that reports the resubmission condition (the (d1) tolerance below)",
+   "(e) / D-001: a code letter's class follows the meaning of its printed legend, never the letter alone (wording that sends the document back for resubmission is 'revise and resubmit'; a plain refusal is 'rejected'); F025 Code C 'Not Approved (Re-submit...)' is revise and resubmit",
+   "(g)(1): a tail on the page's own reference that carries its own 'Rev.' label is a labelled revision with association resolved; the identity is the number without the tail, and the scorer accepts either form; an unlabelled own-number suffix ((g)(2)) is present with association uncertain and is not counted (conventions section 4)",
+   "(g2) / D-002: on a reply-to-comments or comments-resolution sheet the reference is the page identity (association resolved) when it equals the own number of a submittal in the same staged file (F028 p4, F031 p3); its revision is the page revision only when labelled and equal to that submittal's current revision; D-002: a consultant's own comment sheet (F006 p2) is outside (g2)",
+   "(h) / D-003: a compilation file is one pool document with page-level truth keyed by (pool id, page); a file carries a field when at least one in-scope page has it present and resolved; D-003: a labelled value in the running header of a page's own document belongs to that page's document (F043 p2-p4 'Rev. 0'; F043 revision yes/yes)",
+   "(d2): an authority's approval stamp or letter without document-specific comments is class 'approved'; marks that are not review decisions (an authority's authentication of its own licence, company seals and similar) assert no decision",
+   "(f): EMAAR drawing-register status letters are recorded present with actor inferred and association uncertain; they never count toward carries_fact and never carry the document decision",
+   "D-005: the page-specific reading of sections 2 and 4 on F019-p1 (revision ambiguous, candidates 00 / 01, excluded from scoring) is an interpretation, not a general topic (i) rule"
+  ],
+  "review35_item10": [
+   "the unlabelled '- R0n' suffix base form is accepted (8 rows)",
+   "the (d1) tolerance, including the application's 'rejected' (7 scorable rows)",
+   "the application's 'rejected' means revise-and-resubmit (disclosure H2: the harness applies this to any text containing 'rejected')",
+   "the cross-page identity rule keeps evaluator .10 parity (a wrong value equal to another page's identity of the same document is missed, never a critical) and is disclosed; its scope is every non-compilation document, 11 of the 24 run-set documents (F006, F009, F016, F020, F021, F030, F032, F037, F038, F039, F040); the owner decides on that scope between this parity and page keying (R34-06 / R36-09); .10 additionally credits the other page (R6)",
+   "F069 p2 and p4 are NOT_SCORABLE (R34-11); F069 is not in the run set",
+   "candidate-level gates: the candidate outcome is the comparison outcome; per-field outcomes are diagnostics (RC-2)",
+   "B is attempted when its registered row exists",
+   "the layout key comes from ADAPTER-CONTRACT section 5 (the reviewed labels' own kind / page_role text; file and folder names are never used)",
+   "failures count once per (document, field) (RC-6)",
+   "UNDETERMINED (net gain 0 or below) adds no reason and does not block by itself; the field's other gates still apply",
+   "the comparison state (INCOMPLETE, INVALID) applies to every field before the field gates (R35-14)"
+  ],
+  "undetermined_non_blocking": "UNDETERMINED at net gain 0 or below does not block by itself",
+  "verification36_section6": [
+   "whitespace-insensitive comparison (i2); for revisions it holds after the H1 correction, except whitespace inside the prefix word (R37-04; revision_comparison_rule)",
+   "dash-glyph folding for non-Arabic literals (a harness choice with no convention source; .10 differs, R1)",
+   "identity is case-insensitive",
+   "Arabic literals are compared byte for byte after whitespace removal; Arabic-Indic digits are not mapped",
+   "a revision is compared by value with an optional R / REV / REV. / REVISION prefix (.10 differs, R2 / R2b)",
+   "the (g)(1) either form is accepted",
+   "the unlabelled '- R0n' suffix base form is accepted (8 rows)",
+   "a decision is compared by class",
+   "the application's 'rejected' means revise-and-resubmit (H2: any text containing 'rejected')",
+   "the (d1) tolerance including the application's 'rejected' (7 scorable rows; .10 has no such tolerance, R4)",
+   "negative words (UR, n/a, ...) assert no decision",
+   "the cross-page identity rule with its actual scope (11 run-set documents; see review35_item10)",
+   "compilations are keyed by (pool id, page) in the value branch (F035 and F043 in the run set); the H4 gap in the ABSENT branch is disclosed (F002 p3 only, not in the run set)",
+   "NOT_SCORABLE rows (32 rows, including F069 p2 and p4) are excluded; an acceptance contradicting every literal is reported as critical_on_unresolved_truth and is never a stop",
+   "one failure per (document, field)"
+  ]
+ },
+ "lane_switches": {
+  "B": {
+   "AI_EVIDENCE_VARIANT": "off"
+  },
+  "C": {
+   "AI_EVIDENCE_ADJUDICATE": "1",
+   "AI_EVIDENCE_ASSOC": "1",
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_DECISION_REGION": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_IDGUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  },
+  "P": {},
+  "R": {
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  }
+ },
+ "lanes": {
+  "B": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "meaning": "the accepted baseline: the application's accepted processing path, evidence reader off",
+   "runs": "first, on a sandbox where sandbox_ingest_r32 registered exactly the run set without processing; tripwire after every document; B's database sha256 recorded at the end",
+   "switch_basis": "DRAFT-DECLARATION.v2 arm B has switches {} meaning 'accepted path, evidence reader off'; the preflight requires B to state AI_EVIDENCE_VARIANT, so it is stated explicitly as 'off' (the tree default)",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "C": {
+   "commit": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+   "meaning": "the combined candidate: L3 switch set plus IG (AI_EVIDENCE_IDGUARD), CA (AI_EVIDENCE_ADJUDICATE), DR (AI_EVIDENCE_DECISION_REGION) and PA (AI_EVIDENCE_ASSOC)",
+   "runs": "after the C-from-B state check, one run-set document at a time, tripwire after every document",
+   "starts_from": "a copy of B's final database; state_check.check_c_start must pass (recorded B file hash, equal logical content, no C-policy or unattributed evidence, no evidence-task cache row)",
+   "tree": "C:/t/iso/cand-r29"
+  },
+  "P": {
+   "meaning": "the variation probe: a seeded 15 % of C's answered dispatches (seed m2-r30-variation-2026-10-02) re-sent once in lane P",
+   "role": "reported only; never served to B or C; never a score",
+   "switches": {},
+   "tree": "C:/t/iso/cand-r29"
+  },
+  "R": {
+   "commit": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+   "meaning": "the reference (L3 switch set): served C's capture by content key whatever its outcome; a request C never made is sent once as reference-only in lane R",
+   "role": "offline contrast only; never a gate input except decision coverage C >= R; never a live stop (a resolved-truth critical in R is a reference finding)",
+   "starts_from": "a copy of B's final database (state check as for C)",
+   "tree": "C:/t/iso/cand-r29"
+  }
+ },
+ "ledger": {
+  "limits": {
+   "elapsed_s": 604800,
+   "input_tokens": 16300000,
+   "output_tokens": 3260000,
+   "per_request_input": 90000,
+   "per_request_output": 20000,
+   "requests": 556
+  },
+  "path": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scope": "m2-fresh-validation-r32-2026-10-03",
+  "wrap_provider": true
+ },
+ "ledger_detail": {
+  "creation": "created only by the owner's budget authorization naming the declaration hash; new and empty, exactly these limits, closed breaker; this task created no scope (AI ledger 483 entries / 17 scopes / 0 amendments before and after)",
+  "limits_keys": "every key is a field of the application's ledger Limits (requests, input_tokens, output_tokens, per_request_input, per_request_output, elapsed_s); requests 556 = the caps",
+  "live_check": "after the run the ledger may have grown only inside the declared scope (no new scope, no limit amendment, every other scope unchanged) and by at most 556 dispatch entries",
+  "one_scope_for_all_lanes": "one scope serves B, C, R and P; the owner may instead order per-lane scopes, which is a new declaration (R35-10)",
+  "r35_10_consequence": "only the request caps are per lane (the allowance); the lane token and elapsed thresholds of plan v2 section 7 are not enforced per lane, so equality of tokens and elapsed time between B and C is not enforced; the scope's totals are the sum of the lane thresholds"
+ },
+ "name": "M2 fresh validation R32: accepted baseline B vs Review 29 combined candidate C, with reference R and variation probe P",
+ "plan_sources": {
+  "binding_manifest_review31": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BINDING-MANIFEST.json",
+   "sha256": "2dfef08e94710cadff155cf460fb131184941cc511419ec16acf95ce08d55fba"
+  },
+  "budget_card_v2": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/BUDGET-DECISION-CARD.v2.md",
+   "sha256": "b36fb571c65045d48428a2376ddb03f4c91fabfd3aaa40cb251636c4dfc8728e"
+  },
+  "draft_declaration_v2": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/DRAFT-DECLARATION.v2.json",
+   "sha256": "19720ad96cd2b7f34d871c58627ad47436b3aba32a74ddcf7b50e25972818b5d"
+  },
+  "draft_status": "DRAFT-DECLARATION.v2 is superseded by this declaration; its arm switches are restated here, its stale bindings (Review 33 section 5.2) are replaced",
+  "four_arm_final_declaration": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/four-arm-final/declaration/FINAL-DECLARATION.v2.json",
+   "sha256": "6c0189b3dc30e721c318a5df44fac3507c5804430c85d3bdf6f23615002a70c1"
+  },
+  "four_arm_final_usage": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/four-arm-final/USAGE-AND-BUDGET.json",
+   "sha256": "90b4702cda017bdecff39f6e989f90796f60a8628f4b35bde57a4eb88989d1d8"
+  },
+  "plan_v2": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/REVISED-FRESH-VALIDATION-PLAN.v2.md",
+   "sha256": "83c120c939c28351a7a1a70e54e9b9ab2487724aa19cdb979f16f043f2c56bfb"
+  },
+  "stop_and_safety_rules": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/STOP-AND-SAFETY-RULES.md",
+   "sha256": "e2ee3504c1711b5b9497b7292c9161af58ae6c2fdef5f3f7b4ef24a1cd30b0ca"
+  }
+ },
+ "policy": {
+  "amendment_r32_01": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY-AMENDMENT-R32-01.md",
+   "sha256": "815d43fdb1e2177c5bc8e9bd680f6756acbdf3707ac8f19ca4fe9dc264205de6"
+  },
+  "policy": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY.md",
+   "sha256": "7efa891b55fd6a4113f08cff8d0acdca7832d611524bb7f884ec4e5bc30a4f47"
+  },
+  "statement": "the original policy is unchanged; amendment R32-01 (A-04) is bound by its own hash and applies only to the frozen R32 cohort and its declared extensions"
+ },
+ "primary_outcomes": {
+  "predeclared": [
+   "association: false or cross-page association counts per lane, C vs B and C vs R (score_bcr_r32.primary_outcomes 'association'; judged by the harness, .10 emission only)",
+   "revision lost or gained under PA, C vs R on identical captured responses (revision_under_PA_C_vs_R)",
+   "decision outcomes under DR: completed reads, verified absences, wrong absences, accepted decisions (correct / wrong), held conflicts, C vs B and C vs R",
+   "critical acceptances on resolved and on unresolved truth, for each lane and field",
+   "new requests and tokens (actual and estimated) per lane"
+  ],
+  "source": "plan v2 section 6 and DRAFT-DECLARATION.v2 primary_outcomes, restated for the harness judge (evaluator .10 is bound for emission only)"
+ },
+ "project_day_limit": 60,
+ "project_day_limit_detail": {
+  "incomplete_risk": [
+   "a B or C request refused by the day limit is a budget stop of that lane and makes the comparison INCOMPLETE; for EP-27331 that needs B's EP-27331 requests above 12 together with C's maximum of 48 in one UTC day, which the estimates do not expect but cannot exclude",
+   "R and P run after C: at the planning estimate EP-27331 reaches 60 during P (63 in all), so P (report-only) and, in a conservative case, R can be refused for EP-27331; a refusal stops that lane for the rest of the invocation (R's contrasts, including decision coverage C >= R, are then computed on a truncated R)",
+   "R35-09: a day-limit refusal is settled as a failed row and served again on every resume, even on a later UTC day: it is permanent for the run",
+   "a run that crosses 00:00 UTC starts a new day count for every project"
+  ],
+  "justification": [
+   "60 is the largest value the frozen preflight accepts and equals plan v2 section 7 and the application's own ai_max_calls_per_project_per_day",
+   "a lower value only adds refusals: it adds no safety that the lane caps, the ledger scope's request limit (556) and its token and elapsed limits do not already give",
+   "per-project estimate (estimated_usage.per_project): EP-27331 is the binding project: 6 documents, 23 pages read by C, every document decision-bearing; B + C planning 52 and at most 54 (B one form read per decision-bearing document, C 8 per document) in one UTC day, below 60; all lanes planning 63 (B 6, C 46, R 4.1, P 6.9)"
+  ],
+  "owner_alternative": "accept this risk with the authorization, or order a harness change (a higher ceiling or a refusal retryable after the UTC day changes) with re-freeze, independent re-review and a new declaration before any authorization",
+  "range_allowed_by_preflight": "1..60",
+  "value": 60
+ },
+ "provider": {
+  "basis": {
+   "ai_ledger_models_recorded": {
+    "(blank)": 8,
+    "claude-opus-5": 5,
+    "claude-sonnet-5": 457,
+    "note": "read-only count over the 483 entries: the claude-code adapter records the model the CLI reports (claude-sonnet-5 for the 'sonnet' alias, claude-opus-5 for 'opus'); 'sonnet' / blank are timeouts and unknown usage",
+    "sonnet": 13
+   },
+   "four_arm_final_declaration": {
+    "cli_version_recorded": "2.1.263 (Claude Code)",
+    "effort": "not declared (tree default low)",
+    "provider_env": {
+     "AI_MODEL_SMALL": "sonnet",
+     "AI_MODEL_STANDARD": "opus",
+     "AI_PROVIDER": "claude-code"
+    },
+    "sha256": "6c0189b3dc30e721c318a5df44fac3507c5804430c85d3bdf6f23615002a70c1"
+   }
+  },
+  "cost_note": "the claude-code adapter bills the signed-in Claude subscription; the application has no price configured (AI_PRICE_* 0.0), so the application's cost column is 0 and reported as unknown, never as zero cost",
+  "environment_keys": "the ten required keys plus the application's own AI limits, all strings, all verified by every live lane (provider_env)",
+  "ledger_provider": "the application's LedgerProvider wraps the real provider and writes to the declared scope (wrap_provider true)",
+  "owner_confirmable": {
+   "AI_EFFORT": "declared 'low' (the tree default; the four-arm declaration bound no effort, so its tree default 'low' applied); the claude-code adapter passes no effort flag to the CLI, so with AI_PROVIDER claude-code the effort does not change a request; it applies only to the API provider",
+   "AI_MODEL_SMALL": "declared 'sonnet' (the four-arm alias; recorded as claude-sonnet-5); alternatives: the full id 'claude-sonnet-5' (pins the model if the alias moves), or the tree default 'claude-fable-5-1'",
+   "AI_MODEL_STANDARD": "declared 'opus' (recorded as claude-opus-5; used only for escalations, at most 2 per document); alternatives: 'claude-opus-5', or the tree default 'claude-fable-5-1'",
+   "ledger.scope": "declared 'm2-fresh-validation-r32-2026-10-03' (a new name; no scope of that name exists)",
+   "project_day_limit": "declared 60 (project_day_limit_detail)",
+   "rule": "cost and accuracy depend on these values; changing any of them is a new declaration with a new sha256, frozen and verified before any authorization"
+  },
+  "proposed_vs_tree_defaults": {
+   "AI_CLAUDE_CLI": {
+    "candidate_and_baseline_tree_default": "claude",
+    "declared": "claude"
+   },
+   "AI_CLI_TIMEOUT_S": {
+    "candidate_and_baseline_tree_default": "300.0",
+    "declared": "300"
+   },
+   "AI_EFFORT": {
+    "candidate_and_baseline_tree_default": "low",
+    "declared": "low"
+   },
+   "AI_MODEL_SMALL": {
+    "candidate_and_baseline_tree_default": "claude-fable-5-1",
+    "declared": "sonnet"
+   },
+   "AI_MODEL_STANDARD": {
+    "candidate_and_baseline_tree_default": "claude-fable-5-1",
+    "declared": "opus"
+   },
+   "AI_PROVIDER": {
+    "candidate_and_baseline_tree_default": "claude-code",
+    "declared": "claude-code"
+   },
+   "AI_TIMEOUT_S": {
+    "candidate_and_baseline_tree_default": "60.0",
+    "declared": "60"
+   }
+  }
+ },
+ "provider_env": {
+  "AI_CACHE_TTL_DAYS": "90",
+  "AI_CLAUDE_CLI": "claude",
+  "AI_CLI_TIMEOUT_S": "300",
+  "AI_EFFORT": "low",
+  "AI_LEDGER_LIMITS": "{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}",
+  "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "AI_LEDGER_SCOPE": "m2-fresh-validation-r32-2026-10-03",
+  "AI_MAX_CALLS_PER_DOCUMENT": "12",
+  "AI_MAX_CALLS_PER_PROJECT_PER_DAY": "60",
+  "AI_MAX_CONCURRENCY": "2",
+  "AI_MAX_COST_PER_JOB": "0.5",
+  "AI_MAX_ELAPSED_S_PER_JOB": "120.0",
+  "AI_MAX_ESCALATIONS_PER_DOCUMENT": "2",
+  "AI_MAX_INPUT_TOKENS_PER_TASK": "6000",
+  "AI_MAX_OUTPUT_TOKENS_PER_TASK": "800",
+  "AI_MAX_RETRIES": "3",
+  "AI_MODEL_SMALL": "sonnet",
+  "AI_MODEL_STANDARD": "opus",
+  "AI_PRICE_CACHED_INPUT_PER_MILLION": "0.0",
+  "AI_PRICE_INPUT_PER_MILLION": "0.0",
+  "AI_PRICE_OUTPUT_PER_MILLION": "0.0",
+  "AI_PROVIDER": "claude-code",
+  "AI_READ_EFFORT": "high",
+  "AI_READ_MAX_CALLS_PER_DOCUMENT": "60",
+  "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": "600",
+  "AI_READ_MAX_ELAPSED_S": "1800.0",
+  "AI_TIMEOUT_S": "60"
+ },
+ "reference_set": {
+  "assurance_level": "AI-drafted (Claude Opus 5.5) and independently AI-reviewed by separate Claude agents under AI-ACCURACY-POLICY-AMENDMENT-R32-01: an AI-reviewed reference set, NOT human-signed labels, NOT human Golden Truth, NOT independently human-verified evidence; the reviewers and the evaluated extraction models (Claude Sonnet 5 / Opus 5) are of the same model family",
+  "conventions": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.md",
+   "sha256": "5c09d4d2bc0867b8af93c93cd0e67c362f96bfeed5a0c109361931ce7dd5e570"
+  },
+  "field_population": {
+   "decision": 38,
+   "extensions_used": 0,
+   "identity": 57,
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/FIELD-POPULATION.json",
+   "revision": 38,
+   "sha256": "799a4b8f97c4560a2906da84f94515711cf9841b3bb3a9529ad6f5cde338539e"
+  },
+  "label_review_response_final": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-label-review-r32-draft-1/REVIEWER-RESPONSE.final.json",
+   "sha256": "920a21d63871d1618b36deb623e4121d31f3d52949d9c5617536aab7af9d4c5b"
+  },
+  "labels": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/labels/R32-LABELS-REVIEWED-2.json",
+   "sha256": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6"
+  },
+  "name": "r32-labels-reviewed-2",
+  "packages": {
+   "fresh-cohort-r32": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json",
+    "sha256": "15c4114da23e3989b621fed0e43cf9519f9e82e075b972dc2d01f5583f82d0ed"
+   },
+   "fresh-cohort-r32-reviewed": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/EVIDENCE-MANIFEST.json",
+    "sha256": "64c0366737a5567284c6b862e5addbb0091f7bf98066745f081407a8b3fe31c6"
+   },
+   "fresh-cohort-r32-reviewed-2": {
+    "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/evidence/EVIDENCE-MANIFEST.json",
+    "sha256": "1f27a544fa9fb839f5ae9bed721f1e00e7d5cbe1f63f56dd5bbf6fa8086bdb76"
+   }
+  },
+  "statement": "reference set independently AI-reviewed (Claude agents), not human-signed"
+ },
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "reviews": {
+  "review33": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-33/INDEPENDENT-REVIEW.md",
+   "sha256": "8d20baecc8eef24d2047287de77b3c252c1e5641f2dc61c5ffe449f6bbd97804"
+  },
+  "review34": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-34/INDEPENDENT-REVIEW.md",
+   "sha256": "75061210ff7af6b3619d86563af308caf65d706b4b5dc760288899524bbc8f47"
+  },
+  "review35": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-35/INDEPENDENT-REVIEW.md",
+   "sha256": "f4f668ac240cfdde229febe03f7a6a1b28a1120ab50c6b8ed04264ed2987fe31"
+  },
+  "review35_findings": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-35/FINDINGS.json",
+   "sha256": "b3ae349a876e823e4e945013756fb8324b1a53cdfe2faacb73aaf37d5d9aaa57"
+  },
+  "verification36": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-36/INDEPENDENT-VERIFICATION.md",
+   "sha256": "f698c2ffebc44df0487edce762a3f1bd561b2cbbda7b3d844dbd7d6c15173a00"
+  },
+  "verification36_findings": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-36/FINDINGS.json",
+   "sha256": "9e65a5c0275625d7bc624617971ee1dc4cd34fbc609a054f7a0a897933eb8be8"
+  },
+  "verification37": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-37/INDEPENDENT-VERIFICATION.md",
+   "sha256": "288983f25996ce9143ea95f1b7d98f1ac1c581fcefb386014e407e8ecfe84126"
+  },
+  "verification37_findings": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-37/FINDINGS.json",
+   "sha256": "2f77e707059e00a36a6169cca823e39f007de340492b4c6532b9ae89e359b11b"
+  }
+ },
+ "revision_comparison_rule": {
+  "exposure": "0 truth literals and 0 fixture values in the frozen r32 material (Verification 37)",
+  "h1": "H1 (whitespace inside the number, 53 ws_inside_number rows, 23 in the run set) is corrected by review36 and verified by Verification 37",
+  "implementation": {
+   "function": "norm_revision",
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/literal_compare_r32.py",
+   "sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09"
+  },
+  "not_ignored": "whitespace INSIDE the prefix word or before its dot is NOT ignored: 'R EV 01', 'R E V 0 1', 'REV . 1' and 'R ev. 0' do not match their number (Verification 37 R37-04)",
+  "residual_risk": "a letter-spaced labelled revision read by C's AI path (validate_value keeps the literal) is not normalised and, where the truth is resolved, is a critical acceptance on resolved truth that stops C (RESULT): a false C stop on a correct reading is possible but has not been observed in the frozen material",
+  "rule": "Arabic literals: whitespace removed, compared byte for byte (no case or dash folding, Arabic-Indic digits not mapped). Otherwise dash variants are read as '-', the value is upper-cased, runs of whitespace collapse to one space and the ends are stripped; then after an OPTIONAL prefix REVISION / REV / REV. / R / R. every whitespace character inside the value is removed before 0*(\\d+) is matched, and a number is compared by value: '0 1' == '01' == 'REV 0 1' == 'R 01' -> R1; '0 0' -> R0; 'Rev. 0 2' -> R2. A value that is not a number keeps its own characters with every whitespace character removed ('A 1' -> 'A1')."
+ },
+ "run": {
+  "allowance": "C:/t/r2x/r34-sandbox/r32-fresh-validation-2026-10-03/allowance.sqlite",
+  "base_of_the_bound_code": "C:/t/r2x/r34-sandbox is the SANDBOX_BASE of the bound preflight_r32 / runner_r32 (Verification 37 item 1); the folder does not exist at declaration time",
+  "capture_store": "C:/t/r2x/r34-sandbox/r32-fresh-validation-2026-10-03/capture.sqlite",
+  "folder": "C:/t/r2x/r34-sandbox/r32-fresh-validation-2026-10-03",
+  "never_moved_or_deleted": "the run folder holds the one-run anchors (consumed nonces, allowance charges); it is never moved or deleted (R35-07)",
+  "rule": "one run folder, one allowance (caps and day limit bound in the file) and one capture store per declaration, all bound to the declaration sha256 (the run key); 'run' once, then 'resume' only, with the same stamp",
+  "run_state": "C:/t/r2x/r34-sandbox/r32-fresh-validation-2026-10-03/RUN-STATE.json",
+  "stamp": "r32-fresh-validation-2026-10-03"
+ },
+ "run_set": {
+  "aliases_excluded": [
+   "F031",
+   "F052",
+   "F059",
+   "F070"
+  ],
+  "by_reason": {
+   "decision_bearing": 16,
+   "negative_control": 4,
+   "top_up": 4
+  },
+  "decision_controls": {
+   "negative": 8,
+   "positive": 16
+  },
+  "documents": 24,
+  "frozen_by": "this declaration (RUN-SET-RULE.md: the proposal is frozen only by the ORCH-07 declaration)",
+  "labels_eval_input": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/LABELS-R32-EVAL-INPUT.json",
+   "sha256": "4b2c73d59ab852fa45eb46ff58f0ee13242c2ccac4db0221f4b1b607edede5cc"
+  },
+  "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json",
+  "per_field_matched_projection": {
+   "decision": {
+    "by_project": {
+     "EP-22349": 2,
+     "EP-26687": 3,
+     "EP-27331": 6,
+     "EP-29255": 2,
+     "EP-3563": 3
+    },
+    "documents": 16,
+    "margin_over_12": 4
+   },
+   "identity": {
+    "by_project": {
+     "EP-15744": 1,
+     "EP-22349": 5,
+     "EP-26687": 6,
+     "EP-27331": 6,
+     "EP-29255": 2,
+     "EP-3563": 3
+    },
+    "documents": 23,
+    "margin_over_12": 11
+   },
+   "revision": {
+    "by_project": {
+     "EP-15744": 1,
+     "EP-22349": 1,
+     "EP-26687": 5,
+     "EP-27331": 6,
+     "EP-3563": 3
+    },
+    "documents": 16,
+    "margin_over_12": 4
+   }
+  },
+  "pool_ids": [
+   "F037",
+   "F009",
+   "F038",
+   "F072",
+   "F033",
+   "F039",
+   "F006",
+   "F015",
+   "F032",
+   "F021",
+   "F040",
+   "F035",
+   "F016",
+   "F030",
+   "F020",
+   "F018",
+   "F060",
+   "F043",
+   "F057",
+   "F046",
+   "F051",
+   "F042",
+   "F047",
+   "F066"
+  ],
+  "rule_version": "run-set-r32-2026-10-03.1",
+  "seed": "m2-r30-runset-2026-10-02",
+  "selector": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32/run_set_selector_r32.py",
+   "sha256": "5c923ec85f90173b13836b04d81d6e96a6f498e4ce52a6a9a4f7e16851acba53"
+  },
+  "sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+  "truth": {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/dry-run/TRUTH-R32.json",
+   "sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064"
+  }
+ },
+ "run_set_sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+ "schema": "orch07-fresh-validation-declaration-r32.1",
+ "standing_status": {
+  "M2": "CHANGES STILL REQUIRED",
+  "M3": "not started"
+ },
+ "status": "FROZEN DECLARATION, NOT AUTHORIZED: no ledger scope, no token, no authorization file and no dispatch exist; the owner's budget decision is pending",
+ "stop_rules": {
+  "implementation": "stop_rules.StopController (unchanged copy, 4632ffea...) replays every lane's events; the tripwire is per field (pool id, page, field)",
+  "summary": [
+   "budget stops and provider-failure stops are not undone by a resume",
+   "resume is refused after a terminal comparison (RESULT, INVALID) and after a complete run",
+   "R and P stops affect only their own lane"
+  ],
+  "verbatim_review34_resume_rules": {
+   "lines": "67-73",
+   "sha256": "0658e2a82b7daf9fe0d9229b6c8926f2aaf04df0c9f9e2533cf484704004b9e7",
+   "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/LIVE-RUN-CONTRACT.md",
+   "text": [
+    "- **run** refuses when the run folder exists (\"a second fresh invocation is refused; use resume\").",
+    "- **resume** requires the same run key, stamp, binding, run set, caps and day limit, the existing allowance and capture store (never re-created), and a capture store bound to the run key. It runs every lane again on new sandboxes: every bound fingerprint is **served** from the capture store (never re-sent); a reserved request without an answer is served `interrupted_charged` (charged, never re-sent); only requests never made before are dispatched and charged.",
+    "- **No fresh caps.** The caps and the day limit are stored in the allowance file; opening it with another run key, other caps or another day limit is refused; charges are never refunded or reset.",
+    "- **Resume is refused** after a terminal comparison (RESULT: the candidate failed the safety gate; INVALID) and after a complete run. It is allowed after an interrupted, refused or never-finished invocation and after INCOMPLETE.",
+    "- **Budget stops are not undone by a resume.** A request refused by the allowance (lane cap or day limit) is settled in the capture store as a failure `allowance_refused` and, like every failed row (review31 contract, `capture_store` unchanged), is served as its failure on resume; the stop rule makes it a budget stop again. A project that needs more than the day limit in one UTC day therefore stops the run INCOMPLETE; the declaration plans requests per project (R34-09).",
+    "- **Project-day counter.** 60 (or the declared limit) charges per project per UTC day, counted across **all** lanes. The probe lane is attributed to the project of the payload it re-sends. In live mode a request that cannot be attributed to a project is refused.",
+    "- **Writer lock.** A second runner on the same run is refused. After a crashed runner, the operator removes `WRITER.lock` once no runner is alive."
+   ]
+  },
+  "verbatim_stop_and_safety_rules": {
+   "lines": "7-20",
+   "sha256": "e2ee3504c1711b5b9497b7292c9161af58ae6c2fdef5f3f7b4ef24a1cd30b0ca",
+   "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/STOP-AND-SAFETY-RULES.md",
+   "text": [
+    "| Event | Lane | Effect on the lane | Effect on the comparison |",
+    "|---|---|---|---|",
+    "| Critical acceptance on **resolved** truth | **B** | terminal | **INVALID**: the baseline is incomplete. C does not start, or stops if running. |",
+    "| Critical acceptance on **resolved** truth | **C** | terminal, never resumed | **RESULT**: the candidate failed the safety gate. This is a valid comparison outcome, and the scorer reports NOT ELIGIBLE. |",
+    "| Critical acceptance on **resolved** truth | **R** (replay or reference-only) or **P** | none | none. It is recorded as a **reference finding**: no live arm stops, and it is never reported as a live safety stop. |",
+    "| Critical acceptance on **unresolved** truth | any | none | none. It is reported. |",
+    "| Three consecutive provider failures | B | terminal | **INVALID** |",
+    "| Three consecutive provider failures | C | terminal | **INCOMPLETE** |",
+    "| Three consecutive provider failures | R or P | that lane only | none. The R contrast is incomplete. |",
+    "| Breaker, ledger, allowance or counter refusal | any | budget stop, **never raised or reset** | INCOMPLETE if the lane is B or C |",
+    "| Binding difference or second writer | any | refused before dispatch | none |",
+    "",
+    "- **Streaks are per lane.** An R or P failure never counts toward B's or C's streak (tested).",
+    "- **Tripwire timing.** In a live run, the tripwire checks each B or C document against the frozen labels after the document finishes. In the dry run, the controller replays the lane events and then the post-hoc criticals, and says so."
+   ]
+  }
+ },
+ "switch_names": {
+  "CA": "AI_EVIDENCE_ADJUDICATE",
+  "DR": "AI_EVIDENCE_DECISION_REGION",
+  "IG": "AI_EVIDENCE_IDGUARD",
+  "L3": [
+   "AI_EVIDENCE_VARIANT=EV1",
+   "AI_EVIDENCE_GUARD=1",
+   "AI_EVIDENCE_SUPPORT=v2",
+   "AI_EVIDENCE_SCHEDULING=required_first",
+   "AI_EVIDENCE_DEADLINE=1",
+   "AI_EVIDENCE_TARGETED=1"
+  ],
+  "PA": "AI_EVIDENCE_ASSOC",
+  "source": "DRAFT-DECLARATION.v2 arms (restated here, not inherited); candidate app/ai/evidence_reader.py switch definitions; four-arm-final arm L3 env"
+ },
+ "task": "ORCH-07 (orchestrator ledger ORCH-016), implementation agent R37DECL-IMPL, Claude Opus 5.5 (claude-opus-5-5), effort High",
+ "thresholds_verbatim": [
+  {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY.md",
+   "sha256": "7efa891b55fd6a4113f08cff8d0acdca7832d611524bb7f884ec4e5bc30a4f47",
+   "source": "AI-ACCURACY-POLICY.md section 1",
+   "text": "Target zero observed errors among adjudicated automatically accepted critical facts, with at least 90% correct automatic recovery on clear applicable facts in the expanded M2 evaluation. Preserve the existing 98% minimum accepted-precision gate for other evaluated fields.",
+   "verbatim_check": "every text item is a substring of the source file at this sha256 (checked at build time)"
+  },
+  {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/M2-ACCEPTANCE-REPORT.md",
+   "sha256": "7816ea793d0f4a0500ab3e2548c73975f7324b8ae0b37551683144844a14448b",
+   "source": "M2-ACCEPTANCE-REPORT.md Correction 5 targets",
+   "text": [
+    ">= 98 % precision, accepted critical fields",
+    ">= 90 % recovery of readable critical fields",
+    "zero unresolved critical false acceptance"
+   ],
+   "verbatim_check": "every text item is a substring of the source file at this sha256 (checked at build time)"
+  },
+  {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/MASTER-ROADMAP.md",
+   "sha256": "f6dba0b2fce767955aed2b7508cfe7480637b02c44f502c3702c7862116e4c86",
+   "source": "MASTER-ROADMAP.md M2",
+   "text": "Completion additionally requires measured benefit from the selected AI profile, no unresolved critical false acceptance, correct automatic recovery and explicit cost/latency/review burden.",
+   "verbatim_check": "every text item is a substring of the source file at this sha256 (checked at build time)"
+  },
+  {
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review21/ANALYSIS-PLAN.md",
+   "sha256": "76064b634dff6c32b1ec25f83e640a7170ed629ec219820c465553631b75b9c4",
+   "source": "review21/ANALYSIS-PLAN.md section 5",
+   "text": [
+    "an ROI arm's consultant-decision coverage (completed read or verified absence, **including decisions outside the title block**) must be ≥ the matching WP arm's. Unknown (`located_incomplete`) is not coverage.",
+    "≥ 1 correctly associated fact per 8 extra requests at equal caps, no new false accept, interval excluding zero"
+   ],
+   "verbatim_check": "every text item is a substring of the source file at this sha256 (checked at build time)"
+  }
+ ],
+ "token_thresholds": {
+  "enforced": "only the single scope's totals input_tokens 16,300,000 and output_tokens 3,260,000 (the sum of the lane thresholds) and the per-request thresholds; per-lane token equality between B and C is NOT enforced (R35-10)",
+  "per_lane_estimated": {
+   "B": [
+    7000000,
+    1400000
+   ],
+   "C": [
+    7000000,
+    1400000
+   ],
+   "P": [
+    1100000,
+    220000
+   ],
+   "R": [
+    1200000,
+    240000
+   ],
+   "unit": "[input, output] tokens, estimated"
+  },
+  "per_request": {
+   "input": 90000,
+   "output": 20000,
+   "semantics": "reservation thresholds on ESTIMATES before dispatch (the ledger's estimator: the larger of an analytic estimate and the task's calibrated p95); an actual overshoot opens the breaker for later requests; the claude-code CLI has no hard input or output bound; never hard limits"
+  }
+ },
+ "trees": {
+  "baseline": {
+   "clean": true,
+   "head": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "candidate": {
+   "clean": true,
+   "config_py": {
+    "path": "C:/t/iso/cand-r29/backend/app/core/config.py",
+    "sha256": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155"
+   },
+   "head": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+   "tree": "C:/t/iso/cand-r29"
+  }
+ },
+ "what_this_run_can_show": "every gate met: evidence toward closing M2, still subject to independent review and a separate owner selection decision"
+}

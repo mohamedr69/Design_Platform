@@ -1,0 +1,249 @@
+{
+  "at_utc": "2026-09-30T20:27:35+00:00",
+  "a_tag": "r22dry-A",
+  "tag": "L1",
+  "arm": "L1",
+  "track": "r22-L1",
+  "dry_run": true,
+  "declaration_sha256": "6d9baa868ebe5ffd42c9e742842e564df268eda2fcffc9a6cf45309cb304f12e",
+  "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+      "discover_page": "discover-2026-09-29.1",
+      "read_identity": "read-identity-2026-09-29.1",
+      "read_revision": "read-revision-2026-09-29.1",
+      "read_decision": "read-decision-2026-09-29.1",
+      "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+  },
+  "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+  "tree": "C:/t/iso/cand-ai4",
+  "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+      "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    ],
+    "declared": "pilot arm L1"
+  },
+  "harness_contract": "harness-contract-2026-09-30.v4",
+  "runner_version": "arm-ev-2026-10-01.v4.1",
+  "allowance_key": {
+    "scope": "r22-four-arm-dry-2026-09-30-L1",
+    "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "path": "C:/t/r2x/dry-runs/r23-repro-v4.1/critical-stop/dry-allowance.sqlite"
+  },
+  "caps": {
+    "durable_per_document": 12,
+    "reader_per_reading": 8,
+    "project_rolling_day": 60
+  },
+  "projects": {
+    "16830": {
+      "variant": "EV1",
+      "profile": "default",
+      "documents": 2,
+      "calls": 12,
+      "cache_hits": 0,
+      "failed": 0,
+      "budget_stopped": 0,
+      "seconds": 1.5,
+      "documents_in": 2,
+      "documents_skipped_completed": 0,
+      "requests": 12,
+      "worst_case_reserved": 24,
+      "capacity_before": 60,
+      "pid": 27608
+    }
+  },
+  "not_attempted": [
+    {
+      "ep": "17428",
+      "documents": [
+        "synth/raster-2pages.pdf",
+        "synth/text-sheet.pdf"
+      ],
+      "reason": "stop: critical acceptance on a resolved label after EP-16830"
+    }
+  ],
+  "deferred": [],
+  "tripwire": [
+    {
+      "after": "16830",
+      "critical_on_resolved": [
+        {
+          "doc": "EP-16830/synth/raster-6pages.pdf",
+          "page": 2,
+          "field": "identity",
+          "value": "X-DRY-1",
+          "state": "validated",
+          "outcome": "wrong",
+          "truth": "X-DRY-9",
+          "how": "single_component_wrong_identity",
+          "reader": "ai:EV1",
+          "group": "ai:2:own"
+        }
+      ],
+      "binding": {
+        "eligibility": {
+          "EP-16830/synth/raster-6pages.pdf": "eligible",
+          "EP-16830/synth/raster-1page.pdf": "eligible"
+        },
+        "rejected": 2
+      }
+    }
+  ],
+  "resumes": [],
+  "seconds": 1.8,
+  "runner_state": {
+    "consecutive_failures": 0,
+    "recent_failures": [],
+    "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+    "terminal_stop": {
+      "lifecycle": "runner-lifecycle-2026-10-01.v1",
+      "terminal": true,
+      "kind": "critical_acceptance",
+      "reason": "stop: critical acceptance on a resolved label after EP-16830",
+      "evidence": [
+        {
+          "doc": "EP-16830/synth/raster-6pages.pdf",
+          "page": 2,
+          "field": "identity",
+          "value": "X-DRY-1",
+          "state": "validated",
+          "outcome": "wrong",
+          "truth": "X-DRY-9",
+          "how": "single_component_wrong_identity",
+          "reader": "ai:EV1",
+          "group": "ai:2:own"
+        }
+      ],
+      "reconstructed": false,
+      "at_utc": "2026-09-30T20:27:37+00:00",
+      "pid": 27608,
+      "clock": 1790800057.4707272,
+      "tag": "L1",
+      "arm": "L1",
+      "declaration_sha256": "6d9baa868ebe5ffd42c9e742842e564df268eda2fcffc9a6cf45309cb304f12e",
+      "allowance_key": {
+        "scope": "r22-four-arm-dry-2026-09-30-L1",
+        "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+      }
+    },
+    "xtrack_refusals": 0,
+    "allowance_refusals": 0,
+    "allowance_busy": 0,
+    "ledger_precheck_refusals": 0,
+    "per_ep": {
+      "16830": 12
+    },
+    "requests_io": 12,
+    "cache_hits": 0,
+    "deferred": [],
+    "skipped_completed": [],
+    "skipped_projects": [],
+    "interrupted_seen": []
+  },
+  "final": true,
+  "allowance": {
+    "EP-16830/synth/raster-6pages.pdf": {
+      "charged": 8,
+      "attempts": [
+        {
+          "id": 2,
+          "pid": 27608,
+          "started": 1790800056.6716163,
+          "ended": 1790800057.4348347,
+          "status": "completed",
+          "calls_at_start": 0,
+          "calls_at_end": 8
+        }
+      ]
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+      "charged": 4,
+      "attempts": [
+        {
+          "id": 1,
+          "pid": 27608,
+          "started": 1790800056.2506008,
+          "ended": 1790800056.6488535,
+          "status": "completed",
+          "calls_at_start": 0,
+          "calls_at_end": 4
+        }
+      ]
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+      "charged": 0,
+      "attempts": []
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+      "charged": 0,
+      "attempts": []
+    }
+  },
+  "terminal_stop": {
+    "lifecycle": "runner-lifecycle-2026-10-01.v1",
+    "terminal": true,
+    "kind": "critical_acceptance",
+    "reason": "stop: critical acceptance on a resolved label after EP-16830",
+    "evidence": [
+      {
+        "doc": "EP-16830/synth/raster-6pages.pdf",
+        "page": 2,
+        "field": "identity",
+        "value": "X-DRY-1",
+        "state": "validated",
+        "outcome": "wrong",
+        "truth": "X-DRY-9",
+        "how": "single_component_wrong_identity",
+        "reader": "ai:EV1",
+        "group": "ai:2:own"
+      }
+    ],
+    "reconstructed": false,
+    "at_utc": "2026-09-30T20:27:37+00:00",
+    "pid": 27608,
+    "clock": 1790800057.4707272,
+    "tag": "L1",
+    "arm": "L1",
+    "declaration_sha256": "6d9baa868ebe5ffd42c9e742842e564df268eda2fcffc9a6cf45309cb304f12e",
+    "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    }
+  },
+  "tables": {
+    "project_documents": 4,
+    "project_submittals": 0,
+    "project_shop_drawings": 0,
+    "background_jobs": 4,
+    "project_actions": 0,
+    "ai_usage": 12,
+    "document_readings": 0
+  },
+  "business_hashes": {
+    "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+  },
+  "ai_usage_rows": 12,
+  "fresh_requests_this_arm": 12,
+  "status": "stopped",
+  "lifecycle": "runner-lifecycle-2026-10-01.v1"
+}

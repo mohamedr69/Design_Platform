@@ -1,0 +1,466 @@
+{
+ "lifecycle_contract": "runner-lifecycle-2026-10-01.v1",
+ "scenarios": {
+  "T1_critical_stop_then_plain_resume": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 12, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 12 req 1.6 s | critical 1",
+      "done L1 L1 stopped requests 12 seconds 1.8 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': 'stop: critical acceptance on a resolved label after EP-16830', 'terminal_stop': {'lifecycle': 'runner-lifecycle-2026-10-01.v2', 'terminal': True, 'kind': 'critical_acceptance', 'reason': 'stop: critical acceptance on a resolved label after EP-16830', 'evidence': [{'doc': 'EP-16830/synth/raster-6pages.pdf', 'page': 2, 'field': 'identity', 'value': 'X-DRY-1', 'state': 'validated', 'outcome': 'wrong', 'truth': 'X-DRY-9', 'how': 'single_component_wrong_identity', 'reader': 'ai:EV1', 'group': 'ai:2:own'}], 'reconstructed': False, 'at_utc': '2026-09-30T20:50:56+00:00', 'pid': 25952, 'clock': 1790801456.302477, 'tag': 'L1', 'arm': 'L1', 'declaration_sha256': '60821c2e47f7a1a67d0df7cecc2d05f67bab73854422e273240a3712a90568ec', 'allowance_key': {'scope': 'r22-four-arm-dry-2026-09-30-L1', 'profile': 'L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1'}}, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 12, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 12}"
+     ],
+     "printed": null
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+    "requests_this_invocation": {
+     "16830": 12
+    },
+    "projects": [
+     "16830"
+    ],
+    "not_attempted": [
+     {
+      "ep": "17428",
+      "documents": [
+       "synth/raster-2pages.pdf",
+       "synth/text-sheet.pdf"
+      ],
+      "reason": "stop: critical acceptance on a resolved label after EP-16830"
+     }
+    ],
+    "tripwire_errors": [
+     1
+    ],
+    "sends_total_recorded": 12,
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "critical_acceptance",
+     "reason": "stop: critical acceptance on a resolved label after EP-16830",
+     "evidence": [
+      {
+       "doc": "EP-16830/synth/raster-6pages.pdf",
+       "page": 2,
+       "field": "identity",
+       "value": "X-DRY-1",
+       "state": "validated",
+       "outcome": "wrong",
+       "truth": "X-DRY-9",
+       "how": "single_component_wrong_identity",
+       "reader": "ai:EV1",
+       "group": "ai:2:own"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T20:50:56+00:00",
+     "pid": 25952,
+     "clock": 1790801456.302477,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "60821c2e47f7a1a67d0df7cecc2d05f67bab73854422e273240a3712a90568ec",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+    "requests_this_invocation": {},
+    "projects": [
+     "16830"
+    ],
+    "not_attempted": [
+     {
+      "ep": "17428",
+      "documents": [
+       "synth/raster-2pages.pdf",
+       "synth/text-sheet.pdf"
+      ],
+      "reason": "stop: critical acceptance on a resolved label after EP-16830"
+     }
+    ],
+    "tripwire_errors": [
+     1
+    ],
+    "sends_total_recorded": 12,
+    "resumes": [
+     {
+      "at_utc": "2026-09-30T20:50:57+00:00",
+      "pid": 17140,
+      "clock": 1790801457.6914735,
+      "reread": false,
+      "refused": "terminal stop preserved (plain --resume is not approval to clear it)",
+      "requests_sent": 0,
+      "terminal_kind": "critical_acceptance"
+     }
+    ]
+   },
+   "checks": {
+    "initial_stopped_with_pending_work": true,
+    "resume_zero_sends": true,
+    "resume_exit_4_and_refusal_recorded": true,
+    "stop_reason_and_evidence_preserved": true,
+    "lists_consistent": true,
+    "same_binding": true
+   }
+  },
+  "T2_repeated_resume": {
+   "run": {
+    "exit": 4,
+    "tail": [
+     "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    ],
+    "printed": "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+   },
+   "status": "stopped",
+   "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+   "requests_this_invocation": {},
+   "sends_total_recorded": 12,
+   "resumes": [
+    {
+     "at_utc": "2026-09-30T20:50:57+00:00",
+     "pid": 17140,
+     "clock": 1790801457.6914735,
+     "reread": false,
+     "refused": "terminal stop preserved (plain --resume is not approval to clear it)",
+     "requests_sent": 0,
+     "terminal_kind": "critical_acceptance"
+    },
+    {
+     "at_utc": "2026-09-30T20:50:58+00:00",
+     "pid": 23664,
+     "clock": 1790801458.9957116,
+     "reread": false,
+     "refused": "terminal stop preserved (plain --resume is not approval to clear it)",
+     "requests_sent": 0,
+     "terminal_kind": "critical_acceptance"
+    }
+   ],
+   "checks": {
+    "still_zero_sends": true,
+    "unchanged_reason_and_evidence": true,
+    "two_refusals_recorded": true
+   }
+  },
+  "T3_terminal_stop_no_remaining_project": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.9 s | critical 1",
+      "done L1 L1 stopped requests 20 seconds 2.8 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': 'stop: critical acceptance on a resolved label after EP-17428', 'terminal_stop': {'lifecycle': 'runner-lifecycle-2026-10-01.v2', 'terminal': True, 'kind': 'critical_acceptance', 'reason': 'stop: critical acceptance on a resolved label after EP-17428', 'evidence': [{'doc': 'EP-17428/synth/raster-2pages.pdf', 'page': 2, 'field': 'identity', 'value': 'X-DRY-1', 'state': 'validated', 'outcome': 'wrong', 'truth': 'X-DRY-9', 'how': 'single_component_wrong_identity', 'reader': 'ai:EV1', 'group': 'ai:2:own'}], 'reconstructed': False, 'at_utc': '2026-09-30T20:51:03+00:00', 'pid': 36752, 'clock': 1790801463.196613, 'tag': 'L1', 'arm': 'L1', 'declaration_sha256': '26c3ede48097215e5c8eafb1477fac5a51840a49db0e5d13802b3d3d0b69ab39', 'allowance_key': {'scope': 'r22-four-arm-dry-2026-09-30-L1', 'profile': 'L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1'}}, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 20, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 12, '17428': 8}"
+     ],
+     "printed": null
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label after EP-17428",
+    "requests_this_invocation": {
+     "16830": 12,
+     "17428": 8
+    },
+    "projects": [
+     "16830",
+     "17428"
+    ],
+    "not_attempted": [],
+    "tripwire_errors": [
+     0,
+     1
+    ]
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-17428 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-17428 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label after EP-17428",
+    "requests_this_invocation": {},
+    "projects": [
+     "16830",
+     "17428"
+    ],
+    "not_attempted": [],
+    "sends_total_recorded": 20
+   },
+   "checks": {
+    "stopped_after_last_project": true,
+    "resume_stays_stopped_never_completed": true
+   }
+  },
+  "T4_three_consecutive_provider_failures": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 3, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 3 req 0.7 s | critical 0",
+      "done L1 L1 stopped requests 3 seconds 0.9 state {'consecutive_failures': 3, 'recent_failures': [{'seq': 1, 'pid': 27116, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 27116, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 3, 'pid': 27116, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 2, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'stopped': 'stop: three consecutive provider failures', 'terminal_stop': {'lifecycle': 'runner-lifecycle-2026-10-01.v2', 'terminal': True, 'kind': 'provider_failures', 'reason': 'stop: three consecutive provider failures', 'evidence': [{'seq': 1, 'pid': 27116, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 27116, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 3, 'pid': 27116, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 2, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'reconstructed': False, 'at_utc': '2026-09-30T20:51:06+00:00', 'pid': 27116, 'clock': 1790801466.8062377, 'tag': 'L1', 'arm': 'L1', 'declaration_sha256': 'f05013b8493b172444996c3e258626b9a96e77e0cd36b12f9f057de0b1f51031', 'allowance_key': {'scope': 'r22-four-arm-dry-2026-09-30-L1', 'profile': 'L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1'}}, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 3, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 3}"
+     ],
+     "printed": null
+    },
+    "status": "stopped",
+    "stopped": "stop: three consecutive provider failures",
+    "requests_this_invocation": {
+     "16830": 3
+    },
+    "projects": [
+     "16830"
+    ],
+    "not_attempted": [
+     {
+      "ep": "17428",
+      "documents": [
+       "synth/raster-2pages.pdf",
+       "synth/text-sheet.pdf"
+      ],
+      "reason": "stop: three consecutive provider failures"
+     }
+    ],
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "provider_failures",
+     "reason": "stop: three consecutive provider failures",
+     "evidence": [
+      {
+       "seq": 1,
+       "pid": 27116,
+       "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 2,
+       "pid": 27116,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 3,
+       "pid": 27116,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 2,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T20:51:06+00:00",
+     "pid": 27116,
+     "clock": 1790801466.8062377,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "f05013b8493b172444996c3e258626b9a96e77e0cd36b12f9f057de0b1f51031",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: three consecutive provider failures",
+    "requests_this_invocation": {},
+    "sends_total_recorded": 3
+   },
+   "checks": {
+    "terminal_failure_stop_persisted": true,
+    "remaining_project_not_attempted": true,
+    "resume_cannot_clear_it": true
+   }
+  },
+  "T4b_single_failed_request_is_not_terminal": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.9 s | critical 0",
+      "done L1 L1 completed requests 20 seconds 2.8 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': None, 'terminal_stop': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 20, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 12, '17428': 8}"
+     ],
+     "printed": null
+    },
+    "status": "completed",
+    "stopped": null,
+    "requests_this_invocation": {
+     "16830": 12,
+     "17428": 8
+    },
+    "projects": [
+     "16830",
+     "17428"
+    ],
+    "stop_file": null
+   },
+   "resume": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "done L1 L1 completed requests 0 seconds 0.1 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': None, 'terminal_stop': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 0, 'cache_hits': 0, 'deferred': [], 'skipped_projects': ['16830', '17428'], 'interrupted_seen': []} {}"
+     ],
+     "printed": null
+    },
+    "status": "completed",
+    "stopped": null,
+    "requests_this_invocation": {}
+   },
+   "checks": {
+    "one_failure_no_stop": true,
+    "ordinary_resume_not_refused": true
+   }
+  },
+  "T5a_killed_before_stop_persisted": {
+   "killed": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "exit_98_expected": true,
+    "stop_file_after_kill": false,
+    "manifest_knows_stop_after_kill": false,
+    "manifest_projects_after_kill": []
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label (reconstructed on resume from the saved evidence of EP-16830) -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label (reconstructed on resume from the saved evidence of EP-16830) -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label (reconstructed on resume from the saved evidence of EP-16830)",
+    "requests_this_invocation": {},
+    "sends_total_recorded": 12,
+    "projects": [],
+    "not_attempted": [],
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "critical_acceptance",
+     "reason": "stop: critical acceptance on a resolved label (reconstructed on resume from the saved evidence of EP-16830)",
+     "evidence": [
+      {
+       "doc": "EP-16830/synth/raster-6pages.pdf",
+       "page": 2,
+       "field": "identity",
+       "value": "X-DRY-1",
+       "state": "validated",
+       "outcome": "wrong",
+       "truth": "X-DRY-9",
+       "how": "single_component_wrong_identity",
+       "reader": "ai:EV1",
+       "group": "ai:2:own"
+      }
+     ],
+     "reconstructed": true,
+     "at_utc": "2026-09-30T20:51:18+00:00",
+     "pid": 41308,
+     "clock": 1790801478.0637062,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "479672aa1aef54e098ab66fda0620c17b286552da59836825a3eaae4a0e91f15",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    }
+   },
+   "checks": {
+    "state_was_indeterminate": true,
+    "recovery_reconstructed_offline_and_refused": true,
+    "no_dispatch_on_recovery": true
+   }
+  },
+  "T5b_killed_after_stop_file_before_manifest": {
+   "killed": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "exit_98_expected": true,
+    "stop_file_after_kill": true,
+    "manifest_knows_stop_after_kill": false
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: critical acceptance on a resolved label after EP-16830 -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+    "requests_this_invocation": {},
+    "sends_total_recorded": 12,
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "critical_acceptance",
+     "reason": "stop: critical acceptance on a resolved label after EP-16830",
+     "evidence": [
+      {
+       "doc": "EP-16830/synth/raster-6pages.pdf",
+       "page": 2,
+       "field": "identity",
+       "value": "X-DRY-1",
+       "state": "validated",
+       "outcome": "wrong",
+       "truth": "X-DRY-9",
+       "how": "single_component_wrong_identity",
+       "reader": "ai:EV1",
+       "group": "ai:2:own"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T20:51:21+00:00",
+     "pid": 18992,
+     "clock": 1790801481.2851806,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "24bcf7bebfdf202181806561b1b0ffd9bdacd9010c2579aa2cd95735f6c8cfc3",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    }
+   },
+   "checks": {
+    "file_written_manifest_not": true,
+    "recovery_refused_on_file": true,
+    "no_dispatch_on_recovery": true
+   }
+  }
+ }
+}

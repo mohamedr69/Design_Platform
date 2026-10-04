@@ -1,0 +1,217 @@
+{
+ "bytes": 218746016,
+ "cli_file": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+ "embedded_build_time": "2026-09-06T01:08:56Z",
+ "embedded_version": "2.1.263",
+ "executed": false,
+ "findings": {
+  "alias_list": {
+   "needle": "\\[\"sonnet\",\"opus\",\"haiku\",\"fable\",\"best\",\"sonnet\\[1m\\]\",\"opus\\[1m\\]\",\"fable\\[1m\\]\",\"opusplan\"\\]",
+   "occurrences": 1,
+   "offsets": [
+    182473924
+   ],
+   "what": "the alias names",
+   "window_2k_sha256": "1803901df338844f396a143d306f2b74cdcbca2535f319fc43e11a576f664965"
+  },
+  "alias_opus": {
+   "needle": "aliases:\\{opus:\\{default:\"claude\\-opus\\-5\"",
+   "occurrences": 1,
+   "offsets": [
+    182489035
+   ],
+   "what": "alias opus -> claude-opus-5 (first party default)",
+   "window_2k_sha256": "e4f9dcf9284dc803af95d95397bf151548f7b5365fdc2b8016ecc55c40c0210d"
+  },
+  "alias_sonnet": {
+   "needle": "sonnet:\\{default:\"claude\\-sonnet\\-5\",per_provider:",
+   "occurrences": 1,
+   "offsets": [
+    182489242
+   ],
+   "what": "alias sonnet -> claude-sonnet-5 (first party default; per-provider overrides follow)",
+   "window_2k_sha256": "2be4861cb2132ed53c00e27c7461b001e3b9037ef97d7591522ed7487e530f76"
+  },
+  "catalog_entry_opus5": {
+   "needle": "\\{id:\"claude\\-opus\\-5\",family:\"opus\"",
+   "occurrences": 1,
+   "offsets": [
+    182484824
+   ],
+   "what": "the baked model catalog entry claude-opus-5",
+   "window_2k_sha256": "cb63c13855fda67fcef9f0c15a8f915f2b357c2edf97ae6608fbb68a458f11ff"
+  },
+  "catalog_entry_sonnet5": {
+   "needle": "\\{id:\"claude\\-sonnet\\-5\",family:\"sonnet\"",
+   "occurrences": 1,
+   "offsets": [
+    182479664
+   ],
+   "what": "the baked model catalog entry claude-sonnet-5",
+   "window_2k_sha256": "e53f19adf432c0fa0a486b364621bd13aae9b076129d33d30e4ec33595c73080"
+  },
+  "catalog_first_party_opus5": {
+   "needle": "provider_ids:\\{first_party:\"claude\\-opus\\-5\"",
+   "occurrences": 1,
+   "offsets": [
+    182484908
+   ],
+   "what": "its first-party wire id",
+   "window_2k_sha256": "9bdee5fee84bc82b3d13f37df83a29eee3724c6c300d5fa4a36ea5b872b78825"
+  },
+  "catalog_first_party_sonnet5": {
+   "needle": "provider_ids:\\{first_party:\"claude\\-sonnet\\-5\"",
+   "occurrences": 1,
+   "offsets": [
+    182479758
+   ],
+   "what": "its first-party wire id",
+   "window_2k_sha256": "cb745039517cc548eeb89a3c23179316b19f8d7233bb0213a48a98aa484562db"
+  },
+  "catalog_url": {
+   "needle": "https://downloads\\.claude\\.ai/model\\-catalog/v1/catalog\\.json",
+   "occurrences": 3,
+   "offsets": [
+    95680228,
+    194802638,
+    194803843
+   ],
+   "what": "a signed remote model catalog the CLI can load",
+   "window_2k_sha256": "69be3e846b2fcaeb4a176d902545897611875dd1144b5ffb5e53e9ddea0ae87c"
+  },
+  "export_names": {
+   "needle": "wt\\ as\\ parseUserSpecifiedModel",
+   "occurrences": 1,
+   "offsets": [
+    198293985
+   ],
+   "what": "the export mapping of the minified names",
+   "window_2k_sha256": "a5c688f40784f5a5b069ae3a29a6e8ffd17704b1d48d7ffb7f2a1f584bdd6032"
+  },
+  "identity_passthrough": {
+   "needle": "function\\ uS\\(e\\)\\{return\\ e\\}",
+   "occurrences": 1,
+   "offsets": [
+    182839142
+   ],
+   "what": "uS is the identity: a full id passes unchanged",
+   "window_2k_sha256": "2535ab7af2a67376413dd6794a0c93cb5f0d1c01543775f9c306344b14eff216"
+  },
+  "ledger_record_cost": {
+   "needle": "recordCost\\(e,t,o\\)\\{this\\.\\#l\\[o\\]=t",
+   "occurrences": 1,
+   "offsets": [
+    181428941
+   ],
+   "what": "the cost ledger's per-model usage map is keyed by the third argument",
+   "window_2k_sha256": "48587bfb828ae31a18c3b134489b5d61c16447507c71721e222c550658a3a685"
+  },
+  "package_and_version": {
+   "following_text": "@anthropic-ai/claude-code ( 1O https://code.claude.com/docs/en/overview B 2.1.263 0 * https://github.com/anthropics/claude-code/issues >/ 2026-09-06T01:08:56Z( 6& 37ae3f38d765199d54a6913cd61c6c9ad8576cc6C 3 B:/~BUN/root/src/plugins/function",
+   "needle": "@anthropic-ai/claude-code.{1,160}?2\\.1\\.263.{1,200}?20\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ.{0,48}",
+   "occurrences": 264,
+   "offsets": [
+    95598220,
+    180890875,
+    180892033,
+    180893170,
+    180896527
+   ],
+   "what": "the embedded package name, followed by its version string, build time and source commit",
+   "window_2k_sha256": "3ba7525b1e3fd5a28987da0ecff062b1e666d3dc5fcea24311e9e4753ae3e0de"
+  },
+  "parse_user_model": {
+   "needle": "function\\ wt\\(e\\)\\{let\\ t=e\\.trim\\(\\),r=t\\.toLowerCase\\(\\)",
+   "occurrences": 1,
+   "offsets": [
+    183055825
+   ],
+   "what": "parseUserSpecifiedModel: aliases resolve through the default-model getters; any other value is returned through uS",
+   "window_2k_sha256": "c5e4a8693675a52baf00f9bcd8571365a571073a4bb2191482abd306b88c3373"
+  },
+  "recognized_ids": {
+   "needle": "\"claude\\-opus\\-5\",\"claude\\-sonnet\\-4\\-0\",\"claude\\-sonnet\\-4\\-5\",\"claude\\-sonnet\\-4\\-6\",\"claude\\-sonnet\\-5\"\\]",
+   "occurrences": 1,
+   "offsets": [
+    182473826
+   ],
+   "what": "the list of recognized model ids (includes claude-opus-5 and claude-sonnet-5)",
+   "window_2k_sha256": "dbd6e4f091d8afcb162778aa539b7b24e9c0d982bf89a77a91ed8f2d4edd7eb6"
+  },
+  "refusal_fallback_key": {
+   "needle": "lWe=Em\\?f\\.serverRefusalFallback\\?\\.model\\?\\?f\\.model:f\\.model",
+   "occurrences": 1,
+   "offsets": [
+    190375320
+   ],
+   "what": "after a server refusal fallback the usage key is the fallback model",
+   "window_2k_sha256": "80af4e030bc87194fe2368db588cbbf89281bc263fcf19cf7608875adc12407c"
+  },
+  "result_model_usage": {
+   "needle": "total_cost_usd:ru\\(\\),usage:Ai\\(\\),modelUsage:jw\\(\\)",
+   "occurrences": 2,
+   "offsets": [
+    194635238,
+    194645457
+   ],
+   "what": "the JSON result's modelUsage is the cost ledger's map",
+   "window_2k_sha256": "90ce025bc0d19e3fb41eeeb92618d6fda446588695e3f3ea1d44d185b0cad164"
+  },
+  "sonnet_default_getter": {
+   "needle": "function\\ Lp\\(\\)\\{let\\ e=a\\.ANTHROPIC_DEFAULT_SONNET_MODEL",
+   "occurrences": 1,
+   "offsets": [
+    183034719
+   ],
+   "what": "the sonnet alias honours ANTHROPIC_DEFAULT_SONNET_MODEL, else the catalog alias",
+   "window_2k_sha256": "033701cdd21274ab0eeeee55265f3895f7dc6335f7333713483b3ed7be1bd296"
+  },
+  "usage_entry_fields": {
+   "needle": "o\\.canonicalModel=Fe\\(r\\),o\\.provider=El\\(r\\)",
+   "occurrences": 1,
+   "offsets": [
+    187214480
+   ],
+   "what": "each usage entry also carries canonicalModel and provider",
+   "window_2k_sha256": "143d3f1e42e07d530bf2bc39d2f1d58ef08535eff3615334b9f9640e8aa0def4"
+  },
+  "usage_keyed_by_request_model": {
+   "needle": "Ib\\+=VG\\(\\$N\\(F,Oc\\),Oc,f\\.model,f\\.querySource",
+   "occurrences": 5,
+   "offsets": [
+    190378809,
+    190384907,
+    190387100,
+    190388277,
+    190389470
+   ],
+   "what": "the streaming path records usage under f.model (the request's model), not the response's message.model",
+   "window_2k_sha256": "f070025739969ecaa0dc6fade41d3aa3eb3884ac838b9a85d493441370949599"
+  },
+  "version_banner": {
+   "needle": "//\\ Version:\\ 2\\.1\\.263",
+   "occurrences": 1631,
+   "offsets": [
+    180885706,
+    180886868,
+    180888063,
+    180890739,
+    180891876
+   ],
+   "what": "a bundle chunk header naming the version",
+   "window_2k_sha256": "273dcc07a4cd8fcfa909a36bdb574e39374c81c2677db43b92e75e9f26fa0760"
+  },
+  "vet_user_model": {
+   "needle": "function\\ DAt\\(e\\)\\{if\\(e\\&\\&!Cr\\(e\\)\\)return\\ Xh\\(e\\)\\?\\?void\\ 0",
+   "occurrences": 1,
+   "offsets": [
+    183028258
+   ],
+   "what": "vetUserSpecifiedModel: a model outside an org allowlist steps down or is dropped",
+   "window_2k_sha256": "a8e4ec9db066c979521998cab7ecf241c1348319f20e36054da34746110ed265"
+  }
+ },
+ "method": "read-only byte search of the installed file; the CLI was not executed",
+ "on_path": "C:\\Users\\moham\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe\\claude.EXE",
+ "sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03"
+}

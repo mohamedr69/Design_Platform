@@ -885,6 +885,22 @@ def _extract_boq(db: Session, project: Project, *, user_id: int | None, ctx=None
                 continue
             extracted.extend((system_rules.effective_code(sheet.system_code, project), line) for line in result.lines)
 
+        # No sheet was read at all -- the model switched off or unavailable, the files not there: nothing was
+        # attempted, so nothing is stamped. Stamping it made the BOQ "extracted" with no line, and every later
+        # open returned that empty BOQ, the model enabled or not (M2 review 05, R5-04). The reasons are
+        # returned; the next open tries again. A sheet read and found unreadable is still stamped, as before.
+        if reads and not any(getattr(result, "attempted", True) for _sheet, result in reads):
+            # Each sheet is still recorded as not read (the BOQ page and readiness show why), once: an open
+            # that finds the same reason standing adds no second record.
+            for sheet, result in reads:
+                latest = (db.query(ExtractionRun).filter(ExtractionRun.project_id == project.id, ExtractionRun.kind == "design_sheet",
+                                                         ExtractionRun.document_path == str(sheet.document_path))
+                          .order_by(ExtractionRun.id.desc()).first())
+                if latest is None or latest.failure != result.failure or latest.state != result.state:
+                    extraction_pipeline.record_design_sheet_run(db, project, sheet, result, commit=False)
+            db.commit()
+            return BoqEnsureResponse(items=project.boq_items, extracted=False, warnings=warnings, version=project.boq_version)
+
         # One transaction: the stamp, the runs with their review rows, the
         # lines and the version are written together or not at all -- the
         # BOQ never shows as extracted with its lines missing.

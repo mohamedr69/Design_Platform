@@ -1,0 +1,860 @@
+{
+ "changed_tests": [
+  "test_allowance_r32.py",
+  "test_preflight_r32.py",
+  "test_project_bounds_r32.py",
+  "test_run_control_r38.py",
+  "test_runner_r32.py",
+  "test_sandbox_ingest_r32.py",
+  "test_score_bcr_r32.py",
+  "test_visibility_r38.py"
+ ],
+ "files": {
+  "BINDING-MANIFEST-R38.json": {
+   "bytes": 51878,
+   "review38_sha256": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d",
+   "status": "superseded by review39 BINDING-MANIFEST-R39.json"
+  },
+  "CHANGE-RECORD.md": {
+   "bytes": 17199,
+   "review38_sha256": "76915f1d834a08ae288902dc34aaafc8253039b008560b5cd61868356d7ba6d8",
+   "status": "frozen review38 record; its section 11 claim on the reader's 8 is corrected in CHANGE-RECORD-R39.md section 2"
+  },
+  "COMMANDS-AND-AUDIT-LOG.md": {
+   "bytes": 6933,
+   "review38_sha256": "552725979c01a84adc104f2243ae55d3f896263cd9c3cd071d297331d7554d1b",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "COMMANDS.md": {
+   "bytes": 3324,
+   "review38_sha256": "1d69969dae4e35989bb9875f082c6135d04adbfbab24b47583af8a260c369aff",
+   "status": "superseded by review39 COMMANDS.md"
+  },
+  "CROSS-PAGE-WHATIF.json": {
+   "bytes": 391718,
+   "review38_sha256": "491f9590e775fa5367569787cbc3394d8db1b82908f5f6111a2a7491da8c6fe6",
+   "status": "in force, unchanged: rule CP-R38 is untouched; bound by hash in BINDING-MANIFEST-R39 (group review38)"
+  },
+  "LIVE-RUN-CONTRACT.md": {
+   "bytes": 17234,
+   "review38_sha256": "96230dadc80b51ae8f20e8de4d0bcbde3bbeb97110a3a2e9b177b3debe050eb3",
+   "status": "superseded by review39 LIVE-RUN-CONTRACT.md (version 4)"
+  },
+  "PROJECT-REQUEST-BOUNDS.json": {
+   "bytes": 13535,
+   "review38_sha256": "a90ecd1b3fec1fc82ad9668a5ad90ba317558760566653cbe178650df84cf82a",
+   "status": "superseded by review39 PROJECT-REQUEST-BOUNDS.json (project-bounds-r39-2026-10-04.1)"
+  },
+  "REPORT-TEMPLATE.md": {
+   "bytes": 1112,
+   "review38_sha256": "1895fbb0acc7023bc3231d46dd09c1b7e96272da09325b7a18c2d441cb14b3c8",
+   "status": "superseded by review39 REPORT-TEMPLATE.md (re-rendered)"
+  },
+  "SCORER-CHANGES.md": {
+   "bytes": 7166,
+   "review38_sha256": "276c79aafd124eb7f05cce6a44d0a4ded5d8d0bf3fe7f739c2d1b6e80ad852fd",
+   "status": "superseded by review39 SCORER-CHANGES.md (version 4)"
+  },
+  "VISIBILITY-REPORT.md": {
+   "bytes": 21753,
+   "review38_sha256": "8176a17b088be661bd946ae9c2c159b3e05819167eb06c953cd0d29e6cf76c8d",
+   "status": "superseded by review39 VISIBILITY-REPORT.md (re-run, 17 scenarios)"
+  },
+  "VISIBILITY-RESULT.json": {
+   "bytes": 86154,
+   "review38_sha256": "4ef853378e036d3d6639fb45d4a763db9a03e403eb7768d8e984c664a134a1c6",
+   "status": "superseded by review39 VISIBILITY-RESULT.json (re-run)"
+  },
+  "evidence/COPY-RECORD.json": {
+   "bytes": 12215,
+   "review38_sha256": "7d7a139f227c75a4fb093185762fe31dd216bdf181b1f11e5a46ed58c983ae72",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/FREEZE-1.sha256": {
+   "bytes": 4277,
+   "review38_sha256": "b8426634473c1f0c79ebe73eb81fdfa3e2c28fbeed234c023891184539014dd8",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/HARNESS-DIFF-R36-R38.patch": {
+   "bytes": 385400,
+   "review38_sha256": "2598279c7c4f8908786c6d56baa4bb9f5f7e7d060f8f03cce965e726367a9dcd",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/HARNESS-FILES-R36-R38.json": {
+   "bytes": 12455,
+   "review38_sha256": "9b8a29cb6ff32a7ddf82cf9d4e6d09676eb61056f39f5377d97854bc0a831da7",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/PACKAGE-CHECK.json": {
+   "bytes": 20976,
+   "review38_sha256": "f4671546e1551578e19268d563d114300ef376c9c54734986c1e6cfbb4f877fb",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/PARITY-COPY-RECORD.json": {
+   "bytes": 8839,
+   "review38_sha256": "eedaf5939cb01c207d3a1162debb81621c6347958abed2fb00d69235ed03c5a0",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/PROGRESS.md": {
+   "bytes": 5310,
+   "review38_sha256": "be8015da908a8140784b40f964c5f7f2e9fde9a8956802a3f3720ba4a17c80d4",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/SNAPSHOT-AFTER.json": {
+   "bytes": 783918,
+   "review38_sha256": "7cb4278b1f9c90c79649e982429f76d07024bc11d7463dc359b5bf60acb73ecf",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/SNAPSHOT-BEFORE.json": {
+   "bytes": 783918,
+   "review38_sha256": "d8507ab1642e2fce2d8f2de286a685d44ed3d15cd19768008e4134fefd0e8da9",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "evidence/WHATIF-PASSES.json": {
+   "bytes": 782,
+   "review38_sha256": "a659f813b3e03d43f8f209560bef350979aba3fe0e7e5a7c70636c88ffc77509",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/append_response_r38.py": {
+   "bytes": 11597,
+   "review38_sha256": "a72d44daf2a69486761baa5c88ce46163816872373536a769f00f3ec637d18fd",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/assemble_review38.py": {
+   "bytes": 6098,
+   "review38_sha256": "f73d57451f2d9f37a4f11a310e00e56b7beff2b778e37b2ad2a6a1bb53bfd431",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/cross_page_whatif_r38.py": {
+   "bytes": 12603,
+   "review38_sha256": "bd9c0b3021e02d494be5370572fa35b8659d035e45cdfa0fd15737d17c2e6fc5",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/harness-r32/allowance_r32.py": {
+   "bytes": 24531,
+   "review38_sha256": "2868e8ee1476f466a22374a11b2592bc4ae774a7c7178c8e5661ca3681c4e30c",
+   "review39_path": "scripts/harness-r32/allowance_r32.py",
+   "review39_sha256": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/capture_store.py": {
+   "bytes": 12478,
+   "review38_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "review39_path": "scripts/harness-r32/capture_store.py",
+   "review39_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/concentration_r32.py": {
+   "bytes": 13444,
+   "review38_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "review39_path": "scripts/harness-r32/concentration_r32.py",
+   "review39_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/converter_r32.py": {
+   "bytes": 10750,
+   "review38_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "review39_path": "scripts/harness-r32/converter_r32.py",
+   "review39_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/coverage_v4.py": {
+   "bytes": 9999,
+   "review38_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "review39_path": "scripts/harness-r32/coverage_v4.py",
+   "review39_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/dispatch_guard_r32.py": {
+   "bytes": 12991,
+   "review38_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "review39_path": "scripts/harness-r32/dispatch_guard_r32.py",
+   "review39_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/inputs_r32.py": {
+   "bytes": 4434,
+   "review38_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "review39_path": "scripts/harness-r32/inputs_r32.py",
+   "review39_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/labels_adapter_r32.py": {
+   "bytes": 15561,
+   "review38_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "review39_path": "scripts/harness-r32/labels_adapter_r32.py",
+   "review39_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/lane_judge_r32.py": {
+   "bytes": 12076,
+   "review38_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "review39_path": "scripts/harness-r32/lane_judge_r32.py",
+   "review39_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/lane_r32.py": {
+   "bytes": 32656,
+   "review38_sha256": "2c4aa742a6469045d7670bb1bd7450bd9d2f13ef4ab77062e7ca312e3405ecf9",
+   "review39_path": "scripts/harness-r32/lane_r32.py",
+   "review39_sha256": "493c0a9f248a9ceeba0ab2089a86ffed1c0bc142acdde9117012960a36088e6f",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/literal_compare_r32.py": {
+   "bytes": 9519,
+   "review38_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "review39_path": "scripts/harness-r32/literal_compare_r32.py",
+   "review39_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/model_identity_r38.py": {
+   "bytes": 11397,
+   "review38_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "review39_path": "scripts/harness-r32/model_identity_r38.py",
+   "review39_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/page_relations_r38.py": {
+   "bytes": 7691,
+   "review38_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "review39_path": "scripts/harness-r32/page_relations_r38.py",
+   "review39_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/preflight_r32.py": {
+   "bytes": 27611,
+   "review38_sha256": "2bfba6a10a4c04207ce4e9139f9c0fa3c1aa21f0086c9d312df90af223619e91",
+   "review39_path": "scripts/harness-r32/preflight_r32.py",
+   "review39_sha256": "0e59dbff5e87c1f5a9df2520bc82db7cf01b7086a314a9cefb56bcff47ea442f",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/project_bounds_r32.py": {
+   "bytes": 18066,
+   "review38_sha256": "33053d8ff3351424618f303d4f1c0d2d01768222bafce8f9e10706043d58efdb",
+   "review39_path": "scripts/harness-r32/project_bounds_r32.py",
+   "review39_sha256": "6abbf5eb04a72e55feb3883cb50730006f2caf1224c2e0edc63a23ef978c859b",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/r32_test_helpers.py": {
+   "bytes": 11652,
+   "review38_sha256": "15e5d82de7fd2183b8eaf2e2911bafd3fad1e6ad09c38314112299c9f0bc8eb9",
+   "review39_path": "scripts/harness-r32/r32_test_helpers.py",
+   "review39_sha256": "64c9ffcd341570d83e4cff272c16882dee0a6991537423bffc76ccdcfd7edf09",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/r34_scenarios.py": {
+   "bytes": 9842,
+   "review38_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "review39_path": "scripts/harness-r32/r34_scenarios.py",
+   "review39_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/run_control_r38.py": {
+   "bytes": 13745,
+   "review38_sha256": "d226e1733be1861eecf6211906e53bbf5677731194c9fcb4458c3c69304c2715",
+   "review39_path": "scripts/harness-r32/run_control_r38.py",
+   "review39_sha256": "d30de813c1092d46e3af940a4b0e3b03b9820c2b96c28b81ca71f40981bc42d1",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/run_set_selector_r32.py": {
+   "bytes": 11685,
+   "review38_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "review39_path": "scripts/harness-r32/run_set_selector_r32.py",
+   "review39_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/run_state_r38.py": {
+   "bytes": 8726,
+   "review38_sha256": "ca47ad48fdc6fa3c14f06425db560618fac0fcefa67b843ee3b7291de8cbad35",
+   "review39_path": "scripts/harness-r32/run_state_r38.py",
+   "review39_sha256": "5e789b05a23beae15195590ae0497739f87a493ea06acae3e8a798d054e653f8",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/runner_r32.py": {
+   "bytes": 42136,
+   "review38_sha256": "5475f2918bb234db87c2bdaa2241a41d9bb624c56569a54f07e15278fded9407",
+   "review39_path": "scripts/harness-r32/runner_r32.py",
+   "review39_sha256": "b290dd1c8ddda1b8d16117789f2f7691e792830e5a99e6b3b5a0963780027108",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/sandbox_child_r32.py": {
+   "bytes": 4628,
+   "review38_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "review39_path": "scripts/harness-r32/sandbox_child_r32.py",
+   "review39_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/sandbox_ingest_r32.py": {
+   "bytes": 8967,
+   "review38_sha256": "3e0e906df9aa1d387bc8a018142e122c1c9545f54f6d2aa311718c75e45e92a6",
+   "review39_path": "scripts/harness-r32/sandbox_ingest_r32.py",
+   "review39_sha256": "8fb5c891a41bba5f86c6426fb4784ec4dd0b029cc2733893b17a23712aa56ef5",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/score_bcr_r32.py": {
+   "bytes": 25705,
+   "review38_sha256": "77b226e30412b4dd2d29af8932a3b748504597ba204bd00a873e6d5a4374c6d2",
+   "review39_path": "scripts/harness-r32/score_bcr_r32.py",
+   "review39_sha256": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/score_lane_r32.py": {
+   "bytes": 6030,
+   "review38_sha256": "79530a3013cac748df7887db6ee9a038c17f0450abe438f2dcfc7bf3e272eec3",
+   "review39_path": "scripts/harness-r32/score_lane_r32.py",
+   "review39_sha256": "33a102d04bac562add88638008cd4561347225347115a3ad647b264a8a83832c",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/state_check.py": {
+   "bytes": 3901,
+   "review38_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "review39_path": "scripts/harness-r32/state_check.py",
+   "review39_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/stop_rules.py": {
+   "bytes": 4353,
+   "review38_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "review39_path": "scripts/harness-r32/stop_rules.py",
+   "review39_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/synthetic_r32.py": {
+   "bytes": 3400,
+   "review38_sha256": "cc125b2725a525e0b5629e948cfb77ca8394d13adca3d649334e8dcdf60e2cf7",
+   "review39_path": "scripts/harness-r32/synthetic_r32.py",
+   "review39_sha256": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/harness-r32/test_allowance_r32.py": {
+   "bytes": 12519,
+   "review38_sha256": "354fd032a22b746862a574847eda025ad3f6d15833e2825d3c766bd9c7d664c9",
+   "review39_path": "scripts/harness-r32/test_allowance_r32.py",
+   "review39_sha256": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_capture_store.py": {
+   "bytes": 7808,
+   "review38_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "review39_path": "scripts/harness-r32/test_capture_store.py",
+   "review39_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_concentration_r32.py": {
+   "bytes": 17769,
+   "review38_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "review39_path": "scripts/harness-r32/test_concentration_r32.py",
+   "review39_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_converter_r32.py": {
+   "bytes": 4692,
+   "review38_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "review39_path": "scripts/harness-r32/test_converter_r32.py",
+   "review39_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_dispatch_guard_r32.py": {
+   "bytes": 10121,
+   "review38_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "review39_path": "scripts/harness-r32/test_dispatch_guard_r32.py",
+   "review39_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_labels_adapter_r32.py": {
+   "bytes": 6516,
+   "review38_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "review39_path": "scripts/harness-r32/test_labels_adapter_r32.py",
+   "review39_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_lane_judge_r32.py": {
+   "bytes": 13025,
+   "review38_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "review39_path": "scripts/harness-r32/test_lane_judge_r32.py",
+   "review39_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_literal_compare_r32.py": {
+   "bytes": 15571,
+   "review38_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "review39_path": "scripts/harness-r32/test_literal_compare_r32.py",
+   "review39_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_model_identity_r38.py": {
+   "bytes": 7532,
+   "review38_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "review39_path": "scripts/harness-r32/test_model_identity_r38.py",
+   "review39_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_preflight_r32.py": {
+   "bytes": 16401,
+   "review38_sha256": "76399aef5c15507cb4d245b3eeb8a1601b6d1ee4175fbfdc57dc9191b2bc0bfa",
+   "review39_path": "scripts/harness-r32/test_preflight_r32.py",
+   "review39_sha256": "096535e0c6d75060493dfab472c8f12c9c2b21faaa15b4d7c8342953b2747ba4",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_project_bounds_r32.py": {
+   "bytes": 5883,
+   "review38_sha256": "e8e54cf48e3f8f51a2eaebc19f67e064776c03a28e1e46a5a13e163b67309cad",
+   "review39_path": "scripts/harness-r32/test_project_bounds_r32.py",
+   "review39_sha256": "8a47c286c2de3ba41f78d03cb6c809df8c4e8877df143663185f2eaefca58ac4",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_run_control_r38.py": {
+   "bytes": 11754,
+   "review38_sha256": "f83ee0a65da7304eebe023dd7dd71bfba4eff2981c537a627f0b752132d2f059",
+   "review39_path": "scripts/harness-r32/test_run_control_r38.py",
+   "review39_sha256": "43ef8d0e1571ed6665854b7dd79de55ca37e2e767fbf2a92941619b572e81768",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_run_set_selector_r32.py": {
+   "bytes": 5869,
+   "review38_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "review39_path": "scripts/harness-r32/test_run_set_selector_r32.py",
+   "review39_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_runner_r32.py": {
+   "bytes": 27833,
+   "review38_sha256": "f8b6ef55b15def470235ceac0267cf25c1699b2833675c51e0233fad015382aa",
+   "review39_path": "scripts/harness-r32/test_runner_r32.py",
+   "review39_sha256": "6897891a35cdad75d2f48fc9dea70821c6308e05dd4bd0f1aced9f90ddb82605",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_sandbox_ingest_r32.py": {
+   "bytes": 3106,
+   "review38_sha256": "e4f67c701923b6a5e29e9db201829c55563b4cfc252abd65071ab2a9550a0b0f",
+   "review39_path": "scripts/harness-r32/test_sandbox_ingest_r32.py",
+   "review39_sha256": "0da051961c548f35733bf69ca3d21440f1ea3697ea0b4ad62ffaf7f5ce60d16c",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_score_bcr_r32.py": {
+   "bytes": 22997,
+   "review38_sha256": "e090cf4a8d07c345a78b7e56bbb78cefb25270340f488b3f722f8badf55f5fba",
+   "review39_path": "scripts/harness-r32/test_score_bcr_r32.py",
+   "review39_sha256": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_state_check.py": {
+   "bytes": 2786,
+   "review38_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "review39_path": "scripts/harness-r32/test_state_check.py",
+   "review39_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_stop_rules.py": {
+   "bytes": 2824,
+   "review38_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "review39_path": "scripts/harness-r32/test_stop_rules.py",
+   "review39_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_tripwire_r32.py": {
+   "bytes": 3222,
+   "review38_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "review39_path": "scripts/harness-r32/test_tripwire_r32.py",
+   "review39_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": true
+  },
+  "scripts/harness-r32/test_visibility_r38.py": {
+   "bytes": 12701,
+   "review38_sha256": "e19b7afdf600a782e5eab3f3610c655150db2b5cbcbb7ec1e997b84f170cab7f",
+   "review39_path": "scripts/harness-r32/test_visibility_r38.py",
+   "review39_sha256": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": true
+  },
+  "scripts/harness-r32/tripwire_r32.py": {
+   "bytes": 3938,
+   "review38_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "review39_path": "scripts/harness-r32/tripwire_r32.py",
+   "review39_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "status": "re-issued unchanged (byte-identical)",
+   "test_file": false
+  },
+  "scripts/harness-r32/visibility_r38.py": {
+   "bytes": 15186,
+   "review38_sha256": "4f4066e0b073666348f4f4964c0e2344a7421bdaa09d7ce7c388e24cfa1c2e8a",
+   "review39_path": "scripts/harness-r32/visibility_r38.py",
+   "review39_sha256": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156",
+   "status": "re-issued CHANGED (see HARNESS-FILES-R38-R39.json)",
+   "test_file": false
+  },
+  "scripts/make_binding_r38.py": {
+   "bytes": 9044,
+   "review38_sha256": "8860a26c026772f7851d79e1d408f314569ac5c5f7931436ef094a3462218a9f",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/make_diffs_r38.py": {
+   "bytes": 3040,
+   "review38_sha256": "7b13565570add3490a7b5e095e940053e04a7e04eb39b8c543270b045210c6e1",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/make_parity_copy_r38.py": {
+   "bytes": 6434,
+   "review38_sha256": "af2fb66789a26de0d6810029479688b6df1832282dae0962f138f42789211c5c",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/parity-r38/r36-side/common_r35.py": {
+   "bytes": 10367,
+   "review38_sha256": "3c013c38b996c464c8d20068ce195c6d455ac42cfa4aed7974c511573e8dc3d5",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/parity-r38/r36-side/run_evaluator_offline_r32.py": {
+   "bytes": 32020,
+   "review38_sha256": "84818257b21ff71057bccdeb7ebca61b67d1eaae3306ca44e0d3d32dca1073a8",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/parity-r38/r38-side/common_r35.py": {
+   "bytes": 10648,
+   "review38_sha256": "48ef53cf8b07866c9bfcf955ce2ea5f61bca906f998448030ed980d43eb49e46",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/parity-r38/r38-side/run_evaluator_offline_r32.py": {
+   "bytes": 32020,
+   "review38_sha256": "46b9d57448b1bc4cd34f8adeaa1a54cb2004800d571a91a64ab37b0813c948d5",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/pytest-plugins/r38_write_guard.py": {
+   "bytes": 4221,
+   "review38_sha256": "04c4b3902e2b47d207403a2f107c8e1600c0228f4507c0824d4ba036b12c54bb",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/run_tests_r38.py": {
+   "bytes": 5803,
+   "review38_sha256": "4fe8ca593a621fbb5b91af97e1f9dfb9bcb5215331e3974d440cf827c31546c2",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/snapshot_r38.py": {
+   "bytes": 4995,
+   "review38_sha256": "04d6db95535618e299e6dbfa0ef92e9279aca4c975596da0e5cd2e412e49792d",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/verify_review38_package.py": {
+   "bytes": 16569,
+   "review38_sha256": "338f7ff918d4124e9a7a80b71b7fc6ec66c4a3168a88f7f12ea8192e1a2230d3",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/visibility_exercise_r38.py": {
+   "bytes": 9774,
+   "review38_sha256": "21ad9a468dda9d8c4de5ac457bb9c8495f6a5cd8f162d84eee6dfb1e539a8534",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "scripts/write_manifest_r38.py": {
+   "bytes": 3606,
+   "review38_sha256": "bcb6dac4a40ae9612202da9d81ae64e4722e9a8f7f4573cbd0731e08eabbf744",
+   "status": "not re-issued; stays in review38 under its manifest 07c2fb78... (bound by BINDING-MANIFEST-R39 group review38)"
+  },
+  "tests/SUMMARY.json": {
+   "bytes": 6197,
+   "review38_sha256": "42f7d4c875574e387f733025edff0a4f26859b0f93d4b9e1fbe0d652e4e0638f",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_allowance_r32.json": {
+   "bytes": 612,
+   "review38_sha256": "458a6978926bac96cf80cb63e9097d499ff02b927440af252e4fd092282fe61a",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_capture_store.json": {
+   "bytes": 612,
+   "review38_sha256": "38f5626828c7a10de9fa3e28eb2dd6b9755ab561586b2ecca290b22ce39f06fe",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_concentration_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_converter_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_dispatch_guard_r32.json": {
+   "bytes": 612,
+   "review38_sha256": "c61647df3754109688d4d09c9607891d8654914264c69ccf95c187732e02df6a",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_labels_adapter_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_lane_judge_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_literal_compare_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_model_identity_r38.json": {
+   "bytes": 611,
+   "review38_sha256": "3a086418edfcef893176521285933987e7986231763dcebf6cc3027a83f0e23a",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_preflight_r32.json": {
+   "bytes": 612,
+   "review38_sha256": "9a5afb6cd69bc435db770ba4ba2f91d7db852a1fc599251034e5a16d64b25dcb",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_project_bounds_r32.json": {
+   "bytes": 611,
+   "review38_sha256": "8d82d6b42939ddf3c7249a94e2145bacf431fcda5f6c4b75439335930eecd356",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_run_control_r38.json": {
+   "bytes": 612,
+   "review38_sha256": "4258f9339aa1d3fc038cf1b495dbb8f946c79b41b7961b84b8367be7362bdae5",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_run_set_selector_r32.json": {
+   "bytes": 611,
+   "review38_sha256": "ffcb7e1bda760b235c988824090c634638d64fae25ee9f6d78b2ca8b7911118b",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_runner_r32.json": {
+   "bytes": 646,
+   "review38_sha256": "f456af0b8435b4bca5d07e3c9b36acc4fe387a82e9753ab964ad1c12416edcb1",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_sandbox_ingest_r32.json": {
+   "bytes": 643,
+   "review38_sha256": "0fec8b301a5a623ebe145f3de031d631ab972b168d414111491b63e80ca0d305",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_score_bcr_r32.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_state_check.json": {
+   "bytes": 611,
+   "review38_sha256": "e75bcd3fb38eaf16b01407ce99829c474f1ce90b21f45c7f18c7c852f32713cc",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_stop_rules.json": {
+   "bytes": 610,
+   "review38_sha256": "bf8d8a8f2d4c3c73318218cd8b95739205a8412b155bc3801e40cf9472965845",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_tripwire_r32.json": {
+   "bytes": 611,
+   "review38_sha256": "722d9ea14129d41b2409d39aea539761b470c3318b4f9fe04ac8d4b70c05be29",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/guard/test_visibility_r38.json": {
+   "bytes": 647,
+   "review38_sha256": "de69e10cebac4ceae32d39ff36345b3b4af0929e966529e65df174f9ea9a388a",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_allowance_r32.xml": {
+   "bytes": 2258,
+   "review38_sha256": "1857b50aec70a1503d52b68159ba34c44f21f3e42a329d24e89f89d37bf05ddf",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_capture_store.xml": {
+   "bytes": 2813,
+   "review38_sha256": "ff00c380e18dbb85debade59351e3b75d340ef32252bbd906a94b74b8ae84b1f",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_concentration_r32.xml": {
+   "bytes": 3844,
+   "review38_sha256": "07b36d9e59019ac3ecb5c061fba4da85addcf785f429470094e2c2389434805c",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_converter_r32.xml": {
+   "bytes": 1018,
+   "review38_sha256": "6bef18d26531073637ecd1a44f8d58792399e260cd5a2e95cc5644881580b606",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_dispatch_guard_r32.xml": {
+   "bytes": 2065,
+   "review38_sha256": "fec0bde7deb664e05989656bd87405179269a13817314da7477a7a3f83f98f93",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_labels_adapter_r32.xml": {
+   "bytes": 1745,
+   "review38_sha256": "ba96f63aaab0ee86d127bc861c909b2cfac6d35818435161c0314312e5552c19",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_lane_judge_r32.xml": {
+   "bytes": 3194,
+   "review38_sha256": "140678f82273bbc9e4e1fc0a6ba8c61deb36b4f3bd15c7a0f4e4e6e59d59ac31",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_literal_compare_r32.xml": {
+   "bytes": 6427,
+   "review38_sha256": "8b57a5676277e87e10b2faa09c0cde248cdd51c2cfd6d31a048fc801ad230e0e",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_model_identity_r38.xml": {
+   "bytes": 1278,
+   "review38_sha256": "88fa32b788b97aefdfccd2aef0d0d0eabb1fdc35fe03d2ff43171b76bad285ed",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_preflight_r32.xml": {
+   "bytes": 10508,
+   "review38_sha256": "d7056d9178a5683bd0432e00623784599b4ad45aaaf56e9cef9397d7afb0e312",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_project_bounds_r32.xml": {
+   "bytes": 1338,
+   "review38_sha256": "ee53852ded8c18d45795ae7d471e86ea607da3aa2caee84e7a8f8a859eed9a1d",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_run_control_r38.xml": {
+   "bytes": 1485,
+   "review38_sha256": "6045cfdb227b70a2b08a5ac8c5b1be37d57392235d86046ff8995b6bb5543310",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_run_set_selector_r32.xml": {
+   "bytes": 1335,
+   "review38_sha256": "cf09ce989cefd367df089f663606ed634211194bcd9aa0b4b51104e3d14b85e7",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_runner_r32.xml": {
+   "bytes": 6196,
+   "review38_sha256": "92ecb9a45a85569b8a1ba773a2fd9bb4e43b6c19900b1d86a86e441e5996fd54",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_sandbox_ingest_r32.xml": {
+   "bytes": 846,
+   "review38_sha256": "e525dbf814aeedc5eb13972a16d2f8ba332244daae30f58209cde903c805ade2",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_score_bcr_r32.xml": {
+   "bytes": 5617,
+   "review38_sha256": "1bb01ed053bc179f175fa70a03fc64a093d65c981cffaae5703730abb42faa85",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_state_check.xml": {
+   "bytes": 728,
+   "review38_sha256": "a8cc4da1ed36593b05e1d5d7aba987c766dac9ec0c50ba2b3d8c3c70d5a3aec0",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_stop_rules.xml": {
+   "bytes": 1135,
+   "review38_sha256": "bb36385036e7e456da48e383a3a8aca88f2dd029d43b565915d2cdb6eeb28cb5",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_tripwire_r32.xml": {
+   "bytes": 820,
+   "review38_sha256": "dd867a83c0c330db4fb68a6a92b890db14ca88631fa31124e339411a1ae8c28f",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  },
+  "tests/test_visibility_r38.xml": {
+   "bytes": 2145,
+   "review38_sha256": "6f4afb527fea5c5df525434726e867413746ebc9eab39c152c5dc0185d4efbea",
+   "status": "superseded by review39 tests/ (the full suite re-run on the r39 harness)"
+  }
+ },
+ "new_harness_files": [
+  "drawings_ai_probe_r39.py",
+  "request_paths_r39.py",
+  "resume_invocations_r39.py",
+  "test_request_paths_r39.py",
+  "test_unread_pages_r39.py",
+  "unread_pages_probe_r39.py"
+ ],
+ "review38_manifest_sha256": "07c2fb78bedc44c4145f8ff24f2f9c4e4407de4adc2706392b2560afe56b8ce9",
+ "summary": {
+  "frozen review38 record": 1,
+  "in force, unchanged: rule CP-R38 is untouched": 1,
+  "not re-issued": 27,
+  "re-issued CHANGED": 21,
+  "re-issued unchanged": 29,
+  "superseded by review39 BINDING-MANIFEST-R39.json": 1,
+  "superseded by review39 COMMANDS.md": 1,
+  "superseded by review39 LIVE-RUN-CONTRACT.md": 1,
+  "superseded by review39 PROJECT-REQUEST-BOUNDS.json": 1,
+  "superseded by review39 REPORT-TEMPLATE.md": 1,
+  "superseded by review39 SCORER-CHANGES.md": 1,
+  "superseded by review39 VISIBILITY-REPORT.md": 1,
+  "superseded by review39 VISIBILITY-RESULT.json": 1,
+  "superseded by review39 tests/": 41
+ },
+ "unchanged_harness_files": [
+  "capture_store.py",
+  "concentration_r32.py",
+  "converter_r32.py",
+  "coverage_v4.py",
+  "dispatch_guard_r32.py",
+  "inputs_r32.py",
+  "labels_adapter_r32.py",
+  "lane_judge_r32.py",
+  "literal_compare_r32.py",
+  "model_identity_r38.py",
+  "page_relations_r38.py",
+  "r34_scenarios.py",
+  "run_set_selector_r32.py",
+  "sandbox_child_r32.py",
+  "state_check.py",
+  "stop_rules.py",
+  "test_capture_store.py",
+  "test_concentration_r32.py",
+  "test_converter_r32.py",
+  "test_dispatch_guard_r32.py",
+  "test_labels_adapter_r32.py",
+  "test_lane_judge_r32.py",
+  "test_literal_compare_r32.py",
+  "test_model_identity_r38.py",
+  "test_run_set_selector_r32.py",
+  "test_state_check.py",
+  "test_stop_rules.py",
+  "test_tripwire_r32.py",
+  "tripwire_r32.py"
+ ]
+}

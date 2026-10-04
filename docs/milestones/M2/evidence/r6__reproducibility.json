@@ -1,0 +1,78 @@
+{
+ "at_utc": "2026-09-28T11:51:08+00:00",
+ "head": "2221b4327c7dd140994cc2c98e89229431b34899",
+ "git_status_lines": 7,
+ "dirty_files": {
+  "backend/app/services/document_processing.py": "ed7e14560bfba2cfbb2282469f95c6f89f7b2d19bfcf7fca45e977df73e5cef0",
+  "backend/app/services/document_sync.py": "df88dfe8d49051ec5ee8a5f2146a708f73999e73e02092d67d391b927c6bade5",
+  "backend/ep_platform.db": "e5dc1114b38fe5589c1e88fb8b0cc6db25bf4a3edee748343a81361f2d4e30ba",
+  "backend/library/symbols/symbol_library.json": "be66a5f7dad1a92014b68bf8f518f6695eddd6d7ed0d50175b0a16af566f389d",
+  "backend/scripts/repair_extraction.py": "1c7d155001a1322f2584c280d7f6d19f3202afb9c7fb0b80dfc51854442df05c",
+  "backend/tests/test_extraction_m2_review02.py": "7682adfc703b9b8c770afac881cd4d5a4a7693bd33297d58f120210e8cf47a47",
+  "backend/tests/test_extraction_m2_review03.py": "83f15318ce835d1cb078f768556a0abe7adca8a16bdd525ecab5987ebbba0460"
+ },
+ "source_hashes": {
+  "backend/app/services/document_control.py": "519a914c0f630b5c84c62081999b2fa390ce50f4b388ecd04d88479abf7d8a42",
+  "backend/app/services/document_sync.py": "df88dfe8d49051ec5ee8a5f2146a708f73999e73e02092d67d391b927c6bade5",
+  "backend/app/services/document_processing.py": "ed7e14560bfba2cfbb2282469f95c6f89f7b2d19bfcf7fca45e977df73e5cef0",
+  "backend/app/services/design_sheet_extractor.py": "f882fce876a2c400f4705a259c3b6615924fec4c7df4317d3a3b17983b5809dd",
+  "backend/app/services/transmittals.py": "b354e4ea639282c2408960499736f9a29199e572085453314cf37647e3f51097",
+  "backend/app/services/content_evidence.py": "d9a668d7d9b27edf1311d821ccb67befdffbf8cf476f226636fb7a05c078b4ec",
+  "backend/app/ai/sheet_reader.py": "08f75a10709b15c31a4cee5870dc8a56b78f4be236e81e11eafb17bc23c42d73",
+  "backend/app/core/config.py": "8c023cc6e86ac068e675e1b3fb48013c69c43f429cae9ce8b5b2f0002ef64a9d",
+  "backend/scripts/repair_extraction.py": "1c7d155001a1322f2584c280d7f6d19f3202afb9c7fb0b80dfc51854442df05c",
+  "backend/scripts/boq_metrics.py": "31a7476698e5f134ce3cba76668147710a45c393f80e81717dc8010e0d7f7122",
+  "backend/tests/conftest.py": "c776b39c42682a1091becee776a7565c4ecdc98c3d5774378f7ba388758c2eda"
+ },
+ "versions": {
+  "PARSER_VERSION": "parse-2026-09-28.4",
+  "BOX_VERSION": "box-4",
+  "INDEX_VERSION": "index-2026-09-24.4",
+  "design_sheet_extractor.PARSER_VERSION": "2026-09-28.1",
+  "EVIDENCE_VERSION": "evidence-2026-09-28.2",
+  "sheet_reader.PROMPT_VERSION": "read-sheet-2026-09-16.1"
+ },
+ "budgets": {
+  "PAGE_SCAN_LIMIT": 12,
+  "REPLY_SEARCH_LIMIT": 12,
+  "OCR_PAGE_LIMIT": 12,
+  "OCR_TIMEOUT_S": 25,
+  "RENDER_DPI(sheets)": 300,
+  "RECHECK_QUANTITY_BELOW": 90,
+  "LOW_QUANTITY_CONFIDENCE": 60
+ },
+ "settings": {
+  "extraction_promote_observations(default)": false,
+  "ai_enabled": false,
+  "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+  "sync_file_workers": 3
+ },
+ "profiles": [
+  "default",
+  "promoted"
+ ],
+ "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+ "platform": "Windows-10-10.0.19045-SP0",
+ "dependencies": [
+  "alembic==1.19.2",
+  "fastapi==0.115.6",
+  "numpy==2.5.3",
+  "pillow==12.3.0",
+  "pymupdf==1.28.2",
+  "pytesseract==0.3.13",
+  "SQLAlchemy==2.0.36"
+ ],
+ "tesseract_version": [
+  "tesseract v5.4.0.20240606"
+ ],
+ "sandbox_roots": {
+  "stage": "C:/t/pilot/stage",
+  "db": "C:/t/pilot/db",
+  "cache": "C:/t/pilot/cache",
+  "library": "C:/t/pilot/library",
+  "uploads": "C:/t/pilot/uploads",
+  "out": "C:/t/pilot/out",
+  "live_database_untouched": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\backend\\ep_platform.db",
+  "note": "every pilot process sets DATABASE_URL/CACHE_ROOT/LIBRARY_ROOT/UPLOADS_ROOT to the sandbox before importing app code; originals under the OneDrive root are read for metadata and copied once into the stage tree; no write-capable workflow points at the OneDrive folders"
+ }
+}

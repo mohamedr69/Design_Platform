@@ -1,0 +1,436 @@
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index 458f390..6f57f21 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -64,24 +64,63 @@ import os as _os  # noqa: E402
+ 
+ GUARD_ENABLED = _os.environ.get("AI_EVIDENCE_GUARD") == "1"
+ TARGETED_ENABLED = _os.environ.get("AI_EVIDENCE_TARGETED") == "1"
+-# E  AI_EVIDENCE_EFFICIENT=1 (M2 review 18) located discovery for drawing sheets + job-deadline-bound request / OCR
+-#                            timeouts; independent of G / T (compared on its own)
++# E  AI_EVIDENCE_EFFICIENT=1 (M2 review 18) legacy: located discovery for drawing sheets + job-deadline-bound request /
++#                            OCR timeouts together (identity unchanged)
+ EFFICIENT_ENABLED = _os.environ.get("AI_EVIDENCE_EFFICIENT") == "1"
++# --- R21 prerequisite switches (2026-09-30): one switch per behaviour the four-arm design holds common or varies ------
++# Rsup  AI_EVIDENCE_SUPPORT=v2                rotation-correct clip + bounded local OCR support in EVERY read path
++# Sched AI_EVIDENCE_SCHEDULING=required_first the required-first reader path, with or without optional reads
++# D     AI_EVIDENCE_DEADLINE=1                request timeout follows the job's remaining time; MIN_REQUEST_S floor; OCR bound
++# ROI   AI_EVIDENCE_ROI=1                     located title-block discovery (R19-01 absence rule), without the deadline
++# X = TARGETED (optional targeted reads; as reviewed it implies Rsup and Sched). E = ROI + D (legacy identity kept).
++SUPPORT_V2 = _os.environ.get("AI_EVIDENCE_SUPPORT") == "v2"                   # explicit values only; the legacy
++REQUIRED_FIRST = _os.environ.get("AI_EVIDENCE_SCHEDULING") == "required_first"  # implications (T => support v2 +
++DEADLINE_ENABLED = _os.environ.get("AI_EVIDENCE_DEADLINE") == "1"               # required-first; E => ROI + deadline)
++ROI_ENABLED = _os.environ.get("AI_EVIDENCE_ROI") == "1"                         # are applied where the switch is used
++
++
++# the switches in force at USE time (the legacy implications hold whether the attributes were set by the environment at
++# import or by a test afterwards): T => support v2 + required-first; E => ROI + deadline
++def _support_v2() -> bool:
++    return SUPPORT_V2 or TARGETED_ENABLED
++
++
++def _required_first() -> bool:
++    return REQUIRED_FIRST or TARGETED_ENABLED
++
++
++def _deadline() -> bool:
++    return DEADLINE_ENABLED or EFFICIENT_ENABLED
++
++
++def _roi() -> bool:
++    return ROI_ENABLED or EFFICIENT_ENABLED
+ if TARGETED_ENABLED and not GUARD_ENABLED:
+     raise RuntimeError("AI_EVIDENCE_TARGETED requires AI_EVIDENCE_GUARD (T = G + targeted verification)")
+ if GUARD_ENABLED:
+     EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+guard-rev-token-2026-09-30.1"
++if SUPPORT_V2 or TARGETED_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+region-support-2026-09-30.1"
+ if TARGETED_ENABLED:
+     # .2 (M2 review 18): completion from usable evidence (R18-01), no targeted read after a failed / refused primary or
+     # escalation request (R18-02), required reads of every page before any optional targeted read (R18-03)
+-    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+targeted-completion-2026-09-30.2"
+     READER_VERSION = READER_VERSION + "+targeted-2026-09-30.2"
+     PROMPTS = {**PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"}
++elif REQUIRED_FIRST:
++    READER_VERSION = READER_VERSION + "+required-first-2026-09-30.1"      # (T's reader suffix already covers the scheduling)
+ if EFFICIENT_ENABLED:
+     # .2 (M2 review 19, R19-01): a cropped discovery never establishes absence outside what it inspected
+     EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+located-discovery-2026-09-30.2"
+     READER_VERSION = READER_VERSION + "+located-discovery-2026-09-30.2"
+     PROMPTS = {**PROMPTS, "discover_region": "discover-region-2026-09-30.1"}
++else:
++    if ROI_ENABLED:
++        EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+roi-discovery-2026-09-30.1"
++        READER_VERSION = READER_VERSION + "+roi-discovery-2026-09-30.1"
++        PROMPTS = {**PROMPTS, "discover_region": "discover-region-2026-09-30.1"}
++    if DEADLINE_ENABLED:
++        READER_VERSION = READER_VERSION + "+deadline-2026-09-30.1"
+ MIN_REQUEST_S = 20.0            # E: no request is started with less than this left of the job's elapsed budget
+ LOCATED_LONG_SIDE_PX = 1568     # E: the located discovery crop's long side (the provider's native image size)
+ _BARE_REVISION = re.compile(r"^\s*(?:REV(?:ISION)?\.?\s*[-:]?\s*(?:\d{1,3}|[A-Z])|R\.?\s*\d{1,2})\s*$", re.I)
+@@ -353,8 +392,8 @@ class EvidenceRun:
+             self.log.append({**entry, "cache_hit": False, "outcome": f"budget: {self.exhausted}"})
+             return None
+         timeout_s = None
+-        if EFFICIENT_ENABLED:
+-            # E: the job's remaining elapsed budget bounds the request (the provider kills the CLI process at its
++        if _deadline():
++            # D: the job's remaining elapsed budget bounds the request (the provider kills the CLI process at its
+             # timeout); a request is not started with less than MIN_REQUEST_S left -- a budget stop, not a failure
+             remaining = getattr(self.budget, "remaining_s", None)
+             remaining = remaining() if callable(remaining) else None
+@@ -603,7 +642,7 @@ def read_document(run: EvidenceRun, pdf, *, sha256: str, records: list, observat
+             coverage["pages"].append(entry)
+             continue
+         before = run.calls
+-        if TARGETED_ENABLED:
++        if _required_first():
+             found = _read_page_required(run, page, sha256=sha256, number=number, facts=facts, reason=",".join(why),
+                                         ocr_lines=(ocr_lines or {}).get(index) or [])
+             entry["calls"] = run.calls - before
+@@ -675,9 +714,16 @@ def region_texts(page, region_display: tuple | None, ocr_lines: list, *, pad: fl
+     return out
+ 
+ 
++def _region_texts(page, region, ocr_lines, run=None) -> list:
++    """The support policy in force: Rsup (rotation-correct clip + bounded local OCR) or the accepted region text."""
++    if _support_v2():
++        return region_texts_v2(page, region, ocr_lines or [], ocr_timeout=_ocr_timeout(run))
++    return region_texts(page, region, ocr_lines or [])
++
++
+ def _ocr_timeout(run) -> float:
+-    """E: an OCR run inside a job gets at most 30 s and never the time the next request needs; 30 s otherwise."""
+-    if not EFFICIENT_ENABLED or run is None:
++    """D: an OCR run inside a job gets at most 30 s and never the time the next request needs; 30 s otherwise."""
++    if not _deadline() or run is None:
+         return 30.0
+     remaining = getattr(getattr(run, "budget", None), "remaining_s", None)
+     left = remaining() if callable(remaining) else None
+@@ -771,7 +817,7 @@ def _targeted_read(run, page, *, sha256: str, number: int, reason: str, field: s
+     reading = {"source": "blind_context", "value": got.get("value", ""), "legible": bool(got.get("legible", False)),
+                "label": got.get("printed_label"), "role": got.get("role")}
+     use = new_region or region
+-    return reading, use, region_texts_v2(page, use, ocr_lines, ocr_timeout=_ocr_timeout(run))
++    return reading, use, _region_texts(page, use, ocr_lines, run)
+ 
+ 
+ # --- read outcomes (M2 review 08, R8-01) ------------------------------------------------------------------------------
+@@ -829,7 +875,7 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+     readings. Every read's outcome is recorded (`_fields`); the page outcome follows from them. The page's own
+     identity and the identities it references are different facts (component 'own' and 'refN'); nothing here
+     changes a record."""
+-    if TARGETED_ENABLED:
++    if _required_first():
+         ctx = _read_page_required(run, page, sha256=sha256, number=number, facts=facts, reason=reason, ocr_lines=ocr_lines)
+         return _finish_page(run, page, ctx) if ctx.get("_pending") else ctx
+     observations = []
+@@ -855,7 +901,7 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+         readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
+-        texts = region_texts(page, region, ocr_lines or [])
++        texts = _region_texts(page, region, ocr_lines, run)
+         if not (disc_value or det_value):
+             fields[key] = _absent(located, field, facts)
+             continue
+@@ -1054,8 +1100,8 @@ def _norm_to_page(page, clip, box):
+ 
+ 
+ def _discover(run, page, *, sha256: str, number: int, reason: str, facts, ocr_lines):
+-    """(discovered, located) -- `located` None when the page was discovered whole (always with E off)."""
+-    if EFFICIENT_ENABLED:
++    """(discovered, located) -- `located` None when the page was discovered whole (always with ROI off)."""
++    if _roi():
+         import pymupdf
+ 
+         clip, route = locate_title_block(page, ocr_lines, ocr_timeout=_ocr_timeout(run))
+@@ -1075,7 +1121,7 @@ def _discover(run, page, *, sha256: str, number: int, reason: str, facts, ocr_li
+     discovered = run.call(sha256=sha256, task="discover_page", page=number, reason=reason,
+                           parts=[TextPart("task", DISCOVER_TEXT.format(page=number)), ImagePart("page", page_png(page))],
+                           schema=DISCOVER_SCHEMA, max_output=800)
+-    return discovered, ({"located": False, "route": "full_page"} if EFFICIENT_ENABLED else None)
++    return discovered, ({"located": False, "route": "full_page"} if _roi() else None)
+ 
+ 
+ # --- T .2: the targeted page reader (M2 review 18) ---------------------------------------------------------------------
+@@ -1119,7 +1165,7 @@ def _read_page_required(run, page, *, sha256: str, number: int, facts, reason: s
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+         readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
+-        texts = region_texts_v2(page, region, ocr_lines or [], ocr_timeout=_ocr_timeout(run))
++        texts = _region_texts(page, region, ocr_lines, run)
+         st = state[field] = {"key": key, "region": region, "readings": readings, "texts": texts, "disc": disc_value, "det": det_value}
+         if not (disc_value or det_value):
+             fields[key] = _absent(located, field, facts)
+@@ -1182,7 +1228,7 @@ def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
+     number, sha256, reason, discovered, located = ctx["number"], ctx["sha256"], ctx["reason"], ctx["discovered"], ctx["located"]
+     det_identity = ctx["det_identity"]
+     context_clip = located.get("clip") if located and located.get("located") else None
+-    for field in ("identity", "revision"):
++    for field in ("identity", "revision") if TARGETED_ENABLED else ():     # X off: no optional read, same required path
+         st = state.get(field)
+         if not st or st.get("absent"):
+             continue
+diff --git a/backend/tests/_e_crop_coords.py b/backend/tests/_e_crop_coords.py
+index 6088d8f..f4b92ea 100644
+--- a/backend/tests/_e_crop_coords.py
++++ b/backend/tests/_e_crop_coords.py
+@@ -42,7 +42,7 @@ def _to_crop(page, clip, box):
+ def _e_actual_crop_coordinates(monkeypatch, request):
+     from app.ai import evidence_reader as er
+ 
+-    if not getattr(er, "EFFICIENT_ENABLED", False) or request.module.__name__.endswith(("test_ai_pilot_r18", "test_ai_pilot_r19")):
++    if not (getattr(er, "EFFICIENT_ENABLED", False) or getattr(er, "ROI_ENABLED", False)) or request.module.__name__.endswith(("test_ai_pilot_r18", "test_ai_pilot_r19", "test_ai_pilot_r21")):
+         yield
+         return
+     last = {}
+diff --git a/backend/tests/_e_frame_shim.py b/backend/tests/_e_frame_shim.py
+index 734c037..8e9c665 100644
+--- a/backend/tests/_e_frame_shim.py
++++ b/backend/tests/_e_frame_shim.py
+@@ -12,7 +12,7 @@ def _e_whole_sheet_frame(monkeypatch, request):
+     from app.ai import evidence_reader as er
+     from app.services import title_block
+ 
+-    if getattr(er, "EFFICIENT_ENABLED", False) and not request.module.__name__.endswith("test_ai_pilot_r18"):
++    if (getattr(er, "EFFICIENT_ENABLED", False) or getattr(er, "ROI_ENABLED", False)) and not request.module.__name__.endswith(("test_ai_pilot_r18", "test_ai_pilot_r19", "test_ai_pilot_r21")):
+         monkeypatch.setattr(er, "locate_title_block", lambda page, ocr_lines=None, *, ocr_timeout=20.0:
+                             (page.rect, "located:shim_whole_page") if title_block.is_drawing_sheet(page) else (None, "not_a_drawing_sheet"))
+     yield
+diff --git a/backend/tests/test_ai_pilot_2026_09_30.py b/backend/tests/test_ai_pilot_2026_09_30.py
+index f543208..0df36c8 100644
+--- a/backend/tests/test_ai_pilot_2026_09_30.py
++++ b/backend/tests/test_ai_pilot_2026_09_30.py
+@@ -127,6 +127,8 @@ def _t(monkeypatch):
+     # these T tests script discovery regions in the whole page's frame: E (located discovery) is pinned off here and
+     # tested on its own in test_ai_pilot_r18 (M2 review 18)
+     monkeypatch.setattr(er, "EFFICIENT_ENABLED", False, raising=False)
++    for k, v in (("ROI_ENABLED", False), ("DEADLINE_ENABLED", False), ("SUPPORT_V2", True), ("REQUIRED_FIRST", True)):   # R21: the full switch set of T
++        monkeypatch.setattr(er, k, v, raising=False)
+     monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"})
+ 
+ 
+diff --git a/backend/tests/test_ai_pilot_r18.py b/backend/tests/test_ai_pilot_r18.py
+index 58c0e35..c65faa2 100644
+--- a/backend/tests/test_ai_pilot_r18.py
++++ b/backend/tests/test_ai_pilot_r18.py
+@@ -18,6 +18,8 @@ def _flags(monkeypatch, *, T=True, E=False):
+     monkeypatch.setattr(er, "GUARD_ENABLED", True)
+     monkeypatch.setattr(er, "TARGETED_ENABLED", T)
+     monkeypatch.setattr(er, "EFFICIENT_ENABLED", E)
++    for k, v in (("ROI_ENABLED", E), ("DEADLINE_ENABLED", E), ("SUPPORT_V2", T), ("REQUIRED_FIRST", T)):   # R21: the full switch set this test assumes
++        monkeypatch.setattr(er, k, v, raising=False)
+     monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1",
+                                         "discover_region": "discover-region-2026-09-30.1"})
+ 
+diff --git a/backend/tests/test_ai_pilot_r19.py b/backend/tests/test_ai_pilot_r19.py
+index 73dc438..b93e7c9 100644
+--- a/backend/tests/test_ai_pilot_r19.py
++++ b/backend/tests/test_ai_pilot_r19.py
+@@ -25,6 +25,8 @@ def _flags(monkeypatch):
+     monkeypatch.setattr(er, "GUARD_ENABLED", True)
+     monkeypatch.setattr(er, "TARGETED_ENABLED", True)
+     monkeypatch.setattr(er, "EFFICIENT_ENABLED", True)
++    for k, v in (("ROI_ENABLED", True), ("DEADLINE_ENABLED", True), ("SUPPORT_V2", True), ("REQUIRED_FIRST", True)):   # R21: the full switch set (T+E)
++        monkeypatch.setattr(er, k, v, raising=False)
+     monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1",
+                                         "discover_region": "discover-region-2026-09-30.1"})
+ 
+diff --git a/backend/tests/test_ai_pilot_r21.py b/backend/tests/test_ai_pilot_r21.py
+new file mode 100644
+index 0000000..c420730
+--- /dev/null
++++ b/backend/tests/test_ai_pilot_r21.py
+@@ -0,0 +1,190 @@
++"""R21 prerequisite switches: the four declared arm configurations demonstrated with a scripted, keyed provider on ACTUAL
++inputs (a rotated drawing sheet: whole-page discovery for L1 / L3, the real located crop for L2 / L4), through the
++persisted processing path. Common in every arm: G, Rsup (rotation-correct support), the required-first scheduling, the
++deadline policy. Varied: ROI (L2, L4) and the optional targeted read X (L3, L4). Also: identity matrix (flags off ==
++accepted; legacy G / T / T+E strings unchanged; four arms distinct), arm-specific caches, cap refusal, restart
++accounting. No model, no network."""
++import io
++import json
++import os
++import subprocess
++import sys
++
++import pymupdf
++import pytest
++from PIL import Image
++
++from app.ai import evidence_reader as er
++from app.ai.budget import JobBudget, Limits, open_budget
++from app.models import ProjectDocument, ResultCache
++
++from ._keyed_provider import KeyedProvider
++from .test_ai_pilot_r19 import Stage, _clip, crop_answer, read, sheet
++
++BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++BASE_ENV = {"AI_EVIDENCE_GUARD": "1", "AI_EVIDENCE_SUPPORT": "v2", "AI_EVIDENCE_SCHEDULING": "required_first", "AI_EVIDENCE_DEADLINE": "1"}
++ARMS = {"L1": {}, "L2": {"AI_EVIDENCE_ROI": "1"}, "L3": {"AI_EVIDENCE_TARGETED": "1"}, "L4": {"AI_EVIDENCE_ROI": "1", "AI_EVIDENCE_TARGETED": "1"}}
++ACCEPTED = ("evidence-reader-2026-09-29.7", "evidence-policy-2026-09-29.4")
++LEGACY = {  # the reviewed configurations keep their identity strings byte-for-byte (cache continuity of earlier evidence)
++    ("AI_EVIDENCE_GUARD",): ("evidence-reader-2026-09-29.7", "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1"),
++    ("AI_EVIDENCE_GUARD", "AI_EVIDENCE_TARGETED"): ("evidence-reader-2026-09-29.7+targeted-2026-09-30.2",
++                                                    "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"),
++    ("AI_EVIDENCE_GUARD", "AI_EVIDENCE_TARGETED", "AI_EVIDENCE_EFFICIENT"): (
++        "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+located-discovery-2026-09-30.2",
++        "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+located-discovery-2026-09-30.2"),
++}
++
++
++@pytest.fixture(autouse=True)
++def _no_submittal_reader(monkeypatch):
++    from app.ai import submittal_reader
++    monkeypatch.setattr(submittal_reader, "available", lambda project, provider=None: None)
++
++
++def identities(env: dict) -> dict:
++    base = {k: v for k, v in os.environ.items() if not k.startswith("AI_EVIDENCE_")}
++    code = "import json; from app.ai import evidence_reader as er; print(json.dumps([er.READER_VERSION, er.EVIDENCE_POLICY_VERSION, sorted(er.PROMPTS)]))"
++    out = subprocess.run([sys.executable, "-c", code], cwd=BACKEND, env={**base, "AI_ENABLED": "false", **env}, capture_output=True, text=True, check=True)
++    return json.loads(out.stdout.strip().splitlines()[-1])
++
++
++def test_identity_matrix_flags_off_equals_accepted_legacy_unchanged_and_arms_distinct():
++    assert identities({})[:2] == list(ACCEPTED)
++    for keys, expect in LEGACY.items():
++        assert identities({k: "1" for k in keys})[:2] == list(expect), keys
++    arms = {a: identities({**BASE_ENV, **e}) for a, e in ARMS.items()}
++    ids = [(v[0], v[1]) for v in arms.values()]
++    assert len(set(ids)) == 4, arms
++    assert all("+region-support" in v[1] and "+guard" in v[1] and "+deadline" in v[0] for v in arms.values())
++    assert "discover_region" in arms["L2"][2] and "discover_region" in arms["L4"][2] and "discover_region" not in arms["L1"][2]
++    assert "read_field_context" in arms["L3"][2] and "read_field_context" in arms["L4"][2] and "read_field_context" not in arms["L2"][2]
++
++
++def _set(monkeypatch, arm):
++    env = {**BASE_ENV, **ARMS[arm]}
++    ids = identities(env)
++    for k, v in (("GUARD_ENABLED", True), ("SUPPORT_V2", True), ("REQUIRED_FIRST", True), ("DEADLINE_ENABLED", True), ("EFFICIENT_ENABLED", False),
++                 ("ROI_ENABLED", "AI_EVIDENCE_ROI" in env), ("TARGETED_ENABLED", "AI_EVIDENCE_TARGETED" in env),
++                 ("READER_VERSION", ids[0]), ("EVIDENCE_POLICY_VERSION", ids[1])):
++        monkeypatch.setattr(er, k, v)
++    monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1", "discover_region": "discover-region-2026-09-30.1"})
++    return ids
++
++
++def illegible():
++    return {"label_text": "", "value": "", "legible": False, "other_values_in_crop": []}
++
++
++class _Provider(KeyedProvider):
++    """Keyed answers, plus the size of every image sent and the request timeouts (the deadline policy's trace)."""
++
++    def complete(self, request):
++        self.seen = getattr(self, "seen", []) + [(request.task, [Image.open(io.BytesIO(p.png)).size for p in request.parts if hasattr(p, "png")], request.timeout_s)]
++        return super().complete(request)
++
++
++def _answers(page, clip, *, roi, identity_read):
++    full = {**crop_answer(page, page.rect), "own_identity_region": [int(v) for v in _norm(page, page.rect, "DRAWING NO X-SD-1")],
++            "own_revision_region": [int(v) for v in _norm(page, page.rect, "REV 02")]}
++    return {("discover_region" if roi else "discover_page", None, "small"): crop_answer(page, clip) if roi else full,
++            ("read_identity", "identity", "small"): identity_read, ("read_revision", "revision", "small"): read("02"),
++            ("read_field_context", "identity", "small"): {"value": "X-SD-1", "printed_label": "DRAWING NO", "role": "own_identity",
++                                                          "region": [0, 0, 1000, 1000], "legible": True}}
++
++
++def _norm(page, clip, literal):
++    r = page.search_for(literal)[0] * page.rotation_matrix
++    return [(r.x0 - clip.x0) / clip.width * 1000 - 3, (r.y0 - clip.y0) / clip.height * 1000 - 3, (r.x1 - clip.x0) / clip.width * 1000 + 3, (r.y1 - clip.y0) / clip.height * 1000 + 3]
++
++
++class _Clock:
++    def __init__(self, remaining):
++        self.inner = JobBudget(limits=Limits(100000, 100000, 12, 1000, 0.0, 120.0, 2, 0.0, 0.0, 0.0), calls_today_before=0)
++        self.left = remaining
++
++    def remaining_s(self):
++        return self.left
++
++    def __getattr__(self, name):
++        return getattr(self.inner, name)
++
++
++@pytest.mark.parametrize("arm", ["L1", "L2", "L3", "L4"])
++def test_arm_configuration_on_a_rotated_sheet(db_session, tmp_path, monkeypatch, arm):
++    """L1 / L3: whole-page discovery; L2 / L4: the real located crop. The primary identity read is illegible, so the
++    optional targeted read fires in L3 / L4 only. Rotation-correct support (Rsup) validates the revision in EVERY arm on a
++    270-degree page; the deadline policy stamps every request's timeout in every arm."""
++    ids = _set(monkeypatch, arm)
++    roi, x = arm in ("L2", "L4"), arm in ("L3", "L4")
++    doc = sheet(rotation=270)
++    page = doc[0]
++    clip, route = _clip(page)
++    s = Stage(db_session, tmp_path, doc, f"arm{arm}")
++    p = _Provider(_answers(page, clip, roi=roi, identity_read=illegible()))
++    ai = s.run(p)
++    f = s.page_fields(ai)
++    tasks = [t for t, _, _ in p.seen]
++    assert tasks[0] == ("discover_region" if roi else "discover_page")
++    w, h = p.seen[0][1][0]
++    assert abs(w / h - (clip.width / clip.height if roi else page.rect.width / page.rect.height)) < 0.05, "the discovery image is the crop (ROI) or the whole page"
++    assert tasks[1:3] == ["read_identity", "read_revision"], "required reads first, in the fixed order"
++    assert ("read_field_context" in tasks) is x, "the optional targeted read is X only"
++    assert f["own:revision"] == "completed" and s.selected(ai, "own:revision")[:2] == ("02", "validated"), "rotation-correct support in every arm"
++    assert f["own:identity"] == ("completed" if x else "unusable:illegible") and (f.get("own:identity:targeted") == "completed") is x
++    assert f["own:decision"] == (er.LOCATED_ABSENCE if roi else "absent_by_discovery")
++    assert f.get("discovery:route") == (route if roi else None), "no located route is recorded when discovery saw the whole page (accepted behaviour)"
++    assert all(t_s is not None for _, _, t_s in p.seen), "the deadline policy bounds every request (D common)"
++    att = ai["attempts"][-1]
++    assert att["version"] == ids[0] and att["policy"] == ids[1]
++
++
++def test_arm_caches_never_cross_and_a_restart_of_the_same_arm_reuses_its_own(db_session, tmp_path, monkeypatch):
++    doc = sheet(rotation=0)
++    page = doc[0]
++    clip, _ = _clip(page)
++    s = Stage(db_session, tmp_path, doc, "cache")
++
++    def run_keep_cache(provider):
++        row = s.db.get(ProjectDocument, s.id)
++        er.evidence_stage(s.db, s.project, [(row, s.path)], provider=provider, variant="EV1", profile="default")
++        s.db.commit()
++        s.db.expire_all()
++        return s.db.get(ProjectDocument, s.id).extracted["ai_evidence"]
++
++    _set(monkeypatch, "L1")
++    p1 = _Provider(_answers(page, clip, roi=False, identity_read=read("X-SD-1")))
++    run_keep_cache(p1)
++    n1 = p1.calls
++    _set(monkeypatch, "L1")
++    p1b = _Provider(_answers(page, clip, roi=False, identity_read=read("X-SD-1")))
++    ai = run_keep_cache(p1b)
++    assert p1b.calls == 0 and all(c["cache_hit"] for c in ai["attempts"][-1]["calls"]), "a restart of the SAME arm reuses its own answers (no request)"
++    _set(monkeypatch, "L2")
++    p2 = _Provider(_answers(page, clip, roi=True, identity_read=read("X-SD-1")))
++    ai = run_keep_cache(p2)
++    assert p2.calls == n1 and not any(c["cache_hit"] for c in ai["attempts"][-1]["calls"]), "another arm never reuses L1's answers"
++    assert db_session.query(ResultCache).count() == 2 * n1
++
++
++def test_cap_refusal_is_a_recorded_budget_stop_in_the_common_scheduling(db_session, tmp_path, monkeypatch):
++    _set(monkeypatch, "L3")
++    doc = sheet(rotation=0)
++    page = doc[0]
++    clip, _ = _clip(page)
++    two = JobBudget(limits=Limits(100000, 100000, 2, 1000, 0.0, 120.0, 2, 0.0, 0.0, 0.0), calls_today_before=0)
++    p = _Provider(_answers(page, clip, roi=False, identity_read=illegible()))
++    run = er.EvidenceRun(db=db_session, project_id=None, provider=p, budget=two, variant="EV1", fresh=True)
++    out = er._read_page(run, page, sha256="c" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    f = out["_fields"]
++    assert [t for t, _, _ in p.seen] == ["discover_page", "read_identity"], "the cap refuses the third request before dispatch"
++    assert f["own:revision"] == "budget" and f["own:identity:targeted"] == "not_attempted:budget" and run.exhausted == "calls_per_document"
++
++
++def test_deadline_floor_refuses_a_request_with_too_little_time_left(db_session, tmp_path, monkeypatch):
++    _set(monkeypatch, "L2")
++    doc = sheet(rotation=0)
++    page = doc[0]
++    p = _Provider({})
++    run = er.EvidenceRun(db=db_session, project_id=None, provider=p, budget=_Clock(12.0), variant="EV1", fresh=True)
++    out = er._read_page(run, page, sha256="d" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert p.calls == 0 and out["_fields"]["discovery"] == "budget" and run.exhausted == "elapsed_time"

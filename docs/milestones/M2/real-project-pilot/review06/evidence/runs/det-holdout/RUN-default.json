@@ -1,0 +1,831 @@
+{
+ "at_utc": "2026-09-28T20:06:37+00:00",
+ "tag": "det-holdout",
+ "profile": "default",
+ "stage": "C:\\t\\holdout\\stage",
+ "database": "C:\\t\\r6\\det-holdout\\db\\default.db",
+ "parser": "parse-2026-09-29.8",
+ "ai": null,
+ "settings": {
+  "extraction_promote_observations": false,
+  "ai_enabled": false,
+  "ai_provider": "claude-code",
+  "ai_model_small": "sonnet",
+  "ai_model_standard": "opus",
+  "ai_evidence_variant": "off",
+  "sync_file_workers": 0,
+  "tesseract_cmd": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_max_concurrency": 2
+ },
+ "projects": {
+  "EP-19138": {
+   "project_id": 1,
+   "seconds": 2.8,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 7,
+    "processed": 7,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:06:42.009269",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.03,
+     "document_processing_seconds": 2.41,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.04,
+     "reconcile_actions_seconds": 0.01,
+     "reconcile_drawings_seconds": 0.04,
+     "total_seconds": 2.51,
+     "processed_count": 7,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-19138 DWG/a-2 revised  ground floor plan 1537874855099.pdf",
+       "seconds": 1.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 DWG/a-5 revised elevation 1,2,3_4.  1537874809492.pdf",
+       "seconds": 1.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 DWG/a-4 revised roof floor plan  1537430734780.pdf",
+       "seconds": 1.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 MS R0/Battery/ES 12-12.pdf",
+       "seconds": 0.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 MS R0/EP-19138 Cataluge/SIGA-AB4G.pdf",
+       "seconds": 0.5,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 - Commercial documents/EP-19138 - Design Sheet.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-19138 - Scan Documents/EP-19138 T&C Ack.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 7,
+     "documents_per_minute": 167.5,
+     "percentiles_ms": {
+      "median": 525,
+      "p90": 1279,
+      "p95": 1318,
+      "p99": 1318,
+      "max": 1318
+     },
+     "stage_ms": {
+      "classification": 1,
+      "content_evidence": 52,
+      "db_write": 8,
+      "deterministic_extract": 12,
+      "hash": 26,
+      "pdf_open": 8,
+      "pdf_text_extract": 819,
+      "storage_wait": 88,
+      "title_block": 561
+     },
+     "stage_share_pct": {
+      "classification": 0.1,
+      "content_evidence": 3.3,
+      "db_write": 0.5,
+      "deterministic_extract": 0.8,
+      "hash": 1.6,
+      "pdf_open": 0.5,
+      "pdf_text_extract": 52.1,
+      "storage_wait": 5.6,
+      "title_block": 35.6
+     },
+     "events": {
+      "ocr_cache_hits": 5,
+      "ocr_pages_attempted": 2,
+      "page_text_extractions": 11,
+      "page_text_reused": 17,
+      "pages_scanned": 11,
+      "pdf_opens": 7,
+      "read_pdf": 7
+     },
+     "largest_files": [
+      {
+       "path": "EP-19138 DWG/a-2 revised  ground floor plan 1537874855099.pdf",
+       "mb": 1.1,
+       "seconds": 1.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 DWG/a-4 revised roof floor plan  1537430734780.pdf",
+       "mb": 0.9,
+       "seconds": 1.1,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 DWG/a-5 revised elevation 1,2,3_4.  1537874809492.pdf",
+       "mb": 0.8,
+       "seconds": 1.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 MS R0/EP-19138 Cataluge/SIGA-AB4G.pdf",
+       "mb": 0.5,
+       "seconds": 0.5,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 - Scan Documents/EP-19138 T&C Ack.pdf",
+       "mb": 0.5,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 MS R0/Battery/ES 12-12.pdf",
+       "mb": 0.4,
+       "seconds": 0.5,
+       "role": "document"
+      },
+      {
+       "path": "EP-19138 - Commercial documents/EP-19138 - Design Sheet.pdf",
+       "mb": 0.3,
+       "seconds": 0.0,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 7
+     },
+     "ocr_documents": 2,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 7
+    }
+   }
+  },
+  "EP-28569": {
+   "project_id": 2,
+   "seconds": 1.4,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 11,
+    "processed": 11,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:06:43.392423",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.19,
+     "document_processing_seconds": 1.21,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.01,
+     "reconcile_actions_seconds": 0.0,
+     "reconcile_drawings_seconds": 0.01,
+     "total_seconds": 1.25,
+     "processed_count": 11,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+       "seconds": 0.4,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/CCTV/A01a-Hamriyah/C&MCG42403PH1-01-E-CCTV-2001.pdf",
+       "seconds": 0.4,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/CCTV/A01a-Hamriyah/C&MCG42403PH1-01-E-CCTV-2002.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/TELEPHONE/A01b-Zorah/C&MCG42403PH1-01-E-TL-2001.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 FAS/MS/EMLSC/R0/PDF/AUTH 010.pdf",
+       "seconds": 0.3,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 FAS/MS/EMLSC/R0/PDF/Catalogue LATEST.pdf",
+       "seconds": 0.2,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 MS/SCS/Leviton/Sent/R1/Consultant comments.pdf",
+       "seconds": 0.1,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/Transmittal/EP-28659 SCS CCTV & ACS MS R0.docx",
+       "seconds": 0.1,
+       "role": "transmittal",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 FAS/Transmittal/EP-28659 FA & EML MS R0.docx",
+       "seconds": 0.1,
+       "role": "transmittal",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 Scan/EP-28569 SCS MS R1 Ack 24.02.25.pdf",
+       "seconds": 0.1,
+       "role": "submittal_form",
+       "result": "processed"
+      }
+     ],
+     "documents": 11,
+     "documents_per_minute": 527.3,
+     "percentiles_ms": {
+      "median": 232,
+      "p90": 384,
+      "p95": 384,
+      "p99": 408,
+      "max": 408
+     },
+     "stage_ms": {
+      "classification": 0,
+      "content_evidence": 34,
+      "db_write": 17,
+      "deterministic_extract": 15,
+      "hash": 195,
+      "pdf_open": 81,
+      "pdf_text_extract": 247,
+      "storage_wait": 230,
+      "title_block": 191
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 3.3,
+      "db_write": 1.7,
+      "deterministic_extract": 1.5,
+      "hash": 19.3,
+      "pdf_open": 8.0,
+      "pdf_text_extract": 24.5,
+      "storage_wait": 22.8,
+      "title_block": 18.9
+     },
+     "events": {
+      "ocr_cache_hits": 17,
+      "ocr_pages_attempted": 17,
+      "page_text_extractions": 33,
+      "page_text_reused": 24,
+      "pages_scanned": 33,
+      "pdf_opens": 9,
+      "read_pdf": 9
+     },
+     "largest_files": [
+      {
+       "path": "EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+       "mb": 46.9,
+       "seconds": 0.4,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-28569 FAS/MS/EMLSC/R0/PDF/Catalogue LATEST.pdf",
+       "mb": 3.0,
+       "seconds": 0.2,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-28569 ELV/To T&C/Project Documents/Design Sheet/EP-28569 Design.pdf",
+       "mb": 2.6,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "EP-28569 ELV/Transmittal/EP-28659 SCS CCTV & ACS MS R0.docx",
+       "mb": 1.1,
+       "seconds": 0.1,
+       "role": "transmittal"
+      },
+      {
+       "path": "EP-28569 FAS/Transmittal/EP-28659 FA & EML MS R0.docx",
+       "mb": 1.1,
+       "seconds": 0.1,
+       "role": "transmittal"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/CCTV/A01a-Hamriyah/C&MCG42403PH1-01-E-CCTV-2001.pdf",
+       "mb": 0.9,
+       "seconds": 0.4,
+       "role": "document"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/CCTV/A01a-Hamriyah/C&MCG42403PH1-01-E-CCTV-2002.pdf",
+       "mb": 0.8,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 MS/SCS/Leviton/Sent/R1/Consultant comments.pdf",
+       "mb": 0.6,
+       "seconds": 0.1,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-28569 ELV/EP-28569 As Built Dwg/TELEPHONE/A01b-Zorah/C&MCG42403PH1-01-E-TL-2001.pdf",
+       "mb": 0.5,
+       "seconds": 0.3,
+       "role": "document"
+      },
+      {
+       "path": "EP-28569 FAS/MS/EMLSC/R0/PDF/AUTH 010.pdf",
+       "mb": 0.5,
+       "seconds": 0.3,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 5,
+      "submittal_form": 4,
+      "transmittal": 2
+     },
+     "ocr_documents": 5,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 11
+    }
+   }
+  },
+  "EP-28605": {
+   "project_id": 3,
+   "seconds": 0.3,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 4,
+    "processed": 4,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {},
+     "floors": {
+      "added": [],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:06:43.700518",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.01,
+     "document_processing_seconds": 0.2,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.01,
+     "reconcile_actions_seconds": 0.0,
+     "reconcile_drawings_seconds": 0.01,
+     "total_seconds": 0.24,
+     "processed_count": 4,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "EP-28605 Scan/EP-28605 FA&EML MS R0 Ack.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "MS/EM/R0/PDF/CS.pdf",
+       "seconds": 0.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "MS/FA/R0/PDF/CS.pdf",
+       "seconds": 0.1,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-28605 Scan/EP-28605 Theatre EML Design.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 4,
+     "documents_per_minute": 1008.5,
+     "percentiles_ms": {
+      "median": 64,
+      "p90": 237,
+      "p95": 237,
+      "p99": 237,
+      "max": 237
+     },
+     "stage_ms": {
+      "classification": 0,
+      "content_evidence": 7,
+      "db_write": 3,
+      "deterministic_extract": 3,
+      "hash": 10,
+      "pdf_open": 3,
+      "pdf_text_extract": 94,
+      "storage_wait": 32
+     },
+     "stage_share_pct": {
+      "classification": 0.1,
+      "content_evidence": 4.7,
+      "db_write": 1.9,
+      "deterministic_extract": 1.8,
+      "hash": 6.9,
+      "pdf_open": 1.8,
+      "pdf_text_extract": 62.0,
+      "storage_wait": 20.9
+     },
+     "events": {
+      "ocr_cache_hits": 1,
+      "ocr_pages_attempted": 1,
+      "page_text_extractions": 9,
+      "page_text_reused": 10,
+      "pages_scanned": 9,
+      "pdf_opens": 4,
+      "read_pdf": 4
+     },
+     "largest_files": [
+      {
+       "path": "MS/EM/R0/PDF/CS.pdf",
+       "mb": 0.6,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "MS/FA/R0/PDF/CS.pdf",
+       "mb": 0.6,
+       "seconds": 0.1,
+       "role": "document"
+      },
+      {
+       "path": "EP-28605 Scan/EP-28605 FA&EML MS R0 Ack.pdf",
+       "mb": 0.4,
+       "seconds": 0.2,
+       "role": "document"
+      },
+      {
+       "path": "EP-28605 Scan/EP-28605 Theatre EML Design.pdf",
+       "mb": 0.4,
+       "seconds": 0.0,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 4
+     },
+     "ocr_documents": 1,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 4
+    }
+   }
+  },
+  "EP-8430": {
+   "project_id": 4,
+   "seconds": 1.5,
+   "sync_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_job": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 10,
+    "processed": 10,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "drawings": {
+     "systems": {
+      "PAVA": {
+       "drawings": 2,
+       "revisions": 2,
+       "candidates": 0,
+       "missing": 0
+      }
+     },
+     "floors": {
+      "added": [
+       "GF",
+       "L1"
+      ],
+      "missing": [],
+      "inactive": [],
+      "merged": []
+     }
+    },
+    "forms_changed": true,
+    "remaining": 0,
+    "finished_at": "2026-09-28T20:06:45.231264",
+    "telemetry": {
+     "discovery_seconds": 0.0,
+     "hashing_seconds": 0.03,
+     "document_processing_seconds": 1.39,
+     "ai_seconds": 0.0,
+     "reconcile_seconds": 0.04,
+     "reconcile_actions_seconds": 0.0,
+     "reconcile_drawings_seconds": 0.03,
+     "total_seconds": 1.45,
+     "processed_count": 10,
+     "failed_count": 0,
+     "unavailable_count": 0,
+     "partial_count": 0,
+     "unchanged_after_hash_count": 0,
+     "slowest_files": [
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-02-A.pdf",
+       "seconds": 0.9,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-03-D.pdf",
+       "seconds": 0.8,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-02-D.pdf",
+       "seconds": 0.6,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 PAVA MS/Rev. 0/Test Certificates/CE Certification.pdf",
+       "seconds": 0.2,
+       "role": "document",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 PAVA MS/Rev. 0/Test Certificates/BOSCH PAVA Letter.pdf",
+       "seconds": 0.1,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "Approval and Comments/PAVA MS Comments.pdf",
+       "seconds": 0.0,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 Transmittal/EP-8430 PAVA MS R0 08.11.2017.doc",
+       "seconds": 0.0,
+       "role": "transmittal",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 Transmittal/EP-8430 PAVA MS R0.doc",
+       "seconds": 0.0,
+       "role": "transmittal",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 Scan Doc/EP-8430 PAVA MS R.0 Ack..pdf",
+       "seconds": 0.0,
+       "role": "submittal_form",
+       "result": "processed"
+      },
+      {
+       "path": "EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+       "seconds": 0.0,
+       "role": "document",
+       "result": "processed"
+      }
+     ],
+     "documents": 10,
+     "documents_per_minute": 413.8,
+     "percentiles_ms": {
+      "median": 59,
+      "p90": 779,
+      "p95": 868,
+      "p99": 868,
+      "max": 868
+     },
+     "stage_ms": {
+      "classification": 0,
+      "content_evidence": 27,
+      "db_write": 8,
+      "deterministic_extract": 20,
+      "hash": 26,
+      "pdf_open": 6,
+      "pdf_text_extract": 382,
+      "storage_wait": 96,
+      "title_block": 360
+     },
+     "stage_share_pct": {
+      "classification": 0.0,
+      "content_evidence": 3.0,
+      "db_write": 0.9,
+      "deterministic_extract": 2.1,
+      "hash": 2.8,
+      "pdf_open": 0.7,
+      "pdf_text_extract": 41.3,
+      "storage_wait": 10.4,
+      "title_block": 38.9
+     },
+     "events": {
+      "ocr_cache_hits": 8,
+      "ocr_pages_attempted": 5,
+      "page_text_extractions": 17,
+      "page_text_reused": 19,
+      "pages_scanned": 17,
+      "pdf_opens": 8,
+      "read_pdf": 8
+     },
+     "largest_files": [
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-02-A.pdf",
+       "mb": 1.0,
+       "seconds": 0.9,
+       "role": "document"
+      },
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-03-D.pdf",
+       "mb": 0.9,
+       "seconds": 0.8,
+       "role": "document"
+      },
+      {
+       "path": "Shop Drawings/AGC-DF-MEP-SD-PAS-02-D.pdf",
+       "mb": 0.6,
+       "seconds": 0.6,
+       "role": "document"
+      },
+      {
+       "path": "EP-8430 PAVA MS/Rev. 0/Test Certificates/BOSCH PAVA Letter.pdf",
+       "mb": 0.4,
+       "seconds": 0.1,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-8430 Scan Doc/EP-8430 PAVA MS R.0 Ack..pdf",
+       "mb": 0.4,
+       "seconds": 0.0,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+       "mb": 0.4,
+       "seconds": 0.0,
+       "role": "document"
+      },
+      {
+       "path": "Approval and Comments/PAVA MS Comments.pdf",
+       "mb": 0.3,
+       "seconds": 0.0,
+       "role": "submittal_form"
+      },
+      {
+       "path": "EP-8430 Transmittal/EP-8430 PAVA MS R0 08.11.2017.doc",
+       "mb": 0.3,
+       "seconds": 0.0,
+       "role": "transmittal"
+      },
+      {
+       "path": "EP-8430 Transmittal/EP-8430 PAVA MS R0.doc",
+       "mb": 0.3,
+       "seconds": 0.0,
+       "role": "transmittal"
+      },
+      {
+       "path": "EP-8430 PAVA MS/Rev. 0/Test Certificates/CE Certification.pdf",
+       "mb": 0.2,
+       "seconds": 0.2,
+       "role": "document"
+      }
+     ],
+     "roles": {
+      "document": 5,
+      "submittal_form": 3,
+      "transmittal": 2
+     },
+     "ocr_documents": 4,
+     "ai_documents": 0,
+     "processor_version": "2.0-phase0",
+     "workers": 0,
+     "planned": 10
+    }
+   }
+  }
+ },
+ "tables": {
+  "project_documents": 32,
+  "project_submittals": 0,
+  "project_shop_drawings": 2,
+  "background_jobs": 8,
+  "project_actions": 0,
+  "ai_usage": 0,
+  "document_readings": 0
+ },
+ "rows": 32,
+ "ai_usage_rows": 0
+}

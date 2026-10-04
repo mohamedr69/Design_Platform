@@ -1,0 +1,304 @@
+{
+ "declared_at": "2026-09-28T23:28:37",
+ "purpose": "M2 review 06 section 6: AI-EV0 / AI-EV1 / AI-EV2 on exposed exploration data (not sealed, not a generalization claim)",
+ "tree": {
+  "isolated_copy": "C:/t/iso/ep-platform/backend",
+  "scratch_baseline_commit": "c692f1e2cf20ad92ff2414ab7a433fc9102ad406",
+  "owner_head": "2221b43 (+ uncommitted Review 05 Candidate C, carried into the baseline commit)",
+  "uncommitted_candidate_files_sha256": {}
+ },
+ "identities": {
+  "parser": "parse-2026-09-28.7",
+  "title_block": "titleblock-2",
+  "labelled_fields": "fields-2026-09-29.1",
+  "transmittal_observe": "transmittal-observe-2026-09-29.1",
+  "evidence_reader": "evidence-reader-2026-09-29.1",
+  "evidence_policy": "evidence-policy-2026-09-29.1",
+  "evidence_prompts": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.1"
+  },
+  "evidence_schema": "evidence-schema-1",
+  "audit_rate": 0.2,
+  "audit_seed": "audit-2026-09-29",
+  "submittal_reader_prompt": "submittal-2026-09-17.1",
+  "sheet_reader_prompts": {
+   "PROMPT_VERSION": "read-sheet-2026-09-16.1",
+   "VERIFY_PROMPT_VERSION": "verify-rows-2026-09-27.1"
+  },
+  "evaluators": {
+   "frozen_at": "2026-09-28T23:21:30",
+   "evaluator": "m2-pilot-eval-2026-09-29.4",
+   "boq_evaluator": "m2-boq-eval-2026-09-29.3",
+   "rule": "frozen before any AI-variant or sealed run; not changed after seeing their results",
+   "files": {
+    "scripts/m2_eval4.py": "65f3e096dd8ec93be38f50db445eeb0a9837c1acde605f5569a575f1f31f79b5",
+    "tests/test_m2_eval4.py": "96ad942e2ea7d0bc901fad0b3808e1379e256a6e315b19e3f5753e102da22798",
+    "scripts/m2_pilot_eval.py": "845584b076a42ad26eb576c23034890851d35d386e558437c06501399950fe97",
+    "scripts/m2_boq_eval.py": "550e1a3c8eafcc93f97d95e801854b713f39e4206e9b6a900e0a09d691cdbe25",
+    "tests/test_m2_boq_eval3.py": "b6e9201009e9a0884e0a620066ed91b14d1e6cd1068174cdb0c1c3d9d75d496f"
+   }
+  }
+ },
+ "provider": {
+  "name": "claude-code (the provider the live configuration names; the live .env is not read or changed: the sandbox sets AI_PROVIDER/AI_MODEL_* to the same values)",
+  "cli": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "actual_model": "recorded per call from the provider response where returned",
+  "pricing": "not configured (AI_PRICE_* = 0): cost is UNKNOWN, not zero; no spend cap can be enforced by the application",
+  "account_cost_controls": "none available to this run beyond call / time / token caps"
+ },
+ "project_policies": {
+  "source": "live database, read only (projects.ai_policy)",
+  "registered": {
+   "30784": "allowed",
+   "30880": "allowed",
+   "29076": "allowed",
+   "30088": "allowed"
+  },
+  "eligible_for_real_model": [
+   "29076",
+   "30784",
+   "30088"
+  ],
+  "not_eligible": "every other pilot / holdout project: not registered in the application, so no recorded AI policy -- not sent to a model (reported as an evidence gap)"
+ },
+ "sources": {
+  "documents": {
+   "staged_copies_root": "C:/t/pilot/stage (Review 05 staging, read only)",
+   "files": {
+    "EP-29076/01- EP-29076 - Scan/EP-29076 FA MS & Sam B CBS Ack 14.05.26.pdf": "4206d28d767e36bb3987b41b499618c219c95599df5cd9ffa91e8ba49618a5d4",
+    "EP-29076/01- EP-29076 - Scan/EP-29076 FAS Design.pdf": "cf6f2430edd283784a9372217c433fc4b96b27b33c7b1f7d8c65349212dff4f2",
+    "EP-29076/02- Transmittal/EP-29076 CBS MS & SB 11.06.26.doc": "76d6f56ff68ef02b1673f09887edb234d6082cde44792f163a28a280faeddb2d",
+    "EP-29076/02- Transmittal/EP-29076 FAVE & CBS MS R0.doc": "feec4110e4cc2297a38ab26728dad7b7a6dc1dbb4b823ac4d835f9a3f91cb535",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/02_BOQ/01_Tender Document/Volume - III - Bills of Quantities.pdf": "51043493f2250b4f2bba0f27d360c73c17f29044dc6a9cbbf92f63d4c4c8e871",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/03_Specifications/GRANITOKER Tech Specs 2023.pdf": "db11585d7e0702d23a35db04bd09e31746a7eda0779a31868d04d94e55afe1be",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/03_Specifications/ICT & AV Systems/274100- AV-BGM Digital Signage System Specification 30082024.pdf": "8703f690351b8c326c7f6cb726f02d1f145ae6afd68051e10f623b864cc22b66",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-L17-ELE-EP-123-LAC-653-PLN-L17-ELE-EP-123.pdf": "9a1161b3528142b951df208fa5c38e15bc21c677078582e3ec71c1e9a1ff4a25",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-P02-ELE-EP-105-LAC-653-PLN-P02-ELE-EP-105.pdf": "eb2866bf069bea7f4eb7a346d7e1394375025d8cb5275eff76735750a95f05b7",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-ZZZ-ELE-EP-154-LAC-653-PLN-ZZZ-ELE-EP-154.pdf": "7eed8d4feed7b833a3852edf6c246f7e147cfb2ffa7affe86c144071eb588059",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/02-Smoke/LAC-653-PLN-L03-MEC-SM-110-LAC-653-PLN-L03-MEC-SM-110.pdf": "f8fa425a21cfb6fa70d7d6a3cd4564d3163eac82c968227b3b62036183d30fc3",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/02-Smoke/LAC-653-PLN-ZZZ-MEC-SM-155-LAC-653-PLN-ZZZ-MEC-SM-155.pdf": "743cf6d72179d7c2a9446d604c6382b3a3f393bcafa9cdf7c738d2ea51d4e484",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/06-LPG/LAC-653-PLN-M01-PLD-LG-103B.pdf": "1189fac951ea56cc4ef4d3e834f2f8271cfba5883448b076ea0159e9499ea796",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/06_Facade Lighting/LC-LAC-653-GEN-ZZZ-SLT-004-FACADE LIGHTING CONCEPT DESIGN 1.pdf": "2c778f242772bb271cb6f96478ef0dc323ec7126e33d91074db1248473cabe4e",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/06_Facade Lighting/LC-LAC-653-PLN-L12-SLT-118-12TH FLOOR PLAN FACADE LIGHTING LAYOUT.pdf": "ef0e079b47fa3f162b6177cee0527026534ebaf755340ba0c9452923879182c1",
+    "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/07_Acoustics/LAC-653-PPS-ZZZ-AC-134-T  42ND, & 60TH FLOOR PLAN ACOUSTIC LAYOUT.pdf": "e9246d54645b5c9418afd2708dc73de373f9a2e3db6d2235ac5428e0cc8c9942",
+    "EP-29076/05- MS/01- FA/02- R1/Compliance Statement new index.pdf": "9c4d1e2a1751e541124dc38d4d4046c1354c8cbc54e37e3c2760631716ae87a1",
+    "EP-29076/05- MS/01- FA/02- R1/data sheet_pagenumber.pdf": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac",
+    "EP-29076/06- Drawings/01- FA/02- IFC/02- PDF/swisstransfer_69ce9fa7-17c4-4f2e-886d-fa8f29725377/LAC-653-GEN-ZZZ-ELV-FA-211.pdf": "f812c9f89f3341956fcd6a52a934e4ec57d237fdd066d88e36c150c368b03eef",
+    "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf": "648e15718b8f69d68e9375d47fd9cbeb1e29e4da8b9abb708b972ac9ac5075f1",
+    "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-057-R00 - Code B/25H-S202-NCC-SD-MEP-ELE-FA-057-R00 - Code B.pdf": "8867b600f45a1fe144038748f538fbe651a313b2e29a3ad439767a3d9aff6a8d",
+    "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-058-R00 - Code B/25H-AAEM-SD-ELEC-FA-69F-058A.pdf": "67ce28d06499581083115d3e58818d02a05f94e7cb3de1bd2b02d7dd78a725e9",
+    "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-100 - LP/R03/New folder/25H-S202-NCC-SD-MEP-ELE-FA-001-R02 - Code C (1).pdf": "20b016e29f96b2ef7f7b30081f00b9ce6135886a14bbec8a03df42c87ccfb4d7",
+    "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-102 - B1/R03/New folder/Reply to MS Consultant Comments.pdf": "a136d37cac67af72c0301f8e2600b8844448435bc26218b7a74b438585034514",
+    "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-112 - L05/25H-AAEM-SD-ELEC-FA-5F-013.pdf": "7344e1da71248277699cc7b6f4cc6642e1a2e8d5773f8debe1558c95b46c948c",
+    "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-152 -L 64/R1/25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af",
+    "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-157 -L 69/25H-AAEM-SD-ELEC-FA-69F-058A.pdf": "893e99df96a015cab9e8e4e6c6586e5464b461ccbb51774172083d3c67504377",
+    "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf": "7a7bdf78c9e6d6c7a66283863ad4e36a7b4af527a77f8f31a971863cad24c832",
+    "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf": "21d1072ea3eb7946529bb3853dca13fd5873b81152a90223476c63147c4c951a",
+    "EP-29076/06- Drawings/01- FA/Fire Alarm/05. Mezzanine  Floor Fire Alarm Layout/3. R2/1. Submission/25H-S202-NCC-SD-MEP-ELE-FA-005-R2.pdf": "9e753d872acbbe8d2b74f244efba9f66aa5d69a86d03a29a9de453379f587a54",
+    "EP-29076/06- Drawings/01- FA/Fire Alarm/17. 8th Floor Fire Alarm Layout/1. R0/1. Submission/PDF/25H-AAEM-SD-ELEC-FA-8F-016.pdf": "296a9b66edcf944d917a1a0a9d7ea27d20c922e0225dbf637d1682d631dfa244",
+    "EP-29076/06- Drawings/01- FA/Fire Alarm/31. 24th Floor Fire Alarm Layout/25H-S202-NCC-SD-MEP-ELE-FA-031-R00 - Code B.pdf": "6d4323d225f7f567506cff5bf7037e24c2e1594051a71b2447a7364325b95818",
+    "EP-29076/06- Drawings/01- FA/Fire Alarm/50 53rd Floor Fire Alarm Layout/1. R0/1. Submission/25H-S202-NCC-SD-MEP-ELE-FA-050-00.pdf": "5066ef519604102c5ac67da0d18d344592d1668c317f27120e63b4d1e3524fbb",
+    "EP-29076/06- Drawings/02- CBS/02- IFC/02- PDF/swisstransfer_69ce9fa7-17c4-4f2e-886d-fa8f29725377/LAC-653-PLN-L04-ELV-FA-111.pdf": "7a1378b45273f051e48930a7d86d901f0e7a72b35259d3f7bb1eb54e439f6a12",
+    "EP-29076/06- Drawings/02- CBS/03- SD/25H-AAEM-SD-ELEC-EM-102 - B1/R0/25H-AAEM-SD-ELEC-EM-B1-003( - Copy.pdf": "29ad128c5fa73d2ec23c0a0de65078126b9cbbc5ed049ac2ce452ec29ea756b8",
+    "EP-29076/06- Drawings/02- CBS/03- SD/25H-AAEM-SD-ELEC-EM-122 - L16/R1/PDF/25H-AAEM-SD-ELEC-EM-16F-023.pdf": "f12d96cd8979557baf53cd0ca4332807b03f1ff6831559ba370c8732632285cd",
+    "EP-29076/06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/23. 15th Floor Emergency Lighting Layout/3. R2/2. Commented/25H-S202-NCC-SD-MEP-ELE-EM-23-02_Code B/25H-S202-NCC-SD-MEP-ELE-EM-23-02_Code B.pdf": "3cc134e15ce7f6d9b8fa6824a0824710554cdea5664f401152e4a8b9a2a24f86",
+    "EP-29076/06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/25. 17th Floor Emergency Lighting Layout/3. R2/1. Submission/25H-AAEM-SD-ELEC-EM-17F-024-02.pdf": "003815a4b59f255027abfe2bc96b2a66fa2eb69d4a93aae4f441ba12cad18326",
+    "EP-29076/06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/30. 23rd Floor Emergency Lighting Layout/1. R0/2. Commented/25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf": "e1d00adcc1852725dc4fccb7fd71cbb7c8e032314ac615668a396bc2df520981",
+    "EP-29076/06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/32. 25th Floor Emergency Lighting Layout (Mechanical Floor)/1. R0/1. Submission/PDF/25H-AAEM-SD--ELEC-EM-25F-031.pdf": "7b83af93993a50fd69deaadc171194e17ed88aab8765fd5c820e02754bea68bc",
+    "EP-29076/06- Drawings/02- CBS/03- SD/SLD/REF/OneDrive_1_9-18-2026 (1)/48 48th Floor Emergency Lighting Layout (Partial Mechanical Floor)/1. R0/2. Commented/25H-AAEM-SD-EMEC-EM-48F -047.pdf": "3f8f1af232c8abe7c7b0461987d58211d468533beaf8f80a92fd7413023888ea",
+    "EP-29076/06- Drawings/03- FF/01- IFT/01- PDF/LAC-653-PLN-L27-FPR-FF-132.pdf": "ba6c138eb6b92f6b99c728c1349281539d7bbb39e0e7079150cec95bb214f4eb",
+    "EP-29076/06- Drawings/04- SM/01- IFT/01- PDF/LAC-653-PLN-L20-MEC-SM-126-LAC-653-PLN-L20-MEC-SM-126.pdf": "0469bc2bc1103bbf77fe7c038882ad931c3cd1bd850744e910cdf7a3df86c143",
+    "EP-29076/06- Drawings/08- ARCH C1 30-03-2026/ARCH/ARCH/CAD/LAC-653-MOD-SHE-ZZZ-ARC-FM-0002_detached-GARBAGECALCULATION-3990471.pdf": "e419db92d0ce9fbc779bbb33edadc58cacc59d1b47d674398146bf320590cacc",
+    "EP-29076/06- Drawings/08- ARCH C1 30-03-2026/ARCH/ARCH/PDF/LAC-653-ARC-863-BLOCK WORK LAYOUT MEZZANINE FLOOR.pdf": "607e505da5dc1d33dd7d05c17fd4fd1f6862ab3c4387f8b50f3f8791fc56f7b3",
+    "EP-29076/06- Drawings/09- STRUCT C1 30-03-2026/OneDrive_2026-03-30/26.03.13 25H385_STR_C1/PDF/LAC-653-STR-938-BOTTOM EXTRA REINF_13TH FLOOR.pdf": "ccd2747833599c36addada228c2aa5eb163c42c96bf376409a4abd64888debca",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Calculation/Elec/Load Schedules/653-DB-62F to 74F.pdf": "83e60e7a8dcf837b4e4081c990b70c3784c1fcc64dcb23ce5409d5e052d305e8",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/01-HVAC/AC/LAC-653-PLN-L02-MEC-HV-109.pdf": "cca39ba85caa301ae13e221a818b2b665f7536711401c67052501efefd51795a",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/01-HVAC/CHW/LAC-653-PLN-GLF-MEC-CW-103.pdf": "8cd1ea24c5df9558d26ced9d957b739e31a16687cf32b4a89bfed5b861248743",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/04-Water/LAC-653-PLN-L26-PLD-WS-131.pdf": "e7c7e2bdc77d2dcb85d3a9ed27d5555d33ff7a63f93f4a4c6f68986253d28185",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf": "d53d5f4b35954463efa7db1b2181d9e54ffcd036a2176fc5967f72a1aff5063b",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/05-Fire Alarm/LAC-653-PLN-L08-ELV-FA-115-LAC-653-PLN-L08-ELV-FA-115.pdf": "f9890ad9c0572482fbd79f5555e7a78b5e9cb18d33156e80d4c0a919357daeb8",
+    "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/07-BMS Schematic/25-CHILLED WATER PRESSURISATION UNIT.pdf": "5aaa663721581d36d1b971adf92a49aeb6f9e35c064514b01d2c08d305ad468b",
+    "EP-29076/CDA/FA Civil_Defense_Requirements.pdf": "39c2897b4c7621fa79834465d6eeca4ae8d29af0da9760f3f326825a2012c0cb",
+    "EP-29076/CDA/Staircase.pdf": "b216cddb0865fe7ad91cded2795fc6ca44c12d769d6bb07de70505ae605f13fd",
+    "EP-30784/01- EP-30784 Scan/EP-30784 DRF.pdf": "0ac9be2c10d0f8520cd996fb8883eccaaffb3f2c4e01940c64ccc9e06f95153a",
+    "EP-30784/01- EP-30784 Scan/EP-30784 EML Design.pdf": "39a20e17215be7bde7d2da60e9124eac26482a72403d451003295d2f23d4189d",
+    "EP-30784/01- EP-30784 Scan/EP-30784 EML Sam B Ack 06.08.26.pdf": "18b790edf26e063749a4a8f23c052fac98f602e5cf72d1d108fa7a75ac9eae09",
+    "EP-30784/01- EP-30784 Scan/EP-30784 FAS Design.pdf": "1eb94a160ad34d65c662a9ec4fb7994d7b7d21d79db904990d5bf9a3d31a5899",
+    "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf": "165a89a0e5bc2426917b28ebbdac2938995e43fe8187aa8b2131e963843230cd",
+    "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210513 - COMMON MOTOR REQUIREMENTS FOR FIRE SUPPRESSION EQUIPMENT.pdf": "719a944578c48872b4e87cdd6425e514614add3099bfb8957894bee4bf835fcc",
+    "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210517 - SLEEVES AND SLEEVE SEALS FOR FIRE-SUPPRESSION PIPING.pdf": "59bfde178e38d819cf1371707cebbee72486c87e1b9a07d6ff228143042b2b66",
+    "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/213400 - PRESSURE-MAINTENANCE PUMPS.pdf": "5209f870fe4374887b7a43b90d4fe8e9bd76951269abfa9fe2e6fffe99361f53",
+    "EP-30784/03- Drawings/SD/FA/02. Basement-3/R1/Submitted/BBY006-GME-SDW-FP-FA-BSM-B03-010026.pdf": "c60f85c55eb4674e87c851a0c1ce9216c5fa7ce4f6ee738b039991cdbe256153",
+    "EP-30784/03- MS/01- FA/05- Battery Calculation/MFACP_1.pdf": "60a541cc27b1fb18faea8fc102ee88b510e7972ac82f4b9759c91276dedbb799",
+    "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF": "898bd65728e3af65ab5a933390a19d610423ccfecf8a544401aa26f2522b94cc",
+    "EP-30784/03- MS/03- FRC/Draft Warranty.pdf": "321fa7f9eae4aa6fb8690f1247b5743d2ec1b731e9c69f51528209191bec0a62",
+    "EP-30784/03- MS/03- FRC/EP-30784 FRC MS R0 FIREGUARD.pdf": "c673774993a8d2257a71f422748ef2696a008f1145e32286add21d289f0ea735",
+    "EP-30784/04- Drawings/03- RCP/OneDrive_1_9-16-2026/BBY006-GEC-SDW-ID-FT-T02-L52-L53-012220.pdf": "dcd0b9f6b8964ba077c0a3e13a1446641ff5d798582c130d205f4ec92f0eae6e",
+    "EP-30784/04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf": "4b3a372446645c9fe8931615100dd82e8176c9958209dc0e2947d0ac166099b9",
+    "EP-30784/04- Drawings/06- DCD approved/PDF/785045SMOKECONTROLSYSTEMREVISEDPART02.pdf": "8f25950ffb2b1c2fe7604c83256c594ac0b4ed19d15fe1d6d0196e790d61d39f",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R0/05. Ground Floor/BBY006-GME-SDW-FP-FA-POD-BGF-010002.pdf": "2dfe63d284f6a2c41fa598e82f3ca3eed9b3fb9d4c7aa249ca42c94937ae3e4f",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R0/17. L52 & 53(TYP 2C) Floor Plan/BBY006-GME-SDW-FP-FA-ZZZ-ZZZ-010012.pdf": "9f723f6950456734c2afda67456aa24b20a4e3e2abad1252770f1dae8f5af178",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R1/01. Basement-4/BBY006-GME-SDW-FP-FA-BSM-B04-010025.pdf": "019d18293cda65cd2bf746443180c20c1d3883ac02e186f72fde904072270920",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-BSM-B02-010027 Shop Drawing for Basement-2 Floor Plan - Fire Alarm Layout.pdf": "7d85578bb42edc2f38f5bfb8d79490390625c5f781ac3e899e78426219a82137",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2",
+    "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf": "232e571db94db50cde43cdaeefb18d53955dbb48a22aa8892c056c79b9b7c83e",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/approved/BBY006-GME-SDW-EL-LI-ZZZ-L57-010041 Shop Drawing L57-4th Mechanical Floor Plan Emergency Lighting Layout.pdf": "43ad256d36af9e05bbe5bb5f525d19772a1cfadbd72f9eadc6b598452414bbd5",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf": "3704c40777f65ef5832f1d0d0b8c33fe64bbdc8bdc794997b21b99bd868dfcce",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P02-010030 Shop Drawing for Podium-2 Floor Plan Emergency Lighting Layout.pdf": "5218bc3fd15ff5cc708175fd021e930a28f22a22a3ea3f68e8623731d22ad7ab",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-ZZZ-L41-010050 Shop Drawing L41-3rd Mechanical Floor Plan Emergency Lighting Layout.pdf": "0c9344d893df10be232b4685e39174370732bba54a547a00a56fbfa931330950",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/10. L02-1st Mechanical Floor/BBY006-GME-SDW-EL-LI-ZZZ-L02-010033.pdf": "a7fa414ad72907d16ec1cd0f6835dc9e0ae6478e97a9eebe41d9103a8180ffb0",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/21. L58(TYP 3A) Floor Plan/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf": "00880927193eb9200532168f2716d094b5f39295f8208ef553542309735c372d",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/09. L01-Amenities Floor/EM-109.pdf": "72c18ada23bf2ee6e7f268c60f63f390c6143462518ba7c314ef62371e56aabe",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/13. L23-L40(TYP1A) Floor Plan/EM-113.pdf": "7d9446e05ff6400f6eac6d231e9366a1f89359caeb87ba276956817869c9a514",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/25. Roof Floor Plan/EM-125.pdf": "b214090e304e2ff11dc8840bbf77892bd0509c1d002c69dcdba927f34cd2b5b3",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R01/L58/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf": "8fa6ab3b06b7269648011d468629e95a3085d82aa0d6941d99ab195cede50854",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R01/POD-1/Reply to MS Consultant Comments 31 (1).pdf": "32739ca611950e32a5cae33b674bc32a97094c415b5bda16f587744794f4946f",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R01/POD-3/Reply to MS Consultant Comments 31 (3).pdf": "7154c2ca85fa23115c68f2c410ecd201e2914dba291b30195de8a27d292f09c5",
+    "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R02/01.Basement-4/EM-101.pdf": "b6dbe6d6feaebd54cc450a9ebd0a82b1f9ed70f2fd63cc3c08c1d19572e2f912",
+    "EP-30784/06- Transmittal/EM Sam B 06.8.26.doc": "9d835b32d1f8370ba64fe079ca38f0f64081007c0b425198ddf8919ee819a6b2",
+    "EP-30784/06- Transmittal/EP-30784 Optical detector Sam B.doc": "93b67785a8b2a6a96e8fb90ad79e8e1495a79294e15e64820422c57e6c50f7d5",
+    "EP-30784/08- approval/MS/EML/R0/Reply to MS Consultant Comments.pdf": "fcf8b8a17e4d2d5d64710f4b7a98298f952ac92e8cbe9e5d39524c936706bf02",
+    "EP-30784/08- approval/MS/FA/BBY006-GME-MAS-EL-FA-0001 Material Submittal for Fire Alarm, Fire Telephone & Voice Evacuation System.pdf": "1196a35ec9633c8d1510236f0ca7e774c84ce19782ed024bd1d5be09164c9991",
+    "EP-30784/08- approval/samples/FA/R1/BBY006-GME-SAR-EL-FA-0002 Sample Approval Request for Fire Alarm & Voice Evacuation System.pdf": "f31ddfffc5182358db40a9e477b97318e4d8f15a358389bbc9bac71d7e07b0ac",
+    "EP-30784/08- approval/samples/FA/R1/Reply to MS Consultant Comments (2).pdf": "5d96018bfc0c52daa1555a75344e608a5c70ea26e8b83a76f4d499736868688b",
+    "EP-30088/01. Commercial Document/EP-30088 Design Sheet ELS.pdf": "80c43d652683884420df1e6d2bebfa9059f86eb78d4bbdec05d00b8e79567b83",
+    "EP-30088/01. Commercial Document/EP-30088 Design Sheet FAS.pdf": "522b3edde4ed441957dfff67fd7ddf52161f8e89d9b4056db2ffff7eb159235c",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/ELECTRICAL/ELECTRICAL LOAD SCHEDULE/LOAD SCHEDULE.pdf": "d1e9c3f4bcf85e85d8502bea27394dcebb4dd18e6b91ead7c56b4505d8a21dd2",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/ELECTRICAL/SCHEMATIC DIAGRAM/PDF/SINGLE LINE DIAGRAM.pdf": "0a416e761e0a1a518da53e358e4070ca0387866489171b1cbfe5bc52c6ffe8bd",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/CHILLED WATER/PDF/CHILLED WATER LAYOUTS.pdf": "c460d562ba93b2ca25d620b7c2455339530b3039ba32a53f8c0093715e342cc1",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/1. IFC DRAWINGS/03. IFC/02. 23.05.2025 IFC - ARCH STR MEP/MEP/MECHANICAL/VENTILATION/PDF/VENTILATION LAYOUT.pdf": "8a6d655ddde3a8f00dcbad3d748079807a6b79444269dfdcab3616c37435e1bf",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/2. AUTHORITY DOCUMENTS/4. AUTHORITY AND NOCs/DCD Authority Documents for SPM/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf": "a4e484570f9b13d74469c871def544048938518b1ad5fe1ff31487691c87a943",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf": "5903632d17a8cc50a5d8917db2f6c34a2ed90fb9c9690bbfa140f5cb1f4f1543",
+    "EP-30088/03. Document/1. SAMANA PARK MEADOWS/4. MATERIAL SUBMITTAL/FIRE ALARM/ICC-DLRC-SPM-MAR-MEP-0056-00-COMMENTED-B.pdf": "2f01d0986f816c1b14b2be7185c6b280dcc86c8da8a3ef9b18c176d252702c02",
+    "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf": "a4e484570f9b13d74469c871def544048938518b1ad5fe1ff31487691c87a943",
+    "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/FINAL APPROVAL-DCD.pdf": "4cebf62813fb53e91f31233ec0b06b679c1f332e772a28b7126b6a90bc1aa5ec",
+    "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/Park Medows   -Final Design Revision Arch  - Approved/REQ-2387569  - BP.pdf": "a4e6d91e83bbdd260bd4ce92ee5db7fb09b47d3e591ce69be1afc194677080a1",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0078-00-COMMENTED-C.pdf": "97577c5a6a6f575a3988cf2940d01e8da3bee7679490bb2520d48aa40916b645",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0080-00-COMMENTED-C.pdf": "af577d56a6230a3113aea9925b68276deecddf5d7e879815a197904f751717a2",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0084-00-COMMENTED-C.pdf": "fb1630480f71fd6d6f35c613b4dfbe12950eaae7e7073249ebe45a4e24a0a9f9",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0086-00-COMMENTED-C.pdf": "85859d54d51b4750f251ab915a225117e613345856fd78cb746329c682e626d0",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Submission/R0/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-104 C (4TH FLOOR)-00.pdf": "e45458e96438e92d7f3403d6bb9fe45fc83c77629f208c1fa3f39e4b79087c0b",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf": "23cbee28ecb40d80ad7310f954c11cba8313b44c655c2c08adc755d01734f8d3",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-104 H (9TH FLOOR).pdf": "21c0bfa4e394dc97979372d2fb7c8b7e2494b2e85a4fd12cbcc90baf89be36c9",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-105.pdf": "dfd2d59d67efe3bcb2fc5e91be8df96d964cd2aed4d272930b0380882ea53e47",
+    "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Submitted/R01/PDF/ICC-DLRC-SPM-SD-MEPFA-104 B-01 (3RD FLOOR).pdf": "42b9f1795ca2abcf2d4b63ce7240aac03647595c2051696a41cecae4d83c131f",
+    "EP-30088/06. MS/EML/EML SPECS.pdf": "e1f52dd984e66c0b39e50dffc906e9a942f3f7a9fa44b72b4a7a746c532f24b0",
+    "EP-30088/06. MS/EML/R1/SOM.pdf": "864c0a06775632ac1f34432b9010cfdafe6f8af14bdcf68111ef3ee8922ca7b8",
+    "EP-30088/06. MS/EML/Revised/PDF/EATON Auth.pdf": "2a8860c734a43f890f30a625ffaa1a05a0ba7b92e8b78a67497095265c33b4b8",
+    "EP-30088/06. MS/FA/Draft Warranty.pdf": "9c07b30677063eb6fc25b7e29f6fa1817cb2b2e396e58ba17a5e7b01d86ecf45",
+    "EP-30088/06. MS/FA/Revised/PDF/Product Catalog.pdf": "896e3e315db34fea352d1a06a1d42301e912b7e7d5fc50bdff66b833158604de",
+    "EP-30088/07. PQ Samana & IVY Gardens/PQ -R1/ICC-DLRC-SIG2-PQ-MEP-0005-00 -  PQ - Al ARABIA FOR SAFETY AND SECURITY LLC.pdf": "bc3a3dbbbde379f85c79304f66d45152740d20382f9568058b0b854b71ffff3a",
+    "EP-30088/08. RECIEVED FROM ESTIMATION/Samana Dev-OneDrive_2_10-06-2026/01. HYDRAULICS SPECS.pdf": "46a7ea22c01f380c40183059a1770e3367cdb469db4b309a26880c8b1f98d181",
+    "EP-30088/09. Scan Document/EP-30088 CBS Sam B ack 13.08.26.pdf": "bfd9098f7bfce2cb3cd2312eb8b38c21fcbdef3b581ff88a7c31a6f14ee9b8b9",
+    "EP-30088/10. SD/CBS/recieved 14-09/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-104 D (5TH FLOOR)-00.pdf": "efe820ed66191158787cf20ed10f55a96ed9903aa91a9eeb9cd01822866a6418",
+    "EP-30088/10. SD/CBS/recieved 14-09/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-104 I (10TH FLOOR)-00.pdf": "f4c6405c9217954594727351374fbc9db31ae6ad447a042a1f7545b71bd23ecf",
+    "EP-30088/10. SD/FA/recieved/R01/ICC-DLRC-SPM-SD-MEP-0040-00-COMMENTED-B.pdf": "7331e287fb97a2bb17e70a5ce5756bbb31791d4454ea920a66980c8df26ab50d",
+    "EP-30088/10. SD/recieved/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0077-00-COMMENTED-C.pdf": "36bee6d1c7f50371c12a0c5a4f9b564eb32c0511d98a9f854216a649fba9c56b",
+    "EP-30088/10. SD/recieved/Emergency Lighting Layout/Submission/R0/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-103-00.pdf": "e4c39ae89feda615bee530d688769460320b85e712e62364db57e341bcd84f22",
+    "EP-30088/10. SD/recieved/Emergency Lighting Layout/Submission/R0/06-02-2025_EML/ICC-DLRC-SPM-SD-MEPEM-104 A (2ND FLOOR)-00.pdf": "628965f884e07d16795bab6348ae349ea80338b43a2a04b6e4c5304b6435e2fd",
+    "EP-30088/10. SD/recieved/Fire alarm layout/Received/R0/R0/ICC-DLRC-SPM-SD-MEP-0040-00-BASEMENT-02 FLOOR PLAN FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-0040-00.pdf": "7289c61b047b47c81d8aad9f57d2517a701e0f21d8d98b96103df985d372ffa1",
+    "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf": "23cbee28ecb40d80ad7310f954c11cba8313b44c655c2c08adc755d01734f8d3",
+    "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0128-00-COMMENTED-C.pdf": "5b10f3d13176399e4fae6090435d6085a8aadf55737f3ca6feb8f8af1b796339",
+    "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf": "9239dd5363bf6f820d3c10600a3ceea3cd89f246962bc86d524ffa018cca56f4",
+    "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-104 A (2ND FLOOR).pdf": "49e92633791550fea807d4deffd72696dce21351bc54420bb1013f6392962e1e",
+    "EP-30088/12. Transmittal/EP-30058 FA 24.07.26.doc": "dcf84f1accc151d49faf4707afd052d231d3617392ce6078585684154657faaf"
+   },
+   "count": 137
+  },
+  "boq_design_sheets": [
+   {
+    "ep": "30784",
+    "relative_path": "01- EP-30784 Scan\\EP-30784 FAS Design.pdf",
+    "sha256": "1eb94a160ad34d65c662a9ec4fb7994d7b7d21d79db904990d5bf9a3d31a5899",
+    "staged_path": "C:\\t\\pilot\\stage\\EP-30784\\01- EP-30784 Scan\\EP-30784 FAS Design.pdf"
+   },
+   {
+    "ep": "30784",
+    "relative_path": "01- EP-30784 Scan\\EP-30784 EML Design.pdf",
+    "sha256": "39a20e17215be7bde7d2da60e9124eac26482a72403d451003295d2f23d4189d",
+    "staged_path": "C:\\t\\pilot\\stage\\EP-30784\\01- EP-30784 Scan\\EP-30784 EML Design.pdf"
+   },
+   {
+    "ep": "30088",
+    "relative_path": "01. Commercial Document\\EP-30088 Design Sheet FAS.pdf",
+    "sha256": "522b3edde4ed441957dfff67fd7ddf52161f8e89d9b4056db2ffff7eb159235c",
+    "staged_path": "C:\\t\\pilot\\stage\\EP-30088\\01. Commercial Document\\EP-30088 Design Sheet FAS.pdf"
+   },
+   {
+    "ep": "30088",
+    "relative_path": "01. Commercial Document\\EP-30088 Design Sheet ELS.pdf",
+    "sha256": "80c43d652683884420df1e6d2bebfa9059f86eb78d4bbdec05d00b8e79567b83",
+    "staged_path": "C:\\t\\pilot\\stage\\EP-30088\\01. Commercial Document\\EP-30088 Design Sheet ELS.pdf"
+   }
+  ]
+ },
+ "matrix": {
+  "extraction_profile": [
+   "default"
+  ],
+  "document_variants": [
+   "AI-EV0-baseline (application AI path, evidence reader off)",
+   "AI-EV1-targeted (EV0 state + evidence reader EV1)",
+   "AI-EV2-broad (EV0 state + evidence reader EV2)"
+  ],
+  "boq": [
+   "deterministic reader (model disabled; scripts.m2_boq_eval)",
+   "application model-disabled path (sheet recorded not read)",
+   "AI-EV0 application model path (sheet_reader) on the two eligible sheets"
+  ],
+  "not_run": [
+   "promoted profile with a model",
+   "any non-eligible project with a model",
+   "sealed cohort (does not exist yet)"
+  ]
+ },
+ "budgets": {
+  "ev0_settings": {
+   "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 150,
+   "AI_MAX_CALLS_PER_DOCUMENT": 12,
+   "AI_MAX_ELAPSED_S_PER_JOB": 120,
+   "AI_MAX_ESCALATIONS_PER_DOCUMENT": 2,
+   "AI_CLI_TIMEOUT_S": 300
+  },
+  "ev_settings": {
+   "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 150,
+   "AI_MAX_CALLS_PER_DOCUMENT": 8,
+   "AI_MAX_ELAPSED_S_PER_JOB": 300,
+   "AI_MAX_ESCALATIONS_PER_DOCUMENT": 2,
+   "AI_MAX_OUTPUT_TOKENS_PER_TASK": 800,
+   "AI_MAX_INPUT_TOKENS_PER_TASK": 6000,
+   "AI_CLI_TIMEOUT_S": 300
+  },
+  "reader_limits": {
+   "pages_per_document": 4,
+   "calls_per_document": 8,
+   "escalations_per_run": 2
+  },
+  "run_caps_fresh_application_requests": {
+   "AI-EV0 documents": 150,
+   "AI-EV1": 200,
+   "AI-EV2": 300,
+   "BOQ AI-EV0": 120,
+   "experiment_total": 700
+  },
+  "concurrency": 1,
+  "time_cap_hours": 6
+ },
+ "stop_conditions": [
+  "provider not ready / CLI missing -> not run, gap reported",
+  "an auth or refused outcome, or 5 consecutive transport / timeout failures -> stop that track, keep what was written, report partial",
+  "a run cap reached -> the remaining projects are recorded as not run (never as negatives)",
+  "any sandbox assertion failing (database / cache / library / uploads outside C:/t/r6, or the app package not the isolated copy) -> abort before any call"
+ ],
+ "partial_results": "every page / call keeps its outcome (ok, failed, budget); failed and budget-stopped pages are not negatives; the previous deterministic reading stays on every row",
+ "continuation": "a re-run with the same identities reuses the result cache (reported as cache hits); a new identity (model / prompt / policy / variant) cannot reuse it",
+ "no_live_effect": "no live service, live .env, live database, symbol library or OneDrive original is written; sources are Review 05 staged copies"
+}

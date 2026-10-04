@@ -1,0 +1,145 @@
+{
+  "same_revision_literal_different_targets": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "recovered_clean",
+      "decision": "held_only"
+    },
+    "judged": [
+      [
+        "decision",
+        "ANN",
+        "held",
+        "held_correct"
+      ],
+      [
+        "identity",
+        "X-SD-1",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "03",
+        "validated",
+        "correct"
+      ]
+    ],
+    "anchors": {
+      "own:decision": {
+        "source": "reconstructed",
+        "rule": "reconstruct-2",
+        "attempt": 1,
+        "identity": "X-SD-1",
+        "identity_status": "found",
+        "identity_entry": {
+          "value": "X-SD-1",
+          "target": null,
+          "attempt": 1,
+          "seq": null,
+          "at": null
+        },
+        "revision": "02",
+        "revision_known": true,
+        "revision_status": "found",
+        "revision_entry": {
+          "value": "02",
+          "target": "X-SD-1",
+          "attempt": 1,
+          "seq": null,
+          "at": null
+        }
+      },
+      "own:identity": null,
+      "own:revision": {
+        "source": "read",
+        "seq": 3,
+        "identity": "X-SD-1"
+      }
+    }
+  },
+  "different_literal_control": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "recovered_clean",
+      "decision": "held_only"
+    },
+    "judged": [
+      [
+        "decision",
+        "ANN",
+        "held",
+        "held_correct"
+      ],
+      [
+        "identity",
+        "X-SD-1",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "03",
+        "validated",
+        "correct"
+      ]
+    ],
+    "anchors": {
+      "own:decision": {
+        "source": "reconstructed",
+        "rule": "reconstruct-2",
+        "attempt": 1,
+        "identity": "X-SD-1",
+        "identity_status": "found",
+        "identity_entry": {
+          "value": "X-SD-1",
+          "target": null,
+          "attempt": 1,
+          "seq": null,
+          "at": null
+        },
+        "revision": "02",
+        "revision_known": true,
+        "revision_status": "found",
+        "revision_entry": {
+          "value": "02",
+          "target": "X-SD-1",
+          "attempt": 1,
+          "seq": null,
+          "at": null
+        }
+      },
+      "own:identity": null,
+      "own:revision": {
+        "source": "read",
+        "seq": 3,
+        "identity": "X-SD-1"
+      }
+    }
+  },
+  "missing_identity_order": {
+    "recovery": {
+      "identity": "recovered_clean",
+      "revision": "missed",
+      "decision": "missed"
+    },
+    "judged": [
+      [
+        "identity",
+        "X-SD-9",
+        "validated",
+        "correct"
+      ],
+      [
+        "revision",
+        "02",
+        "held",
+        "held_unassociated"
+      ]
+    ],
+    "anchors": {
+      "own:identity": null,
+      "own:revision": null
+    }
+  }
+}

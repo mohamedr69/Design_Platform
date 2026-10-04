@@ -1,0 +1,97 @@
+{
+ "source_rates_r26_2": {
+  "identity": "16/27",
+  "revision": "16/27",
+  "decision": "6/27",
+  "resolved_documents": "17/27"
+ },
+ "planning_ranges": {
+  "identity": [
+   0.45,
+   0.5925925925925926,
+   0.7
+  ],
+  "revision": [
+   0.45,
+   0.5925925925925926,
+   0.7
+  ],
+  "decision_by_stratum": {
+   "review_signal": [
+    0.2,
+    0.3,
+    0.45
+   ],
+   "drawing_signal": [
+    0.05,
+    0.1,
+    0.15
+   ],
+   "other": [
+    0.05,
+    0.1,
+    0.15
+   ]
+  }
+ },
+ "first_pool": {
+  "review_signal": 40,
+  "drawing_signal": 20,
+  "other": 12
+ },
+ "extension": {
+  "review_signal": 36
+ },
+ "target_per_field": 16,
+ "minimum_matched_per_field": 12,
+ "rows": [
+  {
+   "design": "first pool (72)",
+   "field": "identity",
+   "pool_documents": 72,
+   "expected": 42.7,
+   "min_p5_at_low_rate": 25,
+   "max_p95_at_high_rate": 57
+  },
+  {
+   "design": "first pool (72)",
+   "field": "revision",
+   "pool_documents": 72,
+   "expected": 42.7,
+   "min_p5_at_low_rate": 25,
+   "max_p95_at_high_rate": 57
+  },
+  {
+   "design": "first pool (72)",
+   "field": "decision",
+   "pool_documents": 72,
+   "expected": 15.2,
+   "min_p5_at_low_rate": 5,
+   "max_p95_at_high_rate": 29
+  },
+  {
+   "design": "pool + extension (108)",
+   "field": "identity",
+   "pool_documents": 108,
+   "expected": 64.0,
+   "min_p5_at_low_rate": 40,
+   "max_p95_at_high_rate": 83
+  },
+  {
+   "design": "pool + extension (108)",
+   "field": "revision",
+   "pool_documents": 108,
+   "expected": 64.0,
+   "min_p5_at_low_rate": 40,
+   "max_p95_at_high_rate": 83
+  },
+  {
+   "design": "pool + extension (108)",
+   "field": "decision",
+   "pool_documents": 108,
+   "expected": 26.0,
+   "min_p5_at_low_rate": 11,
+   "max_p95_at_high_rate": 47
+  }
+ ]
+}

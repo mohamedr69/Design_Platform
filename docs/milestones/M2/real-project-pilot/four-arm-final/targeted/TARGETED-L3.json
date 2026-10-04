@@ -1,0 +1,460 @@
+[
+ {
+  "draft_id": "D15",
+  "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+  "label_resolved": false,
+  "page": 1,
+  "field": "identity",
+  "reason": "form_or_title_block_without_identity,unexplained_empty_document,targeted",
+  "route": null,
+  "source_region_pt": null,
+  "call_outcome": "budget: elapsed_time (under the minimum request time)",
+  "model": null,
+  "input_tokens": null,
+  "output_tokens": null,
+  "primary_state": "incomplete:no_region",
+  "targeted_state": "budget",
+  "first_reading": {
+   "source": "discovery",
+   "value": "FLS-107",
+   "label": null
+  },
+  "targeted_reading": null,
+  "final_state": "candidate",
+  "final_value": "FLS-107",
+  "truth": "FLS-107",
+  "targeted_value_matches_truth_literally": null,
+  "effect": "no reading (budget: elapsed_time (under the minimum request time))",
+  "evaluator": [
+   [
+    "held",
+    "FLS-107",
+    "held_correct"
+   ]
+  ],
+  "classification": "no effect"
+ },
+ {
+  "draft_id": "D12",
+  "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+  "label_resolved": false,
+  "page": 1,
+  "field": "identity",
+  "reason": "identity_without_revision,targeted",
+  "route": null,
+  "source_region_pt": [
+   1459.504,
+   1499.8419999999996,
+   2253.1500000000005,
+   1511.6469999999997
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 6385,
+  "output_tokens": 269,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "BH2031_DIB_AMB_ID",
+   "label": "DOCUMENT NO."
+  },
+  "targeted_reading": {
+   "value": "BH2031_DIB_AMB_ID_MAIN",
+   "label": "DOCUMENT NO.",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "conflict",
+  "final_value": "BH2031_DIB_AMB_ID",
+  "truth": "BH2031_DIB_AMB_ID_MAIN",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "changed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "BH2031_DIB_AMB_ID",
+    "held_wrong"
+   ]
+  ],
+  "classification": "held"
+ },
+ {
+  "draft_id": "D12",
+  "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+  "label_resolved": false,
+  "page": 1,
+  "field": "revision",
+  "reason": "identity_without_revision,targeted",
+  "route": null,
+  "source_region_pt": null,
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 9082,
+  "output_tokens": 250,
+  "primary_state": "incomplete:no_region",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "discovery",
+   "value": "H",
+   "label": null
+  },
+  "targeted_reading": {
+   "value": "H",
+   "label": "REVISION NO.",
+   "role": "own_revision",
+   "excluded": null
+  },
+  "final_state": "candidate",
+  "final_value": "H",
+  "truth": "H",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "completed the field with the same value as the first (discovery) reading",
+  "evaluator": [],
+  "classification": "no scored emission"
+ },
+ {
+  "draft_id": "D24",
+  "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+  "label_resolved": false,
+  "page": 1,
+  "field": "identity",
+  "reason": "unexplained_empty_document,targeted",
+  "route": null,
+  "source_region_pt": [
+   416.64000854492184,
+   79.95959930419922,
+   535.6800109863282,
+   94.2681591796875
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 7413,
+  "output_tokens": 350,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "EP-22510",
+   "label": "Qtn. Ref."
+  },
+  "targeted_reading": {
+   "value": "EP-22510",
+   "label": "Qtn. Ref.",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "candidate",
+  "final_value": "EP-22510",
+  "truth": "EP-22510",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "redundant: confirmed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "EP-22510",
+    "held_correct"
+   ]
+  ],
+  "classification": "redundant"
+ },
+ {
+  "draft_id": "D23",
+  "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "identity",
+  "reason": "identity_without_revision,targeted",
+  "route": null,
+  "source_region_pt": null,
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 9467,
+  "output_tokens": 251,
+  "primary_state": "incomplete:no_region",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "discovery",
+   "value": "EP-23091/AS/MS-EM /101",
+   "label": null
+  },
+  "targeted_reading": {
+   "value": "EP-23091/AS/MS-EM /101",
+   "label": "Document No.",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "candidate",
+  "final_value": "EP-23091/AS/MS-EM /101",
+  "truth": "EP-23091/AS/MS-EM /101",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "completed the field with the same value as the first (discovery) reading",
+  "evaluator": [
+   [
+    "held",
+    "EP-23091/AS/MS-EM /101",
+    "held_correct"
+   ]
+  ],
+  "classification": "held"
+ },
+ {
+  "draft_id": "D23",
+  "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "revision",
+  "reason": "identity_without_revision,targeted",
+  "route": null,
+  "source_region_pt": null,
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 9439,
+  "output_tokens": 236,
+  "primary_state": "incomplete:no_region",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "discovery",
+   "value": "00",
+   "label": null
+  },
+  "targeted_reading": {
+   "value": "00",
+   "label": "Revision",
+   "role": "own_revision",
+   "excluded": null
+  },
+  "final_state": "candidate",
+  "final_value": "00",
+  "truth": "00",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "completed the field with the same value as the first (discovery) reading",
+  "evaluator": [],
+  "classification": "no scored emission"
+ },
+ {
+  "draft_id": "D04",
+  "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "identity",
+  "reason": "form_or_title_block_without_identity,decision_block_unread,unexplained_empty_document,targeted",
+  "route": null,
+  "source_region_pt": [
+   48.05459999999998,
+   140.19984000000002,
+   187.4129399999999,
+   161.86895999999996
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 8009,
+  "output_tokens": 517,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "FA-101-10",
+   "label": "Dwg. Ref."
+  },
+  "targeted_reading": {
+   "value": "17",
+   "label": "Submittal No.",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "conflict",
+  "final_value": "FA-101-10",
+  "truth": "17",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "changed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "FA-101-10",
+    "held_wrong"
+   ]
+  ],
+  "classification": "held"
+ },
+ {
+  "draft_id": "D09",
+  "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "identity",
+  "reason": "decision_block_unread,targeted",
+  "route": null,
+  "source_region_pt": [
+   2116.8,
+   1595.9,
+   2176.8,
+   1602.3
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 6261,
+  "output_tokens": 355,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+   "label": "AMANA Drawing Number"
+  },
+  "targeted_reading": {
+   "value": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+   "label": "AMANA Drawing Number",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "conflict",
+  "final_value": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+  "truth": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "redundant: confirmed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "DJ-295-P-EN-SEE-04-ASY-0020-01",
+    "held_correct"
+   ]
+  ],
+  "classification": "redundant"
+ },
+ {
+  "draft_id": "D07",
+  "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "identity",
+  "reason": "form_or_title_block_without_identity,unexplained_empty_document,targeted",
+  "route": null,
+  "source_region_pt": [
+   2128.9120000000003,
+   1613.272,
+   2281.488,
+   1650.32
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 9109,
+  "output_tokens": 617,
+  "primary_state": "incomplete:no_region",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "discovery",
+   "value": "ELEC-B11-PAVA-101",
+   "label": null
+  },
+  "targeted_reading": {
+   "value": "ELEC-B11-PAVA-101",
+   "label": "DRAWING NUMBER",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "validated",
+  "final_value": "ELEC-B11-PAVA-101",
+  "truth": "ELEC-B11-PAVA-101",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "completed the field with the same value as the first (discovery) reading",
+  "evaluator": [
+   [
+    "validated",
+    "ELEC-B11-PAVA-101",
+    "correct"
+   ]
+  ],
+  "classification": "correct"
+ },
+ {
+  "draft_id": "D21",
+  "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+  "label_resolved": false,
+  "page": 1,
+  "field": "identity",
+  "reason": "form_or_title_block_without_identity,unexplained_empty_document,targeted",
+  "route": null,
+  "source_region_pt": [
+   59.52000122070313,
+   111.99057310546874,
+   291.6480059814453,
+   126.5078696191406
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 8008,
+  "output_tokens": 234,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "3561",
+   "label": "DRF No:"
+  },
+  "targeted_reading": {
+   "value": "3561",
+   "label": "DRF No:",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "candidate",
+  "final_value": "3561",
+  "truth": "3561",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "redundant: confirmed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "3561",
+    "held_correct"
+   ]
+  ],
+  "classification": "redundant"
+ },
+ {
+  "draft_id": "D06",
+  "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+  "label_resolved": true,
+  "page": 1,
+  "field": "identity",
+  "reason": "audit_confident_output,targeted",
+  "route": null,
+  "source_region_pt": [
+   3043.2,
+   2287.8,
+   3125.5,
+   2295.9
+  ],
+  "call_outcome": "ok",
+  "model": "claude-sonnet-5",
+  "input_tokens": 6665,
+  "output_tokens": 241,
+  "primary_state": "completed",
+  "targeted_state": "completed",
+  "first_reading": {
+   "source": "blind_small",
+   "value": "ARC-41034",
+   "label": "MUNICIPALITY DRAWING No."
+  },
+  "targeted_reading": {
+   "value": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+   "label": "CLIENT DRAWING No.",
+   "role": "own_identity",
+   "excluded": null
+  },
+  "final_state": "conflict",
+  "final_value": "ARC-41034",
+  "truth": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+  "targeted_value_matches_truth_literally": true,
+  "effect": "changed the first reading",
+  "evaluator": [
+   [
+    "held",
+    "ARC-41034",
+    "held_wrong"
+   ]
+  ],
+  "classification": "held"
+ }
+]

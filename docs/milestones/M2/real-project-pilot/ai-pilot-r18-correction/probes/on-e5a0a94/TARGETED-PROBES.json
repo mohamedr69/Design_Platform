@@ -1,0 +1,311 @@
+{
+  "targeted_rescue_after_illegible_blind": {
+    "requests": [
+      [
+        "discover_page",
+        "small"
+      ],
+      [
+        "read_identity",
+        "small"
+      ],
+      [
+        "read_field_context",
+        "small"
+      ]
+    ],
+    "outcome": "partial",
+    "fields": {
+      "discovery": "ok",
+      "own:identity": "unusable:illegible",
+      "own:revision": "absent_by_discovery",
+      "own:decision": "absent_by_discovery"
+    },
+    "request_outcomes": {
+      "discovery": "ok",
+      "own:identity": "ok",
+      "own:identity:targeted": "ok"
+    },
+    "identity": {
+      "page": 1,
+      "kind": "ai_evidence",
+      "version": "evidence-reader-2026-09-29.7+targeted-2026-09-30.1",
+      "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+      "variant": "EV1",
+      "profile": "default",
+      "page_kind": "drawing_sheet",
+      "field": "identity",
+      "component": "own",
+      "role": "own",
+      "value": "X-SD-1",
+      "value_literal": "X-SD-1",
+      "value_normalized": "X-SD-1",
+      "candidates": [
+        "X-SD-1"
+      ],
+      "state": "validated",
+      "reasons": [
+        "read not completed (unusable:illegible): unverified"
+      ],
+      "support": "text",
+      "readings": [
+        {
+          "source": "discovery",
+          "value": "X-SD-1",
+          "legible": true
+        },
+        {
+          "source": "blind_small",
+          "value": "",
+          "legible": false,
+          "label": null
+        },
+        {
+          "source": "blind_context",
+          "value": "X-SD-1",
+          "legible": true,
+          "label": "Drawing No",
+          "role": "own_identity"
+        }
+      ],
+      "region": [
+        807.1999999999996,
+        803.25,
+        1684.0,
+        1190.0
+      ],
+      "deterministic": null,
+      "read": "unusable:illegible",
+      "request": "ok"
+    }
+  },
+  "targeted_after_failed_escalation": {
+    "requests": [
+      [
+        "discover_page",
+        "small"
+      ],
+      [
+        "read_identity",
+        "small"
+      ],
+      [
+        "read_identity",
+        "standard"
+      ],
+      [
+        "read_field_context",
+        "small"
+      ]
+    ],
+    "outcome": "evidence",
+    "fields": {
+      "discovery": "ok",
+      "own:identity:escalation": "failed:timeout",
+      "own:identity": "completed",
+      "own:revision": "absent_by_discovery",
+      "own:decision": "absent_by_discovery"
+    },
+    "request_outcomes": {
+      "discovery": "ok",
+      "own:identity": "ok",
+      "own:identity:targeted": "ok"
+    },
+    "identity": {
+      "page": 1,
+      "kind": "ai_evidence",
+      "version": "evidence-reader-2026-09-29.7+targeted-2026-09-30.1",
+      "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+      "variant": "EV2",
+      "profile": "default",
+      "page_kind": "drawing_sheet",
+      "field": "identity",
+      "component": "own",
+      "role": "own",
+      "value": "X-SD-2",
+      "value_literal": "X-SD-2",
+      "value_normalized": "X-SD-2",
+      "candidates": [
+        "X-SD-1",
+        "X-SD-2"
+      ],
+      "state": "conflict",
+      "reasons": [
+        "the readings disagree: discovery='X-SD-1', blind_small='X-SD-2', blind_context='X-SD-1'"
+      ],
+      "support": null,
+      "readings": [
+        {
+          "source": "discovery",
+          "value": "X-SD-1",
+          "legible": true
+        },
+        {
+          "source": "blind_small",
+          "value": "X-SD-2",
+          "legible": true,
+          "label": null
+        },
+        {
+          "source": "blind_context",
+          "value": "X-SD-1",
+          "legible": true,
+          "label": "Drawing No",
+          "role": "own_identity"
+        }
+      ],
+      "region": [
+        807.1999999999996,
+        803.25,
+        1684.0,
+        1190.0
+      ],
+      "deterministic": null,
+      "read": "completed",
+      "request": "ok"
+    }
+  },
+  "targeted_rescue_after_empty_blind": {
+    "requests": [
+      [
+        "discover_page",
+        "small"
+      ],
+      [
+        "read_identity",
+        "small"
+      ],
+      [
+        "read_field_context",
+        "small"
+      ]
+    ],
+    "outcome": "partial",
+    "fields": {
+      "discovery": "ok",
+      "own:identity": "unusable:empty",
+      "own:revision": "absent_by_discovery",
+      "own:decision": "absent_by_discovery"
+    },
+    "request_outcomes": {
+      "discovery": "ok",
+      "own:identity": "ok",
+      "own:identity:targeted": "ok"
+    },
+    "identity": {
+      "page": 1,
+      "kind": "ai_evidence",
+      "version": "evidence-reader-2026-09-29.7+targeted-2026-09-30.1",
+      "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+      "variant": "EV1",
+      "profile": "default",
+      "page_kind": "drawing_sheet",
+      "field": "identity",
+      "component": "own",
+      "role": "own",
+      "value": "X-SD-1",
+      "value_literal": "X-SD-1",
+      "value_normalized": "X-SD-1",
+      "candidates": [
+        "X-SD-1"
+      ],
+      "state": "validated",
+      "reasons": [
+        "read not completed (unusable:empty): unverified"
+      ],
+      "support": "text",
+      "readings": [
+        {
+          "source": "discovery",
+          "value": "X-SD-1",
+          "legible": true
+        },
+        {
+          "source": "blind_small",
+          "value": "",
+          "legible": true,
+          "label": null
+        },
+        {
+          "source": "blind_context",
+          "value": "X-SD-1",
+          "legible": true,
+          "label": "Drawing No",
+          "role": "own_identity"
+        }
+      ],
+      "region": [
+        807.1999999999996,
+        803.25,
+        1684.0,
+        1190.0
+      ],
+      "deterministic": null,
+      "read": "unusable:empty",
+      "request": "ok"
+    }
+  },
+  "primary_timeout_control": {
+    "requests": [
+      [
+        "discover_page",
+        "small"
+      ],
+      [
+        "read_identity",
+        "small"
+      ]
+    ],
+    "outcome": "partial",
+    "fields": {
+      "discovery": "ok",
+      "own:identity": "failed:timeout",
+      "own:revision": "absent_by_discovery",
+      "own:decision": "absent_by_discovery"
+    },
+    "request_outcomes": {
+      "discovery": "ok",
+      "own:identity": "failed:timeout"
+    },
+    "identity": {
+      "page": 1,
+      "kind": "ai_evidence",
+      "version": "evidence-reader-2026-09-29.7+targeted-2026-09-30.1",
+      "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+      "variant": "EV1",
+      "profile": "default",
+      "page_kind": "drawing_sheet",
+      "field": "identity",
+      "component": "own",
+      "role": "own",
+      "value": "X-SD-1",
+      "value_literal": "X-SD-1",
+      "value_normalized": "X-SD-1",
+      "candidates": [
+        "X-SD-1"
+      ],
+      "state": "candidate",
+      "reasons": [
+        "discovery only: no blind reading of the region",
+        "read not completed (failed:timeout): unverified"
+      ],
+      "support": "text",
+      "readings": [
+        {
+          "source": "discovery",
+          "value": "X-SD-1",
+          "legible": true
+        }
+      ],
+      "region": [
+        1279.84,
+        1071.0,
+        1515.6000000000001,
+        1130.5
+      ],
+      "deterministic": null,
+      "read": "failed:timeout",
+      "request": "failed:timeout"
+    }
+  }
+}

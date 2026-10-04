@@ -234,15 +234,15 @@ def test_a_bounded_re_read_carries_the_records_of_the_pages_it_did_not_visit(cli
 
 
 def test_carry_unvisited_keeps_records_of_unknown_page_and_flags_by_source_identity():
-    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same"}
+    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same", "parser_version": dc.PARSER_VERSION, "profile": "default"}
     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
-    carried, note = document_sync.carry_unvisited(kept, coverage, "same")
+    carried, note = document_sync.carry_unvisited(kept, coverage, "same", "default")
     assert [(r["reference"], r["flags"]) for r in carried] == [("B", ["carried_unvisited"]), ("C", ["carried_unvisited"])]
     assert "2 records" in note and "unverified" not in note
-    carried, note = document_sync.carry_unvisited(kept, coverage, "other")
+    carried, note = document_sync.carry_unvisited(kept, coverage, "other", "default")
     assert all(r["flags"] == ["carried_unvisited", "carried_unverified"] for r in carried) and "unverified" in note
-    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same")
-    assert all("carried_unverified" in r["flags"] for r in carried), "unknown source identity: unverified"
+    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same", "default")
+    assert all("carried_unverified" in r["flags"] and "carried_other_parser" in r["flags"] for r in carried), "unknown source identity and parser: unverified, held"
     assert document_sync.carry_unvisited(kept, {"pages_skipped": []}, "same") == ([], None)
 
 

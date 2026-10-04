@@ -1,0 +1,68 @@
+{
+ "candidate_commit": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+ "base": "689d95e53cc369c2397600daf2a46a3de93d5214",
+ "commits_since_base": [
+  "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3 review10-candidate: association compatibility of retained facts (R10-01A targetless context, R10-01B known revision constraint)"
+ ],
+ "branch": "iso-baseline (isolated scratch repository C:/t/iso/ep-platform; core.autocrlf false)",
+ "history_kept": {
+  "689d95e": "Review 09 candidate (frozen-r9, the tree Review 10 inspected, unchanged)",
+  "e02a8c1": "Review 08 candidate",
+  "review09 package": "docs/milestones/M2/real-project-pilot/review09 (unchanged)"
+ },
+ "trees": {
+  "frozen-r10": {
+   "head": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+   "clean": true,
+   "has_env": false
+  },
+  "frozen-r9 (reviewed Review 09 tree)": {
+   "head": "689d95e53cc369c2397600daf2a46a3de93d5214",
+   "clean": true,
+   "has_env": false
+  },
+  "scratch repository": {
+   "head": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+   "clean": true,
+   "has_env": true
+  }
+ },
+ "versions": {
+  "reader": "evidence-reader-2026-09-29.5 (selection / association only)",
+  "policy": "evidence-policy-2026-09-29.4 (unchanged)",
+  "evaluator": "m2-pilot-eval-2026-09-29.9",
+  "ledger": "ai-ledger-2026-09-29.2 (unchanged)",
+  "parser": "parse-2026-09-29.9 (unchanged)"
+ },
+ "changed_files": {
+  "backend/app/ai/evidence_reader.py": {
+   "sha256": "4404abfa4d1c8d54f0b1b6a6bfa498b9a0fbb5b3529d8bc3441498be805e8e27",
+   "bytes": 90743,
+   "kind": "application",
+   "crlf": true
+  },
+  "backend/scripts/m2_eval5.py": {
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "bytes": 31072,
+   "kind": "evaluator script",
+   "crlf": false
+  },
+  "backend/tests/test_m2_review10.py": {
+   "sha256": "dfb36277165f24551bceb645e0b26e37b27c6c79387f7df83783e8dd56580481",
+   "bytes": 15433,
+   "kind": "test",
+   "crlf": false
+  }
+ },
+ "diff": {
+  "file": "candidate-r9.diff",
+  "against": "689d95e53cc369c2397600daf2a46a3de93d5214",
+  "sha256": "98849c36abef9d55bac9f908fcd9766343c65c4a43dd52996b562ff03fb94ce2"
+ },
+ "owner_checkout_head": "2221b4327c7dd140994cc2c98e89229431b34899",
+ "temporary_environment": {
+  "tests": "tests/conftest.py: temporary database, library, cache, uploads; AI off; frozen-r10 has no .env",
+  "temp": "TEMP=TMP=C:/t/iso/tmp; --basetemp under C:/t/iso/tmp",
+  "models": "none called; scripted providers only"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "baseline": {
+  "file": "logs/FULL-baseline.xml",
+  "totals": {
+   "tests": 1694,
+   "failures": 4,
+   "errors": 0,
+   "skipped": 35
+  },
+  "failures": {
+   "tests.test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+    "kind": "failure",
+    "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: \nDROP TABLE users]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+   },
+   "tests.test_floor_schedule::test_the_schedule_exports_as_a_pdf": {
+    "kind": "failure",
+    "message": "assert 401 == 200\n +  where 401 = <Response [401 Unauthorized]>.status_code"
+   },
+   "tests.test_logs_register::test_only_a_drawn_system_has_a_drawings_register": {
+    "kind": "failure",
+    "message": "KeyError: 'systems'"
+   },
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  'SIGA-OSD-FCN'\n  '3-SDDC2'\n  '3-SSDC2'"
+   }
+  }
+ },
+ "candidate": {
+  "file": "logs/FULL-final-candidate.xml",
+  "totals": {
+   "tests": 1861,
+   "failures": 2,
+   "errors": 0,
+   "skipped": 35
+  },
+  "failures": {
+   "tests.test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index": {
+    "kind": "failure",
+    "message": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: \nDROP TABLE users]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+   },
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SDDC2'\n  'SIGA-OSD-FCN'\n  '3-SSDC2'"
+   }
+  }
+ },
+ "same_tests": false,
+ "same_messages_raw": false,
+ "same_messages": true,
+ "only_in_candidate": [],
+ "only_in_baseline": [
+  "tests.test_floor_schedule::test_the_schedule_exports_as_a_pdf",
+  "tests.test_logs_register::test_only_a_drawn_system_has_a_drawings_register"
+ ],
+ "identical_failures": false
+}

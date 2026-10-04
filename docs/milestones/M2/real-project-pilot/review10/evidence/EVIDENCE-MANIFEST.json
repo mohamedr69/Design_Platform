@@ -1,0 +1,212 @@
+{
+ "package": "M2 Review 10 correction",
+ "date": "2026-09-29",
+ "candidate": {
+  "commit": "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3",
+  "repository": "C:/t/iso/ep-platform",
+  "frozen_tree": "C:/t/iso/frozen-r10",
+  "base": "689d95e53cc369c2397600daf2a46a3de93d5214",
+  "commits_since_base": [
+   "a34d3f8c0af7b6877eafd9f58cfede8a73c595a3 review10-candidate: association compatibility of retained facts (R10-01A targetless context, R10-01B known revision constraint)"
+  ],
+  "changed_files_sha256_at_a34d3f8": {
+   "backend/app/ai/evidence_reader.py": "4404abfa4d1c8d54f0b1b6a6bfa498b9a0fbb5b3529d8bc3441498be805e8e27",
+   "backend/scripts/m2_eval5.py": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "backend/tests/test_m2_review10.py": "dfb36277165f24551bceb645e0b26e37b27c6c79387f7df83783e8dd56580481"
+  }
+ },
+ "owner_candidate_c_freeze": {
+  "files": 11,
+  "failures": []
+ },
+ "copied_from": {
+  "COMPATIBILITY-TABLE.md": "C:\\t\\iso\\work\\r10\\COMPATIBILITY-TABLE.md",
+  "tests/test_m2_review10.py": "C:\\t\\iso\\frozen-r10\\backend\\tests\\test_m2_review10.py",
+  "prior/before_fix_on_689d95e.txt": "C:\\t\\iso\\work\\r10\\prior\\before_fix_on_689d95e.txt",
+  "prior/review10_module_on_689d95e.txt": "C:\\t\\iso\\work\\r10\\prior\\review10_module_on_689d95e.txt",
+  "prior/r10__review10_module_on_689d95e.xml": "C:\\t\\iso\\work\\r10\\prior\\r10__review10_module_on_689d95e.xml",
+  "probes/association_probe_before.py": "C:\\t\\iso\\work\\r10\\probes\\association_probe_before.py",
+  "probes/association_probe_after.py": "C:\\t\\iso\\work\\r10\\probes\\association_probe_after.py",
+  "probes/before/association-probe-results.json": "C:\\t\\iso\\work\\r10\\probes\\before\\association-probe-results.json",
+  "probes/after/association-probe-results.json": "C:\\t\\iso\\work\\r10\\probes\\after\\association-probe-results.json",
+  "probes/probes_old_before.py": "C:\\t\\iso\\work\\r10\\probes\\probes_old_before.py",
+  "probes/probes_old_after.py": "C:\\t\\iso\\work\\r10\\probes\\probes_old_after.py",
+  "probes/old_before/probe-results.json": "C:\\t\\iso\\work\\r10\\probes\\old_before\\probe-results.json",
+  "probes/old_after/probe-results.json": "C:\\t\\iso\\work\\r10\\probes\\old_after\\probe-results.json",
+  "rescore/rescore9.py": "C:\\t\\iso\\work\\r10\\rescore9.py",
+  "rescore/make_rescore9.py": "C:\\t\\iso\\work\\r10\\make_rescore9.py",
+  "rescore/SUMMARY.json": "C:\\t\\iso\\work\\r10\\eval9\\SUMMARY.json",
+  "rescore/ASSOCIATIONS.json": "C:\\t\\iso\\work\\r10\\eval9\\ASSOCIATIONS.json",
+  "rescore/eval9_run.log": "C:\\t\\iso\\work\\r10\\eval9_run.log",
+  "rescore/matched-AI-EV1.json": "C:\\t\\iso\\work\\r10\\eval9\\matched-AI-EV1.json",
+  "rescore/matched-AI-EV2.json": "C:\\t\\iso\\work\\r10\\eval9\\matched-AI-EV2.json",
+  "freeze/FREEZE-R10.json": "C:\\t\\iso\\work\\r10\\freeze\\FREEZE-R10.json",
+  "freeze/candidate-r10.diff": "C:\\t\\iso\\work\\r10\\freeze\\candidate-r10.diff",
+  "freeze/freeze_r10.py": "C:\\t\\iso\\work\\r10\\freeze_r10.py",
+  "freeze/make_freeze_r10.py": "C:\\t\\iso\\work\\r10\\make_freeze_r10.py",
+  "patches/er_patch_r10.py": "C:\\t\\iso\\work\\r10\\er_patch_r10.py",
+  "patches/ev_patch9.py": "C:\\t\\iso\\work\\r10\\ev_patch9.py",
+  "package_r10.py": "C:\\t\\iso\\work\\r10\\package_r10.py",
+  "suite/full_frozen_hermetic.log": "C:\\t\\iso\\work\\r10\\suite\\full_frozen_hermetic.log",
+  "suite/r10__suite_full_frozen_hermetic.xml": "C:\\t\\iso\\work\\r10\\suite\\r10__suite_full_frozen_hermetic.xml",
+  "focused/r10__compat_boq_extraction_ai.xml": "C:\\t\\iso\\work\\r10\\focused\\r10__compat_boq_extraction_ai.xml",
+  "focused/r10__review10_module.xml": "C:\\t\\iso\\work\\r10\\focused\\r10__review10_module.xml",
+  "focused/r10__reviewer_eight_module_set.xml": "C:\\t\\iso\\work\\r10\\focused\\r10__reviewer_eight_module_set.xml"
+ },
+ "files": {
+  "COMPATIBILITY-TABLE.md": {
+   "sha256": "87e32616ba259c65c682aea4ade653a9f19bf1bd39a2c5871bf1695d56028bb4",
+   "bytes": 4919
+  },
+  "focused/r10__compat_boq_extraction_ai.xml": {
+   "sha256": "d46229d10930d512202c19f8594a646ea8b186d6944e01dc0e6b13d3737d30da",
+   "bytes": 18296
+  },
+  "focused/r10__review10_module.xml": {
+   "sha256": "1f6fa6cabecc077d52ddc64c424173b233c685dec6c099aaf7f8e95013ad71fb",
+   "bytes": 1815
+  },
+  "focused/r10__reviewer_eight_module_set.xml": {
+   "sha256": "b00afd9048e5d37be6175a58577431e1d617601078ef3d5dfeab95b79a4cd7d7",
+   "bytes": 20327
+  },
+  "freeze/candidate-r10.diff": {
+   "sha256": "98849c36abef9d55bac9f908fcd9766343c65c4a43dd52996b562ff03fb94ce2",
+   "bytes": 32544
+  },
+  "freeze/FREEZE-R10.json": {
+   "sha256": "dd74448a56cce70456a23ecc295882c4d2008f710627a4ae305b6cfc268a801b",
+   "bytes": 2427
+  },
+  "freeze/freeze_r10.py": {
+   "sha256": "b0d43ac6896b3f99cf9750a099dc449e7cc6ef12efd9ef1ec5fa6d6b602db233",
+   "bytes": 3278
+  },
+  "freeze/make_freeze_r10.py": {
+   "sha256": "8b50b506dd22228c868d81edcdc9794dd2ac8c1603e479242114099e1f04b047",
+   "bytes": 2845
+  },
+  "package_r10.py": {
+   "sha256": "a5c8712dd289e46bb948c42aca8571de7e2154977f344b54aeca92800a989ca2",
+   "bytes": 4678
+  },
+  "patches/er_patch_r10.py": {
+   "sha256": "c2e0538ed446e1488173a952649703d1519774a701a8505307e8d39e2b45f1ce",
+   "bytes": 7883
+  },
+  "patches/ev_patch9.py": {
+   "sha256": "fa208584e681217acaff2d15373c087c3fe931d2f9cdf7c304dd71dee3bf3fe6",
+   "bytes": 3264
+  },
+  "prior/before_fix_on_689d95e.txt": {
+   "sha256": "2f978f410dbf2c90c6b6cd4d3e7d652696b2d4a2e65a93603ff1e24e2421c6a7",
+   "bytes": 1248
+  },
+  "prior/r10__review10_module_on_689d95e.xml": {
+   "sha256": "7e8880639a1796504007a7d42e0e8f1fa377faef3023dfcd87ff0feebfc26e0e",
+   "bytes": 9769
+  },
+  "prior/review10_module_on_689d95e.txt": {
+   "sha256": "8f2e7b076277fe5ca166aa96d3b4e12da7643dda7ef5d2765e7a3487d993b5ff",
+   "bytes": 1248
+  },
+  "probes/after/association-probe-results.json": {
+   "sha256": "00b5716ff8d5127c666a43beee6ead9f87bd66760f0573bc4169e223d6030189",
+   "bytes": 35781
+  },
+  "probes/association_probe_after.py": {
+   "sha256": "47477c000dc2faa1144e9d8e4ceef63b463f8eaae52a96cd5319633a7f3b943b",
+   "bytes": 4046
+  },
+  "probes/association_probe_before.py": {
+   "sha256": "37a234946c3290c6475cc83f7643dca8cdc1a730912729cd3baaf2a0c4e96ea3",
+   "bytes": 4046
+  },
+  "probes/before/association-probe-results.json": {
+   "sha256": "17662e95df8909c064103fc9ee4e4dbf6c6d65614bfe18913cefa9efc088f6be",
+   "bytes": 34553
+  },
+  "probes/old_after/probe-results.json": {
+   "sha256": "31cc3db18480a43f56d0e2af8e0d3fc9e036ee08211bf0bb79a22d556d3cf119",
+   "bytes": 55723
+  },
+  "probes/old_before/probe-results.json": {
+   "sha256": "cf386a68b177b6c653305f67c591d18c8b5a98e588020034a045e405f9a4719b",
+   "bytes": 55723
+  },
+  "probes/probes_old_after.py": {
+   "sha256": "c12f997af7bd3e749640ec0a39354872fc811ec13d326c3305404f7b4844a148",
+   "bytes": 5739
+  },
+  "probes/probes_old_before.py": {
+   "sha256": "6eefa667ac6a684bb1f5cb8eec23b252544d669867416b9ddeca7d492182b2eb",
+   "bytes": 5739
+  },
+  "rescore/ASSOCIATIONS.json": {
+   "sha256": "2c1e6a844662df6ddf05cb87a33699be6d72911835cab781c57c33d4200d1db3",
+   "bytes": 556
+  },
+  "rescore/eval9_run.log": {
+   "sha256": "eee5ce3cb8d925bfad62ae96122c5bc74ec8760e1364846fc02fe40d453c7dc9",
+   "bytes": 5000
+  },
+  "rescore/make_rescore9.py": {
+   "sha256": "092fa9e2492c2a1cbe37c532359709fdde56d15f0a8809c8276286857fe0c6e2",
+   "bytes": 2753
+  },
+  "rescore/matched-AI-EV1.json": {
+   "sha256": "ca2775b68dd56374b7ded3c2f7be1d9c45208dcc25f1ae459f59214c7b8081de",
+   "bytes": 257774
+  },
+  "rescore/matched-AI-EV2.json": {
+   "sha256": "a49df691170b07f777bba8191f6f971b876a3220f1b9f366e4d8d17c3ac5aa13",
+   "bytes": 228988
+  },
+  "rescore/rescore9.py": {
+   "sha256": "a0795a346589f033a59ec5de9145e30f257636f7a1792f31c2b284da09835ecb",
+   "bytes": 7989
+  },
+  "rescore/SUMMARY.json": {
+   "sha256": "d869e7cd835c7e51bb31d543dfbcee07c2e14943df521454f908db65f776dbc9",
+   "bytes": 13918
+  },
+  "suite/full_frozen_hermetic.log": {
+   "sha256": "c9d25b7c02e0d9c8965870cf135c2c08b0f7b1098a1f89a1bb7e7d77c7a55111",
+   "bytes": 22240
+  },
+  "suite/r10__suite_full_frozen_hermetic.xml": {
+   "sha256": "7d7cc7a1e0d411544213ad1cd2d720f2c0e831fd4621aa2bb9d0822e4964b834",
+   "bytes": 237546
+  },
+  "tests/test_m2_review10.py": {
+   "sha256": "dfb36277165f24551bceb645e0b26e37b27c6c79387f7df83783e8dd56580481",
+   "bytes": 15433
+  }
+ },
+ "package_files": {
+  "COMPATIBILITY.md": {
+   "sha256": "964c42c9ecd2054b00f62f2af87251747a587f3097f6571a37c9fafc9dc48d30",
+   "bytes": 6252
+  },
+  "DISPOSITIONS.md": {
+   "sha256": "2775e45caec7a38ec1724a3df2e18fcdc222b709c4c387641f12ab4dcc133233",
+   "bytes": 7574
+  },
+  "PROVENANCE-AND-FREEZE.md": {
+   "sha256": "03d7426d3c8e038ba098a4ecd15943480220e30bec26c01044321fd9041ac016",
+   "bytes": 3987
+  },
+  "REGRESSION.md": {
+   "sha256": "2982b597da01a04ae565663d98dcc50ba45491ae69673f1eeea04a04bfaf45a3",
+   "bytes": 6062
+  },
+  "RESCORE.md": {
+   "sha256": "a580f8a6ebcfed9f70b2df4a2a465735e837b63f63b3905723a7826ace069bdf",
+   "bytes": 4182
+  },
+  "REVIEW-10-REPORT.md": {
+   "sha256": "f68760940e24c7ea0171ec20a93eaf3c2cf8630269a48f00f5c6e8fe7c7fd80b",
+   "bytes": 4883
+  }
+ }
+}

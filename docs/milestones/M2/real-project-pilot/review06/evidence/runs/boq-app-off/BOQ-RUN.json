@@ -1,0 +1,117 @@
+{
+ "at_utc": "2026-09-28T19:57:37+00:00",
+ "tag": "boq-app-off",
+ "ai": false,
+ "database": "C:\\t\\r6\\boq-app-off\\db\\boq.db",
+ "projects": {
+  "30784": {
+   "project_id": 1,
+   "ensure_1": {
+    "status": 200,
+    "seconds": 0.1,
+    "items": 0,
+    "warnings": [
+     "EP-30784 FAS Design.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)",
+     "EP-30784 EML Design.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)"
+    ]
+   },
+   "ensure_2": {
+    "status": 200,
+    "items": 0
+   },
+   "reread": {
+    "status": 202,
+    "job": {
+     "id": 1,
+     "project_id": 1,
+     "kind": "boq_reread",
+     "status": "failed",
+     "progress": {
+      "done": 100,
+      "total": 200,
+      "message": "Reading EP-30784 EML Design.pdf (sheet 2 of 2)"
+     },
+     "cancel_requested": false,
+     "result": null,
+     "error": "CandidateError: No Design Sheet could be read, so nothing was compared and the BOQ is unchanged: EP-30784 FAS Design.pdf: Not read: AI assistance is disabled (AI_ENABLED=false); EP-30784 EML Design.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)",
+     "created_at": "2026-09-28T19:57:39.011221",
+     "started_at": "2026-09-28T19:57:39.021564",
+     "finished_at": "2026-09-28T19:57:39.056257",
+     "already_active": false
+    }
+   },
+   "items_before_reread": 0,
+   "items_after_reread": 0,
+   "no_removal": {
+    "before": 0,
+    "kept": 0,
+    "removed": []
+   }
+  },
+  "30088": {
+   "project_id": 2,
+   "ensure_1": {
+    "status": 200,
+    "seconds": 0.0,
+    "items": 0,
+    "warnings": [
+     "EP-30088 Design Sheet FAS.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)",
+     "EP-30088 Design Sheet ELS.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)"
+    ]
+   },
+   "ensure_2": {
+    "status": 200,
+    "items": 0
+   },
+   "reread": {
+    "status": 202,
+    "job": {
+     "id": 2,
+     "project_id": 2,
+     "kind": "boq_reread",
+     "status": "failed",
+     "progress": {
+      "done": 100,
+      "total": 200,
+      "message": "Reading EP-30088 Design Sheet ELS.pdf (sheet 2 of 2)"
+     },
+     "cancel_requested": false,
+     "result": null,
+     "error": "CandidateError: No Design Sheet could be read, so nothing was compared and the BOQ is unchanged: EP-30088 Design Sheet FAS.pdf: Not read: AI assistance is disabled (AI_ENABLED=false); EP-30088 Design Sheet ELS.pdf: Not read: AI assistance is disabled (AI_ENABLED=false)",
+     "created_at": "2026-09-28T19:57:39.125273",
+     "started_at": "2026-09-28T19:57:39.126271",
+     "finished_at": "2026-09-28T19:57:39.152455",
+     "already_active": false
+    }
+   },
+   "items_before_reread": 0,
+   "items_after_reread": 0,
+   "no_removal": {
+    "before": 0,
+    "kept": 0,
+    "removed": []
+   }
+  }
+ },
+ "stored": {
+  "boq_items": 0,
+  "projects": [
+   {
+    "id": 1,
+    "ep_number": "30784",
+    "boq_extracted_at": null,
+    "boq_extraction_warnings": null,
+    "boq_version": 0
+   },
+   {
+    "id": 2,
+    "ep_number": "30088",
+    "boq_extracted_at": null,
+    "boq_extraction_warnings": null,
+    "boq_version": 0
+   }
+  ],
+  "document_readings": []
+ },
+ "ai_usage_rows": 0
+}

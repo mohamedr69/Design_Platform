@@ -1,0 +1,90 @@
+# --- the join --------------------------------------------------------------------------------------------------------
+GEOMETRY_TOLERANCE = 22.0      # render pixels at the extractor's dpi (rows are ~45 px apart on the EP-8430 sheet)
+
+
+def _pair_score(e: dict, t: dict) -> float:
+    """Alignment evidence: description similarity only -- NOT the part number or the quantity (both are scored)."""
+    sim = description_similarity(e.get("description"), t.get("description"))
+    return sim if sim >= 0.5 else 0.0
+
+
+def _align(emitted: list[dict], truth: list[dict], forbid: frozenset = frozenset()) -> tuple[float, list]:
+    n, m = len(emitted), len(truth)
+    best = [[0.0] * (m + 1) for _ in range(n + 1)]
+    for i in range(n - 1, -1, -1):
+        for j in range(m - 1, -1, -1):
+            s = _pair_score(emitted[i], truth[j])
+            take = s + best[i + 1][j + 1] if s > 0 and (i, j) not in forbid else float("-inf")
+            best[i][j] = max(take, best[i + 1][j], best[i][j + 1])
+    pairs, i, j = [], 0, 0
+    while i < n and j < m:
+        s = _pair_score(emitted[i], truth[j])
+        if s > 0 and (i, j) not in forbid and abs(best[i][j] - (s + best[i + 1][j + 1])) < 1e-9:
+            pairs.append((i, j))
+            i, j = i + 1, j + 1
+        elif abs(best[i][j] - best[i + 1][j]) < 1e-9:
+            i += 1
+        else:
+            j += 1
+    return best[0][0], pairs
+
+
+def _candidates(e, t, i, j, score) -> list:
+    """Every truth index the emitted row i takes in some equally good alignment (j first); None = unpaired equally well."""
+    cands, forbid = [j], {(i, j)}
+    while True:
+        alt, pairs = _align(e, t, frozenset(forbid))
+        if abs(alt - score) > 1e-9:
+            return cands
+        mine = [jj for ii, jj in pairs if ii == i]
+        if not mine:
+            return cands + [None]
+        cands.append(mine[0])
+        forbid.add((i, mine[0]))
+
+
+def join_rows(emitted: list[dict], truth: list[dict], tolerance: float = GEOMETRY_TOLERANCE) -> dict:
+    """emitted: rows with 'page', 'y' (geometry), 'part_number', 'quantity', 'description' and an 'id';
+    truth: label rows of kind 'line' with 'page', 'ordinal' (print order), 'description' and, when VERIFIED, 'y'.
+    Returns {'pairs': [(emitted id, truth ordinal, 'matched_geometry'|'matched'|'ambiguous')],
+             'held': {emitted id: [candidate truth ordinals]}, 'unmatched_emitted': [...], 'unmatched_truth': [...]}."""
+    out = {"pairs": [], "held": {}, "unmatched_emitted": [], "unmatched_truth": []}
+    for page in sorted({r["page"] for r in emitted} | {r["page"] for r in truth}):
+        e_all = sorted([r for r in emitted if r["page"] == page], key=lambda r: r["y"])
+        t_all = sorted([r for r in truth if r["page"] == page], key=lambda r: r["ordinal"])
+        # 1. verified geometry
+        geo_t = [t for t in t_all if t.get("y") is not None]
+        used_e, used_t = set(), set()
+        for t in geo_t:
+            near = [x for x in e_all if abs(x["y"] - t["y"]) <= tolerance]
+            back = [tt for tt in geo_t if near and abs(near[0]["y"] - tt["y"]) <= tolerance]
+            if len(near) == 1 and len(back) == 1:
+                out["pairs"].append((near[0]["id"], t["ordinal"], "matched_geometry"))
+                used_e.add(near[0]["id"])
+            elif len(near) > 1 or len(back) > 1:
+                for x in near:
+                    out["held"].setdefault(x["id"], []).append(t["ordinal"])
+                    used_e.add(x["id"])
+            else:
+                out["unmatched_truth"].append(t["ordinal"])      # verified position, nothing emitted there: missed
+            used_t.add(t["ordinal"])
+        # 2. order + description for the rest (never a scored value)
+        e = [x for x in e_all if x["id"] not in used_e]
+        t = [x for x in t_all if x["ordinal"] not in used_t]
+        score, pairs = _align(e, t)
+        paired_e, paired_t = set(), set()
+        for i, j in pairs:
+            cands = _candidates(e, t, i, j, score)
+            if len(cands) == 1:
+                out["pairs"].append((e[i]["id"], t[j]["ordinal"], "matched"))
+                paired_t.add(j)
+            else:
+                out["pairs"].append((e[i]["id"], t[j]["ordinal"], "ambiguous"))
+                out["held"][e[i]["id"]] = [t[c]["ordinal"] for c in cands if c is not None]
+                paired_t.update(c for c in cands if c is not None)
+            paired_e.add(i)
+        out["unmatched_emitted"] += [e[i]["id"] for i in range(len(e)) if i not in paired_e]
+        out["unmatched_truth"] += [t[j]["ordinal"] for j in range(len(t)) if j not in paired_t]
+    return out
+
+

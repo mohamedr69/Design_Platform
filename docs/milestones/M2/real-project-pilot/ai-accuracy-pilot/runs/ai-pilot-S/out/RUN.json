@@ -1,0 +1,160 @@
+{
+ "at_utc": "2026-09-30T06:35:47+00:00",
+ "a_tag": "ai-pilot-A",
+ "tag": "ai-pilot-S",
+ "arm": "S",
+ "track": "pilot-S",
+ "dry_run": false,
+ "declaration_sha256": "6218bb8f9bd97f0a55419929385729449d45299e95843f7a43a43f24a13b71cd",
+ "shares_sha256": "290d3df644758ac8c10ea3ab7d846399b950608cf0254839fe5be49b498c6cab",
+ "identities": {
+  "READER_VERSION": "evidence-reader-2026-09-29.7",
+  "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4",
+  "SCHEMA_VERSION": "evidence-schema-1",
+  "PROMPTS": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2"
+  },
+  "AUDIT_RATE": 0.2,
+  "AUDIT_SEED": "audit-2026-09-29",
+  "MAX_PAGES_PER_DOCUMENT": 4,
+  "MAX_CALLS_PER_DOCUMENT": 8,
+  "GUARD_ENABLED": null,
+  "TARGETED_ENABLED": null
+ },
+ "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+ "tree": "C:/t/iso/frozen-r12",
+ "context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4"
+  ],
+  "declared": "pilot arm S"
+ },
+ "projects": {
+  "16830": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 6,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 79.8,
+   "documents_in": 3,
+   "requests": 6,
+   "share": 19
+  },
+  "17428": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 6,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 361.2,
+   "documents_in": 3,
+   "requests": 6,
+   "share": 15
+  },
+  "19144": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 3,
+   "calls": 2,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 2,
+   "seconds": 315.2,
+   "documents_in": 3,
+   "requests": 2,
+   "share": 19
+  },
+  "23323": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 2,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 0,
+   "seconds": 313.6,
+   "documents_in": 2,
+   "requests": 2,
+   "share": 19
+  },
+  "30549": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 1,
+   "calls": 2,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 125.3,
+   "documents_in": 1,
+   "requests": 2,
+   "share": 17
+  }
+ },
+ "not_attempted": [],
+ "tripwire": [
+  {
+   "after": "16830",
+   "critical_on_resolved": []
+  },
+  {
+   "after": "17428",
+   "critical_on_resolved": []
+  },
+  {
+   "after": "19144",
+   "critical_on_resolved": []
+  },
+  {
+   "after": "23323",
+   "critical_on_resolved": []
+  },
+  {
+   "after": "30549",
+   "critical_on_resolved": []
+  }
+ ],
+ "seconds": 1195.3,
+ "runner_state": {
+  "consecutive_failures": 0,
+  "stopped": null,
+  "xtrack_refusals": 0,
+  "share_refusals": 0,
+  "per_ep": {
+   "16830": 6,
+   "17428": 6,
+   "19144": 2,
+   "23323": 2,
+   "30549": 2
+  },
+  "requests_io": 18
+ },
+ "tables": {
+  "project_documents": 12,
+  "project_submittals": 0,
+  "project_shop_drawings": 1,
+  "background_jobs": 10,
+  "project_actions": 0,
+  "ai_usage": 20,
+  "document_readings": 4
+ },
+ "business_hashes": {
+  "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_shop_drawings": "80d5795e0c592ade1ef34cb95e66c6732752c7d0f66b845172a3cec2febae95e",
+  "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_documents_role": "d4186ac80ef47cedbf4ed0b2ed171c99f104f545e1fda3b9bb178c395397e9f2"
+ },
+ "ai_usage_rows": 20,
+ "fresh_requests_this_arm": 18
+}

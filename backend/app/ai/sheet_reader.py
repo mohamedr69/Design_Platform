@@ -1342,7 +1342,7 @@ def combine(run: _Run, *, document_sha: str, reading: DocumentReading, page_imag
 # --- the read a caller asks for ------------------------------------------------------------
 
 
-def _not_read(why: str, *, reading_id: int | None = None) -> DesignSheetExtraction:
+def _not_read(why: str, *, reading_id: int | None = None, attempted: bool = True) -> DesignSheetExtraction:
     """A sheet the model did not read, saying why. Nothing stands in for the
     reading: the BOQ page shows the reason and offers the read again."""
     result = DesignSheetExtraction(reader="ai", reading_id=reading_id, failure=why)
@@ -1353,6 +1353,7 @@ def _not_read(why: str, *, reading_id: int | None = None) -> DesignSheetExtracti
     # (M2), not only its failure text -- a "completed" run with no lines
     # read the job state as done (projects._boq_read_state) when nothing was.
     result.state = "failed"
+    result.attempted = attempted
     return result
 
 
@@ -1368,9 +1369,9 @@ def read_design_sheet(db: Session, project: Project, sheet: ProjectDesignSheet, 
     path = Path(sheet.document_path)
     why_not = available(project, provider)
     if why_not:
-        return _not_read(f"Not read: {why_not}")
+        return _not_read(f"Not read: {why_not}", attempted=False)
     if not path.is_file():
-        return _not_read("Not read: the file is not there")
+        return _not_read("Not read: the file is not there", attempted=False)
     document_sha = pipeline.sha256_of(path) or ""
     run = _Run(db=db, project=project, provider=provider or get_provider(), budget=_budget(db, project.id))
     try:

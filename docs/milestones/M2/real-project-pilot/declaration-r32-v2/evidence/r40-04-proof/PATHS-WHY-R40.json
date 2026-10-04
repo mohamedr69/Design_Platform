@@ -1,0 +1,223 @@
+{
+ "B": {
+  "app.ai.evaluation:run_case": [
+   "app.services.document_processing:run [entry]",
+   "app.ai.submittal_reader:stored [scoped]",
+   "app.services.ep_directory:ScanResult.status [global-only]",
+   "app.ai.provider:ClaudeCodeProvider.complete [global-only]",
+   "app.ai.evaluation:run [global-only]",
+   "app.ai.evaluation:run_case [scoped]"
+  ],
+  "app.ai.sheet_reader:available": [
+   "app.services.document_processing:run [entry]",
+   "app.services.document_processing:read_task [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.sheet_reader:available [global-only]"
+  ],
+  "app.ai.verification:available": [
+   "app.services.document_processing:run [entry]",
+   "app.services.document_processing:read_task [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.verification:available [global-only]"
+  ],
+  "app.ai.verification:drf_run": [
+   "app.services.document_processing:run [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]",
+   "app.ai.verification:drf_run [scoped]"
+  ],
+  "app.ai.verification:read_drf": [
+   "app.services.document_processing:run [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]"
+  ],
+  "app.compliance.assist:available": [
+   "app.services.document_processing:run [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:available [scoped]"
+  ],
+  "app.compliance.assist:open_session": [
+   "app.services.document_processing:run [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:open_session [scoped]"
+  ],
+  "app.extraction.pipeline:ask": [
+   "app.services.document_processing:run [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.routers.projects:_resolve_suggestions [scoped]",
+   "app.extraction.pipeline:suggest_drf_field [scoped]",
+   "app.extraction.pipeline:ask [scoped]"
+  ]
+ },
+ "C": {
+  "app.ai.evaluation:run_case": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.ai.provider:ClaudeCodeProvider.complete [scoped]",
+   "app.ai.evaluation:run [global-only]",
+   "app.ai.evaluation:run_case [scoped]"
+  ],
+  "app.ai.sheet_reader:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_control:_open_pdf [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.sheet_reader:available [global-only]"
+  ],
+  "app.ai.submittal_reader:check": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.submittal_reader:check [global-only]"
+  ],
+  "app.ai.verification:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_control:_open_pdf [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.verification:available [global-only]"
+  ],
+  "app.ai.verification:drf_run": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]",
+   "app.ai.verification:drf_run [scoped]"
+  ],
+  "app.ai.verification:read_drf": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]"
+  ],
+  "app.compliance.assist:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:available [scoped]"
+  ],
+  "app.compliance.assist:open_session": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:open_session [scoped]"
+  ],
+  "app.extraction.pipeline:ask": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.routers.projects:_resolve_suggestions [scoped]",
+   "app.extraction.pipeline:suggest_drf_field [scoped]",
+   "app.extraction.pipeline:ask [scoped]"
+  ],
+  "app.services.document_processing:run": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.ai.provider:ClaudeCodeProvider.complete [scoped]",
+   "app.services.document_processing:run [global-only]"
+  ],
+  "app.services.drawing_ai_review:_ask": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.services.shop_drawings:reconcile [global-only]",
+   "app.services.shop_drawings:_ai_review [scoped]",
+   "app.services.drawing_ai_review:review_floor_duplicates [scoped]",
+   "app.services.drawing_ai_review:_ask [scoped]"
+  ],
+  "app.services.drawing_ai_review:enabled": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.services.shop_drawings:reconcile [global-only]",
+   "app.services.shop_drawings:_ai_review [scoped]",
+   "app.services.drawing_ai_review:enabled [scoped]"
+  ]
+ },
+ "R": {
+  "app.ai.evaluation:run_case": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.ai.provider:ClaudeCodeProvider.complete [scoped]",
+   "app.ai.evaluation:run [global-only]",
+   "app.ai.evaluation:run_case [scoped]"
+  ],
+  "app.ai.sheet_reader:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_control:_open_pdf [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.sheet_reader:available [global-only]"
+  ],
+  "app.ai.submittal_reader:check": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.submittal_reader:check [global-only]"
+  ],
+  "app.ai.verification:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_control:_open_pdf [scoped]",
+   "app.services.floor_schedule:read [global-only]",
+   "app.extraction.row_geometry:PageGeometry.columns [global-only]",
+   "app.ai.verification:available [global-only]"
+  ],
+  "app.ai.verification:drf_run": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]",
+   "app.ai.verification:drf_run [scoped]"
+  ],
+  "app.ai.verification:read_drf": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.ai.verification:read_drf [scoped]"
+  ],
+  "app.compliance.assist:available": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:available [scoped]"
+  ],
+  "app.compliance.assist:open_session": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.details_check:check [global-only]",
+   "app.compliance.assist:open_session [scoped]"
+  ],
+  "app.extraction.pipeline:ask": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.services.document_intake:check [global-only]",
+   "app.routers.projects:resolve [global-only]",
+   "app.routers.projects:_resolve_suggestions [scoped]",
+   "app.extraction.pipeline:suggest_drf_field [scoped]",
+   "app.extraction.pipeline:ask [scoped]"
+  ],
+  "app.services.document_processing:run": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.ai.provider:ClaudeCodeProvider.complete [scoped]",
+   "app.services.document_processing:run [global-only]"
+  ],
+  "app.services.drawing_ai_review:_ask": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.services.shop_drawings:reconcile [global-only]",
+   "app.services.shop_drawings:_ai_review [scoped]",
+   "app.services.drawing_ai_review:review_floor_duplicates [scoped]",
+   "app.services.drawing_ai_review:_ask [scoped]"
+  ],
+  "app.services.drawing_ai_review:enabled": [
+   "app.ai.evidence_reader:evidence_stage [entry]",
+   "app.ai.evidence_reader:EvidenceRun [scoped]",
+   "app.ai.evidence_reader:EvidenceRun.call [scoped]",
+   "app.services.shop_drawings:reconcile [global-only]",
+   "app.services.shop_drawings:_ai_review [scoped]",
+   "app.services.drawing_ai_review:enabled [scoped]"
+  ]
+ }
+}

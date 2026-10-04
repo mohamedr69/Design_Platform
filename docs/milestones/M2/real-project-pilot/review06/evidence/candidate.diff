@@ -1,0 +1,703 @@
+diff --git a/backend/app/core/config.py b/backend/app/core/config.py
+index d027538..7936ff8 100644
+--- a/backend/app/core/config.py
++++ b/backend/app/core/config.py
+@@ -408,6 +408,9 @@ class Settings(BaseSettings):
+     ai_price_cached_input_per_million: float = 0.0
+     # How long a validated result is reused for the same evidence.
+     ai_cache_ttl_days: int = 90
++    # The AI evidence reader (M2 review 06, app.ai.evidence_reader): "off" (default), "EV1" (targeted + a frozen
++    # 20 % audit) or "EV2" (broad blind verification). Shadow evidence only: it never changes a record or a status.
++    ai_evidence_variant: str = "off"
+     # Field-level OCR confidence below which a DRF value is offered to the
+     # model for a second reading (calibrated on the ten reviewed DRFs:
+     # correct values read at 77-96, noise at 24-30, EP-31725's plot at 54).
+diff --git a/backend/app/services/design_sheet_extractor.py b/backend/app/services/design_sheet_extractor.py
+index 6047514..f37fb03 100644
+--- a/backend/app/services/design_sheet_extractor.py
++++ b/backend/app/services/design_sheet_extractor.py
+@@ -44,7 +44,8 @@ settings = get_settings()
+ 
+ # Part of every cache key: a change to how a sheet is read is a change to
+ # what a cached result means.
+-PARSER_VERSION = "2026-09-28.2"   # M2 review 05: correlated part-number agreement is not confirmation; item-number and misassigned columns held
++PARSER_VERSION = "2026-09-29.1"   # M2 review 06: quantity passes that agree against the strip hold the row (H-06)
++# 2026-09-28.2: M2 review 05: correlated part-number agreement is not confirmation; item-number and misassigned columns held
+ # 2026-09-28.1 -- M2 review 02: band rows, quantity recheck < 90 %, part-number check, heading carry-over
+ if settings.tesseract_cmd:
+     pytesseract.pytesseract.tesseract_cmd = settings.tesseract_cmd
+@@ -656,6 +657,12 @@ CONFIDENT_QUANTITY = 85
+ # as 49 at 86 % and the confident-read rule above never looked again (M2
+ # review 02, D). Rows at or above it are taken on the strip's word.
+ RECHECK_QUANTITY_BELOW = 90
++# Part numbers read by the strip under this confidence get the independent passes (_confirm_catalog). A separate
++# knob from the recheck of quantities (M2 review 06, section 5), so the part gate can be measured on its own.
++CONFIRM_CATALOG_BELOW = RECHECK_QUANTITY_BELOW
++# A confident-enough strip quantity (60-90 %) contradicted by two or more agreeing independent passes, none backing
++# it, is held for review rather than accepted (M2 review 06, H-06).
++HOLD_ON_PASS_DISAGREEMENT = True
+ # Below this, a strip read no pass can confirm goes to review rather than
+ # into the BOQ; between this and LOW_QUANTITY_CONFIDENCE it is kept, noted.
+ UNCONFIRMED_REVIEW_BELOW = 50
+@@ -879,7 +886,17 @@ def _check_cut_digit(image: Image.Image, line: ExtractedBoqLine) -> None:
+     strip_value = line.quantity
+     others = {v: valid.count(v) for v in valid if v != strip_value}
+     confidence = f" ({line.quantity_confidence:.0f}%)" if line.quantity_confidence is not None else ""
+-    _cut_digit(line, strip_value, others, confidence)
++    if _cut_digit(line, strip_value, others, confidence):
++        return
++    # Independent passes that agree with each other against the strip, none backing it, are not "the cell pass
++    # being the worse reader" (M2 review 06, H-06: EP-8430 "PC+Monitor", printed 2, the strip read "| 9" at 74 %,
++    # all three passes read 2 and the 9 was accepted). Neither value is taken: the row goes for review with both.
++    agreed = [v for v, n in others.items() if n >= 2]
++    if HOLD_ON_PASS_DISAGREEMENT and agreed and strip_value not in valid:
++        line.quantity = None
++        line.quantity_parse = {**(line.quantity_parse or {}), "status": values.AMBIGUOUS,
++                               "rule": f"the column read {strip_value!r}{confidence} but {others[agreed[0]]} independent passes "
++                                       f"read {agreed[0]!r} and none read the column's value"}
+ 
+ 
+ def _part_key(text: str | None) -> str:
+@@ -1034,7 +1051,7 @@ def extract_design_sheet(pdf_path: Path, on_page=None) -> DesignSheetExtraction:
+         page_lines, section, heading, regions = _read_page(image, dark, rules, layout, page_number, section, heading)
+         catalog_span = (rules[layout.catalog[0]], rules[layout.catalog[1]])
+         for line in page_lines:
+-            if line.catalog_no and line.quantity and (line.catalog_confidence is None or line.catalog_confidence < RECHECK_QUANTITY_BELOW):
++            if line.catalog_no and line.quantity and (line.catalog_confidence is None or line.catalog_confidence < CONFIRM_CATALOG_BELOW):
+                 _confirm_catalog(image, line, catalog_span)
+             if not line.quantity:
+                 _read_quantity_again(image, line)
+diff --git a/backend/app/services/document_control.py b/backend/app/services/document_control.py
+index 0cd5d79..94dd9f9 100644
+--- a/backend/app/services/document_control.py
++++ b/backend/app/services/document_control.py
+@@ -6,6 +6,7 @@ from datetime import datetime, timezone
+ from functools import lru_cache
+ from pathlib import Path
+ import os
++import json
+ import re
+ import io
+ import subprocess
+@@ -358,7 +359,9 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
+ # covers and scanned transmittals are promoted to records only on the
+ # evaluation path (EXTRACTION_PROMOTE_OBSERVATIONS), else kept as
+ # observations; a reference cut at a hyphen is flagged incomplete.
+-PARSER_VERSION = "parse-2026-09-28.6"
++PARSER_VERSION = "parse-2026-09-29.8"   # M2 review 06: an OCR title-block number is a register key only when clean and unambiguous (titleblock-3)
++# parse-2026-09-28.7: M2 review 06: raw evidence of transmittals and labelled form fields; OCR title blocks
++# parse-2026-09-28.6: M2 review 05 (title block by position, reference roles)
+ 
+ # The codes a controlled document's reference carries. Contractors number
+ # them their own way: MAS and MAR are both a material submittal (material
+@@ -1265,7 +1268,9 @@ def parse_page(text: str, path: str, modified: datetime, page: int, sheet=None)
+         # A method statement transmittal names its material submittal's
+         # number; it is not one (EP-29495 files both under -MS- and -MAR-).
+         if category == "submittals" and re.search(r"method\s+statement|risk\s+assessment", text, re.I): return []
+-        if not re.search(required, text, re.I) and not re.search(r"consultant.*(?:reply|comment|status)|review\s*status", text, re.I): return []
++        # A sheet whose title block gave its own number is a drawing sheet by that evidence: the text layer may carry
++        # no "drawing title" words at all (a title block drawn as graphics and read by OCR, M2 review 06 H-01).
++        if not own and not re.search(required, text, re.I) and not re.search(r"consultant.*(?:reply|comment|status)|review\s*status", text, re.I): return []
+     elif drawing_value and re.search(r"FIRE\s*ALARM|EMERGENCY\s*LIGHT|VOICE\s*EVACUATION", text, re.I):
+         reference, category = drawing_value, "drawings"
+         if not TITLE.search(text) and not own: return []
+@@ -1696,7 +1701,7 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+             visited.append(number)
+             try:
+                 text = page_text(page, index, page_texts)
+-                sheet = _sheet_of(page, text, number, observations)
++                sheet = _sheet_of(page, text, number, observations, use_ocr=use_ocr, sha256=sha256, index=index)
+                 with timed("deterministic_extract"):
+                     # Passed only where a title block was read: `parse_page` is a seam tests replace.
+                     found = parse_page(text, filename, modified, number, **({"sheet": sheet} if sheet is not None else {}))
+@@ -1823,9 +1828,14 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+                         observations.extend({"page": number, "kind": "cover_untracked", "record": observed_record(row)} for row in held)
+                         found = [row for row in found if row not in held]
+                 if not found and not scan:
+-                    sheet = untracked_sheet_observation(text)
+-                    if sheet is not None:
+-                        observations.append({"page": number, **sheet})
++                    untracked = untracked_sheet_observation(text)
++                    if untracked is not None:
++                        observations.append({"page": number, **untracked})
++                # Raw evidence the register's grammar does not carry (M2 review 06, H-02 / H-03 / H-05): a
++                # transmittal's own number, parties and listed documents; a form's labelled identity and stated
++                # purpose. Observations only: no register record, status or category is made of them.
++                observations.extend(page_evidence(page, text, number, scan=scan, found=found, sheet=sheet,
++                                                  observations=observations))
+                 if found and pending is not None and all(r.category == "reply" for r in found) \
+                         and _answers(records[pending], found[0]):
+                     # The reply behind a submission, naming the sheets it covers:
+@@ -1902,21 +1912,80 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+     return reading if full else (reading.records, reading.notes)
+ 
+ 
++EVIDENCE_PAGE_LIMIT = 4
++
++
++def page_evidence(page, text: str, number: int, *, scan: bool, found: list, sheet, observations: list) -> list[dict]:
++    """The page's raw evidence beyond the records (M2 review 06): every transmittal as one (`transmittals.observe`,
++    merged into a transmittal observation the reader already made), and a form's labelled identity and purpose on
++    a page that gave no record (`labelled_fields`), on the first EVIDENCE_PAGE_LIMIT pages."""
++    from app.services import labelled_fields, title_block, transmittals
++
++    out = []
++    if transmittals.looks_like_transmittal_form(text):
++        seen = transmittals.observe(text, source="ocr" if scan else "text", page=number)
++        existing = next((o for o in observations if o.get("page") == number and o.get("kind") == "transmittal"), None)
++        if existing is not None:
++            existing.update({k: v for k, v in seen.items() if k not in ("records",) and (v or k not in existing)})
++            if existing.get("reference"):
++                existing.pop("flags", None) if existing.get("flags") == ["reference_unread"] else None
++        else:
++            out.append(seen)
++        return out
++    if found or sheet is not None or number > EVIDENCE_PAGE_LIMIT:
++        return out
++    try:
++        fields = (labelled_fields.read_text(text) if scan else
++                  labelled_fields.read_lines(title_block.page_lines(page), page.rect.width, page.rect.height))
++    except Exception as exc:  # noqa: BLE001 -- evidence is best effort: the page's reading stands without it
++        return [{"page": number, "kind": "form_identity", "version": labelled_fields.FIELDS_VERSION, "error": f"{type(exc).__name__}: {exc}"[:200]}]
++    if fields is not None and fields.identity:     # a heading alone is not evidence of a component
++        out.append(fields.observation(number))
++    return out
++
++
+ def _controlled_number(value: str) -> bool:
+     found = reference_candidates(value)
+     return bool(found) and found[0].start == 0 and found[0].reference.upper() == value.upper().rstrip("-.")
+ 
+ 
+-def _sheet_of(page, text: str, number: int, observations: list):
+-    """The page's title block read by position, for a drawing-sized page with a text layer; its facts kept
+-    as an observation of the page. A failure here leaves the page to the text reader, noted."""
++TITLE_BLOCK_OCR_VARIANT = "tb-ocr-1"
++
++
++def _title_block_ocr_lines(sha256: str | None, index: int):
++    """The OCR fallback for a title block drawn as graphics or scanned: the strip OCRed once, its lines cached by
++    content (page-cache variant `TITLE_BLOCK_OCR_VARIANT`)."""
++    from app.services import page_cache, title_block
++
++    def ocr_lines(page, clip):
++        cached = page_cache.get_ocr(sha256, index, TITLE_BLOCK_OCR_VARIANT) if sha256 else None
++        if cached is not None:
++            counted("ocr_cache_hits")
++            return [title_block.Line(*row) for row in json.loads(cached)]
++        counted("title_block_ocr")
++        with timed("ocr_engine"):
++            lines = title_block.ocr_word_lines(page, clip)
++        if sha256:
++            page_cache.put_ocr(sha256, index, json.dumps([[l.x0, l.y0, l.x1, l.y1, l.text] for l in lines]), TITLE_BLOCK_OCR_VARIANT)
++        return lines
++
++    return ocr_lines
++
++
++def _sheet_of(page, text: str, number: int, observations: list, *, use_ocr: bool = False, sha256: str | None = None,
++              index: int = 0):
++    """The page's title block read by position, for a drawing-sized page; its facts kept as an observation of the
++    page. Where the text layer gives no own number -- a title block drawn as graphics, or a scanned sheet -- and OCR
++    is on, the title-block strip is OCRed once (M2 review 06, H-01). A failure here leaves the page to the text
++    reader, noted."""
+     from app.services import title_block
+ 
+-    if len(text.strip()) < 80 or not title_block.is_drawing_sheet(page):
++    if not title_block.is_drawing_sheet(page) or (len(text.strip()) < 80 and not use_ocr):
+         return None
+     try:
+         with timed("title_block"):
+-            sheet = title_block.read_page(page, controlled=_controlled_number)
++            sheet = title_block.read_page(page, controlled=_controlled_number,
++                                          ocr_lines=_title_block_ocr_lines(sha256, index) if use_ocr else None)
+     except Exception as exc:  # noqa: BLE001 -- geometry failed: the text reader stands, as before
+         observations.append({"page": number, "kind": "title_block", "version": title_block.TITLE_BLOCK_VERSION,
+                              "error": f"{type(exc).__name__}: {exc}"[:200]})
+diff --git a/backend/app/services/document_processing.py b/backend/app/services/document_processing.py
+index 0b0ea1b..0905e8f 100644
+--- a/backend/app/services/document_processing.py
++++ b/backend/app/services/document_processing.py
+@@ -282,6 +282,7 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
+     # done (the AI stage below), so a 150-second call on one form never
+     # holds up the shop drawings and replies behind it.
+     deferred_forms: list[tuple[ProjectDocument, Path, str]] = []
++    evidence_rows: list[tuple[ProjectDocument, Path]] = []    # read in this run: the AI evidence stage's input
+     processing_started = time.perf_counter()
+     for (path, relative, _size, _mtime, _previous, row), reading in document_sync.read_in_completion_order(
+             plan, ocr, workers, check=ctx.check if ctx is not None else None, task=task):
+@@ -420,6 +421,8 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
+                 db.commit()
+             raise
+         anything_read = True
++        if row.state == FRESH and source is None:
++            evidence_rows.append((row, path))
+         forms_changed = _after_reading(db, project, row, role, relative, now, counts) or forms_changed
+         commit_started = time.perf_counter()
+         db.commit()
+@@ -488,6 +491,15 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
+             raise
+         telemetry.add("ai_stage", time.perf_counter() - ai_stage_started)
+ 
++    # The AI evidence stage (M2 review 06): off unless AI_EVIDENCE_VARIANT names a variant. Shadow evidence on the
++    # rows read in this run -- `extracted["ai_evidence"]` only; no record, status or consumer changes.
++    from app.ai import evidence_reader
++
++    if evidence_reader.configured_variant() != "off" and evidence_rows:
++        evidence_started = time.perf_counter()
++        counts["ai_evidence"] = evidence_reader.evidence_stage(db, project, evidence_rows, provider=provider, ctx=ctx)
++        telemetry.add("ai_evidence_stage", time.perf_counter() - evidence_started)
++
+     # What is built from the documents, brought up to the readings once.
+     reconcile_started = time.perf_counter()
+     if forms_changed and can_read_forms:
+diff --git a/backend/app/services/document_sync.py b/backend/app/services/document_sync.py
+index 291371a..34ec078 100644
+--- a/backend/app/services/document_sync.py
++++ b/backend/app/services/document_sync.py
+@@ -517,8 +517,11 @@ def process(db: Session, project: Project, row: ProjectDocument, path: Path, roo
+         from app.services.word_text import read_word_text
+ 
+         relative = path.relative_to(root).as_posix()
+-        records = transmittals.read_transmittal(read_word_text(path), relative,
+-                                                datetime.fromtimestamp(stat.st_mtime_ns / 1e9, timezone.utc))
++        word = read_word_text(path)
++        records = transmittals.read_transmittal(word, relative, datetime.fromtimestamp(stat.st_mtime_ns / 1e9, timezone.utc))
++        # Every transmittal as raw evidence (M2 review 06, H-05): its number, parties and listed documents, whether
++        # or not it carries a sample the register records.
++        observations = [transmittals.observe(word, source="word")]
+         notes = ()
+         coverage = coverage or {"outcome": "complete", "pages_total": 1, "pages_visited": [1], "pages_skipped": [],
+                                 "pages_failed": [], "ocr_failed_pages": [], "stop_reason": None,
+diff --git a/backend/app/services/title_block.py b/backend/app/services/title_block.py
+index 2951f99..bb5004f 100644
+--- a/backend/app/services/title_block.py
++++ b/backend/app/services/title_block.py
+@@ -24,13 +24,14 @@ import re
+ from dataclasses import dataclass, field
+ from datetime import date
+ 
+-TITLE_BLOCK_VERSION = "titleblock-1"
++TITLE_BLOCK_VERSION = "titleblock-3"   # .3: an OCR number is a register key only when clean and unambiguous   # M2 review 06: DRG/DOCUMENT labels, sub-label rows, nearest REV cell, OCR fallback
++# titleblock-1: M2 review 05 (P-06 / P-07)
+ 
+ # A drawing sheet: A2 and larger (the forms, letters and datasheets are A4 / A3).
+ MIN_SHEET_SIDE_PT = 1300.0
+ 
+ _NUMBER_LABEL = re.compile(
+-    r"^(?:(?P<qualifier>[A-Z][A-Z.]*)\s+)?(?:DRAWING|DWG)\.?\s*(?:NO|NUMBER|NR)\b\.?\s*:?\s*(?P<inline>[A-Z0-9][A-Z0-9 ./_&()-]{3,})?$",
++    r"^(?:(?P<qualifier>[A-Z][A-Z.]*)\s+)?(?:DRAWING|DWG|DRG|DOCUMENT|DOC)\.?\s*(?:NO|NUMBER|NR)\b\.?\s*:?\s*(?P<inline>[A-Z0-9][A-Z0-9 ./_&()-]{3,})?$",
+     re.I)
+ _REV_LABEL = re.compile(r"^(?:REV(?:ISION)?|Rev)\b\.?\s*(?:NO\b\.?)?\s*:?\s*(?P<inline>[A-Z0-9]{1,4})?$", re.I)
+ # A revision as printed: "0", "00", "07", "AB", "C1", "P03", "2A". Letters stay letters.
+@@ -75,14 +76,25 @@ class TitleBlock:
+     history_latest: str | None = None          # the history row dated latest, where the dates settle it
+     references: tuple = ()                     # values of the reference-drawings table(s)
+     conflict: bool = False                     # the REV cell and the history's latest row disagree
++    source: str = "text"                       # "text" (the page's text layer) or "ocr" (the title-block strip OCRed)
++    number_region: tuple | None = None         # the number cell's label, display coordinates (x0, y0, x1, y1)
++    revision_region: tuple | None = None       # the REV cell's label
+     title: str | None = None                   # the Drawing Title cell's lines, as printed
+     notes: tuple = field(default=())
++    # An OCR-read number cell (source "ocr"): the text exactly as OCR gave it, and the one identity-shaped token
++    # taken from it when there is exactly one, clean (M2 review 06). `number` is that token only when it is not
++    # glyph-ambiguous; otherwise `number` stays None and the literal / candidate are evidence, never a register key.
++    number_literal: str | None = None
++    number_candidate: str | None = None
+ 
+     def observation(self) -> dict:
+         return {"kind": "title_block", "version": TITLE_BLOCK_VERSION, "number": self.number,
+                 "revision": self.revision, "number_label": self.number_label, "revision_label": self.revision_label,
+                 "history": [list(row) for row in self.history], "history_latest": self.history_latest,
+-                "references": list(self.references), "conflict": self.conflict, "title": self.title, "notes": list(self.notes)}
++                "references": list(self.references), "conflict": self.conflict, "title": self.title, "notes": list(self.notes),
++                "source": self.source, "number_literal": self.number_literal, "number_candidate": self.number_candidate,
++                "number_region": list(self.number_region) if self.number_region else None,
++                "revision_region": list(self.revision_region) if self.revision_region else None}
+ 
+ 
+ def page_lines(page) -> list[Line]:
+@@ -110,14 +122,107 @@ def is_drawing_sheet(page) -> bool:
+     return max(page.rect.width, page.rect.height) > MIN_SHEET_SIDE_PT
+ 
+ 
+-def read_page(page, *, controlled=None) -> TitleBlock | None:
+-    """The title block of a drawing-sized page with a text layer; None for any other page."""
++def read_page(page, *, controlled=None, ocr_lines=None) -> TitleBlock | None:
++    """The title block of a drawing-sized page; None for any other page. `ocr_lines(page, clip)`: where the text
++    layer gives no own number (a title block drawn as vector outlines -- EP-8430's Nakheel/Dar sheets, M2 review 06
++    H-01), the title-block strip is OCRed once and its word boxes read by the same geometry."""
+     if not is_drawing_sheet(page):
+         return None
+     lines = page_lines(page)
+-    if len(lines) < 5:
+-        return None
+-    return read(lines, page.rect.width, page.rect.height, controlled=controlled)
++    block = read(lines, page.rect.width, page.rect.height, controlled=controlled) if len(lines) >= 5 else None
++    if ocr_lines is not None and (block is None or block.number is None):
++        clip = title_block_strip(page)
++        found = ocr_lines(page, clip)
++        if found:
++            ocr_block = read(found, page.rect.width, page.rect.height, controlled=controlled)
++            if ocr_block is not None and (ocr_block.number or (block is None and ocr_block.revision)):
++                import dataclasses
++
++                literal = ocr_block.number
++                candidate, why = ocr_number(literal)
++                trusted = candidate if candidate and why is None else None
++                notes = tuple(block.notes if block else ()) + ("title block read by OCR of its strip",) + ocr_block.notes
++                if literal and trusted is None:
++                    notes += (f"OCR number {literal!r} not taken: {why}",)
++                return dataclasses.replace(ocr_block, source="ocr", number=trusted, number_literal=literal,
++                                           number_candidate=candidate, notes=notes)
++    return block
++
++
++_OCR_TOKEN = re.compile(r"^[A-Z0-9][A-Z0-9&./_-]*[A-Z0-9]$")
++_AMBIGUOUS_GLYPH = re.compile(r"(?<=\d)[OIL]|[OIL](?=\d)")
++
++
++def ocr_number(literal: str | None) -> tuple[str | None, str | None]:
++    """(candidate, reason it is not trusted) for an OCR-read own number. The candidate is the one token of the
++    literal that is identity-shaped (letters / digits with separators, a digit, at least 6 characters); a literal
++    with none or several has no candidate. A candidate with O / I / L against a digit ("LO8") is glyph-ambiguous:
++    OCR confuses those with 0 / 1, and the page cannot say which was printed (EP-29076 LAC-653 sheets)."""
++    if not literal:
++        return None, "nothing read"
++    tokens = [t.strip(".,;:|") for t in literal.split()]
++    shaped = [t for t in tokens if len(t) >= 6 and re.search(r"\d", t) and re.search(r"[-/._]", t) and _OCR_TOKEN.match(t.upper())]
++    if len(shaped) != 1:
++        return None, "no single identity-shaped token" if not shaped else "several identity-shaped tokens"
++    candidate = shaped[0]
++    extra = [t for t in tokens if t and t != candidate]
++    if extra:
++        return candidate, "other text beside the number: " + " ".join(extra)
++    if _AMBIGUOUS_GLYPH.search(candidate.upper()):
++        return candidate, "a letter O / I / L against a digit: OCR cannot tell it from 0 / 1"
++    return candidate, None
++
++
++def title_block_strip(page):
++    """The strip of a sheet its title block occupies, in display coordinates: the right 28 % of a landscape sheet,
++    the bottom 22 % of a portrait one."""
++    import pymupdf
++
++    r = page.rect
++    return pymupdf.Rect(r.width * 0.72, 0, r.width, r.height) if r.width >= r.height else pymupdf.Rect(0, r.height * 0.78, r.width, r.height)
++
++
++def ocr_word_lines(page, clip, *, dpi: int = 250, image_to_data=None) -> list[Line]:
++    """The strip's OCR as Lines in display coordinates (Tesseract's own line grouping)."""
++    import io
++
++    import pymupdf
++    from PIL import Image
++
++    scale = dpi / 72
++    pix = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip)
++    image = Image.open(io.BytesIO(pix.tobytes("png")))
++    if image_to_data is None:
++        from app.services.document_control import _tesseract
++
++        image_to_data = _tesseract().image_to_data
++    data = image_to_data(image, output_type="dict")
++    words: dict = {}
++    for i, word in enumerate(data["text"]):
++        if not str(word).strip() or float(data["conf"][i]) < 0:
++            continue
++        key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
++        x0, y0 = data["left"][i] / scale + clip.x0, data["top"][i] / scale + clip.y0
++        words.setdefault(key, []).append((x0, y0, x0 + data["width"][i] / scale, y0 + data["height"][i] / scale, str(word).strip()))
++    out = []
++    for line in words.values():
++        # Tesseract joins neighbouring cells of a row into one line ("SCALE 1:150 @ A0 Drg. no. REV."): split
++        # where the gap between two words is wider than about one word-height, so each cell is a run of its own.
++        line.sort(key=lambda w: w[0])
++        run = [line[0]]
++        for w in line[1:]:
++            height = max(run[-1][3] - run[-1][1], w[3] - w[1], 1.0)
++            if w[0] - run[-1][2] > 1.1 * height:
++                out.append(run)
++                run = []
++            run.append(w)
++        out.append(run)
++    lines = []
++    for run in out:
++        text = " ".join(w[4] for w in run).strip(" )(|[]{}'\"`~,;")
++        if text:
++            lines.append(Line(min(w[0] for w in run), min(w[1] for w in run), max(w[2] for w in run), max(w[3] for w in run), text))
++    return lines
+ 
+ 
+ # --- the geometry -----------------------------------------------------------------------------------
+@@ -184,6 +289,11 @@ def _cell_value(lines: list[Line], label: Line, inline: str | None, shaped, *, r
+     if after and not _is_label(after[0]) and shaped(after[0].text) and after[0].x0 - label.x1 < 12 * label.h:
+         return after[0].text, ""
+     below = _below(lines, label, _column(lines, label, right_pad=right_pad), 4 * label.h)
++    # A cell may carry sub-labels between its label and its value (ISO 19650's "PROJECT CODE  ORIGINATOR ..." row
++    # under "DRAWING CODE"): up to two rows of words with no digit are stepped over, never a row with one.
++    skipped = 0
++    while below and not shaped(below[0].text) and not re.search(r"\d", below[0].text) and len(below[0].text.split()) <= 5 and skipped < 2:
++        below, skipped = below[1:], skipped + 1
+     if not below:
+         return None, "no value"
+     value = below[0]
+@@ -317,12 +427,19 @@ def read(lines: list[Line], width: float, height: float, *, controlled=None) ->
+     # The REV cell: on the number's row where there is a number cell; otherwise the REV label nearest the
+     # corner that is neither a history header (its row names DESCRIPTION) nor a reference-table column.
+     revision = revision_label = None
++    revision_box = None
+     rev_labels = [l for l in lines if _REV_LABEL.match(l.text) and _in_zone(l, width, height)]
+     if chosen is not None:
+         rev_labels = [l for l in rev_labels if _same_row(l, chosen) and l.x0 > chosen.x0]
+         rev_labels.sort(key=lambda l: l.x0)
+     else:
+         rev_labels.sort(key=lambda l: -_corner_rank(l, width, height))
++    if chosen is not None:
++        # A REV cell off the number's row (a stacked "ORIGINAL SIZE / REV" cell, M2 review 06 H-04): the REV labels
++        # of the title block nearest the number cell, after the ones on its row.
++        near = [l for l in lines if _REV_LABEL.match(l.text) and _in_zone(l, width, height) and l not in rev_labels
++                and abs(l.cy - chosen.cy) <= 0.25 * height]
++        rev_labels = rev_labels + sorted(near, key=lambda l: abs(l.cx - chosen.cx) + abs(l.cy - chosen.cy))
+     for label in rev_labels:
+         if any(_DESCRIPTION.match(l.text) for l in _row(lines, label)) or _under_reference_heading(lines, label):
+             continue
+@@ -332,13 +449,16 @@ def read(lines: list[Line], width: float, height: float, *, controlled=None) ->
+             notes.append(f"'{label.text}': {why}")
+             continue
+         revision, revision_label = value.strip(), label.text
++        revision_box = (round(label.x0, 1), round(label.y0, 1), round(label.x1, 1), round(label.y1, 1))
+         break
+     if number is None and revision is None:
+         return None
+     history, latest = _history(lines)
+     conflict = bool(revision and latest and revision_key(revision) != revision_key(latest))
++    number_box = (round(chosen.x0, 1), round(chosen.y0, 1), round(chosen.x1, 1), round(chosen.y1, 1)) if chosen is not None else None
+     return TitleBlock(number, revision, number_label, revision_label, history, latest, _references(lines), conflict,
+-                      title=_title(lines, width, height, chosen), notes=tuple(notes))
++                      title=_title(lines, width, height, chosen), notes=tuple(notes), number_region=number_box,
++                      revision_region=revision_box)
+ 
+ 
+ def _title(lines: list[Line], width: float, height: float, near: Line | None) -> str | None:
+diff --git a/backend/app/services/transmittals.py b/backend/app/services/transmittals.py
+index 8eaaf6d..b6a350e 100644
+--- a/backend/app/services/transmittals.py
++++ b/backend/app/services/transmittals.py
+@@ -249,3 +249,78 @@ def raw_reference(text: str) -> str | None:
+     number ("_18/0127/26"): evidence kept for an engineer, never a number (M2 review 05, pilot P-09)."""
+     found = _RAW_REF.search(text or "")
+     return " ".join(found.group(1).split()) if found else None
++
++
++
++# --- every transmittal as raw evidence (M2 review 06, H-05) ------------------------------------------------------
++
++OBSERVE_VERSION = "transmittal-observe-2026-09-29.1"
++_ITEM_CELLS = re.compile(r"^\|?\s*(\d{1,3})\s*\|\s*([A-Z0-9][^|]{3,70}?)\s*\|\s*([^|]{3,160}?)\s*(?:\|\s*([^|]{0,40}))?\|?\s*$", re.I)
++_ITEM_OCR = re.compile(r"^\W{0,3}(\d{1,2})\s*\|?\s*([A-Z0-9][A-Z0-9/&._-]{5,}(?:\s*[-/][A-Z0-9/&._-]+)*)\s+\|?\s*(.{3,160})$", re.I)
++_LABEL_VALUE = r"\W{0,8}([^\n|]{2,120})"
++
++
++_NEXT_LABEL = re.compile(r"\s(?:Date|AASS\s*Ref|Tel|Attn|Project\s*ID|Subject|Fax)\b.*$", re.I)
++
++
++def _after(text: str, label: str) -> str | None:
++    found = re.search(r"(?im)(?:^|\|)\s*" + label + _LABEL_VALUE, text)
++    if not found:
++        return None
++    value = _NEXT_LABEL.sub("", " ".join(found.group(1).split())).strip(" :|_.")
++    return value or None
++
++
++_ITEM_INLINE = re.compile(r"\|\s*(\d{1,3})\s*\|\s*([A-Z0-9][A-Z0-9/&._ -]{3,70}?)\s*\|\s*([^|]{3,160}?)\s*\|", re.I)
++
++
++def _document_no_shaped(value: str) -> bool:
++    return bool(re.search(r"\d", value)) and bool(re.search(r"[A-Z]", value, re.I)) and bool(re.search(r"[/-]", value)) \
++        and not re.match(r"(?:document|item|description)", value, re.I)
++
++
++def _project_id(text: str) -> str | None:
++    found = re.search(r"EP-\s?\d{3,5}", _after(text, r"Project\s*ID") or "")
++    return found.group(0).replace(" ", "") if found else None
++
++
++def observe(text: str, *, source: str, page: int = 1) -> dict:
++    """What a transmittal says, whatever it carries: its own number (a TR number, or the literal token its reference
++    field was read as when no TR number reads), date, recipient, attention, subject, the documents it lists and the
++    receipt evidence on it. A receipt (a RECEIVED stamp, a signed "Received By") is a receipt: never an approval.
++    Kept as an observation; the register's sample records are read by `read_transmittal` / `from_ocr` as before."""
++    text = text or ""
++    found = _OCR_REF.search(text)
++    reference = f"TR/{found.group(1)}/{found.group(2)}" if found else None
++    items = []
++    for line in text.splitlines():
++        found = [m for m in [_ITEM_CELLS.match(line.strip()) or _ITEM_OCR.match(line.strip())] if m] or list(_ITEM_INLINE.finditer(line))
++        for m in found:
++            if _document_no_shaped(m.group(2)):
++                item = {"item": m.group(1), "document_no": " ".join(m.group(2).split()), "description": " ".join(m.group(3).split())[:160]}
++                if item not in items:
++                    items.append(item)
++    date = None
++    date_label = re.search(r"\bDate\b", text, re.I)
++    for d in _OCR_DATE.finditer(text, date_label.end() if date_label else 0):
++        date = f"{d.group(1)}/{d.group(2)}/{d.group(3)}"
++        break
++    upper = text.upper()
++    receipt = {"received_by_field": bool(re.search(r"RECEIVED\s*BY", upper)),
++               "received_stamp": bool(re.search(r"\bRECEIVED\b(?!\s*BY)", upper)),
++               "signature_field": bool(re.search(r"\bSIGNATURE\b", upper))}
++    out = {"kind": "transmittal", "version": OBSERVE_VERSION, "page": page, "source": source, "reference": reference,
++           "raw_reference": None if reference else raw_reference(text), "date": date,
++           "to": _after(text, r"To\b"), "attn": _after(text, r"Att(?:n|entio)n?\.?"), "subject": _after(text, r"Subject"),
++           "project_id": _project_id(text),
++           "items": items, "receipt": receipt, "records": []}
++    if reference is None:
++        out["flags"] = ["reference_unread"]
++    return out
++
++
++def looks_like_transmittal_form(text: str) -> bool:
++    """A document transmittal by its heading and at least two of the form's own labels, with or without a TR
++    number that OCR could read."""
++    text = text or ""
++    return bool(_OCR_HEADING.search(text)) and sum(1 for cue in _OCR_FORM_CUES if cue.search(text)) >= 2
+diff --git a/backend/scripts/m2_boq_eval.py b/backend/scripts/m2_boq_eval.py
+index 916c754..3db611b 100644
+--- a/backend/scripts/m2_boq_eval.py
++++ b/backend/scripts/m2_boq_eval.py
+@@ -27,10 +27,26 @@ import re
+ import time
+ from pathlib import Path
+ 
+-BOQ_EVALUATOR_VERSION = "m2-boq-eval-2026-09-28.2"   # .2: versioned label corrections (--corrections)
++BOQ_EVALUATOR_VERSION = "m2-boq-eval-2026-09-29.3"   # .3: absence / unscorable truth states (M2 review 06); .2: label corrections
++NEGATIVE_WORDS = ("absent", "n/a", "none", "blank", "not applicable")
++UNSCORABLE_WORDS = ("unknown", "illegible", "ambiguous", "unlabelled", "cut")
+ EQUIPMENT = ("line", "component")
+ 
+ 
++def truth_literal(text):
++    """(state, literal) of a label value: 'negative' for an explicit absence ("absent", "absent (blank cell)"),
++    'unscorable' for unknown / illegible, else 'readable' with the value before any parenthetical note."""
++    if text is None:
++        return "negative", None
++    t = str(text).strip()
++    low = t.lower()
++    if any(low == w or low.startswith(w + " ") or low.startswith(w + "(") for w in NEGATIVE_WORDS):
++        return "negative", None
++    if any(low == w or low.startswith(w + " ") for w in UNSCORABLE_WORDS):
++        return "unscorable", None
++    return "readable", re.split(r"\s\(", t, 1)[0].strip()
++
++
+ def part_key(text) -> str:
+     return re.sub(r"[^A-Z0-9/+.-]", "", str(text or "").upper())
+ 
+@@ -63,14 +79,15 @@ def edit_distance(a: str, b: str) -> int:
+ def similarity(truth: dict, emitted: dict) -> float:
+     """How alike a labelled row and an emitted row are, 0..3: part number, description, quantity."""
+     score = 0.0
+-    tp, ep = part_key(truth.get("part_number")), part_key(emitted.get("part_number"))
++    tp, ep = part_key(truth_literal(truth.get("part_number"))[1]), part_key(emitted.get("part_number"))
+     if tp and ep:
+         d = edit_distance(tp, ep)
+         score += 1.5 if d == 0 else 1.0 if d <= max(1, len(tp) // 5) else 0.0
+     a, b = tokens(truth.get("description")), tokens(emitted.get("description"))
+     if a and b:
+         score += len(a & b) / max(1, min(len(a), len(b)))
+-    if quantity_key(truth.get("quantity")) and quantity_key(truth.get("quantity")) == quantity_key(emitted.get("quantity")):
++    tq = quantity_key(truth_literal(truth.get("quantity"))[1])
++    if tq and tq == quantity_key(emitted.get("quantity")):
+         score += 0.3
+     return score
+ 
+@@ -104,11 +121,16 @@ def align(truth: list[dict], emitted: list[dict], threshold: float = 0.6) -> lis
+ 
+ 
+ def judge(truth_value, emitted_value, accepted: bool, key) -> str:
+-    t, e = key(truth_value), key(emitted_value)
++    """Truth state first (.3): an explicit absence is a negative that can fail; unknown truth is unscorable; a held
++    row is held only where there was something to recover."""
++    state, lit = truth_literal(truth_value)
++    t, e = key(lit), key(emitted_value)
++    if state == "unscorable":
++        return "unscorable"
++    if state == "negative":
++        return ("fp" if e else "tn") if accepted else "tn"
+     if not accepted:
+-        return "held" if e or t else "tn"
+-    if not t:
+-        return "fp" if e else "tn"
++        return "held"
+     if not e:
+         return "missed"
+     return "tp" if t == e else "wrong"
+@@ -117,7 +139,7 @@ def judge(truth_value, emitted_value, accepted: bool, key) -> str:
+ def rates(c: collections.Counter) -> dict:
+     accepted = c["tp"] + c["wrong"] + c["fp"]
+     positives = c["tp"] + c["wrong"] + c["missed"] + c["held"]
+-    return {**{k: c[k] for k in ("tp", "wrong", "fp", "tn", "held", "missed")}, "accepted": accepted,
++    return {**{k: c[k] for k in ("tp", "wrong", "fp", "tn", "held", "missed", "unscorable")}, "accepted": accepted,
+             "precision_of_accepted": round(c["tp"] / accepted, 4) if accepted else None,
+             "recovery_of_readable": round(c["tp"] / positives, 4) if positives else None}
+ 
+@@ -177,8 +199,8 @@ def score_sheet(label: dict, extraction: dict) -> dict:
+             if e is None:
+                 out["rows"]["equipment missing"] += 1
+                 for f in ("part_number", "quantity", "description"):
+-                    if t.get(f) not in (None, ""):
+-                        fields[f]["missed"] += 1
++                    state = truth_literal(t.get(f))[0] if f != "description" else ("readable" if t.get(f) else "negative")
++                    fields[f]["missed" if state == "readable" else "tn" if state == "negative" else "unscorable"] += 1
+                 out["pairs"].append({"page": page, "how": "missing", "truth": _brief(t)})
+                 continue
+             out["rows"]["equipment matched (accepted)" if e["accepted"] else "equipment matched (held)"] += 1
+@@ -212,7 +234,7 @@ def totals(sheets: list[dict]) -> dict:
+     for s in sheets:
+         rows.update(s["rows"])
+         for f, v in s["fields"].items():
+-            for k in ("tp", "wrong", "fp", "tn", "held", "missed"):
++            for k in ("tp", "wrong", "fp", "tn", "held", "missed", "unscorable"):
+                 fields[f][k] += v[k]
+     return {"rows": dict(rows), "fields": {f: rates(c) for f, c in fields.items()},
+             "critical": sum(len(s["critical"]) for s in sheets), "sheets": len(sheets),
+diff --git a/backend/tests/test_design_sheet_extractor.py b/backend/tests/test_design_sheet_extractor.py
+index f32f12e..c47b77a 100644
+--- a/backend/tests/test_design_sheet_extractor.py
++++ b/backend/tests/test_design_sheet_extractor.py
+@@ -464,13 +464,17 @@ def test_a_longer_independent_reading_sends_a_cut_digit_to_review(monkeypatch):
+         {"pass": "a", "text": "121", "value": "121", "status": "ok"}, {"pass": "b", "text": "12]", "value": "12", "status": "ok"}, {"pass": "c", "text": "121", "value": "121", "status": "ok"}])
+     dse._check_cut_digit(None, line)
+     assert line.quantity == "121"
+-    # and a pass reading something else entirely at 60-90 % leaves the strip's value alone (the cell pass is the worse reader: 48 read "86")
++    # two passes agreeing on something else entirely at 60-90 %, none backing the strip, hold the row with both readings
++    # (M2 review 06, H-06; this replaces the Review 02 contract that kept the strip's value). Printed 48 read "86" by
++    # the passes, and printed 2 read "9" by the strip (EP-8430): neither reader is the reliably better one, so neither
++    # value is accepted on a contradiction.
+     line = dse.ExtractedBoqLine(catalog_no="X", description="Wrapped row", quantity="48", group_heading=None, confidence=80.0, page=1,
+                                 raw_quantity="48", quantity_confidence=75.0, quantity_parse={"kind": "equipment_count", "raw": "48", "value": 48, "status": "ok"})
+     monkeypatch.setattr(dse, "_independent_readings", lambda image, l: [
+         {"pass": "a", "text": "86", "value": "86", "status": "ok"}, {"pass": "b", "text": "86", "value": "86", "status": "ok"}, {"pass": "c", "text": "", "value": None, "status": "empty"}])
+     dse._check_cut_digit(None, line)
+-    assert line.quantity == "48" and line.alternates is not None
++    assert line.quantity is None and line.quantity_parse["status"] == "ambiguous" and "'86'" in line.quantity_parse["rule"]
++    assert line.alternates is not None
+     # the low-confidence path keeps its full confirmation logic, cut digit included
+     line = dse.ExtractedBoqLine(catalog_no="TP606", description="Back Box", quantity="49", group_heading=None, confidence=50.0, page=2,
+                                 raw_quantity="49", quantity_confidence=45.0, quantity_parse={"kind": "equipment_count", "raw": "49", "value": 49, "status": "ok"})
+diff --git a/backend/tests/test_extraction_pilot.py b/backend/tests/test_extraction_pilot.py
+index cfc6485..ddb8d02 100644
+--- a/backend/tests/test_extraction_pilot.py
++++ b/backend/tests/test_extraction_pilot.py
+@@ -59,5 +59,7 @@ def test_p04_mat_is_a_material_submittal_code():
+ 
+ 
+ def test_parser_identity_moved_with_the_pilot_fixes():
+-    # .5 carried the four pilot fixes; .6 the review-05 title-block and reference-role rules (the fixes stay in force).
+-    assert dc.PARSER_VERSION == "parse-2026-09-28.6"
++    # .5 carried the four pilot fixes; .6 the review-05 title-block and reference-role rules; .7 the review-06 raw
++    # evidence (transmittals, labelled form fields, OCR title blocks); .8 an OCR number is a key only when clean. The
++    # earlier fixes stay in force.
++    assert dc.PARSER_VERSION == "parse-2026-09-29.8"

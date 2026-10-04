@@ -1,0 +1,1231 @@
+{
+ "seed": "m2-r21-four-arm-2026-09-30",
+ "rule": "R21 sample selection, FROZEN BEFORE LABELLING (no prediction, no model): from the 415-document non-sealed exploration\nmanifest, every content hash ever predicted or held out is excluded (small batch, pilot, continuation, both BOQ sheets,\nreview05 holdout files: by sha256 found in those files), duplicates by sha256 collapse to one, staged copies are\nhash-checked and EVERY page is classified (size class, rotation, text layer vs scan-like) -- the earlier availability\ntable described first pages only. A deterministic PRE-LABEL SCREEN of the text layer / cached OCR flags pages whose\ndecision words lie OUTSIDE the application's title-block strip (candidate off-title-block decisions); it is a selection\naid only, never a label.\n\nRule (declared here, applied by seed order sha256(seed | doc_key) inside each stratum):\n  24 primary documents: rotated text-layer drawing sheets 8; rotation-0 text-layer drawing sheets 4; drawing-sheet scans 3;\n  A3/A4 text 5; A3/A4 scans 4 -- each with every page within the reader's 4-page scope; at most 3 per project;\n  MINIMUM off-title-block decision stratum: >= 4 of the 24 must carry a screened candidate off-title-block decision on an\n  in-scope page (filled first from the screened pool, in seed order, within their strata); if labelling later finds\n  fewer than 4 confirmed, the shortfall is topped up from the screened pool in seed order BEFORE any prediction, and the\n  final count is reported; a shortfall that cannot be filled is reported, never hidden.\n  3 coverage controls (in the planned denominator, outside the 24): 2 PDFs with more than 4 pages (their supported first\n  4 pages are read and consume real budget; pages beyond are 'unsupported:beyond_reader_scope'), 1 Word file (unsupported input).\nWrites R21-SAMPLE.json and R21-PAGE-CLASSES.json (every page of every candidate, for the workload).",
+ "manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+ "exposure_files": {
+  "C:/t/iso/work/r2x/SMALL-BATCH.json": "7039daa3f04935a35d9a272076be16510d4eb0a8885651f83f07af51f44d7139",
+  "C:/t/iso/work/r2x/ai-pilot/PILOT-SAMPLE.json": "3822df9ef792e6c6277e0bec3271dcee06dcdc6a15291a3e03ab0b25b6bf1917",
+  "C:/t/iso/work/r2x/ai-pilot-r18/CONTINUATION-SAMPLE.json": "ddbceb3f75ee2d44a654a68d6a54b41875cc37f0f26899d4806239cfd3e3c7f3",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/boq-holdout-extraction.json": "03335858cf8b433f33e34577c60e797a66fd1521b4100375307b0c9304ad9324",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/boq-holdout.json": "1c6c8445d8ea6095db464551a919231e32b52eda9a4596a4e9ac44cd44e6020b",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/eval-default.json": "3a03353e2d757d0069a21c559b36a989972a00160b0807b9dbb3f542cad441be",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/eval-promoted.json": "3a03353e2d757d0069a21c559b36a989972a00160b0807b9dbb3f542cad441be",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-BOQ-LABELS.json": "f8136f49be8c48c6ed205ddd05894b54187ad46d1a7103d1305d358dbe298fa4",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-BOQ-SET.json": "b03f448a47908336dd862db70faa15814b70ded9f4454fcfde0908fc8c0960c1",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-LABELS.json": "73b0520f4937682b5758b0763334adedaae6e1114c7021eeeee4ae81afa771c9",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-PAGE-LABELS.json": "ae1dd8ac4070f44154caf7870da1e99d6cd7e682f7d5d7b4f5510ee302f7da7a",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-PLAN.json": "18bc11d7be01749e717d0d319bac890ed0b99a746d95bd6d252e17cb6a2359ca",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-PROJECTS.json": "6062a4f0469825ed136b3ee22030a646b1d4ca4265a8ffb52eb5bb60d93fa93a",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-SAMPLE-run1-regex-bug.json": "bc89898c1c2d2b33bfe279bcaaecfd7041f92eb60836a6712cdf19287458e47c",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-SAMPLE.json": "8060b5b13c191f43ed93dd0fa3753d2b52fe07f3d17869aa17da01c9397aefe5",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/LABELS-FROZEN-BEFORE-RUN.json": "d5745bdae8e64a4026ae940297748aeb822af632ac4b1c6f90ec532d55d74391",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/pages_to_label.json": "b23be470942682ad11b94b6a0dc0aaff7f1c46716baaa7e6739b83d9506aeed0",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/rows-default.json": "ba8aee007660f3ba0e9a08ef3738982f50808e648d92418675723b9b49a014af",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/rows-promoted.json": "5a24eb459ee376d6629d1e700173750e35248492bec840cc4e1a9312db8957e2",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/RUN-default.json": "bc037563adb3590784e1deaaeb6c8abccf58e46197e708514fbc308502bd2702",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/RUN-promoted.json": "45e95538fb8a2792ae95769173e500e59ba9ccbe8c693c6e42cde2ce1978534f",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/SELECTION.json": "ad185bc3a5ae96c1a43cf18d7c6dba6c739b9348f56caf976752f90ae50967ec",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/staged_extra.json": "0ba5e6fb69f895115761ba08ae1e60f1b8afc5a30445fbbd0a3af21ca1ef2d62"
+ },
+ "excluded_exposed_hashes": 84,
+ "duplicates_collapsed": 0,
+ "candidates": 388,
+ "in_scope_pdfs": 284,
+ "strata_available": {
+  "a3_a4 / * / scan_like": 82,
+  "a3_a4 / * / text": 94,
+  "drawing_sheet / * / scan_like": 11,
+  "drawing_sheet / rot0 / text": 33,
+  "drawing_sheet / rotated / text": 64
+ },
+ "screened_off_title_block_available": 15,
+ "min_off_title_block": 4,
+ "off_title_block_selected": 4,
+ "shortfall": [],
+ "per_project": {
+  "30549": 3,
+  "27421": 3,
+  "28745": 2,
+  "23091": 3,
+  "26208": 3,
+  "23323": 3,
+  "17428": 3,
+  "19144": 3,
+  "22510": 2,
+  "16830": 2
+ },
+ "documents": [
+  {
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+   "ep": "30549",
+   "sha256": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-30549\\Inputs\\DUTCO DOC\\05.05.2026\\01. ARCHITECTURE\\A. ARCHITECTURAL FOLDER\\DRAWINGS\\AR-40000_DETAILED PLANS (ID)\\DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary:screened_off_title_block",
+   "stratum_src": "reply",
+   "stratum": "drawing_sheet / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": true
+  },
+  {
+   "doc_key": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+   "ep": "27421",
+   "sha256": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-27421\\wetransfer_drawings_2024-04-01_1039\\04-GATE LEVEL\\49354- EYAD AL KURRDY\\FOHC-221023-09509.pdf",
+   "extension": ".pdf",
+   "pages": 2,
+   "shape": "pdf",
+   "role": "primary:screened_off_title_block",
+   "stratum_src": "shop_drawing",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": true
+  },
+  {
+   "doc_key": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+   "ep": "28745",
+   "sha256": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-28745\\MS\\Copper\\R0\\PDF\\Detector and Base.pdf",
+   "extension": ".pdf",
+   "pages": 4,
+   "shape": "pdf",
+   "role": "primary:screened_off_title_block",
+   "stratum_src": "submittal",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 3,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 4,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": true
+  },
+  {
+   "doc_key": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+   "ep": "23091",
+   "sha256": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23091\\MS FA + CMS MATERIAL APPROVAL.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary:screened_off_title_block",
+   "stratum_src": "approval_sample",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": true
+  },
+  {
+   "doc_key": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+   "ep": "26208",
+   "sha256": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-26208\\EP-26208 drawing\\AsBuilt\\FA system\\R0\\B9\\B9\\BUILDING-9.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+   "ep": "30549",
+   "sha256": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-30549\\Inputs\\DUTCO DOC\\05.05.2026\\01. ARCHITECTURE\\A. ARCHITECTURAL FOLDER\\DRAWINGS\\AR-41000_MEP DETAILED PLANS\\DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 90,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+   "ep": "26208",
+   "sha256": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-26208\\EP-26208 drawing\\Shop dwg\\PAVA System\\Rev-0\\ELEC-B11-PAVA-101.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+   "ep": "27421",
+   "sha256": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-27421\\EP-27421 Shop Drawings\\EMERGENCY LIGHTING LAYOUT\\EML-04.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+   "ep": "23323",
+   "sha256": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\Shop Drawing\\REV-01\\Central Battery System\\DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+   "ep": "30549",
+   "sha256": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-30549\\Inputs\\DUTCO DOC\\05.05.2026\\01. ARCHITECTURE\\A. ARCHITECTURAL FOLDER\\DRAWINGS\\AR-41000_MEP DETAILED PLANS\\DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 90,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+   "ep": "27421",
+   "sha256": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-27421\\EP-27421 Shop Drawings\\FIRE ALARM SYSTEM LAYOUT\\FAS-02.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+   "ep": "17428",
+   "sha256": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\VARIATION - NEW ID - OFFICES\\FA EM INPUT\\210307_DIB_AMB_ Tender Package\\2. Drawings\\PDF\\BH2031-ID-OFF-00-001-00_H.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 90,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+   "ep": "17428",
+   "sha256": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\VARIATION - NEW ID - OFFICES\\FA EM INPUT\\06-Fire Alarm System\\PDF\\ID-R-100.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+   "ep": "23323",
+   "sha256": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\Inputs\\2. Fire Alarm System\\PDF\\DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+   "ep": "17428",
+   "sha256": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-17428\\EP-17428 Drawing\\Inputs\\From CD\\DIB IFC DWGS\\ARCH\\PDF\\1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "drawing_ifc_input",
+   "stratum": "drawing_sheet / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "sha256": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 DWGS\\Approved SD\\TELEPHONE APPRVED SHOP DRGS\\TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "approval_sample",
+   "stratum": "drawing_sheet / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "sha256": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 T&C\\Approved SD\\TELEPHONE APPRVED SHOP DRGS\\TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "approval_sample",
+   "stratum": "drawing_sheet / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "sha256": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-19144\\EP-18101 DWGS\\Approved SD\\TELEPHONE APPRVED SHOP DRGS\\TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "approval_sample",
+   "stratum": "drawing_sheet / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "drawing_sheet",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+   "ep": "23323",
+   "sha256": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23323\\EP-23323 - AKI Logistics\\Approvals & Comments\\DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+   "extension": ".pdf",
+   "pages": 4,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "reply",
+   "stratum": "a3_a4 / rotated / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 3,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 4,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-23091/O&M/EM/Content.pdf",
+   "ep": "23091",
+   "sha256": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23091\\O&M\\EM\\Content.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "other",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+   "ep": "28745",
+   "sha256": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-28745\\EP-28745 Scan\\EP-28745 DRF.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "scan",
+   "stratum": "a3_a4 / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "ep": "26208",
+   "sha256": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-26208\\EP-26208 drawing\\wetransfer_fire-alarm-system_2023-10-03_0541\\Emergency Lighting System\\MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+   "extension": ".pdf",
+   "pages": 4,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "shop_drawing",
+   "stratum": "a3_a4 / rotated / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 3,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 4,
+     "size": "drawing_sheet",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+   "ep": "23091",
+   "sha256": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-23091\\EP-23091 Material Submittal\\cs eml.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "submittal",
+   "stratum": "a3_a4 / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+   "ep": "22510",
+   "sha256": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-22510\\EP-22510 Commercial\\EP-22510 EML Design.pdf",
+   "extension": ".pdf",
+   "pages": 1,
+   "shape": "pdf",
+   "role": "primary",
+   "stratum_src": "design_sheet",
+   "stratum": "a3_a4 / rot0 / scan_like",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "scan_like",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+   "ep": "22510",
+   "sha256": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-22510\\EP-22510 MS\\R0\\PDF\\6. Test Report.pdf",
+   "extension": ".pdf",
+   "pages": 10,
+   "shape": "pdf_over_4_pages",
+   "role": "control:pdf_over_4_pages",
+   "stratum_src": "submittal",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 3,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 4,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 5,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 6,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 7,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 8,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 9,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 10,
+     "size": "a3_a4",
+     "rotation": 270,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    }
+   ],
+   "screened_off_title_block": false
+  },
+  {
+   "doc_key": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+   "ep": "16830",
+   "sha256": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\EP-16830-MS-ELV\\CCTV\\Nursery & Retail\\Spec for CCTV.pdf",
+   "extension": ".pdf",
+   "pages": 52,
+   "shape": "pdf_over_4_pages",
+   "role": "control:pdf_over_4_pages",
+   "stratum_src": "submittal",
+   "stratum": "a3_a4 / rot0 / text",
+   "page_classes": [
+    {
+     "page": 1,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    },
+    {
+     "page": 2,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 3,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": true
+    },
+    {
+     "page": 4,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": true
+    },
+    {
+     "page": 5,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 6,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 7,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 8,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 9,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 10,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 11,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 12,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 13,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 14,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 15,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 16,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 17,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 18,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 19,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 20,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 21,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 22,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 23,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 24,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 25,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 26,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 27,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 28,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 29,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 30,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 31,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 32,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 33,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 34,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 35,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 36,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 37,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 38,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 39,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 40,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 41,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 42,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 43,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 44,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 45,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 46,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 47,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 48,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 49,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 50,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": true,
+     "in_scope": false
+    },
+    {
+     "page": 51,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    },
+    {
+     "page": 52,
+     "size": "a3_a4",
+     "rotation": 0,
+     "text": "text",
+     "screen_off_title_block_decision": false,
+     "in_scope": false
+    }
+   ],
+   "screened_off_title_block": true
+  },
+  {
+   "doc_key": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+   "ep": "16830",
+   "sha256": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-16830\\EP-16830 - Transmittal\\SCS SD R0 13.04.2019.doc",
+   "extension": ".doc",
+   "pages": null,
+   "shape": "unsupported_input",
+   "role": "control:unsupported_input",
+   "stratum_src": "transmittal_word",
+   "stratum": null,
+   "page_classes": null,
+   "screened_off_title_block": null
+  }
+ ]
+}

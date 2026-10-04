@@ -122,3 +122,45 @@ Row accounting of the run: FAS 74 golden rows -> 73 lines read (69 matched by pa
 | D-BOQ-6 | VAL (R3-03) | The EML multiline part `+SL231` (source `+SL23I`) accepted; sheet VALID | one-line passes on a two-line cell; fragments taken as no contrary evidence | block-mode passes for tall cells; part-key comparison; unconfirmed or contradicted parts are review rows with cell box and readings | `test_a_multiline_catalog_cell_is_read_as_a_block_and_a_near_miss_holds_it`, `test_fragments_do_not_confirm_a_part_and_a_whole_matching_reading_does`; EML run: 2 review rows, NEEDS_INTERPRETATION |
 
 Disputed Golden labels adjudicated (M2-REVIEW-RESPONSE.md, Review 03): `SIGA-OSHD-FC` printed cut (fixture annotated with the printed form); `6538-G5` group an owner layout decision.
+
+
+## Fixed in the Review 04 correction (2026-09-28)
+
+| ID | Layer | Defect | Root cause | Fix | Evidence |
+|---|---|---|---|---|---|
+| D-GATE-4 | VAL (R4-01) | A same-hash, same-profile record read by an older parser and carried from an unvisited page kept its Approved mirror; `parser_current` true, hash reused, copied to duplicates | the carry checked source hash and profile only; parser version was descriptive | `carried_other_parser` flag, decision withheld as a candidate, `retained.mixed` / `other_parser`; `parser_current` False for a mixed reading; not reused, not copied; repair selection names it; `parser_compatible` = current version only | `test_a_record_read_by_an_older_parser_is_held_by_a_bounded_reading_until_its_page_is_read_again`, `test_parser_compatibility_is_explicit_and_narrow`; eight probes rerun (`evidence/r6__probe__*`); pilot scenario 15-16 on a real document |
+| D-PROC-1 | processing | `KeyError: 'unchanged'` on a duplicate-content result | `result["unchanged"]` on a dict the copy path builds without the key | `result.get("unchanged")` | the R4 test's duplicate step; pilot scenario 3 (`duplicates_reused 1`) |
+
+## Real-project pilot (2026-09-28): fixed and open
+
+Full list with evidence and renders: `real-project-pilot/DEFECTS.md`.
+
+| ID | Layer | Defect | Fix / disposition |
+|---|---|---|---|
+| P-01 | EXT | OCR label glued to the number (`Reference25H-S202-...`) accepted as the reference | fixed (`_GLUED_LABEL`), `test_p01_...` |
+| P-02 | EXT | an empty `Drawing No:` field took the next label (`Reference`) as the number | fixed (`drawing_number()`), `test_p02_...` |
+| P-03 | EXT | OCR `-RO` suffix left unread and glued to the reference | fixed (`_OCR_REVISION_SUFFIX`), `test_p03_...` |
+| P-04 | EXT | `-MAT-` (Emaar / EFECO material submittal) not a reference code; code after a wrapped hyphen | fixed (`_CODES`, `REF`), `test_p04_...` |
+| P-05 | reconciliation | floors `HC FIRE ALARM` / `FIRST FIRE ALARM` from drawing titles | open (M3 / M4 gate) |
+| P-06 | EXT | revision taken from the first revision-table row or a sheet-index suffix (30 wrong revisions) | open (M3 title-block rules) |
+| P-07 | EXT | drawing number taken from a reference-drawings table on the sheet (12 wrong references) | open (M3) |
+| P-08 / P-09 / P-10 / P-11 | EXT | reply-sheet, transmittal, OCR-cut references | open (M3) |
+| P-obs-2 | telemetry | a bounded reading with carried records counted `partial` | open, cosmetic |
+
+## Review 05 correction (2026-09-28): fixed and open -- all M2
+
+Detail and tests: `real-project-pilot/DEFECTS.md` (Review 05 section) and `real-project-pilot/review05/REVIEW-05-REPORT.md`.
+
+- **Fixed in candidate C** (regression tests `tests/test_m2_review05.py`, `tests/test_m2_review05_boq.py`,
+  `tests/test_m2_pilot_eval.py`): P-05 raw floor; P-06 revision from the wrong row (title-block REV cell by position;
+  self-contradicting sheets flagged); P-07 neighbour / table / callout numbers (own number cell); P-08 reply header;
+  P-09 transmittal items (and an unread TR number kept unread); P-10 wrapped label joins and split starts (held);
+  P-11 reclassified as a label error; footer form numbers, subject lines, citations, fax covers, form editions and
+  table headers; scanned covers whose reference line OCR lost (bounded header-band re-read); BOQ correlated OCR,
+  item-number and crossed columns (held); the BOQ completion contract (no stamp without an attempt; an all-failed
+  re-read fails; unread sheets' lines never offered as removals); the page-counts test's missing commit.
+- **Open**: BOQ confident strip misreads (5 critical on the pilot sheets); the unseen-holdout defects H-01..H-06
+  (Nakheel/Dar title block labels, company MS cover numbers, client MTS/review forms and their decisions, stacked REV
+  cell, material-submittal transmittals leaving no trace, 4 wrong BOQ quantities); unread decision marks from the pilot;
+  recovery below 90 %. Existing limitations outside M2: the migration downgrade under enforced foreign keys; the stale
+  part-catalogue test (report section 5).

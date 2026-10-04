@@ -1,0 +1,169 @@
+{
+ "made_utc": "2026-10-04T07:42:57+00:00",
+ "sides": {
+  "r36": {
+   "common_r35.py": {
+    "copy": "C:/t/iso/work/r2x/r38/parity/r36-side/scripts/common_r35.py",
+    "copy_sha256": "3c013c38b996c464c8d20068ce195c6d455ac42cfa4aed7974c511573e8dc3d5",
+    "diff": [
+     "--- ",
+     "+++ ",
+     "@@ -20 +20 @@",
+     "-WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")",
+     "+WORK = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r36-side\")",
+     "@@ -22 +22 @@",
+     "-HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\"",
+     "+HARNESS_DIR = pathlib.Path(\"C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32\")",
+     "@@ -56 +56 @@",
+     "-    \"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\",",
+     "+    \"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\","
+    ],
+    "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/scripts/common_r35.py",
+    "source_sha256": "5f6cb52e1f47d34ca5792bda0ffe9393b59c29437ff191f6e43ee662b0fe780d",
+    "substitutions": [
+     {
+      "count": 1,
+      "new": "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r36-side\")",
+      "old": "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")"
+     },
+     {
+      "count": 1,
+      "new": "\"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\"",
+      "old": "\"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\""
+     },
+     {
+      "count": 1,
+      "new": "HARNESS_DIR = pathlib.Path(\"C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/scripts/harness-r32\")",
+      "old": "HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\""
+     }
+    ]
+   },
+   "run_evaluator_offline_r32.py": {
+    "copy": "C:/t/iso/work/r2x/r38/parity/r36-side/scripts/run_evaluator_offline_r32.py",
+    "copy_sha256": "84818257b21ff71057bccdeb7ebca61b67d1eaae3306ca44e0d3d32dca1073a8",
+    "diff": [
+     "--- ",
+     "+++ ",
+     "@@ -120 +120 @@",
+     "-    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r35/run/no-database-never-created.db\"",
+     "+    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r38/parity/r36-side/run/no-database-never-created.db\"",
+     "@@ -465 +465 @@",
+     "-    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r35/run/no-database-never-created.db\")",
+     "+    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r36-side/run/no-database-never-created.db\")"
+    ],
+    "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/scripts/run_evaluator_offline_r32.py",
+    "source_sha256": "b7edc6d9cc4a57acf7eaa111303ea845e411d8d3f8e36f4c8bf6f441c85407d0",
+    "substitutions": [
+     {
+      "count": 2,
+      "new": "C:/t/iso/work/r2x/r38/parity/r36-side/run/no-database-never-created.db",
+      "old": "C:/t/iso/work/r2x/r35/run/no-database-never-created.db"
+     }
+    ]
+   }
+  },
+  "r38": {
+   "common_r35.py": {
+    "copy": "C:/t/iso/work/r2x/r38/parity/r38-side/scripts/common_r35.py",
+    "copy_sha256": "48ef53cf8b07866c9bfcf955ce2ea5f61bca906f998448030ed980d43eb49e46",
+    "diff": [
+     "--- ",
+     "+++ ",
+     "@@ -20 +20 @@",
+     "-WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")",
+     "+WORK = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r38-side\")",
+     "@@ -22 +22,2 @@",
+     "-HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\"",
+     "+HARNESS_DIR = pathlib.Path(\"C:/t/iso/work/r2x/r38/harness-r32\")",
+     "+SOURCE_BOUND = True       # ORCH-08 what-if: the lane document carries the staged sha256",
+     "@@ -56,2 +57,2 @@",
+     "-    \"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\",",
+     "-    \"lane_judge_r32\": \"a0b6b7c83262ddb2d1337d5ed17296a5aa6fa26cc6ebbee18afcb3cf48f0ca45\",",
+     "+    \"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\",",
+     "+    \"lane_judge_r32\": \"a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70\",",
+     "@@ -59 +60 @@",
+     "-    \"tripwire_r32\": \"42dc6226700852f84762bdd7759bb7592de72778fe92aaad7f7993db291f14d0\",",
+     "+    \"tripwire_r32\": \"2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389\",",
+     "@@ -61 +62,2 @@",
+     "-    \"score_lane_r32\": \"c25f4d8994631b0fe5b52c1eb4d5bb0f7227f15a4b26c671e72e9c7e31c3c915\",",
+     "+    \"score_lane_r32\": \"79530a3013cac748df7887db6ee9a038c17f0450abe438f2dcfc7bf3e272eec3\",",
+     "+    \"page_relations_r38\": \"256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94\",",
+     "@@ -178,0 +181,2 @@",
+     "+    elif outcome == \"recovered_conflict\":",
+     "+        verdict = \"correct_and_cross_page\"",
+     "@@ -198 +202 @@",
+     "-    jd = J.judge_document(truth, pool_id, {\"facts\": facts})",
+     "+    jd = J.judge_document(truth, pool_id, {\"facts\": facts, \"source_sha256\": truth[\"documents\"][pool_id][\"staged_sha256\"] if SOURCE_BOUND else None})"
+    ],
+    "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/scripts/common_r35.py",
+    "source_sha256": "5f6cb52e1f47d34ca5792bda0ffe9393b59c29437ff191f6e43ee662b0fe780d",
+    "substitutions": [
+     {
+      "count": 1,
+      "new": "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r38-side\")",
+      "old": "WORK = pathlib.Path(\"C:/t/iso/work/r2x/r35\")"
+     },
+     {
+      "count": 1,
+      "new": "\"literal_compare_r32\": \"c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09\"",
+      "old": "\"literal_compare_r32\": \"ec2221c825db6a629cafc42fffe854e2593393860a942f2e1ec9762eec16a3e6\""
+     },
+     {
+      "count": 1,
+      "new": "HARNESS_DIR = pathlib.Path(\"C:/t/iso/work/r2x/r38/harness-r32\")\nSOURCE_BOUND = True       # ORCH-08 what-if: the lane document carries the staged sha256",
+      "old": "HARNESS_DIR = REVIEW34 / \"scripts/harness-r32\""
+     },
+     {
+      "count": 1,
+      "new": "\"lane_judge_r32\": \"a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70\"",
+      "old": "\"lane_judge_r32\": \"a0b6b7c83262ddb2d1337d5ed17296a5aa6fa26cc6ebbee18afcb3cf48f0ca45\""
+     },
+     {
+      "count": 1,
+      "new": "\"tripwire_r32\": \"2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389\"",
+      "old": "\"tripwire_r32\": \"42dc6226700852f84762bdd7759bb7592de72778fe92aaad7f7993db291f14d0\""
+     },
+     {
+      "count": 1,
+      "new": "\"score_lane_r32\": \"79530a3013cac748df7887db6ee9a038c17f0450abe438f2dcfc7bf3e272eec3\",\n    \"page_relations_r38\": \"256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94\"",
+      "old": "\"score_lane_r32\": \"c25f4d8994631b0fe5b52c1eb4d5bb0f7227f15a4b26c671e72e9c7e31c3c915\""
+     },
+     {
+      "count": 1,
+      "new": "    jd = J.judge_document(truth, pool_id, {\"facts\": facts, \"source_sha256\": truth[\"documents\"][pool_id][\"staged_sha256\"] if SOURCE_BOUND else None})",
+      "old": "    jd = J.judge_document(truth, pool_id, {\"facts\": facts})"
+     },
+     {
+      "count": 1,
+      "new": "    elif outcome == \"recovered_conflict\":\n        verdict = \"correct_and_cross_page\"\n    elif outcome == \"recovered_clean\":\n        verdict = \"correct\"",
+      "old": "    elif outcome == \"recovered_clean\":\n        verdict = \"correct\""
+     }
+    ]
+   },
+   "run_evaluator_offline_r32.py": {
+    "copy": "C:/t/iso/work/r2x/r38/parity/r38-side/scripts/run_evaluator_offline_r32.py",
+    "copy_sha256": "46b9d57448b1bc4cd34f8adeaa1a54cb2004800d571a91a64ab37b0813c948d5",
+    "diff": [
+     "--- ",
+     "+++ ",
+     "@@ -120 +120 @@",
+     "-    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r35/run/no-database-never-created.db\"",
+     "+    os.environ[\"DATABASE_URL\"] = \"sqlite:///C:/t/iso/work/r2x/r38/parity/r38-side/run/no-database-never-created.db\"",
+     "@@ -465 +465 @@",
+     "-    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r35/run/no-database-never-created.db\")",
+     "+    db_path = pathlib.Path(\"C:/t/iso/work/r2x/r38/parity/r38-side/run/no-database-never-created.db\")"
+    ],
+    "source": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/scripts/run_evaluator_offline_r32.py",
+    "source_sha256": "b7edc6d9cc4a57acf7eaa111303ea845e411d8d3f8e36f4c8bf6f441c85407d0",
+    "substitutions": [
+     {
+      "count": 2,
+      "new": "C:/t/iso/work/r2x/r38/parity/r38-side/run/no-database-never-created.db",
+      "old": "C:/t/iso/work/r2x/r35/run/no-database-never-created.db"
+     }
+    ]
+   }
+  }
+ },
+ "source_manifest_sha256": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7"
+}

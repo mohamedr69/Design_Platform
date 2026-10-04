@@ -1,0 +1,1687 @@
+{
+ "ep27331_decision_gain_sweep": {
+  "1": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037"
+   ],
+   "net_gain": 1,
+   "paired_ci95": [
+    0.0,
+    0.1875
+   ],
+   "request_gate_passes": false
+  },
+  "2": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037",
+    "F009"
+   ],
+   "net_gain": 2,
+   "paired_ci95": [
+    0.0,
+    0.25
+   ],
+   "request_gate_passes": false
+  },
+  "3": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037",
+    "F009",
+    "F032"
+   ],
+   "net_gain": 3,
+   "paired_ci95": [
+    0.0625,
+    0.3125
+   ],
+   "request_gate_passes": true
+  },
+  "4": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037",
+    "F009",
+    "F032",
+    "F021"
+   ],
+   "net_gain": 4,
+   "paired_ci95": [
+    0.125,
+    0.375
+   ],
+   "request_gate_passes": true
+  },
+  "5": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037",
+    "F009",
+    "F032",
+    "F021",
+    "F030"
+   ],
+   "net_gain": 5,
+   "paired_ci95": [
+    0.1875,
+    0.375
+   ],
+   "request_gate_passes": true
+  },
+  "6": {
+   "candidate": "NOT ELIGIBLE",
+   "concentration": "NOT ELIGIBLE",
+   "documents": [
+    "F037",
+    "F009",
+    "F032",
+    "F021",
+    "F030",
+    "F020"
+   ],
+   "net_gain": 6,
+   "paired_ci95": [
+    0.375,
+    0.375
+   ],
+   "request_gate_passes": true
+  }
+ },
+ "note": "SYNTHETIC lane results built from the frozen truth itself (correct values copied from it, wrong values invented); no application reader, no model, no prediction; Review 34's scenario structures (section 6) on the corrected scorer; these exercise score_bcr_r32 and concentration_r32 v2 and are NOT results",
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "rule_version": "concentration-r32-2026-10-03.2",
+ "run_set": [
+  "F037",
+  "F009",
+  "F038",
+  "F072",
+  "F033",
+  "F039",
+  "F006",
+  "F015",
+  "F032",
+  "F021",
+  "F040",
+  "F035",
+  "F016",
+  "F030",
+  "F020",
+  "F018",
+  "F060",
+  "F043",
+  "F057",
+  "F046",
+  "F051",
+  "F042",
+  "F047",
+  "F066"
+ ],
+ "scenarios": {
+  "S1 one wrong revision acceptance in C": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain -1 over 16 matched documents; failures 1 (once per document); largest project share of the failures 1.0 (EP-27331); largest contractor share of the failures 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the failures 1.0 (emaar-mirage-document-submittal); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal",
+     "failures": 1,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": -1,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "C accepts one wrong revision on F037; everything else identical to B",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      -0.1875,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 0.9722
+   },
+   "reasons": {
+    "decision": [
+     "critical acceptance on resolved truth in C: revision F037 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "identity": [
+     "critical acceptance on resolved truth in C: revision F037 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "critical acceptance on resolved truth in C: revision F037 p1 (candidate-level safety gate)",
+     "request-normalised gate not met",
+     "revision: accepted precision 0.9722 < 0.98"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 0.9714
+   },
+   "request_gate": {
+    "ci95": [
+     -0.1304,
+     0.0
+    ],
+    "extra": 0,
+    "net": -1,
+    "new_false": 1,
+    "passes": false
+   }
+  },
+  "S2 identity gain 8 and one wrong decision acceptance": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain -1 over 16 matched documents; failures 1 (once per document); largest project share of the failures 1.0 (EP-26687); largest contractor share of the failures 1.0 (ENCO); largest layout_key share of the failures 1.0 (single:F072); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-26687, contractor=ENCO, layout_key=single:F072",
+     "failures": 1,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": -1,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 8 over 23 matched documents; largest project share of the gain 0.25 (EP-29255); largest contractor share of the gain 0.25 (Scale EMC); largest layout_key share of the gain 0.25 (emaar-mirage-document-submittal); failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "emaar-mirage-document-submittal",
+      0.25
+     ],
+     "largest_project": [
+      "EP-29255",
+      0.25
+     ],
+     "net_gain": 8,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "C gains identity on 8 documents; one wrong decision acceptance (no correct one) on F072",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      -0.1875,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "identity": {
+     "ci95": [
+      0.1739,
+      0.5217
+     ],
+     "matched": 23,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 0.9697,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "critical acceptance on resolved truth in C: decision F072 p1 (candidate-level safety gate)",
+     "request-normalised gate not met",
+     "decision: accepted precision 0.9697 < 0.98"
+    ],
+    "identity": [
+     "critical acceptance on resolved truth in C: decision F072 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "critical acceptance on resolved truth in C: decision F072 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 0.9697,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.1739,
+     0.4783
+    ],
+    "extra": 20,
+    "net": 7,
+    "new_false": 1,
+    "passes": false
+   }
+  },
+  "S3a decision gain 2 inside one project": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 2 over 16 matched documents; largest project share of the gain 1.0 (EP-22349); largest contractor share of the gain 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the gain 0.5 (single:F035); failures 0 (once per document); gains come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F035",
+      0.5
+     ],
+     "largest_project": [
+      "EP-22349",
+      1.0
+     ],
+     "net_gain": 2,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+      "decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "B misses decision on ['F038', 'F035'] (all of EP-22349's decision documents); C gets them",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.125,
+      0.125
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met",
+     "concentration: decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+     "concentration: decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.1739
+    ],
+    "extra": 10,
+    "net": 2,
+    "new_false": 0,
+    "passes": false
+   }
+  },
+  "S3b decision gain 3 inside EP-27331": {
+   "candidate_basis": "NOT ELIGIBLE in decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 3 over 16 matched documents; largest project share of the gain 1.0 (EP-27331); largest contractor share of the gain 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 1.0 (emaar-mirage-document-submittal); failures 0 (once per document); gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "emaar-mirage-document-submittal",
+      1.0
+     ],
+     "largest_project": [
+      "EP-27331",
+      1.0
+     ],
+     "net_gain": 3,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 3 of the net gain 3 (> half) from one project (EP-27331)",
+      "decision: 3 of the net gain 3 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "decision: 3 of the net gain 3 (> half) from one layout_key (emaar-mirage-document-submittal)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "B misses decision on ['F037', 'F009', 'F032'] (EP-27331, one contractor, one layout); C gets them",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0625,
+      0.3125
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "concentration: decision: 3 of the net gain 3 (> half) from one project (EP-27331)",
+     "concentration: decision: 3 of the net gain 3 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: decision: 3 of the net gain 3 (> half) from one layout_key (emaar-mirage-document-submittal)"
+    ],
+    "identity": [],
+    "revision": []
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0435,
+     0.2174
+    ],
+    "extra": 20,
+    "net": 3,
+    "new_false": 0,
+    "passes": true
+   }
+  },
+  "S3c decision gain 4 inside EP-27331": {
+   "candidate_basis": "NOT ELIGIBLE in decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 4 over 16 matched documents; largest project share of the gain 1.0 (EP-27331); largest contractor share of the gain 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 1.0 (emaar-mirage-document-submittal); failures 0 (once per document); gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "emaar-mirage-document-submittal",
+      1.0
+     ],
+     "largest_project": [
+      "EP-27331",
+      1.0
+     ],
+     "net_gain": 4,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 4 of the net gain 4 (> half) from one project (EP-27331)",
+      "decision: 4 of the net gain 4 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "decision: 4 of the net gain 4 (> half) from one layout_key (emaar-mirage-document-submittal)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "B misses decision on ['F037', 'F009', 'F032', 'F021'] (EP-27331); C gets them",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.125,
+      0.375
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "concentration: decision: 4 of the net gain 4 (> half) from one project (EP-27331)",
+     "concentration: decision: 4 of the net gain 4 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: decision: 4 of the net gain 4 (> half) from one layout_key (emaar-mirage-document-submittal)"
+    ],
+    "identity": [],
+    "revision": []
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.087,
+     0.2609
+    ],
+    "extra": 20,
+    "net": 4,
+    "new_false": 0,
+    "passes": true
+   }
+  },
+  "S3c-spread decision gain 4 over four projects": {
+   "candidate_basis": "all three fields ELIGIBLE",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 4 over 16 matched documents; largest project share of the gain 0.25 (EP-29255); largest contractor share of the gain 0.25 (Scale EMC); largest layout_key share of the gain 0.25 (single:F072); failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F072",
+      0.25
+     ],
+     "largest_project": [
+      "EP-29255",
+      0.25
+     ],
+     "net_gain": 4,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "B misses decision on ['F038', 'F072', 'F037', 'F006'] (one document in each of four projects); C gets them",
+   "outcome": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+   "outcome_by_field": {
+    "decision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0625,
+      0.4375
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [],
+    "identity": [],
+    "revision": []
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0435,
+     0.3478
+    ],
+    "extra": 20,
+    "net": 4,
+    "new_false": 0,
+    "passes": true
+   }
+  },
+  "S3d every field gained on two documents of one project": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 2 over 16 matched documents; largest project share of the gain 1.0 (EP-22349); largest contractor share of the gain 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the gain 0.5 (single:F035); failures 0 (once per document); gains come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F035",
+      0.5
+     ],
+     "largest_project": [
+      "EP-22349",
+      1.0
+     ],
+     "net_gain": 2,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+      "decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 2 over 23 matched documents; largest project share of the gain 1.0 (EP-22349); largest contractor share of the gain 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the gain 0.5 (single:F035); failures 0 (once per document); gains come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F035",
+      0.5
+     ],
+     "largest_project": [
+      "EP-22349",
+      1.0
+     ],
+     "net_gain": 2,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "identity: 2 of the net gain 2 (> half) from one project (EP-22349)",
+      "identity: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+     ]
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 1 over 16 matched documents; largest project share of the gain 1.0 (EP-22349); largest contractor share of the gain 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the gain 1.0 (single:F035); failures 0 (once per document); gains come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting, layout_key=single:F035; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F035",
+      1.0
+     ],
+     "largest_project": [
+      "EP-22349",
+      1.0
+     ],
+     "net_gain": 1,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "revision: 1 of the net gain 1 (> half) from one project (EP-22349)",
+      "revision: 1 of the net gain 1 (> half) from one contractor (Ardh Al Kananh Building Contracting)",
+      "revision: 1 of the net gain 1 (> half) from one layout_key (single:F035)"
+     ]
+    }
+   },
+   "default_selected": null,
+   "note": "B misses every field on ['F038', 'F035']; C recovers them",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.125,
+      0.125
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.1739
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0625,
+      0.0625
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met",
+     "concentration: decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+     "concentration: decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+    ],
+    "identity": [
+     "request-normalised gate not met",
+     "concentration: identity: 2 of the net gain 2 (> half) from one project (EP-22349)",
+     "concentration: identity: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+    ],
+    "revision": [
+     "request-normalised gate not met",
+     "concentration: revision: 1 of the net gain 1 (> half) from one project (EP-22349)",
+     "concentration: revision: 1 of the net gain 1 (> half) from one contractor (Ardh Al Kananh Building Contracting)",
+     "concentration: revision: 1 of the net gain 1 (> half) from one layout_key (single:F035)"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.4783
+    ],
+    "extra": 16,
+    "net": 5,
+    "new_false": 0,
+    "passes": false
+   }
+  },
+  "S4a C does not attempt five decision documents": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 11 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 18 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 13 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "C not attempted on ['F009', 'F033', 'F037', 'F038', 'F072']",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 11,
+     "verdict": "INCONCLUSIVE (matched resolved documents 11 < 12)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 18,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 13,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met",
+     "decision: matched 11 < 12"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "extra": 0,
+    "net": 0,
+    "new_false": 0,
+    "passes": false
+   }
+  },
+  "S4b as S4a with the comparison INCOMPLETE": {
+   "candidate_basis": "INCOMPLETE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "INCOMPLETE",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 11 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 18 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 13 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "stop state INCOMPLETE",
+   "outcome": "INCOMPLETE",
+   "outcome_by_field": {
+    "decision": "INCOMPLETE",
+    "identity": "INCOMPLETE",
+    "revision": "INCOMPLETE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 11,
+     "verdict": "INCONCLUSIVE (matched resolved documents 11 < 12)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 18,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 13,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met",
+     "decision: matched 11 < 12"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "extra": 0,
+    "net": 0,
+    "new_false": 0,
+    "passes": false
+   }
+  },
+  "S5 identity gain 8 and decision recovery below 0.90": {
+   "candidate_basis": "NOT ELIGIBLE in decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 8 over 23 matched documents; largest project share of the gain 0.25 (EP-29255); largest contractor share of the gain 0.25 (Scale EMC); largest layout_key share of the gain 0.25 (emaar-mirage-document-submittal); failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "emaar-mirage-document-submittal",
+      0.25
+     ],
+     "largest_project": [
+      "EP-29255",
+      0.25
+     ],
+     "net_gain": 8,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "C gains identity on 8 documents; B and C both miss decision on ['F037', 'F009', 'F038']",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "identity": {
+     "ci95": [
+      0.1739,
+      0.5217
+     ],
+     "matched": 23,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "decision: clean recovery 0.7576 < 0.90"
+    ],
+    "identity": [],
+    "revision": []
+   },
+   "recovery_C": {
+    "decision": 0.7576,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.1739,
+     0.5217
+    ],
+    "extra": 20,
+    "net": 8,
+    "new_false": 0,
+    "passes": true
+   }
+  },
+  "S6 revision gain 6 elsewhere and loss 2 in EP-26687": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 4 over 16 matched documents; largest project share of the gain 1.0 (EP-27331); largest contractor share of the gain 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 1.0 (emaar-mirage-document-submittal); failures 2 (once per document); largest project share of the failures 1.0 (EP-26687); largest contractor share of the failures 1.0 (ENCO); largest layout_key share of the failures 1.0 (arex-enco-shop-drawing-approval-request); gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures come mainly from one project=EP-26687, contractor=ENCO, layout_key=arex-enco-shop-drawing-approval-request",
+     "failures": 2,
+     "largest_layout": [
+      "emaar-mirage-document-submittal",
+      1.0
+     ],
+     "largest_project": [
+      "EP-27331",
+      1.0
+     ],
+     "net_gain": 4,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "revision: 4 of the net gain 4 (> half) from one project (EP-27331)",
+      "revision: 2 of 2 failures (> half) in one project (EP-26687), whose net gain is -2",
+      "revision: 4 of the net gain 4 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "revision: 2 of 2 failures (> half) in one contractor (ENCO), whose net gain is -2",
+      "revision: 4 of the net gain 4 (> half) from one layout_key (emaar-mirage-document-submittal)",
+      "revision: 2 of 2 failures (> half) in one layout_key (arex-enco-shop-drawing-approval-request), whose net gain is -2"
+     ]
+    }
+   },
+   "default_selected": null,
+   "note": "C gains revision on ['F037', 'F009', 'F033', 'F032', 'F021', 'F035'], loses ['F039', 'F040']",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0625,
+      0.4375
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met",
+     "concentration: revision: 4 of the net gain 4 (> half) from one project (EP-27331)",
+     "concentration: revision: 2 of 2 failures (> half) in one project (EP-26687), whose net gain is -2",
+     "concentration: revision: 4 of the net gain 4 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: revision: 2 of 2 failures (> half) in one contractor (ENCO), whose net gain is -2",
+     "concentration: revision: 4 of the net gain 4 (> half) from one layout_key (emaar-mirage-document-submittal)",
+     "concentration: revision: 2 of 2 failures (> half) in one layout_key (arex-enco-shop-drawing-approval-request), whose net gain is -2"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 0.9429
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.3478
+    ],
+    "extra": 10,
+    "net": 4,
+    "new_false": 0,
+    "passes": false
+   }
+  },
+  "S7 decision accepted on a negative control": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 0 over 16 matched documents; failures 1 (once per document); largest project share of the failures 1.0 (EP-26687); largest contractor share of the failures 1.0 (ENCO); largest layout_key share of the failures 1.0 (enco-shop-drawing); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-26687, contractor=ENCO, layout_key=enco-shop-drawing",
+     "failures": 1,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 1 false acceptance(s) by C on negative decision controls"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 0 over 23 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "C accepts 'approved' on F060 p1",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "identity": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 0.9706,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "critical acceptance on resolved truth in C: decision F060 p1 (candidate-level safety gate)",
+     "request-normalised gate not met",
+     "decision: accepted precision 0.9706 < 0.98",
+     "concentration: decision: 1 false acceptance(s) by C on negative decision controls"
+    ],
+    "identity": [
+     "critical acceptance on resolved truth in C: decision F060 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "critical acceptance on resolved truth in C: decision F060 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "extra": 0,
+    "net": 0,
+    "new_false": 1,
+    "passes": false
+   }
+  },
+  "S8 decision gain 2 in one project and identity loss 1": {
+   "candidate_basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+   "comparison_state": "PENDING",
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 2 over 16 matched documents; largest project share of the gain 1.0 (EP-22349); largest contractor share of the gain 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the gain 0.5 (single:F035); failures 0 (once per document); gains come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      "single:F035",
+      0.5
+     ],
+     "largest_project": [
+      "EP-22349",
+      1.0
+     ],
+     "net_gain": 2,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+      "decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain -1 over 23 matched documents; failures 1 (once per document); largest project share of the failures 1.0 (EP-22349); largest contractor share of the failures 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the failures 1.0 (infinity-al-arabia-drawing-sheet); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting, layout_key=infinity-al-arabia-drawing-sheet",
+     "failures": 1,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": -1,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 0 over 16 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "failures": 0,
+     "largest_layout": [
+      null,
+      null
+     ],
+     "largest_project": [
+      null,
+      null
+     ],
+     "net_gain": 0,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    }
+   },
+   "default_selected": null,
+   "note": "decision +2 in one project, identity -1 elsewhere",
+   "outcome": "NOT ELIGIBLE",
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.125,
+      0.125
+     ],
+     "matched": 16,
+     "verdict": "SUPPORTED (interval excludes zero, in favour of C)"
+    },
+    "identity": {
+     "ci95": [
+      -0.1304,
+      0.0
+     ],
+     "matched": 23,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    },
+    "revision": {
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "matched": 16,
+     "verdict": "INCONCLUSIVE (interval includes zero)"
+    }
+   },
+   "precision_C": {
+    "decision": 1.0,
+    "identity": 1.0,
+    "revision": 1.0
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met",
+     "concentration: decision: 2 of the net gain 2 (> half) from one project (EP-22349)",
+     "concentration: decision: 2 of the net gain 2 (> half) from one contractor (Ardh Al Kananh Building Contracting)"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met"
+    ]
+   },
+   "recovery_C": {
+    "decision": 1.0,
+    "identity": 0.9787,
+    "revision": 1.0
+   },
+   "request_gate": {
+    "ci95": [
+     -0.087,
+     0.1739
+    ],
+    "extra": 10,
+    "net": 1,
+    "new_false": 0,
+    "passes": false
+   }
+  }
+ }
+}

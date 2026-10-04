@@ -1,0 +1,1205 @@
+{
+ "generated_utc": "2026-10-01T18:26:42+00:00",
+ "arm": "L4",
+ "tag": "final-L4",
+ "declaration_sha256": "6c0189b3dc30e721c318a5df44fac3507c5804430c85d3bdf6f23615002a70c1",
+ "scoring_dir": "final-score",
+ "scorer": "score-arms-2026-09-30.v4",
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "note": "interim offline scoring with the frozen scorer; the final scoring runs after all arms",
+ "1_status": {
+  "classification": "completed",
+  "runner_status_field": "completed",
+  "breaker": null,
+  "terminal_stop": null
+ },
+ "2_requests": {
+  "sent_ledger_entries": 66,
+  "states": {
+   "settled": 66
+  },
+  "cap": 180,
+  "refused_before_dispatch": {
+   "ledger_precheck": 0,
+   "rolling_counter": 0,
+   "durable_allowance": 0,
+   "reader_calls_with_budget_outcome": 8
+  },
+  "nominal_remaining": 114,
+  "usable_remaining": 114,
+  "note": "a request refused before dispatch is not a sent request and consumes no provider tokens"
+ },
+ "3_tokens": {
+  "provider_reported": {
+   "requests": 64,
+   "input": 634893,
+   "output": 100950,
+   "cached_input_within_input": 387305
+  },
+  "estimated_charge_unknown_usage": {
+   "requests": 2,
+   "outcomes": {
+    "timeout": 2
+   },
+   "input": 23669,
+   "output": 1600
+  },
+  "ledger_total_accounted": {
+   "input": 658562,
+   "output": 102550
+  },
+  "pre_dispatch_estimates_all": {
+   "input": 1169506,
+   "output": 189317
+  },
+  "scope_thresholds": {
+   "per_request_input": 70000,
+   "per_request_output": 20000,
+   "input_tokens": 4000000,
+   "output_tokens": 600000
+  },
+  "check_app_usage_vs_ledger": {
+   "app_evidence_input_incl_cached": 634893,
+   "ledger_known_input": 634893,
+   "app_rows_inherited_from_A": 4
+  }
+ },
+ "4_largest": {
+  "by_input": {
+   "id": 418,
+   "task": "discover_page",
+   "model": "claude-sonnet-5",
+   "act_in": 28176,
+   "act_out": 1853,
+   "cached_in": 20500,
+   "turns": 5,
+   "latency_ms": 25322,
+   "outcome": "ok"
+  },
+  "by_output": {
+   "id": 452,
+   "task": "discover_region",
+   "model": "claude-sonnet-5",
+   "act_in": 14773,
+   "act_out": 11726
+  },
+  "crossed_per_request_input": false,
+  "crossed_per_request_output": false,
+  "requests_over_per_request_input": [],
+  "requests_over_per_request_output": []
+ },
+ "5_events_in_order": [
+  {
+   "at": "2026-10-01T17:58:20+00:00",
+   "kind": "provider_failure",
+   "ledger_id": 434,
+   "task": "discover_region",
+   "outcome": "timeout",
+   "usage_unknown": true
+  },
+  {
+   "at": "2026-10-01T18:04:35+00:00",
+   "kind": "provider_failure",
+   "ledger_id": 451,
+   "task": "discover_region",
+   "outcome": "timeout",
+   "usage_unknown": true
+  }
+ ],
+ "5_consecutive_failures_at_end": 0,
+ "6_grouping": {
+  "documents": {
+   "fully processed": [
+    "D01 EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+    "D02 EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+    "D03 EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+    "D04 EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+    "D05 EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+    "D06 EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+    "D07 EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+    "D08 EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+    "D10 EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+    "D11 EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+    "D12 EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+    "D13 EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+    "D14 EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+    "D15 EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+    "D17 EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+    "D18 EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "D20 EP-23091/O&M/EM/Content.pdf",
+    "D21 EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+    "D23 EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+    "D24 EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+    "D25 EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf"
+   ],
+   "partially processed": [
+    "D09 EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+    "D16 EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "D19 EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+    "D22 EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+    "D26 EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf"
+   ],
+   "not attempted (unsupported input)": [
+    "D27 EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc"
+   ]
+  },
+  "counts": {
+   "fully processed": 21,
+   "partially processed": 5,
+   "not attempted (unsupported input)": 1
+  },
+  "projects": {
+   "EP-16830": {
+    "partially processed": 1,
+    "not attempted (unsupported input)": 1
+   },
+   "EP-17428": {
+    "fully processed": 3
+   },
+   "EP-19144": {
+    "partially processed": 1,
+    "fully processed": 2
+   },
+   "EP-22510": {
+    "fully processed": 2
+   },
+   "EP-23091": {
+    "fully processed": 3
+   },
+   "EP-23323": {
+    "partially processed": 2,
+    "fully processed": 1
+   },
+   "EP-26208": {
+    "fully processed": 2,
+    "partially processed": 1
+   },
+   "EP-27421": {
+    "fully processed": 3
+   },
+   "EP-28745": {
+    "fully processed": 2
+   },
+   "EP-30549": {
+    "fully processed": 3
+   }
+  },
+  "per_document": {
+   "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": {
+    "group": "fully processed",
+    "requests_sent": 0,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": {
+    "group": "fully processed",
+    "requests_sent": 5,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf": {
+    "group": "fully processed",
+    "requests_sent": 4,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": {
+    "group": "partially processed",
+    "requests_sent": 1,
+    "budget_refused_calls": 3,
+    "attempt_outcome": "budget"
+   },
+   "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf": {
+    "group": "fully processed",
+    "requests_sent": 0,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": {
+    "group": "fully processed",
+    "requests_sent": 4,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": {
+    "group": "fully processed",
+    "requests_sent": 0,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": {
+    "group": "fully processed",
+    "requests_sent": 0,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": {
+    "group": "fully processed",
+    "requests_sent": 4,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": {
+    "group": "partially processed",
+    "requests_sent": 1,
+    "budget_refused_calls": 1,
+    "attempt_outcome": "budget"
+   },
+   "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": {
+    "group": "fully processed",
+    "requests_sent": 1,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": {
+    "group": "fully processed",
+    "requests_sent": 1,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "partial"
+   },
+   "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": {
+    "group": "partially processed",
+    "requests_sent": 4,
+    "budget_refused_calls": 1,
+    "attempt_outcome": "budget"
+   },
+   "EP-23091/O&M/EM/Content.pdf": {
+    "group": "fully processed",
+    "requests_sent": 1,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": {
+    "group": "fully processed",
+    "requests_sent": 4,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": {
+    "group": "partially processed",
+    "requests_sent": 5,
+    "budget_refused_calls": 2,
+    "attempt_outcome": "budget"
+   },
+   "EP-23091/EP-23091 Material Submittal/cs eml.pdf": {
+    "group": "fully processed",
+    "requests_sent": 3,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": {
+    "group": "fully processed",
+    "requests_sent": 2,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": {
+    "group": "fully processed",
+    "requests_sent": 2,
+    "budget_refused_calls": 0,
+    "attempt_outcome": "complete"
+   },
+   "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": {
+    "group": "partially processed",
+    "requests_sent": 6,
+    "budget_refused_calls": 1,
+    "attempt_outcome": "budget"
+   },
+   "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": {
+    "group": "not attempted (unsupported input)",
+    "requests_sent": 0,
+    "budget_refused_calls": 0,
+    "attempt_outcome": null
+   }
+  },
+  "runner_projects": {
+   "16830": {
+    "documents_in": 1,
+    "requests": 6,
+    "budget_stopped": 1,
+    "calls": 6,
+    "seconds": 113.4
+   },
+   "17428": {
+    "documents_in": 3,
+    "requests": 8,
+    "budget_stopped": 0,
+    "calls": 8,
+    "seconds": 153.0
+   },
+   "19144": {
+    "documents_in": 3,
+    "requests": 3,
+    "budget_stopped": 1,
+    "calls": 3,
+    "seconds": 263.1
+   },
+   "22510": {
+    "documents_in": 2,
+    "requests": 4,
+    "budget_stopped": 0,
+    "calls": 4,
+    "seconds": 79.9
+   },
+   "23091": {
+    "documents_in": 3,
+    "requests": 9,
+    "budget_stopped": 0,
+    "calls": 9,
+    "seconds": 111.1
+   },
+   "23323": {
+    "documents_in": 3,
+    "requests": 5,
+    "budget_stopped": 2,
+    "calls": 5,
+    "seconds": 240.6
+   },
+   "26208": {
+    "documents_in": 3,
+    "requests": 11,
+    "budget_stopped": 1,
+    "calls": 11,
+    "seconds": 253.7
+   },
+   "27421": {
+    "documents_in": 3,
+    "requests": 6,
+    "budget_stopped": 0,
+    "calls": 6,
+    "seconds": 154.6
+   },
+   "28745": {
+    "documents_in": 2,
+    "requests": 7,
+    "budget_stopped": 0,
+    "calls": 7,
+    "seconds": 103.0
+   },
+   "30549": {
+    "documents_in": 3,
+    "requests": 7,
+    "budget_stopped": 0,
+    "calls": 7,
+    "seconds": 120.9
+   }
+  },
+  "deferred": [],
+  "not_attempted": []
+ },
+ "7_coverage": {
+  "this_arm": {
+   "own:identity": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 13,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 19,
+    "in_scope_discovery_absent": 1,
+    "in_scope_usable": 20,
+    "in_scope_classes": {
+     "completed_read": 19,
+     "not_selected_by_policy": 12,
+     "budget": 6,
+     "not_attempted": 3,
+     "located_incomplete": 1,
+     "discovery_absent": 1
+    },
+    "pages_beyond_reader_scope_retained": 54
+   },
+   "own:revision": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 13,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 12,
+    "in_scope_discovery_absent": 5,
+    "in_scope_usable": 17,
+    "in_scope_classes": {
+     "completed_read": 12,
+     "not_selected_by_policy": 12,
+     "discovery_absent": 5,
+     "budget": 5,
+     "located_incomplete": 2,
+     "not_attempted": 3,
+     "no_region": 3
+    },
+    "pages_beyond_reader_scope_retained": 54
+   },
+   "own:decision": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 5,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 3,
+    "in_scope_discovery_absent": 8,
+    "in_scope_usable": 11,
+    "in_scope_classes": {
+     "located_incomplete": 10,
+     "not_selected_by_policy": 12,
+     "discovery_absent": 8,
+     "completed_read": 3,
+     "budget": 5,
+     "not_attempted": 3,
+     "no_region": 1
+    },
+    "pages_beyond_reader_scope_retained": 54
+   }
+  },
+  "compare_arm": {
+   "own:identity": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 12,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 15,
+    "in_scope_discovery_absent": 1,
+    "in_scope_usable": 16,
+    "in_scope_classes": {
+     "completed_read": 15,
+     "not_selected_by_policy": 12,
+     "unusable": 3,
+     "no_region": 3,
+     "not_attempted": 4,
+     "located_incomplete": 1,
+     "budget": 3,
+     "discovery_absent": 1
+    },
+    "pages_beyond_reader_scope_retained": 54
+   },
+   "own:revision": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 11,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 12,
+    "in_scope_discovery_absent": 4,
+    "in_scope_usable": 16,
+    "in_scope_classes": {
+     "completed_read": 12,
+     "not_selected_by_policy": 12,
+     "discovery_absent": 4,
+     "unusable": 2,
+     "not_attempted": 4,
+     "located_incomplete": 1,
+     "budget": 3,
+     "no_region": 4
+    },
+    "pages_beyond_reader_scope_retained": 54
+   },
+   "own:decision": {
+    "documents_planned": 27,
+    "documents_field_usable_on_all_in_scope_pages": 7,
+    "documents_unsupported_input": 1,
+    "in_scope_pages": 42,
+    "in_scope_completed_read": 6,
+    "in_scope_discovery_absent": 9,
+    "in_scope_usable": 15,
+    "in_scope_classes": {
+     "located_incomplete": 9,
+     "not_selected_by_policy": 12,
+     "discovery_absent": 9,
+     "completed_read": 6,
+     "not_attempted": 4,
+     "budget": 2
+    },
+    "pages_beyond_reader_scope_retained": 54
+   }
+  },
+  "documents_required_complete": 5,
+  "complete_ids": [
+   "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+   "EP-23091/O&M/EM/Content.pdf",
+   "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+   "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+   "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf"
+  ],
+  "note": "denominators keep all 27 planned documents, every in-scope page (budget, not attempted, failed, no region and unusable included) and the pages beyond the reader scope"
+ },
+ "8_critical_and_held": {
+  "critical_acceptances_scored": [
+   {
+    "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+    "page": 1,
+    "field": "identity",
+    "value": "2.4 Accessories",
+    "state": "validated",
+    "outcome": "fp",
+    "truth": null,
+    "how": "negative_page",
+    "reader": "ai:EV1",
+    "group": "ai:1:own"
+   }
+  ],
+  "runner_tripwire_critical": [],
+  "introduced_ai_errors": [
+   {
+    "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+    "page": 1,
+    "field": "identity",
+    "value": "2.4 Accessories",
+    "state": "validated",
+    "outcome": "fp",
+    "truth": null,
+    "how": "negative_page",
+    "reader": "ai:EV1",
+    "group": "ai:1:own"
+   }
+  ],
+  "held": [
+   {
+    "draft_id": "D04",
+    "page": 1,
+    "field": "decision",
+    "value": "ANN",
+    "truth": "ANN",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D04",
+    "page": 1,
+    "field": "identity",
+    "value": "FA-101-106",
+    "truth": "17",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D06",
+    "page": 1,
+    "field": "identity",
+    "value": "ARC-41034",
+    "truth": "DCH-M-BSB-DWG-ZZ-ARC-41034",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D06",
+    "page": 1,
+    "field": "revision",
+    "value": "E",
+    "truth": "E",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D09",
+    "page": 1,
+    "field": "identity",
+    "value": "DJ-295-O-EN-DEE-04-0001",
+    "truth": "DJ-295-P-EN-SEE-04-ASY-0020-01",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D09",
+    "page": 1,
+    "field": "revision",
+    "value": "01",
+    "truth": "R1",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D12",
+    "page": 1,
+    "field": "identity",
+    "value": "BH2031_DIB_AMB_ID",
+    "truth": "BH2031_DIB_AMB_ID_MAIN",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D12",
+    "page": 1,
+    "field": "revision",
+    "value": "H",
+    "truth": "H",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D15",
+    "page": 1,
+    "field": "revision",
+    "value": "01",
+    "truth": "R1",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D16",
+    "page": 1,
+    "field": "identity",
+    "value": "TES/1343/NTH-MID-3B/SD/TEL-04",
+    "truth": "TES/1343/NTH-MID-3B/SD/TEL-04",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D19",
+    "page": 2,
+    "field": "identity",
+    "value": "DJ-295-P-EN-SFD-01-ASY-00",
+    "truth": "DJ-295-P-EN-SFD-01-ASY-0001-00",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D19",
+    "page": 2,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D22",
+    "page": 1,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D22",
+    "page": 2,
+    "field": "identity",
+    "value": "MEC/SD/PR56/0284 Rev. 00",
+    "truth": "MEC/SD/PR56/0284",
+    "state": "held",
+    "outcome": "held_wrong"
+   },
+   {
+    "draft_id": "D22",
+    "page": 2,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D23",
+    "page": 1,
+    "field": "identity",
+    "value": "EP-23091/AS/MS-EM /101",
+    "truth": "EP-23091/AS/MS-EM /101",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D23",
+    "page": 1,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D26",
+    "page": 1,
+    "field": "identity",
+    "value": "28 20 00",
+    "truth": "28 20 00",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D26",
+    "page": 1,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D26",
+    "page": 2,
+    "field": "revision",
+    "value": "00",
+    "truth": "R0",
+    "state": "held",
+    "outcome": "held_correct"
+   },
+   {
+    "draft_id": "D26",
+    "page": 3,
+    "field": "identity",
+    "value": "Section 28 20 00 Video Surveillance System",
+    "truth": null,
+    "state": "held",
+    "outcome": "held_on_negative"
+   },
+   {
+    "draft_id": "D26",
+    "page": 3,
+    "field": "revision",
+    "value": "00 – Sep. 2018",
+    "truth": null,
+    "state": "held",
+    "outcome": "held_on_negative"
+   }
+  ],
+  "held_counts": {
+   "held_correct": 14,
+   "held_wrong": 6,
+   "held_on_negative": 2
+  },
+  "observed_errors": [
+   {
+    "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+    "page": 1,
+    "field": "revision",
+    "value": "00",
+    "state": "observed",
+    "outcome": "wrong",
+    "truth": "R1",
+    "how": "single_component",
+    "reader": "title_block",
+    "group": "obs:0"
+   }
+  ]
+ },
+ "9_matched": {
+  "pair": [
+   "L2",
+   "L4"
+  ],
+  "valid_both": true,
+  "fields": {
+   "own:identity": {
+    "documents_read_in_both": 10,
+    "rows": [
+     {
+      "draft_id": "D01",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D04",
+      "label_resolved": true,
+      "L2": {
+       "missed": 1
+      },
+      "L4": {
+       "missed": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D05",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D06",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D07",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D08",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D11",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D12",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D21",
+      "label_resolved": false,
+      "L2": {
+       "held_only": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": false
+     },
+     {
+      "draft_id": "D24",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     }
+    ],
+    "differences": [
+     {
+      "draft_id": "D21",
+      "label_resolved": false,
+      "L2": {
+       "held_only": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": false
+     }
+    ]
+   },
+   "own:revision": {
+    "documents_read_in_both": 8,
+    "rows": [
+     {
+      "draft_id": "D01",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D04",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D05",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D06",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D07",
+      "label_resolved": true,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D08",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D11",
+      "label_resolved": false,
+      "L2": {
+       "recovered_clean": 1
+      },
+      "L4": {
+       "recovered_clean": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D12",
+      "label_resolved": false,
+      "L2": {
+       "held_only": 1
+      },
+      "L4": {
+       "held_only": 1
+      },
+      "same": true
+     }
+    ],
+    "differences": []
+   },
+   "own:decision": {
+    "documents_read_in_both": 2,
+    "rows": [
+     {
+      "draft_id": "D04",
+      "label_resolved": true,
+      "L2": {
+       "held_only": 1
+      },
+      "L4": {
+       "held_only": 1
+      },
+      "same": true
+     },
+     {
+      "draft_id": "D21",
+      "label_resolved": false,
+      "L2": {
+       "tn": 1
+      },
+      "L4": {
+       "tn": 1
+      },
+      "same": true
+     }
+    ],
+    "differences": []
+   }
+  },
+  "required_complete_in_both": [
+   "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+   "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+   "EP-23091/O&M/EM/Content.pdf"
+  ],
+  "inconclusive_rule": "a pair with fewer than 12 documents attempted by both arms is INCONCLUSIVE (Review 21 plan 4)",
+  "documents_attempted_by_both": 22,
+  "whole_sample_coverage_kept_in_item_7": true
+ },
+ "10_no_change": {
+  "business_rows_and_roles_equal_A": true,
+  "stage_files_unchanged": true,
+  "planned_source_hashes_equal_rows": true,
+  "run_database": "C:\\t\\r2x\\runs\\final-L4\\db",
+  "tables": {
+   "project_documents": 27,
+   "project_submittals": 1,
+   "project_shop_drawings": 4,
+   "background_jobs": 20,
+   "project_actions": 0,
+   "ai_usage": 70,
+   "document_readings": 6
+  },
+  "production": "the runner opens only its sandbox database under C:/t/r2x/runs/<tag>; no production database, live service, .env or source folder is written by it"
+ },
+ "11_roi_gate": {
+  "rule": "ROI arm decision coverage (completed read or verified absence, including decisions outside the title block) >= matching whole-page arm; located_incomplete is not coverage (Review 21 plan 5)",
+  "decision_pages": [
+   {
+    "draft_id": "D04",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "completed_read",
+    "L4": "completed_read",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D16",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "not_attempted",
+    "L4": "located_incomplete",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D17",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "not_attempted",
+    "L4": "not_attempted",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D18",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "located_incomplete",
+    "L4": "located_incomplete",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D19",
+    "page": 1,
+    "label": "rejected",
+    "location": "outside_title_block",
+    "L2": "not_selected_by_policy",
+    "L4": "not_selected_by_policy",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D22",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "completed_read",
+    "L4": "completed_read",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D22",
+    "page": 2,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "completed_read",
+    "L4": "budget",
+    "false_absence": []
+   }
+  ],
+  "L2_usable": 3,
+  "L4_usable": 2,
+  "L2_completed_read": 3,
+  "L4_completed_read": 2,
+  "gate_by_rule": false,
+  "gate_completed_read_only": false,
+  "pages_attempted_by_both": 4,
+  "pages_total": 7,
+  "crop_eligible_D16_D17_D18": [
+   {
+    "draft_id": "D16",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "not_attempted",
+    "L4": "located_incomplete",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D17",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "not_attempted",
+    "L4": "not_attempted",
+    "false_absence": []
+   },
+   {
+    "draft_id": "D18",
+    "page": 1,
+    "label": "approved as noted",
+    "location": "outside_title_block",
+    "L2": "located_incomplete",
+    "L4": "located_incomplete",
+    "false_absence": []
+   }
+  ]
+ },
+ "12_scope": {
+  "scope": "m2-four-arm-final-2026-10-01-L4",
+  "exists": true,
+  "limits_equal_declared": true,
+  "created_utc": "2026-10-01T17:51:15+00:00",
+  "expires_utc": "2026-10-05T17:51:15+00:00",
+  "breaker": null,
+  "entries": 66,
+  "in_flight": 0,
+  "resume_permitted": false,
+  "why": "nothing left to resume"
+ }
+}

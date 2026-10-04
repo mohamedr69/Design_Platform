@@ -1,0 +1,117 @@
+{
+  "timeout_identity": [
+    "X-SD-1"
+  ],
+  "illegible_identity": [
+    [
+      "decision",
+      "ANN",
+      "validated"
+    ],
+    [
+      "identity",
+      "X-SD-9",
+      "candidate"
+    ]
+  ],
+  "illegible_decision": [
+    [
+      "decision",
+      null,
+      "no_decision_marked"
+    ],
+    [
+      "identity",
+      "X-SD-1",
+      "validated"
+    ]
+  ],
+  "missing_hash_state": "current",
+  "wrong_profile_state": "unavailable",
+  "heading": {
+    "part_control": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item data: reader part 'P-1'"
+      ],
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    },
+    "source_description_count": {
+      "state": "not_an_item",
+      "part": "not_applicable",
+      "quantity": "not_applicable",
+      "row_type": "heading_confirmed",
+      "reasons": [
+        "the reader has no item data and the reading confirms a heading"
+      ],
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": "Dual Input Module"
+      }
+    },
+    "numeric_zero": {
+      "state": "not_an_item",
+      "part": "not_applicable",
+      "quantity": "not_applicable",
+      "row_type": "heading_confirmed",
+      "reasons": [
+        "the reader has no item data and the reading confirms a heading"
+      ],
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    },
+    "string_zero": {
+      "state": "conflict",
+      "part": "unverified",
+      "quantity": "unverified",
+      "row_type": "disputed",
+      "reasons": [
+        "the reading calls the row a heading, but the row carries item data: reader quantity '0'"
+      ],
+      "blind": {
+        "part_number": null,
+        "quantity": null,
+        "description": null
+      }
+    }
+  },
+  "grouped_changed_identity": [
+    {
+      "page": 1,
+      "layer": "ai",
+      "kind": "ai_evidence",
+      "reader": "ai:EV1",
+      "component": "ai:1:own",
+      "facts": [
+        {
+          "field": "decision",
+          "value": "ANN",
+          "state": "validated",
+          "ai_state": "validated"
+        },
+        {
+          "field": "identity",
+          "value": "X-SD-9",
+          "state": "validated",
+          "ai_state": "validated"
+        }
+      ],
+      "provenance": {
+        "version": null,
+        "policy": null,
+        "profile": "default"
+      }
+    }
+  ]
+}

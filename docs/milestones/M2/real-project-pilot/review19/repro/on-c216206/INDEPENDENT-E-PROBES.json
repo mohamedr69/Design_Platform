@@ -1,0 +1,207 @@
+{
+  "text_only_control": {
+    "text_length": 113,
+    "clip": [
+      1097.92,
+      947.524951171875,
+      1593.5830517578124,
+      1190.0
+    ],
+    "stamp_outside": true,
+    "outcome": "partial",
+    "fields": {
+      "discovery": "ok",
+      "discovery:route": "located:labels:text",
+      "own:identity": "completed",
+      "own:revision": "incomplete:located_region_only",
+      "own:decision": "absent_by_discovery"
+    },
+    "requests": [
+      "discover_region",
+      "read_identity"
+    ]
+  },
+  "raster_stamp": {
+    "text_length": 113,
+    "clip": [
+      1097.92,
+      947.524951171875,
+      1593.5830517578124,
+      1190.0
+    ],
+    "stamp_outside": true,
+    "outcome": "partial",
+    "fields": {
+      "discovery": "ok",
+      "discovery:route": "located:labels:text",
+      "own:identity": "completed",
+      "own:revision": "incomplete:located_region_only",
+      "own:decision": "absent_by_discovery"
+    },
+    "requests": [
+      "discover_region",
+      "read_identity"
+    ]
+  },
+  "actual_locator_rotation_controls": [
+    {
+      "rotation": 0,
+      "route": "located:labels:text",
+      "contains": true,
+      "source_supported": true
+    },
+    {
+      "rotation": 90,
+      "route": "located:labels:text",
+      "contains": true,
+      "source_supported": true
+    },
+    {
+      "rotation": 180,
+      "route": "located:labels:text",
+      "contains": true,
+      "source_supported": true
+    },
+    {
+      "rotation": 270,
+      "route": "located:labels:text",
+      "contains": true,
+      "source_supported": true
+    }
+  ],
+  "transport_only_completion": {
+    "result": "complete",
+    "input": {
+      "calls": [
+        {
+          "outcome": "ok"
+        }
+      ],
+      "pages": {
+        "1": {
+          "outcome": "partial",
+          "fields": {
+            "own:identity": "incomplete:no_region"
+          }
+        }
+      }
+    }
+  },
+  "matched_with_incomplete_fields": {
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf": {
+      "role": "control_exposed",
+      "S": {
+        "state": "complete",
+        "requests": 3,
+        "tasks": [
+          "discover_page",
+          "read_identity",
+          "read_revision"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "own:identity": "completed",
+            "own:revision": "completed",
+            "own:decision": "absent_by_discovery"
+          }
+        }
+      },
+      "T2": {
+        "state": "complete",
+        "requests": 4,
+        "tasks": [
+          "discover_region",
+          "read_identity",
+          "read_revision",
+          "read_field_context"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "discovery:route": "located:labels:text",
+            "own:identity": "completed",
+            "own:revision": "completed",
+            "own:decision": "incomplete:located_region_only",
+            "own:identity:primary": "completed",
+            "own:identity:targeted": "completed"
+          }
+        }
+      }
+    },
+    "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf": {
+      "role": "new",
+      "S": {
+        "state": "complete",
+        "requests": 3,
+        "tasks": [
+          "discover_page",
+          "read_identity",
+          "read_revision"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "own:identity": "completed",
+            "own:revision": "completed",
+            "own:decision": "absent_by_discovery"
+          }
+        }
+      },
+      "T2": {
+        "state": "complete",
+        "requests": 3,
+        "tasks": [
+          "discover_region",
+          "read_identity",
+          "read_revision"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "discovery:route": "located:strip:text",
+            "own:identity": "completed",
+            "own:revision": "completed",
+            "own:decision": "incomplete:located_region_only"
+          }
+        }
+      }
+    },
+    "EP-26208/EP-26208 drawing/Shop dwg/CBS System/Rev-0/B16/ELEC-B16-EM-101.pdf": {
+      "role": "new",
+      "S": {
+        "state": "complete",
+        "requests": 1,
+        "tasks": [
+          "discover_page"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "own:identity": "incomplete:no_region",
+            "own:revision": "incomplete:no_region",
+            "own:decision": "absent_by_discovery"
+          }
+        }
+      },
+      "T2": {
+        "state": "complete",
+        "requests": 3,
+        "tasks": [
+          "discover_region",
+          "read_identity",
+          "read_revision"
+        ],
+        "fields": {
+          "1": {
+            "discovery": "ok",
+            "discovery:route": "located:labels:text",
+            "own:identity": "completed",
+            "own:revision": "completed",
+            "own:decision": "absent_by_discovery"
+          }
+        }
+      }
+    }
+  }
+}

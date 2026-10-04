@@ -1,0 +1,1096 @@
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index e52275c..deea17a 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -41,9 +41,11 @@ from typing import Any
+ 
+ from app.ai.provider import AiRequest, ImagePart, TextPart
+ 
+-READER_VERSION = "evidence-reader-2026-09-29.3"   # .3: review 08 (field-level outcomes and merge, context selection)
++READER_VERSION = "evidence-reader-2026-09-29.4"   # .4: review 09 (usable reads, fact association, source identity)
++# evidence-reader-2026-09-29.3: review 08 (field-level outcomes and merge, context selection)
+ # evidence-reader-2026-09-29.2: review 07 (validation policy .2, lifecycle, profile)
+-EVIDENCE_POLICY_VERSION = "evidence-policy-2026-09-29.3"   # .3: review 08 -- a BOQ heading answer is a non-item outcome
++EVIDENCE_POLICY_VERSION = "evidence-policy-2026-09-29.4"   # .4: review 09 -- usable reads; heading only without item evidence
++# evidence-policy-2026-09-29.3: review 08 -- a BOQ heading answer is a non-item outcome
+ # evidence-policy-2026-09-29.2: review 07 (region-bound literal support, decision corroboration, numeric semantics)
+ SCHEMA_VERSION = "evidence-schema-1"
+ PROMPTS = {"discover_page": "discover-2026-09-29.1", "read_identity": "read-identity-2026-09-29.1",
+@@ -550,6 +552,7 @@ def read_document(run: EvidenceRun, pdf, *, sha256: str, records: list, observat
+         entry["calls"] = run.calls - before
+         entry["outcome"] = found.pop("_outcome")
+         entry["fields"] = found.pop("_fields", {})
++        entry["requests"] = found.pop("_requests", {})
+         out.extend(found.pop("_observations"))
+         coverage["pages"].append(entry)
+     coverage["calls"] = run.calls - calls_before
+@@ -601,9 +604,15 @@ def region_texts(page, region_display: tuple | None, ocr_lines: list, *, pad: fl
+ 
+ # --- read outcomes (M2 review 08, R8-01) ------------------------------------------------------------------------------
+ #
+-# Every required read of a page has an outcome of its own, recorded in the page's coverage (`fields`):
+-#   completed            the field's blind read returned (a value, a negative such as "no decision marked", or an
+-#                        unreadable result) -- the field was read
++# Every required read of a page has an outcome of its own, recorded in the page's coverage (`fields`), and the
++# request behind it has one too (`requests`: ok | failed:<kind> | budget | not_attempted). A returned response is not
++# a usable read (M2 review 09, R9-01):
++#   completed            the field's blind read is usable: for an identity / a revision a legible blind reading with a
++#                        value; for a decision block a legible blind reading (a verified negative -- a legible block
++#                        with nothing marked -- is completed)
++#   unusable:illegible   the request returned, but the blind answer is not legible: nothing was read
++#   unusable:empty       the request returned a legible answer with no value for an identity / a revision: there is
++#                        no verified absence of an identity or a revision, so nothing was read
+ #   absent_by_discovery  discovery completed and reported no such field; its region was never read
+ #   incomplete:no_region discovery named the field but gave no readable region: nothing was read
+ #   failed:<kind>        the read's request failed (timeout, transport, invalid response, ...)
+@@ -627,8 +636,20 @@ def _call_outcome(run: EvidenceRun) -> str:
+     return "failed:" + (outcome or "unknown")
+ 
+ 
+-def _read_outcome(run: EvidenceRun, result) -> str:
+-    return COMPLETED if result is not None else _call_outcome(run)
++def _request_outcome(run: EvidenceRun, result) -> str:
++    """The request's own outcome: 'ok' when a response came back, else the call's failure or budget refusal."""
++    return "ok" if result is not None else _call_outcome(run)
++
++
++def _value_read_outcome(field: str, readings: list[dict], request: str) -> str:
++    """The field outcome of an identity / revision read (R9-01): completed only with a legible blind reading that
++    carries a value -- the discovery reading alone never completes a field."""
++    if request != "ok":
++        return request
++    blind = [r for r in readings if str(r.get("source", "")).startswith("blind")]
++    if any(r.get("legible") and literal_key(field, r.get("value")) for r in blind):
++        return COMPLETED
++    return "unusable:empty" if any(r.get("legible") for r in blind) else "unusable:illegible"
+ 
+ 
+ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageFacts, reason: str, ocr_lines: list | None = None) -> dict:
+@@ -638,19 +659,21 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+     changes a record."""
+     observations = []
+     fields: dict = {}
++    requests: dict = {}
+     discovered = run.call(sha256=sha256, task="discover_page", page=number, reason=reason,
+                           parts=[TextPart("task", DISCOVER_TEXT.format(page=number)), ImagePart("page", page_png(page))],
+                           schema=DISCOVER_SCHEMA, max_output=800)
+     if discovered is None:
+         outcome = _call_outcome(run)
+         return {"_outcome": "budget: " + (run.exhausted or "refused") if outcome == "budget" else "failed",
+-                "_observations": [], "_fields": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}}}
+-    fields["discovery"] = "ok"
++                "_observations": [], "_fields": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}},
++                "_requests": {"discovery": outcome, **{f: "not_attempted" for f in REQUIRED_FIELDS}}}
++    fields["discovery"] = requests["discovery"] = "ok"
+     det_identity = facts.identities[0] if facts.identities else None
+     det_revision = facts.revisions[0] if facts.revisions else None
+     common = {"page": number, "kind": "ai_evidence", "version": READER_VERSION, "policy": EVIDENCE_POLICY_VERSION,
+               "variant": run.variant, "profile": run.profile, "page_kind": discovered.get("page_kind")}
+-    own_identity = None
++    own_identity = own_revision = None
+     spec = (("identity", "read_identity", discovered.get("own_identity"), discovered.get("own_identity_region"), det_identity),
+             ("revision", "read_revision", discovered.get("own_revision"), discovered.get("own_revision_region"), det_revision))
+     for field, task, disc_value, disc_region, det_value in spec:
+@@ -662,13 +685,13 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+             fields[key] = ABSENT_BY_DISCOVERY
+             continue
+         if region is None:
+-            fields[key] = "incomplete:no_region"
++            fields[key], requests[key] = "incomplete:no_region", "not_attempted"
+             verdict = validate_value(field, readings, texts, det_value)
+         else:
+             blind = run.call(sha256=sha256, task=task, page=number, reason=reason,
+                              parts=[TextPart("task", READ_TEXTS[task]), ImagePart("crop", crop_png(page, region))],
+                              schema=READ_VALUE_SCHEMA, max_output=400)
+-            fields[key] = _read_outcome(run, blind)
++            requests[key] = _request_outcome(run, blind)
+             if blind is not None:
+                 readings.append({"source": "blind_small", "value": blind.get("value", ""), "legible": blind.get("legible", False),
+                                  "label": blind.get("label_text")})
+@@ -683,10 +706,13 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                     verdict = validate_value(field, readings, texts, det_value)
+                 else:
+                     fields[key + ":escalation"] = _call_outcome(run)
++            fields[key] = _value_read_outcome(field, readings, requests[key])
+         if verdict["state"] == "unreadable" and not disc_value:
+             continue
+         if field == "identity" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED:
+             own_identity = verdict.get("value")
++        if field == "revision" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED:
++            own_revision = verdict.get("value")
+         roles = [n for n in discovered.get("other_numbers") or [] if det_value and literal_key(field, n.get("literal")) == literal_key(field, det_value)]
+         reasons = list(verdict["reasons"]) + ([f"discovery lists the deterministic value as a {roles[0].get('role')}"] if roles else [])
+         if fields[key] != COMPLETED:
+@@ -695,7 +721,9 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                              "value_literal": verdict.get("value_literal"), "value_normalized": verdict.get("value_normalized"),
+                              "candidates": verdict.get("candidates"), "state": verdict["state"], "reasons": reasons,
+                              "support": verdict.get("support"), "readings": readings, "region": list(region) if region else None,
+-                             "deterministic": det_value, "read": fields[key]})
++                             "deterministic": det_value, "read": fields[key], "request": requests.get(key),
++                             # the component identity this revision was read for (R9-02); an identity is its own
++                             **({"target": own_identity or det_identity} if field == "revision" else {})})
+     # identities the page references: facts of their own, read by discovery (completed with it)
+     for i, other in enumerate(discovered.get("other_numbers") or []):
+         if other.get("literal"):
+@@ -716,25 +744,35 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+             blind = run.call(sha256=sha256, task="read_decision", page=number, reason=reason,
+                              parts=[TextPart("task", READ_TEXTS["read_decision"]), ImagePart("crop", crop_png(page, region, pad=0.15))],
+                              schema=READ_DECISION_SCHEMA, max_output=400)
+-            fields["own:decision"] = _read_outcome(run, blind)
++            requests["own:decision"] = _request_outcome(run, blind)
+             if blind is not None:
+                 readings.append({"source": "blind_small", **blind})
++            # a decision block is read only by a legible blind reading: its verified negative needs one too (R9-01)
++            fields["own:decision"] = (requests["own:decision"] if blind is None else
++                                      COMPLETED if blind.get("legible", True) else "unusable:illegible")
++        if region is None:
++            requests["own:decision"] = "not_attempted"
+         target = own_identity or det_identity
+         verdict = validate_decision(readings, target)
+         reasons = list(verdict["reasons"])
++        state = verdict["state"]
+         if fields["own:decision"] != COMPLETED:
+             reasons.append(f"read not completed ({fields['own:decision']}): unverified")
++            # nothing verified: a positive stays a candidate; a negative from discovery alone is no verified absence
++            state = "candidate" if state == "validated" else "unverified" if state in ("no_decision_marked", "not_a_decision") else state
+         observations.append({**common, "field": "decision", "component": "own", "role": "own", "value": verdict.get("decision"),
+-                             "state": verdict["state"] if fields["own:decision"] == COMPLETED or verdict["state"] != "validated" else "candidate",
+-                             "reasons": reasons, "target": target, "legend": verdict.get("legend"), "actor": verdict.get("actor"),
++                             "state": state, "reasons": reasons, "target": target,
++                             # the revision the decision was read with, when this read established one (R9-02)
++                             "target_revision": own_revision, "legend": verdict.get("legend"), "actor": verdict.get("actor"),
+                              "readings": readings, "region": list(region) if region else None, "read": fields["own:decision"],
++                             "request": requests.get("own:decision"),
+                              "deterministic": next((r.get("status") for r in facts.records if r.get("status") not in (None, "UR")), None)})
+     else:
+         fields["own:decision"] = ABSENT_BY_DISCOVERY
+     required = [fields.get(f) for f in REQUIRED_FIELDS]
+     complete = all(o in (COMPLETED, ABSENT_BY_DISCOVERY) for o in required)
+     outcome = ("evidence" if observations else "no_components") if complete else "partial"
+-    return {"_outcome": outcome, "_observations": observations, "_fields": fields}
++    return {"_outcome": outcome, "_observations": observations, "_fields": fields, "_requests": requests}
+ 
+ 
+ # --- BOQ rows ---------------------------------------------------------------------------------------------------------
+@@ -759,11 +797,17 @@ _QTY = re.compile(r"^\s*([+-]?)\s*(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?\s*([A-Za-
+ _DESCRIPTION_COUNT = re.compile(r"^\s*\(\s*(\d+)\s*\)")
+ 
+ 
++def quantity_present(value) -> bool:
++    """A quantity is present when anything is printed: numeric 0 and "0" are present values; only None and blank text
++    are absence (R9-04)."""
++    return value is not None and str(value).strip() != ""
++
++
+ def parse_quantity_literal(text) -> tuple[str, tuple | None]:
+     """('empty' | 'ok' | 'unsupported', (sign, digits, decimals, unit)) -- decimals, sign and unit are kept, never
+     stripped: "1.5" is not "15"; "1,5" (decimal comma or a thousands slip) and anything with stray marks is
+-    unsupported, not guessed."""
+-    t = str(text or "").strip()
++    unsupported, not guessed. Zero is a value, never empty."""
++    t = str(text).strip() if quantity_present(text) else ""
+     if not t:
+         return "empty", None
+     m = _QTY.match(t)
+@@ -782,25 +826,30 @@ def validate_boq_row(row: dict, blind: dict | None) -> dict:
+     verified; part_verified_quantity_unverified keeps the two apart; conflict when either disagrees."""
+     if blind is None:
+         return {"state": "unverified", "part": "unverified", "quantity": "unverified", "reasons": ["no reading"]}
++    reader = {k: row.get(k) for k in ("part_number", "quantity", "description")}      # the reader's literals, as given
+     if blind.get("row_is_heading"):
+         # A heading answer is a row-type claim, never validated equipment data (M2 review 08, R8-04). It confirms a
+-        # non-item only where the reader has no item either (no part, no quantity) and the reading carries no count;
+-        # a reader part or quantity, or a "( n )" count in the reading, is a row-type disagreement -- held.
+-        count = _DESCRIPTION_COUNT.match(str(blind.get("description") or ""))
++        # non-item only where neither side carries item evidence (R9-04): a part, a present quantity (0 and "0" are
++        # present), or a "( n )" count in either description -- the reader's included, which the reading may omit.
++        # Any of them against a heading answer is a row-type disagreement -- held. Nothing is removed or inferred.
+         if not blind.get("legible", True):
+             return {"state": "unverified", "part": "unverified", "quantity": "unverified", "row_type": "unverified",
+-                    "reasons": ["the reading is not legible"]}
+-        if row.get("part_number") or row.get("quantity") or count or blind.get("part_number") or str(blind.get("quantity") or "").strip():
++                    "reasons": ["the reading is not legible"], "reader": reader}
++        evidence = [
++            f"reader part {row.get('part_number')!r}" if str(row.get("part_number") or "").strip() else "",
++            f"reader quantity {row.get('quantity')!r}" if quantity_present(row.get("quantity")) else "",
++            f"count {m.group(0).strip()!r} in the reader's description" if (m := _DESCRIPTION_COUNT.match(str(row.get("description") or ""))) else "",
++            f"reading part {blind.get('part_number')!r}" if str(blind.get("part_number") or "").strip() else "",
++            f"reading quantity {blind.get('quantity')!r}" if quantity_present(blind.get("quantity")) else "",
++            f"count {m.group(0).strip()!r} in the reading" if (m := _DESCRIPTION_COUNT.match(str(blind.get("description") or ""))) else ""]
++        evidence = [x for x in evidence if x]
++        if evidence:
+             return {"state": "conflict", "part": "unverified", "quantity": "unverified", "row_type": "disputed",
+-                    "reasons": ["the reading calls the row a heading, but the row carries item data: "
+-                                + ", ".join(x for x in (f"reader part {row.get('part_number')!r}" if row.get("part_number") else "",
+-                                                        f"reader quantity {row.get('quantity')!r}" if row.get("quantity") else "",
+-                                                        f"count {count.group(0)!r} in the reading" if count else "",
+-                                                        f"reading part {blind.get('part_number')!r}" if blind.get("part_number") else "") if x)],
+-                    "blind": {k: blind.get(k) for k in ("part_number", "quantity", "description")}}
++                    "reasons": ["the reading calls the row a heading, but the row carries item evidence: " + ", ".join(evidence)],
++                    "reader": reader, "blind": {k: blind.get(k) for k in ("part_number", "quantity", "description")}}
+         return {"state": "not_an_item", "part": "not_applicable", "quantity": "not_applicable", "row_type": "heading_confirmed",
+-                "reasons": ["the reader has no item data and the reading confirms a heading"],
+-                "blind": {k: blind.get(k) for k in ("part_number", "quantity", "description")}}
++                "reasons": ["neither the reader nor the reading carries item evidence, and the reading confirms a heading"],
++                "reader": reader, "blind": {k: blind.get(k) for k in ("part_number", "quantity", "description")}}
+     reasons = []
+     rp, bp = row.get("part_number"), blind.get("part_number")
+     if not bp and rp:
+@@ -811,7 +860,7 @@ def validate_boq_row(row: dict, blind: dict | None) -> dict:
+         part = "conflict"
+         reasons.append(f"part: reader {rp!r}, blind {bp!r}")
+     bq, source = blind.get("quantity"), "quantity_cell"
+-    if not str(bq or "").strip():
++    if not quantity_present(bq):
+         m = _DESCRIPTION_COUNT.match(str(blind.get("description") or ""))
+         if m:
+             bq, source = m.group(1), "description_count"
+@@ -888,7 +937,9 @@ def verify_boq_rows(run: EvidenceRun, pdf, *, sha256: str, extraction: dict, ren
+         blind = run.call(sha256=sha256, task="read_boq_row", page=page_no, reason=reason,
+                          parts=[TextPart("task", READ_TEXTS["read_boq_row"]), ImagePart("quantity_cell", qpng), ImagePart("row", png)],
+                          schema=BOQ_ROW_SCHEMA, max_output=300)
+-        verdict = validate_boq_row({"part_number": row.get("catalog_no") or row.get("part_number"), "quantity": row.get("quantity")}, blind)
++        # the reader's item evidence as it was read -- its description (and any "( n )" count) included (R9-04)
++        verdict = validate_boq_row({"part_number": row.get("catalog_no") or row.get("part_number"), "quantity": row.get("quantity"),
++                                    "description": row.get("description")}, blind)
+         results.append({"page": page_no, "reason": reason, "row": _brief(row), "accepted_by_reader": row["_accepted"], **verdict})
+     return results
+ 
+@@ -998,7 +1049,9 @@ def _flatten(env: dict) -> dict:
+     out = []
+     for pno, page in sorted((env.get("pages") or {}).items(), key=lambda kv: int(kv[0])):
+         for fkey, entry in sorted(page.get("fields", {}).items()):
+-            out += [dict(o, provenance=entry["provenance"], field_status=entry["status"]) for o in entry["observations"]]
++            out += [dict(o, provenance=entry["provenance"], field_status=entry["status"],
++                         **({"source_binding": entry["source_binding"]} if entry.get("source_binding") else {}))
++                    for o in entry["observations"]]
+     env["observations"] = out
+     return env
+ 
+@@ -1021,6 +1074,10 @@ def merge_evidence(previous: dict | None, attempt: dict, *, sha256: str, profile
+         if env is not None:
+             ai["superseded"] = (ai["superseded"] + [{"key": key, **env}])[-4:]
+         env = {"profile": profile, "variant": variant, "read_sha256": sha256, "pages": {}, "stale": None}
++    elif not env.get("read_sha256"):
++        # the bytes this envelope was last read from; each field keeps its own source in its provenance, and a field
++        # read from unknown bytes stays unknown (R9-03) -- nothing retained is relabelled with this attempt's hash
++        env = {**env, "read_sha256": sha256}
+     provenance = {"attempt": attempt["attempt"], "version": attempt.get("version"), "policy": attempt.get("policy"),
+                   "prompts": attempt.get("prompts"), "models": attempt.get("models"), "variant": variant, "profile": profile,
+                   "read_sha256": sha256, "at": attempt.get("at")}
+@@ -1028,7 +1085,7 @@ def merge_evidence(previous: dict | None, attempt: dict, *, sha256: str, profile
+     for o in attempt.get("observations") or []:
+         by_field.setdefault((str(o.get("page") or 1), _field_key(o)), []).append(o)
+     pages = {k: {"fields": dict(v.get("fields") or {})} for k, v in (env.get("pages") or {}).items()}
+-    changed = []
++    changed, unapplied = [], []
+     for entry in (attempt.get("coverage") or {}).get("pages") or []:
+         pno = str(entry.get("page"))
+         outcomes = dict(entry.get("fields") or {})
+@@ -1052,6 +1109,11 @@ def merge_evidence(previous: dict | None, attempt: dict, *, sha256: str, profile
+                 page["fields"][fkey] = {"observations": new, "status": "incomplete", "provenance": {**provenance, "read": outcome},
+                                         "history": (existing or {}).get("history") or []}
+                 changed.append(f"{pno}:{fkey} (incomplete)")
++            elif new:
++                # read, but not usable against the evidence kept: recorded with the attempt, never applied (R9-01)
++                unapplied += [{"page": o.get("page"), "component": o.get("component") or "own", "field": o.get("field"),
++                               "value": o.get("value"), "state": o.get("state"), "read": outcome, "target": o.get("target")}
++                              for o in new]
+         if not page["fields"]:
+             pages.pop(pno)
+     env = _flatten({**env, "pages": pages})
+@@ -1059,27 +1121,71 @@ def merge_evidence(previous: dict | None, attempt: dict, *, sha256: str, profile
+     if changed:
+         ai["last_written_key"] = key
+     summary = {k: attempt.get(k) for k in ("attempt", "at", "outcome", "version", "policy", "error", "models")}
+-    summary.update(key=key, variant=variant, profile=profile, read_sha256=sha256, changed=changed,
+-                   pages={str(e.get("page")): {"outcome": e.get("outcome"), "fields": e.get("fields")} for e in (attempt.get("coverage") or {}).get("pages") or []},
++    summary.update(key=key, variant=variant, profile=profile, read_sha256=sha256, changed=changed, unapplied=unapplied,
++                   pages={str(e.get("page")): {"outcome": e.get("outcome"), "fields": e.get("fields"), "requests": e.get("requests")}
++                          for e in (attempt.get("coverage") or {}).get("pages") or []},
+                    calls=attempt.get("calls"))
+     ai["attempts"] = (ai["attempts"] + [summary])[-MAX_ATTEMPTS_KEPT:]
+     return ai
+ 
+ 
++def _usable_value(entry: dict | None) -> str | None:
++    """A field's current value when it can anchor an association: read (completed, or legacy) and carrying a value."""
++    if not entry or entry.get("status") not in (COMPLETED, "legacy"):
++        return None
++    values = [o.get("value") for o in entry.get("observations") or [] if o.get("value") not in (None, "")]
++    return values[0] if values else None
++
++
++def association_of(o: dict, current_identity: str | None, current_revision: str | None) -> dict | None:
++    """The association of a dependent fact (a revision or a decision of the page's own component) with the component
++    as it is read now (M2 review 09, R9-02). A fact keeps the target it was read for; it is never reattached:
++      current               its target is the component's current identity (and, for a decision, its revision)
++      held:target_changed   the component's current identity is another one: the fact stays with its own target
++      held:revision_changed a decision read with a known revision the component no longer carries
++      by_target             no usable current identity: associated only by its own recorded target
++      not_recorded          a fact that never recorded a target (review 06 evidence): none is invented"""
++    if o.get("field") not in ("decision", "revision") or not _field_key(o).startswith("own:"):
++        return None
++    target = o.get("target")
++    if not target:
++        return {"status": "not_recorded"}
++    base = {"target": target, "current_identity": current_identity}
++    if current_identity is None:
++        return {"status": "by_target", **base, "reason": "no usable current identity: associated only by its recorded target"}
++    if literal_key("identity", target) != literal_key("identity", current_identity):
++        return {"status": "held:target_changed", **base, "reason": f"read for {target!r}; the component now reads {current_identity!r}"}
++    tr = o.get("target_revision") if o.get("field") == "decision" else None
++    if tr and current_revision and literal_key("revision", tr) != literal_key("revision", current_revision):
++        return {"status": "held:revision_changed", **base, "target_revision": tr, "current_revision": current_revision,
++                "reason": f"read with revision {tr!r}; the component now reads {current_revision!r}"}
++    return {"status": "current", **base}
++
++
+ def evidence_for(ai: dict | None, *, sha256: str | None, profile: str | None, variant: str | None,
+-                 policies: set | None = None, accept_unknown_profile: bool = False) -> dict:
++                 policies: set | None = None, accept_unknown_profile: bool = False, historical_source: dict | None = None) -> dict:
+     """The AI evidence that applies to a requested context -- source hash, extraction profile, verification variant
+-    and (optionally) compatible policies -- as an explicit state (M2 review 08, R8-02):
+-      current      evidence read for exactly this context (`envelope`, `observations`; `incomplete` lists fields
+-                   known only from unsuccessful reads)
+-      pending      reading was attempted for this context and gave no evidence yet
+-      unavailable  nothing was read for this context (or none under a compatible policy); `history` names what exists
+-      stale        evidence for this context exists but was read from other bytes
+-    Another profile's or variant's evidence is never returned for this one. An unknown legacy profile is used only
+-    when the caller says so (`accept_unknown_profile`, for a historical run whose manifest declares its profile)."""
++    and (optionally) compatible policies -- as an explicit state (M2 review 08, R8-02; review 09, R9-03):
++      current         evidence read for exactly this context (`envelope`, `observations`; `incomplete` lists fields
++                      known only from unsuccessful reads; `withheld` lists fields of this envelope that are not)
++      pending         reading was attempted for this context and gave no evidence yet
++      unavailable     nothing was read for this context (or none under a compatible policy); `history` names what exists
++      stale           the evidence for this context was read from other bytes
++      unknown_source  the evidence for this context records no source hash: it is not exact-file evidence
++      source_required the request names no source hash: exact-file evidence cannot be selected without one
++    Source identity is decided per field, by the hash in the field's own provenance: a retained field keeps the bytes it
++    was read from, whatever a later attempt read. Another profile's or variant's evidence is never returned for this
++    one. An unknown legacy *profile* is used only when the caller says so (`accept_unknown_profile`); that says nothing
++    about the bytes. `historical_source` -- {"manifest": <run manifest>, "sha256": <the hash it binds this document
++    to>} -- is a separate, explicit historical mode: fields with *no* recorded hash count as read from the manifest's
++    bytes when those are the requested bytes; a known mismatch never does. Operational callers never pass it.
++    Each dependent fact carries its `association` with the component as read now (`association_of`)."""
+     ai = _normalise_ai(ai) if ai else _normalise_ai(None)
+     context = {"sha256": sha256, "profile": profile, "variant": variant, "policies": sorted(policies) if policies else None}
+     history = sorted(ai["envelopes"])
++    if not sha256:
++        return {"state": "source_required", "reason": "the request names no source hash: exact-file evidence needs one",
++                "context": context, "history": history}
+     key = envelope_key(profile, variant)
+     env, via = ai["envelopes"].get(key), None
+     if env is None and accept_unknown_profile:
+@@ -1089,23 +1195,48 @@ def evidence_for(ai: dict | None, *, sha256: str | None, profile: str | None, va
+         return {"state": "pending" if attempted else "unavailable",
+                 "reason": f"reading was attempted for {key} and gave no evidence yet" if attempted else f"no evidence was read for {key}",
+                 "context": context, "history": history}
+-    if env.get("stale") or (sha256 and env.get("read_sha256") and env.get("read_sha256") != sha256):
++    if env.get("stale") or (env.get("read_sha256") and env.get("read_sha256") != sha256):
+         return {"state": "stale", "reason": env.get("stale") or "read from other bytes", "context": context, "history": history}
+-    pages = {}
++    binding = None
++    if historical_source and historical_source.get("manifest") and historical_source.get("sha256") == sha256:
++        binding = f"historical:{historical_source['manifest']}"
++    pages, withheld = {}, {}
+     for pno, page in (env.get("pages") or {}).items():
+-        kept = {fk: e for fk, e in page.get("fields", {}).items() if not policies or e["provenance"].get("policy") in policies}
++        kept = {}
++        for fk, e in page.get("fields", {}).items():
++            if policies and e["provenance"].get("policy") not in policies:
++                continue
++            source = e["provenance"].get("read_sha256")
++            if source == sha256:
++                kept[fk] = e
++            elif not source and binding:
++                kept[fk] = {**e, "source_binding": binding}
++            else:
++                withheld[f"{pno}:{fk}"] = "unknown_source" if not source else "stale"
+         if kept:
+             pages[pno] = {"fields": kept}
+     if not pages:
++        if withheld:
++            state = "stale" if "stale" in withheld.values() else "unknown_source"
++            return {"state": state, "reason": ("read from other bytes" if state == "stale" else
++                                               "the evidence records no source hash: it is not exact-file evidence"),
++                    "context": context, "history": history, "withheld": withheld}
+         # an envelope exists only because an attempt for this context was merged into it
+         incompatible = bool(policies and env.get("pages"))
+         return {"state": "unavailable" if incompatible else "pending",
+                 "reason": "no evidence under a compatible policy" if incompatible else "reading was attempted for this context; no evidence yet",
+                 "context": context, "history": history}
+     current = _flatten({**{k: v for k, v in env.items() if k not in ("pages", "observations")}, "pages": pages})
++    for o in current["observations"]:
++        page = pages[str(o.get("page") or 1)]["fields"]
++        assoc = association_of(o, _usable_value(page.get("own:identity")), _usable_value(page.get("own:revision")))
++        if assoc is not None:
++            o["association"] = assoc
+     incomplete = sorted(f"{p}:{fk}" for p, page in pages.items() for fk, e in page["fields"].items() if e["status"] == "incomplete")
+-    return {"state": "current", "context": context, "via": via, "envelope": current, "observations": current["observations"],
+-            "incomplete": incomplete, "history": history}
++    return {"state": "current", "context": context, "via": via, "mode": "historical" if binding and any(
++                e.get("source_binding") for page in pages.values() for e in page["fields"].values()) else "operational",
++            "envelope": current, "observations": current["observations"], "incomplete": incomplete, "withheld": withheld,
++            "history": history}
+ 
+ 
+ def last_known(ai: dict | None) -> dict:
+diff --git a/backend/app/ai/ledger.py b/backend/app/ai/ledger.py
+index 1991e0f..c688070 100644
+--- a/backend/app/ai/ledger.py
++++ b/backend/app/ai/ledger.py
+@@ -32,9 +32,11 @@ limits; every later handle -- another worker, another process, a restart -- is h
+   * reservation and settlement read the effective limits from the database inside their transaction, never from
+     the handle's memory;
+   * the only way to change a scope's limits is `amend_limits(new, authorized_by=..., reason=...)`: explicit,
+-    versioned (`limits_version`), recorded in `limit_amendments` with who, why, old and new. A handle opened on the
+-    earlier version is refused afterwards (its limits no longer match). An amendment does not re-open a tripped
+-    breaker.
++    versioned (`limits_version`), recorded in `limit_amendments` with who, why, old and new. After an amendment, a
++    handle that is already open reads the saved, amended policy at its next reservation or settlement (it holds no
++    policy of its own); a handle newly opened afterwards that explicitly supplies the old, now conflicting limits is
++    refused (`LedgerConfigMismatch`). An amendment does not re-open a tripped breaker. (Wording corrected in M2
++    review 09; the behaviour is that of ai-ledger-2026-09-29.2, unchanged.)
+ """
+ from __future__ import annotations
+ 
+diff --git a/backend/scripts/m2_eval5.py b/backend/scripts/m2_eval5.py
+index 67166b4..30c7893 100644
+--- a/backend/scripts/m2_eval5.py
++++ b/backend/scripts/m2_eval5.py
+@@ -44,7 +44,8 @@ from pathlib import Path
+ from scripts import m2_eval4 as ev4
+ from scripts import m2_pilot_eval as v3
+ 
+-EVALUATOR_VERSION = "m2-pilot-eval-2026-09-29.7"   # .7: AI evidence selected for the run's declared context (review 08)
++EVALUATOR_VERSION = "m2-pilot-eval-2026-09-29.8"   # .8: retained facts judged under their association; source identity (review 09)
++# m2-pilot-eval-2026-09-29.7: AI evidence selected for the run's declared context (review 08)
+ # m2-pilot-eval-2026-09-29.6   # .6: a no-record page associates a cross-page copy of the document's own identity (as .4); pending-evidence records hold all their facts
+ FIELDS = ("identity", "revision", "decision")
+ ASSERTED = ("accepted", "observed", "validated")
+@@ -126,12 +127,14 @@ def observation_groups(row: dict | None) -> list[dict]:
+     return out
+ 
+ 
+-def ai_envelope(row: dict | None, ai_context: dict | None) -> tuple[dict, str]:
++def ai_envelope(row: dict | None, ai_context: dict | None, doc: str | None = None) -> tuple[dict, str]:
+     """(envelope, state) of the AI evidence that applies to the evaluated run's declared context -- its variant,
+     its extraction profile (default: the row's own) and optionally the compatible policies -- through
+     `evidence_reader.evidence_for`. No context, no AI evidence: another run's envelope is never scored for this one
+     (review 08, R8-02). A historical run whose stored envelopes carry no profile is scored only when its context
+-    declares `accept_unknown_profile` (from the run manifest)."""
++    declares `accept_unknown_profile` (from the run manifest). Evidence that records no source hash is scored only
++    under a declared historical binding -- `historical_source` {"manifest", "sha256_by_doc"} from a run manifest --
++    and only for the bytes that manifest names for this document (review 09, R9-03)."""
+     if ai_context is None:
+         return {}, "no_context"
+     from app.ai import evidence_reader
+@@ -141,17 +144,24 @@ def ai_envelope(row: dict | None, ai_context: dict | None) -> tuple[dict, str]:
+     if not ai:
+         return {}, "none"
+     profile = ai_context.get("profile", (row.get("extracted") or {}).get("profile"))
++    hs = ai_context.get("historical_source") or None
++    binding = ({"manifest": hs.get("manifest"), "sha256": (hs.get("sha256_by_doc") or {}).get(doc)} if hs and doc else None)
+     got = evidence_reader.evidence_for(ai, sha256=row.get("sha256"), profile=profile, variant=ai_context.get("variant"),
+-                                       policies=ai_context.get("policies"), accept_unknown_profile=bool(ai_context.get("accept_unknown_profile")))
++                                       policies=ai_context.get("policies"), accept_unknown_profile=bool(ai_context.get("accept_unknown_profile")),
++                                       historical_source=binding)
+     return (got.get("envelope") or {}) if got["state"] == "current" else {}, got["state"]
+ 
+ 
+-def ai_groups(row: dict | None, ai_context: dict | None = None) -> list[dict]:
++def ai_groups(row: dict | None, ai_context: dict | None = None, doc: str | None = None) -> list[dict]:
+     """One group per AI component read. Review 07 observations carry a `component` key; review 06 observations do
+     not, so their page's single own-identity read is one component -- and where a page has several AI identity
+     observations, each is its own group and that page's revision / decision observations stay unassociated with any
+-    of them (`component: None`), never merged into one."""
+-    env, _state = ai_envelope(row, ai_context)
++    of them (`component: None`), never merged into one.
++    Review 09 (R9-02): a dependent fact keeps its explicit association (`evidence_reader.association_of`). One whose
++    target is not the component's current identity -- `held:*` (held) or `by_target` (its own state) -- is a group of
++    its own, associated by its target (`association_identity`), never beside another identity. Target and association
++    travel with the fact into the judgement; a fact that never recorded a target is grouped as before."""
++    env, _state = ai_envelope(row, ai_context, doc)
+     obs_list = [o for o in env.get("observations") or [] if o.get("value") not in (None, "")]
+     state_of = lambda o: "validated" if o.get("state") == "validated" else "held"
+     groups: dict = {}
+@@ -162,7 +172,11 @@ def ai_groups(row: dict | None, ai_context: dict | None = None) -> list[dict]:
+         own_ids = [o for o in items if o.get("field") == "identity"]
+         for i, o in enumerate(items):
+             role = o.get("role") or "own"
+-            if o.get("component") is not None:
++            assoc = o.get("association") or {}
++            status = assoc.get("status")
++            if status and (status.startswith("held:") or status == "by_target"):
++                key = f"ai:{page}:{o.get('component') or 'own'}@{assoc['target']}"
++            elif o.get("component") is not None:
+                 key = f"ai:{page}:{o['component']}"
+             elif len(own_ids) <= 1:
+                 key = f"ai:{page}:0"
+@@ -170,10 +184,14 @@ def ai_groups(row: dict | None, ai_context: dict | None = None) -> list[dict]:
+                 key = f"ai:{page}:id{own_ids.index(o)}" if o in own_ids else f"ai:{page}:unassigned"
+             g = groups.setdefault(key, _group(page, "ai", "ai_evidence", f"ai:{o.get('variant') or env.get('variant')}", key, [],
+                                               {"version": o.get("version"), "policy": o.get("policy"), "profile": env.get("profile")}))
++            if "@" in key:
++                g["association_identity"] = assoc["target"]
+             if role != "own" and o.get("field") == "identity":
+                 g["facts"].append(_fact("referenced_identity", o["value"], "observed_reference", role=role))
+                 continue
+-            g["facts"].append(_fact(o.get("field"), o["value"], state_of(o), ai_state=o.get("state")))
++            state = "held" if status and status.startswith("held:") else state_of(o)
++            extra = {k: v for k, v in (("target", o.get("target")), ("association", status)) if v}
++            g["facts"].append(_fact(o.get("field"), o["value"], state, ai_state=o.get("state"), **extra))
+             if key.endswith(":unassigned"):
+                 g["unassigned_component"] = True
+     return list(groups.values())
+@@ -208,8 +226,21 @@ def _same(field: str, truth, value) -> bool:
+ 
+ def associate_group(g: dict, exp_by_page: dict, exp_all: list[dict]) -> tuple[dict | None, str]:
+     """(truth component, how): identity | cross_page | single_component | single_component_wrong_identity |
+-    unassociated | no_component. Only asserted identities associate by value."""
++    unassociated | no_component. Only asserted identities associate by value. A group of retained facts whose
++    association is their own recorded target (`association_identity`, review 09) associates by that target only:
++    target | target_cross_page | target_unmatched -- never by the page's other component."""
+     here = exp_by_page.get(g["page"], [])
++    if g.get("association_identity"):
++        target = g["association_identity"]
++        for strength in ("exact", "suffix"):
++            for e in here:
++                if ev4.reference_truth(e.get("reference"))[0] == "readable" and v3.same_identity(v3.literal(e["reference"]), target) == strength:
++                    return e, "target"
++        for e in exp_all:
++            if e["page"] != g["page"] and ev4.reference_truth(e.get("reference"))[0] == "readable" and \
++                    v3.same_identity(v3.literal(e["reference"]), target) in ("exact", "suffix"):
++                return e, "target_cross_page"
++        return None, "target_unmatched"
+     ids = [f["value"] for f in g["facts"] if f["field"] == "identity" and f["state"] in ASSERTED]
+     for strength in ("exact", "suffix"):
+         for e in here:
+@@ -234,7 +265,8 @@ def judge_group(g: dict, e: dict | None, how: str, negative_page: bool) -> list[
+     for f in g["facts"]:
+         field, state = f["field"], f["state"]
+         asserted = state in ASSERTED
+-        rec = {"field": field, "value": f["value"], "state": state, "how": how}
++        rec = {"field": field, "value": f["value"], "state": state, "how": how,
++               **{k: f[k] for k in ("target", "association") if f.get(k)}}
+         if field not in FIELDS:
+             rec["outcome"] = "not_scored"
+         elif negative_page:
+@@ -268,12 +300,13 @@ def score_layer(groups: list[dict], exp: list[dict], no_record: set, unvalidated
+         if g["page"] not in labelled_pages or g["page"] in unvalidated:
+             for f in g["facts"]:
+                 judged.append({"field": f["field"], "value": f["value"], "state": f["state"], "how": "unscored_page",
+-                               "outcome": "unscored_page", "page": g["page"], "reader": g["reader"], "group": g["component"], "expected": None})
++                               "outcome": "unscored_page", "page": g["page"], "reader": g["reader"], "group": g["component"], "expected": None,
++                               **{k: f[k] for k in ("target", "association") if f.get(k)}})
+             association["unscored_page"] += 1
+             continue
+         negative_page = g["page"] in no_record and not exp_by_page.get(g["page"])
+         e, how = associate_group(g, exp_by_page, exp)
+-        if negative_page and how != "cross_page":
++        if negative_page and how not in ("cross_page", "target_cross_page"):
+             # a no-record page: only a copy of the document's own identity from another page associates (as .4 does);
+             # anything else asserted there is a false positive
+             e, how = None, "negative_page"
+@@ -373,8 +406,8 @@ def evaluate(labels: dict, page_labels: dict | None, rows: dict, corrections: li
+         pages_with_components = {e["page"] for e in exp}
+         labelled_pages = pages_with_components | no_record if page_labelled else {1}
+         raw = record_groups(row) + observation_groups(row)
+-        ai = ai_groups(row, ai_context)
+-        ai_state = ai_envelope(row, ai_context)[1]
++        ai = ai_groups(row, ai_context, key)
++        ai_state = ai_envelope(row, ai_context, key)[1]
+         entry = dict(by_doc[key])
+         entry["ai_evidence_state"] = ai_state
+         entry.pop("raw", None)
+diff --git a/backend/tests/test_m2_eval5.py b/backend/tests/test_m2_eval5.py
+index 6195ebc..c039a76 100644
+--- a/backend/tests/test_m2_eval5.py
++++ b/backend/tests/test_m2_eval5.py
+@@ -22,9 +22,13 @@ def obs(field, value, state="validated", page=1, **kw):
+     return {"page": page, "kind": "ai_evidence", "field": field, "value": value, "state": state, **kw}
+ 
+ 
++SOURCE = "a" * 64   # the fixture's bytes: its AI evidence records the hash it was read from (review 09, R9-03)
++
++
+ def rows(ai=(), records=(), observations=()):
+-    return {"EP-1/a.pdf": {"state": "fresh", "extracted": {"records": list(records), "observations": list(observations),
+-                                                           "coverage": {"outcome": "complete"}, "ai_evidence": {"observations": list(ai)}}}}
++    return {"EP-1/a.pdf": {"state": "fresh", "sha256": SOURCE,
++                           "extracted": {"records": list(records), "observations": list(observations), "coverage": {"outcome": "complete"},
++                                         "ai_evidence": {"observations": list(ai), "read_sha256": SOURCE}}}}
+ 
+ 
+ LEGACY_AI = {"profile": None, "variant": None}   # the tests' AI rows are flat review 06 envelopes: context "unknown|unknown"
+diff --git a/backend/tests/test_m2_review09.py b/backend/tests/test_m2_review09.py
+new file mode 100644
+index 0000000..228e51e
+--- /dev/null
++++ b/backend/tests/test_m2_review09.py
+@@ -0,0 +1,464 @@
++"""M2 review 09: usable reads (R9-01), retained facts keep their association (R9-02), unknown source bytes are not
++exact-file evidence (R9-03), a heading is confirmed only without item evidence (R9-04), and the ledger's documented
++amendment behaviour. Scripted providers only -- no model is called. Written to run unchanged on the review 08
++candidate (e02a8c1), where the R9 cases fail on behaviour: every new key is read with `.get`, and the behavioural
++assertion of each test comes first."""
++from types import SimpleNamespace
++
++import pymupdf
++import pytest
++
++from app.ai import evidence_reader as er
++from app.ai import ledger as L
++from app.ai.provider import RecordingProvider
++from app.models import Project, ProjectDocument, ResultCache, RoleEnum
++
++from .conftest import make_user
++from .test_evidence_reader import _run as _er_run
++
++SHA = "9" * 64
++LEGEND = ["A = APPROVED", "B = APPROVED AS NOTED", "C = REVISE AND RESUBMIT"]
++APPROVAL = {"options": LEGEND, "marked": "B = APPROVED AS NOTED", "mark": "tick", "actor": "consultant"}
++UNMARKED = {"options": LEGEND, "marked": "", "mark": "none", "actor": "consultant"}
++RESUBMIT = {"options": LEGEND, "marked": "C = REVISE AND RESUBMIT", "mark": "tick", "actor": "consultant"}
++
++
++def timeout():
++    e = RuntimeError("the CLI did not answer")
++    e.kind = "timeout"
++    return e
++
++
++def discover(identity="X-SD-1", revision="", decision=None, other_numbers=()):
++    d = decision or {}
++    return {"page_kind": "review_form", "own_identity": identity, "own_identity_label": "Drawing No",
++            "own_identity_region": [760, 900, 900, 950] if identity else [], "own_revision": revision, "own_revision_label": "REV",
++            "own_revision_region": [900, 900, 990, 950] if revision else [], "decision_options_printed": d.get("options", []),
++            "decision_marked_option": d.get("marked", ""), "decision_mark_type": d.get("mark", "none"),
++            "decision_actor": d.get("actor", "unknown"), "decision_region": [100, 100, 400, 300] if d else [],
++            "other_numbers": list(other_numbers), "notes": ""}
++
++
++def read(value, legible=True):
++    return {"label_text": "", "value": value, "legible": legible, "other_values_in_crop": []}
++
++
++ILLEGIBLE = {"label_text": "", "value": "", "legible": False, "other_values_in_crop": []}
++
++
++def decision_read(marked="B = APPROVED AS NOTED", mark="tick", legible=True):
++    return {"options_printed": LEGEND if legible else [], "marked_option": marked, "mark_type": mark,
++            "actor": "consultant" if legible else "unknown", "legible": legible}
++
++
++# --- a persisted row read through the real stage entry point, reloaded after every step -------------------------------
++
++
++@pytest.fixture()
++def doc_row(db_session, tmp_path, monkeypatch):
++    from app.ai import submittal_reader
++
++    monkeypatch.setattr(submittal_reader, "available", lambda project, provider=None: None)
++    pdf = pymupdf.open()
++    page = pdf.new_page(width=1684, height=1190)
++    page.insert_text((1300, 1100), "Drawing No X-SD-1 X-SD-9", fontsize=9)
++    page.insert_text((1540, 1100), "REV 02 03", fontsize=9)
++    page.insert_text((200, 200), "B = APPROVED AS NOTED", fontsize=9)
++    path = tmp_path / "form.pdf"
++    pdf.save(path)
++    user = make_user(db_session, "r9@test.local", RoleEnum.admin)
++    project = Project(ep_number="R9", project_name="r9", source_folder_path=str(tmp_path), created_by_id=user.id)
++    db_session.add(project)
++    db_session.flush()
++    row = ProjectDocument(project_id=project.id, path=str(path), relative_path="form.pdf", filename="form.pdf", role="document",
++                          state="fresh", sha256=SHA, extracted={"records": [], "observations": [], "profile": "default"})
++    db_session.add(row)
++    db_session.commit()
++    return SimpleNamespace(db=db_session, project=project, id=row.id, path=path)
++
++
++def stage(d, answers, *, provider=None):
++    d.db.query(ResultCache).delete()            # every step asks again: nothing comes back from the result cache
++    d.db.commit()
++    row = d.db.get(ProjectDocument, d.id)
++    er.evidence_stage(d.db, d.project, [(row, d.path)], provider=provider or RecordingProvider(answers), variant="EV1", profile="default")
++    d.db.commit()
++    d.db.expire_all()
++    return d.db.get(ProjectDocument, d.id).extracted["ai_evidence"]
++
++
++def current(ai, sha=SHA):
++    got = er.evidence_for(ai, sha256=sha, profile="default", variant="EV1")
++    assert got["state"] == "current", got
++    return got
++
++
++def field(ai, key):
++    return current(ai)["envelope"]["pages"]["1"]["fields"][key]
++
++
++def fact(ai, key):
++    """(value, state, attempt) of a field's current evidence."""
++    entry = field(ai, key)
++    o = entry["observations"][0]
++    return o.get("value"), o.get("state"), entry["provenance"]["attempt"]
++
++
++def last(ai):
++    page = ai["attempts"][-1]["pages"]["1"]
++    return page if isinstance(page, dict) else {"outcome": page, "fields": {}}
++
++
++def ledger_provider(tmp_path, answers, requests):
++    led = L.Ledger(str(tmp_path / f"led-{requests}.sqlite"), f"r9-{requests}", L.Limits(requests=requests))
++    inner = RecordingProvider(answers)
++    inner.name = "claude-code"
++    return L.LedgerProvider(inner, led)
++
++
++# --- R9-01: a returned response is not a usable read -------------------------------------------------------------------
++
++
++def test_an_illegible_blind_identity_keeps_the_last_good_identity(doc_row):
++    ai = stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    assert fact(ai, "own:identity") == ("X-SD-1", "validated", 1)
++    # the reviewer's case: discovery reads X-SD-9, the blind read of the region returns legible=false
++    ai = stage(doc_row, [discover("X-SD-9"), ILLEGIBLE])
++    assert fact(ai, "own:identity") == ("X-SD-1", "validated", 1), "a discovery-only candidate never replaces a good field"
++    assert field(ai, "own:identity")["history"] == []
++    assert fact(ai, "own:decision")[:2] == ("ANN", "validated")
++    page = last(ai)
++    assert page["outcome"] == "partial" and page["fields"]["own:identity"] == "unusable:illegible"
++    assert page.get("requests", {}).get("own:identity") == "ok", "the request completed; the field is not usable"
++    assert [(u["field"], u["value"], u["state"]) for u in ai["attempts"][-1].get("unapplied", [])] == [("identity", "X-SD-9", "candidate")]
++    # a later legible read replaces it under the existing contract, keeping the old value as history
++    ai = stage(doc_row, [discover("X-SD-9"), read("X-SD-9")])
++    assert fact(ai, "own:identity") == ("X-SD-9", "validated", 3)
++    assert [h["observations"][0]["value"] for h in field(ai, "own:identity")["history"]] == ["X-SD-1"]
++
++
++def test_an_illegible_blind_revision_keeps_the_last_good_revision(doc_row):
++    stage(doc_row, [discover("X-SD-1", revision="02"), read("X-SD-1"), read("02")])
++    ai = stage(doc_row, [discover("X-SD-1", revision="03"), read("X-SD-1"), ILLEGIBLE])
++    assert fact(ai, "own:revision") == ("02", "validated", 1)
++    assert last(ai)["fields"]["own:revision"] == "unusable:illegible" and last(ai)["fields"]["own:identity"] == "completed"
++    # a legible blind reading with no value is not a usable read either (there is no verified absence of a revision)
++    ai = stage(doc_row, [discover("X-SD-1", revision="03"), read("X-SD-1"), read("", legible=True)])
++    assert fact(ai, "own:revision") == ("02", "validated", 1)
++    assert last(ai)["fields"]["own:revision"] == "unusable:empty"
++
++
++def test_an_unmarked_discovery_and_an_illegible_blind_read_never_erase_a_decision(doc_row):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1", decision=UNMARKED), read("X-SD-1"), decision_read("", "unclear", legible=False)])
++    assert fact(ai, "own:decision") == ("ANN", "validated", 1), "no legible blind confirmation of absence"
++    assert last(ai)["fields"]["own:decision"] == "unusable:illegible"
++    assert field(ai, "own:decision")["history"] == []
++    assert [u["field"] for u in ai["attempts"][-1].get("unapplied", [])] == ["decision"]
++
++
++def test_a_marked_discovery_and_an_illegible_blind_read_never_replace_a_decision(doc_row):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1", decision=RESUBMIT), read("X-SD-1"), decision_read("", "unclear", legible=False)])
++    assert fact(ai, "own:decision") == ("ANN", "validated", 1)
++    assert last(ai)["fields"]["own:decision"] == "unusable:illegible"
++
++
++def test_a_first_read_with_an_illegible_blind_answer_is_incomplete_never_verified(doc_row):
++    ai = stage(doc_row, [discover("X-SD-1", decision=RESUBMIT), read("X-SD-1"), decision_read("", "unclear", legible=False)])
++    entry = field(ai, "own:decision")
++    assert entry["status"] == "incomplete" and entry["observations"][0]["state"] != "validated"
++    assert "own:decision" in " ".join(current(ai)["incomplete"])
++
++
++def test_a_legible_unmarked_block_read_both_ways_supersedes(doc_row):
++    """Control: a genuinely completed, legible negative still supersedes (the old decision goes to history)."""
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1", decision=UNMARKED), read("X-SD-1"), decision_read("", "none")])
++    assert fact(ai, "own:decision") == (None, "no_decision_marked", 2)
++    assert field(ai, "own:decision")["history"][-1]["observations"][0]["value"] == "ANN"
++    assert last(ai)["fields"]["own:decision"] == "completed"
++
++
++def test_completed_conflicting_readings_stay_an_explicit_conflict(doc_row):
++    """Control: a legible blind reading that disagrees with discovery is completed evidence -- a conflict, not hidden."""
++    stage(doc_row, [discover("X-SD-1"), read("X-SD-1")])
++    ai = stage(doc_row, [discover("X-SD-9"), read("X-SD-1")])
++    value, state, attempt = fact(ai, "own:identity")
++    assert state == "conflict" and attempt == 2
++
++
++def test_timeout_and_budget_controls(doc_row, tmp_path):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-9", decision=UNMARKED), timeout(), timeout()])
++    assert fact(ai, "own:identity") == ("X-SD-1", "validated", 1) and fact(ai, "own:decision") == ("ANN", "validated", 1)
++    assert last(ai)["fields"]["own:identity"] == "failed:timeout"
++    ai = stage(doc_row, None, provider=ledger_provider(tmp_path, [discover("X-SD-9", decision=UNMARKED)], requests=1))
++    assert fact(ai, "own:identity") == ("X-SD-1", "validated", 1) and fact(ai, "own:decision") == ("ANN", "validated", 1)
++    assert last(ai)["fields"]["own:identity"] == "budget"
++
++
++# --- R9-02: a retained fact keeps its association ------------------------------------------------------------------------
++
++
++LABEL = {"doc": "EP-9/form.pdf", "ep": "9", "cohort": "c", "stratum": "s", "extension": ".pdf", "scan_like": False, "confidence": "high"}
++
++
++def score(ai, *, reference, decision, revision="00"):
++    """The AI layer's judgement of the labelled page (one component) against this evidence."""
++    from scripts import m2_eval5 as ev
++
++    doc = {**LABEL, "labels": {"kind": "shop-drawing cover", "reference": reference, "revision": revision, "decision": decision}}
++    rows = {LABEL["doc"]: {"state": "fresh", "sha256": SHA, "extracted": {"records": [], "profile": "default", "coverage": {"outcome": "complete"},
++                                                                         "ai_evidence": ai}}}
++    result = ev.evaluate({"documents": [doc]}, None, rows, ai_context={"variant": "EV1"})
++    layer = result["documents"][0]["layers"]["ai"]
++    return layer, result["totals"]
++
++
++def decisions(layer):
++    return [(j["value"], j["state"], j["outcome"]) for j in layer["judged"] if j["field"] == "decision"]
++
++
++def association(ai, key="own:decision"):
++    o = next(o for o in current(ai)["observations"] if er._field_key(o) == key)
++    return o.get("association") or {}
++
++
++def test_a_changed_identity_does_not_inherit_the_retained_decision(doc_row):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-9"), read("X-SD-9")])          # identity completed; no decision block seen
++    assert fact(ai, "own:identity") == ("X-SD-9", "validated", 2)
++    layer, _ = score(ai, reference="X-SD-9", decision="approved as noted")
++    # the retained ANN was validated for X-SD-1: never accepted, never recovered for X-SD-9
++    assert ("ANN", "validated", "correct") not in decisions(layer)
++    assert layer["components"][0]["fields"]["decision"] != "recovered_clean"
++    assert fact(ai, "own:decision") == ("ANN", "validated", 1), "the fact itself is kept, with its original target"
++    assert field(ai, "own:decision")["observations"][0]["target"] == "X-SD-1"
++    assert association(ai).get("status") == "held:target_changed" and association(ai).get("target") == "X-SD-1"
++    assert decisions(layer) == [("ANN", "held", "held_unassociated")], "held and visible, not dropped"
++    assert next(j for j in layer["judged"] if j["field"] == "decision").get("target") == "X-SD-1"
++
++
++def test_a_same_identity_retry_keeps_its_decision_associated(doc_row):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL), read("X-SD-1"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1"), read("X-SD-1")])
++    layer, _ = score(ai, reference="X-SD-1", decision="approved as noted")
++    assert decisions(layer) == [("ANN", "validated", "correct")] and layer["components"][0]["fields"]["decision"] == "recovered_clean"
++    assert association(ai).get("status", "current") == "current"   # a control: e02a8c1 records no association and passes
++
++
++def test_a_decision_with_no_usable_current_identity_associates_only_by_its_target():
++    """No AI identity on the page (the decision's target came from the deterministic reading): it is associated by its
++    recorded target, never by the page's other component."""
++    obs = [dict(page=1, component="own", field="decision", value="ANN", target="X-SD-1", state="validated")]
++    ai = er.merge_evidence(None, {"attempt": 1, "outcome": "complete", "observations": obs, "coverage": {"pages": [
++        {"page": 1, "outcome": "evidence", "fields": {"own:identity": "absent_by_discovery", "own:decision": "completed"}}]}},
++        sha256=SHA, profile="default", variant="EV1")
++    other, _ = score(ai, reference="X-SD-7", decision="approved as noted")
++    assert ("ANN", "validated", "correct") not in decisions(other) and other["components"][0]["fields"]["decision"] != "recovered_clean"
++    assert association(ai).get("status") == "by_target"
++    same, _ = score(ai, reference="X-SD-1", decision="approved as noted")
++    assert decisions(same) == [("ANN", "validated", "correct")], "its own target still associates"
++
++
++def test_a_changed_revision_holds_a_decision_made_for_the_earlier_revision(doc_row):
++    stage(doc_row, [discover("X-SD-1", revision="02", decision=APPROVAL), read("X-SD-1"), read("02"), decision_read()])
++    ai = stage(doc_row, [discover("X-SD-1", revision="03"), read("X-SD-1"), read("03")])
++    assert fact(ai, "own:revision") == ("03", "validated", 2)
++    layer, _ = score(ai, reference="X-SD-1", revision="03", decision="approved as noted")
++    assert ("ANN", "validated", "correct") not in decisions(layer)
++    assert field(ai, "own:decision")["observations"][0].get("target_revision") == "02"
++    assert association(ai).get("status") == "held:revision_changed"
++
++
++def test_multiple_components_on_a_page_keep_their_own_associations(doc_row):
++    stage(doc_row, [discover("X-SD-1", decision=APPROVAL, other_numbers=[{"role": "reviewed_drawing", "literal": "L-100"}]),
++                    read("X-SD-1"), decision_read()])
++    # the own identity changes to X-SD-9; the page now lists X-SD-1 as a referenced number: the ANN stays X-SD-1's
++    ai = stage(doc_row, [discover("X-SD-9", other_numbers=[{"role": "reviewed_drawing", "literal": "X-SD-1"}]), read("X-SD-9")])
++    layer, _ = score(ai, reference="X-SD-9", decision="approved as noted")
++    assert ("ANN", "validated", "correct") not in decisions(layer)
++    assert association(ai).get("status") == "held:target_changed"
++    refs = [(j["value"], j["state"]) for j in layer["judged"] if j["field"] == "referenced_identity"]
++    assert refs == [("X-SD-1", "observed_reference")], "the reference stays a reference"
++
++
++def test_a_legacy_fact_without_a_recorded_target_is_never_given_one():
++    legacy = {"version": "evidence-reader-2026-09-29.1", "policy": "evidence-policy-2026-09-29.1", "variant": "EV1", "read_sha256": SHA,
++              "observations": [{"page": 1, "field": "identity", "value": "X-SD-1", "state": "validated"},
++                               {"page": 1, "field": "decision", "value": "ANN", "state": "validated"}]}
++    got = er.evidence_for(legacy, sha256=SHA, profile="default", variant="EV1", accept_unknown_profile=True)
++    dec = next(o for o in got["observations"] if o["field"] == "decision")
++    assert "target" not in dec and (dec.get("association") or {}).get("status", "not_recorded") == "not_recorded"
++    from scripts import m2_eval5 as ev
++
++    doc = {**LABEL, "labels": {"kind": "shop-drawing cover", "reference": "X-SD-1", "revision": "00", "decision": "approved as noted"}}
++    rows = {LABEL["doc"]: {"state": "fresh", "sha256": SHA, "extracted": {"records": [], "profile": "default", "ai_evidence": legacy}}}
++    layer = ev.evaluate({"documents": [doc]}, None, rows, ai_context={"variant": "EV1", "accept_unknown_profile": True})["documents"][0]["layers"]["ai"]
++    assert decisions(layer) == [("ANN", "validated", "correct")], "scored as it always was: grouped with its page's identity"
++    assert next(j for j in layer["judged"] if j["field"] == "decision").get("target") is None
++
++
++
++def test_target_and_association_survive_on_unscored_pages_too():
++    from scripts import m2_eval5 as ev
++
++    g = {"page": 7, "layer": "ai", "kind": "ai_evidence", "reader": "ai:EV1", "component": "ai:7:own@X-SD-1", "association_identity": "X-SD-1",
++         "facts": [{"field": "decision", "value": "ANN", "state": "held", "target": "X-SD-1", "association": "held:target_changed"}]}
++    judged = ev.score_layer([g], [], set(), set(), {1})["judged"]
++    assert [(j["outcome"], j.get("target"), j.get("association")) for j in judged] == [("unscored_page", "X-SD-1", "held:target_changed")]
++
++# --- R9-03: unknown bytes are not exact-file evidence --------------------------------------------------------------------
++
++
++def _good(sha=SHA):
++    obs = [dict(page=1, component="own", field="identity", value="X-SD-1", state="validated")]
++    return er.merge_evidence(None, {"attempt": 1, "outcome": "complete", "observations": obs,
++                                    "coverage": {"pages": [{"page": 1, "outcome": "evidence", "fields": {"own:identity": "completed"}}]}},
++                             sha256=sha, profile="default", variant="EV1")
++
++
++def _unknown():
++    ai = _good()
++    env = ai["envelopes"]["default|EV1"]
++    env["read_sha256"] = None
++    for f in env["pages"]["1"]["fields"].values():
++        f["provenance"]["read_sha256"] = None
++    return ai
++
++
++def test_unknown_envelope_and_field_hashes_are_not_current():
++    got = er.evidence_for(_unknown(), sha256=SHA, profile="default", variant="EV1")
++    assert got["state"] != "current" and not got.get("observations")
++    assert got["state"] == "unknown_source"
++
++
++def test_legacy_flat_evidence_without_a_hash_is_not_current_even_with_the_legacy_profile_declared():
++    flat = {"version": "evidence-reader-2026-09-29.1", "policy": "evidence-policy-2026-09-29.1", "variant": "EV1",
++            "observations": [{"page": 1, "field": "identity", "value": "L-1", "state": "validated"}]}
++    got = er.evidence_for(flat, sha256=SHA, profile="default", variant="EV1", accept_unknown_profile=True)
++    assert got["state"] == "unknown_source" and not got.get("observations")
++    with_hash = {**flat, "read_sha256": SHA}
++    assert er.evidence_for(with_hash, sha256=SHA, profile="default", variant="EV1", accept_unknown_profile=True)["state"] == "current"
++
++
++def test_known_mismatch_is_stale_and_an_exact_match_is_current():
++    assert er.evidence_for(_good(), sha256="0" * 64, profile="default", variant="EV1")["state"] == "stale"
++    assert er.evidence_for(_good(), sha256=SHA, profile="default", variant="EV1")["state"] == "current"
++
++
++def test_a_request_without_a_source_hash_gets_no_exact_file_evidence():
++    got = er.evidence_for(_good(), sha256=None, profile="default", variant="EV1")
++    assert got["state"] != "current" and got["state"] == "source_required"
++
++
++def test_mixed_and_partial_rereads_never_relabel_retained_fields():
++    ai = _unknown()
++    rev = [dict(page=1, component="own", field="revision", value="02", state="validated")]
++    ai = er.merge_evidence(ai, {"attempt": 2, "outcome": "partial", "observations": rev, "coverage": {"pages": [
++        {"page": 1, "outcome": "partial", "fields": {"own:identity": "failed:timeout", "own:revision": "completed"}}]}},
++        sha256=SHA, profile="default", variant="EV1")
++    fields = ai["envelopes"]["default|EV1"]["pages"]["1"]["fields"]
++    assert fields["own:identity"]["provenance"]["read_sha256"] is None, "the retained field keeps its (unknown) source"
++    assert fields["own:revision"]["provenance"]["read_sha256"] == SHA
++    got = er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")
++    assert [o["field"] for o in got.get("observations") or []] == ["revision"], "only the field read from these bytes is current"
++    assert got["state"] == "current" and got.get("withheld") == {"1:own:identity": "unknown_source"}
++
++
++def test_an_explicit_historical_binding_is_a_separate_manifest_backed_mode():
++    ai = _unknown()
++    assert er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1")["state"] == "unknown_source"
++    bound = er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1", historical_source={"manifest": "RUN-X.json", "sha256": SHA})
++    assert bound["state"] == "current" and bound["mode"] == "historical" and bound["observations"][0]["source_binding"] == "historical:RUN-X.json"
++    other = er.evidence_for(ai, sha256=SHA, profile="default", variant="EV1", historical_source={"manifest": "RUN-X.json", "sha256": "0" * 64})
++    assert other["state"] == "unknown_source", "a manifest binding other bytes establishes nothing"
++    assert er.evidence_for(_good("1" * 64), sha256=SHA, profile="default", variant="EV1",
++                           historical_source={"manifest": "RUN-X.json", "sha256": SHA})["state"] == "stale", "never over a known mismatch"
++
++
++def test_the_evaluator_scores_unknown_bytes_only_under_a_declared_historical_manifest():
++    from scripts import m2_eval5 as ev
++
++    doc = {**LABEL, "labels": {"kind": "shop-drawing cover", "reference": "X-SD-1", "revision": "00", "decision": "rejected"}}
++    rows = {LABEL["doc"]: {"state": "fresh", "sha256": SHA, "extracted": {"records": [], "profile": "default", "ai_evidence": _unknown()}}}
++    plain = ev.evaluate({"documents": [doc]}, None, rows, ai_context={"variant": "EV1"})
++    assert plain["totals"]["ai_evidence_states"] == {"unknown_source": 1}
++    assert not [j for j in plain["documents"][0]["layers"]["ai"]["judged"] if j["field"] == "identity"]
++    ctx = {"variant": "EV1", "historical_source": {"manifest": "RUN-X.json", "sha256_by_doc": {LABEL["doc"]: SHA}}}
++    bound = ev.evaluate({"documents": [doc]}, None, rows, ai_context=ctx)
++    assert [(j["value"], j["outcome"]) for j in bound["documents"][0]["layers"]["ai"]["judged"] if j["field"] == "identity"] == [("X-SD-1", "correct")]
++
++
++# --- R9-04: a heading is confirmed only without item evidence ----------------------------------------------------------
++
++
++@pytest.mark.parametrize("row, blind, state", [
++    ({"part_number": None, "quantity": None, "description": "( 2 ) Dual Input Module"}, {"description": "Dual Input Module"}, "conflict"),
++    ({"part_number": None, "quantity": None, "description": "Dual Input Module"}, {"description": "( 2 ) Dual Input Module"}, "conflict"),
++    ({"part_number": None, "quantity": 0}, {}, "conflict"),
++    ({"part_number": None, "quantity": "0"}, {}, "conflict"),
++    ({"part_number": None, "quantity": None}, {"quantity": 0}, "conflict"),
++    ({"part_number": "P-1", "quantity": None}, {}, "conflict"),
++    ({"part_number": None, "quantity": ""}, {"quantity": "  "}, "not_an_item"),
++    ({"part_number": None, "quantity": None, "description": "FIRE ALARM SYSTEM"}, {"description": "FIRE ALARM SYSTEM"}, "not_an_item"),
++    ({"part_number": None, "quantity": "0"}, {"legible": False}, "unverified"),
++])
++def test_a_heading_answer_against_item_evidence(row, blind, state):
++    got = er.validate_boq_row(row, {"row_is_heading": True, "legible": True, **blind})
++    assert got["state"] == state
++    if state == "conflict":
++        assert got.get("row_type") == "disputed"
++
++
++def test_numeric_zero_is_a_present_quantity_in_the_item_comparison_too():
++    got = er.validate_boq_row({"part_number": "P-1", "quantity": "0"}, {"part_number": "P-1", "quantity": 0, "legible": True})
++    assert got["state"] == "validated" and got["quantity"] == "verified"
++
++
++def _sheet(lines):
++    """A sheet printing each line's description at its own row, so that every row crop is a distinct image (identical
++    crops would come back from the result cache as the first row's answer)."""
++    doc = pymupdf.open()
++    page = doc.new_page(width=842, height=595)
++    for line in lines:
++        page.insert_text((40, line["y_px"] * 72 / 300 + 3), f"{line['y_px']} {line.get('description') or ''}", fontsize=8)
++    return doc
++
++
++def _line(n, **kw):
++    return {"page": 1, "y_px": 300 + 200 * n, "table_span": [100, 3000], "quantity_span": [100, 300], **kw}
++
++
++def test_the_normal_verifier_carries_the_readers_description_and_keeps_every_line(db_session):
++    lines = [_line(0, catalog_no=None, quantity=None, description="( 2 ) Dual Input Module"),
++             _line(1, catalog_no=None, quantity=0, description="Spare"),
++             _line(2, catalog_no=None, quantity="0", description="Spare"),
++             _line(3, catalog_no="P-1", quantity=None, description="Relay"),
++             _line(4, catalog_no=None, quantity=None, description="FIRE ALARM SYSTEM"),
++             _line(5, catalog_no=None, quantity="", description="( 4 ) Sounder")]
++    heading = {"part_number": "", "quantity": "", "description": "Dual Input Module", "legible": True, "row_is_heading": True}
++    answers = [heading, dict(heading, description="Spare"), dict(heading, description="Spare"), dict(heading, description="Relay"),
++               dict(heading, description="FIRE ALARM SYSTEM"), dict(heading, description="Sounder", legible=False)]
++    results = er.verify_boq_rows(_er_run(db_session, RecordingProvider(answers), "EV2"), _sheet(lines), sha256="5" * 64,
++                                 extraction={"lines": [dict(l) for l in lines], "issues": []}, render_dpi=300)
++    assert [r["state"] for r in results] == ["conflict", "conflict", "conflict", "conflict", "not_an_item", "unverified"]
++    assert len(results) == len(lines), "every line is reported; none removed"
++    assert [r["row"]["quantity"] for r in results] == [None, 0, "0", None, None, ""], "the reader's literals are kept"
++    assert [r["row"]["description"] for r in results] == [l["description"] for l in lines]
++    assert "( 2 )" in " ".join(results[0]["reasons"])
++
++
++# --- the ledger's documented amendment behaviour (R8-03, accepted) -------------------------------------------------------
++
++
++def test_an_open_handle_reads_the_amended_policy_and_a_new_handle_with_the_old_limits_is_refused(tmp_path):
++    path = str(tmp_path / "ledger.sqlite")
++    open_handle = L.Ledger(path, "amend", L.Limits(requests=1))
++    open_handle.settle(open_handle.reserve("t", 1, 1), input_tokens=1, output_tokens=1)
++    L.Ledger(path, "amend").amend_limits(L.Limits(requests=2), authorized_by="owner (test)", reason="declared addendum")
++    open_handle.reserve("t", 1, 1)            # the already-open handle reserves under the saved, amended policy
++    with pytest.raises(L.LedgerConfigMismatch):
++        L.Ledger(path, "amend", L.Limits(requests=1))
++    assert "already open" in L.__doc__ and "newly opened" in L.__doc__

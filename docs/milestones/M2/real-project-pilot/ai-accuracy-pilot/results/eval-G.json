@@ -1,0 +1,6067 @@
+{
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "register_evaluator": "m2-pilot-eval-2026-09-29.4",
+ "ai_context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1"
+  ],
+  "declared": "pilot arm G"
+ },
+ "documents": [
+  {
+   "doc": "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-105-BASEMENT-01 FLOOR.pdf",
+   "ep": "17428",
+   "cohort": "exploration",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "MEP-FA-B01-005",
+      "printed_revision": "01",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "matched",
+     "fields": {
+      "reference": "tp",
+      "revision": "tp",
+      "decision": "tn",
+      "projection_revision": "tp"
+     },
+     "emissions": 1,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [
+    {
+     "page": 1,
+     "how": "same_page",
+     "reference": "MEP-FA-B01-005",
+     "status": "UR",
+     "printed_revision": "01",
+     "expected": 0
+    }
+   ],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "observed",
+       "how": "identity",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "MEP-FA-B01-005",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "accepted",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "record:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "observed",
+       "how": "identity",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "held",
+       "how": "single_component",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "validated",
+       "how": "target",
+       "target": "MEP-FA-B01-005",
+       "association": "by_target",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@MEP-FA-B01-005",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SHEET NO: 1/1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SCALE: 1:125 @ A1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "129-656",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "01 | AHMAD | SALEEM | SALEEM | 10/11/2019 | REVIEWED AS PER CONSULTANT COMMENTS",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "00 | AHMAD | SALEEM | SALEEM | 07/10/2019 | ISSUED FOR APPROVAL",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "FL1.008.207",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "FL1.026.207",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2,
+      "single_component": 8,
+      "target": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 2
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "MEP-FA-B01-005",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "MEP-FA-B01-005",
+       "state": "held",
+       "how": "single_component",
+       "truth": "MEP-FA-B01-005",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "01",
+       "state": "validated",
+       "how": "target",
+       "target": "MEP-FA-B01-005",
+       "association": "by_target",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@MEP-FA-B01-005",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SHEET NO: 1/1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SCALE: 1:125 @ A1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "129-656",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "01 | AHMAD | SALEEM | SALEEM | 10/11/2019 | REVIEWED AS PER CONSULTANT COMMENTS",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "00 | AHMAD | SALEEM | SALEEM | 07/10/2019 | ISSUED FOR APPROVAL",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "FL1.008.207",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "FL1.026.207",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 8,
+      "target": 1
+     },
+     "precision": {
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "held_only": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "MEP-FA-B01-005",
+        "printed_revision": "01",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "held_only",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/SD recieved from Trinity/TELEPHONE LAYOUTs/TELEPHONE LAYOUT/03#END-3B TELEPHONE DATA/TEL-02-END-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-SUB-BIND.pdf",
+   "ep": "19144",
+   "cohort": "exploration",
+   "stratum": "shop_drawing",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "TES/1343/NTH-END-3B/SD/TEL-02",
+      "printed_revision": "1",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TES/1343/NTH-END-3B/SD/TEL-02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "TES/1343/NTH-END-3B/SD/TEL-02",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-02",
+        "printed_revision": "1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TES/1343/NTH-END-3B/SD/TEL-02",
+       "state": "observed",
+       "how": "identity",
+       "truth": "TES/1343/NTH-END-3B/SD/TEL-02",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "1",
+       "state": "observed",
+       "how": "identity",
+       "truth": "R1",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-02",
+        "printed_revision": "1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-02",
+        "printed_revision": "1",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf",
+   "ep": "17428",
+   "cohort": "exploration",
+   "stratum": "drawing_ifc_input",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "AR-101",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 1
+     },
+     "precision": {
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "AR-101",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "observed",
+       "how": "single_component",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "AR-101",
+       "state": "validated",
+       "how": "identity",
+       "truth": "AR-101",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "validated",
+       "how": "identity",
+       "target": "AR-101",
+       "association": "current",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1159",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1209656",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-301",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-303",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-302",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4B+G+14",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 7,
+      "identity": 1
+     },
+     "precision": {
+      "revision": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "revision:accepted": {
+       "correct": 1
+      },
+      "identity:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "AR-101",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "AR-101",
+       "state": "validated",
+       "how": "identity",
+       "truth": "AR-101",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "validated",
+       "how": "identity",
+       "target": "AR-101",
+       "association": "current",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1159",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1209656",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-301",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-303",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "AR-302",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4B+G+14",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "single_component": 6
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:accepted": {
+       "correct": 1
+      },
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "AR-101",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf",
+   "ep": "17428",
+   "cohort": "exploration",
+   "stratum": "drawing_ifc_input",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "BH2031-ID-OFF-23-109-00",
+      "printed_revision": "H",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BH2031-ID-OFF-23-109-00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "BH2031-ID-OFF-23-109-00",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "H",
+       "state": "observed",
+       "how": "identity",
+       "truth": "H",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "BH2031-ID-OFF-23-109-00",
+        "printed_revision": "H",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BH2031-ID-OFF-23-109-00",
+       "state": "observed",
+       "how": "identity",
+       "truth": "BH2031-ID-OFF-23-109-00",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "H",
+       "state": "observed",
+       "how": "identity",
+       "truth": "H",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "BH2031-ID-OFF-23-1",
+       "state": "held",
+       "how": "single_component",
+       "truth": "BH2031-ID-OFF-23-109-00",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "H",
+       "state": "held",
+       "how": "target",
+       "target": "BH2031-ID-OFF-23-109-00",
+       "association": "held:target_changed",
+       "truth": "H",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@BH2031-ID-OFF-23-109-00",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "BH2031",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "08/03/2021",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref11",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DH-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref12",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DG-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref13",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DGS-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref14",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DT-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref15",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DTS-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref16",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref17",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-02",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref18",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-03",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref19",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A - 03/01/2020 - ISSUED FOR APPROVAL - NR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-04",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref20",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-05",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref21",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-06",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref22",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-07",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref23",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-08",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref24",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-09",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref25",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref26",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-009",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref27",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-010",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref28",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-011",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref29",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B - 02/04/2020 - ISSUED FOR APPROVAL - JC - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-012",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref30",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-008",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref31",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-004",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref32",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-009A",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref33",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-001",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref34",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-002",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref35",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-013",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref36",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-014",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref37",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-015",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref38",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-016",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref39",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "C - 12/07/2020 - ISSUED FOR APPROVAL - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-017",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref40",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-018",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref41",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-021",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref42",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-022",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref43",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-023",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref44",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-024",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref45",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-026",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref46",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-027",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref47",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref48",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-029",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref49",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "D - 03/09/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref50",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref51",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref52",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "E - 24/09/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "F - 12/11/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "G - 31/01/2021 - ISSUED FOR APPROVAL - MQ - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "H - 08/03/2021 - ISSUED FOR TENDER - MQ - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1:100",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "single_component": 54,
+      "target": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "BH2031-ID-OFF-23-109-00",
+        "printed_revision": "H",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "BH2031-ID-OFF-23-1",
+       "state": "held",
+       "how": "single_component",
+       "truth": "BH2031-ID-OFF-23-109-00",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "H",
+       "state": "held",
+       "how": "target",
+       "target": "BH2031-ID-OFF-23-109-00",
+       "association": "held:target_changed",
+       "truth": "H",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@BH2031-ID-OFF-23-109-00",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "BH2031",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "08/03/2021",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref11",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DH-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref12",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DG-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref13",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DGS-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref14",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DT-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref15",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DTS-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref16",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-01",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref17",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-02",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref18",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-03",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref19",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A - 03/01/2020 - ISSUED FOR APPROVAL - NR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-04",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref20",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-05",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref21",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-06",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref22",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-07",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref23",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-08",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref24",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "WT-09",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref25",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref26",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-009",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref27",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-010",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref28",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-011",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref29",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B - 02/04/2020 - ISSUED FOR APPROVAL - JC - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-012",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref30",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-008",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref31",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-004",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref32",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-009A",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref33",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-001",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref34",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-002",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref35",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-013",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref36",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-014",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref37",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-015",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref38",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-016",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref39",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "C - 12/07/2020 - ISSUED FOR APPROVAL - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-017",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref40",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-018",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref41",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-021",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref42",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-022",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref43",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-023",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref44",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-024",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref45",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-026",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref46",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-027",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref47",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref48",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "109-029",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref49",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "D - 03/09/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref50",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref51",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref52",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "E - 24/09/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "F - 12/11/2020 - REVISED DETAILED DESIGN - JR - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "G - 31/01/2021 - ISSUED FOR APPROVAL - MQ - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "H - 08/03/2021 - ISSUED FOR TENDER - MQ - AP",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1:100",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 54,
+      "target": 1
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "held_only": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "BH2031-ID-OFF-23-109-00",
+        "printed_revision": "H",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "held_only",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf",
+   "ep": "23323",
+   "cohort": "exploration",
+   "stratum": "approval_sample",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "medium",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "DJ-295-0-EN-DST-07-ASS-0301",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DJ-295-0-EN-DST-07-ASS-0301",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "DJ-296-ENJDST-07-ASS-0301",
+       "state": "held",
+       "how": "single_component",
+       "truth": "DJ-295-0-EN-DST-07-ASS-0301",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "validated",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "DJ-296-ENJDST-07-ASS-0301",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DJ-295",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10221",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10314",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10272",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "26.05.2022",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "00",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "513-0565",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 8
+     },
+     "precision": {
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DJ-295-0-EN-DST-07-ASS-0301",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "DJ-296-ENJDST-07-ASS-0301",
+       "state": "held",
+       "how": "single_component",
+       "truth": "DJ-295-0-EN-DST-07-ASS-0301",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "validated",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "DJ-296-ENJDST-07-ASS-0301",
+       "truth": "R0",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DJ-295",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10221",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10314",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "10272",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "26.05.2022",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "00",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "513-0565",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 8
+     },
+     "precision": {
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "revision:accepted": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DJ-295-0-EN-DST-07-ASS-0301",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+   "ep": "19144",
+   "cohort": "exploration",
+   "stratum": "approval_sample",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "TES/1343/NTH-END-3B/SD/TEL-00",
+      "printed_revision": "1",
+      "decision": "ANN",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "missed"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-00",
+        "printed_revision": "1",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TES/1343",
+       "state": "held",
+       "how": "single_component",
+       "truth": "TES/1343/NTH-END-3B/SD/TEL-00",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "held",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "TES/1343",
+       "truth": "R1",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "(PH-11)",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "519/214",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1:75",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "09-09-19",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25 SEP 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 6
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-00",
+        "printed_revision": "1",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "TES/1343",
+       "state": "held",
+       "how": "single_component",
+       "truth": "TES/1343/NTH-END-3B/SD/TEL-00",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "02",
+       "state": "held",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "TES/1343",
+       "truth": "R1",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "(PH-11)",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "519/214",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1:75",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "09-09-19",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25 SEP 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 6
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "missed": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "TES/1343/NTH-END-3B/SD/TEL-00",
+        "printed_revision": "1",
+        "decision": "ANN"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "missed"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf",
+   "ep": "16830",
+   "cohort": "exploration",
+   "stratum": "reply",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": true,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "reply",
+      "reference": "Caf6NGC/KA/PQ·MEP-002",
+      "printed_revision": "00",
+      "decision": "n/a",
+      "register": true,
+      "revision_conflict": null
+     },
+     "how": "missing",
+     "fields": {
+      "reference": "missed",
+      "revision": "missed",
+      "decision": "tn"
+     },
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "missed": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "reply",
+        "reference": "Caf6NGC/KA/PQ·MEP-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "missed",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "Caf6NGC/KA/PQ-MEP-002",
+       "state": "held",
+       "how": "single_component",
+       "truth": "Caf6NGC/KA/PQ·MEP-002",
+       "near": true,
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "held",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "Caf6NGC/KA/PQ-MEP-002",
+       "truth": "R0",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "PA07",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 2",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref11",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Page 1 of 1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref12",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "6",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "7",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 6",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 14
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "held_only": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "reply",
+        "reference": "Caf6NGC/KA/PQ·MEP-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "held_only",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "Caf6NGC/KA/PQ-MEP-002",
+       "state": "held",
+       "how": "single_component",
+       "truth": "Caf6NGC/KA/PQ·MEP-002",
+       "near": true,
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "00",
+       "state": "held",
+       "how": "single_component",
+       "association": "not_recorded",
+       "context_identity": "Caf6NGC/KA/PQ-MEP-002",
+       "truth": "R0",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "PA07",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 2",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref11",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Page 1 of 1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref12",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "5",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "6",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "7",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 6",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "sec# 4",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 14
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "held_only": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "reply",
+        "reference": "Caf6NGC/KA/PQ·MEP-002",
+        "printed_revision": "00",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "held_only",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf",
+   "ep": "30549",
+   "cohort": "exploration",
+   "stratum": "reply",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "sheet",
+      "reference": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+      "printed_revision": "E",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "state": "observed",
+       "how": "identity",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "E",
+       "state": "observed",
+       "how": "identity",
+       "truth": "E",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "state": "observed",
+       "how": "identity",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+        "printed_revision": "E",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "state": "observed",
+       "how": "identity",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "E",
+       "state": "observed",
+       "how": "identity",
+       "truth": "E",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "title_block",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "state": "observed",
+       "how": "identity",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "parser",
+       "group": "obs:1",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "ARC-74028",
+       "state": "held",
+       "how": "single_component",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "E",
+       "state": "held",
+       "how": "target",
+       "target": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "association": "by_target",
+       "truth": "E",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DCH-M-B5B-DWG-ZZ-ARC-74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-03-13S",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1  VALVE ENGINEERING - DTS REACHAL",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2  VALVE ENGINEERING - BOH FINISHES",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A0",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-05-13M",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-03-13T",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 2,
+      "single_component": 12,
+      "target": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 1
+      },
+      "revision": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      },
+      "revision:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "recovered_clean": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+        "printed_revision": "E",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "recovered_clean",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "ARC-74028",
+       "state": "held",
+       "how": "single_component",
+       "truth": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "outcome": "held_wrong",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "revision",
+       "value": "E",
+       "state": "held",
+       "how": "target",
+       "target": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "association": "by_target",
+       "truth": "E",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own@DCH-M-BSB-DWG-ZZ-ARC-74028",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "DCH-M-B5B-DWG-ZZ-ARC-74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-03-13S",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref10",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1  VALVE ENGINEERING - DTS REACHAL",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2  VALVE ENGINEERING - BOH FINISHES",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "A0",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "1 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "2 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "3 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "4 / 74028",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-05-13M",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "B1-03-13T",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref9",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 12,
+      "target": 1
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "held_only": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "sheet",
+        "reference": "DCH-M-BSB-DWG-ZZ-ARC-74028",
+        "printed_revision": "E",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "held_only",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Rev.01/Content 14.pdf",
+   "ep": "16830",
+   "cohort": "exploration",
+   "stratum": "submittal",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "pending",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf",
+   "ep": "16830",
+   "cohort": "exploration",
+   "stratum": "submittal",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "letter",
+      "reference": "P10781",
+      "printed_revision": "absent",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "P10781",
+       "state": "observed",
+       "how": "identity",
+       "truth": "P10781",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ocr",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "letter",
+        "reference": "P10781",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "P10781",
+       "state": "observed",
+       "how": "identity",
+       "truth": "P10781",
+       "outcome": "correct",
+       "page": 1,
+       "reader": "ocr",
+       "group": "obs:0",
+       "layer": "raw",
+       "expected": 0
+      },
+      {
+       "field": "identity",
+       "value": "P10781",
+       "state": "held",
+       "how": "single_component",
+       "truth": "P10781",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "22.05.2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "MBR-Dubai Hills Estate PA07-Nursery & Retail",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "050-6776429",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "48859",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "+971 4 7035900",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "+971 4 2566975",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "identity": 1,
+      "single_component": 7
+     },
+     "precision": {
+      "identity": {
+       "correct": 1,
+       "redundant": 0
+      }
+     },
+     "precision_by_state": {
+      "identity:observed": {
+       "correct": 1
+      }
+     },
+     "recovery": {
+      "identity": {
+       "recovered_clean": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "letter",
+        "reference": "P10781",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "recovered_clean",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "P10781",
+       "state": "held",
+       "how": "single_component",
+       "truth": "P10781",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "22.05.2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "MBR-Dubai Hills Estate PA07-Nursery & Retail",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "050-6776429",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "48859",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "+971 4 7035900",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "+971 4 2566975",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 7
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "held_only": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "letter",
+        "reference": "P10781",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "held_only",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf",
+   "ep": "19144",
+   "cohort": "exploration",
+   "stratum": "scan",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "medium",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [
+    {
+     "page": 1,
+     "expected": {
+      "component": "form",
+      "reference": "2836",
+      "printed_revision": "absent",
+      "decision": "n/a",
+      "register": false,
+      "revision_conflict": null
+     },
+     "how": "unregistered",
+     "fields": {},
+     "emissions": 0,
+     "redundant_copies": 0,
+     "conflicting_emissions": false
+    }
+   ],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "missed": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "2836",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "missed",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "2836",
+       "state": "held",
+       "how": "single_component",
+       "truth": "2836",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "EP-18101",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SSD-P-06 B/IQF.17",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Revision Number 03",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "055 3319514",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "07/07/2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "24/07/19",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25/7/2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Revision Date 11 May 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25 JUL 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 10
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "held_only": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "2836",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "held_only",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "2836",
+       "state": "held",
+       "how": "single_component",
+       "truth": "2836",
+       "outcome": "held_correct",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "EP-18101",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "SSD-P-06 B/IQF.17",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Revision Number 03",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "055 3319514",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref3",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "07/07/2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref4",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "24/07/19",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref5",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25/7/2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref6",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "Revision Date 11 May 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref7",
+       "layer": "ai",
+       "expected": 0
+      },
+      {
+       "field": "referenced_identity",
+       "value": "25 JUL 2019",
+       "state": "observed_reference",
+       "how": "single_component",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref8",
+       "layer": "ai",
+       "expected": 0
+      }
+     ],
+     "association": {
+      "single_component": 10
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {
+      "identity": {
+       "held_only": 1
+      },
+      "revision": {
+       "tn": 1
+      },
+      "decision": {
+       "tn": 1
+      }
+     },
+     "components": [
+      {
+       "page": 1,
+       "expected": {
+        "component": "form",
+        "reference": "2836",
+        "printed_revision": "absent",
+        "decision": "n/a"
+       },
+       "fields": {
+        "identity": "held_only",
+        "revision": "tn",
+        "decision": "tn"
+       }
+      }
+     ],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  },
+  {
+   "doc": "EP-23323/EP-23323 - AKI Logistics/O&M/FAS/R0/SOV.pdf",
+   "ep": "23323",
+   "cohort": "exploration",
+   "stratum": "other",
+   "extension": ".pdf",
+   "scan_like": null,
+   "confidence": "high",
+   "in_scope": false,
+   "execution": "complete",
+   "records": [],
+   "emissions": [],
+   "unvalidated": [],
+   "ai": {
+    "variant": null,
+    "outcome": null,
+    "pages_read": 0,
+    "page_outcomes": {},
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {}
+   },
+   "ai_evidence_state": "current",
+   "layers": {
+    "raw": {
+     "judged": [],
+     "association": {},
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "evidence": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "1",
+       "state": "held",
+       "how": "negative_page",
+       "outcome": "held_on_negative",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "531-0565",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "01",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "02",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": null
+      }
+     ],
+     "association": {
+      "negative_page": 4
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    },
+    "ai": {
+     "judged": [
+      {
+       "field": "identity",
+       "value": "1",
+       "state": "held",
+       "how": "negative_page",
+       "outcome": "held_on_negative",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:own",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "531-0565",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref0",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "01",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref1",
+       "layer": "ai",
+       "expected": null
+      },
+      {
+       "field": "referenced_identity",
+       "value": "02",
+       "state": "observed_reference",
+       "how": "negative_page",
+       "outcome": "not_scored",
+       "page": 1,
+       "reader": "ai:EV1",
+       "group": "ai:1:ref2",
+       "layer": "ai",
+       "expected": null
+      }
+     ],
+     "association": {
+      "negative_page": 4
+     },
+     "precision": {},
+     "precision_by_state": {},
+     "recovery": {},
+     "components": [],
+     "critical": [],
+     "observed_errors": []
+    }
+   }
+  }
+ ],
+ "totals": {
+  "register": {
+   "execution": {
+    "complete": 12
+   },
+   "records": {
+    "matched": 1,
+    "missing": 3,
+    "unregistered": 6
+   },
+   "emissions": {
+    "same_page": 1
+   },
+   "redundant_copies": 0,
+   "conflicting_emission_sets": 0,
+   "unvalidated_emitted_records": 0,
+   "register": {
+    "reference": {
+     "tp": 1,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 1,
+     "readable": 4,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.25,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 1,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 3,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 1,
+     "readable": 4,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.25,
+     "specificity_of_negatives": null
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 3,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 1,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    },
+    "projection_revision": {
+     "tp": 1,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 0,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 1,
+     "readable": 1,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 1.0,
+     "specificity_of_negatives": null
+    }
+   },
+   "raw": {
+    "identity": {
+     "tp": 5,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 5,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 5,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.5,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 4,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 2,
+     "held": 0,
+     "missed": 4,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 4,
+     "readable": 8,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.5,
+     "specificity_of_negatives": 1.0
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 9,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 1,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "critical": [],
+   "evidence": {
+    "identity": {
+     "tp": 5,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 0,
+     "held": 0,
+     "missed": 5,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 5,
+     "readable": 10,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.5,
+     "specificity_of_negatives": null
+    },
+    "revision": {
+     "tp": 4,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 2,
+     "held": 0,
+     "missed": 4,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 4,
+     "readable": 8,
+     "precision_of_accepted": 1.0,
+     "recovery_of_readable": 0.5,
+     "specificity_of_negatives": 1.0
+    },
+    "decision": {
+     "tp": 0,
+     "wrong": 0,
+     "fp": 0,
+     "tn": 9,
+     "held": 0,
+     "missed": 1,
+     "accepted_on_conflict": 0,
+     "conflict_held": 0,
+     "conflict_missing": 0,
+     "conflict_resolved_silently": 0,
+     "unscorable": 0,
+     "not_repeated": 0,
+     "accepted": 0,
+     "readable": 1,
+     "precision_of_accepted": null,
+     "recovery_of_readable": 0.0,
+     "specificity_of_negatives": 1.0
+    }
+   },
+   "evidence_introduced_errors": [],
+   "ai": {
+    "documents": 12,
+    "calls": 0,
+    "cache_hits": 0,
+    "states": {},
+    "page_outcomes": {}
+   }
+  },
+  "raw": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 5,
+      "redundant": 2
+     },
+     "recovery_counts": {
+      "recovered_clean": 5,
+      "missed": 5
+     },
+     "asserted_distinct": 5,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.5,
+     "clean_recovery": 0.5,
+     "evidence_recovery_incl_held": 0.5
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 5,
+      "redundant": 1
+     },
+     "recovery_counts": {
+      "recovered_clean": 5,
+      "missed": 3,
+      "tn": 2
+     },
+     "asserted_distinct": 5,
+     "readable": 8,
+     "accepted_precision": 1.0,
+     "recovery": 0.625,
+     "clean_recovery": 0.625,
+     "evidence_recovery_incl_held": 0.625
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "tn": 9,
+      "missed": 1
+     },
+     "asserted_distinct": 0,
+     "readable": 1,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {
+    "identity": 7,
+    "single_component": 1
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "identity:accepted": {
+     "correct": 1
+    },
+    "identity:observed": {
+     "correct": 4
+    },
+    "revision:accepted": {
+     "correct": 1
+    },
+    "revision:observed": {
+     "correct": 4
+    }
+   }
+  },
+  "evidence": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 6,
+      "redundant": 2
+     },
+     "recovery_counts": {
+      "recovered_clean": 6,
+      "missed": 3,
+      "held_only": 1
+     },
+     "asserted_distinct": 6,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.6,
+     "clean_recovery": 0.6,
+     "evidence_recovery_incl_held": 0.7
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 6,
+      "redundant": 3
+     },
+     "recovery_counts": {
+      "recovered_clean": 6,
+      "missed": 1,
+      "held_only": 1,
+      "tn": 2
+     },
+     "asserted_distinct": 6,
+     "readable": 8,
+     "accepted_precision": 1.0,
+     "recovery": 0.75,
+     "clean_recovery": 0.75,
+     "evidence_recovery_incl_held": 0.875
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "tn": 9,
+      "missed": 1
+     },
+     "asserted_distinct": 0,
+     "readable": 1,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {
+    "identity": 8,
+    "single_component": 126,
+    "target": 3,
+    "negative_page": 4
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "identity:accepted": {
+     "correct": 2
+    },
+    "identity:observed": {
+     "correct": 4
+    },
+    "revision:accepted": {
+     "correct": 3
+    },
+    "revision:observed": {
+     "correct": 3
+    }
+   }
+  },
+  "ai": {
+   "fields": {
+    "identity": {
+     "precision_counts": {
+      "correct": 1,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "held_only": 3,
+      "missed": 6,
+      "recovered_clean": 1
+     },
+     "asserted_distinct": 1,
+     "readable": 10,
+     "accepted_precision": 1.0,
+     "recovery": 0.1,
+     "clean_recovery": 0.1,
+     "evidence_recovery_incl_held": 0.4
+    },
+    "revision": {
+     "precision_counts": {
+      "correct": 3,
+      "redundant": 0
+     },
+     "recovery_counts": {
+      "recovered_clean": 3,
+      "missed": 2,
+      "held_only": 3,
+      "tn": 2
+     },
+     "asserted_distinct": 3,
+     "readable": 8,
+     "accepted_precision": 1.0,
+     "recovery": 0.375,
+     "clean_recovery": 0.375,
+     "evidence_recovery_incl_held": 0.75
+    },
+    "decision": {
+     "precision_counts": {},
+     "recovery_counts": {
+      "tn": 9,
+      "missed": 1
+     },
+     "asserted_distinct": 0,
+     "readable": 1,
+     "accepted_precision": null,
+     "recovery": 0.0,
+     "clean_recovery": 0.0,
+     "evidence_recovery_incl_held": 0.0
+    }
+   },
+   "association": {
+    "single_component": 125,
+    "target": 3,
+    "identity": 1,
+    "negative_page": 4
+   },
+   "critical": [],
+   "observed_errors": [],
+   "precision_by_state": {
+    "identity:accepted": {
+     "correct": 1
+    },
+    "revision:accepted": {
+     "correct": 3
+    }
+   }
+  },
+  "introduced_ai_errors": [],
+  "ai_evidence_states": {
+   "current": 10,
+   "pending": 2
+  }
+ }
+}

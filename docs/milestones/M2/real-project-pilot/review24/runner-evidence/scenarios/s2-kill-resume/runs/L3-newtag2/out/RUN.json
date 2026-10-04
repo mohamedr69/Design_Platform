@@ -1,0 +1,263 @@
+{
+ "at_utc": "2026-09-30T20:51:35+00:00",
+ "a_tag": "r22dry-A",
+ "tag": "L3-newtag2",
+ "arm": "L3",
+ "track": "r22-L3",
+ "dry_run": true,
+ "declaration_sha256": "452f9e65ce44ae8bb58687da0735373b05dab5ca5c31d324d27ef120ea9bb8a0",
+ "identities": {
+  "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+  "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "SCHEMA_VERSION": "evidence-schema-1",
+  "PROMPTS": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2",
+   "read_field_context": "read-field-context-2026-09-30.1"
+  },
+  "AUDIT_RATE": 0.2,
+  "AUDIT_SEED": "audit-2026-09-29",
+  "MAX_PAGES_PER_DOCUMENT": 4,
+  "MAX_CALLS_PER_DOCUMENT": 8,
+  "GUARD_ENABLED": true,
+  "TARGETED_ENABLED": true,
+  "EFFICIENT_ENABLED": false,
+  "SUPPORT_V2": true,
+  "REQUIRED_FIRST": true,
+  "DEADLINE_ENABLED": true,
+  "ROI_ENABLED": false
+ },
+ "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+ "tree": "C:/t/iso/cand-ai4",
+ "context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
+  ],
+  "declared": "pilot arm L3"
+ },
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "runner_version": "arm-ev-2026-10-01.v4.2",
+ "allowance_key": {
+  "scope": "r22-four-arm-dry-2026-09-30-L3",
+  "profile": "L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+  "path": "C:/t/r2x/dry-runs/r24-probes/s2-kill-resume/dry-allowance.sqlite"
+ },
+ "caps": {
+  "durable_per_document": 12,
+  "reader_per_reading": 8,
+  "project_rolling_day": 60
+ },
+ "projects": {
+  "16830": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 5,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 1.0,
+   "documents_in": 2,
+   "documents_skipped_completed": 0,
+   "requests": 5,
+   "worst_case_reserved": 7,
+   "capacity_before": 43,
+   "pid": 9484
+  },
+  "17428": {
+   "variant": "EV1",
+   "profile": "default",
+   "documents": 2,
+   "calls": 4,
+   "cache_hits": 0,
+   "failed": 0,
+   "budget_stopped": 1,
+   "seconds": 0.5,
+   "documents_in": 2,
+   "documents_skipped_completed": 0,
+   "requests": 4,
+   "worst_case_reserved": 16,
+   "capacity_before": 52,
+   "pid": 9484
+  }
+ },
+ "not_attempted": [],
+ "deferred": [],
+ "tripwire": [
+  {
+   "after": "16830",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-16830/synth/raster-6pages.pdf": "eligible",
+     "EP-16830/synth/raster-1page.pdf": "eligible"
+    },
+    "rejected": 2
+   }
+  },
+  {
+   "after": "17428",
+   "critical_on_resolved": [],
+   "binding": {
+    "eligibility": {
+     "EP-16830/synth/raster-6pages.pdf": "eligible",
+     "EP-16830/synth/raster-1page.pdf": "eligible",
+     "EP-17428/synth/raster-2pages.pdf": "eligible",
+     "EP-17428/synth/text-sheet.pdf": "eligible",
+     "EP-17428/synth/note.docx": "ineligible"
+    },
+    "rejected": 0
+   }
+  }
+ ],
+ "resumes": [],
+ "seconds": 1.7,
+ "runner_state": {
+  "consecutive_failures": 0,
+  "recent_failures": [],
+  "stopped": null,
+  "terminal_stop": null,
+  "xtrack_refusals": 0,
+  "allowance_refusals": 2,
+  "allowance_busy": 0,
+  "ledger_precheck_refusals": 0,
+  "per_ep": {
+   "16830": 5,
+   "17428": 4
+  },
+  "requests_io": 9,
+  "cache_hits": 0,
+  "deferred": [],
+  "skipped_completed": [],
+  "skipped_projects": [],
+  "interrupted_seen": []
+ },
+ "final": true,
+ "allowance": {
+  "EP-16830/synth/raster-6pages.pdf": {
+   "charged": 12,
+   "attempts": [
+    {
+     "id": 2,
+     "pid": 30608,
+     "started": 1790801489.8349948,
+     "ended": null,
+     "status": "interrupted",
+     "calls_at_start": 0,
+     "calls_at_end": 3
+    },
+    {
+     "id": 3,
+     "pid": 40480,
+     "started": 1790801491.7904575,
+     "ended": 1790801493.2345886,
+     "status": "completed:budget_stop",
+     "calls_at_start": 3,
+     "calls_at_end": 12
+    },
+    {
+     "id": 7,
+     "pid": 9484,
+     "started": 1790801496.6701949,
+     "ended": 1790801496.7385926,
+     "status": "completed:budget_stop",
+     "calls_at_start": 12,
+     "calls_at_end": 12
+    }
+   ]
+  },
+  "EP-16830/synth/raster-1page.pdf": {
+   "charged": 10,
+   "attempts": [
+    {
+     "id": 1,
+     "pid": 30608,
+     "started": 1790801489.22533,
+     "ended": 1790801489.806502,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 5
+    },
+    {
+     "id": 6,
+     "pid": 9484,
+     "started": 1790801496.1228557,
+     "ended": 1790801496.6463387,
+     "status": "completed",
+     "calls_at_start": 5,
+     "calls_at_end": 10
+    }
+   ]
+  },
+  "EP-17428/synth/raster-2pages.pdf": {
+   "charged": 12,
+   "attempts": [
+    {
+     "id": 4,
+     "pid": 40480,
+     "started": 1790801493.2951174,
+     "ended": 1790801494.0441318,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 8
+    },
+    {
+     "id": 8,
+     "pid": 9484,
+     "started": 1790801496.7858665,
+     "ended": 1790801497.2910821,
+     "status": "completed:budget_stop",
+     "calls_at_start": 8,
+     "calls_at_end": 12
+    }
+   ]
+  },
+  "EP-17428/synth/text-sheet.pdf": {
+   "charged": 0,
+   "attempts": [
+    {
+     "id": 5,
+     "pid": 40480,
+     "started": 1790801494.0597541,
+     "ended": 1790801494.0737908,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    },
+    {
+     "id": 9,
+     "pid": 9484,
+     "started": 1790801497.305709,
+     "ended": 1790801497.3114996,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 0
+    }
+   ]
+  }
+ },
+ "tables": {
+  "project_documents": 4,
+  "project_submittals": 0,
+  "project_shop_drawings": 0,
+  "background_jobs": 4,
+  "project_actions": 0,
+  "ai_usage": 9,
+  "document_readings": 0
+ },
+ "business_hashes": {
+  "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+ },
+ "ai_usage_rows": 9,
+ "fresh_requests_this_arm": 9,
+ "status": "completed",
+ "lifecycle": "runner-lifecycle-2026-10-01.v2"
+}

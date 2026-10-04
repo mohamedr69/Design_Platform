@@ -1,0 +1,134 @@
+{
+ "allowance": "C:/t/r2x/r40-sandbox/r40d-m29255-52050f/allowance.sqlite",
+ "application_env": {
+  "DRAWINGS_AI_REVIEW_ENABLED": "false"
+ },
+ "binding": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/BINDING-MANIFEST-R39.json",
+ "binding_sha256": "a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b",
+ "caps": {
+  "B": 240,
+  "C": 240,
+  "P": 36,
+  "R": 40
+ },
+ "cli_version": "dry mode: no CLI is run",
+ "decision_coverage_gate": "C_GE_B_ONLY",
+ "declaration_path": null,
+ "declaration_sha256": null,
+ "harness_dir": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review39\\scripts\\harness-r32",
+ "invocation": 1,
+ "lane_switches": {
+  "B": {
+   "AI_EVIDENCE_VARIANT": "off"
+  },
+  "C": {
+   "AI_EVIDENCE_ADJUDICATE": "1",
+   "AI_EVIDENCE_ASSOC": "1",
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_DECISION_REGION": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_IDGUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  },
+  "P": {},
+  "R": {
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  }
+ },
+ "lane_task_kinds": {
+  "B": [
+   "read_submittal_form"
+  ],
+  "C": [
+   "discover_page",
+   "locate_decision",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ],
+  "P": [
+   "discover_page",
+   "locate_decision",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ],
+  "R": [
+   "discover_page",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ]
+ },
+ "mode": "dry",
+ "model_identity": {
+  "cli_path": null,
+  "cli_version": null,
+  "provider": "claude-code",
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "out_dir": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\out",
+ "parent": {
+  "elapsed_s": 604800,
+  "input_tokens": 16300000,
+  "output_tokens": 3260000,
+  "total": 556
+ },
+ "policies": {
+  "B": "B:accepted-path:evidence-off"
+ },
+ "project_totals": {
+  "EP-29255": {
+   "planning": 18.9,
+   "structural": 46
+  }
+ },
+ "project_window": {
+  "limit": 60,
+  "window_s": 86400
+ },
+ "provider_env": null,
+ "reader": "none",
+ "resume_policy": "full",
+ "run_folder": "C:/t/r2x/r40-sandbox/r40d-m29255-52050f",
+ "run_key": "81871048798e517e5b4204b33e4d2cc57b4deab153a072d768dbc4aae3eba9f0",
+ "run_set": [
+  {
+   "doc_key": "EP-29255/Project document_Scale Jumeriah Garden/MS Approval Copy/ACS_Approval.pdf",
+   "ep": "29255",
+   "pool_id": "F006"
+  },
+  {
+   "doc_key": "EP-29255/T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-005-R00-AAN(Typical 2nd to 8th Floor Plan Telephone Layout).pdf",
+   "ep": "29255",
+   "pool_id": "F015"
+  }
+ ],
+ "run_set_path": "C:\\t\\iso\\work\\r2x\\r40\\dry\\RUN-SET-EP29255.json",
+ "sandbox": {
+  "B": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\B",
+  "C": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\C",
+  "R": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\R"
+ },
+ "sandbox_base": "C:/t/r2x/r40-sandbox",
+ "stamp": "r40d-m29255-52050f",
+ "store": "C:/t/r2x/r40-sandbox/r40d-m29255-52050f/capture.sqlite",
+ "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode",
+ "trees": {
+  "baseline": "C:/t/iso/frozen-r12/backend",
+  "candidate": "C:/t/iso/cand-r29/backend"
+ },
+ "truth": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\out\\TRUTH-R32.json"
+}

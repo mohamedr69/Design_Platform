@@ -111,6 +111,8 @@ def select_rows(db: Session, project: Project | None, selections: set[str], ids:
             reasons.append(f"read under another extraction profile ({(row.extracted or {}).get('profile') or 'not recorded'}, now {document_control.extraction_profile()})")
         elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_profile"):
             reasons.append("carries records read under another or an unknown extraction profile")
+        elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_parser"):
+            reasons.append("carries records read by another or an unknown parser")
         if "all" in selections:
             reasons.append("every row of the project")
         if reasons:

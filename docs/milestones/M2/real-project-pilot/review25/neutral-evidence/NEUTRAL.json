@@ -1,0 +1,392 @@
+{
+ "validator": "provider-outcomes.v1/validator-2",
+ "journal": "provider-outcomes.v1",
+ "scenarios": {
+  "m0-unmutated-control": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "sends": 3,
+    "stop_file": false
+   },
+   "original_load": {
+    "state": "ok",
+    "streak": 3,
+    "why": null
+   },
+   "alteration": null,
+   "load_before_resume": {
+    "state": "ok",
+    "streak": 3,
+    "why": null
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status_after": "stopped",
+    "new_sends": 0,
+    "refusals": [
+     {
+      "at_utc": "2026-09-30T21:15:02+00:00",
+      "tag": "L1",
+      "arm": "L1",
+      "resume": true,
+      "refused": "terminal stop preserved: stop: three consecutive provider failures",
+      "requests_sent": 0
+     }
+    ]
+   },
+   "state_before_resume": {
+    "run_json": "fd3242fc542d5ada579e9f485fe5ca42d34d6dd1c0bcaf823bdaab50fd90832c",
+    "journal": "a86d8a0a756439eaba1767a40eadcad3875c6c457ea5625b85fe3e8bab291bad",
+    "io": "20548c8a6cbefe9429440ed42fca81ff68a667df40a4c95d6363cbc5c65283a1",
+    "progress_lines": 5,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "state_after_resume": {
+    "run_json": "777729a9faf5e5b0c04c99c227e4b77e077abb92e294dcd16cb2525dfe020cfd",
+    "journal": "a86d8a0a756439eaba1767a40eadcad3875c6c457ea5625b85fe3e8bab291bad",
+    "io": "20548c8a6cbefe9429440ed42fca81ff68a667df40a4c95d6363cbc5c65283a1",
+    "progress_lines": 6,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": true
+   },
+   "checks": {
+    "three_failures_killed_before_file": true,
+    "original_journal_streak_3": true,
+    "reconstructed_stop_zero_sends": true
+   }
+  },
+  "m-budget": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "sends": 3,
+    "stop_file": false
+   },
+   "original_load": {
+    "state": "ok",
+    "streak": 3,
+    "why": null
+   },
+   "alteration": {
+    "from": {
+     "b": "46bcaaf686d432a7bc95979f",
+     "error_detail": "scripted provider failure",
+     "kind": "failure",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 18204,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    },
+    "to": {
+     "b": "46bcaaf686d432a7bc95979f",
+     "error_detail": "scripted provider failure",
+     "kind": "budget",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 18204,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    }
+   },
+   "load_before_resume": {
+    "state": "indeterminate",
+    "streak": null,
+    "why": "record 7: kind and outcome disagree (kind 'budget', outcome 'transport')"
+   },
+   "resume": {
+    "run": {
+     "exit": 5,
+     "tail": [
+      "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'budget', outcome 'transport') -- zero requests sent; the run record is left untouched"
+     ],
+     "printed": "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'budget', outcome 'transport') -- zero requests sent; the run record is left untouched"
+    },
+    "status_after": null,
+    "new_sends": 0,
+    "refusals": [
+     {
+      "at_utc": "2026-09-30T21:15:05+00:00",
+      "tag": "L1",
+      "arm": "L1",
+      "resume": true,
+      "refused": "indeterminate provider state: record 7: kind and outcome disagree (kind 'budget', outcome 'transport')",
+      "requests_sent": 0
+     }
+    ]
+   },
+   "state_before_resume": {
+    "run_json": "213c5eeab170ddf0e9e980c67d350de15ac99d4f299dca07cdfa13ed550e1617",
+    "journal": "eefd5b4b74f68aeaa45dbfe47f8c6012e45128de30d5311e3f00591893f0ac10",
+    "io": "31fdee8f7aefa8d41cc50a02ac34902de8a19d316c5c9a4e5898f08efd4ed74e",
+    "progress_lines": 5,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "state_after_resume": {
+    "run_json": "213c5eeab170ddf0e9e980c67d350de15ac99d4f299dca07cdfa13ed550e1617",
+    "journal": "eefd5b4b74f68aeaa45dbfe47f8c6012e45128de30d5311e3f00591893f0ac10",
+    "io": "31fdee8f7aefa8d41cc50a02ac34902de8a19d316c5c9a4e5898f08efd4ed74e",
+    "progress_lines": 6,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "checks": {
+    "three_failures_killed_before_file": true,
+    "original_journal_streak_3": true,
+    "only_the_kind_changed": true,
+    "mutated_journal_indeterminate": true,
+    "refused_exit_5_zero_sends": true,
+    "no_stop_fabricated": true,
+    "run_record_charges_journal_io_unchanged": true,
+    "refusal_recorded_with_reason": true
+   }
+  },
+  "m-cache_hit": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "sends": 3,
+    "stop_file": false
+   },
+   "original_load": {
+    "state": "ok",
+    "streak": 3,
+    "why": null
+   },
+   "alteration": {
+    "from": {
+     "b": "a71244c62252b138c6a9275a",
+     "error_detail": "scripted provider failure",
+     "kind": "failure",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 39040,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    },
+    "to": {
+     "b": "a71244c62252b138c6a9275a",
+     "error_detail": "scripted provider failure",
+     "kind": "cache_hit",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 39040,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    }
+   },
+   "load_before_resume": {
+    "state": "indeterminate",
+    "streak": null,
+    "why": "record 7: kind and outcome disagree (kind 'cache_hit', outcome 'transport')"
+   },
+   "resume": {
+    "run": {
+     "exit": 5,
+     "tail": [
+      "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'cache_hit', outcome 'transport') -- zero requests sent; the run record is left untouched"
+     ],
+     "printed": "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'cache_hit', outcome 'transport') -- zero requests sent; the run record is left untouched"
+    },
+    "status_after": null,
+    "new_sends": 0,
+    "refusals": [
+     {
+      "at_utc": "2026-09-30T21:15:09+00:00",
+      "tag": "L1",
+      "arm": "L1",
+      "resume": true,
+      "refused": "indeterminate provider state: record 7: kind and outcome disagree (kind 'cache_hit', outcome 'transport')",
+      "requests_sent": 0
+     }
+    ]
+   },
+   "state_before_resume": {
+    "run_json": "765b7a41655f1dcf0bf29bb70f532ac48b502c461ed2006205d5b7e4c218f115",
+    "journal": "ac58a5682ebc0a983365a43195688a85d37168f6ae9e49406e3eda3d02083d07",
+    "io": "bc677c9e4a5360856b20e3a9caebf528e95483b6736811afdf2486273ec4aab4",
+    "progress_lines": 5,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "state_after_resume": {
+    "run_json": "765b7a41655f1dcf0bf29bb70f532ac48b502c461ed2006205d5b7e4c218f115",
+    "journal": "ac58a5682ebc0a983365a43195688a85d37168f6ae9e49406e3eda3d02083d07",
+    "io": "bc677c9e4a5360856b20e3a9caebf528e95483b6736811afdf2486273ec4aab4",
+    "progress_lines": 6,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "checks": {
+    "three_failures_killed_before_file": true,
+    "original_journal_streak_3": true,
+    "only_the_kind_changed": true,
+    "mutated_journal_indeterminate": true,
+    "refused_exit_5_zero_sends": true,
+    "no_stop_fabricated": true,
+    "run_record_charges_journal_io_unchanged": true,
+    "refusal_recorded_with_reason": true
+   }
+  },
+  "m-none": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "sends": 3,
+    "stop_file": false
+   },
+   "original_load": {
+    "state": "ok",
+    "streak": 3,
+    "why": null
+   },
+   "alteration": {
+    "from": {
+     "b": "1e6edd119726f90a88840055",
+     "error_detail": "scripted provider failure",
+     "kind": "failure",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 17480,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    },
+    "to": {
+     "b": "1e6edd119726f90a88840055",
+     "error_detail": "scripted provider failure",
+     "kind": "none",
+     "model": "dry",
+     "outcome": "transport",
+     "page": 2,
+     "pid": 17480,
+     "seq": 3,
+     "task": "discover_page",
+     "type": "result"
+    }
+   },
+   "load_before_resume": {
+    "state": "indeterminate",
+    "streak": null,
+    "why": "record 7: kind and outcome disagree (kind 'none', outcome 'transport')"
+   },
+   "resume": {
+    "run": {
+     "exit": 5,
+     "tail": [
+      "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'none', outcome 'transport') -- zero requests sent; the run record is left untouched"
+     ],
+     "printed": "REFUSED (indeterminate provider state): record 7: kind and outcome disagree (kind 'none', outcome 'transport') -- zero requests sent; the run record is left untouched"
+    },
+    "status_after": null,
+    "new_sends": 0,
+    "refusals": [
+     {
+      "at_utc": "2026-09-30T21:15:12+00:00",
+      "tag": "L1",
+      "arm": "L1",
+      "resume": true,
+      "refused": "indeterminate provider state: record 7: kind and outcome disagree (kind 'none', outcome 'transport')",
+      "requests_sent": 0
+     }
+    ]
+   },
+   "state_before_resume": {
+    "run_json": "9b253a98b8ef2f305cf27901d229f02125b2b7ec4e100481332e60f4a8ba26fe",
+    "journal": "c9710a5c7aa478ae861ecbff393383bdbef82fe77c678720eb6c0223f3f3bbfe",
+    "io": "9d59db4cf30108aa06bdcd29d742eadd70bfd05f101cd6c524e3377d9173d515",
+    "progress_lines": 5,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "state_after_resume": {
+    "run_json": "9b253a98b8ef2f305cf27901d229f02125b2b7ec4e100481332e60f4a8ba26fe",
+    "journal": "c9710a5c7aa478ae861ecbff393383bdbef82fe77c678720eb6c0223f3f3bbfe",
+    "io": "9d59db4cf30108aa06bdcd29d742eadd70bfd05f101cd6c524e3377d9173d515",
+    "progress_lines": 6,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "stop_file": false
+   },
+   "checks": {
+    "three_failures_killed_before_file": true,
+    "original_journal_streak_3": true,
+    "only_the_kind_changed": true,
+    "mutated_journal_indeterminate": true,
+    "refused_exit_5_zero_sends": true,
+    "no_stop_fabricated": true,
+    "run_record_charges_journal_io_unchanged": true,
+    "refusal_recorded_with_reason": true
+   }
+  }
+ }
+}

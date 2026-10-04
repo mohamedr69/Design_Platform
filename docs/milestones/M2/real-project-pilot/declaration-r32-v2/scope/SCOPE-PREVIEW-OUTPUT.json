@@ -1,0 +1,81 @@
+{
+ "create_command": "create_scope_r40.py create --frozen-sha <frozen hash> --run-sha <RUN hash>  (owner only; token in R34_OWNER_DISPATCH_TOKEN)",
+ "frozen_declaration_sha256": "f38fb281f30b4ca45fea1c801d58f37d83ffdaa2b61cd406d9a087e8e51725af",
+ "ledger": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+ "ledger_after": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ledger_before": {
+  "entries": 483,
+  "limit_amendments": 0,
+  "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+  "scopes": 17
+ },
+ "ledger_unchanged": true,
+ "limits": {
+  "elapsed_s": 604800,
+  "input_tokens": 16300000,
+  "output_tokens": 3260000,
+  "per_request_input": 90000,
+  "per_request_output": 20000,
+  "requests": 556
+ },
+ "mode": "preview (read-only; nothing created)",
+ "preconditions_now": {
+  "1 authorization file at the pinned path": {
+   "exists": false,
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/OWNER-DISPATCH-AUTHORIZATION.json",
+   "state": "NOT YET (the owner writes it after the budget authorization)"
+  },
+  "2 frozen declaration hash": {
+   "equals_DECLARATION.sha256": true,
+   "sha256": "f38fb281f30b4ca45fea1c801d58f37d83ffdaa2b61cd406d9a087e8e51725af"
+  },
+  "3 RUN file": {
+   "exists": false,
+   "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v2/FRESH-VALIDATION-DECLARATION-R32-V2.RUN.json",
+   "state": "NOT YET (the owner writes it with build_declaration_r40.py fill_owner_digest)"
+  },
+  "4 authorization names the RUN hash, the digest, the owner, a nonce; the token matches": {
+   "state": "checked in create mode only"
+  },
+  "5 run folder absent": {
+   "absent": true,
+   "path": "C:/t/r2x/r40-sandbox/r32-v2"
+  },
+  "6 bound harness and contract 4": {
+   "state": "checked in create mode (verify_binding a6f703b4...; validate_declaration on the RUN file)"
+  },
+  "7 application ledger module": {
+   "equals_bound": true,
+   "path": "C:/t/iso/cand-r29/backend/app/ai/ledger.py",
+   "sha256": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca"
+  },
+  "8 no scope of that name": {
+   "exists": false,
+   "scope": "m2-fresh-validation-r32-v2-2026-10-04"
+  }
+ },
+ "scope": "m2-fresh-validation-r32-v2-2026-10-04",
+ "would_call": "sys.path.insert(0, 'C:/t/iso/cand-r29/backend'); from app.ai.ledger import Ledger, Limits; Ledger('C:/t/r2x/ledger/r2x-ledger.sqlite', 'm2-fresh-validation-r32-v2-2026-10-04', Limits(**{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}))",
+ "would_create": {
+  "entries": "483 (unchanged)",
+  "limit_amendments": "0 (unchanged)",
+  "new_scope": {
+   "breaker": null,
+   "entries": 0,
+   "limits": {
+    "elapsed_s": 604800,
+    "input_tokens": 16300000,
+    "output_tokens": 3260000,
+    "per_request_input": 90000,
+    "per_request_output": 20000,
+    "requests": 556
+   }
+  },
+  "scopes": "17 -> 18"
+ }
+}

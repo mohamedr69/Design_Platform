@@ -1,0 +1,159 @@
+{
+ "version": "ai-pilot-boq-queue-2026-09-30.1",
+ "cap": 12,
+ "order": [
+  {
+   "kind": "issue",
+   "index": 0,
+   "tier": "1_held",
+   "signals": [
+    "QUANTITY_OR_UNIT_PARSE_FAILURE"
+   ],
+   "position": 1
+  },
+  {
+   "kind": "issue",
+   "index": 1,
+   "tier": "1_held",
+   "signals": [
+    "QUANTITY_OR_UNIT_PARSE_FAILURE"
+   ],
+   "position": 2
+  },
+  {
+   "kind": "issue",
+   "index": 2,
+   "tier": "1_held",
+   "signals": [
+    "QUANTITY_OR_UNIT_PARSE_FAILURE"
+   ],
+   "position": 3
+  },
+  {
+   "kind": "issue",
+   "index": 3,
+   "tier": "1_held",
+   "signals": [
+    "QUANTITY_OR_UNIT_PARSE_FAILURE"
+   ],
+   "position": 4
+  },
+  {
+   "kind": "line",
+   "index": 5,
+   "tier": "2_risk",
+   "signals": [
+    "quantity_rewritten",
+    "low_quantity_confidence",
+    "low_catalog_confidence"
+   ],
+   "position": 5
+  },
+  {
+   "kind": "line",
+   "index": 1,
+   "tier": "2_risk",
+   "signals": [
+    "quantity_not_from_cell",
+    "low_quantity_confidence"
+   ],
+   "position": 6
+  },
+  {
+   "kind": "line",
+   "index": 0,
+   "tier": "2_risk",
+   "signals": [
+    "no_part"
+   ],
+   "position": 7
+  },
+  {
+   "kind": "line",
+   "index": 3,
+   "tier": "3_audit",
+   "signals": [],
+   "position": 8
+  },
+  {
+   "kind": "line",
+   "index": 6,
+   "tier": "3_audit",
+   "signals": [],
+   "position": 9
+  },
+  {
+   "kind": "line",
+   "index": 8,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 10
+  },
+  {
+   "kind": "line",
+   "index": 10,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 11
+  },
+  {
+   "kind": "line",
+   "index": 13,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 12
+  }
+ ],
+ "not_reached": [
+  {
+   "kind": "line",
+   "index": 11,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 13
+  },
+  {
+   "kind": "line",
+   "index": 9,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 14
+  },
+  {
+   "kind": "line",
+   "index": 4,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 15
+  },
+  {
+   "kind": "line",
+   "index": 7,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 16
+  },
+  {
+   "kind": "line",
+   "index": 12,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 17
+  },
+  {
+   "kind": "line",
+   "index": 2,
+   "tier": "4_residual_audit",
+   "signals": [],
+   "position": 18
+  }
+ ],
+ "thresholds": {
+  "recheck_quantity_below": 90,
+  "confirm_catalog_below": 90
+ },
+ "audit": {
+  "seed": "ai-pilot-boq-audit-2026-09-30",
+  "n": 2
+ }
+}

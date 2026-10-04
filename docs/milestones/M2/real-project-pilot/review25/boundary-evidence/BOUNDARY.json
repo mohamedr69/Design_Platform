@@ -1,0 +1,678 @@
+{
+ "lifecycle_contract": "runner-lifecycle-2026-10-01.v2",
+ "scenarios": {
+  "P1_provider_stop_ordinary": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 3, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 3 req 0.7 s | critical 0",
+      "done L1 L1 stopped requests 3 seconds 0.8 state {'consecutive_failures': 3, 'recent_failures': [{'seq': 1, 'pid': 41580, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 41580, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 3, 'pid': 41580, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 2, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'stopped': 'stop: three consecutive provider failures', 'terminal_stop': {'lifecycle': 'runner-lifecycle-2026-10-01.v2', 'terminal': True, 'kind': 'provider_failures', 'reason': 'stop: three consecutive provider failures', 'evidence': [{'seq': 1, 'pid': 41580, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 41580, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 3, 'pid': 41580, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 2, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'reconstructed': False, 'at_utc': '2026-09-30T21:14:19+00:00', 'pid': 41580, 'clock': 1790802859.3444414, 'tag': 'L1', 'arm': 'L1', 'declaration_sha256': '8373bd1eab62df7767042ee67d4c82b985a852525e3b8275dcb0cbddcda3eaa4', 'allowance_key': {'scope': 'r22-four-arm-dry-2026-09-30-L1', 'profile': 'L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1'}}, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 3, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 3}"
+     ],
+     "printed": null
+    },
+    "status": "stopped",
+    "sends": 3,
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "provider_failures",
+     "reason": "stop: three consecutive provider failures",
+     "evidence": [
+      {
+       "seq": 1,
+       "pid": 41580,
+       "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 2,
+       "pid": 41580,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 3,
+       "pid": 41580,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 2,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T21:14:19+00:00",
+     "pid": 41580,
+     "clock": 1790802859.3444414,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "8373bd1eab62df7767042ee67d4c82b985a852525e3b8275dcb0cbddcda3eaa4",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    },
+    "journal": {
+     "records": 7,
+     "results": [
+      "failure",
+      "failure",
+      "failure"
+     ],
+     "unresolved_seqs": [],
+     "pids": [
+      41580
+     ]
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "sends": 3
+   },
+   "checks": {
+    "stop_persisted_in_process": true,
+    "resume_zero_sends_stop_kept": true
+   }
+  },
+  "P2_provider_stop_killed_before_file": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "status": null,
+    "sends": 3,
+    "stop_file": null,
+    "manifest_stop": null,
+    "journal": {
+     "records": 7,
+     "results": [
+      "failure",
+      "failure",
+      "failure"
+     ],
+     "unresolved_seqs": [],
+     "pids": [
+      28812
+     ]
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "stopped": "stop: three consecutive provider failures",
+    "sends": 3,
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "provider_failures",
+     "reason": "stop: three consecutive provider failures",
+     "evidence": [
+      {
+       "seq": 1,
+       "pid": 28812,
+       "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 2,
+       "pid": 28812,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 3,
+       "pid": 28812,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 2,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      }
+     ],
+     "reconstructed": true,
+     "at_utc": "2026-09-30T21:14:23+00:00",
+     "pid": 36436,
+     "clock": 1790802863.9263296,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "4ac09a27c168a41201adf3871762b3637861d156f9c31c7e9445e443e229c5a4",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    },
+    "not_attempted": []
+   },
+   "ledger_outcomes_independent": [
+    [
+     "settled",
+     "transport"
+    ],
+    [
+     "settled",
+     "transport"
+    ],
+    [
+     "settled",
+     "transport"
+    ]
+   ],
+   "checks": {
+    "decided_not_persisted": true,
+    "reconstructed_and_refused": true,
+    "evidence_is_the_journalled_failures": true,
+    "ledger_corroborates": true
+   }
+  },
+  "P4_repeated_resume_of_recovered_provider_stop": {
+   "run": {
+    "exit": 4,
+    "tail": [
+     "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    ],
+    "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+   },
+   "status": "stopped",
+   "sends": 3,
+   "checks": {
+    "zero_sends": true,
+    "stop_evidence_charges_journal_unchanged": true,
+    "first_reason_kept": true,
+    "two_refusals": true
+   }
+  },
+  "P3_provider_stop_killed_after_file": {
+   "initial": {
+    "run": {
+     "exit": 98,
+     "tail": [],
+     "printed": null
+    },
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "provider_failures",
+     "reason": "stop: three consecutive provider failures",
+     "evidence": [
+      {
+       "seq": 1,
+       "pid": 36224,
+       "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 2,
+       "pid": 36224,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 3,
+       "pid": 36224,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 2,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T21:14:27+00:00",
+     "pid": 36224,
+     "clock": 1790802867.2735035,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "a4ad3a470c8e90e62b5dc721732155e624a62d0ddcdeea239da09a222aa25fc8",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    },
+    "manifest_stop": null
+   },
+   "resume": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "sends": 3
+   },
+   "checks": {
+    "file_written_manifest_not": true,
+    "refused_on_file": true
+   }
+  },
+  "P5a_two_failures_and_an_unresolved_request": {
+   "initial": {
+    "run": {
+     "exit": 97,
+     "tail": [],
+     "printed": null
+    },
+    "journal": {
+     "records": 6,
+     "results": [
+      "failure",
+      "failure"
+     ],
+     "unresolved_seqs": [
+      3
+     ],
+     "pids": [
+      11416
+     ]
+    },
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 2,
+     "41d54518": 0,
+     "a733b0ba": 0
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.8 s | critical 0",
+      "done L1 L1 completed requests 16 seconds 2.2 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': None, 'terminal_stop': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 16, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': [{'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'attempts': [{'attempt': 2, 'pid': 11416, 'started': 1790802870.376503, 'calls_at_start': 0}], 'calls_already_charged': 2}]} {'16830': 8, '17428': 8}"
+     ],
+     "printed": null
+    },
+    "status": "completed",
+    "stopped": null,
+    "requests": {
+     "16830": 8,
+     "17428": 8
+    },
+    "provider_journal": {
+     "state": "ok",
+     "streak": 2,
+     "unresolved": [
+      {
+       "seq": 3,
+       "pid": 11416,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 2
+      }
+     ],
+     "last_seq": 3,
+     "result_counts": {
+      "ok": 0,
+      "failure": 2,
+      "cache_hit": 0,
+      "budget": 0,
+      "none": 0
+     },
+     "processes": 1
+    },
+    "stop_file": null,
+    "charges": {
+     "0909d684": 1,
+     "395f76c1": 10,
+     "41d54518": 8,
+     "a733b0ba": 0
+    }
+   },
+   "checks": {
+    "state_before_resume": true,
+    "not_terminal_resume_completes": true,
+    "streak_carried_as_two_unresolved_not_counted": true,
+    "in_flight_request_stays_charged": true
+   }
+  },
+  "P5b_success_between_failures": {
+   "initial": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.9 s | critical 0",
+      "done L1 L1 completed requests 18 seconds 2.4 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': None, 'terminal_stop': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 18, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 10, '17428': 8}"
+     ],
+     "printed": null
+    },
+    "status": "completed",
+    "journal": {
+     "records": 37,
+     "results": [
+      "failure",
+      "failure",
+      "ok",
+      "failure",
+      "failure",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok"
+     ],
+     "unresolved_seqs": [],
+     "pids": [
+      11932
+     ]
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "done L1 L1 completed requests 0 seconds 0.1 state {'consecutive_failures': 0, 'recent_failures': [], 'stopped': None, 'terminal_stop': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 0, 'cache_hits': 0, 'deferred': [], 'skipped_projects': ['16830', '17428'], 'interrupted_seen': []} {}"
+     ],
+     "printed": null
+    },
+    "status": "completed",
+    "provider_journal": {
+     "state": "ok",
+     "streak": 0,
+     "unresolved": [],
+     "last_seq": 18,
+     "result_counts": {
+      "ok": 14,
+      "failure": 4,
+      "cache_hit": 0,
+      "budget": 0,
+      "none": 0
+     },
+     "processes": 1
+    },
+    "requests": {}
+   },
+   "checks": {
+    "no_stop_with_ok_between": true,
+    "no_false_reconstruction_on_resume": true
+   }
+  },
+  "P5c_breaker_not_reset_by_restart": {
+   "initial": {
+    "run": {
+     "exit": 97,
+     "tail": [],
+     "printed": null
+    },
+    "journal": {
+     "records": 6,
+     "results": [
+      "failure",
+      "failure"
+     ],
+     "unresolved_seqs": [
+      3
+     ],
+     "pids": [
+      32632
+     ]
+    }
+   },
+   "resume": {
+    "run": {
+     "exit": 0,
+     "tail": [
+      "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 1, 'calls': 1, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 1 req 0.5 s | critical 0",
+      "done L1 L1 stopped requests 1 seconds 0.7 state {'consecutive_failures': 3, 'recent_failures': [{'seq': 1, 'pid': 32632, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 32632, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 4, 'pid': 40308, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'stopped': 'stop: three consecutive provider failures', 'terminal_stop': {'lifecycle': 'runner-lifecycle-2026-10-01.v2', 'terminal': True, 'kind': 'provider_failures', 'reason': 'stop: three consecutive provider failures', 'evidence': [{'seq': 1, 'pid': 32632, 'sha256': '0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 2, 'pid': 32632, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}, {'seq': 4, 'pid': 40308, 'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'task': 'discover_page', 'page': 1, 'outcome': 'transport', 'error_detail': 'scripted provider failure', 'model': 'dry'}], 'reconstructed': False, 'at_utc': '2026-09-30T21:14:42+00:00', 'pid': 40308, 'clock': 1790802882.9554145, 'tag': 'L1', 'arm': 'L1', 'declaration_sha256': '45e995a1a55a612d162c8f834901a2794856cc42ae543666c23abdbc8a60fd5e', 'allowance_key': {'scope': 'r22-four-arm-dry-2026-09-30-L1', 'profile': 'L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1'}}, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 1, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': [{'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'attempts': [{'attempt': 2, 'pid': 32632, 'started': 1790802881.0485363, 'calls_at_start': 0}], 'calls_already_charged': 2}]} {'16830': 1}"
+     ],
+     "printed": null
+    },
+    "status": "stopped",
+    "stop_file": {
+     "lifecycle": "runner-lifecycle-2026-10-01.v2",
+     "terminal": true,
+     "kind": "provider_failures",
+     "reason": "stop: three consecutive provider failures",
+     "evidence": [
+      {
+       "seq": 1,
+       "pid": 32632,
+       "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 2,
+       "pid": 32632,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      },
+      {
+       "seq": 4,
+       "pid": 40308,
+       "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+       "task": "discover_page",
+       "page": 1,
+       "outcome": "transport",
+       "error_detail": "scripted provider failure",
+       "model": "dry"
+      }
+     ],
+     "reconstructed": false,
+     "at_utc": "2026-09-30T21:14:42+00:00",
+     "pid": 40308,
+     "clock": 1790802882.9554145,
+     "tag": "L1",
+     "arm": "L1",
+     "declaration_sha256": "45e995a1a55a612d162c8f834901a2794856cc42ae543666c23abdbc8a60fd5e",
+     "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+     }
+    },
+    "journal": {
+     "records": 8,
+     "results": [
+      "failure",
+      "failure",
+      "failure"
+     ],
+     "unresolved_seqs": [
+      3
+     ],
+     "pids": [
+      32632,
+      40308
+     ]
+    }
+   },
+   "resume_again": {
+    "run": {
+     "exit": 4,
+     "tail": [
+      "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+     ],
+     "printed": "STOPPED (terminal, preserved): stop: three consecutive provider failures -- zero requests sent; a separate explicit decision and binding are required to reopen this arm"
+    },
+    "status": "stopped",
+    "sends": 3
+   },
+   "checks": {
+    "two_failures_then_in_flight": true,
+    "terminal_after_first_resumed_failure": true,
+    "further_resume_refused": true
+   }
+  },
+  "P6a_torn_record": {
+   "damage": "the last record truncated by 20 bytes (torn write)",
+   "initial": {
+    "exit": 98,
+    "tail": [],
+    "printed": null
+   },
+   "resume": {
+    "exit": 5,
+    "tail": [
+     "REFUSED (indeterminate provider state): torn trailing record (the last line is incomplete) -- zero requests sent; the run record is left untouched"
+    ],
+    "printed": "REFUSED (indeterminate provider state): torn trailing record (the last line is incomplete) -- zero requests sent; the run record is left untouched"
+   },
+   "refusals": [
+    {
+     "at_utc": "2026-09-30T21:14:47+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "indeterminate provider state: torn trailing record (the last line is incomplete)",
+     "requests_sent": 0
+    }
+   ],
+   "checks": {
+    "refused_exit_5": true,
+    "zero_sends_nothing_changed": true,
+    "no_stop_fabricated": true,
+    "refusal_recorded_zero_requests": true
+   }
+  },
+  "P6b_journal_missing": {
+   "damage": "the journal deleted (requests and charges exist)",
+   "initial": {
+    "exit": 98,
+    "tail": [],
+    "printed": null
+   },
+   "resume": {
+    "exit": 5,
+    "tail": [
+     "REFUSED (indeterminate provider state): no provider-outcome journal although this run recorded requests or charges -- zero requests sent; the run record is left untouched"
+    ],
+    "printed": "REFUSED (indeterminate provider state): no provider-outcome journal although this run recorded requests or charges -- zero requests sent; the run record is left untouched"
+   },
+   "refusals": [
+    {
+     "at_utc": "2026-09-30T21:14:50+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "indeterminate provider state: no provider-outcome journal although this run recorded requests or charges",
+     "requests_sent": 0
+    }
+   ],
+   "checks": {
+    "refused_exit_5": true,
+    "zero_sends_nothing_changed": true,
+    "no_stop_fabricated": true,
+    "refusal_recorded_zero_requests": true
+   }
+  },
+  "P6c_other_binding": {
+   "damage": "the header bound to another tag",
+   "initial": {
+    "exit": 98,
+    "tail": [],
+    "printed": null
+   },
+   "resume": {
+    "exit": 5,
+    "tail": [
+     "REFUSED (indeterminate provider state): the journal is bound to another run -- zero requests sent; the run record is left untouched"
+    ],
+    "printed": "REFUSED (indeterminate provider state): the journal is bound to another run -- zero requests sent; the run record is left untouched"
+   },
+   "refusals": [
+    {
+     "at_utc": "2026-09-30T21:14:53+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "indeterminate provider state: the journal is bound to another run",
+     "requests_sent": 0
+    }
+   ],
+   "checks": {
+    "refused_exit_5": true,
+    "zero_sends_nothing_changed": true,
+    "no_stop_fabricated": true,
+    "refusal_recorded_zero_requests": true
+   }
+  },
+  "P6d_result_without_attempt": {
+   "damage": "the attempt record of seq 2 removed (a result without its attempt)",
+   "initial": {
+    "exit": 98,
+    "tail": [],
+    "printed": null
+   },
+   "resume": {
+    "exit": 5,
+    "tail": [
+     "REFUSED (indeterminate provider state): record 4: a result without its open attempt -- zero requests sent; the run record is left untouched"
+    ],
+    "printed": "REFUSED (indeterminate provider state): record 4: a result without its open attempt -- zero requests sent; the run record is left untouched"
+   },
+   "refusals": [
+    {
+     "at_utc": "2026-09-30T21:14:57+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "indeterminate provider state: record 4: a result without its open attempt",
+     "requests_sent": 0
+    }
+   ],
+   "checks": {
+    "refused_exit_5": true,
+    "zero_sends_nothing_changed": true,
+    "no_stop_fabricated": true,
+    "refusal_recorded_zero_requests": true
+   }
+  }
+ }
+}

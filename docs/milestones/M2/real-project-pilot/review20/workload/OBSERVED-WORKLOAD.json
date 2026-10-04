@@ -1,0 +1,282 @@
+{
+ "mode": "read-only ledger",
+ "pricing": "unknown: no cost computed",
+ "tasks": {
+  "discover_page": {
+   "requests": 34,
+   "usage_unknown": 2,
+   "timeouts": 2,
+   "input_total_incl_cached": {
+    "mean": 26492,
+    "p90": 55102,
+    "max": 81625
+   },
+   "cached_input_mean": 17853,
+   "output": {
+    "mean": 4611,
+    "max": 17923
+   },
+   "latency_ms": {
+    "p50": 38990,
+    "p90": 168101,
+    "max": 265854
+   },
+   "turns": {
+    "p50": 4,
+    "max": 8
+   },
+   "estimate_charged_for_unknown": [
+    45544
+   ]
+  },
+  "discover_region": {
+   "requests": 6,
+   "usage_unknown": 1,
+   "timeouts": 1,
+   "input_total_incl_cached": {
+    "mean": 13891,
+    "p90": 25963,
+    "max": 25963
+   },
+   "cached_input_mean": 9654,
+   "output": {
+    "mean": 3502,
+    "max": 5162
+   },
+   "latency_ms": {
+    "p50": 35860,
+    "p90": 56577,
+    "max": 56577
+   },
+   "turns": {
+    "p50": 4,
+    "max": 5
+   },
+   "estimate_charged_for_unknown": [
+    11947
+   ]
+  },
+  "read_boq_row": {
+   "requests": 17,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 5721,
+    "p90": 5532,
+    "max": 8967
+   },
+   "cached_input_mean": 4177,
+   "output": {
+    "mean": 437,
+    "max": 1211
+   },
+   "latency_ms": {
+    "p50": 7765,
+    "p90": 9903,
+    "max": 16119
+   },
+   "turns": {
+    "p50": 5,
+    "max": 7
+   },
+   "estimate_charged_for_unknown": []
+  },
+  "read_decision": {
+   "requests": 1,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 6239,
+    "p90": 6239,
+    "max": 6239
+   },
+   "cached_input_mean": 2521,
+   "output": {
+    "mean": 362,
+    "max": 362
+   },
+   "latency_ms": {
+    "p50": 7944,
+    "p90": 7944,
+    "max": 7944
+   },
+   "turns": {
+    "p50": 3,
+    "max": 3
+   },
+   "estimate_charged_for_unknown": []
+  },
+  "read_field_context": {
+   "requests": 3,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 6703,
+    "p90": 7507,
+    "max": 7507
+   },
+   "cached_input_mean": 3157,
+   "output": {
+    "mean": 316,
+    "max": 454
+   },
+   "latency_ms": {
+    "p50": 6936,
+    "p90": 9079,
+    "max": 9079
+   },
+   "turns": {
+    "p50": 3,
+    "max": 3
+   },
+   "estimate_charged_for_unknown": []
+  },
+  "read_identity": {
+   "requests": 22,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 7841,
+    "p90": 10732,
+    "max": 20893
+   },
+   "cached_input_mean": 4691,
+   "output": {
+    "mean": 414,
+    "max": 1407
+   },
+   "latency_ms": {
+    "p50": 7481,
+    "p90": 15600,
+    "max": 19000
+   },
+   "turns": {
+    "p50": 3,
+    "max": 6
+   },
+   "estimate_charged_for_unknown": []
+  },
+  "read_revision": {
+   "requests": 18,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 6097,
+    "p90": 7569,
+    "max": 9447
+   },
+   "cached_input_mean": 3997,
+   "output": {
+    "mean": 235,
+    "max": 313
+   },
+   "latency_ms": {
+    "p50": 6143,
+    "p90": 8251,
+    "max": 15560
+   },
+   "turns": {
+    "p50": 3,
+    "max": 4
+   },
+   "estimate_charged_for_unknown": []
+  },
+  "read_submittal_form": {
+   "requests": 3,
+   "usage_unknown": 0,
+   "timeouts": 0,
+   "input_total_incl_cached": {
+    "mean": 20579,
+    "p90": 26121,
+    "max": 26121
+   },
+   "cached_input_mean": 10274,
+   "output": {
+    "mean": 1907,
+    "max": 3035
+   },
+   "latency_ms": {
+    "p50": 24635,
+    "p90": 36136,
+    "max": 36136
+   },
+   "turns": {
+    "p50": 5,
+    "max": 5
+   },
+   "estimate_charged_for_unknown": []
+  }
+ },
+ "arms": {
+  "ai-pilot-2026-09-30-S": {
+   "planned_documents": 12,
+   "settled_requests": 18,
+   "refused": 0,
+   "requests_per_planned_document": 1.5,
+   "timeouts": 1,
+   "input_total_incl_cached": 340041,
+   "output_total": 55379,
+   "note": null
+  },
+  "ai-pilot-2026-09-30-G": {
+   "planned_documents": 12,
+   "settled_requests": 26,
+   "refused": 0,
+   "requests_per_planned_document": 2.17,
+   "timeouts": 0,
+   "input_total_incl_cached": 390869,
+   "output_total": 47873,
+   "note": null
+  },
+  "ai-pilot-2026-09-30-T": {
+   "planned_documents": 12,
+   "settled_requests": 9,
+   "refused": 8,
+   "requests_per_planned_document": 0.75,
+   "timeouts": 0,
+   "input_total_incl_cached": 140666,
+   "output_total": 9087,
+   "note": "closed by its breaker after 9 requests: a lower bound, not a per-document rate"
+  },
+  "ai-pilot-r18-2026-09-30-S": {
+   "planned_documents": 7,
+   "settled_requests": 15,
+   "refused": 0,
+   "requests_per_planned_document": 2.14,
+   "timeouts": 0,
+   "input_total_incl_cached": 270459,
+   "output_total": 58234,
+   "note": null
+  },
+  "ai-pilot-r18-2026-09-30-T2": {
+   "planned_documents": 7,
+   "settled_requests": 16,
+   "refused": 0,
+   "requests_per_planned_document": 2.29,
+   "timeouts": 2,
+   "input_total_incl_cached": 186803,
+   "output_total": 31656,
+   "note": null
+  },
+  "ai-pilot-2026-09-30-BOQ-S": {
+   "planned_documents": 1,
+   "settled_requests": 5,
+   "refused": 0,
+   "requests_per_planned_document": 5.0,
+   "timeouts": 0,
+   "input_total_incl_cached": 27556,
+   "output_total": 2653,
+   "note": null
+  },
+  "ai-pilot-2026-09-30-BOQ-T": {
+   "planned_documents": 1,
+   "settled_requests": 12,
+   "refused": 0,
+   "requests_per_planned_document": 12.0,
+   "timeouts": 0,
+   "input_total_incl_cached": 69699,
+   "output_total": 4780,
+   "note": null
+  }
+ }
+}

@@ -1,0 +1,77 @@
+def join_rows(emitted: list[dict], truth: list[dict], tolerance: float = GEOMETRY_TOLERANCE) -> dict:
+    """emitted: rows with 'page', 'y' (geometry), 'part_number', 'quantity', 'description' and an 'id';
+    truth: label rows of kind 'line' with 'page', 'ordinal' (print order), 'description' and, when VERIFIED, 'y'.
+    Returns {'pairs': [(emitted id, truth ordinal, 'matched_geometry'|'matched'|'ambiguous')],
+             'held': {emitted id: [candidate truth ordinals]}, 'held_reasons': {emitted id: reason},
+             'unmatched_emitted': [...], 'unmatched_truth': [...], 'intervals': {page: [...]}}.
+
+    R16-01 contract (r16.1): every VERIFIED truth row is a boundary for the whole page, whether or not an emitted row
+    was matched to it. Truth rows without a position are placed in the interval between the verified rows that
+    enclose them in print order; emitted rows (not consumed by geometry) in the interval between the verified
+    positions that enclose them. A fallback (description) match is only possible INSIDE the same interval, so no
+    confirmed association crosses a verified row. Verified positions that contradict print order are not used to
+    guess: every emitted row of that page is held (reason 'verified positions contradict print order')."""
+    out = {"pairs": [], "held": {}, "held_reasons": {}, "unmatched_emitted": [], "unmatched_truth": [], "intervals": {}}
+    for page in sorted({r["page"] for r in emitted} | {r["page"] for r in truth}):
+        e_all = sorted([r for r in emitted if r["page"] == page], key=lambda r: r["y"])
+        t_all = sorted([r for r in truth if r["page"] == page], key=lambda r: r["ordinal"])
+        anchors = [t for t in t_all if t.get("y") is not None]                 # print order
+        if any(anchors[k]["y"] >= anchors[k + 1]["y"] for k in range(len(anchors) - 1)):
+            for x in e_all:
+                out["held"][x["id"]] = [t["ordinal"] for t in t_all]
+                out["held_reasons"][x["id"]] = "verified positions contradict print order"
+            out["unmatched_truth"] += []
+            continue
+        # 1. verified geometry (physical identity), exactly as r15.1
+        used_e = set()
+        for t in anchors:
+            near = [x for x in e_all if abs(x["y"] - t["y"]) <= tolerance]
+            back = [tt for tt in anchors if near and abs(near[0]["y"] - tt["y"]) <= tolerance]
+            if len(near) == 1 and len(back) == 1:
+                out["pairs"].append((near[0]["id"], t["ordinal"], "matched_geometry"))
+                used_e.add(near[0]["id"])
+            elif len(near) > 1 or len(back) > 1:
+                for x in near:
+                    out["held"].setdefault(x["id"], []).append(t["ordinal"])
+                    out["held_reasons"][x["id"]] = "geometry: more than one emitted row within tolerance of a verified row"
+                    used_e.add(x["id"])
+            else:
+                out["unmatched_truth"].append(t["ordinal"])                  # verified position, nothing emitted there: missed
+        # 2. intervals bounded by EVERY verified row (matched or not)
+        a_ord = [t["ordinal"] for t in anchors]
+        a_y = [t["y"] for t in anchors]
+        n_int = len(anchors) + 1
+        t_int = [[] for _ in range(n_int)]
+        e_int = [[] for _ in range(n_int)]
+        for t in t_all:
+            if t.get("y") is None:
+                t_int[sum(1 for o in a_ord if o < t["ordinal"])].append(t)
+        for x in e_all:
+            if x["id"] not in used_e:
+                e_int[sum(1 for y in a_y if y < x["y"])].append(x)
+        out["intervals"][page] = [{"interval": k, "truth": [t["ordinal"] for t in t_int[k]], "emitted": [x["id"] for x in e_int[k]]} for k in range(n_int)]
+        # 3. fallback inside each interval only: order + description (never a scored value); ties held
+        for k in range(n_int):
+            e, t = e_int[k], t_int[k]
+            if not e or not t:
+                out["unmatched_emitted"] += [x["id"] for x in e]
+                out["unmatched_truth"] += [x["ordinal"] for x in t]
+                continue
+            score, pairs = _align(e, t)
+            paired_e, paired_t = set(), set()
+            for i, j in pairs:
+                cands = _candidates(e, t, i, j, score)
+                if len(cands) == 1:
+                    out["pairs"].append((e[i]["id"], t[j]["ordinal"], "matched"))
+                    paired_t.add(j)
+                else:
+                    out["pairs"].append((e[i]["id"], t[j]["ordinal"], "ambiguous"))
+                    out["held"][e[i]["id"]] = [t[c]["ordinal"] for c in cands if c is not None]
+                    out["held_reasons"][e[i]["id"]] = f"fallback: an equally good alignment inside interval {k}"
+                    paired_t.update(c for c in cands if c is not None)
+                paired_e.add(i)
+            out["unmatched_emitted"] += [e[i]["id"] for i in range(len(e)) if i not in paired_e]
+            out["unmatched_truth"] += [t[j]["ordinal"] for j in range(len(t)) if j not in paired_t]
+    return out
+
+

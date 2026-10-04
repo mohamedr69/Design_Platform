@@ -1,0 +1,3037 @@
+diff --git a/backend/app/ai/sheet_reader.py b/backend/app/ai/sheet_reader.py
+index 30643eb..8306f62 100644
+--- a/backend/app/ai/sheet_reader.py
++++ b/backend/app/ai/sheet_reader.py
+@@ -1342,7 +1342,7 @@ def combine(run: _Run, *, document_sha: str, reading: DocumentReading, page_imag
+ # --- the read a caller asks for ------------------------------------------------------------
+ 
+ 
+-def _not_read(why: str, *, reading_id: int | None = None) -> DesignSheetExtraction:
++def _not_read(why: str, *, reading_id: int | None = None, attempted: bool = True) -> DesignSheetExtraction:
+     """A sheet the model did not read, saying why. Nothing stands in for the
+     reading: the BOQ page shows the reason and offers the read again."""
+     result = DesignSheetExtraction(reader="ai", reading_id=reading_id, failure=why)
+@@ -1353,6 +1353,7 @@ def _not_read(why: str, *, reading_id: int | None = None) -> DesignSheetExtracti
+     # (M2), not only its failure text -- a "completed" run with no lines
+     # read the job state as done (projects._boq_read_state) when nothing was.
+     result.state = "failed"
++    result.attempted = attempted
+     return result
+ 
+ 
+@@ -1368,9 +1369,9 @@ def read_design_sheet(db: Session, project: Project, sheet: ProjectDesignSheet,
+     path = Path(sheet.document_path)
+     why_not = available(project, provider)
+     if why_not:
+-        return _not_read(f"Not read: {why_not}")
++        return _not_read(f"Not read: {why_not}", attempted=False)
+     if not path.is_file():
+-        return _not_read("Not read: the file is not there")
++        return _not_read("Not read: the file is not there", attempted=False)
+     document_sha = pipeline.sha256_of(path) or ""
+     run = _Run(db=db, project=project, provider=provider or get_provider(), budget=_budget(db, project.id))
+     try:
+diff --git a/backend/app/routers/projects.py b/backend/app/routers/projects.py
+index eaf3ecb..5569b72 100644
+--- a/backend/app/routers/projects.py
++++ b/backend/app/routers/projects.py
+@@ -885,6 +885,22 @@ def _extract_boq(db: Session, project: Project, *, user_id: int | None, ctx=None
+                 continue
+             extracted.extend((system_rules.effective_code(sheet.system_code, project), line) for line in result.lines)
+ 
++        # No sheet was read at all -- the model switched off or unavailable, the files not there: nothing was
++        # attempted, so nothing is stamped. Stamping it made the BOQ "extracted" with no line, and every later
++        # open returned that empty BOQ, the model enabled or not (M2 review 05, R5-04). The reasons are
++        # returned; the next open tries again. A sheet read and found unreadable is still stamped, as before.
++        if reads and not any(getattr(result, "attempted", True) for _sheet, result in reads):
++            # Each sheet is still recorded as not read (the BOQ page and readiness show why), once: an open
++            # that finds the same reason standing adds no second record.
++            for sheet, result in reads:
++                latest = (db.query(ExtractionRun).filter(ExtractionRun.project_id == project.id, ExtractionRun.kind == "design_sheet",
++                                                         ExtractionRun.document_path == str(sheet.document_path))
++                          .order_by(ExtractionRun.id.desc()).first())
++                if latest is None or latest.failure != result.failure or latest.state != result.state:
++                    extraction_pipeline.record_design_sheet_run(db, project, sheet, result, commit=False)
++            db.commit()
++            return BoqEnsureResponse(items=project.boq_items, extracted=False, warnings=warnings, version=project.boq_version)
++
+         # One transaction: the stamp, the runs with their review rows, the
+         # lines and the version are written together or not at all -- the
+         # BOQ never shows as extracted with its lines missing.
+diff --git a/backend/app/services/boq_candidates.py b/backend/app/services/boq_candidates.py
+index aa2e29e..a76f7a1 100644
+--- a/backend/app/services/boq_candidates.py
++++ b/backend/app/services/boq_candidates.py
+@@ -189,10 +189,23 @@ def build(db: Session, project: Project, user: User | None, ctx=None) -> BoqCand
+         for line in result.lines:
+             new_lines.append(_candidate_line(project, sheet, line, run, len(new_lines)))
+ 
++    # A sheet this read could not read says nothing about the lines the BOQ took from it: they are not
++    # "no longer yielded" -- nobody looked. Offered as removals they could be accepted and the BOQ lose
++    # them (M2 review 05, R5-04). They are left out of the comparison and stand as they are; a re-read that
++    # read no sheet at all is not a re-read, and fails with the reasons.
++    unread = [(sheet, s) for sheet, s in zip(project.design_sheets, sheets) if s["failure"]]
++    if sheets and len(unread) == len(sheets):
++        raise CandidateError("No Design Sheet could be read, so nothing was compared and the BOQ is unchanged: "
++                             + "; ".join(f"{s['document_name']}: {s['failure']}" for _sheet, s in unread))
++    unread_paths = {str(sheet.document_path) for sheet, _s in unread}
++    run_paths = {run.id: str(run.document_path) for run in db.query(ExtractionRun).filter(ExtractionRun.project_id == project.id)}
+     library = boq_provenance.part_library(db)
+     for record in new_lines:
+         boq_provenance.check_catalog(record, library)
+-    old_lines = [_old_line(item) for item in project.boq_items]
++    old_lines, not_reread = [], []
++    for item in project.boq_items:
++        (not_reread if item.extraction_run_id is not None and run_paths.get(item.extraction_run_id) in unread_paths
++         else old_lines).append(_old_line(item))
+     changes, unchanged = compare(old_lines, new_lines)
+     summary = {
+         "old_lines": len(old_lines), "new_lines": len(new_lines),
+@@ -204,6 +217,8 @@ def build(db: Session, project: Project, user: User | None, ctx=None) -> BoqCand
+         "removed": sum(1 for c in changes if c["kind"] == "removed"),
+         "sheets": sheets,
+         "failed_sheets": [s["document_name"] for s in sheets if s["failure"]],
++        # Lines from those sheets, left as they are: not compared, never offered for removal.
++        "not_reread": len(not_reread),
+     }
+     candidate = BoqCandidate(
+         project_id=project.id, status="pending", base_boq_version=project.boq_version,
+diff --git a/backend/app/services/design_sheet_extractor.py b/backend/app/services/design_sheet_extractor.py
+index a2bfa1e..6047514 100644
+--- a/backend/app/services/design_sheet_extractor.py
++++ b/backend/app/services/design_sheet_extractor.py
+@@ -44,7 +44,8 @@ settings = get_settings()
+ 
+ # Part of every cache key: a change to how a sheet is read is a change to
+ # what a cached result means.
+-PARSER_VERSION = "2026-09-28.1"   # M2 review 02: band rows, quantity recheck < 90 %, part-number check, heading carry-over
++PARSER_VERSION = "2026-09-28.2"   # M2 review 05: correlated part-number agreement is not confirmation; item-number and misassigned columns held
++# 2026-09-28.1 -- M2 review 02: band rows, quantity recheck < 90 %, part-number check, heading carry-over
+ if settings.tesseract_cmd:
+     pytesseract.pytesseract.tesseract_cmd = settings.tesseract_cmd
+ 
+@@ -528,6 +529,10 @@ class DesignSheetExtraction:
+     # it, when one did. A partial read's lines are what was settled; its
+     # rows still pending are review rows that a resumed read settles.
+     state: str = "completed"
++    # False where no reader looked at the sheet at all -- the model switched off or unavailable, the file not
++    # there -- as against a sheet read and found unreadable. A read nothing attempted is not a completed read:
++    # it is not stamped as the project's BOQ read, and its sheet's lines are not re-read away (M2 review 05).
++    attempted: bool = True
+     budget_exhausted: str | None = None
+ 
+     @property
+@@ -791,6 +796,12 @@ def _confirm_catalog(image: Image.Image, line: ExtractedBoqLine, catalog_span: t
+         return o.upper() not in strip.upper() and len(o) >= 0.6 * len(strip)
+ 
+     agreed = len(others) >= 2 and len(set(_part_key(o) for o in others)) == 1 and whole(others[0])
++    # The passes read the strip's own pixels again with the same engine, preprocessed two ways: when the
++    # strip itself was unsure, their agreeing is the same misreading repeated, not a second witness. On the
++    # pilot's frozen sheets, 8 of the 64 strip reads under 90 % that both passes "confirmed" were wrong --
++    # KCW019ML-IP65 read KCWO019ML-IP65 at 51 % by the strip and both passes (EP-19977), G1ARN read GIARN,
++    # CTR160 read CTRI60 (M2 review 05, R5-04). Agreement stays recorded; it no longer accepts the row.
++    correlated = confirmed and line.catalog_confidence is not None and line.catalog_confidence < RECHECK_QUANTITY_BELOW
+     # a near miss: the same length, one or two characters read as others
+     # (I for 1, O for 0, Z for 2); a separator more or fewer (a wrap's "-")
+     # is the pass's own artefact, not another part
+@@ -806,6 +817,11 @@ def _confirm_catalog(image: Image.Image, line: ExtractedBoqLine, catalog_span: t
+         # every pass read.
+         line.catalog_uncertain = True
+         line.catalog_check = {"confirmed": False, "multiline": multiline, "reason": "no independent pass read the whole part number"}
++    elif correlated:
++        line.catalog_uncertain = True
++        line.catalog_check = {"confirmed": False, "multiline": multiline, "agreement": "correlated",
++                              "reason": f"the strip read it at {line.catalog_confidence:.0f}% and the passes that agree read the same "
++                                        "pixels with the same engine: repeated, not independent, evidence"}
+     else:
+         line.catalog_check = {"confirmed": True, "multiline": multiline, "reason": "an independent pass read the same part number"}
+ 
+@@ -1049,6 +1065,7 @@ def extract_design_sheet(pdf_path: Path, on_page=None) -> DesignSheetExtraction:
+                                     f"(y {region.top}-{region.bottom}) was read as {region.rows_accepted} row(s)")
+         read.extend(page_lines)
+ 
++    _hold_implausible_columns(read, result.notes)
+     result.buildings = settle_identity(read)
+ 
+     # A BOQ line is something being quoted in some amount, so a row whose
+@@ -1079,6 +1096,60 @@ def extract_design_sheet(pdf_path: Path, on_page=None) -> DesignSheetExtraction:
+     return result
+ 
+ 
++# A run of this many rows whose "quantities" count 1, 2, 3 ... is the item-number column, not quantities.
++ITEM_NUMBER_RUN = 5
++
++
++def _hold_implausible_columns(lines: list[ExtractedBoqLine], notes: list[str]) -> None:
++    """Hold rows whose columns do not read as a BOQ's, for the engineer, with the cell and what was read
++    (M2 review 05, R5-04). Two checks on what a column holds, never on what a value should be:
++
++    - a quantity column that counts 1, 2, 3 ... down consecutive rows is the item numbers (EP-26369's
++      MS FAS BOQ, laid out Item | Model | Description | Quantity: items 1-13 read as quantities 1-13).
++      Once a run shows it, every row the same column layout gives is held, on every page: the column
++      is the item column throughout, whatever the shorter sections happen to count;
++    - a table whose descriptions are mostly bare numbers has its columns crossed (EP-26082's aspiration
++      sheet: part numbers read as quantities, quantities as descriptions).
++
++    Nothing is dropped: each held row's quantity is set aside with the reason, so it becomes a review row
++    with its cell (`_dropped_row_issue`). Runs over the whole sheet, after every page is read."""
++    def hold(line: ExtractedBoqLine, rule: str) -> None:
++        line.quantity_parse = {**(line.quantity_parse or {}), "status": values.AMBIGUOUS, "held_quantity": line.quantity, "rule": rule}
++        line.quantity = None
++
++    def counted(line: ExtractedBoqLine) -> str | None:
++        value = line.quantity or line.raw_quantity
++        value = (value or "").strip()
++        return value if value.isdigit() else None
++
++    by_table: dict[tuple, list[ExtractedBoqLine]] = {}
++    for line in lines:
++        by_table.setdefault((line.page, line.table_span), []).append(line)
++    item_columns: dict[tuple | None, str] = {}
++    for (page, span), rows in by_table.items():
++        rows = sorted(rows, key=lambda l: l.y_px or 0)
++        numeric = [l for l in rows if re.fullmatch(r"\d[\d.,]*", (l.description or "").strip())]
++        if len(rows) >= 3 and len(numeric) >= 0.6 * len(rows):
++            for line in rows:
++                if line.quantity:
++                    hold(line, "the table's description column reads as numbers: its columns do not read as a BOQ's")
++            notes.append(f"page {page}: a table of {len(rows)} rows whose descriptions are numbers was held for review")
++            continue
++        run: list[ExtractedBoqLine] = []
++        for line in [l for l in rows if counted(l)] + [None]:
++            if line is not None and run and int(counted(line)) == int(counted(run[-1])) + 1:
++                run.append(line)
++                continue
++            if len(run) >= ITEM_NUMBER_RUN and span not in item_columns:
++                item_columns[span] = f"page {page}: the quantity column counts {counted(run[0])}..{counted(run[-1])} down {len(run)} rows"
++            run = [line] if line is not None else []
++    for span, why in item_columns.items():
++        held = [l for l in lines if l.table_span == span and l.quantity]
++        for line in held:
++            hold(line, f"{why}: it reads as the item numbers, not quantities, wherever this column layout is read")
++        notes.append(f"{why}; {len(held)} rows read in that column layout were held for review")
++
++
+ def settle_identity(read: list[ExtractedBoqLine]) -> list[dict]:
+     """One building, one name; one part, one spelling -- across every row of
+     one sheet, whoever read them. Returns the buildings the sheet names.
+diff --git a/backend/app/services/document_control.py b/backend/app/services/document_control.py
+index 5c326cd..0cd5d79 100644
+--- a/backend/app/services/document_control.py
++++ b/backend/app/services/document_control.py
+@@ -358,13 +358,17 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
+ # covers and scanned transmittals are promoted to records only on the
+ # evaluation path (EXTRACTION_PROMOTE_OBSERVATIONS), else kept as
+ # observations; a reference cut at a hyphen is flagged incomplete.
+-PARSER_VERSION = "parse-2026-09-28.4"
++PARSER_VERSION = "parse-2026-09-28.6"
+ 
+ # The codes a controlled document's reference carries. Contractors number
+ # them their own way: MAS and MAR are both a material submittal (material
+ # approval request), SDW, DWG and SD a shop drawing, SAR a sample. MS is a
+ # method statement and is not one of these.
+-_CODES = r"(MAS|MAR|SDW|DWG|SD|SAR)"
++# MAT: a material submittal in Emaar / Voltas and EFECO numbering ("EBF-DCP-6374-VL-MAT-ELV-0003", "A23-EFE-MAT-E-00033";
++# real-project pilot, 2026-09-28).
++# MTG: a material sample tag in CSCEC numbering ("R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020"), a sample; the tag form
++# also prints the material submittal it belongs to ("…-MAR-…-1009"), which is not the tag (M2 review 05).
++_CODES = r"(MAS|MAR|MAT|MTG|SDW|DWG|SD|SAR)"
+ # A reference may go on past a slash with the sheets it covers -- the
+ # submission "…-SD-MEP-FA-0054" lists "…-SD-MEP/FA-104 A~104 M", the reply
+ # answers "…-SD-MEP/FA-100,101,102,104&105", a sheet is "…-SD-MEP/FA-104-M".
+@@ -378,14 +382,17 @@ _SHEETS = r"(?:/[A-Z0-9]{1,6}-\d{1,5}(?:[ -]?[A-Z](?![A-Z0-9]))?(?:\s*[,&~]\s*\d
+ # on the next line ("…-SD-MEP-" / "0042", a cover's own fields read by OCR)
+ # is never glued on -- that made a serial of a base and unfolded the reply
+ # behind EP-30088's FA-0042 cover.
+-_SEGMENT = r"(?:-[A-Z0-9]+|-\n[A-Z][A-Z0-9]*)"
+-REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
++# The wrapped segment is never the next field's label: a scanned form wraps "…-PJW-ZZZ-" over its
++# "Rev.01" label, and joining the two read "…-ZZZ-Rev" as the number (M2 review 05, pilot P-10).
++_SEGMENT = r"(?:-[A-Z0-9]+|-\n(?!(?:REV|REVISION|DATE|REF|NO|PAGE|SHEET|TITLE)\b)[A-Z][A-Z0-9]*)"
++# The code itself may follow a wrapped hyphen ("EBF-DCP-6374-VL-" / "MAT-ELV-0003"), like any segment.
++REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-\n?" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
+ # A date written "6-Mar-2026" has the shape of a MAR reference and is not
+ # one: a number, a month, a year. A real reference with a numeric prefix
+ # ("123-MAR-001") has no year where the year would be.
+ _DATE_SHAPED = re.compile(r"^\d{1,2}-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-(?:\d{2}|\d{4})$", re.I)
+-_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "SAR": "samples", "SDW": "drawings", "DWG": "drawings",
+-                     "SD": "drawings"}
++_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "MAT": "submittals", "SAR": "samples", "MTG": "samples", "SDW": "drawings",
++                     "DWG": "drawings", "SD": "drawings"}
+ 
+ 
+ def is_date_shaped(reference: str | None) -> bool:
+@@ -410,6 +417,27 @@ class ReferenceCandidate:
+     # was read is the start of it, not the whole, and is marked so rather
+     # than guessed at.
+     incomplete: bool = False
++    # Where the page names this reference as another document's -- "REFER TO DWG No. …", "Refer to …
++    # for comments", "see drawing …" -- it is a cross-reference: never the page's own identity (M2
++    # review 05, pilot P-07 / P-08).
++    cross_reference: bool = False
++    # Where the page's own label precedes it on its line ("Ref No : …", "Reference: …").
++    labelled: bool = False
++    # Where the text right before it on its line is a lone letter or the tail of another hyphenated
++    # run ("R 1029-…", "…-CO-EL V-EL-MTG-…"): a scanner's text layer split the number, and where it
++    # starts is not known (pilot P-10). Read, and marked so rather than guessed at.
++    uncertain_start: bool = False
++    # Named as what the page is about, not as the page: a letter's or a comment sheet's "Subject: … Ref. X",
++    # a clause's citation "(Ref: X)" (A23 comment sheet, Voltas quotation; M2 review 05).
++    about: bool = False
++    # A form's own control number printed in its footer ("R1029-CSCEC-FM-MAR-001_R01" over "Version Date"):
++    # the template's identity, on every page made from it (MTG-1020 page 6; M2 review 05).
++    template: bool = False
++
++    @property
++    def identity_candidate(self) -> bool:
++        """Whether this may be the page's own number at all."""
++        return not (self.cross_reference or self.about or self.template)
+ 
+     @property
+     def category(self) -> str:
+@@ -426,25 +454,96 @@ def reference_candidates(text: str) -> list[ReferenceCandidate]:
+     out = []
+     for match in REF.finditer(text):
+         raw = match.group()
++        start = match.start()
++        # OCR of a form glues the field's label to its value ("Reference25H-S202-…",
++        # "No.R1029-…"): the label is not part of the number (pilot P-01).
++        glued = _GLUED_LABEL.match(raw)
++        if glued:
++            raw = raw[glued.end():]
++            start += glued.end()
+         reference = raw.replace("-\n", "-").rstrip("-.")
++        # OCR reads the zero of a revision suffix as the letter O ("-RO", "-R0O"):
++        # the suffix is a revision, not part of the number (pilot P-03).
++        reference = _OCR_REVISION_SUFFIX.sub(lambda m: "-R" + m.group(1).upper().replace("O", "0"), reference)
+         if is_date_shaped(reference):
+             continue
+         base = reference.split("/", 1)[0]
+         kind = "sheets" if "/" in reference else "serial" if re.search(r"-\d{2,}[A-Z]?$", base, re.I) else "other"
+-        out.append(ReferenceCandidate(reference, match.group(1).upper(), match.start(), match.end(), kind,
+-                                      incomplete=raw.rstrip(".").endswith("-")))
++        before = text[text.rfind("\n", 0, start) + 1:start]
++        out.append(ReferenceCandidate(reference, match.group(1).upper(), start, match.end(), kind,
++                                      incomplete=raw.rstrip(".").endswith("-"),
++                                      cross_reference=bool(_CROSS_REFERENCE.search(before)),
++                                      labelled=bool(_OWN_LABEL.search(before) or glued),
++                                      uncertain_start=bool(_SPLIT_START.search(before)),
++                                      about=bool(_SUBJECT_LINE.search(before) or _CITATION.search(before)),
++                                      template=bool(_TEMPLATE_AFTER.search(text[match.end():match.end() + 60]))))
+     return out
+ 
+ 
++_CROSS_REFERENCE = re.compile(r"(?:\brefer(?:ence\s+to|\s+to)?|\bsee|\bas\s+per)\b\s*(?:the\s+)?"
++                              r"(?:(?:dwg|drawing|sheet|detail)s?\.?\s*(?:no\.?|number)?\s*[:.]?\s*)?$", re.I)
++_OWN_LABEL = re.compile(r"(?:\bref(?:erence)?\.?\s*(?:no\.?)?|\bour\s+ref\.?|\bsubmittal\s+no\.?|\bdoc(?:ument)?\.?\s*no\.?)"
++                        r"\s*[:|.]?\s*$", re.I)
++_SPLIT_START = re.compile(r"(?:^|[\s|:])[A-Za-z] $|-[A-Z0-9]+ $")
++_SUBJECT_LINE = re.compile(r"^\W{0,3}Subject\b", re.I)
++_CITATION = re.compile(r"\(\s*ref(?:erence)?\.?\s*(?:no\.?)?\s*[:#]?\s*$", re.I)
++_TEMPLATE_AFTER = re.compile(r"^_R\d+\b|^[^\n]{0,12}\n\s*Version\s+(?:Date|No)\b", re.I)
++
++# A revision that is not the document's: a form's own edition ("Form No.: F-013 / Rev.0", a footer
++# "LAC-SM-Feb. 2014 (Rev.02)") and a table's column header ("DRAWING No. / DOCUMENTS No. Rev" over the
++# reference drawings). EP-19977's Emaar form read R0 from its template; NCC FA-047 read R2 from its footer;
++# NCC FA-031's sheet read R1 from its reference table (M2 review 05).
++_FORM_EDITION = re.compile(r"\bForm\s*(?:No|Ref)\b|\bAppendix\s+[A-Z]\d*\b|\bPage\s*\d+\s*of\s*\d+|\bVersion\s+Date\b|\bIssue\s+Date\b", re.I)
++_TABLE_HEADER = re.compile(r"\b(?:DRAWING\s*No|DOCUMENTS?\s*No|DESCRIPTION|TITLE|SHEET)\b", re.I)
++
++
++def page_revision(text: str):
++    """The page's own revision field as a REV match (group 1 the number), or None: the first REV that is
++    not a form's edition, a table's column header or a date under the label."""
++    for found in REV.finditer(text):
++        line_start = text.rfind("\n", 0, found.start()) + 1
++        previous_start = text.rfind("\n", 0, max(line_start - 1, 0)) + 1
++        line_end = text.find("\n", found.start())
++        line = text[line_start:len(text) if line_end < 0 else line_end]
++        if text[max(0, found.start() - 1):found.start()] == "(" or _FORM_EDITION.search(text[previous_start:len(text) if line_end < 0 else line_end]):
++            continue
++        rest = line.replace(line[found.start() - line_start:], "")
++        if _TABLE_HEADER.search(line) and not re.search(r"\d", rest):
++            continue
++        return found
++    return None
++
++
++_GLUED_LABEL = re.compile(r"^(?:Reference|Ref\.?|No\.?)(?=[A-Z0-9]*\d)", re.I)
++_OCR_REVISION_SUFFIX = re.compile(r"-R([O0]{1,2}\d{0,2}|\d{0,2}[O0]{1,2})$", re.I)
++# A drawing-number field's value is a number, never the next field's label:
++# an empty "Drawing No:" in front of "Reference No: …" read "Reference" as
++# the number (pilot P-02).
++_FIELD_LABEL = re.compile(r"^(?:Reference|Ref|Rev|Revision|Date|Title|Sheet|Scale|No|Number|Drawn|Checked|Approved)\b\.?\s*(?:No\.?)?\s*:?$", re.I)
++
++
++def drawing_number(text: str):
++    """The first drawing-number field whose value holds a digit and is not a
++    field label, as a match (group 1 is the number); None for none."""
++    for match in DRAW_REF.finditer(text):
++        value = match.group(1).strip()
++        if re.search(r"\d", value) and not _FIELD_LABEL.match(value):
++            return match
++    return None
++
++
+ def first_reference(text: str) -> ReferenceCandidate | None:
+-    """The first reference on the page that is not a date; None for none."""
+-    found = reference_candidates(text)
++    """The first reference on the page that is not a date and not a cross-reference to another
++    document ("REFER TO DWG No. …"); None for none."""
++    found = [c for c in reference_candidates(text) if c.identity_candidate]
+     return found[0] if found else None
+ # The trailing guard rejects a numbered list item. A CAD title block keeps
+ # labels and values in separate text runs, so the line after the "REV" label
+ # is whatever the export put next -- on every EP-30784 shop drawing that is
+ # the general notes, whose "1.)" was read as revision 1.
+-REV = re.compile(r"\b(?:MAS\s+|MAR\s+|SDW\s+|DWG\s+|SD\s+|SAR\s+)?REV(?:ISION)?\.?\s*[:.-]?\s*\n?\s*R?\s*(\d{1,3})\b(?!\s*\.?\))", re.I)
++# The number is not the start of a date: "Rev.\n10.09.2024" is a date under the label, not revision 10
++# (JAM-SD-FA-002, M2 review 05, pilot P-07).
++REV = re.compile(r"\b(?:MAS\s+|MAR\s+|SDW\s+|DWG\s+|SD\s+|SAR\s+)?REV(?:ISION)?\.?\s*[:.-]?\s*\n?\s*R?\s*(\d{1,3})\b(?!\s*\.?\))(?![./-]\d)", re.I)
+ 
+ # Shop drawings are filed one folder per submission (.../1.FAVE/R1/05. Ground
+ # Floor/...). The sheet's own title block carries the *drawing's* revision,
+@@ -604,7 +703,7 @@ def submission_cover(text: str) -> Cover | None:
+         return None
+     category = _COVER_CATEGORY[heading.group(1)[:4].upper()]
+     candidates = reference_candidates(text)
+-    serials = [c for c in candidates if c.kind == "serial" and c.category == category]
++    serials = [c for c in candidates if c.kind == "serial" and c.category == category and c.identity_candidate]
+     if not serials:
+         return None
+     # The submission's own number: written by its label where the form
+@@ -613,7 +712,7 @@ def submission_cover(text: str) -> Cover | None:
+                      if re.search(r"(?:\bNo\.?|Reference|Ref\.?)\s*:?\s*$", text[max(0, c.start - 24):c.start], re.I)), None)
+     cover = labelled or serials[0]
+     listed = tuple(dict.fromkeys(" ".join(c.reference.split()) for c in candidates if c.kind == "sheets"))
+-    revision_match = REV.search(text)
++    revision_match = page_revision(text)
+     revision = f"R{int(revision_match.group(1))}" if revision_match else None
+     description = None
+     first_sheet = next((c for c in candidates if c.kind == "sheets"), None)
+@@ -1030,14 +1129,56 @@ def floor_name(title: str, *, whole: bool = True) -> str | None:
+         # A title block exports its runs separately, so a floor can come
+         # back with the gaps still in it ("LIFT MACHINE ROOM  FLOOR PLAN").
+         if found: return " ".join(found.group().split())
+-    # Last resort: the whole line, where it is a floor and nothing else
+-    # ("GROUND FLOOR PLAN"). Never for a file name -- a hundred characters
+-    # of drawing number and description is not a floor, and printed as one
+-    # it filled the column.
+-    return " ".join(title.split()) if whole and "FLOOR" in title.upper() else None
++    # Last resort: the word the title prints in front of FLOOR, as printed ("FIRST FLOOR", "HC FLOOR",
++    # "MEZZANINE FLOOR"). Not the whole line: "FIRST FLOOR FIRE ALARM LAYOUT" kept whole became the
++    # floor "FIRST FIRE ALARM" downstream (M2 review 05, pilot P-05); what a floor word means -- its
++    # level, its elevation, an alias -- is not read here. Never for a file name -- a hundred characters
++    # of drawing number and description is not a floor, and printed as one it filled the column.
++    if not whole or "FLOOR" not in title.upper():
++        return None
++    # A line that is a floor and nothing else stays whole ("LIFT MACHINE ROOM FLOOR PLAN").
++    if not _SYSTEM_WORDS.search(title):
++        return " ".join(title.split())
++    found = re.search(r"\b([A-Z][A-Z.]*|\d+[A-Z]*)\s+FLOOR\b", title, re.I)
++    return f"{found.group(1)} FLOOR".upper() if found and found.group(1).upper() not in _NOT_A_FLOOR_WORD else None
++
++
++# What a title names beside its floor: the system and the kind of sheet, never part of the floor.
++_SYSTEM_WORDS = re.compile(r"\b(?:FIRE|ALARM|LAYOUT|EMERGENCY|LIGHTING|LIGHT|SYSTEM|DETECTION|VOICE|EVACUATION|PAVA|PA/VA"
++                           r"|SCHEMATIC|DETAILS?|RISER|CABLES?|SPEAKERS?|BATTERY|CBS|ELS|FAS)\b", re.I)
++
++
++# Words a title puts before FLOOR that do not name one ("THE FLOOR", "RAISED FLOOR" is a floor type).
++_NOT_A_FLOOR_WORD = {"THE", "EACH", "EVERY", "PER", "ALL", "RAISED", "FALSE", "ACCESS", "ON", "OF", "AND", "TO", "FOR"}
++
++
++# A form's listing of what it carries: the numbers under it are the listed items, not the page's own.
++_LISTING_HEADER = re.compile(r"Attachment\s+Details|Shop\s*drawing\s+Reference|\bITEM\b[^\n]{0,6}Document\s+No", re.I)
++
++
++def _is_transmittal_form(text: str) -> bool:
++    """A document transmittal (the scanned acknowledgement of one): its heading and the form's own field
++    labels. The numbers it lists are the items it carries (pilot P-09); its own number is the TR number,
++    read by `transmittals`, never the first reference on it."""
++    from app.services import transmittals
++
++    return bool(transmittals._OCR_HEADING.search(text)) and sum(1 for cue in transmittals._OCR_FORM_CUES if cue.search(text)) >= 2
++
++
++# A covering sheet sent with a document -- a fax cover, a transmittal letter -- names the document it
++# carries ("kindly find attached … material submittal reference # A23-EFE-MAT-E-0033"); it is not that
++# document (EFECO fax, EP-13777; M2 review 05).
++_COVERING_SHEET = re.compile(r"\bFACSIMILE\s+TRANSMITTAL\b|\bFAX\s+(?:COVER|TRANSMITTAL)\b", re.I)
++
+ 
++def _listed(text: str, candidate: ReferenceCandidate) -> bool:
++    header = _LISTING_HEADER.search(text)
++    return bool(header) and candidate.start > header.start()
+ 
+-def parse_page(text: str, path: str, modified: datetime, page: int) -> list[ControlledDocument]:
++
++def parse_page(text: str, path: str, modified: datetime, page: int, sheet=None) -> list[ControlledDocument]:
++    """`sheet`: the page's title block read by position (`title_block.read_page`), for a drawing sheet
++    with a text layer; its own number and REV cell stand for the page's (M2 review 05, P-06 / P-07)."""
+     # A drawing schedule defines required rows, not an approved drawing itself.
+     if re.search(r"DWG\s*NO", text, re.I) and "FIRE ALARM" in text.upper() and "EML SUBMISSION" in text.upper():
+         schedule = []
+@@ -1049,16 +1190,21 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
+                 schedule.append(ControlledDocument(code, title, path, modified, re.sub(r"\s+", " ", ref.strip()), "R0", "UR", floor_name(title), page=page, source="drawing schedule", category="drawings"))
+         return schedule
+     candidate = first_reference(text)
+-    drawing_match = DRAW_REF.search(text)
++    drawing_match = drawing_number(text)
+     # A reply sheet quotes the reference it answers. Registering it would
+     # displace the submission form carrying that reference, so it is only
+     # ever read for the decision it may carry (source="reply"), and
+     # _scan_document_control attaches that to the submission itself.
+     if REPLY_SHEET.search(text) and not SUBMISSION_FORM.search(text):
++        # The reply's own header names the submission it answers ("Ref No : …-010029"); the comments
++        # quote others ("Refer to …-010034 for comments"), which are never its reference (pilot P-08).
++        # A reply whose only numbers are quoted ones names nothing of its own.
++        replies = [c for c in reference_candidates(text) if c.identity_candidate]
++        candidate = next((c for c in replies if c.labelled), replies[0] if replies else None)
+         if candidate is None: return []
+         decision, evidence = read_decision(text)
+         reference = re.sub(r"-R\d+$", "", candidate.reference, flags=re.I)
+-        revision_match = REV.search(text) or re.search(r"\bR\.?\s*(\d{1,3})\b", text)
++        revision_match = page_revision(text) or re.search(r"\bR\.?\s*(\d{1,3})\b", text)
+         return [ControlledDocument(
+             None, "Reply to consultant comments", path, modified, reference,
+             f"R{int(revision_match.group(1))}" if revision_match else "R0",
+@@ -1093,22 +1239,55 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
+         revision_source = "cover" if cover.revision else "folder" if category == "drawings" and folder_revision(path) else "default"
+         return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page,
+                                    category=category, listed=listed, raw_system=raw_system, revision_source=revision_source)]
++    if _is_transmittal_form(text) or _COVERING_SHEET.search(text):
++        return []
++    own = sheet.number if sheet is not None and sheet.number and not SUBMISSION_FORM.search(text) else None
++    drawing_value = drawing_match.group(1).strip() if drawing_match else None
++    if own:
++        # The title block's own number cell (title_block): the page's identity, whatever the text lists
++        # first. In the controlled numbering it is read as a reference; otherwise as a drawing number.
++        controlled = [c for c in reference_candidates(own) if c.start == 0 and c.reference.upper() == own.upper().rstrip("-.")]
++        candidate = controlled[0] if controlled else None
++        drawing_value = None if controlled else own
++    elif candidate is not None and _listed(text, candidate):
++        # The first number sits in the form's listing of what it carries (an attachment, a listed
++        # drawing): the page's own number was not read -- a scanned cover whose reference line OCR lost.
++        own_before = [c for c in reference_candidates(text) if c.identity_candidate and not _listed(text, c)]
++        candidate = own_before[0] if own_before else None
++        if candidate is None:
++            return []
+     match = candidate
+     if match:
+         reference = candidate.reference
+         category = candidate.category
+         # A catalogue quoting a submittal number is not a submission form.
+-        required = r"material[s]?\s+submittal|MAS\s+Reference" if category == "submittals" else r"sample\s+approval|SAR\s+Reference" if category == "samples" else r"drawing\s*(?:title|no|number|submittal)|shop\s*drawing"
++        required = r"material[s]?\s+submittal|MAS\s+Reference" if category == "submittals" else r"sample\s+(?:approval|tag)|SAR\s+Reference" if category == "samples" else r"drawing\s*(?:title|no|number|submittal)|shop\s*drawing"
+         # A method statement transmittal names its material submittal's
+         # number; it is not one (EP-29495 files both under -MS- and -MAR-).
+         if category == "submittals" and re.search(r"method\s+statement|risk\s+assessment", text, re.I): return []
+         if not re.search(required, text, re.I) and not re.search(r"consultant.*(?:reply|comment|status)|review\s*status", text, re.I): return []
+-    elif drawing_match and re.search(r"FIRE\s*ALARM|EMERGENCY\s*LIGHT|VOICE\s*EVACUATION", text, re.I):
+-        reference, category = drawing_match.group(1).strip(), "drawings"
+-        if not TITLE.search(text): return []
++    elif drawing_value and re.search(r"FIRE\s*ALARM|EMERGENCY\s*LIGHT|VOICE\s*EVACUATION", text, re.I):
++        reference, category = drawing_value, "drawings"
++        if not TITLE.search(text) and not own: return []
+     else:
+         return []
+-    revision_match = REV.search(text)
++    flags: list[str] = []
++    # A drawing sheet whose title block was read by position: its REV cell is the printed revision, and
++    # the text's REV runs -- the revision history's, the reference table's, a date under the label -- are
++    # not read at all (P-06). A sheet whose REV cell and latest revision-history row disagree prints no
++    # one revision: both are kept (the observation), the record is flagged, and its revision comes from
++    # what else there is (P-06: BBY006 L58 R01 prints REV. NO. 00 over a history whose latest row is 01).
++    geometry = sheet is not None and category == "drawings" and not SUBMISSION_FORM.search(text) \
++        and bool(sheet.number or sheet.revision)
++    revision_match = None if geometry else page_revision(text)
++    if geometry and sheet.revision:
++        if sheet.conflict:
++            flags.append("revision_conflict")
++        elif re.fullmatch(r"\d{1,3}", sheet.revision):
++            revision_match = re.match(r"(\d+)", sheet.revision)
++        else:
++            # Printed as letters ("AB", "C1"): kept as printed; the register's R-number is not made of it.
++            flags.append("printed_revision_unmapped")
+     suffix = re.search(r"-R(\d+)$", reference.split("/", 1)[0], re.I)
+     # The drawing's own revision first; the folder only where it prints
+     # none. A resubmission is filed with the comments it answers -- a
+@@ -1131,9 +1310,13 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
+     if category == "drawings" and not SUBMISSION_FORM.search(text):
+         # A drawing sheet: read the title block by position (see title_block).
+         block_title, layout = title_block(text, reference)
++        if geometry and sheet.title:
++            # The sheet's own Drawing Title cell, read by position: it names the system and the floor the
++            # sheet is of, where the run after the number in the export order is whatever came next (R5-01).
++            block_title, layout = sheet.title, None
+         # The revision the block prints, kept as printed beside the one
+         # above: on a sheet filed under R1 that still says 00, both are facts.
+-        printed = printed_revision(text, reference)
++        printed = sheet.revision if geometry else printed_revision(text, reference)
+     else:
+         block_title = None
+     title_match = re.search(r"(?:Material\s+Submittal\s+for|Sample\s+Approval\s+Request\s+for)\s+([^\n]+)", text, re.I) if category != "drawings" else TITLE.search(text)
+@@ -1167,9 +1350,12 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
+     # Floor Plan" -- so without this it reached the log as a drawing of no
+     # floor at all, and those basements looked undrawn.
+     floor = floor_name(title) or floor_name(Path(path).stem, whole=False)
+-    flags = ("reference_incomplete",) if candidate is not None and candidate.incomplete else ()
++    if candidate is not None and candidate.incomplete:
++        flags.append("reference_incomplete")
++    if candidate is not None and candidate.uncertain_start and not own:
++        flags.append("reference_uncertain")
+     return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page, category=category,
+-                               printed_revision=printed, revision_source=revision_source, flags=flags)]
++                               printed_revision=printed, revision_source=revision_source, flags=tuple(flags))]
+ 
+ 
+ def normalize_floor(value: str) -> str:
+@@ -1510,8 +1696,10 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+             visited.append(number)
+             try:
+                 text = page_text(page, index, page_texts)
++                sheet = _sheet_of(page, text, number, observations)
+                 with timed("deterministic_extract"):
+-                    found = parse_page(text, filename, modified, number)
++                    # Passed only where a title block was read: `parse_page` is a seam tests replace.
++                    found = parse_page(text, filename, modified, number, **({"sheet": sheet} if sheet is not None else {}))
+                 # The approval block lists every option and fills the box
+                 # beside the one chosen. As text that is a list of choices
+                 # and settles nothing -- rightly, since a list is not an
+@@ -1565,6 +1753,19 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+                             renders.clear()
+                             with timed("deterministic_extract"):
+                                 ocr_found = parse_page(ocr_text, filename, modified, number)
++                            if not found and not ocr_found and scan and _LISTING_HEADER.search(ocr_text) \
++                                    and not _is_transmittal_form(ocr_text):
++                                # A scanned cover whose own reference line the full-page OCR lost, while it
++                                # read the attachments listed under it (NCC LACASA covers): the header band
++                                # read once more, on its own, at the same scale -- bounded, cached by content.
++                                band = _ocr_band_text(page, sha256, index)
++                                counted("ocr_band_retries")
++                                band_found = parse_page(band + "\n" + ocr_text, filename, modified, number)
++                                observations.append({"page": number, "kind": "ocr_retry", "region": "header band",
++                                                     "used": bool(band_found)})
++                                if band_found:
++                                    ocr_found, ocr_text = band_found, band + "\n" + ocr_text
++                            with timed("deterministic_extract"):
+                                 decision, evidence = read_decision(ocr_text)
+                                 if not found and not ocr_found and scan and index < 2:
+                                     # A scanned copy of a document transmittal
+@@ -1579,6 +1780,18 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+                                             ocr_found = sent
+                                         elif sent:
+                                             observations.append({"page": number, "kind": "transmittal", "records": [observed_record(r) for r in sent]})
++                                    elif _is_transmittal_form(ocr_text):
++                                        # A transmittal whose TR number OCR did not read as one ("18/0127/26";
++                                        # re-reads gave "7R", "1R", "TR" -- no read settles it): what was read
++                                        # is kept as read, and no number is made of it (pilot P-09).
++                                        observations.append({"page": number, "kind": "transmittal", "records": [],
++                                                             "reference": None, "flags": ["reference_unread"],
++                                                             "raw_reference": transmittals.raw_reference(ocr_text)})
++                            if sheet is not None and sheet.number:
++                                # The title block gave the sheet's own number: OCR of its images adds a stamp or
++                                # a decision, never another identity -- a callout's "DWG No. …-FA-00104" on the
++                                # ICT sheet SA-H2-BEST-ICT-00100a is not the sheet (M2 review 05).
++                                ocr_found = [r for r in ocr_found if re.sub(r"\s+", "", r.reference).upper() == re.sub(r"\s+", "", sheet.number).upper()]
+                             if not found: found = ocr_found
+                             if ocr_found or decision != "UR":
+                                 counted("ocr_pages_used")   # the OCR text changed what was read
+@@ -1689,6 +1902,56 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
+     return reading if full else (reading.records, reading.notes)
+ 
+ 
++def _controlled_number(value: str) -> bool:
++    found = reference_candidates(value)
++    return bool(found) and found[0].start == 0 and found[0].reference.upper() == value.upper().rstrip("-.")
++
++
++def _sheet_of(page, text: str, number: int, observations: list):
++    """The page's title block read by position, for a drawing-sized page with a text layer; its facts kept
++    as an observation of the page. A failure here leaves the page to the text reader, noted."""
++    from app.services import title_block
++
++    if len(text.strip()) < 80 or not title_block.is_drawing_sheet(page):
++        return None
++    try:
++        with timed("title_block"):
++            sheet = title_block.read_page(page, controlled=_controlled_number)
++    except Exception as exc:  # noqa: BLE001 -- geometry failed: the text reader stands, as before
++        observations.append({"page": number, "kind": "title_block", "version": title_block.TITLE_BLOCK_VERSION,
++                             "error": f"{type(exc).__name__}: {exc}"[:200]})
++        return None
++    if sheet is not None:
++        observations.append({"page": number, **sheet.observation()})
++    return sheet
++
++
++OCR_BAND_VARIANT = "band-1"
++
++
++def _ocr_band_text(page, sha256: str | None, index: int) -> str:
++    """The header band of a scanned page (8-32 % of its height, full width), OCRed on its own at the
++    reader's render scale; cached by content like the page (variant `OCR_BAND_VARIANT`)."""
++    from PIL import Image
++
++    from app.services import page_cache
++
++    cached = page_cache.get_ocr(sha256, index, OCR_BAND_VARIANT) if sha256 else None
++    if cached is not None:
++        counted("ocr_cache_hits")
++        return cached
++    rect = page.rect
++    scale = _render_scale(page)
++    clip = pymupdf.Rect(0, rect.height * 0.08, rect.width, rect.height * 0.32)
++    with timed("ocr_render"):
++        pixels = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip)
++        image = Image.open(io.BytesIO(pixels.tobytes("png")))
++    text = _ocr_images(page, [image])[0]
++    if sha256:
++        page_cache.put_ocr(sha256, index, text, OCR_BAND_VARIANT)
++    return text
++
++
+ def _sheet_numbers(reference: str) -> set[str]:
+     """The sheet numbers a reference lists past its slash ("…/FA-100,101,104&105" -> 100, 101, 104, 105)."""
+     _base, slash, sheets = reference.partition("/")
+diff --git a/backend/app/services/document_processing.py b/backend/app/services/document_processing.py
+index 1f1cd32..0b0ea1b 100644
+--- a/backend/app/services/document_processing.py
++++ b/backend/app/services/document_processing.py
+@@ -224,10 +224,11 @@ def parser_current(row: ProjectDocument) -> bool:
+             # not assumed to be either ...
+             and extracted.get("profile") == document_control.extraction_profile()
+             # ... and not carrying records read under another or an unknown
+-            # profile (M2 review 03, R3-02): such a reading is a mixed one,
+-            # never reused as this profile's; it is read again when the row
+-            # is next processed or repaired (not on its own: no retry loop).
+-            and not retained.get("other_profile"))
++            # profile (M2 review 03, R3-02) or by another or an unknown parser
++            # (M2 review 04, R4-01): such a reading is a mixed one, never
++            # reused as this parser's and profile's; it is read again when the
++            # row is next processed or repaired (not on its own: no retry loop).
++            and not retained.get("other_profile") and not retained.get("other_parser"))
+ 
+ 
+ # --- the job -----------------------------------------------------------------------------
+@@ -321,8 +322,11 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
+             _report(ctx, done, total, path.name)
+             continue
+         timing = dict(result.get("timing") or {})
+-        if result["unchanged"]:
++        if result.get("unchanged"):
+             # Touched, not changed: the content already read. Nothing opened.
++            # (`.get`: a duplicate-content result carries no "unchanged" key --
++            # M2 real-project pilot: the duplicate branch below raised KeyError
++            # here and failed the whole processing job.)
+             row.sha256, row.size, row.mtime, row.last_seen_at = result["sha"], result["size"], result["mtime"], now
+             row.state, row.error = FRESH, None
+             counts["unchanged_after_hash"] += 1
+diff --git a/backend/app/services/document_sync.py b/backend/app/services/document_sync.py
+index a54e8d9..291371a 100644
+--- a/backend/app/services/document_sync.py
++++ b/backend/app/services/document_sync.py
+@@ -356,10 +356,22 @@ def staleness(kept: dict, sha256: str | None):
+ CARRIED_UNVISITED = "carried_unvisited"
+ CARRIED_UNVERIFIED = "carried_unverified"
+ CARRIED_OTHER_PROFILE = "carried_other_profile"
+-CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE)
++CARRIED_OTHER_PARSER = "carried_other_parser"
++CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE, CARRIED_OTHER_PARSER)
+ RETAINED_METHOD = "retained"
+ 
+ 
++def parser_compatible(version: str | None) -> bool:
++    """Whether a record read under `version` may stand as read by the parser
++    as it is now (M2 review 04, R4-01). The contract is explicit and narrow:
++    only the current `document_control.PARSER_VERSION` is compatible with
++    itself; an earlier or an unknown version is not, whatever it read -- a
++    known defect of an earlier parser would otherwise stand for ever on a
++    page the current parser never visited. (A future version may name the
++    versions whose records it accepts; none does now.)"""
++    return version is not None and version == document_control.PARSER_VERSION
++
++
+ def retained_provenance(record: dict, kept: dict) -> dict:
+     """Where a carried record was read: its own retained provenance when it
+     was carried before (it travels with the record and is never restamped
+@@ -407,18 +419,22 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
+         retained = retained_provenance(record, kept)
+         unverified = retained["source_sha256"] is None or retained["source_sha256"] != sha256
+         other_profile = profile is not None and (retained["profile"] is None or retained["profile"] != profile)
++        other_parser = not parser_compatible(retained.get("parser_version"))
+         flags = [f for f in (record.get("flags") or []) if f not in CARRY_FLAGS] + [CARRIED_UNVISITED]
+         if unverified:
+             flags.append(CARRIED_UNVERIFIED)
+         if other_profile:
+             flags.append(CARRIED_OTHER_PROFILE)
++        if other_parser:
++            flags.append(CARRIED_OTHER_PARSER)
+         new = {**record, "flags": flags, "retained": retained}
+         candidates = [list(c) for c in (record.get("decision_candidates") or [])]
+         held = next((c for c in candidates if len(c) == 3 and c[2] == RETAINED_METHOD), None)
+-        if unverified or other_profile:
++        if unverified or other_profile or other_parser:
+             status = record.get("status")
+             if status not in (None, "UR") and held is None:
+-                why = f"retained from a {retained['profile'] or 'unknown-profile'} reading of " + ("other bytes" if unverified else "these bytes")
++                why = (f"retained from a {retained['profile'] or 'unknown-profile'} reading by {retained.get('parser_version') or 'an unknown parser'} of "
++                       + ("other bytes" if unverified else "these bytes"))
+                 candidates.append([status, why, RETAINED_METHOD])
+             new["status"] = "UR"
+             new["decision_candidates"] = candidates
+@@ -431,11 +447,13 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
+         return [], None
+     pages = sorted({r.get("page") for r in carried if r.get("page") is not None})
+     unverified_n = sum(1 for r in carried if CARRIED_UNVERIFIED in r["flags"]); other_n = sum(1 for r in carried if CARRIED_OTHER_PROFILE in r["flags"])
++    parser_n = sum(1 for r in carried if CARRIED_OTHER_PARSER in r["flags"])
+     note = (f"{len(carried)} record{'s' if len(carried) != 1 else ''} on page{'s' if len(pages) != 1 else ''} "
+             f"{', '.join(str(p) for p in pages) if pages else 'unknown'} not visited by this reading "
+             f"{'were' if len(carried) != 1 else 'was'} kept from the previous reading"
+             + (f"; {unverified_n} read from other or unknown bytes (unverified)" if unverified_n else "")
+-            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "") + ".")
++            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "")
++            + (f"; {parser_n} read by another or unknown parser (decision held until the page is read again)" if parser_n else "") + ".")
+     return carried, note
+ 
+ 
+@@ -448,8 +466,11 @@ def retained_summary(records: list[dict]) -> dict | None:
+     if not kept:
+         return None
+     return {"records": len(kept), "pages": sorted({r.get("page") for r in kept if r.get("page") is not None}),
++            # a mixed reading: some record of it stands under another profile or parser than the envelope's
++            "mixed": any(CARRIED_OTHER_PROFILE in r["flags"] or CARRIED_OTHER_PARSER in r["flags"] for r in kept),
+             "unverified": sum(1 for r in kept if CARRIED_UNVERIFIED in r["flags"]),
+             "other_profile": sum(1 for r in kept if CARRIED_OTHER_PROFILE in r["flags"]),
++            "other_parser": sum(1 for r in kept if CARRIED_OTHER_PARSER in r["flags"]),
+             "sources": sorted({json.dumps({k: (r.get("retained") or {}).get(k) for k in ("source_sha256", "parser_version", "profile")}, sort_keys=True) for r in kept})}
+ 
+ 
+diff --git a/backend/app/services/transmittals.py b/backend/app/services/transmittals.py
+index a13a1e3..8eaaf6d 100644
+--- a/backend/app/services/transmittals.py
++++ b/backend/app/services/transmittals.py
+@@ -239,3 +239,13 @@ def number(records: list[ControlledDocument]) -> list[ControlledDocument]:
+         for n, row in enumerate(chain):
+             numbered.append(replace(row, revision=f"R{n}", status="UR" if n == len(chain) - 1 else "SUPERSEDED"))
+     return numbered
++
++
++_RAW_REF = re.compile(r"\bAASS\s*Ref\b[^\n]{0,24}?([^\s|]{0,3}\s*/\s*\d{1,5}\s*/\s*\d{2,4})", re.I)
++
++
++def raw_reference(text: str) -> str | None:
++    """What a scanned transmittal's "AASS Ref." cell read as, literally, where it did not read as a TR
++    number ("_18/0127/26"): evidence kept for an engineer, never a number (M2 review 05, pilot P-09)."""
++    found = _RAW_REF.search(text or "")
++    return " ".join(found.group(1).split()) if found else None
+diff --git a/backend/scripts/repair_extraction.py b/backend/scripts/repair_extraction.py
+index fd00790..c1e9c3d 100644
+--- a/backend/scripts/repair_extraction.py
++++ b/backend/scripts/repair_extraction.py
+@@ -111,6 +111,8 @@ def select_rows(db: Session, project: Project | None, selections: set[str], ids:
+             reasons.append(f"read under another extraction profile ({(row.extracted or {}).get('profile') or 'not recorded'}, now {document_control.extraction_profile()})")
+         elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_profile"):
+             reasons.append("carries records read under another or an unknown extraction profile")
++        elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_parser"):
++            reasons.append("carries records read by another or an unknown parser")
+         if "all" in selections:
+             reasons.append("every row of the project")
+         if reasons:
+diff --git a/backend/tests/test_ai_sheet_reader.py b/backend/tests/test_ai_sheet_reader.py
+index 62ebee4..7bee69b 100644
+--- a/backend/tests/test_ai_sheet_reader.py
++++ b/backend/tests/test_ai_sheet_reader.py
+@@ -196,7 +196,11 @@ def test_without_the_model_the_sheet_is_recorded_as_not_read(client, db_session,
+ 
+     body = client.post(f"/projects/{project.id}/boq/ensure").json()
+ 
+-    assert body["extracted"] and body["items"] == [] and body["reading"] is None
++    # Not stamped as the BOQ's read: nothing was read, so the next open tries again (M2 review 05, R5-04; it used
++    # to answer extracted=true with no line, and every later open returned that empty BOQ).
++    assert not body["extracted"] and body["items"] == [] and body["reading"] is None
++    db_session.expire_all()
++    assert db_session.get(Project, project.id).boq_extracted_at is None
+     assert body["warnings"] and "Not read: AI assistance is disabled" in body["warnings"][0], body["warnings"]
+     run = db_session.query(ExtractionRun).filter(ExtractionRun.project_id == project.id).one()
+     assert run.reader == "ai" and run.reading_id is None and run.failure.startswith("Not read")
+diff --git a/backend/tests/test_design_sheet_extractor.py b/backend/tests/test_design_sheet_extractor.py
+index b9d759c..f32f12e 100644
+--- a/backend/tests/test_design_sheet_extractor.py
++++ b/backend/tests/test_design_sheet_extractor.py
+@@ -539,7 +539,10 @@ def test_the_catalog_check_reads_the_cell_twice_and_keeps_what_each_pass_read(mo
+     line = dse.ExtractedBoqLine(catalog_no="SL2MNM65D3C-M", description="Exit", quantity="1", group_heading=None, confidence=70.0,
+                                 page=1, y_px=100.0, raw_quantity="1", catalog_confidence=70.0, table_span=(0, 600))
+     dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
+-    assert not line.catalog_uncertain, "one pass agreed, the other read a fragment"
++    # M2 review 05 (R5-04): a strip read at 70 % that a pass on the same pixels repeats is not confirmed -- the
++    # agreement is correlated, and the row is held with its readings (it used to be accepted here).
++    assert line.catalog_uncertain and line.catalog_check["agreement"] == "correlated"
++    assert line.catalog_no == "SL2MNM65D3C-M", "held as read, nothing substituted"
+ 
+ 
+ def test_a_multiline_catalog_cell_is_read_as_a_block_and_a_near_miss_holds_it(monkeypatch):
+@@ -587,11 +590,18 @@ def test_fragments_do_not_confirm_a_part_and_a_whole_matching_reading_does(monke
+     answers = iter(["757-7A-T", "757-7A-T"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
+     line = line_for("WSTIA-T"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
+     assert line.catalog_uncertain and "another part number" in line.catalog_check["reason"]
+-    # a clear matching whole reading: confirmed, even beside a clipped fragment
++    # a whole matching reading beside a clipped fragment: under 90 % the match is the same engine on the same pixels,
++    # so it is recorded as correlated agreement and held (M2 review 05, R5-04); a strip without a confidence of its
++    # own is still confirmed by a whole matching reading
+     answers = iter(["-L210DI", "SL210DI"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
+     line = line_for("SL210DI"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
++    assert line.catalog_uncertain and line.catalog_check["agreement"] == "correlated" and not line.catalog_check["confirmed"]
++    answers = iter(["-L210DI", "SL210DI"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
++    line = line_for("SL210DI"); line.catalog_confidence = None; dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
+     assert not line.catalog_uncertain and line.catalog_check["confirmed"]
+     # a cut identity read literally by every pass is confirmed as printed: nothing is completed
+     answers = iter(["SIGA-OSHD-FC", "SIGA-OSHD-FC"]); monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda img, config="": next(answers))
+     line = line_for("SIGA-OSHD-FC"); dse._confirm_catalog(Image.new("L", (600, 400), 255), line, (100, 300))
+-    assert not line.catalog_uncertain and line.catalog_no == "SIGA-OSHD-FC"
++    # ... and held, not confirmed: the sheet prints SIGA-OSHD-FCN (EP-30784 FAS page 2); both passes repeating the
++    # strip's cut reading is the correlated agreement the pilot accepted (M2 review 05, R5-04). Nothing is completed.
++    assert line.catalog_uncertain and line.catalog_no == "SIGA-OSHD-FC" and line.catalog_check["agreement"] == "correlated"
+diff --git a/backend/tests/test_extraction_m2_review02.py b/backend/tests/test_extraction_m2_review02.py
+index ebfd9cd..83039e7 100644
+--- a/backend/tests/test_extraction_m2_review02.py
++++ b/backend/tests/test_extraction_m2_review02.py
+@@ -234,15 +234,15 @@ def test_a_bounded_re_read_carries_the_records_of_the_pages_it_did_not_visit(cli
+ 
+ 
+ def test_carry_unvisited_keeps_records_of_unknown_page_and_flags_by_source_identity():
+-    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same"}
++    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same", "parser_version": dc.PARSER_VERSION, "profile": "default"}
+     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
+-    carried, note = document_sync.carry_unvisited(kept, coverage, "same")
++    carried, note = document_sync.carry_unvisited(kept, coverage, "same", "default")
+     assert [(r["reference"], r["flags"]) for r in carried] == [("B", ["carried_unvisited"]), ("C", ["carried_unvisited"])]
+     assert "2 records" in note and "unverified" not in note
+-    carried, note = document_sync.carry_unvisited(kept, coverage, "other")
++    carried, note = document_sync.carry_unvisited(kept, coverage, "other", "default")
+     assert all(r["flags"] == ["carried_unvisited", "carried_unverified"] for r in carried) and "unverified" in note
+-    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same")
+-    assert all("carried_unverified" in r["flags"] for r in carried), "unknown source identity: unverified"
++    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same", "default")
++    assert all("carried_unverified" in r["flags"] and "carried_other_parser" in r["flags"] for r in carried), "unknown source identity and parser: unverified, held"
+     assert document_sync.carry_unvisited(kept, {"pages_skipped": []}, "same") == ([], None)
+ 
+ 
+diff --git a/backend/tests/test_extraction_m2_review03.py b/backend/tests/test_extraction_m2_review03.py
+index 51e4719..f931a6b 100644
+--- a/backend/tests/test_extraction_m2_review03.py
++++ b/backend/tests/test_extraction_m2_review03.py
+@@ -78,8 +78,8 @@ def test_repeated_bounded_reads_keep_the_carried_records_provenance_and_uncertai
+     record = _carried(row)
+     assert set(record["flags"]) == {"carried_unvisited", "carried_unverified"}
+     assert record["retained"] == {"source_sha256": original_sha, "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": original_at}
+-    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "unverified": 1, "other_profile": 0,
+-                                                                                         "sources": row.extracted["retained"]["sources"]}
++    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "mixed": False, "unverified": 1, "other_profile": 0,
++                                                                                         "other_parser": 0, "sources": row.extracted["retained"]["sources"]}
+     assert original_sha in row.extracted["retained"]["sources"][0]
+ 
+     # the same new bytes read again, twice, by the repair tool: nothing certified, nothing lost
+@@ -135,16 +135,16 @@ def test_a_legacy_record_carried_into_a_bounded_reading_has_unknown_provenance_a
+     _sync(client, project_id)
+     db_session.refresh(row)
+     record = _carried(row)
+-    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile"}
++    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile", "carried_other_parser"}
+     assert record["retained"] == {"source_sha256": None, "parser_version": None, "profile": None, "read_at": None}, "unknown stays unknown"
+-    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading of other bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading by an unknown parser of other bytes", "retained"] in record["decision_candidates"]
+     assert row.status == "UR", "the mirror does not project a decision of unknown provenance"
+     assert row.extracted["retained"]["other_profile"] == 1 and document_processing.parser_current(row) is False
+ 
+ 
+ def test_carry_unvisited_follows_the_records_own_provenance_not_the_envelope():
+     kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": ["carried_unvisited", "carried_unverified"],
+-                         "retained": {"source_sha256": "original", "parser_version": "p1", "profile": "default", "read_at": "t0"},
++                         "retained": {"source_sha256": "original", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t0"},
+                          "decision_candidates": [["approved", "retained from a default reading of other bytes", "retained"]]}],
+             "read_sha256": "new", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t1"}
+     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
+@@ -190,7 +190,7 @@ def test_a_promoted_record_on_an_unvisited_page_is_held_by_a_default_bounded_rea
+     assert _processed(client, result).get("failed", 0) == 0
+     record = _carried(row)
+     assert row.extracted["profile"] == "default" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
+-    assert record["status"] == "UR" and ["rejected", "retained from a promoted reading of these bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and ["rejected", f"retained from a promoted reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
+     assert record["retained"]["profile"] == "promoted" and record["retained"]["source_sha256"] == promoted_sha
+     assert row.status == "UR" and row.reference == REFERENCE, "the mirror shows no default status the reader did not read"
+     assert row.extracted["retained"]["other_profile"] == 1
+@@ -260,5 +260,119 @@ def test_a_default_record_is_held_by_a_promoted_bounded_reading_too(client, db_s
+     db_session.refresh(row)
+     record = _carried(row)
+     assert row.extracted["profile"] == "promoted" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
+-    assert record["status"] == "UR" and row.status == "UR" and ["approved", "retained from a default reading of these bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and row.status == "UR" and ["approved", f"retained from a default reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
+     assert document_processing.parser_current(row) is False
++
++
++# --- R4-01 (review 04): the parser that read a carried record is part of its identity -------------
++
++
++def test_a_record_read_by_an_older_parser_is_held_by_a_bounded_reading_until_its_page_is_read_again(client, db_session, tmp_path, inline, monkeypatch):
++    """Same bytes, same profile, an older parser: a formerly authoritative
++    decision on the skipped page is retained with its parser, its decision
++    withheld, the reading not current and not reused; the repair tool
++    selects it; a wider read by the current parser clears it."""
++    from scripts import repair_extraction as tool
++
++    folder = tmp_path / "EP-30925"
++    with pymupdf.open() as document:
++        _page(document, SEPARATOR)
++        for _ in range(11):
++            _page(document, SEPARATOR)
++        _page(document, FA_COVER + "Review status: (A) Approved\n")
++        path = folder / "05- Drawings" / "package.pdf"
++        path.parent.mkdir(parents=True)
++        path.write_bytes(document.tobytes())
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
++    project_id = _project(client, folder, ep="30925")
++    _sync(client, project_id)
++    row = _row(db_session, project_id)
++    assert row.status == "approved" and _carried(row)["page"] == 13
++    # the reading as an older parser left it: the same bytes, the same profile, another parser version
++    older = dict(row.extracted)
++    older["parser_version"] = "parse-older-defective"
++    row.extracted = older
++    db_session.commit()
++    assert document_processing.parser_current(row) is False
++
++    # the current parser, narrower budget, unchanged bytes: it must read the file (no reuse) and hold page 13
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 12)
++    _touch(path)
++    result = _sync(client, project_id)
++    db_session.refresh(row)
++    assert _processed(client, result)["unchanged_after_hash"] == 0
++    record = _carried(row)
++    assert set(record["flags"]) == {"carried_unvisited", "carried_other_parser"}
++    assert record["retained"]["parser_version"] == "parse-older-defective" and record["retained"]["source_sha256"] == row.sha256
++    assert record["status"] == "UR" and ["approved", "retained from a default reading by parse-older-defective of these bytes", "retained"] in record["decision_candidates"]
++    assert row.status == "UR", "an old parser's decision is not certified by the new envelope"
++    assert row.extracted["parser_version"] == dc.PARSER_VERSION and row.extracted["retained"]["other_parser"] == 1 and row.extracted["retained"]["mixed"] is True
++    assert document_processing.parser_current(row) is False and document_processing._previous_sha(row) is None
++    reloaded = _reload(row.id)
++    assert _carried(reloaded)["status"] == "UR" and reloaded.status == "UR"
++
++    # repeated bounded runs (the repair tool twice) and reload: the old parser stays in the record's provenance
++    monkeypatch.setattr(tool, "root_of", lambda r: str(folder))
++    selected = dict((r.id, reasons) for r, reasons in tool.select_rows(db_session, db_session.get(Project, project_id), {"parser-outdated"}, []))
++    assert any(reason.startswith("carries records read by another") for reason in selected.get(row.id, []))
++    for _ in range(2):
++        entry = tool.preview(db_session, row, selected[row.id], False)
++        tool.apply_row(db_session, row, entry)
++        db_session.refresh(row)
++        record = _carried(row)
++        assert record["retained"]["parser_version"] == "parse-older-defective" and "carried_other_parser" in record["flags"] and record["status"] == "UR"
++    assert _carried(_reload(row.id))["retained"]["parser_version"] == "parse-older-defective"
++
++    # a duplicate of the same bytes is not given the mixed reading
++    copy = folder / "05- Drawings" / "Archive" / "package.pdf"
++    copy.parent.mkdir(parents=True)
++    copy.write_bytes(path.read_bytes())
++    result = _sync(client, project_id)
++    assert _processed(client, result).get("failed", 0) == 0, _processed(client, result)
++    twin = db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id, ProjectDocument.relative_path == "05- Drawings/Archive/package.pdf").one()
++    assert twin.extracted.get("retained") is None and twin.extracted["records"] == [] and not twin.status, "read on its own (page 13 unvisited: no record), not copied"
++    # and the mixed row is not refreshed from the twin's current reading either: it keeps its retained evidence
++    db_session.refresh(row)
++    assert "carried_other_parser" in _carried(row)["flags"]
++
++    # the copy leaves; its row is removed by the sync
++    copy.unlink()
++    _sync(client, project_id)
++    db_session.refresh(twin)
++    assert twin.state == "removed"
++
++    # a missing retained parser identity: unknown is not compatible
++    stripped = dict(row.extracted)
++    stripped["records"] = [{**r, "retained": {**r["retained"], "parser_version": None}} for r in stripped["records"]]
++    row.extracted = stripped
++    db_session.commit()
++    entry = tool.preview(db_session, row, ["selected by id"], False)
++    tool.apply_row(db_session, row, entry)
++    db_session.refresh(row)
++    assert "carried_other_parser" in _carried(row)["flags"] and _carried(row)["retained"]["parser_version"] is None and row.status == "UR"
++
++    # the current parser reaches page 13: read afresh, current, idempotent
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
++    _touch(path)
++    result = _sync(client, project_id)
++    db_session.refresh(row)
++    processed = _processed(client, result)
++    assert processed.get("processed", 0) >= 1, (result, processed, row.state, row.extracted.get("retained"))
++    record = _carried(row)
++    assert record["flags"] == [] and record.get("retained") is None and record["status"] == "approved" and row.status == "approved"
++    assert "retained" not in row.extracted and document_processing.parser_current(row) is True and document_processing._previous_sha(row) == row.sha256
++    _touch(path)
++    result = _sync(client, project_id)
++    assert _processed(client, result)["unchanged_after_hash"] >= 1
++
++
++def test_parser_compatibility_is_explicit_and_narrow():
++    assert document_sync.parser_compatible(dc.PARSER_VERSION) is True
++    assert document_sync.parser_compatible("parse-2026-09-28.3") is False and document_sync.parser_compatible(None) is False
++    kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": []}], "read_sha256": "same", "parser_version": "older", "profile": "default", "read_at": "t0"}
++    coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
++    [carried], note = document_sync.carry_unvisited(kept, coverage, "same", "default")
++    assert set(carried["flags"]) == {"carried_unvisited", "carried_other_parser"} and carried["status"] == "UR" and "another or unknown parser" in note
++    kept["parser_version"] = dc.PARSER_VERSION
++    [carried], _ = document_sync.carry_unvisited(kept, coverage, "same", "default")
++    assert carried["flags"] == ["carried_unvisited"] and carried["status"] == "approved"
+diff --git a/backend/tests/test_submittal_one_per_system.py b/backend/tests/test_submittal_one_per_system.py
+index d78ec00..b6010a3 100644
+--- a/backend/tests/test_submittal_one_per_system.py
++++ b/backend/tests/test_submittal_one_per_system.py
+@@ -152,6 +152,10 @@ def test_the_page_counts_submittals_by_their_latest_revision(client, db_session)
+         _reading("BBY006-GME-MAS-EL-FA-0001", 0, "approved", system="FAS", maker="EDWARDS", relative="fas/R0.pdf"),
+     ]
+     submittal_reader.sync_register(db_session, project, submittal_reader.build_map(readings), None)
++    # sync_register leaves the commit to its caller (`check` commits right after it); the request below
++    # reads through its own connection, so the rows are committed first, as `check` would. The test used
++    # to pass only because the old in-memory harness shared one connection across sessions (M2 review 05).
++    db_session.commit()
+     register = client.get(f"/projects/{project.id}/submittals").json()
+     assert len(register["items"]) == 2
+     assert {k: register["counts"][k] for k in ("total", "approved", "under_review", "rejected")} == \
++++ new file: backend/app/services/title_block.py
+"""A drawing sheet's title block read by position (M2 review 05, R5-01: pilot P-06 / P-07).
+
+A CAD sheet carries several drawing numbers and several revision columns: its own number and REV cell,
+a reference-drawings table ("DRAWING NO | REV | DRAWING TITLE" with the architect's sheets it was drawn
+over), a revision-history table (one row per issue) and, on the plan itself, callouts to the next sheet
+("REFER TO DWG No. ...-00008"). The PDF text layer gives these as unordered runs, so the first number or
+the first "REV" in the text is whichever the CAD export wrote first -- on the pilot that was a neighbour
+sheet's number on 12 of 13 BK Gulf sheets and the date "10.09.2024" read as revision 10 on JAM-SD-FA-002.
+
+This reads the text runs by their place on the sheet instead. The sheet's own identity is a *cell*: a
+"DRAWING NO" label with exactly one value under it (or beside it), nearest the title block's corner,
+and the REV label on the same row with exactly one revision under it. A label whose column lists
+several values is a table, and a label under a "REFERENCE DRAWINGS" heading is the reference table,
+whatever it is called. The revision history is a separate fact: its rows and their dates are read, and
+where the row dated latest names another revision than the REV cell, the sheet contradicts itself --
+reported as such (`conflict`), never settled by picking one.
+
+Nothing here guesses: no first / last / highest rule, no value borrowed from the file name or the folder.
+Where no cell is found the reading is None and the text reader stands, as before.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+from datetime import date
+
+TITLE_BLOCK_VERSION = "titleblock-1"
+
+# A drawing sheet: A2 and larger (the forms, letters and datasheets are A4 / A3).
+MIN_SHEET_SIDE_PT = 1300.0
+
+_NUMBER_LABEL = re.compile(
+    r"^(?:(?P<qualifier>[A-Z][A-Z.]*)\s+)?(?:DRAWING|DWG)\.?\s*(?:NO|NUMBER|NR)\b\.?\s*:?\s*(?P<inline>[A-Z0-9][A-Z0-9 ./_&()-]{3,})?$",
+    re.I)
+_REV_LABEL = re.compile(r"^(?:REV(?:ISION)?|Rev)\b\.?\s*(?:NO\b\.?)?\s*:?\s*(?P<inline>[A-Z0-9]{1,4})?$", re.I)
+# A revision as printed: "0", "00", "07", "AB", "C1", "P03", "2A". Letters stay letters.
+REVISION_VALUE = re.compile(r"^(?:\d{1,3}|[A-Z]{1,2}|[A-Z]{1,2}\d{1,2}|\d{1,2}[A-Z])$")
+_DATE = re.compile(r"^(\d{1,2})[./-](\d{1,2})[./-](\d{2}|\d{4})$")
+_REFERENCE_HEADING = re.compile(r"\bREF(?:ERENCE|\.)?\s*(?:DRAWINGS?|DWGS?|DOCUMENTS?)\b", re.I)
+_DESCRIPTION = re.compile(r"^DESCRIPTION\b", re.I)
+_DATE_LABEL = re.compile(r"^DATE\s*:?$", re.I)
+_TITLE_LABEL = re.compile(r"^(?:DRAWING\s+|DWG\.?\s+|SHEET\s+)?TITLE\s*:?$", re.I)
+
+
+@dataclass(frozen=True)
+class Line:
+    """One text run in display coordinates (the page as it is shown: rotation applied)."""
+
+    x0: float
+    y0: float
+    x1: float
+    y1: float
+    text: str
+
+    @property
+    def h(self) -> float:
+        return max(self.y1 - self.y0, 1.0)
+
+    @property
+    def cx(self) -> float:
+        return (self.x0 + self.x1) / 2
+
+    @property
+    def cy(self) -> float:
+        return (self.y0 + self.y1) / 2
+
+
+@dataclass(frozen=True)
+class TitleBlock:
+    number: str | None
+    revision: str | None                       # the REV cell, as printed
+    number_label: str | None = None
+    revision_label: str | None = None
+    history: tuple = ()                        # ((revision, date as printed), ...) in the sheet's order
+    history_latest: str | None = None          # the history row dated latest, where the dates settle it
+    references: tuple = ()                     # values of the reference-drawings table(s)
+    conflict: bool = False                     # the REV cell and the history's latest row disagree
+    title: str | None = None                   # the Drawing Title cell's lines, as printed
+    notes: tuple = field(default=())
+
+    def observation(self) -> dict:
+        return {"kind": "title_block", "version": TITLE_BLOCK_VERSION, "number": self.number,
+                "revision": self.revision, "number_label": self.number_label, "revision_label": self.revision_label,
+                "history": [list(row) for row in self.history], "history_latest": self.history_latest,
+                "references": list(self.references), "conflict": self.conflict, "title": self.title, "notes": list(self.notes)}
+
+
+def page_lines(page) -> list[Line]:
+    """The page's horizontal text runs in display coordinates. Runs set at an angle (a rotated callout,
+    vertical grid labels) are not title-block cells and are left out."""
+    import pymupdf
+
+    matrix = page.rotation_matrix
+    out = []
+    for block in page.get_text("dict").get("blocks", []):
+        for line in block.get("lines", []):
+            text = " ".join(span["text"] for span in line["spans"]).strip()
+            if not text:
+                continue
+            dx, dy = line["dir"]
+            ddx, ddy = dx * matrix.a + dy * matrix.c, dx * matrix.b + dy * matrix.d
+            if ddx < 0.95 or abs(ddy) > 0.05:
+                continue
+            r = pymupdf.Rect(line["bbox"]) * matrix
+            out.append(Line(r.x0, r.y0, r.x1, r.y1, " ".join(text.split())))
+    return out
+
+
+def is_drawing_sheet(page) -> bool:
+    return max(page.rect.width, page.rect.height) > MIN_SHEET_SIDE_PT
+
+
+def read_page(page, *, controlled=None) -> TitleBlock | None:
+    """The title block of a drawing-sized page with a text layer; None for any other page."""
+    if not is_drawing_sheet(page):
+        return None
+    lines = page_lines(page)
+    if len(lines) < 5:
+        return None
+    return read(lines, page.rect.width, page.rect.height, controlled=controlled)
+
+
+# --- the geometry -----------------------------------------------------------------------------------
+
+
+def _same_row(a: Line, b: Line) -> bool:
+    return abs(a.cy - b.cy) <= 0.6 * max(a.h, b.h) and 0.5 <= a.h / b.h <= 2.0
+
+
+def _row(lines: list[Line], label: Line) -> list[Line]:
+    return sorted((l for l in lines if l is not label and _same_row(l, label)), key=lambda l: l.x0)
+
+
+def _is_label(line: Line) -> bool:
+    text = line.text
+    return bool(_NUMBER_LABEL.match(text) and not _NUMBER_LABEL.match(text).group("inline")) \
+        or bool(_REV_LABEL.match(text) and not _REV_LABEL.match(text).group("inline")) \
+        or text.endswith(":")
+
+
+def _column(lines: list[Line], label: Line, *, right_pad: float) -> tuple[float, float]:
+    """The x-range of the label's cell: from a little left of the label to the next run on its row."""
+    after = [l for l in _row(lines, label) if l.x0 >= label.x1 - 1]
+    right = after[0].x0 if after else label.x1 + right_pad
+    return label.x0 - 3 * label.h, right
+
+
+def _below(lines: list[Line], label: Line, span: tuple[float, float], depth: float) -> list[Line]:
+    left, right = span
+    return sorted((l for l in lines if l is not label and label.y0 + 0.5 * label.h < l.y0 <= label.y1 + depth
+                   and left <= l.cx < right and not _is_label(l)), key=lambda l: l.y0)
+
+
+def _under_reference_heading(lines: list[Line], label: Line) -> bool:
+    return any(_REFERENCE_HEADING.search(l.text) and label.y0 - 5 * label.h <= l.y0 < label.y0 - 0.3 * label.h
+               and l.x1 > label.x0 - 10 * label.h and l.x0 < label.x1 + 30 * label.h for l in lines)
+
+
+def _number_shaped(text: str) -> bool:
+    return len(text) >= 5 and bool(re.search(r"\d", text)) and bool(re.search(r"[A-Z]", text, re.I)) \
+        and bool(re.search(r"[-_/]", text)) and not _DATE.match(text)
+
+
+def _incomplete(text: str) -> bool:
+    """A number whose segments the CAD export set as separate runs comes back with holes in it
+    ("R1029- -BSB-DWG- ARC-"): the run is part of the number, never the number."""
+    return bool(re.search(r"-\s+-|--|-\s*$|^\s*-", text))
+
+
+def _in_zone(line: Line, width: float, height: float) -> bool:
+    """The title block sits along the right edge or the bottom edge of a sheet."""
+    return line.x0 >= 0.55 * width or line.y0 >= 0.8 * height
+
+
+def _corner_rank(line: Line, width: float, height: float) -> float:
+    return line.y1 / height + line.x1 / width
+
+
+def _cell_value(lines: list[Line], label: Line, inline: str | None, shaped, *, right_pad: float) -> tuple[str | None, str]:
+    """(value, why-not). One value, under the label or beside it on its row; a column holding several is a table."""
+    if inline:
+        return (inline.strip(), "") if shaped(inline.strip()) else (None, "inline value not shaped")
+    after = [l for l in _row(lines, label) if l.x0 >= label.x1 - 1]
+    if after and not _is_label(after[0]) and shaped(after[0].text) and after[0].x0 - label.x1 < 12 * label.h:
+        return after[0].text, ""
+    below = _below(lines, label, _column(lines, label, right_pad=right_pad), 4 * label.h)
+    if not below:
+        return None, "no value"
+    value = below[0]
+    if not shaped(value.text):
+        return None, "value not shaped"
+    span = _column(lines, label, right_pad=right_pad)
+    # The column ends where the next cell starts: a label under this one (a second numbering scheme's
+    # "MUNICIPALITY DRAWING No." under "CLIENT DRAWING No.") opens a cell of its own, not a table row.
+    stop = min((l.y0 for l in lines if l is not label and l.y0 > label.y1 and span[0] <= l.cx < span[1]
+                and (_is_label(l) or _TITLE_LABEL.match(l.text))), default=float("inf"))
+    deeper = [l for l in _below(lines, label, span, 9 * label.h) if l is not value and shaped(l.text) and l.y0 < stop]
+    if deeper:
+        return None, "a list (table column)"
+    return value.text, ""
+
+
+def _rev_shaped(text: str) -> bool:
+    return bool(REVISION_VALUE.match(text.strip())) and not _DATE.match(text.strip())
+
+
+def _parse_date(text: str) -> date | None:
+    found = _DATE.match(text.strip())
+    if not found:
+        return None
+    day, month, year = (int(v) for v in found.groups())
+    if year < 100:
+        year += 2000
+    try:
+        return date(year, month, day)
+    except ValueError:
+        return None
+
+
+def revision_key(value: str | None) -> str | None:
+    """A printed revision compared as printed: digits by value ("07" == "7"), letters as they are."""
+    if value is None:
+        return None
+    value = value.strip().upper()
+    return str(int(value)) if value.isdigit() else value
+
+
+def _history(lines: list[Line]) -> tuple[tuple, str | None]:
+    """The revision-history table: its REV column's rows with the date on each row. The table's header
+    row names DESCRIPTION; its rows run up or down from the header."""
+    rows: list[tuple[Line, date | None, str | None]] = []
+    for header in lines:
+        if not _REV_LABEL.match(header.text) or _REV_LABEL.match(header.text).group("inline"):
+            continue
+        row = _row(lines, header)
+        if not any(_DESCRIPTION.match(l.text) for l in row):
+            continue
+        date_label = next((l for l in row if _DATE_LABEL.match(l.text)), None)
+        column = [l for l in lines if l is not header and abs(l.cx - header.cx) <= max(2.5 * header.h, (header.x1 - header.x0))
+                  and abs(l.cy - header.cy) <= 30 * header.h and _rev_shaped(l.text)]
+        for value in column:
+            printed_date = None
+            if date_label is not None:
+                printed_date = next((l.text for l in lines if _same_row(l, value) and _parse_date(l.text)
+                                     and date_label.x0 - 3 * date_label.h <= l.cx <= date_label.x1 + 6 * date_label.h), None)
+            rows.append((value, _parse_date(printed_date) if printed_date else None, printed_date))
+    if not rows:
+        return (), None
+    rows.sort(key=lambda r: r[0].y0)
+    history = tuple((r[0].text, r[2]) for r in rows)
+    dated = [r for r in rows if r[1] is not None]
+    latest = None
+    if dated:
+        top = max(r[1] for r in dated)
+        at_top = {revision_key(r[0].text) for r in dated if r[1] == top}
+        latest = next(r[0].text for r in dated if r[1] == top) if len(at_top) == 1 else None
+    return history, latest
+
+
+def _references(lines: list[Line]) -> tuple:
+    """The values of the reference-drawings table(s): the sheets this one was drawn over -- facts about
+    the sheet, never its identity."""
+    out = []
+    for heading in lines:
+        if not _REFERENCE_HEADING.search(heading.text):
+            continue
+        for label in lines:
+            if _NUMBER_LABEL.match(label.text) and 0 < label.y0 - heading.y0 <= 5 * heading.h \
+                    and label.x1 > heading.x0 - 10 * label.h and label.x0 < heading.x1 + 10 * label.h:
+                out.extend(l.text for l in _below(lines, label, _column(lines, label, right_pad=30 * label.h), 12 * label.h)
+                           if len(l.text) >= 4 and re.search(r"\d", l.text) and not _DATE.match(l.text))
+    return tuple(dict.fromkeys(out))
+
+
+def read(lines: list[Line], width: float, height: float, *, controlled=None) -> TitleBlock | None:
+    """`controlled`: whether a value is in the project's controlled-document numbering (the reader's
+    reference grammar). A sheet may carry its number in two schemes -- the client's and the
+    municipality's (Kling / IBA: "CLIENT DRAWING No." and "MUNICIPALITY DRAWING No.") -- and the register
+    is keyed by the controlled one; where neither or both are controlled and they differ, the sheet does
+    not say which is its identity and no number is read."""
+    notes: list[str] = []
+    number = number_label = None
+    chosen = None
+    candidates = [l for l in lines if _NUMBER_LABEL.match(l.text) and _in_zone(l, width, height)
+                  and not re.match(r"^REF", _NUMBER_LABEL.match(l.text).group("qualifier") or "", re.I)]
+    cells = []
+    for label in sorted(candidates, key=lambda l: -_corner_rank(l, width, height)):
+        if _under_reference_heading(lines, label):
+            notes.append(f"'{label.text}' is under a reference-drawings heading")
+            continue
+        value, why = _cell_value(lines, label, _NUMBER_LABEL.match(label.text).group("inline"), _number_shaped,
+                                 right_pad=40 * label.h)
+        if value is not None and _incomplete(value):
+            value, why = None, f"value incomplete ({value!r})"
+        if value is None:
+            notes.append(f"'{label.text}': {why}")
+            continue
+        cells.append((label, value))
+    # A run that carries its label and its number together ("DWG No. SA-H2-BEST-FA-00104") is a callout on the
+    # plan, pointing at another sheet; a title block sets the label and the value as runs of their own. Where
+    # the sheet has such a cell, the callouts are not cells (SA-H2-BEST-ICT-00100a, M2 review 05).
+    true_cells = [(label, value) for label, value in cells if not _NUMBER_LABEL.match(label.text).group("inline")]
+    if true_cells:
+        cells = true_cells
+    distinct = list(dict.fromkeys(value for _label, value in cells))
+    if len(distinct) > 1 and controlled is not None:
+        kept = [(label, value) for label, value in cells if controlled(value)]
+        if len({value for _label, value in kept}) == 1:
+            notes.append("several own-number cells; the controlled number kept: " + ", ".join(distinct))
+            cells = kept[:1]
+    if len({value for _label, value in cells}) > 1:
+        notes.append("several own-number cells disagree: " + ", ".join(distinct))
+        cells = []
+    if cells:
+        chosen, number = cells[0]
+        number_label = chosen.text
+    # The REV cell: on the number's row where there is a number cell; otherwise the REV label nearest the
+    # corner that is neither a history header (its row names DESCRIPTION) nor a reference-table column.
+    revision = revision_label = None
+    rev_labels = [l for l in lines if _REV_LABEL.match(l.text) and _in_zone(l, width, height)]
+    if chosen is not None:
+        rev_labels = [l for l in rev_labels if _same_row(l, chosen) and l.x0 > chosen.x0]
+        rev_labels.sort(key=lambda l: l.x0)
+    else:
+        rev_labels.sort(key=lambda l: -_corner_rank(l, width, height))
+    for label in rev_labels:
+        if any(_DESCRIPTION.match(l.text) for l in _row(lines, label)) or _under_reference_heading(lines, label):
+            continue
+        value, why = _cell_value(lines, label, _REV_LABEL.match(label.text).group("inline"), _rev_shaped,
+                                 right_pad=6 * label.h)
+        if value is None:
+            notes.append(f"'{label.text}': {why}")
+            continue
+        revision, revision_label = value.strip(), label.text
+        break
+    if number is None and revision is None:
+        return None
+    history, latest = _history(lines)
+    conflict = bool(revision and latest and revision_key(revision) != revision_key(latest))
+    return TitleBlock(number, revision, number_label, revision_label, history, latest, _references(lines), conflict,
+                      title=_title(lines, width, height, chosen), notes=tuple(notes))
+
+
+def _title(lines: list[Line], width: float, height: float, near: Line | None) -> str | None:
+    """The Drawing Title cell: the lines under its label, one after another, until the next label or a gap
+    wider than a line -- the cell nearest the number cell (or the corner). A reference table's DRAWING TITLE
+    column is not it."""
+    labels = [l for l in lines if _TITLE_LABEL.match(l.text) and _in_zone(l, width, height) and not _under_reference_heading(lines, l)]
+    if near is not None:
+        labels.sort(key=lambda l: abs(l.cx - near.cx) + abs(l.cy - near.cy))
+    else:
+        labels.sort(key=lambda l: -_corner_rank(l, width, height))
+    for label in labels:
+        left, right = _column(lines, label, right_pad=40 * label.h)
+        column = sorted((l for l in lines if l is not label and l.y0 > label.y0 + 0.5 * label.h and l.y0 <= label.y1 + 30 * label.h
+                         and left <= l.cx < right), key=lambda l: (round(l.y0), l.x0))
+        out, previous = [], label
+        for line in column:
+            limit = 4 * label.h if previous is label else 1.2 * max(previous.h, line.h)
+            if line.y0 - previous.y1 > limit or _is_label(line) or _TITLE_LABEL.match(line.text) or _DATE_LABEL.match(line.text):
+                break
+            out.append(line.text)
+            previous = line if line.y1 > previous.y1 else previous
+            if len(out) == 4:
+                break
+        if out:
+            return " ".join(" ".join(out).split())
+    return None
++++ new file: backend/scripts/m2_pilot_eval.py
+"""M2 real-project pilot evaluator, v2 (M2 review 05, R5-02 / R5-03).
+
+Replaces the submitted scorer (`real-project-pilot/outputs/scripts/score.py`, kept unchanged as historical evidence).
+What changed, and why:
+
+* Truth categories are distinct. `unknown`, `illegible`, `ambiguous`, `unlabelled` are unscorable. `absent` (the page
+  prints no such field) and `n/a` (no consultant decision applies) are NEGATIVE CONTROLS that can fail: an invented
+  reference on a page labelled `absent`, or an accepted decision on a page labelled `n/a`, is a false positive.
+* Decisions have separate denominators: accepted-positive precision (every non-UR decision the reader accepted, on
+  scorable truth), negative-control specificity (truth UR / n/a), readable-field recovery (truth a positive decision
+  of high/medium label confidence), abstention, held-evidence recovery (the right decision kept as a candidate but not
+  accepted -- evidence, never an accepted approval), and conflict evidence (truth `conflict` needs the
+  `decision_conflict` flag or two disagreeing candidates; a bare UR is not credited).
+* Records are matched, not first-record fields. Expected records (page, component, reference, printed revision,
+  decision) are matched to emitted records on the same page by identity; reference, revision and decision are judged
+  on the same matched pair. Every emitted record is scored: matched, substituted (wrong identity), extra (a page whose
+  truth is "no record"), duplicate (the same identity again), or unvalidated (a page with no truth). Missing expected
+  register records are counted.
+* Word transmittals are scored like any other document.
+* Raw extraction is separated from projection: `printed_revision` (or a revision whose `revision_source` is printed /
+  cover / suffix) is the raw revision; a folder/default revision is the legacy projection, reported apart, and a raw
+  revision the reader did not extract is an abstention, not a misread. A decision held back by the default profile's
+  gate with the right candidate is evidence recovery, not a misread.
+* System uses a documented field-equivalence table (`SYSTEM_EQUIVALENCE`), not substring matching. Production
+  effective-system rules are untouched.
+
+Usage: python -m scripts.m2_pilot_eval --labels GOLDEN-LABELS.json --page-labels page_labels.json
+       --rows rows-default.json [--rows-name default] --out report.json"""
+from __future__ import annotations
+
+import argparse
+import collections
+import json
+import re
+from pathlib import Path
+
+# .3: a reference the reader itself marks incomplete or uncertain is held (evidence, not an accepted value); a
+# sheet labelled as contradicting itself (REV cell vs revision history) is scored on whether the reader said so.
+EVALUATOR_VERSION = "m2-pilot-eval-2026-09-28.3"
+UNCERTAIN_REFERENCE_FLAGS = ("reference_incomplete", "reference_uncertain")
+UNSCORABLE = ("unknown", "illegible", "ambiguous", "unlabelled")
+NEGATIVE = ("absent", "n/a")
+POSITIVE_DECISIONS = ("approved", "ANN", "rejected")
+DECISION_WORDS = {"approved": "approved", "ann": "ANN", "approved as noted": "ANN", "rejected": "rejected", "ur": "UR",
+                  "conflict": "conflict", "n/a": "n/a", "none": "n/a", "ambiguous": "ambiguous", "unknown": "unknown",
+                  "illegible": "illegible", "unlabelled": "unlabelled", "absent": "absent"}
+RAW_REVISION_SOURCES = ("printed", "cover", "suffix")
+
+# Evaluation-only field equivalence: a label names systems in words; the reader emits a platform code (or a raw
+# discipline). Each label token maps to the codes that count as the same field value. "other" (a discipline the
+# platform does not track) expects no tracked code.
+SYSTEM_EQUIVALENCE = {
+    "FAS": {"FAS"}, "FIRE ALARM": {"FAS"}, "VES": {"FAS", "VES"}, "VOICE EVACUATION": {"FAS", "VES"},
+    "FIRE TELEPHONE": {"FAS"}, "LIFE SAFETY": {"FAS"}, "FLAME": {"FAS"}, "ASD": {"FAS", "ASD"},
+    "ELS": {"ELS"}, "EMERGENCY LIGHT": {"ELS"}, "CBS": {"ELS", "CBS"}, "CENTRAL BATTERY": {"ELS", "CBS"},
+    "PA/VA": {"PAVA"}, "PAVA": {"PAVA"}, "PUBLIC ADDRESS": {"PAVA"}, "FRC": {"FRC"}, "CABLE": {"FRC", "FAS"},
+}
+TRACKED = {"FAS", "VES", "ELS", "CBS", "PAVA", "FRC", "ASD"}
+
+
+# --- normalisation -----------------------------------------------------------------------------------------------
+
+
+def literal(value) -> str | None:
+    """A label's literal value: the text before a parenthetical note; a leading non-value word wins."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    low = text.lower()
+    for word in UNSCORABLE + NEGATIVE:
+        if low == word or re.match(re.escape(word) + r"[\s(;:,]", low):
+            return word
+    return re.split(r"\s\(", text, 1)[0].strip()
+
+
+def norm_ref(value: str | None) -> str:
+    return re.sub(r"\s+", "", value or "").upper()
+
+
+def alnum(value: str | None) -> str:
+    return re.sub(r"[^0-9A-Z]", "", (value or "").upper())
+
+
+def norm_rev(value: str | None) -> str | None:
+    """A revision token as printed, compared: numbers by value (00 == R0 == Rev.0), letters and mixed as written."""
+    if value is None:
+        return None
+    text = literal(value)
+    if text is None or text in UNSCORABLE + NEGATIVE:
+        return text
+    token = re.split(r"[\s;]", text.strip().upper(), 1)[0]
+    number = re.fullmatch(r"(?:R|REV\.?|REVISION|R\.)?0*(\d+)", token)
+    return f"R{int(number.group(1))}" if number else token
+
+
+def split_suffix(reference: str) -> tuple[str, str | None]:
+    """'X-R3' -> ('X', 'R3'); the reader files a trailing revision suffix as the revision."""
+    found = re.search(r"-\s*R\.?\s*0*(\d+)\s*$", reference or "", re.I)
+    return ((reference[:found.start()], f"R{int(found.group(1))}") if found else (reference, None))
+
+
+def same_identity(expected: str, actual: str | None) -> str:
+    """'exact' | 'suffix' (the expected reference's revision suffix is filed as the revision) | 'near' | 'different'."""
+    if not actual:
+        return "different"
+    if norm_ref(expected) == norm_ref(actual):
+        return "exact"
+    base, _ = split_suffix(expected)
+    if norm_ref(base) == norm_ref(actual):
+        return "suffix"
+    if alnum(expected) == alnum(actual):
+        return "near"
+    return "different"
+
+
+def expected_systems(label) -> set[str] | None:
+    """The platform codes a system label accepts; set() for an untracked discipline; None when unscorable."""
+    text = literal(label)
+    if text is None or text in UNSCORABLE:
+        return None
+    upper = str(label).upper()
+    if upper.startswith("OTHER"):
+        return set()
+    codes: set[str] = set()
+    for token, accepted in SYSTEM_EQUIVALENCE.items():
+        if re.search(r"(?<![A-Z])" + re.escape(token) + r"(?![A-Z])", upper):
+            codes |= accepted
+    return codes or None
+
+
+def floor_key(text: str | None) -> str | None:
+    """A floor's comparable key: L<n>, B<n>, P<n>, GF, RF, MEZ, or the upper-case words (raw names kept)."""
+    if not text:
+        return None
+    t = str(text).upper()
+    words = {"FIRST": 1, "SECOND": 2, "THIRD": 3, "FOURTH": 4, "FIFTH": 5, "1ST": 1, "2ND": 2, "3RD": 3}
+    if re.search(r"\bGROUND\b|\bGF\b|\bGFL\b", t):
+        return "GF"
+    if re.search(r"\bROOF\b", t):
+        return "RF"
+    found = re.search(r"\bBASEMENT[\s-]*0*(\d+)|\bB0*(\d+)\b", t)
+    if found:
+        return f"B{int(found.group(1) or found.group(2))}"
+    found = re.search(r"\bPODIUM[\s-]*0*(\d+)|\bP0*(\d+)\b", t)
+    if found:
+        return f"P{int(found.group(1) or found.group(2))}"
+    found = re.search(r"\bL(?:EVEL)?[\s-]*0*(\d+)\b|\b0*(\d+)(?:ST|ND|RD|TH)\b", t)
+    if found:
+        return f"L{int(found.group(1) or found.group(2))}"
+    for word, n in words.items():
+        if re.search(r"\b" + word + r"\b", t):
+            return f"L{n}"
+    if "MEZZ" in t:
+        return "MEZ"
+    return re.sub(r"\s+", " ", t).strip()
+
+
+# --- field judgements ---------------------------------------------------------------------------------------------
+
+
+def judge_decision(expected, actual_status: str | None, candidates=(), flags=(), has_record: bool = True) -> str:
+    """One decision outcome:
+    tp (accepted, correct) | wrong (accepted, a different positive) | fp (accepted where truth is UR / n/a) |
+    tn (UR / no record where truth is UR / n/a) | held (right decision kept as a candidate, not accepted) |
+    missed (positive truth, nothing accepted, not held) | conflict_ok | conflict_missing (truth conflict) |
+    unscorable."""
+    truth = DECISION_WORDS.get((literal(expected) or "unlabelled").lower(), literal(expected))
+    status = actual_status if (has_record and actual_status not in (None, "")) else "UR"
+    accepted = status in POSITIVE_DECISIONS
+    if truth in UNSCORABLE or truth == "absent" or truth is None:
+        return "unscorable"
+    if truth == "conflict":
+        statuses = {c[0] for c in candidates or () if c}
+        return "conflict_ok" if not accepted and ("decision_conflict" in (flags or ()) or len(statuses) > 1) else "conflict_missing"
+    if truth in ("UR", "n/a"):
+        return "fp" if accepted else "tn"
+    if truth in POSITIVE_DECISIONS:
+        if accepted:
+            return "tp" if status == truth else "wrong"
+        if any(c and c[0] == truth for c in candidates or ()):
+            return "held"
+        return "missed"
+    return "unscorable"
+
+
+def judge_reference(expected, actual: str | None) -> str:
+    """tp | near | wrong | fp (invented where truth is absent / n/a) | tn | missed | unscorable."""
+    truth = literal(expected)
+    if truth is None or truth in UNSCORABLE:
+        return "unscorable"
+    if truth in NEGATIVE:
+        return "fp" if actual else "tn"
+    if not actual:
+        return "missed"
+    same = same_identity(truth, actual)
+    return {"exact": "tp", "suffix": "tp", "near": "near"}.get(same, "wrong")
+
+
+def raw_revision(record: dict) -> str | None:
+    if record.get("printed_revision"):
+        return record["printed_revision"]
+    if record.get("revision_source") in RAW_REVISION_SOURCES:
+        return record.get("revision")
+    return None
+
+
+def judge_revision(expected, record: dict | None, expected_reference: str | None = None) -> str:
+    """Raw printed revision: tp | wrong | fp (a revision where truth is absent) | tn | missed (not extracted) |
+    unscorable. A reference whose suffix carries the revision ('...-R3') is judged by the suffix."""
+    truth_raw = expected
+    if expected_reference:
+        _, suffix = split_suffix(literal(expected_reference) or "")
+        if suffix and (literal(expected) in (None, "absent") or str(expected).upper().startswith("R")):
+            truth_raw = suffix
+    truth = norm_rev(truth_raw)
+    got = norm_rev(raw_revision(record)) if record else None
+    if truth is None or truth in UNSCORABLE:
+        return "unscorable"
+    if truth in NEGATIVE:
+        return "fp" if got else "tn"
+    if not got:
+        return "missed"
+    return "tp" if got == truth else "wrong"
+
+
+def judge_system(expected, record: dict | None) -> str:
+    accepted = expected_systems(expected)
+    if accepted is None:
+        return "unscorable"
+    got = (record or {}).get("system_code")
+    if not accepted:
+        return "fp" if got in TRACKED else "tn"
+    if not got:
+        return "missed"
+    return "tp" if got in accepted else "wrong"
+
+
+def judge_floor(expected, record: dict | None) -> str:
+    truth = literal(expected)
+    got = (record or {}).get("floor")
+    if truth is None or truth in UNSCORABLE:
+        return "unscorable"
+    if truth in NEGATIVE:
+        return "fp" if got else "tn"
+    if not got:
+        return "missed"
+    return "tp" if floor_key(truth) == floor_key(got) else "wrong"
+
+
+def judge_title(expected, record: dict | None) -> str:
+    truth = literal(expected)
+    got = (record or {}).get("name")
+    if truth is None or truth in UNSCORABLE or truth in NEGATIVE:
+        return "unscorable"
+    if not got:
+        return "missed"
+    a = set(re.findall(r"[A-Z0-9]{2,}", truth.upper()))
+    b = set(re.findall(r"[A-Z0-9]{2,}", str(got).upper()))
+    if not a:
+        return "unscorable"
+    return "tp" if len(a & b) / len(a) >= 0.6 else "wrong"
+
+
+# --- record matching ------------------------------------------------------------------------------------------------
+
+
+def match_page(expected: list[dict], emitted: list[dict]) -> list[tuple[dict | None, dict | None, str]]:
+    """Pair expected and emitted records of one page by identity. Returns (expected, emitted, how) with how in
+    matched | substituted (an emitted record takes an unmatched expected slot) | missing | extra | duplicate."""
+    pairs: list[tuple[dict | None, dict | None, str]] = []
+    left = list(emitted)
+    open_expected = []
+    for exp in expected:
+        best = next((r for r in left if same_identity(exp["reference"], r.get("reference")) in ("exact", "suffix")), None)
+        if best is None:
+            best = next((r for r in left if same_identity(exp["reference"], r.get("reference")) == "near"), None)
+        if best is not None:
+            left.remove(best)
+            pairs.append((exp, best, "matched"))
+        else:
+            open_expected.append(exp)
+    for exp in open_expected:
+        if left:
+            pairs.append((exp, left.pop(0), "substituted"))
+        else:
+            pairs.append((exp, None, "missing"))
+    seen = {norm_ref(p[1].get("reference")) for p in pairs if p[1] is not None}
+    for r in left:
+        pairs.append((None, r, "duplicate" if norm_ref(r.get("reference")) in seen else "extra"))
+    return pairs
+
+
+# --- the evaluation -------------------------------------------------------------------------------------------------
+
+
+def page1_expectation(doc: dict, in_scope: bool) -> list[dict]:
+    """A v1 (page-1) label as an expected record set for page 1: one record when it names a reference, none when the
+    reference is absent / n/a; unscorable when the reference is unknown."""
+    lab = doc["labels"]
+    ref = literal(lab.get("reference"))
+    if ref is None or ref in UNSCORABLE:
+        return [{"page": 1, "component": "page1", "reference": None, "unscorable": True, "labels": lab, "register": in_scope}]
+    if ref in NEGATIVE:
+        return []
+    return [{"page": 1, "component": "page1", "reference": ref, "printed_revision": lab.get("revision"), "decision": lab.get("decision"),
+             "system": lab.get("system"), "floor": lab.get("floor"), "title": lab.get("title"), "register": in_scope,
+             "confidence": doc.get("confidence"), "revision_conflict": bool(lab.get("revision_conflict"))}]
+
+
+SCOPE_PREFIXES = ("shop-drawing cover", "shop-drawing transmittal", "material submittal", "material approval", "material / equipment approval",
+                  "material sample", "sample approval", "reply", "drawing sheet (shop drawing", "drawing sheet (contractor shop drawing",
+                  "shop drawing sheet", "stamped shop drawing", "commented shop drawing", "technical submission", "document submittal",
+                  "pre-qualification", "transmittal", "word transmittal", "drawing sheet (scanned")
+
+
+def in_scope(kind) -> bool:
+    return any(str(kind or "").lower().startswith(p) for p in SCOPE_PREFIXES)
+
+
+def records_of(row: dict | None) -> list[dict]:
+    return list(((row or {}).get("extracted") or {}).get("records") or [])
+
+
+def evaluate(labels: dict, page_labels: dict | None, rows: dict, corrections: list[dict] | None = None) -> dict:
+    """Score one profile's stored rows against the truth. Returns per-document results and totals."""
+    rows = {k.replace("\\", "/"): v for k, v in rows.items()}
+    plabels = {k.replace("\\", "/"): v for k, v in ((page_labels or {}).get("documents") or {}).items()}
+    fixes = {}
+    for c in corrections or ():
+        fixes.setdefault(c["doc_suffix"], []).append(c)
+    docs_out = []
+    for doc in labels["documents"]:
+        key = doc["doc"].replace("\\", "/")
+        lab = dict(doc["labels"])
+        for suffix, items in fixes.items():
+            if key.endswith(suffix):
+                for c in items:
+                    lab[c["field"]] = c["new"]
+        doc = {**doc, "labels": lab}
+        row = rows.get(key)
+        scope = in_scope(literal(lab.get("kind")) or lab.get("kind"))
+        emitted = records_of(row)
+        entry = {"doc": key, "ep": doc["ep"], "cohort": doc["cohort"], "stratum": doc["stratum"], "extension": doc["extension"],
+                 "scan_like": doc.get("scan_like"), "confidence": doc.get("confidence"), "in_scope": scope,
+                 "truth": "v2 page records" if key in plabels else "v1 page 1", "state": (row or {}).get("state"),
+                 "outcome": (((row or {}).get("extracted") or {}).get("coverage") or {}).get("outcome"), "pairs": [], "unvalidated": []}
+        if row is None:
+            entry["outcome"] = "not-run"
+            docs_out.append(entry)
+            continue
+        if key in plabels:
+            pl = plabels[key]
+            expected = [dict(r, confidence=r.get("confidence", "high")) for r in pl["records"]]
+            no_record = {int(p) for p in (pl.get("no_record_pages") or {})}
+            unvalidated = set(pl.get("unvalidated_pages") or [])
+            labelled_pages = {r["page"] for r in expected} | no_record
+        else:
+            expected = page1_expectation(doc, scope)
+            labelled_pages = {1}
+            no_record, unvalidated = set(), set()
+        by_page_exp = collections.defaultdict(list)
+        for r in expected:
+            by_page_exp[r["page"]].append(r)
+        by_page_emit = collections.defaultdict(list)
+        for r in emitted:
+            by_page_emit[int(r.get("page") or 1)].append(r)
+        doc_identities = {norm_ref(split_suffix(r["reference"])[0]) for r in expected if r.get("reference")}
+        for page in sorted(set(by_page_exp) | set(by_page_emit)):
+            if page not in labelled_pages or page in unvalidated:
+                for r in by_page_emit.get(page, []):
+                    entry["unvalidated"].append({"page": page, "reference": r.get("reference"), "status": r.get("status")})
+                continue
+            exp = [e for e in by_page_exp.get(page, []) if not e.get("unscorable")]
+            if any(e.get("unscorable") for e in by_page_exp.get(page, [])):
+                for r in by_page_emit.get(page, []):
+                    entry["unvalidated"].append({"page": page, "reference": r.get("reference"), "status": r.get("status"), "why": "truth unknown"})
+                continue
+            for e, a, how in match_page(exp, by_page_emit.get(page, [])):
+                p = {"page": page, "how": how, "expected": e and {k: e.get(k) for k in ("component", "reference", "printed_revision", "decision", "register", "confidence", "duplicate_of_page", "revision_conflict")},
+                     "actual": a and {k: a.get(k) for k in ("reference", "revision", "printed_revision", "revision_source", "status", "system_code", "floor", "name", "flags", "decision_candidates", "category")}}
+                if how in ("matched", "substituted") and e is not None and e.get("duplicate_of_page"):
+                    p["duplicate_component"] = True
+                if how == "extra" and norm_ref(split_suffix(a.get("reference") or "")[0]) in doc_identities:
+                    how = p["how"] = "duplicate"      # the document's own identity again on a component page (a photo, a QA sheet)
+                if how == "extra":
+                    p["fields"] = {"reference": "fp", "decision": "fp" if a.get("status") in POSITIVE_DECISIONS else "tn"}
+                elif how == "duplicate":
+                    p["fields"] = {}
+                else:
+                    ref_state = judge_reference(e["reference"], a.get("reference") if a else None) if how != "substituted" else ("wrong" if a else "missed")
+                    if how == "missing":
+                        ref_state = "missed"
+                    elif a is not None and set(a.get("flags") or ()) & set(UNCERTAIN_REFERENCE_FLAGS):
+                        ref_state = "held"         # the reader said it could not settle the number: not an accepted value
+                    p["fields"] = {"reference": ref_state,
+                                   "revision": judge_revision(e.get("printed_revision"), a, e.get("reference")) if a else "missed",
+                                   "decision": judge_decision(e.get("decision"), a.get("status") if a else None, (a or {}).get("decision_candidates") or (), (a or {}).get("flags") or (), a is not None)}
+                    if "system" in e:
+                        p["fields"]["system"] = judge_system(e.get("system"), a)
+                    if "floor" in e or "floor_raw" in e:
+                        p["fields"]["floor"] = judge_floor(e.get("floor", e.get("floor_raw")), a)
+                    if "title" in e:
+                        p["fields"]["title"] = judge_title(e.get("title"), a)
+                    said = a is not None and "revision_conflict" in (a.get("flags") or ())
+                    if e.get("revision_conflict"):
+                        p["fields"]["revision_conflict"] = "conflict_ok" if said else "conflict_missing"
+                    elif said:
+                        p["fields"]["revision_conflict"] = "fp"
+                    if a is not None and a.get("revision") and raw_revision(a) is None:
+                        p["projection_revision"] = {"revision": a.get("revision"), "source": a.get("revision_source")}
+                if how == "missing" and e is not None and not e.get("register", True):
+                    # an untracked discipline or an evidence-only component: not a register miss; the raw evidence
+                    # may still be held as an observation on the page
+                    obs = [o for o in (((row or {}).get("extracted") or {}).get("observations") or []) if int(o.get("page") or 1) == page]
+                    found = any(same_identity(e["reference"], o.get("reference") or (o.get("record") or {}).get("reference")) in ("exact", "suffix", "near") for o in obs)
+                    p["how"] = "unregistered"
+                    p["fields"] = {"raw_evidence": "tp" if found else "missed"}
+                if how == "missing" and e is not None and e.get("duplicate_of_page"):
+                    p["how"] = "component_not_repeated"      # a second page of the same identity: not a miss
+                    p["fields"] = {}
+                entry["pairs"].append(p)
+        # page 1 truth that says "no reference" and nothing was emitted: a true negative, counted
+        if key not in plabels and not expected and not by_page_emit.get(1):
+            entry["pairs"].append({"page": 1, "how": "negative", "fields": {"reference": "tn", "decision": "tn"}})
+        docs_out.append(entry)
+    return {"evaluator": EVALUATOR_VERSION, "documents": docs_out, "totals": totals(docs_out)}
+
+
+def rates(counter: collections.Counter) -> dict:
+    tp, wrong, near, fp = counter["tp"], counter["wrong"], counter["near"], counter["fp"]
+    accepted = tp + wrong + near + fp
+    positives = tp + wrong + near + counter["missed"] + counter["held"]
+    negatives = counter["tn"] + fp
+    out = {k: counter[k] for k in ("tp", "wrong", "near", "fp", "tn", "missed", "held", "conflict_ok", "conflict_missing", "unscorable")}
+    out.update({"accepted": accepted,
+                "precision_of_accepted": round(tp / accepted, 4) if accepted else None,
+                "recovery_of_readable": round(tp / positives, 4) if positives else None,
+                "specificity_of_negatives": round(counter["tn"] / negatives, 4) if negatives else None,
+                "abstention_rate": round((counter["missed"] + counter["held"]) / positives, 4) if positives else None,
+                "held_evidence": counter["held"]})
+    return out
+
+
+def totals(docs: list[dict], key=None) -> dict:
+    fields = collections.defaultdict(collections.Counter)
+    record_how = collections.Counter()
+    unvalidated = 0
+    critical = []
+    for d in docs:
+        unvalidated += len(d.get("unvalidated") or [])
+        for p in d.get("pairs") or []:
+            record_how[p["how"]] += 1
+            for f, state in (p.get("fields") or {}).items():
+                fields[f][state] += 1
+            f = p.get("fields") or {}
+            act = p.get("actual") or {}
+            if f.get("decision") in ("fp", "wrong") and act.get("status") in ("approved", "ANN"):
+                critical.append({"kind": "false approval", "doc": d["doc"], "page": p["page"], "expected": (p.get("expected") or {}).get("decision"), "actual": act.get("status")})
+            elif f.get("decision") in ("fp", "wrong"):
+                critical.append({"kind": "wrong decision accepted", "doc": d["doc"], "page": p["page"], "expected": (p.get("expected") or {}).get("decision"), "actual": act.get("status")})
+            if f.get("reference") in ("wrong", "near", "fp") and act:
+                critical.append({"kind": "wrong reference accepted" if f.get("reference") != "fp" else "record where truth has none", "doc": d["doc"], "page": p["page"],
+                                 "expected": (p.get("expected") or {}).get("reference"), "actual": act.get("reference"), "how": p["how"]})
+            if f.get("revision") in ("wrong", "fp") and act:
+                critical.append({"kind": "wrong printed revision accepted", "doc": d["doc"], "page": p["page"], "expected": (p.get("expected") or {}).get("printed_revision"), "actual": raw_revision(act)})
+    return {"records": dict(record_how), "unvalidated_emitted_records": unvalidated, "fields": {f: rates(c) for f, c in fields.items()}, "critical": critical}
+
+
+def grouped(result: dict, keyfn) -> dict:
+    groups = collections.defaultdict(list)
+    for d in result["documents"]:
+        groups[keyfn(d)].append(d)
+    return {str(k): {"documents": len(v), "outcomes": dict(collections.Counter(d.get("outcome") for d in v)), **totals(v)} for k, v in sorted(groups.items(), key=lambda kv: str(kv[0]))}
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--labels", required=True)
+    ap.add_argument("--page-labels")
+    ap.add_argument("--rows", required=True)
+    ap.add_argument("--out", required=True)
+    args = ap.parse_args(argv)
+    labels = json.loads(Path(args.labels).read_text(encoding="utf-8"))
+    page_labels = json.loads(Path(args.page_labels).read_text(encoding="utf-8")) if args.page_labels else None
+    rows = json.loads(Path(args.rows).read_text(encoding="utf-8"))
+    result = evaluate(labels, page_labels, rows, (page_labels or {}).get("page1_corrections"))
+    result["by"] = {
+        "project": grouped(result, lambda d: d["ep"]), "cohort": grouped(result, lambda d: d["cohort"]),
+        "format": grouped(result, lambda d: "word" if d["extension"] != ".pdf" else ("scan" if d["scan_like"] else "text")),
+        "scope": grouped(result, lambda d: "in scope" if d["in_scope"] else "out of scope"),
+        "scope_cohort": grouped(result, lambda d: f"{'in' if d['in_scope'] else 'out'} / {d['cohort']}"),
+        "truth": grouped(result, lambda d: d["truth"]), "label_confidence": grouped(result, lambda d: d.get("confidence")),
+        "stratum": grouped(result, lambda d: d["stratum"]),
+    }
+    Path(args.out).write_text(json.dumps(result, indent=1, default=str, ensure_ascii=False), encoding="utf-8")
+    t = result["totals"]
+    print(json.dumps({"records": t["records"], "unvalidated": t["unvalidated_emitted_records"], "critical": len(t["critical"]),
+                      **{f: {k: v[k] for k in ("accepted", "tp", "precision_of_accepted", "recovery_of_readable", "specificity_of_negatives")} for f, v in t["fields"].items()}}, indent=1))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
++++ new file: backend/scripts/m2_boq_eval.py
+"""Deterministic BOQ evaluation for the M2 real-project pilot (M2 review 05, R5-04).
+
+Runs the application's own deterministic reader, `app.services.design_sheet_extractor.extract_design_sheet`, on each
+frozen Design Sheet with the model disabled, and scores what it emitted against the independently labelled rows.
+
+Units: a *row* is one labelled row of a sheet. Equipment rows (kind "line" and "component") are scored; headings are
+counted apart (a heading emitted as an equipment line is an extra, never a match); "component-or-heading" rows are
+unscorable. An emitted row is either *accepted* (a BOQ line the reader stands behind) or *held* (an issue for the
+engineer with the cell's readings, quantity and crop -- evidence, not an accepted value).
+
+Per field, over equipment rows: tp / wrong (accepted, differs) / fp (accepted where truth has none) / tn / held /
+missed. Critical: an accepted wrong part number, an accepted wrong quantity, an accepted line where the truth is a
+heading or nothing.
+
+Usage: python -m scripts.m2_boq_eval --labels GOLDEN-LABELS.json --set FROZEN-BOQ-SET.json --out result.json
+       [--only EP-19977] [--reuse extraction.json]
+"""
+from __future__ import annotations
+
+import argparse
+import collections
+import dataclasses
+import hashlib
+import json
+import os
+import re
+import time
+from pathlib import Path
+
+BOQ_EVALUATOR_VERSION = "m2-boq-eval-2026-09-28.2"   # .2: versioned label corrections (--corrections)
+EQUIPMENT = ("line", "component")
+
+
+def part_key(text) -> str:
+    return re.sub(r"[^A-Z0-9/+.-]", "", str(text or "").upper())
+
+
+def quantity_key(text) -> str | None:
+    if text is None:
+        return None
+    t = str(text).strip().replace(",", "")
+    try:
+        f = float(t)
+        return str(int(f)) if f == int(f) else str(f)
+    except ValueError:
+        return t.upper() or None
+
+
+def tokens(text) -> set:
+    return set(re.findall(r"[A-Z0-9]{2,}", str(text or "").upper()))
+
+
+def edit_distance(a: str, b: str) -> int:
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def similarity(truth: dict, emitted: dict) -> float:
+    """How alike a labelled row and an emitted row are, 0..3: part number, description, quantity."""
+    score = 0.0
+    tp, ep = part_key(truth.get("part_number")), part_key(emitted.get("part_number"))
+    if tp and ep:
+        d = edit_distance(tp, ep)
+        score += 1.5 if d == 0 else 1.0 if d <= max(1, len(tp) // 5) else 0.0
+    a, b = tokens(truth.get("description")), tokens(emitted.get("description"))
+    if a and b:
+        score += len(a & b) / max(1, min(len(a), len(b)))
+    if quantity_key(truth.get("quantity")) and quantity_key(truth.get("quantity")) == quantity_key(emitted.get("quantity")):
+        score += 0.3
+    return score
+
+
+def align(truth: list[dict], emitted: list[dict], threshold: float = 0.6) -> list[tuple]:
+    """Order-preserving alignment (both lists in reading order): pairs (t, e), (t, None) or (None, e)."""
+    n, m = len(truth), len(emitted)
+    best = [[0.0] * (m + 1) for _ in range(n + 1)]
+    move = [[None] * (m + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        move[i][0] = "t"
+    for j in range(1, m + 1):
+        move[0][j] = "e"
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            s = similarity(truth[i - 1], emitted[j - 1])
+            options = [(best[i - 1][j], "t"), (best[i][j - 1], "e")]
+            if s >= threshold:
+                options.append((best[i - 1][j - 1] + s, "m"))
+            best[i][j], move[i][j] = max(options, key=lambda o: o[0])
+    pairs, i, j = [], n, m
+    while i > 0 or j > 0:
+        step = move[i][j]
+        if step == "m":
+            pairs.append((truth[i - 1], emitted[j - 1])); i -= 1; j -= 1
+        elif step == "t":
+            pairs.append((truth[i - 1], None)); i -= 1
+        else:
+            pairs.append((None, emitted[j - 1])); j -= 1
+    return list(reversed(pairs))
+
+
+def judge(truth_value, emitted_value, accepted: bool, key) -> str:
+    t, e = key(truth_value), key(emitted_value)
+    if not accepted:
+        return "held" if e or t else "tn"
+    if not t:
+        return "fp" if e else "tn"
+    if not e:
+        return "missed"
+    return "tp" if t == e else "wrong"
+
+
+def rates(c: collections.Counter) -> dict:
+    accepted = c["tp"] + c["wrong"] + c["fp"]
+    positives = c["tp"] + c["wrong"] + c["missed"] + c["held"]
+    return {**{k: c[k] for k in ("tp", "wrong", "fp", "tn", "held", "missed")}, "accepted": accepted,
+            "precision_of_accepted": round(c["tp"] / accepted, 4) if accepted else None,
+            "recovery_of_readable": round(c["tp"] / positives, 4) if positives else None}
+
+
+def emitted_rows(extraction: dict) -> list[dict]:
+    """Accepted lines and held review rows of one extraction, in reading order."""
+    rows = []
+    for line in extraction["lines"]:
+        top = (line.get("row_bounds") or [line.get("y_px") or 0])[0]
+        rows.append({"page": line["page"], "y": top, "part_number": line.get("catalog_no"), "quantity": line.get("quantity"),
+                     "description": line.get("description"), "accepted": True, "catalog_check": line.get("catalog_check"),
+                     "catalog_confidence": line.get("catalog_confidence")})
+    for issue in extraction["issues"]:
+        detail = issue.get("detail") or {}
+        if not str(issue.get("target") or "").startswith("boq_line:"):
+            continue
+        region = issue.get("region") or detail.get("bbox") or [0, 0, 0, 0]
+        rows.append({"page": issue.get("page"), "y": region[1], "part_number": detail.get("catalog_no"),
+                     "quantity": detail.get("quantity") or detail.get("raw_quantity"), "description": detail.get("description"),
+                     "accepted": False, "reason": detail.get("reason_code") or detail.get("reason"),
+                     "catalog_alternates": detail.get("catalog_alternates"), "catalog_cell": detail.get("catalog_cell")})
+    return sorted(rows, key=lambda r: (r["page"] or 0, r["y"] or 0))
+
+
+def score_sheet(label: dict, extraction: dict) -> dict:
+    out = {"ep": label["ep"], "relative_path": label["relative_path"], "pages": label.get("pages"),
+           "truth": dict(collections.Counter(r["kind"] for r in label["rows"])), "state": extraction.get("state"),
+           "outcome": extraction.get("outcome"), "failure": extraction.get("failure"),
+           "emitted": {"accepted": len(extraction["lines"]), "held": sum(1 for i in extraction["issues"] if str(i.get("target") or "").startswith("boq_line:"))},
+           "fields": {}, "rows": collections.Counter(), "critical": [], "pairs": []}
+    fields = collections.defaultdict(collections.Counter)
+    emitted = emitted_rows(extraction)
+    for page in sorted({r["page"] for r in label["rows"]} | {r["page"] for r in emitted}):
+        truth = [r for r in label["rows"] if r["page"] == page]
+        mine = [r for r in emitted if r["page"] == page]
+        for t, e in align(truth, mine):
+            kind = t["kind"] if t else None
+            if t is not None and kind not in EQUIPMENT and kind != "heading":
+                out["rows"]["unscorable (component-or-heading)"] += 1
+                continue
+            if t is None:
+                how = "extra accepted" if e["accepted"] else "extra held"
+                out["rows"][how] += 1
+                if e["accepted"]:
+                    out["critical"].append({"kind": "accepted line where truth has none", "page": page, "emitted": _brief(e)})
+                out["pairs"].append({"page": page, "how": how, "emitted": _brief(e)})
+                continue
+            if kind == "heading":
+                if e is None:
+                    out["rows"]["heading (not emitted)"] += 1
+                else:
+                    how = "heading emitted as accepted line" if e["accepted"] else "heading held"
+                    out["rows"][how] += 1
+                    if e["accepted"]:
+                        out["critical"].append({"kind": "accepted line where truth is a heading", "page": page, "truth": t.get("description"), "emitted": _brief(e)})
+                continue
+            if e is None:
+                out["rows"]["equipment missing"] += 1
+                for f in ("part_number", "quantity", "description"):
+                    if t.get(f) not in (None, ""):
+                        fields[f]["missed"] += 1
+                out["pairs"].append({"page": page, "how": "missing", "truth": _brief(t)})
+                continue
+            out["rows"]["equipment matched (accepted)" if e["accepted"] else "equipment matched (held)"] += 1
+            states = {"part_number": judge(t.get("part_number"), e.get("part_number"), e["accepted"], part_key),
+                      "quantity": judge(t.get("quantity"), e.get("quantity"), e["accepted"], quantity_key)}
+            if e["accepted"]:
+                a, b = tokens(t.get("description")), tokens(e.get("description"))
+                states["description"] = ("tp" if a and len(a & b) / len(a) >= 0.6 else "wrong") if a else "tn"
+            else:
+                states["description"] = "held"
+            for f, s in states.items():
+                fields[f][s] += 1
+            if states["part_number"] in ("wrong", "fp"):
+                out["critical"].append({"kind": "accepted wrong part number", "page": page, "truth": t.get("part_number"), "emitted": e.get("part_number"),
+                                        "catalog_confidence": e.get("catalog_confidence"), "catalog_check": e.get("catalog_check")})
+            if states["quantity"] in ("wrong", "fp"):
+                out["critical"].append({"kind": "accepted wrong quantity", "page": page, "part": t.get("part_number"), "truth": t.get("quantity"), "emitted": e.get("quantity")})
+            out["pairs"].append({"page": page, "how": "matched", "fields": states, "truth": _brief(t), "emitted": _brief(e)})
+    out["fields"] = {f: rates(c) for f, c in fields.items()}
+    out["rows"] = dict(out["rows"])
+    return out
+
+
+def _brief(r: dict) -> dict:
+    return {k: r.get(k) for k in ("part_number", "quantity", "description", "accepted", "reason", "kind") if r.get(k) is not None}
+
+
+def totals(sheets: list[dict]) -> dict:
+    fields = collections.defaultdict(collections.Counter)
+    rows = collections.Counter()
+    for s in sheets:
+        rows.update(s["rows"])
+        for f, v in s["fields"].items():
+            for k in ("tp", "wrong", "fp", "tn", "held", "missed"):
+                fields[f][k] += v[k]
+    return {"rows": dict(rows), "fields": {f: rates(c) for f, c in fields.items()},
+            "critical": sum(len(s["critical"]) for s in sheets), "sheets": len(sheets),
+            "outcomes": dict(collections.Counter(s["outcome"] for s in sheets))}
+
+
+def apply_corrections(labels: list[dict], corrections: list[dict]) -> list[dict]:
+    """Apply versioned label corrections (each with its evidence); returns what was applied. A correction that
+    matches no row is reported, never silently skipped."""
+    applied = []
+    for c in corrections:
+        hits = [r for s in labels if s["ep"] == c["ep"] and s["relative_path"].endswith(c["relative_path_suffix"])
+                for r in s["rows"] if r["page"] == c["page"] and str(r.get("description") or "").startswith(c["description_startswith"])
+                and r.get(c["field"]) == c["old"]]
+        for r in hits:
+            r[c["field"]] = c["new"]
+            r.update(c.get("set") or {})
+        applied.append({**c, "rows_matched": len(hits)})
+    return applied
+
+
+def extract(sheet: dict) -> dict:
+    from app.services import design_sheet_extractor as dse
+
+    path = Path(sheet["staged_path"])
+    before = hashlib.sha256(path.read_bytes()).hexdigest()
+    started = time.perf_counter()
+    result = dse.extract_design_sheet(path)
+    return {"sha256_matches_frozen": before == sheet["sha256"], "seconds": round(time.perf_counter() - started, 1),
+            "state": result.state, "reader": result.reader, "failure": result.failure, "outcome": str(result.outcome),
+            "lines": [dataclasses.asdict(l) for l in result.lines],
+            "issues": [dataclasses.asdict(i) if dataclasses.is_dataclass(i) else dict(i) for i in result.issues],
+            "notes": list(result.notes), "coverage": dataclasses.asdict(result.coverage),
+            "source_unchanged": hashlib.sha256(path.read_bytes()).hexdigest() == before}
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--labels", required=True)
+    ap.add_argument("--set", required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--only")
+    ap.add_argument("--reuse", help="score a stored extraction json instead of running the reader")
+    ap.add_argument("--corrections", help="versioned label corrections (labels v2), applied before scoring")
+    args = ap.parse_args(argv)
+    from app.core.config import get_settings
+
+    assert not get_settings().ai_enabled, "the deterministic track runs with the model disabled (AI_ENABLED=false)"
+    labels = json.loads(Path(args.labels).read_text(encoding="utf-8"))["boq_design_sheets"]["sheets"]
+    applied = apply_corrections(labels, json.loads(Path(args.corrections).read_text(encoding="utf-8"))["corrections"]) if args.corrections else []
+    frozen = json.loads(Path(args.set).read_text(encoding="utf-8"))["sheets"]
+    stored = json.loads(Path(args.reuse).read_text(encoding="utf-8")) if args.reuse else {}
+    sheets, extractions = [], {}
+    for label in labels:
+        if args.only and f"EP-{label['ep']}" not in args.only.split(","):
+            continue
+        sheet = next(s for s in frozen if s["ep"] == label["ep"] and s["relative_path"] == label["relative_path"])
+        key = f"EP-{sheet['ep']}/{sheet['relative_path']}"
+        extraction = stored.get(key) or extract(sheet)
+        extractions[key] = extraction
+        scored = score_sheet(label, extraction)
+        scored["sha256_matches_frozen"] = extraction.get("sha256_matches_frozen")
+        sheets.append(scored)
+        print(key[-55:].ljust(55), scored["outcome"], scored["emitted"], {f: (v["tp"], v["accepted"], v["held"], v["missed"]) for f, v in scored["fields"].items()},
+              "critical", len(scored["critical"]), flush=True)
+    result = {"evaluator": BOQ_EVALUATOR_VERSION, "ai_enabled": False, "labels_corrections_applied": applied, "sheets": sheets, "totals": totals(sheets)}
+    Path(args.out).write_text(json.dumps(result, indent=1, default=str, ensure_ascii=False), encoding="utf-8")
+    Path(args.out).with_name(Path(args.out).stem + "-extraction.json").write_text(json.dumps(extractions, indent=1, default=str), encoding="utf-8")
+    print(json.dumps(result["totals"], indent=1))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
++++ new file: backend/tests/test_m2_review05.py
+"""M2 review 05, R5-01: raw extraction on the real-project defect classes.
+
+Every case is taken from a real original of the pilot (named with its content hash). The sheets are rebuilt here
+from the originals' own text-run geometry (the runs, their positions and sizes as the PDF carries them), so the
+tests run anywhere; where the sandbox copy of an original is present (C:/t/pilot/stage, the pilot's staged
+originals), the original itself is read as well. No live data, model, worker or production endpoint."""
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+import pymupdf
+import pytest
+
+import app.routers.jobs as jobs_router
+from app.models import ProjectDocument
+from app.services import document_control as dc
+from app.services import title_block as tb
+from app.services import transmittals
+
+from .test_document_sync import _project, _result
+
+NOW = datetime(2026, 9, 28, tzinfo=timezone.utc)
+STAGE = Path("C:/t/pilot/stage")
+
+
+@pytest.fixture()
+def inline(monkeypatch):
+    monkeypatch.setattr(jobs_router, "RUN_INLINE", True)
+
+
+def _sheet(path: Path, runs, size=(2384, 1684)) -> Path:
+    """An A1 sheet whose text runs sit where the original's do: (x, baseline y, text, font size)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with pymupdf.open() as document:
+        page = document.new_page(width=size[0], height=size[1])
+        for x, y, text, size_pt in runs:
+            page.insert_text((x, y), text, fontsize=size_pt)
+        document.save(path)
+    return path
+
+
+# AKA-BKG-ELE-B1-SD-PAVA-00010.pdf (EP-25091, sha256 fa9fede54892...): the plan's match-line callouts name the
+# neighbour sheets, a reference-drawings table lists the architect's sheets, the revision history runs 00-02, and
+# the title block's own cells say AKA-BKG-ELE-B1-SD-PAVA-00010 / REV 02. The reader took ...-00008 (review 05).
+PAVA_00010 = [
+    (900, 700, "REFER TO DWG No. AKA-BKG-ELE-B1-SD-PAVA-00008", 9), (900, 760, "REFER TO DWG No. AKA-BKG-ELE-B1-SD-PAVA-00009", 9),
+    (900, 820, "PAVA PANEL-05", 9), (900, 880, "2CX2.5 sq.mm FIRE RATED CABLE(TYPICAL)", 9),
+    (2168, 318, "REFERENCE DRAWINGS:", 10), (2100, 333, "DRAWING NO:", 8), (2170, 333, "REV.", 8), (2199, 333, "DRAWING TITLE:", 8),
+    (2102, 355, "F-12174", 6), (2176, 355, "D0", 6), (2198, 351, "PART D UPPER ROOF FLOOR PLAN", 6),
+    (2102, 386, "A 1011D", 6), (2176, 386, "D0", 6), (2102, 416, "E-06380", 6), (2176, 416, "D0", 6),
+    (2105, 944, "02", 6), (2147, 944, "RE-ISSUED FOR APPROVAL", 6), (2259, 944, "06.09.25", 6),
+    (2105, 964, "01", 6), (2147, 964, "ISSUED FOR APPROVAL", 6), (2259, 964, "28.08.24", 6),
+    (2105, 983, "00", 6), (2147, 983, "ISSUED FOR APPROVAL", 6), (2259, 983, "27.06.24", 6),
+    (2100, 1000, "REV", 7), (2153, 1000, "DESCRIPTION", 7), (2259, 1000, "DATE", 7), (2289, 1000, "DRAWN", 7), (2344, 1000, "APPR.", 7),
+    (2102, 1538, "Drawing Title :", 8), (2120, 1555, "PUBLIC ADDRESS & VOICE EVAC.", 12),
+    (2117, 1572, "LAYOUT - BASEMENT LEVEL B01", 12), (2155, 1590, "FLOOR PLAN - ZONE D", 12),
+    (2102, 1605, "PURPOSE OF ISSUE :", 6), (2170, 1605, "FOR APPROVAL", 6), (2244, 1605, "SCALE:", 6), (2273, 1605, "1:250", 6),
+    (2102, 1618, "DATE :", 6), (2129, 1618, "28/08/2024", 6), (2180, 1618, "DRAWN:", 6), (2243, 1618, "CHECKED:", 6), (2305, 1618, "APPROVED:", 6),
+    (2102, 1632, "Drawing No.", 8), (2343, 1632, "REV", 8),
+    (2105, 1655, "AKA-BKG-ELE-B1-SD-PAVA-00010", 12), (2345, 1655, "02", 12),
+]
+
+# JAM-SD-FA-002.pdf (EP-26369, sha256 a6624709a580...): the revision history's rows 0-7 above its header, the date
+# 10.09.2024 in the cell under the "Date" label, and the title block's Rev. cell 07. The reader took R10 from the
+# date (review 05, P-07).
+JAM_SD_FA_002 = [
+    (1900, 540, "SHOP DRAWING", 30),
+    *[(1950, 1364 - 12 * n, str(n), 8) for n in range(8)],
+    *[(1972, 1364 - 12 * n, d, 8) for n, d in enumerate(("10.09.24", "23.09.24", "20.11.24", "18.02.25", "10.06.25", "28.08.25", "16.09.25", "30.10.25"))],
+    *[(2140, 1364 - 12 * n, "revised as per afs comments" if n else "Issue for Approval", 8) for n in range(8)],
+    (1941, 1378, "Rev.", 10), (1985, 1378, "Date", 10), (2034, 1378, "Drn.", 10), (2110, 1378, "Apr.", 10), (2178, 1378, "Description", 10),
+    (2064, 1393, "Revision History", 11),
+    (1945, 1422, "Drawing Title", 11), (2013, 1463, "GROUND FLOOR PLAN LAYOUT", 11), (2041, 1482, "FIRE ALARM SYSTEM", 11),
+    (1943, 1528, "Drawn", 11), (1994, 1528, "Checked Approved", 11), (2133, 1528, "Date", 11), (2216, 1523, "Scale/A1", 11),
+    (1951, 1550, "MA", 11), (2131, 1550, "10.09.2024", 11), (2231, 1550, "1:200", 11),
+    (1945, 1584, "Drawing No.", 11), (2218, 1585, "Rev.", 11),
+    (2030, 1606, "JAM-SD-FA-002", 11), (2246, 1609, "07", 11),
+]
+
+# BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf, the copy filed under R01 (EP-30784, sha256 8fa6ab3b06b7...): the
+# title block's REV. NO. cell prints 00 and its DATE 06.08.2026, while the revision history's latest row is 01,
+# ISSUED FOR APPROVAL, 21.08.2026. The sheet contradicts itself.
+L58_R01_BOXES = [   # (x0, y0, x1, y1, text): the original's own runs, display coordinates of its 3370 x 2384 sheet
+    (3117, 1254, 3231, 1266, "REFERENCE DRAWINGS"), (3114, 1279, 3184, 1291, "DRAWING NO."), (3313, 1279, 3332, 1291, "REV"),
+    (3114, 1297, 3290, 1306, "BBY006 - GME - SDW - EL - LI - ZZZ - L03 - 010012"), (3313, 1297, 3324, 1306, "00"),
+    (3013, 1503, 3029, 1513, "Rev"), (3073, 1503, 3092, 1513, "Date"), (3210, 1503, 3256, 1513, "Description"),
+    (3017, 1527, 3027, 1536, "00"), (3060, 1527, 3106, 1536, "06.08.2026"), (3179, 1527, 3287, 1536, "ISSUED FOR APPROVAL"),
+    (3017, 1549, 3027, 1558, "01"), (3060, 1549, 3106, 1558, "21.08.2026"), (3179, 1549, 3287, 1558, "ISSUED FOR APPROVAL"),
+    (3111, 2156, 3233, 2174, "SHOP DRAWING"), (3011, 2182, 3083, 2193, "DRAWING TITLE"),
+    (3061, 2208, 3282, 2224, "L58 - RES 53 (TYP 3A) FLOOR PLAN"), (3065, 2225, 3273, 2240, "EMERGENCY LIGHTING LAYOUT"),
+    (3028, 2264, 3048, 2272, "SCALE"), (3087, 2264, 3112, 2272, "DRAWN"), (3140, 2265, 3170, 2273, "CHECKED"),
+    (3199, 2264, 3216, 2272, "DATE"), (3256, 2264, 3269, 2272, "SIZE"), (3301, 2264, 3329, 2272, "REV. NO."),
+    (3025, 2280, 3049, 2291, "1:100"), (3098, 2280, 3106, 2291, "IS"), (3131, 2280, 3178, 2291, "RAMADAN"),
+    (3186, 2280, 3233, 2291, "06.08.2026"), (3257, 2281, 3268, 2291, "A0"), (3307, 2281, 3318, 2291, "00"),
+    (3013, 2298, 3122, 2307, "DRAWING CODE | ISO 19650"), (3013, 2316, 3060, 2324, "PROJECT CODE"), (3284, 2316, 3336, 2324, "SERIAL NUMBER"),
+    (3063, 2334, 3280, 2347, "BBY006-GME-SDW-EL-LI-ZZZ-L58-010042"),
+]
+L58_R01 = [(x0, y1 - 0.22 * (y1 - y0), text, (y1 - y0) / 1.15) for x0, y0, x1, y1, text in L58_R01_BOXES]
+
+
+def _read(path: Path, *, promote=False):
+    with pymupdf.open(path) as pdf:
+        return dc.read_open_pdf(pdf, str(path), NOW, False, None, full=True, promote=promote)
+
+
+# --- the title block by position (P-06 / P-07) ---------------------------------------------------------------------
+
+
+def test_pava_00010_is_its_own_number_and_revision_not_the_neighbour_it_refers_to(tmp_path):
+    reading = _read(_sheet(tmp_path / "EP-25091" / "PAVA" / "B1" / "R2 B" / "AKA-BKG-ELE-B1-SD-PAVA-00010.pdf", PAVA_00010))
+    [record] = reading.records
+    assert record.reference == "AKA-BKG-ELE-B1-SD-PAVA-00010", "not -00008 from the match-line callout"
+    assert (record.printed_revision, record.revision, record.revision_source) == ("02", "R2", "printed")
+    assert record.system_code == "PAVA" and "revision_conflict" not in record.flags
+    [block] = [o for o in reading.observations if o["kind"] == "title_block"]
+    assert block["number"] == "AKA-BKG-ELE-B1-SD-PAVA-00010" and block["revision"] == "02"
+    assert block["references"][:3] == ["F-12174", "A 1011D", "E-06380"], "the reference table is a fact of its own"
+    assert [row[0] for row in block["history"]] == ["02", "01", "00"] and block["history_latest"] == "02"
+
+
+def test_jam_sd_fa_002_reads_rev_07_and_the_date_under_the_label_is_not_revision_10(tmp_path):
+    reading = _read(_sheet(tmp_path / "JAM" / "JAM-SD-FA-002.pdf", JAM_SD_FA_002))
+    [record] = reading.records
+    assert record.reference == "JAM-SD-FA-002" and record.system_code == "FAS"
+    assert (record.printed_revision, record.revision, record.revision_source) == ("07", "R7", "printed")
+    [block] = [o for o in reading.observations if o["kind"] == "title_block"]
+    assert block["history_latest"] == "7" and not block["conflict"]
+    # the text reader alone, as for a sheet with no usable title block, no longer reads a date as a revision
+    assert dc.REV.search("Rev.\n10.09.2024") is None and dc.REV.search("REV: 02").group(1) == "02"
+
+
+def test_a_sheet_whose_rev_cell_and_revision_history_disagree_is_flagged_not_settled(tmp_path):
+    path = _sheet(tmp_path / "04- Drawings" / "2.EML" / "R01" / "L58" / "BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf", L58_R01, size=(3370, 2384))
+    [record] = _read(path).records
+    assert record.reference == "BBY006-GME-SDW-EL-LI-ZZZ-L58-010042"
+    assert record.printed_revision == "00", "the REV. NO. cell, as printed"
+    assert "revision_conflict" in record.flags
+    assert (record.revision, record.revision_source) == ("R1", "folder"), "neither printed value is taken; the folder is what else there is"
+
+
+def _lines(*runs):
+    return [tb.Line(x0, y0, x1, y1, text) for x0, y0, x1, y1, text in runs]
+
+
+def test_letters_are_a_revision_as_printed_and_are_not_mapped_to_a_number():
+    # R1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208.pdf (EP-26082): DRAWING NO. / REV. cells, REV. prints "AB"
+    lines = _lines((3091, 2302, 3139, 2309, "DRAWING NO."), (3281, 2302, 3297, 2309, "REV."),
+                   (3077, 2316, 3275, 2326, "R1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208"), (3289, 2316, 3305, 2328, "AB"),
+                   (3084, 1147, 3149, 1154, "DRAWING NUMBER"), (3283, 1147, 3299, 1154, "REV."),
+                   (3082, 1159, 3171, 1165, "R1029-07-IBA-DWG-L08-FAS-1208"), (3292, 1160, 3298, 1166, "01"),
+                   (3082, 1171, 3177, 1177, "R1029-07-KCD-DWG-L08-ARC-1208"), (3292, 1172, 3298, 1177, "03"))
+    block = tb.read(lines, 3370, 2384)
+    assert (block.number, block.revision) == ("R1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208", "AB")
+    text = "DRAWING NO.\nREV.\nR1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208\nAB\nFIRE ALARM LAYOUT\nDRAWING TITLE\nLEVEL 08 FIRE ALARM LAYOUT\n"
+    [record] = dc.parse_page(text, "SD/FAVE/MGM1/AB/L8/R1029-CSCEC-MEP-SD-MGM1-L08-FAS-1208.pdf", NOW, 1, sheet=block)
+    assert record.printed_revision == "AB" and "printed_revision_unmapped" in record.flags
+    assert (record.revision, record.revision_source) == ("R0", "default"), "no R-number is made of letters"
+
+
+def test_a_table_column_is_not_a_cell_and_a_reference_heading_excludes_a_single_row_table():
+    # a CSCEC reference table: three rows under DRAWING NUMBER / REV. -- a list, never the sheet's number
+    table = _lines((3053, 1146, 3117, 1153, "DRAWING NUMBER"), (3247, 1146, 3263, 1153, "REV."),
+                   (3051, 1158, 3144, 1164, "R1029-03-KCD-DWG-L01-ARC-1230"), (3256, 1158, 3262, 1164, "00"),
+                   (3051, 1169, 3141, 1175, "R1029-07-IBA-DWG-L01-MEC-1201"), (3256, 1170, 3262, 1175, "00"))
+    assert tb.read(table, 3370, 2384) is None
+    # BK Gulf CBS-00054 (rot 270, sha256 in the pilot manifest): a one-row reference table under its heading
+    single = _lines((3027, 460, 3205, 476, "REFERENCE DRAWINGS:"), (2933, 480, 3012, 494, "DRAWING NO:"),
+                    (3030, 480, 3057, 494, "REV."), (2937, 515, 2965, 523, "F-12728"), (3038, 515, 3048, 524, "D0"))
+    assert tb.read(single, 3370, 2384) is None
+
+
+def test_two_numbering_schemes_keep_the_controlled_number_and_otherwise_say_nothing():
+    # R1029-01-IBA-DWG-ALL-FAS-6601-PDF [0].pdf (EP-26082): CLIENT and MUNICIPALITY drawing numbers
+    lines = _lines((3043, 2287, 3123, 2295, "CLIENT DRAWING No."), (3295, 2287, 3331, 2295, "REVISION"),
+                   (3047, 2302, 3241, 2315, "R1029-01-IBA-DWG-ALL-FAS-6601"), (3311, 2319, 3319, 2333, "0"),
+                   (3043, 2321, 3151, 2329, "MUNICIPALITY DRAWING No."), (3047, 2336, 3105, 2349, "FA-01-001"))
+    assert tb.read(lines, 3370, 2384, controlled=dc._controlled_number).number == "R1029-01-IBA-DWG-ALL-FAS-6601"
+    assert tb.read(lines, 3370, 2384, controlled=dc._controlled_number).revision == "0"
+    assert tb.read(lines, 3370, 2384).number is None, "without the grammar the sheet does not say which is its identity"
+
+
+def test_a_number_the_export_split_into_runs_is_not_read_as_a_number():
+    # R1029-08-BSB-DWG-L08-ARC-1208_Q.pdf (EP-26082 tender set): the cell's run is "R1029- -BSB-DWG- ARC-"
+    lines = _lines((3043, 2287, 3123, 2295, "DRAWING No."), (3047, 2302, 3241, 2315, "R1029- -BSB-DWG- ARC-"))
+    block = tb.read(lines, 3370, 2384)
+    assert block is None or block.number is None
+
+
+@pytest.mark.parametrize("relative, sha_prefix, reference, printed", [
+    ("EP-25091/EP-25091 SD/Final SD  received on 04-02-26 from BK Gulf/ELETRICAL/PAVA/B1/R2 B/AKA-BKG-ELE-B1-SD-PAVA-00010.pdf", "fa9fede54892", "AKA-BKG-ELE-B1-SD-PAVA-00010", "02"),
+    ("EP-26369/SHOP DRAWINGS/MRO SHOP DWGS/UPDATE DWGS/MRO UPDATE -3/JAM-SD-FA-002.pdf", "a6624709a580", "JAM-SD-FA-002", "07"),
+])
+def test_the_independently_checked_originals(relative, sha_prefix, reference, printed):
+    path = STAGE / relative
+    if not path.is_file():
+        pytest.skip("the pilot's staged originals are not on this machine")
+    assert hashlib.sha256(path.read_bytes()).hexdigest().startswith(sha_prefix), "the original the review checked"
+    [record] = _read(path).records
+    assert record.reference == reference and record.printed_revision == printed and record.revision == f"R{int(printed)}"
+
+
+# --- the reply's own reference, the transmittal's items, wrapped labels, printed digits (P-08..P-11) -------------
+
+
+REPLY_31 = ("SN\nConsultant Comments\nAl Arabia SSD Reply\nREMARKS\n1\nRefer to BBY006-GME-SDW-EL-LI-ZZZ-ZZZ-010034 for\ncomments.\nComply\n"
+            "Project: : BINGHATTI SKYBLADE\nReply to Consultant Comments on FA drawings\nEND\nRef No : BBY006-GME-SDW-EL-LI-POD-P01-010029\nPage 1 of 1\n")
+
+
+def test_a_reply_is_the_reply_to_the_submission_its_header_names_not_a_drawing_its_comments_quote():
+    # EP-30784 .../POD-1/Reply to MS Consultant Comments 31 (1).pdf (pilot P-08)
+    [reply] = dc.parse_page(REPLY_31, "Reply to MS Consultant Comments 31 (1).pdf", NOW, 1)
+    assert reply.source == "reply" and reply.reference == "BBY006-GME-SDW-EL-LI-POD-P01-010029"
+    quoted_only = REPLY_31.replace("Ref No : BBY006-GME-SDW-EL-LI-POD-P01-010029\n", "")
+    assert dc.parse_page(quoted_only, "reply.pdf", NOW, 1) == [], "a reply whose only number is quoted names nothing of its own"
+
+
+TRANSMITTAL_OCR = ("DOCUMENT TRANSMITTAL\nTo || M/s.al Arabia EMW ee _ Date |: | 14/05/2026\n"
+                   "atin. :| Mr. Hakem Ali/ Yousef Khan | AASS Ref. | |_18/0127/26\nProject ID il | | EP-29076 |\n"
+                   ": Subject | | Material Submittal & sample Board / Fire Alarm & Voice Evacuation system\nDear Sir/ Madam,\n"
+                   "ITEM | Document No. Description | No. of\n1 25H-S202-NCC-MAS-MEP- | Material Submittal / Fire Alarm, Voice Evacuation and 2No's\n"
+                   "ELE-005-R3 Fire Telephone System.\n| | _ Sample Board / Central Battery System\n")
+
+
+def test_a_scanned_transmittal_is_not_its_first_items_number_and_an_unread_tr_number_stays_unread(tmp_path, monkeypatch):
+    # EP-29076/01- EP-29076 - Scan/EP-29076 FA MS & Sam B CBS Ack 14.05.26.pdf (pilot P-09): OCR read the TR number
+    # as "18/0127/26" (re-reads: "7R", "1R", "TR") -- none is taken; the listed item is not the page's number.
+    assert dc.parse_page(TRANSMITTAL_OCR, "ack.pdf", NOW, 1) == []
+    assert transmittals.looks_like_transmittal(TRANSMITTAL_OCR) is False
+    path = tmp_path / "EP-29076 FA MS & Sam B CBS Ack 14.05.26.pdf"
+    with pymupdf.open() as document:
+        document.new_page().draw_rect(pymupdf.Rect(40, 40, 500, 700))
+        document.save(path)
+    monkeypatch.setattr(dc, "_ocr_text", lambda page, sha256, index, renders=None: TRANSMITTAL_OCR)
+    with pymupdf.open(path) as pdf:
+        for promote in (False, True):
+            reading = dc.read_open_pdf(pdf, str(path), NOW, True, None, full=True, promote=promote)
+            assert reading.records == ()
+            [seen] = [o for o in reading.observations if o["kind"] == "transmittal"]
+            assert seen["reference"] is None and seen["flags"] == ["reference_unread"] and seen["raw_reference"] == "_18/0127/26"
+
+
+def test_a_wrapped_number_is_not_joined_onto_the_next_fields_label_and_a_split_start_is_marked():
+    # EP-26082 SCAN DOC/R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf, page 1 text layer (pilot P-10)
+    text = "Material Submittal Reference\nR 1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-\nRev.01\nZZZ-1009\n"
+    [candidate] = dc.reference_candidates(text)
+    assert candidate.reference == "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ", "not ...-ZZZ-Rev"
+    assert candidate.incomplete and candidate.uncertain_start
+    # a real wrapped segment still joins, and a label glued to its value is still a label (P-01)
+    assert dc.reference_candidates("R1029-CSM-CO-ELE-FA-MAR-PJW-ZZZ-\nZZZ-1004")[0].reference == "R1029-CSM-CO-ELE-FA-MAR-PJW-ZZZ-ZZZ-1004"
+    assert dc.reference_candidates("No.R1029-CSM-CO-ELE-FA-MAR-PJW-ZZZ-ZZZ-1004")[0].reference == "R1029-CSM-CO-ELE-FA-MAR-PJW-ZZZ-ZZZ-1004"
+    records = dc.parse_page(text + "Material Submittal for Central Battery System\n", "MTG-1020.pdf", NOW, 1)
+    assert records and {"reference_incomplete", "reference_uncertain"} <= set(records[0].flags)
+
+
+def test_a_printed_number_is_read_as_printed_never_from_the_file_name():
+    # 25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf (EP-29076): the cover prints "EM-30-R0"; the file says 030.
+    # Pilot P-11 was the v1 label copying the file name (GOLDEN-LABELS v2 correction), not an OCR loss.
+    [record] = dc.parse_page("SHOPDRAWING SUBMITTAL\nDate: 4th July 2026 Reference: 25H-S202-NCC-SD-MEP-ELE-EM-30-RO\n"
+                             "Title/Subject: 23rd Floor Emergency Lighting Layout\n", "25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf", NOW, 1)
+    assert record.reference == "25H-S202-NCC-SD-MEP-ELE-EM-30" and record.revision == "R0"
+
+
+NCC_FULL_OCR = ("The Employer The PMC : The Engineer The Contractor MEP Contractor\nProject Name: 25hours Heimat Dubai Residences Tower\n"
+                "Date: 01-May-2026\nTitle/Subject: 1st Basement Floor Plan Fire Alarm Layout\nAttachment Details:\nShop drawing Reference\n"
+                "1st Basement Floor Plan Fire Alarm\nLayout Sheet - 01 of 02\n25H-AAEM-SD-ELEC-FA-B1-003\n"
+                "4st Basement Floor Plan Fire Alarm\nLayout Sheet - 02 of 02\n25H-AAEM-SD-ELEC-FA-B1-003A\nTHE ENGINEER COMMENTS:\n")
+NCC_BAND = "SHOPDRAWING SUBMITTAL\nDate: 01-May-2026 Reference: 25H-S202-NCC-SD-MEP-ELE-FA-003-R3\n"
+
+
+def _scan(path: Path) -> Path:
+    with pymupdf.open() as document:
+        document.new_page().draw_rect(pymupdf.Rect(40, 40, 500, 700))
+        document.save(path)
+    return path
+
+
+def test_a_listed_attachment_is_not_the_cover_and_a_lost_reference_line_is_read_again_in_its_band(tmp_path, monkeypatch):
+    # 25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf (EP-29076): the full-page OCR lost "Reference: …-FA-003-R3"
+    # and read the attachment table; the header band read on its own at the same scale has it.
+    assert dc.parse_page(NCC_FULL_OCR, "cover.pdf", NOW, 1) == [], "the attachments are listed items"
+    path = _scan(tmp_path / "25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf")
+    monkeypatch.setattr(dc, "_ocr_text", lambda page, sha256, index, renders=None: NCC_FULL_OCR)
+    bands = []
+    monkeypatch.setattr(dc, "_ocr_band_text", lambda page, sha256, index: bands.append(index) or NCC_BAND)
+    with pymupdf.open(path) as pdf:
+        reading = dc.read_open_pdf(pdf, str(path), NOW, True, None, full=True, promote=False)
+    [record] = reading.records
+    assert record.reference == "25H-S202-NCC-SD-MEP-ELE-FA-003" and record.revision == "R3" and bands == [0]
+    assert {"page": 1, "kind": "ocr_retry", "region": "header band", "used": True} in reading.observations
+    # where the band has nothing either, nothing is made of the attachments
+    monkeypatch.setattr(dc, "_ocr_band_text", lambda page, sha256, index: "Project Name: 25hours\n")
+    with pymupdf.open(path) as pdf:
+        reading = dc.read_open_pdf(pdf, str(path), NOW, True, None, full=True, promote=False)
+    assert reading.records == () and {"page": 1, "kind": "ocr_retry", "region": "header band", "used": False} in reading.observations
+
+
+def test_the_raw_floor_is_the_floor_the_title_prints_and_nothing_is_expanded():
+    # EP-30088 (pilot P-05): "FIRST FLOOR FIRE ALARM LAYOUT" became the floor "FIRST FIRE ALARM" downstream
+    assert dc.floor_name("FIRST FLOOR FIRE ALARM LAYOUT") == "FIRST FLOOR"
+    assert dc.floor_name("HC FLOOR FIRE ALARM LAYOUT") == "HC FLOOR", "kept raw: no expansion, no elevation"
+    assert dc.floor_name("GROUND FLOOR PLAN") == "GROUND FLOOR" and dc.floor_name("LIFT MACHINE ROOM  FLOOR PLAN") == "LIFT MACHINE ROOM FLOOR PLAN"
+    assert dc.floor_name("FLOOR PLAN - ZONE D FIRE ALARM LAYOUT") is None
+
+
+# --- persistence: the ordinary writer and the repair tool ------------------------------------------------------------
+
+
+def test_the_title_block_reading_is_stored_by_processing_and_by_the_repair_tool(client, db_session, tmp_path, inline, monkeypatch):
+    from scripts import repair_extraction as tool
+
+    folder = tmp_path / "EP-30951"
+    _sheet(folder / "05- Drawings" / "PAVA" / "AKA-BKG-ELE-B1-SD-PAVA-00010.pdf", PAVA_00010)
+    project_id = _project(client, folder, ep="30951")
+    result = _result(client, client.post(f"/projects/{project_id}/jobs/sync-documents"))
+    assert result.get("failed", 0) == 0, result
+    row = db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id).one()
+    db_session.refresh(row)
+    [stored] = row.extracted["records"]
+    assert stored["reference"] == "AKA-BKG-ELE-B1-SD-PAVA-00010" and stored["printed_revision"] == "02" and stored["revision"] == "R2"
+    assert row.reference == "AKA-BKG-ELE-B1-SD-PAVA-00010" and row.extracted["parser_version"] == dc.PARSER_VERSION
+    assert any(o["kind"] == "title_block" and o["number"] == stored["reference"] for o in row.extracted["observations"])
+    json.dumps(row.extracted)
+
+    # an earlier parser's reading of the same bytes (the neighbour's number) is repaired to the sheet's own
+    old = json.loads(json.dumps(row.extracted))
+    old["records"][0].update(reference="AKA-BKG-ELE-B1-SD-PAVA-00008", revision="R0", printed_revision=None, revision_source="default")
+    old["parser_version"], old["observations"] = "parse-2026-09-28.5", []
+    row.extracted, row.reference, row.revision = old, "AKA-BKG-ELE-B1-SD-PAVA-00008", "R0"
+    db_session.commit()
+    monkeypatch.setattr(tool, "root_of", lambda r: str(folder))
+    entry = tool.preview(db_session, row, ["selected by id"], False)
+    assert entry["outcome"] == "would_repair" and entry["new"]["reference"] == "AKA-BKG-ELE-B1-SD-PAVA-00010" and entry["new"]["revision"] == "R2"
+    tool.apply_row(db_session, row, entry)
+    db_session.refresh(row)
+    assert row.reference == "AKA-BKG-ELE-B1-SD-PAVA-00010" and row.revision == "R2"
+    assert row.extracted["records"][0]["printed_revision"] == "02" and row.extracted["parser_version"] == dc.PARSER_VERSION
+    assert any(o["kind"] == "title_block" for o in row.extracted["observations"])
+
+
+# --- numbers and revisions that are not the page's own (review 05 re-score of the frozen corpus) ----------------------
+
+
+def test_a_forms_own_edition_and_a_tables_header_are_not_the_documents_revision():
+    # EP-19977 FA MS R1 App.pdf (Emaar form): "Form No.: F-013 / Rev.0" is the template's edition
+    assert dc.page_revision("MATERIAL / EQUIPMENT APPROVAL FORM\nForm No.: F-013\nRev.0\nDate: July 2016\n") is None
+    # 25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf: the LACASA form's footer "(Rev.02)"
+    assert dc.page_revision("Appendix D3 Page 1of1 LAC-SM-Feb. 2014 (Rev.02\n") is None
+    # 25H-S202-NCC-SD-MEP-ELE-FA-031-R00 - Code B.pdf page 2 (scanned sheet): the reference table's header row
+    assert dc.page_revision("REFERENCE IFC DRAWINGS\n| DRAWING No, / DOCUMENTS No. Rev\n1 os _ a 1 SEE\n") is None
+    # a field and its value are still a revision
+    assert dc.page_revision("Drawing No: X-SD-001 Rev: 01\n").group(1) == "01"
+    assert dc.page_revision("No: ABC-XYZ-SPM-SD-MEP-FA-0054\nRev: 01\n").group(1) == "01"
+
+
+def test_a_subject_line_a_citation_and_a_form_template_number_are_never_the_pages_identity():
+    # A23-EFE-MAT-E-00033 ... page 3 (the consultant's comment sheet), EP-19977-Var1-Voltas.pdf (a quotation),
+    # R1029-CSM-...-1020-01_CODE C.pdf page 6 (the CSCEC form's footer number)
+    for text in ("Subject: Material Submittal of Fire Alarm System - Ref. A23-Effeco-MAT-E-00033\nRev.0, Dated 30 April 2018,\n"
+                 "1. Selected PC is not accepted it should match with our specs.\n",
+                 "Quotation\nRefrence _: [EP-19977-Var. 01\n1. Scope of Work: Supply, Testing & Commissioning as per Material Submittal "
+                 "comments (Ref: EBF-DCP-6374-VL-\nMAT-ELV-0003). Any additional material required will be quoted separately.\n",
+                 "Engineer's Comments:\nR1029-CSCEC-FM-MAR-001_R01 \nVersion Date \nMaterial Submittal Reference\n"):
+        assert dc.first_reference(text) is None
+        assert dc.parse_page(text, "page.pdf", NOW, 1) == []
+
+
+def test_a_fax_cover_is_not_the_submittal_it_forwards():
+    # EP-13777/Approval Documents/AAR-001 Commented Material Submittal- ... (1).pdf page 1
+    text = ("EFECO\nFACSIMILE TRANSMITTAL SHEET\nTO: MR. AHAMED\nSubject: Commented Material Submittal - FIRE ALARM SYSTEM\n"
+            "With reference to the above-mentioned subject, kindly find attached above captioned subject\n"
+            "material submittal reference # A23-EFE-MAT-E-0033, Rev 1 dated 20.06.18 which has been\ncommented by the consultant.\n")
+    assert dc.parse_page(text, "AAR-001.pdf", NOW, 1) == []
+
+
+def test_a_callout_to_another_sheet_is_not_the_sheets_number(tmp_path):
+    # SA-H2-BEST-ICT-00100a.pdf (EP-26369): the plan's callouts "DWG No. SA-H2-BEST-FA-00104" (label and number in
+    # one run) sit in the sheet's right-hand part; the title block's DRAWING NO: cell is the sheet's own number. The
+    # reader had made FA-00104 the record.
+    path = _sheet(tmp_path / "SA-H2-BEST-ICT-00100a.pdf", [
+        (2748, 1178, "DWG No. SA-H2-BEST-FA-00104", 7), (2416, 981, "DWG No. SA-H2-BEST-ICT-00101", 7),
+        (1500, 900, "4x100mm uPVC DUCT FOR ICT/SECURITY +FIRE ALARM+EMERGENCY", 9),
+        (2913, 2308, "DRAWING NO:", 9), (3129, 2308, "CONSULTANT:", 9), (3232, 2308, "REVISION:", 9),
+        (2933, 2336, "SA-H2-BEST-ICT-00100a", 12), (3156, 2336, "SPEC", 12), (3296, 2336, "00", 12),
+        (2913, 2078, "DRAWING TITLE:", 9), (2916, 2132, "SITE PLAN STRUCTURED CABLING LAYOUT- PART -1", 16)], size=(3370, 2384))
+    reading = _read(path)
+    [block] = [o for o in reading.observations if o["kind"] == "title_block"]
+    assert (block["number"], block["revision"]) == ("SA-H2-BEST-ICT-00100a", "00")
+    assert block["title"] == "SITE PLAN STRUCTURED CABLING LAYOUT- PART -1"
+    assert all(r.reference != "SA-H2-BEST-FA-00104" for r in reading.records)
+    assert reading.records == (), "a structured-cabling sheet is no tracked system's record"
+
+
+def test_ocr_of_a_title_block_sheets_images_adds_no_other_identity(tmp_path, monkeypatch):
+    # The same rule where OCR runs: a fire alarm sheet whose title block gives its number, with an image OCR reads
+    # another sheet's number off.
+    path = _sheet(tmp_path / "SA-H2-BEST-FA-00201.pdf", [
+        (2913, 2308, "DRAWING NO:", 9), (3129, 2308, "CONSULTANT:", 9), (3232, 2308, "REVISION:", 9),
+        (2933, 2336, "SA-H2-BEST-FA-00201", 12), (3156, 2336, "SPEC", 12), (3296, 2336, "00", 12),
+        (2913, 2078, "DRAWING TITLE:", 9), (2916, 2132, "FIRE ALARM SCHEMATIC DIAGRAM", 16)], size=(3370, 2384))
+    with pymupdf.open(path) as document:      # an image on the sheet, so the reader OCRs its region
+        document[0].insert_image(pymupdf.Rect(400, 400, 1400, 1400), pixmap=pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, 400, 400), 0))
+        document.saveIncr()
+    calls = []
+    ocr = "DWG No. SA-H2-BEST-FA-00104\nFIRE ALARM LAYOUT\nDRAWING TITLE\nFIRE ALARM\n"
+    monkeypatch.setattr(dc, "_ocr_regions_text", lambda page, regions, sha256, index, renders: calls.append("regions") or ocr)
+    monkeypatch.setattr(dc, "_ocr_text", lambda page, sha256, index, renders=None: calls.append("page") or ocr)
+    with pymupdf.open(path) as pdf:
+        reading = dc.read_open_pdf(pdf, str(path), NOW, True, None, full=True, promote=False)
+    assert calls, "the sheet's image was OCRed"
+    assert [r.reference for r in reading.records] == ["SA-H2-BEST-FA-00201"]
+
+
+def test_a_material_sample_tag_is_its_own_number_not_the_submittal_it_belongs_to():
+    # R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf page 6 (EP-26082): the CSCEC tag form prints its own
+    # number and the material submittal it belongs to; the reader took the submittal's (the grammar knew no MTG).
+    text = ("R1029-CSCEC-FM-MAR-001_R01 \nVersion Date \nMaterial Sample TAG\nR1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-\nZZZ-1020 \n"
+            "Material Submittal Reference\nR1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-\nZZZ-1009 \nProject\nR1029 \nEngineer's Comments:\n")
+    [record] = dc.parse_page(text, "tag.pdf", NOW, 6)
+    assert (record.reference, record.category) == ("R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020", "samples")
+    # MAR, MAS, MAT, SAR and the drawing codes read as before
+    assert dc.first_reference("BBY006-GME-MAS-EL-FA-0001").category == "submittals"
+    assert dc.first_reference("ABC-XYZ-SPM-SD-MEP-FA-0054").category == "drawings"
++++ new file: backend/tests/test_m2_review05_boq.py
+"""M2 review 05, R5-04: the deterministic BOQ reader and the BOQ read's completion contract.
+
+The reader: agreement between OCR passes over the same pixels is not independent confirmation; a column that reads
+as item numbers, or crossed columns, is held for review, never dropped. The contract: a read that attempted no sheet
+is not stamped as the project's BOQ read; a re-read never offers a sheet's lines for removal because the sheet
+could not be read, and a re-read that read nothing fails. Disposable data only (the file-backed test harness)."""
+from PIL import Image, ImageDraw
+
+import app.routers.projects as projects_router
+from app.models import BoqCandidate, ExtractionRun, Project
+from app.services import design_sheet_extractor as dse
+from app.services.design_sheet_extractor import DesignSheetExtractionError, ExtractedBoqLine
+
+from .test_ai_sheet_reader import _login, _project
+from .test_projects import _login_admin, _valid_project_payload
+
+
+def _line(catalog, description, quantity, *, y=0, span=(0, 100), page=1, confidence=None):
+    return ExtractedBoqLine(catalog_no=catalog, description=description, quantity=quantity, group_heading="Main",
+                            confidence=90.0, page=page, raw_quantity=quantity, y_px=y, table_span=span, catalog_confidence=confidence)
+
+
+# --- the reader: correlated agreement ------------------------------------------------------------------------------
+
+
+def _check(strip: str, confidence: float, monkeypatch, passes: list[str], height: int = 60):
+    """The part-number check on one cell, the two passes' readings fixed (the OCR engine is the seam)."""
+    image = Image.new("L", (900, height), 255)
+    ImageDraw.Draw(image).text((20, 10), strip, fill=0)
+    line = _line(strip, "Emergency light", "4", y=height // 2, confidence=confidence)
+    line.row_bounds = (0, height)
+    readings = iter(passes)
+    monkeypatch.setattr(dse.pytesseract, "image_to_string", lambda *a, **k: next(readings))
+    dse._confirm_catalog(image, line, (0, 900))
+    return line
+
+
+def test_a_confident_strip_read_is_not_second_guessed():
+    # the check runs only under RECHECK_QUANTITY_BELOW: a strip read at 90 % or more stands on its own word, as before
+    assert dse.RECHECK_QUANTITY_BELOW == 90
+
+
+def test_passes_repeating_an_unsure_strip_read_are_not_a_confirmation(monkeypatch):
+    # EP-19977 CBS Design (sha256 ebca6cb9...): the strip read the printed KCW019ML-IP65 as KCWO019ML-IP65 at 51 %,
+    # and both passes on the same cell read the same. Repeated, not independent: the row is held with every reading.
+    line = _check("KCWO019ML-IP65", 51.0, monkeypatch, ["KCWO019ML-IP65", "KCWO019ML-IP65"])
+    assert line.catalog_uncertain and line.catalog_check["agreement"] == "correlated" and not line.catalog_check["confirmed"]
+    assert line.catalog_no == "KCWO019ML-IP65", "the literal reading stays; nothing is substituted, O is not turned into 0"
+    assert [r["value"] for r in line.catalog_alternates] == ["KCWO019ML-IP65", "KCWO019ML-IP65"]
+    issue = dse._uncertain_part_issue(line, 1)
+    assert issue.detail["catalog_no"] == "KCWO019ML-IP65" and issue.detail["quantity"] == "4" and issue.detail["catalog_cell"]
+    assert "same pixels" in issue.detail["reason"]
+
+
+def test_a_pass_reading_another_part_still_makes_the_row_uncertain(monkeypatch):
+    line = _check("4-CABI6D", 70.0, monkeypatch, ["4-CAB16D", "4-CAB16D"])
+    assert line.catalog_uncertain and "another part number" in line.catalog_check["reason"]
+
+
+def test_a_split_multiline_identity_is_read_as_a_block_and_held_when_unsure(monkeypatch):
+    # EP-30784 EML: "SL2MNM65D3C-M" over "+SL23I" in one tall cell: the block passes read it whole
+    line = _check("SL2MNM65D3C-M +SL23I", 81.5, monkeypatch, ["SL2MNM65D3C-M +SL23I", "SL2MNM65D3C-M +SL23I"], height=120)
+    assert line.catalog_check["multiline"] and line.catalog_uncertain and line.catalog_check["agreement"] == "correlated"
+
+
+# --- the reader: columns that do not read as a BOQ's -----------------------------------------------------------------
+
+
+def test_an_item_number_column_read_as_quantities_is_held_for_review_on_every_page():
+    # EP-26369 MS FAS\BOQ.pdf: Item | Model | Description | Quantity -- items 1-13 read as quantities 1-13, and the
+    # shorter sections (items 1-4) in the same column layout, on page 1 and page 2.
+    span = (201, 2189)
+    rows = [_line(f"P-{n}", f"Part {n}", str(n), y=100 + 40 * n, span=span) for n in range(1, 14)]
+    short = [_line(f"Q-{n}", f"Other {n}", str(n), y=900 + 40 * n, span=span) for n in range(1, 4)]
+    page2 = [_line("SIGA-CT1", "Single input module", "1", y=100, span=span, page=2)]
+    other = [_line("X-1", "Elsewhere", "7", y=100, span=(5, 1500), page=2)]
+    notes = []
+    dse._hold_implausible_columns(rows + short + page2 + other, notes)
+    assert all(l.quantity is None and l.quantity_parse["held_quantity"] for l in rows + short + page2)
+    assert other[0].quantity == "7", "another column layout is not touched"
+    assert "counts 1..13 down 13 rows" in notes[0]
+    # nothing is dropped: each held row becomes a review row with its cell
+    assert all(dse._dropped_row_issue(l, i) is not None for i, l in enumerate(rows + short + page2, 1))
+
+
+def test_real_quantities_that_happen_to_repeat_or_vary_are_not_item_numbers():
+    rows = [_line(f"P-{n}", f"Part {n}", q, y=40 * n) for n, q in enumerate(["1", "1", "2", "1", "6", "12", "3"], 1)]
+    dse._hold_implausible_columns(rows, [])
+    assert [l.quantity for l in rows] == ["1", "1", "2", "1", "6", "12", "3"]
+
+
+def test_duplicate_parts_with_different_quantities_stay_two_lines():
+    rows = [_line("SIGA-CT1", "Single input module", "14", y=40), _line("SIGA-CT1", "Single input module", "6", y=80)]
+    dse._hold_implausible_columns(rows, [])
+    assert [(l.catalog_no, l.quantity) for l in rows] == [("SIGA-CT1", "14"), ("SIGA-CT1", "6")]
+
+
+def test_a_table_whose_descriptions_are_numbers_has_crossed_columns_and_is_held():
+    # EP-26082 Aspiration Design: part numbers read as quantities ("910900"), quantities as descriptions ("2000")
+    rows = [_line("Pipe-Red, ABS, 3/4\", 3m", "2000", "910900", y=40), _line("Socket-Red, ABS, 3/4", "2000", "910908", y=80),
+            _line("End cap-Red, ABS, 3/4", "240", "910927", y=120)]
+    notes = []
+    dse._hold_implausible_columns(rows, notes)
+    assert all(l.quantity is None for l in rows) and "descriptions are numbers" in notes[0]
+
+
+# --- the completion contract -----------------------------------------------------------------------------------------
+
+
+def test_a_first_read_that_attempted_no_sheet_is_not_stamped_and_is_tried_again(client, db_session, tmp_path, monkeypatch):
+    sheet = tmp_path / "EP-70105 FAS Design.pdf"
+    sheet.write_bytes(b"%PDF-1.4 sheet")
+    project = _project(db_session, sheet, ep="70105")
+    _login(client)
+    first = client.post(f"/projects/{project.id}/boq/ensure").json()
+    assert not first["extracted"] and first["items"] == [] and "Not read: AI assistance is disabled" in first["warnings"][0]
+    db_session.expire_all()
+    assert db_session.get(Project, project.id).boq_extracted_at is None, "nothing read, nothing stamped"
+    again = client.post(f"/projects/{project.id}/boq/ensure").json()
+    assert not again["extracted"]
+    assert db_session.query(ExtractionRun).filter(ExtractionRun.project_id == project.id).count() == 1, "recorded once, not per open"
+    # a reader that can read the sheet (the test seam) reads it on the next open
+    monkeypatch.setattr(projects_router, "extract_boq_lines", lambda path: [_line("SIGA-PS", "Smoke detector", "12")])
+    read = client.post(f"/projects/{project.id}/boq/ensure").json()
+    assert read["extracted"] and [i["catalog_no"] for i in read["items"]] == ["SIGA-PS"]
+
+
+def _two_sheet_project(client, monkeypatch, ep):
+    reads = {"FAS": [_line("4-CPU", "Central Processor Module", "1"), _line("SIGA-PS", "Smoke detector", "120")],
+             "ELS": [_line("SL-1", "Emergency light", "40")]}
+    fail: set = set()
+
+    def extract(path):
+        code = "ELS" if "ELS" in str(path) else "FAS"
+        if code in fail:
+            raise DesignSheetExtractionError("Could not find a line-item table in this Design Sheet")
+        return list(reads[code])
+
+    monkeypatch.setattr(projects_router, "extract_boq_lines", extract)
+    _login_admin(client)
+    payload = _valid_project_payload(ep)
+    payload["design_sheets"] = [{"system_code": "FAS", "document_path": r"C:\archive\x\FAS Design.pdf"},
+                                {"system_code": "ELS", "document_path": r"C:\archive\x\ELS Design.pdf"}]
+    pid = client.post("/projects", json=payload).json()["id"]
+    body = client.post(f"/projects/{pid}/boq/ensure").json()
+    assert body["extracted"] and len(body["items"]) == 3
+    return pid, body, fail
+
+
+def test_a_reread_never_offers_an_unread_sheets_lines_for_removal(client, db_session, monkeypatch):
+    pid, body, fail = _two_sheet_project(client, monkeypatch, "61105")
+    fail.add("ELS")
+    built = client.post(f"/projects/{pid}/boq/candidates")
+    assert built.status_code == 201, built.text
+    candidate = built.json()
+    assert candidate["summary"]["failed_sheets"] == ["ELS Design.pdf"] and candidate["summary"]["not_reread"] == 1
+    assert not [c for c in candidate["changes"] if c["kind"] == "removed"], "SL-1 was not re-read, so it is not 'no longer yielded'"
+    applied = client.post(f"/projects/{pid}/boq/candidates/{candidate['id']}/apply", json={"decisions": {}})
+    assert applied.status_code == 200, applied.text
+    assert sorted(i["catalog_no"] for i in client.get(f"/projects/{pid}/boq").json()) == ["4-CPU", "SIGA-PS", "SL-1"]
+
+
+def test_a_reread_that_read_no_sheet_fails_and_leaves_the_good_boq_as_it_was(client, db_session, monkeypatch):
+    pid, body, fail = _two_sheet_project(client, monkeypatch, "61106")
+    fail.update({"FAS", "ELS"})
+    before = client.get(f"/projects/{pid}/boq").json()
+    built = client.post(f"/projects/{pid}/boq/candidates")
+    assert built.status_code == 409 and "No Design Sheet could be read" in built.json()["detail"]
+    assert client.get(f"/projects/{pid}/boq").json() == before
+    assert db_session.query(BoqCandidate).filter(BoqCandidate.project_id == pid, BoqCandidate.status == "pending").count() == 0
+    # the job route: the job fails, it does not succeed with every sheet failed
+    import app.routers.jobs as jobs_router
+
+    monkeypatch.setattr(jobs_router, "RUN_INLINE", True)
+    job = client.post(f"/projects/{pid}/jobs/boq-reread").json()
+    finished = client.get(f"/jobs/{job['id']}").json()
+    assert finished["status"] == "failed" and "No Design Sheet could be read" in (finished.get("error") or "")
+    assert client.get(f"/projects/{pid}/boq").json() == before
++++ new file: backend/tests/test_m2_pilot_eval.py
+"""Adversarial tests of the pilot evaluator v2 (M2 review 05, R5-02 / R5-03): every case the submitted scorer got
+wrong, plus the record-matching contract."""
+from scripts import m2_pilot_eval as ev
+
+
+def test_known_absence_is_a_negative_control_that_can_fail():
+    # n/a consultant decision + an accepted approval = a false positive (the old scorer returned unscorable)
+    assert ev.judge_decision("n/a", "approved") == "fp"
+    assert ev.judge_decision("n/a", "ANN") == "fp"
+    assert ev.judge_decision("n/a", "UR") == "tn"
+    assert ev.judge_decision("n/a", None, has_record=False) == "tn"
+    # a reference labelled absent + an invented one = a false positive
+    assert ev.judge_reference("absent", "WRONG-SD-001") == "fp"
+    assert ev.judge_reference("absent", None) == "tn"
+
+
+def test_unknown_truth_stays_unscorable_and_is_not_lumped_with_absence():
+    for truth in ("unknown", "illegible", "ambiguous", "unlabelled", "unknown (rotated)"):
+        assert ev.judge_decision(truth, "approved") == "unscorable"
+        assert ev.judge_reference(truth, "X-SD-1") == "unscorable"
+
+
+def test_ur_empty_and_positive_decisions_have_different_denominators():
+    counter = ev.collections.Counter()
+    for truth, status in (("UR", "UR"), ("UR", None), ("rejected", "rejected"), ("ANN", "UR"), ("n/a", "approved")):
+        counter[ev.judge_decision(truth, status, has_record=status is not None)] += 1
+    r = ev.rates(counter)
+    assert (r["tp"], r["tn"], r["fp"], r["missed"]) == (1, 2, 1, 1)
+    assert r["accepted"] == 2 and r["precision_of_accepted"] == 0.5        # the correct UR outcomes are not "accepted"
+    assert r["specificity_of_negatives"] == round(2 / 3, 4)
+    assert r["recovery_of_readable"] == 0.5
+
+
+def test_a_conflict_needs_its_evidence_not_merely_a_default_ur():
+    assert ev.judge_decision("conflict", "UR") == "conflict_missing"
+    assert ev.judge_decision("conflict", "UR", flags=("decision_conflict",)) == "conflict_ok"
+    assert ev.judge_decision("conflict", "UR", candidates=(("ANN", "text"), ("rejected", "ocr"))) == "conflict_ok"
+    assert ev.judge_decision("conflict", "ANN", flags=("decision_conflict",)) == "conflict_missing"
+
+
+def test_held_evidence_is_recovery_never_an_accepted_approval():
+    state = ev.judge_decision("ANN", "UR", candidates=(("ANN", "drawn_frame", "held"),))
+    assert state == "held"
+    r = ev.rates(ev.collections.Counter([state]))
+    assert r["accepted"] == 0 and r["held_evidence"] == 1 and r["tp"] == 0
+
+
+def test_records_are_matched_by_page_and_identity_and_a_later_correct_record_does_not_hide_a_wrong_one():
+    labels = {"documents": [{"doc": "EP-1/a.pdf", "ep": "1", "cohort": "c", "stratum": "s", "extension": ".pdf", "scan_like": False, "confidence": "high",
+                             "labels": {"kind": "shop-drawing cover", "reference": "X-SD-0001", "revision": "00", "decision": "rejected"}}]}
+    page_labels = {"documents": {"EP-1/a.pdf": {"records": [
+        {"page": 1, "component": "cover", "reference": "X-SD-0001", "printed_revision": "00", "decision": "rejected", "register": True},
+        {"page": 2, "component": "sheet", "reference": "X-SD-0001", "printed_revision": "00", "decision": "rejected", "register": True}],
+        "no_record_pages": {"3": "catalogue"}}}}
+    rows = {"EP-1/a.pdf": {"state": "fresh", "extracted": {"records": [
+        {"page": 1, "reference": "X-SD-0008", "revision": "R0", "revision_source": "default", "status": "rejected"},      # wrong on page 1
+        {"page": 2, "reference": "X-SD-0001", "printed_revision": "00", "status": "rejected"},                             # right on page 2
+        {"page": 2, "reference": "X-SD-0001", "printed_revision": "00", "status": "rejected"},                             # a duplicate
+        {"page": 3, "reference": "Y-SD-9", "status": "ANN"}],                                                              # a false record
+        "coverage": {"outcome": "complete"}}}}
+    result = ev.evaluate(labels, page_labels, rows)
+    t = result["totals"]
+    assert t["records"] == {"substituted": 1, "matched": 1, "duplicate": 1, "extra": 1}
+    assert t["fields"]["reference"]["wrong"] == 1 and t["fields"]["reference"]["tp"] == 1 and t["fields"]["reference"]["fp"] == 1
+    kinds = sorted(c["kind"] for c in t["critical"])
+    assert "false approval" in kinds and "wrong reference accepted" in kinds and "record where truth has none" in kinds
+    # the default-sourced revision on the wrong record is a projection, not a raw misread
+    assert t["fields"]["revision"]["missed"] == 1
+
+
+def test_pages_without_truth_stay_unvalidated():
+    labels = {"documents": [{"doc": "EP-1/b.pdf", "ep": "1", "cohort": "c", "stratum": "s", "extension": ".pdf", "scan_like": False, "confidence": "high",
+                             "labels": {"kind": "material submittal cover", "reference": "M-MAS-1", "revision": "00", "decision": "ANN"}}]}
+    rows = {"EP-1/b.pdf": {"state": "fresh", "extracted": {"records": [
+        {"page": 1, "reference": "M-MAS-1", "printed_revision": "00", "status": "ANN"},
+        {"page": 7, "reference": "M-MAS-2", "status": "UR"}], "coverage": {"outcome": "complete"}}}}
+    result = ev.evaluate(labels, None, rows)
+    assert result["totals"]["unvalidated_emitted_records"] == 1
+    assert result["totals"]["records"] == {"matched": 1}
+
+
+def test_word_transmittals_are_scored():
+    labels = {"documents": [{"doc": "EP-1/t.doc", "ep": "1", "cohort": "c", "stratum": "transmittal_word", "extension": ".doc", "scan_like": False, "confidence": "high",
+                             "labels": {"kind": "Word transmittal (DOCUMENT TRANSMITTAL)", "reference": "TR/197/26", "revision": "absent", "decision": "n/a", "system": "ELS / CBS"}}]}
+    rows = {"EP-1/t.doc": {"state": "fresh", "extracted": {"records": [{"page": 1, "reference": "TR/197/26", "revision": "R0", "status": "UR", "system_code": "ELS"}]}}}
+    f = ev.evaluate(labels, None, rows)["totals"]["fields"]
+    assert f["reference"]["tp"] == 1 and f["decision"]["tn"] == 1 and f["system"]["tp"] == 1
+    assert f["revision"]["tn"] == 1        # no printed revision, none extracted (R0 is a default projection)
+
+
+def test_system_equivalence_is_a_table_not_a_substring():
+    assert ev.judge_system("FAS / VES", {"system_code": "FAS"}) == "tp"
+    assert ev.judge_system("CBS", {"system_code": "ELS"}) == "tp"
+    assert ev.judge_system("other (HVAC; non-FAS)", {"system_code": "FAS"}) == "fp"       # 'non-FAS' is not FAS
+    assert ev.judge_system("other (HVAC; non-FAS)", {"system_code": None}) == "tn"
+    assert ev.judge_system("PA/VA", {"system_code": "FAS"}) == "wrong"
+
+
+def test_revision_tokens_are_compared_as_printed():
+    assert ev.norm_rev("00") == ev.norm_rev("R0") == ev.norm_rev("Rev.0") == "R0"
+    assert ev.norm_rev("07") == "R7" and ev.norm_rev("R10") == "R10"
+    assert ev.norm_rev("AB") == "AB" and ev.norm_rev("C1") == "C1"
+    # the reference's own revision suffix is the revision the reader files
+    assert ev.judge_revision("R3 (suffix of the reference)", {"revision": "R3", "revision_source": "suffix"}, "25H-S202-NCC-SD-MEP-ELE-FA-003-R3") == "tp"
+    assert ev.judge_reference("25H-S202-NCC-SD-MEP-ELE-FA-003-R3", "25H-S202-NCC-SD-MEP-ELE-FA-003") == "tp"
+    assert ev.judge_revision("07", {"revision": "R10", "revision_source": "printed"}) == "wrong"
++++ new file: backend/tests/test_extraction_pilot.py
+"""Real-project pilot (2026-09-28, docs/milestones/M2/real-project-pilot): the reader defects the regression and
+exploration cohorts demonstrated, each pinned by the text of the document that showed it. The snippets are the
+literal text runs of those originals (OCR or text layer), quoted with the source document; nothing is invented."""
+from datetime import datetime
+
+from app.services import document_control as dc
+
+
+MODIFIED = datetime(2026, 9, 28)
+
+
+def test_p01_a_label_ocr_glued_to_the_number_is_not_part_of_the_reference():
+    # EP-29076/06- Drawings/01- FA/03- SD/.../25H-S202-NCC-SD-MEP-ELE-FA-050-00.pdf (sha 5066ef519604…), a scanned
+    # LACASA shop-drawing submittal form: OCR runs the "Reference" label into the number.
+    found = dc.reference_candidates("SHOPDRAWING SUBMITTAL\nReference25H-S202-NCC-SD-MEP-ELE-FA-050-00\nDate: 24th July 2026\n")
+    assert [c.reference for c in found] == ["25H-S202-NCC-SD-MEP-ELE-FA-050-00"]
+    assert found[0].category == "drawings" and found[0].kind == "serial"
+    # the offset points at the number, so a label search behind it still sees "Reference"
+    assert found[0].start == len("SHOPDRAWING SUBMITTAL\nReference")
+
+
+def test_p02_an_empty_drawing_number_field_does_not_take_the_next_label_as_the_number():
+    # EP-19977/EP-19977 Scan Doc/EP-19977 FA MS R1 App.pdf (sha d4a7765240…), page 2, an Emaar submittal register
+    # print: "Drawing No:" is empty and the next line is the "Reference No:" label.
+    text = ("Submittal Details\nSubmittal Register: 0\nContract Reference:\nSubmittal Register Line:\nLOA No: Voltas6374\n"
+            "Drawing No:\nReference No: EBF-DCP-6374-VL-\nMAT-ELV-0003\nPlanned Start Date: 25/Jun/2020\n"
+            "Title: Material Submittal for Fire Alarm with voice Evacuation & Fire Telephone\n")
+    assert dc.drawing_number(text) is None
+    assert dc.drawing_number("DRAWING NO: FA-101\nTITLE: GROUND FLOOR\n").group(1).strip() == "FA-101"
+    # and the reference the page does carry is read as a material submittal, across the wrapped hyphen (P-04)
+    found = dc.first_reference(text)
+    assert found is not None and found.reference == "EBF-DCP-6374-VL-MAT-ELV-0003" and found.category == "submittals"
+    records = dc.parse_page(text, "EP-19977 FA MS R1 App.pdf", MODIFIED, 2)
+    assert all(r.reference != "Reference" for r in records)
+
+
+def test_p03_an_ocr_letter_o_in_the_revision_suffix_is_the_revision_not_the_reference():
+    # EP-29076/.../25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf (sha …) and .../25H-S202-NCC-SD-MEP-ELE-EM-030-R00 -
+    # Code B.pdf: OCR read the "-R00" suffix as "-RO".
+    found = dc.reference_candidates("Reference 25H-S202-NCC-SD-MEP-ELE-FA-024-RO\nDate: 18 May 2026\n")
+    assert [c.reference for c in found] == ["25H-S202-NCC-SD-MEP-ELE-FA-024-R0"]
+    records = dc.parse_page("SHOP DRAWING SUBMITTAL\nReference 25H-S202-NCC-SD-MEP-ELE-EM-30-RO\nDrawing Title: 23rd Floor Emergency Lighting Layout\n",
+                            "25H-S202-NCC-SD-MEP-ELE-EM-030-R00 - Code B.pdf", MODIFIED, 1)
+    assert records and records[0].reference == "25H-S202-NCC-SD-MEP-ELE-EM-30" and records[0].revision == "R0"
+    # a real trailing segment is untouched
+    assert dc.reference_candidates("BBY006-GME-SDW-EL-LI-POD-P03-010031")[0].reference == "BBY006-GME-SDW-EL-LI-POD-P03-010031"
+
+
+def test_p04_mat_is_a_material_submittal_code():
+    # EP-13777/Approval Documents/A23-EFE-MAT-E-00033 Fire Alarm System - B.pdf (EFECO numbering) and the EP-19977
+    # Emaar forms ("EBF-DCP-6374-VL-MAT-ELV-0003"): "-MAT-" numbers a material submittal.
+    for text, expected in (("Ref No.: A23-EFE-MAT-E-00033 Rev. 01\nMaterial Submittal - Fire Alarm System", "A23-EFE-MAT-E-00033"),
+                           ("Reference No: EBF-DCP-6374-VL-MAT-ELV-0003 Rev.No. 01", "EBF-DCP-6374-VL-MAT-ELV-0003")):
+        found = dc.first_reference(text)
+        assert found is not None and found.reference == expected and found.category == "submittals"
+    # a date is still not a reference, and MAS / MAR are unchanged
+    assert dc.first_reference("Date: 6-MAR-2026") is None
+    assert dc.first_reference("BBY006-GME-MAS-EL-FA-0001").category == "submittals"
+
+
+def test_parser_identity_moved_with_the_pilot_fixes():
+    # .5 carried the four pilot fixes; .6 the review-05 title-block and reference-role rules (the fixes stay in force).
+    assert dc.PARSER_VERSION == "parse-2026-09-28.6"

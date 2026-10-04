@@ -1,0 +1,144 @@
+{
+  "status": "stopped",
+  "stopped": "stop: three consecutive provider failures",
+  "requests_this_invocation": {},
+  "projects": [],
+  "not_attempted": [],
+  "deferred": [],
+  "tripwire_errors": [],
+  "terminal_stop": {
+    "lifecycle": "runner-lifecycle-2026-10-01.v2",
+    "terminal": true,
+    "kind": "provider_failures",
+    "reason": "stop: three consecutive provider failures",
+    "evidence": [
+      {
+        "seq": 1,
+        "pid": 35104,
+        "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+        "task": "discover_page",
+        "page": 1,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      },
+      {
+        "seq": 2,
+        "pid": 35104,
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "task": "discover_page",
+        "page": 1,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      },
+      {
+        "seq": 3,
+        "pid": 35104,
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "task": "discover_page",
+        "page": 2,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      }
+    ],
+    "reconstructed": true,
+    "at_utc": "2026-09-30T21:15:28+00:00",
+    "pid": 18912,
+    "clock": 1790802928.3874393,
+    "tag": "L1",
+    "arm": "L1",
+    "declaration_sha256": "a8e232107e90523b361abb203b165919ec084fc2b5e5d6ed5b6a69616508b715",
+    "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    }
+  },
+  "stop_file": {
+    "lifecycle": "runner-lifecycle-2026-10-01.v2",
+    "terminal": true,
+    "kind": "provider_failures",
+    "reason": "stop: three consecutive provider failures",
+    "evidence": [
+      {
+        "seq": 1,
+        "pid": 35104,
+        "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+        "task": "discover_page",
+        "page": 1,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      },
+      {
+        "seq": 2,
+        "pid": 35104,
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "task": "discover_page",
+        "page": 1,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      },
+      {
+        "seq": 3,
+        "pid": 35104,
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "task": "discover_page",
+        "page": 2,
+        "outcome": "transport",
+        "error_detail": "scripted provider failure",
+        "model": "dry"
+      }
+    ],
+    "reconstructed": true,
+    "at_utc": "2026-09-30T21:15:28+00:00",
+    "pid": 18912,
+    "clock": 1790802928.3874393,
+    "tag": "L1",
+    "arm": "L1",
+    "declaration_sha256": "a8e232107e90523b361abb203b165919ec084fc2b5e5d6ed5b6a69616508b715",
+    "allowance_key": {
+      "scope": "r22-four-arm-dry-2026-09-30-L1",
+      "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    }
+  },
+  "resumes": [
+    {
+      "at_utc": "2026-09-30T21:15:28+00:00",
+      "pid": 18912,
+      "clock": 1790802928.3858635,
+      "reread": false,
+      "provider_journal": {
+        "state": "ok",
+        "streak": 3,
+        "unresolved": [],
+        "last_seq": 3,
+        "result_counts": {
+          "ok": 0,
+          "failure": 3,
+          "cache_hit": 0,
+          "budget": 0,
+          "none": 0
+        },
+        "processes": 1
+      },
+      "refused": "terminal stop preserved (plain --resume is not approval to clear it)",
+      "requests_sent": 0,
+      "terminal_kind": "provider_failures"
+    }
+  ],
+  "sends_total_recorded": 3,
+  "sends_by_pid": {
+    "35104": 3
+  },
+  "declaration_sha256": "a8e232107e90523b361abb203b165919ec084fc2b5e5d6ed5b6a69616508b715",
+  "arm": "L1",
+  "tag": "L1",
+  "allowance_key": {
+    "scope": "r22-four-arm-dry-2026-09-30-L1",
+    "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "path": "C:/t/r2x/dry-runs/r25-r24probe-v4.3/provider-before_file/dry-allowance.sqlite"
+  }
+}

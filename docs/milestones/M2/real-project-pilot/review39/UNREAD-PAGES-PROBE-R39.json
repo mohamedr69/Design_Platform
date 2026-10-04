@@ -1,0 +1,274 @@
+{
+ "A": {
+  "calls_per_page": [
+   4,
+   4,
+   4,
+   4
+  ],
+  "coverage": {
+   "calls": 8,
+   "outcome": "partial",
+   "pages": [
+    {
+     "calls": 4,
+     "fields": {},
+     "outcome": "completed",
+     "page": 1,
+     "requests": {},
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 4,
+     "fields": {},
+     "outcome": "completed",
+     "page": 2,
+     "requests": {},
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 0,
+     "outcome": "budget: calls per document",
+     "page": 3,
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 0,
+     "outcome": "budget: calls per document",
+     "page": 4,
+     "triggers": [
+      "document_empty"
+     ]
+    }
+   ],
+   "policy": "evidence-policy-2026-09-29.4",
+   "variant": "EV1",
+   "version": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1"
+  },
+  "provider_calls": 8,
+  "run_calls": 8,
+  "run_exhausted": null,
+  "stored_summary": {
+   "at": "2026-10-04T00:00:00+00:00",
+   "attempt": 1,
+   "calls": [],
+   "changed": [],
+   "error": null,
+   "key": "default|EV1",
+   "models": [],
+   "outcome": "partial",
+   "pages": {
+    "1": {
+     "fields": {},
+     "outcome": "completed",
+     "requests": {}
+    },
+    "2": {
+     "fields": {},
+     "outcome": "completed",
+     "requests": {}
+    },
+    "3": {
+     "fields": null,
+     "outcome": "budget: calls per document",
+     "requests": null
+    },
+    "4": {
+     "fields": null,
+     "outcome": "budget: calls per document",
+     "requests": null
+    }
+   },
+   "policy": "evidence-policy-2026-09-29.4",
+   "profile": "default",
+   "read_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+   "seq": 1,
+   "unapplied": [],
+   "variant": "EV1",
+   "version": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1"
+  }
+ },
+ "B": {
+  "calls_per_page": [
+   7,
+   7,
+   7,
+   7
+  ],
+  "coverage": {
+   "calls": 12,
+   "outcome": "budget",
+   "pages": [
+    {
+     "calls": 7,
+     "fields": {},
+     "outcome": "completed",
+     "page": 1,
+     "requests": {},
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 5,
+     "fields": {},
+     "outcome": "completed",
+     "page": 2,
+     "requests": {},
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 0,
+     "outcome": "budget: calls_per_document",
+     "page": 3,
+     "triggers": [
+      "document_empty"
+     ]
+    },
+    {
+     "calls": 0,
+     "outcome": "budget: calls_per_document",
+     "page": 4,
+     "triggers": [
+      "document_empty"
+     ]
+    }
+   ],
+   "policy": "evidence-policy-2026-09-29.4",
+   "variant": "EV1",
+   "version": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1"
+  },
+  "provider_calls": 12,
+  "run_calls": 12,
+  "run_exhausted": "calls_per_document",
+  "stored_summary": {
+   "at": "2026-10-04T00:00:00+00:00",
+   "attempt": 1,
+   "calls": [],
+   "changed": [],
+   "error": null,
+   "key": "default|EV1",
+   "models": [],
+   "outcome": "budget",
+   "pages": {
+    "1": {
+     "fields": {},
+     "outcome": "completed",
+     "requests": {}
+    },
+    "2": {
+     "fields": {},
+     "outcome": "completed",
+     "requests": {}
+    },
+    "3": {
+     "fields": null,
+     "outcome": "budget: calls_per_document",
+     "requests": null
+    },
+    "4": {
+     "fields": null,
+     "outcome": "budget: calls_per_document",
+     "requests": null
+    }
+   },
+   "policy": "evidence-policy-2026-09-29.4",
+   "profile": "default",
+   "read_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+   "seq": 1,
+   "unapplied": [],
+   "variant": "EV1",
+   "version": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1"
+  }
+ },
+ "C": {
+  "evidence_stage_branch": "except Exception -> attempt.update(outcome='failed', error=..., coverage={'pages': []})",
+  "in_scope_pages": 4,
+  "stored_summary": {
+   "at": "2026-10-04T00:00:00+00:00",
+   "attempt": 1,
+   "calls": [],
+   "changed": [],
+   "error": "RuntimeError: injected reader exception",
+   "key": "default|EV1",
+   "models": [],
+   "outcome": "failed",
+   "pages": {},
+   "policy": "evidence-policy-2026-09-29.4",
+   "profile": "default",
+   "read_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+   "seq": 1,
+   "unapplied": [],
+   "variant": "EV1",
+   "version": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1"
+  }
+ },
+ "derived_unread_pages": {
+  "A": [
+   {
+    "kind": "application_reader_cap",
+    "page": "3",
+    "partial": false,
+    "reason": "not read: budget: calls per document"
+   },
+   {
+    "kind": "application_reader_cap",
+    "page": "4",
+    "partial": false,
+    "reason": "not read: budget: calls per document"
+   }
+  ],
+  "B": [
+   {
+    "kind": "application_document_limit",
+    "page": "3",
+    "partial": false,
+    "reason": "not read: budget: calls_per_document"
+   },
+   {
+    "kind": "application_document_limit",
+    "page": "4",
+    "partial": false,
+    "reason": "not read: budget: calls_per_document"
+   }
+  ],
+  "C": [
+   {
+    "kind": "application_reader_exception",
+    "page": "1",
+    "partial": false,
+    "reason": "the evidence reader raised: RuntimeError: injected reader exception"
+   },
+   {
+    "kind": "application_reader_exception",
+    "page": "2",
+    "partial": false,
+    "reason": "the evidence reader raised: RuntimeError: injected reader exception"
+   },
+   {
+    "kind": "application_reader_exception",
+    "page": "3",
+    "partial": false,
+    "reason": "the evidence reader raised: RuntimeError: injected reader exception"
+   },
+   {
+    "kind": "application_reader_exception",
+    "page": "4",
+    "partial": false,
+    "reason": "the evidence reader raised: RuntimeError: injected reader exception"
+   }
+  ]
+ },
+ "evidence_stage_exception_branch_present": true,
+ "job_calls_per_document": 12,
+ "reader_soft_cap": 8,
+ "taken_utc": "2026-10-04T10:00:46+00:00"
+}

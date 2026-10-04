@@ -239,3 +239,13 @@ def number(records: list[ControlledDocument]) -> list[ControlledDocument]:
         for n, row in enumerate(chain):
             numbered.append(replace(row, revision=f"R{n}", status="UR" if n == len(chain) - 1 else "SUPERSEDED"))
     return numbered
+
+
+_RAW_REF = re.compile(r"\bAASS\s*Ref\b[^\n]{0,24}?([^\s|]{0,3}\s*/\s*\d{1,5}\s*/\s*\d{2,4})", re.I)
+
+
+def raw_reference(text: str) -> str | None:
+    """What a scanned transmittal's "AASS Ref." cell read as, literally, where it did not read as a TR
+    number ("_18/0127/26"): evidence kept for an engineer, never a number (M2 review 05, pilot P-09)."""
+    found = _RAW_REF.search(text or "")
+    return " ".join(found.group(1).split()) if found else None

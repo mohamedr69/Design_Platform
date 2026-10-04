@@ -1,0 +1,228 @@
+{
+ "of": {
+  "draft_sha256": "06537a553b9c12429dca02e4173ef6f73761baf5e4deb230c3355973a8b7cb40",
+  "critique_sha256": "8089391e68f77561d7a63cc9f120f1438c806ff8aeb184431be1526443867cc8",
+  "findings_sha256": "39a40941aed340a65a7555a8e6c3079b51fa67cb567981475cbeba2cca65c49a",
+  "escalation_rulings_sha256": "4deb4bacf81d918568acbb01fd176624a256e99aa1dc834f9973a6063a9557c5",
+  "critique_md_sha256": "0175de38059931aac5dceb95056df18aa55396b71a1807f9ae3c22f3c16e4abc"
+ },
+ "agent": {
+  "task_id": "ORCH-03.4",
+  "label": "R33-FINAL",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), per my own system context. A fresh isolated agent: not a dimension reviewer (D1-D4), not R33-SYNTH, not R33-CRITIC, not the r32 drafter, not a label reviewer (R32REV-*), not the implementer (R32APPLY-*), not the orchestrator. Effort High as configured by the task.",
+  "nature": "Owner-delegated independent Claude AI review; NOT human sign-off; authorizes nothing."
+ },
+ "method": "Every material disagreement and missing check was re-examined against the frozen inputs. Hashes were recomputed before use. Images read by R33-FINAL: crops/F019-p1-0.03_0.84_0.2_1-r90.png, crops/F019-p1-0.38_0.86_0.44_0.99-r90.png, renders/F019-p1.png (a scratch rotation of the revision-table region, not evidence), renders/F031-p3.png. Own scripts (scratchpad r33-final/): population recount under each ruling, non-scorable row census, grey-level pixel comparison of alias renders. AI ledger read through file:...?mode=ro, uri=True. Other ledgers and C:/t/r2x/runs by stat only.",
+ "dispositions": [
+  {
+   "id": "D-001",
+   "critique_id": "C-001",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "The F019 p1 page is internally contradictory about which revision is current. The title-block cell prints 'Rev. no.' 00, but the same title block's DATE is 09-05-16, which is the date of revision-table row 01 ('AS PER CONSULTANT COMMENTS'); row 00 is dated 05-03-16. Frozen section 4 names where the page's 'own current revision' is normally read (the cell first; the table only when it is the only source). It does not say the cell wins when the page itself shows the cell may be out of date. Frozen section 2 defines 'ambiguous' as a case where 'which of several candidates is the field cannot be established from the page', which describes this page without any topic (i) amendment. The R32 disposer reached the same factual conclusion ('The image does not settle which revision is current'). The ruling is page-specific: no general cell-versus-table rule (topic (i)) is adopted. Two further reasons favour the conservative ruling. Under the frozen STOP-AND-SAFETY-RULES a critical acceptance on RESOLVED truth makes B terminal with the comparison INVALID, or makes C fail the safety gate, whereas one on unresolved truth is only reported; making a row the review itself calls contested into resolved truth creates a known path to an INVALID comparison. And revision is 38 >= 12 either way, so nothing is gained at the gate.",
+   "evidence": "Read by R33-FINAL: crops/F019-p1-0.03_0.84_0.2_1-r90.png (DATE 09-05-16, DWG. NO FAM-PIV-MAH-SPD-FA-2633-007, 'Rev. no.' 00, Dewan REVIEW NOTE arrow to APPROVED AS NOTED dated 16.5.16); crops/F019-p1-0.38_0.86_0.44_0.99-r90.png (rows 09-05-16 AS PER CONSULTANT COMMENTS above 05-03-16 ISSUED FOR APPROVAL); scratch rotation of renders/F019-p1.png region x 0.33-0.46, y 0.85-1.0 (REV column 01 / 00). LABEL-CONVENTIONS-R32.md sections 2 and 4 (5c09d4d2...e570). review31/STOP-AND-SAFETY-RULES.md lines 9-12. Label-review DISPOSITIONS.json D-005 (e8828bec...). Population recount (own script): ruled ambiguous gives 57/38/38; present '00' gives 57/39/38. Cross-document context offered by the critic (F012) was not used as evidence.",
+   "change_applied": "D-005 ruling changed from PRESENT '00' to AMBIGUOUS (candidates 00 cell / 01 latest table entry), excluded from scoring; F019 revision resolved_for_scoring no / carries_fact no; expected reviewed-2 counts 57/38/38 (not 57/39/38); C-1 row list rewritten; 'contested row' disclosure replaced by an excluded-row disclosure; PRESENT '00' kept as the owner alternative (revision 39). Recorded in ESCALATION-RULINGS.final.json and INDEPENDENT-REVIEW.md sections 1, 4, 6 and 8. C-008 (region of the present row) becomes moot."
+  },
+  {
+   "id": "D-002",
+   "critique_id": "C-002",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "The same-family fact is CONFIRMED and is the fact most relevant to the owner's section 8 choice: the evaluated extraction requests in the AI ledger used Claude models, and every label agent (drafter, R32 reviewers, Review 33 agents) is Claude Opus 5.5. Shared reading errors between labeller and predictor can inflate agreement and hide critical false acceptances. Policy section 8 ('independently checked against originals, not generated or approved solely by another model') is satisfied as written only by a check that is not a model's; an amendment or waiver is a departure from it. The review therefore names the human check of the rows that will actually be scored as the route that satisfies section 8 as written and the waiver/amendment as the alternative; the choice stays owner-only. The D3 image check is a same-model re-read of a sample (0 of 98 refuted) and is described as such.",
+   "evidence": "C:/t/r2x/ledger/r2x-ledger.sqlite via file:...?mode=ro, uri=True: entries 483, scopes 17, limit_amendments 0; SELECT model, count(*) GROUP BY model gives ('',8), ('claude-opus-5',5), ('claude-sonnet-5',457), ('sonnet',13). AI-ACCURACY-POLICY.md (7efa891b...) line 91 and line 27 ('A different model or image crop reduces some shared failure modes but does not prove statistical independence'). R32-LABELS-REVIEWED-1 agents: 9, all claude-opus-5-5 / high.",
+   "change_applied": "R33-02 and C-3 rewritten: same-family disclosure, the two owner routes with the human check of the frozen run-set rows (after the selector freezes, before B) named as the route that meets section 8 as written, and a required assurance-level statement in the declaration (C-7). R33-26 wording: same-model sample re-read, not independent of the model family under test."
+  },
+  {
+   "id": "D-003",
+   "critique_id": "C-003",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "Recount CONFIRMS the critic: 30 non-scorable page-field rows on 30 pages in 25 documents. The 27 in the draft is wrong.",
+   "evidence": "R33-FINAL script over R32-LABELS-REVIEWED-1.json (00e53e82...): non-scorable = state ambiguous/illegible/unsupported, or excluded_from_scoring, or present with association uncertain. 30 rows, 30 pages, 25 pool ids: F002 F003 F004 F005 F006 F007 F008 F011 F013 F015 F019 F020 F024 F025 F028 F029 F030 F032 F034 F035 F036 F037 F043 F067 F069. All 30 pages also carry at least one scorable field (mixed). 21 rows are present+uncertain; the other 9 are the 7 ambiguous rows (including F019 p1 revision, which is also excluded) and the 2 F069 present-but-excluded rows (the draft's 6/3 split counts F019 under excluded).",
+   "change_applied": "R33-05 now reads '30 pages in 25 documents'."
+  },
+  {
+   "id": "D-004",
+   "critique_id": "C-004",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "AI-ACCURACY-POLICY section 7 requires the experiment record, before execution, to include 'project AI policies' and to use 'project-policy-eligible documents'. No package, plan, review or authority checks or binds the AI policy and eligibility of the six cohort projects (CONFIRMED absence by grep). BINDING-MANIFEST and DRAFT-DECLARATION.v2 bind AI-ACCURACY-POLICY.md at 7efa891b...; an append-only amendment of section 8 (one C-3 route) would change that hash and the preflight would refuse the run unless re-bound. DRAFT-DECLARATION.v2 expected_use figures come from the four-arm sample and must be re-estimated for the r32 run set. Whether the six projects are in fact policy-eligible is UNVERIFIABLE from the evidence I may read.",
+   "evidence": "AI-ACCURACY-POLICY.md lines 78-86 (sha256 7efa891b55fd6a4113f08cff8d0acdca7832d611524bb7f884ec4e5bc30a4f47 recomputed); review31/BINDING-MANIFEST.json line 86 and DRAFT-DECLARATION.v2.json line 172 bind that hash; grep for AI policy / policy-eligible / project policy over COHORT-PROPOSAL.md, PROJECT-VERIFICATION.json, both PREPARATION-REPORTs, plan v2, DRAFT-DECLARATION.v2, reviews/M2-review-32 and orchestrator/ finds no project AI-policy check.",
+   "change_applied": "New finding R33-30 (major, CONFIRMED absence; eligibility itself UNVERIFIABLE). New condition C-9 (check and bind project AI policies/eligibility for the six projects). C-7 and section 5.2 add: project AI policies, re-binding of AI-ACCURACY-POLICY.md and thresholds_verbatim if amended, re-estimated expected use, label assurance level. Owner-only list and gates updated."
+  },
+  {
+   "id": "D-005",
+   "critique_id": "C-005",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "The draft accepted 57/38/38 while leaving open the rule those counts depend on. NEXT-BOUNDED-TASK requires Review 33 to 'rule on ... the carried-over convention items with page evidence' and to 'recount the populations with the count-once rule', and the review ruled D-004/D-005 with the same authority. The page evidence supports count-once for both content duplicates: F001/F031 p1 and p2 are pixel-identical renders, F031 p3 repeats F001's values (MAT - 116, Rev 02) and F031 p4 carries no field; F046/F059 differ only in a seal region outside the title block. Counting them twice would double-count the same document facts. The ruling is ADOPTED for this cohort as a Review 33 ruling, recorded as an explicit amendment to frozen section 1 (byte-identical only) with the F031 p3/p4 caveat. The owner may reverse it; without it the counts are 59/40/39 and the gate still passes.",
+   "evidence": "R33-FINAL pixel comparison (PIL, grey) of bound renders: F001-p1 vs F031-p1 and F001-p2 vs F031-p2: 0 differing pixels (1800x1272); F046-p1 vs F059-p1 (1272x1800): 77,603 differ, 1,183 by more than 64 levels, bbox x 0.842-0.882, y 0.856-0.911. renders/F031-p3.png read: Comments Resolution Sheet, 'Submittal No.: MAT - 116', 'Rev.: 02'. Reviewed-1 page rows F001 p1/p2 equal F031 p1/p2; F031 p3 identity MAT - 116 / revision 02; F031 p4 all absent. Recount: with (c)(ii) 57/38/38, without 59/40/39.",
+   "change_applied": "Carried-over items count-once F031->F001 and F059->F046 ruled ADOPTED (amendment recorded, caveat stated); C-2 becomes a recording step; section 1 accepts 57/38/38 under that ruling and states the owner alternative."
+  },
+  {
+   "id": "D-006",
+   "critique_id": "M-001",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "Same item as C-004.",
+   "evidence": "See D-004.",
+   "change_applied": "R33-30, C-9."
+  },
+  {
+   "id": "D-007",
+   "critique_id": "M-002",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "Same item as C-002.",
+   "evidence": "See D-002.",
+   "change_applied": "R33-02, C-3."
+  },
+  {
+   "id": "D-008",
+   "critique_id": "M-003",
+   "material": true,
+   "disposition": "adopted",
+   "reason": "Same item as C-001: the draft did not weigh making a contested row resolved truth against the terminal stop rules.",
+   "evidence": "See D-001.",
+   "change_applied": "D-005 ruled AMBIGUOUS; the stop-rule weighting is stated in section 4."
+  },
+  {
+   "id": "D-009",
+   "critique_id": "C-006",
+   "material": false,
+   "disposition": "noted",
+   "reason": "CONFIRMED: evaluate() appends one reason per concentrated field to a single reasons_not_eligible list and sets one outcome, so a concentrated decision gain makes the whole comparison NOT ELIGIBLE.",
+   "evidence": "review31/scripts/harness/score_bcr.py (5a3828a5...) concentration() and evaluate() as read by R33-FINAL.",
+   "change_applied": "R33-01 text and the C-4 owner card say the effect is on the whole comparison."
+  },
+  {
+   "id": "D-010",
+   "critique_id": "C-007",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Agreed. The D-004 outcome rests on the page alone; F062/F068 are context, not evidence.",
+   "evidence": "Frozen sections 2 and 3; renders/F069-p1.png, F069-p3.png as read by D3, SYNTH and CRITIC.",
+   "change_applied": "D-004 basis restated page-only in section 4 and ESCALATION-RULINGS.final.json."
+  },
+  {
+   "id": "D-011",
+   "critique_id": "C-008",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Moot: D-005 is now AMBIGUOUS, and the reviewed-1 region spanning both candidates is appropriate for an ambiguous row.",
+   "evidence": "Reviewed-1 F019 p1 revision region [0.04,0.86,0.43,0.99].",
+   "change_applied": "None (moot). If the owner adopts the PRESENT '00' alternative, the row must carry the cell's own region, not the spanning one."
+  },
+  {
+   "id": "D-012",
+   "critique_id": "C-009",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Typo CONFIRMED; the file hash recomputes equal to the frozen value.",
+   "evidence": "sha256 CROPS.jsonl b1760b64a2f88a0415307911b1fe6faccccdd6a22c9cc69468dfe5dbd13cd1ff.",
+   "change_applied": "Abbreviation corrected to b1760b64...3cd1ff."
+  },
+  {
+   "id": "D-013",
+   "critique_id": "C-010",
+   "material": false,
+   "disposition": "noted",
+   "reason": "The verdict rule is stated in the ORCH-03.4 task instruction issued to R33-FINAL: any CONFIRMED blocker gives CHANGES REQUIRED or BLOCKED BY MISSING EVIDENCE; CONFIRMED majors allow at most PREPARATION ACCEPTED WITH CONDITIONS with each condition named; otherwise PREPARATION ACCEPTED. NEXT-BOUNDED-TASK.md defines the four verdicts but not the mapping.",
+   "evidence": "ORCH-03.4 task text; NEXT-BOUNDED-TASK.md 'Required verdict and content'.",
+   "change_applied": "Section 1 quotes the rule and its source."
+  },
+  {
+   "id": "D-014",
+   "critique_id": "C-011",
+   "material": false,
+   "disposition": "noted",
+   "reason": "CONFIRMED by mtimes: D1 10:58-10:59, D4 11:01-11:03, D2 11:05-11:07, D3 11:15-11:17 (+04); the four ran in the same window under the orchestrator's A-03 interpretation. Each wrote only its own files.",
+   "evidence": "ls --full-time of reviews/M2-review-33/dimensions.",
+   "change_applied": "R33-20 extended to Review 33's own D1-D4; owner confirms or objects."
+  },
+  {
+   "id": "D-015",
+   "critique_id": "C-012",
+   "material": false,
+   "disposition": "noted",
+   "reason": "CONFIRMED: M2-REVIEW-RESPONSE.md lines 1070 and 1098 name the Codex reviewer; the ledger is append-only and is not edited.",
+   "evidence": "grep -n Codex M2-REVIEW-RESPONSE.md (sha256 f0a4ffac...c65b; first 156,880 bytes 6e296c28...fa0d4, both recomputed).",
+   "change_applied": "R33-21 list completed."
+  },
+  {
+   "id": "D-016",
+   "critique_id": "C-013",
+   "material": false,
+   "disposition": "noted",
+   "reason": "CONFIRMED: D2-report and DECISION-LEDGER ORCH-001 both abbreviate the conventions as ...8570 and the review31 manifest as ...7460, while the true hashes end ...e570 and ...c460. The files are intact. D2-only items are not treated as independently recomputed.",
+   "evidence": "D2-report.md lines 40 and 52; DECISION-LEDGER.md lines 19 and 37; recomputed hashes.",
+   "change_applied": "Section 2 notes the reduced weight of D2-only recomputation claims (selection order key, authority timeline, database counts)."
+  },
+  {
+   "id": "D-017",
+   "critique_id": "M-004",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Covered by D-004.",
+   "evidence": "See D-004.",
+   "change_applied": "C-7 and section 5.2."
+  },
+  {
+   "id": "D-018",
+   "critique_id": "M-005",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Re-checked by stat only: project-day.sqlite 2026-10-01 22:17:43, doc-allowance.sqlite 22:17:50, r2x-ledger.sqlite 22:17:50, C:/t/r2x/runs 21:51:11 (+04). None opened except the AI ledger read-only. Consistent with no run since the four-arm run.",
+   "evidence": "stat output, R33-FINAL.",
+   "change_applied": "Section 2."
+  },
+  {
+   "id": "D-019",
+   "critique_id": "M-006",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Critic's own check; not repeated by R33-FINAL; relied on as reported.",
+   "evidence": "CRITIQUE.json M-006.",
+   "change_applied": "Section 2 'relied on'."
+  },
+  {
+   "id": "D-020",
+   "critique_id": "M-007",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Critic's own os.stat check (72 of 72), independent of D1; not repeated by R33-FINAL.",
+   "evidence": "CRITIQUE.json M-007.",
+   "change_applied": "Section 2 'relied on'."
+  },
+  {
+   "id": "D-021",
+   "critique_id": "M-008",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Resolved: the rule is in the ORCH-03.4 task text (see D-013).",
+   "evidence": "ORCH-03.4 task text.",
+   "change_applied": "Section 1."
+  },
+  {
+   "id": "D-022",
+   "critique_id": "M-009",
+   "material": false,
+   "disposition": "noted",
+   "reason": "Same as C-011.",
+   "evidence": "See D-014.",
+   "change_applied": "R33-20."
+  }
+ ],
+ "counts": {
+  "material_total": 8,
+  "upheld": 0,
+  "adopted": 8,
+  "escalated": 0,
+  "noted": 14,
+  "total_items": 22,
+  "note": "Material items are the five material disagreements (C-001..C-005) and the three material missing checks (M-001..M-003), which duplicate C-004, C-002 and C-001; distinct material issues: 5. Non-material items (C-006..C-013, M-004..M-009) are noted; where a text change was made it is listed under change_applied. No disposition was escalated as undecidable; owner alternatives are kept for D-004, D-005 and count-once (c)(ii), and the section 8 and concentration decisions remain owner-only conditions."
+ },
+ "verdict_effect": "Verdict category unchanged: PREPARATION ACCEPTED WITH CONDITIONS (the critic did not challenge it; re-derived in INDEPENDENT-REVIEW.md section 1)."
+}

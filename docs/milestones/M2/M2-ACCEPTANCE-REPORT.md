@@ -188,3 +188,36 @@ The submission's "no restart" was wrong for the snapshot step: `stop-backend.bat
 | Clone repair | project 4 {'repaired': 516, 'skipped': 6}; project 1 {'repaired': 352, 'skipped': 4}; roles changed 0; retained: p4 {'documents': 0, 'other_profile': 0, 'unverified': 0}, p1 {'documents': 0, 'other_profile': 0, 'unverified': 0} |
 | Live data | untouched by this correction; the backend found running at the end of Review 02 was neither used nor stopped |
 | Verdict | **READY FOR INDEPENDENT M2 RE-REVIEW**; owner decisions and missing evidence listed in `M2-REVIEW-RESPONSE.md` (Review 03) |
+
+
+## Correction 4 (2026-09-28, after Independent Review 04) and the real-project pilot -- supersedes Correction 3's verdict
+
+| Item | Value |
+|---|---|
+| Source | commit `2221b4327c7dd140994cc2c98e89229431b34899` (the Review 01-03 corrections, committed by the owner); the R4-01 closure and the pilot fixes uncommitted (`evidence/r6__m2_review04_changes.diff`; hashes in `evidence/M2-EVIDENCE-MANIFEST.json` and `real-project-pilot/RUN-MANIFEST.json`) |
+| Versions | parser `parse-2026-09-28.4` (candidate A, R4-01 closed) -> `parse-2026-09-28.5` (candidate B, pilot fixes P-01..P-04); box-4, sheet reader `2026-09-28.1`, evidence `evidence-2026-09-28.2`; no migration |
+| Tests | Submitted module set (the reviewer's 28 modules, now with the two R4 tests): **346 tests, 339 passed, 7 skipped, 0 failed, 0 errors** in 299.8 s (`evidence/r6__suite_submitted_r6.xml`, `.log`; file-backed harness, candidate B). `tests/test_extraction_pilot.py`: 5 passed. Full backend suite (`tests/`, 1,442 tests): 1,404 passed, 35 skipped, 3 failed (`evidence/r6__suite_full_r6.xml`): `test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index` (FOREIGN KEY constraint on `DROP TABLE users`), `test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it`, `test_submittal_one_per_system::test_the_page_counts_submittals_by_their_latest_revision` -- all three fail identically with the candidate A reader (HEAD's `document_control.py` swapped in), are outside the submitted set, and are pre-existing; not investigated in this correction. |
+| Reviewer probes | all eight meet their contracts on the frozen code (`evidence/r6__probe__*`, `real-project-pilot/outputs/probe_r4/`) |
+| R4-01 | closed: retained parser identity is part of projection, freshness, reuse, duplicate copy and repair selection; explicit narrow compatibility contract; persisted tests (`M2-REVIEW-RESPONSE.md`, Review 04) |
+| Real-project pilot | 380 documents (376 distinct) from ten OneDrive folders + 15 BOQ sheets, frozen and labelled before extraction; sandbox only; both profiles; scenarios, clone workflow, BOQ path with the model off. Decision precision 100 % (0 false approvals); reference / revision precision 65-79 % (in scope) against the 98 % target; 4 defects fixed with tests, 7 open with evidence (`real-project-pilot/`) |
+| Live data | untouched; OneDrive originals read only; the backend found running was neither used nor stopped |
+| Verdict | **CHANGES REQUIRED** (`real-project-pilot/ACCEPTANCE.md`); R4-01 ready for independent re-review; not self-approved; M3 not begun |
+
+## Correction 5 (2026-09-28, after Independent Review 05) -- supersedes Correction 4's verdict
+
+Verdict: **CHANGES STILL REQUIRED.** Not self-approved; M3 not begun.
+
+Candidate C (parser `parse-2026-09-28.6`, title-block reader `titleblock-1`, design-sheet extractor `2026-09-28.2`;
+frozen in `real-project-pilot/review05/CANDIDATE-C-FREEZE.json`) against the targets, which are unchanged:
+
+| target | frozen pilot corpus (exposed; C default / promoted) | fresh holdout (4 unseen projects, 28 documents + 4 Design Sheets) |
+|---|---|---|
+| >= 98 % precision, accepted critical fields | reference 137/137, 144/144; printed revision 104/104, 108/108; decision 26/26, 29/29 | nothing accepted (0 records) -- not measurable |
+| >= 90 % recovery of readable critical fields | reference 83.5 % / 86.7 %; revision 69.8 % / 73.0 %; decision 36.6 % / 39.7 % -- **no** | 0 of 9 readable references -- **no** |
+| zero unresolved critical false acceptance | 0 / 0 (was 30 / 30 for candidate B under the corrected evaluator) | 0 (nothing accepted) |
+| deterministic BOQ (model off), critical | 55 -> 5 on the 15 pilot sheets -- **no** | 4 wrong quantities accepted -- **no** |
+| real-model BOQ accuracy | not exercised | not exercised |
+
+The earlier claim that the regression controls met 98 % for references (30/32, 33/35) was wrong and is corrected
+(93.8 %, 94.3 %). Evaluator, truth versions, reader changes, BOQ reports, the completion-contract fix, the holdout and
+the three full-suite failures: `real-project-pilot/review05/REVIEW-05-REPORT.md`; response: `M2-REVIEW-RESPONSE.md`.

@@ -1,0 +1,1420 @@
+{
+ "scorer": "score-arms-2026-09-30.v4",
+ "contract": "harness-contract-2026-09-30.v4",
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "declaration_sha256": "452f9e65ce44ae8bb58687da0735373b05dab5ca5c31d324d27ef120ea9bb8a0",
+ "tags": {
+  "A": "r22dry-A",
+  "L1": "r22dry-L1",
+  "L2": "r22dry-L2",
+  "L3": "r22dry-L3",
+  "L4": "r22dry-L4"
+ },
+ "planned": [
+  "EP-16830/synth/raster-6pages.pdf",
+  "EP-16830/synth/raster-1page.pdf",
+  "EP-17428/synth/raster-2pages.pdf",
+  "EP-17428/synth/text-sheet.pdf",
+  "EP-17428/synth/note.docx"
+ ],
+ "max_pages": 4,
+ "arms": {
+  "A": {
+   "eligibility": {
+    "EP-16830/synth/raster-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "missed": 10,
+      "recovered_clean": 1
+     },
+     "precision_numerator": 1,
+     "precision_denominator": 1
+    },
+    "revision": {
+     "recovery": {
+      "missed": 10,
+      "recovered_clean": 1
+     },
+     "precision_numerator": 1,
+     "precision_denominator": 1
+    },
+    "decision": {
+     "recovery": {
+      "missed": 9,
+      "tn": 2
+     },
+     "precision_numerator": 0,
+     "precision_denominator": 0
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r22dry-A",
+   "context": {
+    "variant": null
+   },
+   "usage": {
+    "requests": 0,
+    "cache_hits": 0,
+    "outcomes": {},
+    "input_tokens_total_incl_cached": 0,
+    "output_tokens": 0,
+    "requests_without_token_usage": 0,
+    "by_task": {},
+    "cost": "UNKNOWN"
+   }
+  },
+  "L1": {
+   "eligibility": {
+    "EP-16830/synth/raster-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "held_only": 3,
+      "recovered_clean": 3,
+      "missed": 5
+     },
+     "precision_numerator": 3,
+     "precision_denominator": 3
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 6,
+      "missed": 5
+     },
+     "precision_numerator": 6,
+     "precision_denominator": 6
+    },
+    "decision": {
+     "recovery": {
+      "recovered_clean": 5,
+      "missed": 4,
+      "tn": 2
+     },
+     "precision_numerator": 5,
+     "precision_denominator": 5
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r22dry-L1",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 20,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 20
+    },
+    "input_tokens_total_incl_cached": 200,
+    "output_tokens": 100,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_page": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_revision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_decision": {
+      "n": 5,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "allowance_refusals": 0,
+     "allowance_busy": 0,
+     "ledger_precheck_refusals": 0,
+     "per_ep": {
+      "16830": 12,
+      "17428": 8
+     },
+     "requests_io": 20,
+     "cache_hits": 0,
+     "deferred": [],
+     "skipped_completed": [],
+     "skipped_projects": [],
+     "interrupted_seen": []
+    },
+    "not_attempted": [],
+    "deferred": [],
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible"
+       },
+       "rejected": 2
+      }
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible",
+        "EP-17428/synth/raster-2pages.pdf": "eligible",
+        "EP-17428/synth/text-sheet.pdf": "eligible",
+        "EP-17428/synth/note.docx": "ineligible"
+       },
+       "rejected": 0
+      }
+     }
+    ],
+    "seconds": 2.5,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L2": {
+   "eligibility": {
+    "EP-16830/synth/raster-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "held_only": 5,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "precision_numerator": 1,
+     "precision_denominator": 1
+    },
+    "revision": {
+     "recovery": {
+      "held_only": 5,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "precision_numerator": 1,
+     "precision_denominator": 1
+    },
+    "decision": {
+     "recovery": {
+      "recovered_clean": 5,
+      "missed": 4,
+      "tn": 2
+     },
+     "precision_numerator": 5,
+     "precision_denominator": 5
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r22dry-L2",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 20,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 20
+    },
+    "input_tokens_total_incl_cached": 200,
+    "output_tokens": 100,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_region": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_revision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_decision": {
+      "n": 5,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "allowance_refusals": 0,
+     "allowance_busy": 0,
+     "ledger_precheck_refusals": 0,
+     "per_ep": {
+      "16830": 12,
+      "17428": 8
+     },
+     "requests_io": 20,
+     "cache_hits": 0,
+     "deferred": [],
+     "skipped_completed": [],
+     "skipped_projects": [],
+     "interrupted_seen": []
+    },
+    "not_attempted": [],
+    "deferred": [],
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible"
+       },
+       "rejected": 2
+      }
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible",
+        "EP-17428/synth/raster-2pages.pdf": "eligible",
+        "EP-17428/synth/text-sheet.pdf": "eligible",
+        "EP-17428/synth/note.docx": "ineligible"
+       },
+       "rejected": 0
+      }
+     }
+    ],
+    "seconds": 2.0,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L3": {
+   "eligibility": {
+    "EP-16830/synth/raster-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "held_only": 3,
+      "recovered_clean": 3,
+      "missed": 5
+     },
+     "precision_numerator": 3,
+     "precision_denominator": 3
+    },
+    "revision": {
+     "recovery": {
+      "recovered_clean": 6,
+      "missed": 5
+     },
+     "precision_numerator": 6,
+     "precision_denominator": 6
+    },
+    "decision": {
+     "recovery": {
+      "recovered_clean": 5,
+      "missed": 4,
+      "tn": 2
+     },
+     "precision_numerator": 5,
+     "precision_denominator": 5
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r22dry-L3",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2"
+    ]
+   },
+   "usage": {
+    "requests": 21,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 21
+    },
+    "input_tokens_total_incl_cached": 210,
+    "output_tokens": 105,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_page": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_revision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_decision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_field_context": {
+      "n": 1,
+      "latency_ms_median": 1
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "allowance_refusals": 0,
+     "allowance_busy": 0,
+     "ledger_precheck_refusals": 0,
+     "per_ep": {
+      "16830": 13,
+      "17428": 8
+     },
+     "requests_io": 21,
+     "cache_hits": 0,
+     "deferred": [],
+     "skipped_completed": [],
+     "skipped_projects": [],
+     "interrupted_seen": []
+    },
+    "not_attempted": [],
+    "deferred": [],
+    "tripwire": [
+     {
+      "after": "16830",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible"
+       },
+       "rejected": 2
+      }
+     },
+     {
+      "after": "17428",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible",
+        "EP-17428/synth/raster-2pages.pdf": "eligible",
+        "EP-17428/synth/text-sheet.pdf": "eligible",
+        "EP-17428/synth/note.docx": "ineligible"
+       },
+       "rejected": 0
+      }
+     }
+    ],
+    "seconds": 2.6,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  },
+  "L4": {
+   "eligibility": {
+    "EP-16830/synth/raster-6pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-16830/synth/raster-1page.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/raster-2pages.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/text-sheet.pdf": {
+     "state": "eligible",
+     "reason": "bound"
+    },
+    "EP-17428/synth/note.docx": {
+     "state": "ineligible",
+     "reason": "no_row"
+    }
+   },
+   "eligibility_counts": {
+    "eligible": 4,
+    "ineligible": 1
+   },
+   "rejected_evidence": [],
+   "valid_accuracy_claim": true,
+   "recovery_all_planned": {
+    "identity": {
+     "recovery": {
+      "held_only": 5,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "precision_numerator": 1,
+     "precision_denominator": 1
+    },
+    "revision": {
+     "recovery": {
+      "held_only": 4,
+      "missed": 5,
+      "recovered_clean": 2
+     },
+     "precision_numerator": 2,
+     "precision_denominator": 2
+    },
+    "decision": {
+     "recovery": {
+      "recovered_clean": 5,
+      "missed": 4,
+      "tn": 2
+     },
+     "precision_numerator": 5,
+     "precision_denominator": 5
+    }
+   },
+   "critical": [],
+   "introduced_ai_errors": [],
+   "tag": "r22dry-L4",
+   "context": {
+    "variant": "EV1",
+    "profile": "default",
+    "policies": [
+     "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1"
+    ]
+   },
+   "usage": {
+    "requests": 22,
+    "cache_hits": 0,
+    "outcomes": {
+     "ok": 22
+    },
+    "input_tokens_total_incl_cached": 220,
+    "output_tokens": 110,
+    "requests_without_token_usage": 0,
+    "by_task": {
+     "evidence:discover_region": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_identity": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_revision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_decision": {
+      "n": 5,
+      "latency_ms_median": 1
+     },
+     "evidence:read_field_context": {
+      "n": 2,
+      "latency_ms_median": 1.0
+     }
+    },
+    "cost": "UNKNOWN"
+   },
+   "runner": {
+    "runner_state": {
+     "consecutive_failures": 0,
+     "stopped": null,
+     "xtrack_refusals": 0,
+     "allowance_refusals": 0,
+     "allowance_busy": 0,
+     "ledger_precheck_refusals": 0,
+     "per_ep": {
+      "16830": 14
+     },
+     "requests_io": 14,
+     "cache_hits": 0,
+     "deferred": [],
+     "skipped_completed": [],
+     "skipped_projects": [
+      "17428"
+     ],
+     "interrupted_seen": []
+    },
+    "not_attempted": [],
+    "deferred": [],
+    "tripwire": [
+     {
+      "after": "17428",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-17428/synth/raster-2pages.pdf": "eligible",
+        "EP-17428/synth/text-sheet.pdf": "eligible",
+        "EP-17428/synth/note.docx": "ineligible"
+       },
+       "rejected": 2
+      }
+     },
+     {
+      "after": "16830",
+      "critical_on_resolved": [],
+      "binding": {
+       "eligibility": {
+        "EP-16830/synth/raster-6pages.pdf": "eligible",
+        "EP-16830/synth/raster-1page.pdf": "eligible",
+        "EP-17428/synth/raster-2pages.pdf": "eligible",
+        "EP-17428/synth/text-sheet.pdf": "eligible",
+        "EP-17428/synth/note.docx": "ineligible"
+       },
+       "rejected": 0
+      }
+     }
+    ],
+    "seconds": 1.8,
+    "business_hashes": {
+     "project_submittals": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_shop_drawings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_actions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+     "project_documents_role": "f270e059310f676a781333a375994c299e9eeefd85995a2dbecc831101e1efdc"
+    }
+   }
+  }
+ },
+ "coverage": {
+  "L1": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 2,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:revision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:decision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     }
+    },
+    "complete_ids": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/raster-6pages.pdf": "no_transport_stop",
+    "EP-16830/synth/raster-1page.pdf": "no_transport_stop",
+    "EP-17428/synth/raster-2pages.pdf": "no_transport_stop",
+    "EP-17428/synth/text-sheet.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "3": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "4": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/raster-1page.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/raster-2pages.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 2,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/text-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L2": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 2,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:revision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:decision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     }
+    },
+    "complete_ids": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/raster-6pages.pdf": "no_transport_stop",
+    "EP-16830/synth/raster-1page.pdf": "no_transport_stop",
+    "EP-17428/synth/raster-2pages.pdf": "no_transport_stop",
+    "EP-17428/synth/text-sheet.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "3": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "4": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/raster-1page.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/raster-2pages.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 2,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/text-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L3": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 2,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:revision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:decision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     }
+    },
+    "complete_ids": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/raster-6pages.pdf": "no_transport_stop",
+    "EP-16830/synth/raster-1page.pdf": "no_transport_stop",
+    "EP-17428/synth/raster-2pages.pdf": "no_transport_stop",
+    "EP-17428/synth/text-sheet.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "3": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "4": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/raster-1page.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/raster-2pages.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 2,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/text-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  },
+  "L4": {
+   "summary": {
+    "documents_planned": 5,
+    "documents_required_complete": 2,
+    "documents_unsupported_input": 1,
+    "documents_unattempted": 0,
+    "documents_complete_in_scope_only": 0,
+    "binding_reasons": {
+     "bound": 4,
+     "no_row": 1
+    },
+    "page_field_classes": {
+     "own:identity": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:revision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     },
+     "own:decision": {
+      "completed_read": 5,
+      "budget": 2,
+      "unsupported:beyond_reader_scope": 2,
+      "not_selected_by_policy": 1
+     }
+    },
+    "complete_ids": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "complete_in_scope_ids": []
+   },
+   "transport": {
+    "EP-16830/synth/raster-6pages.pdf": "no_transport_stop",
+    "EP-16830/synth/raster-1page.pdf": "no_transport_stop",
+    "EP-17428/synth/raster-2pages.pdf": "no_transport_stop",
+    "EP-17428/synth/text-sheet.pdf": "no_transport_stop",
+    "EP-17428/synth/note.docx": "not_attempted"
+   },
+   "extra_facts_outside_scope": [],
+   "documents": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "3": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "4": {
+       "own:identity": "budget",
+       "own:revision": "budget",
+       "own:decision": "budget"
+      },
+      "5": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      },
+      "6": {
+       "own:identity": "unsupported:beyond_reader_scope",
+       "own:revision": "unsupported:beyond_reader_scope",
+       "own:decision": "unsupported:beyond_reader_scope"
+      }
+     },
+     "in_scope_pages": 4,
+     "pages_beyond_reader_scope": 2,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-16830/synth/raster-1page.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/raster-2pages.pdf",
+     "state": "complete",
+     "pages": {
+      "1": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      },
+      "2": {
+       "own:identity": "completed_read",
+       "own:revision": "completed_read",
+       "own:decision": "completed_read"
+      }
+     },
+     "in_scope_pages": 2,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/text-sheet.pdf",
+     "state": "incomplete",
+     "pages": {
+      "1": {
+       "own:identity": "not_selected_by_policy",
+       "own:revision": "not_selected_by_policy",
+       "own:decision": "not_selected_by_policy"
+      }
+     },
+     "in_scope_pages": 1,
+     "pages_beyond_reader_scope": 0,
+     "attempted": true,
+     "reason": "bound"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "state": "unsupported_input",
+     "pages": {},
+     "unsupported": ".docx",
+     "reason": "no_row"
+    }
+   ]
+  }
+ },
+ "pairs": {
+  "ROI alone": {
+   "arms": [
+    "L1",
+    "L2"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:revision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:decision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ]
+   },
+   "required_complete_in_both": [
+    "EP-16830/synth/raster-1page.pdf",
+    "EP-17428/synth/raster-2pages.pdf"
+   ],
+   "required_complete_in_scope_in_both": []
+  },
+  "X on whole page": {
+   "arms": [
+    "L1",
+    "L3"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:revision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:decision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ]
+   },
+   "required_complete_in_both": [
+    "EP-16830/synth/raster-1page.pdf",
+    "EP-17428/synth/raster-2pages.pdf"
+   ],
+   "required_complete_in_scope_in_both": []
+  },
+  "X on ROI": {
+   "arms": [
+    "L2",
+    "L4"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:revision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:decision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ]
+   },
+   "required_complete_in_both": [
+    "EP-16830/synth/raster-1page.pdf",
+    "EP-17428/synth/raster-2pages.pdf"
+   ],
+   "required_complete_in_scope_in_both": []
+  },
+  "ROI under X": {
+   "arms": [
+    "L3",
+    "L4"
+   ],
+   "valid": true,
+   "field_read_in_both": {
+    "own:identity": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:revision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ],
+    "own:decision": [
+     "EP-16830/synth/raster-1page.pdf",
+     "EP-17428/synth/raster-2pages.pdf"
+    ]
+   },
+   "required_complete_in_both": [
+    "EP-16830/synth/raster-1page.pdf",
+    "EP-17428/synth/raster-2pages.pdf"
+   ],
+   "required_complete_in_scope_in_both": []
+  }
+ },
+ "no_business_change": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": true
+ },
+ "valid_accuracy_claims": {
+  "A": true,
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": true
+ }
+}

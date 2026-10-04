@@ -1,0 +1,2182 @@
+From a4ce6a3c53b3a8cd78bbf104a8a18efa4a454580 Mon Sep 17 00:00:00 2001
+From: mohamedr69 <mohamedelazab607@gmail.com>
+Date: Thu, 1 Oct 2026 23:36:26 +0400
+Subject: [PATCH] M2 review 29 candidate (isolated): four independent switches
+ -- identity role guard (IG), conflict adjudication rev.1 (CA),
+ decision-region path (DR), page association invariant (PA); evaluator .10
+ (m2_eval6, per-fact association); tests
+
+Flags off: identities and behaviour of 719e8de. CA, DR and PA require AI_EVIDENCE_SCHEDULING=required_first explicitly.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ backend/app/ai/evidence_reader.py         | 557 +++++++++++++++++++++-
+ backend/scripts/m2_eval6.py               | 522 ++++++++++++++++++++
+ backend/tests/_r29.py                     | 151 ++++++
+ backend/tests/test_r29_adjudication.py    | 166 +++++++
+ backend/tests/test_r29_association.py     | 128 +++++
+ backend/tests/test_r29_decision_region.py | 191 ++++++++
+ backend/tests/test_r29_identity_guard.py  | 136 ++++++
+ backend/tests/test_r29_persistence.py     | 136 ++++++
+ 8 files changed, 1975 insertions(+), 12 deletions(-)
+ create mode 100644 backend/scripts/m2_eval6.py
+ create mode 100644 backend/tests/_r29.py
+ create mode 100644 backend/tests/test_r29_adjudication.py
+ create mode 100644 backend/tests/test_r29_association.py
+ create mode 100644 backend/tests/test_r29_decision_region.py
+ create mode 100644 backend/tests/test_r29_identity_guard.py
+ create mode 100644 backend/tests/test_r29_persistence.py
+
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index 6f57f21..709446a 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -121,6 +121,36 @@ else:
+         PROMPTS = {**PROMPTS, "discover_region": "discover-region-2026-09-30.1"}
+     if DEADLINE_ENABLED:
+         READER_VERSION = READER_VERSION + "+deadline-2026-09-30.1"
++# --- Review 29 switches (2026-10-02), isolated candidate only (review29/CONTRACTS.md) ---------------------------------
++# IG  AI_EVIDENCE_IDGUARD=1         identity role guard (C1), in every reader path
++# CA  AI_EVIDENCE_ADJUDICATE=1      conflict adjudication under the written evidence-ordering contract (C2)
++# DR  AI_EVIDENCE_DECISION_REGION=1 the bounded decision-region path; title-block discovery gives no decisions (C3)
++# PA  AI_EVIDENCE_ASSOC=1           page / target association invariant (C4)
++# One switch per behaviour: none implies another, and none implies support, scheduling, deadline, targeted reads or
++# ROI. CA, DR and PA run in the required-first path and refuse to start unless AI_EVIDENCE_SCHEDULING=required_first is
++# set explicitly. All four off: identities and behaviour are those of 719e8de.
++IDGUARD_ENABLED = _os.environ.get("AI_EVIDENCE_IDGUARD") == "1"
++ADJUDICATE_ENABLED = _os.environ.get("AI_EVIDENCE_ADJUDICATE") == "1"
++DECISION_REGION_ENABLED = _os.environ.get("AI_EVIDENCE_DECISION_REGION") == "1"
++ASSOC_ENABLED = _os.environ.get("AI_EVIDENCE_ASSOC") == "1"
++for _switch, _on in (("AI_EVIDENCE_ADJUDICATE", ADJUDICATE_ENABLED), ("AI_EVIDENCE_DECISION_REGION", DECISION_REGION_ENABLED),
++                     ("AI_EVIDENCE_ASSOC", ASSOC_ENABLED)):
++    if _on and not REQUIRED_FIRST:
++        raise RuntimeError(f"{_switch} requires AI_EVIDENCE_SCHEDULING=required_first, set explicitly (it is never implied)")
++IDGUARD_VERSION = "identity-role-guard-2026-10-02.1"
++ADJUDICATE_VERSION = "conflict-adjudication-2026-10-02.2"   # C2 revision 1
++DECISION_REGION_VERSION = "decision-region-2026-10-02.1"
++ASSOC_VERSION = "page-association-2026-10-02.1"
++if IDGUARD_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+" + IDGUARD_VERSION
++if ADJUDICATE_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+" + ADJUDICATE_VERSION
++if DECISION_REGION_ENABLED:
++    READER_VERSION = READER_VERSION + "+" + DECISION_REGION_VERSION
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+" + DECISION_REGION_VERSION
++    PROMPTS = {**PROMPTS, "locate_decision": "locate-decision-2026-10-02.1"}
++if ASSOC_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+" + ASSOC_VERSION
+ MIN_REQUEST_S = 20.0            # E: no request is started with less than this left of the job's elapsed budget
+ LOCATED_LONG_SIDE_PX = 1568     # E: the located discovery crop's long side (the provider's native image size)
+ _BARE_REVISION = re.compile(r"^\s*(?:REV(?:ISION)?\.?\s*[-:]?\s*(?:\d{1,3}|[A-Z])|R\.?\s*\d{1,2})\s*$", re.I)
+@@ -550,6 +580,230 @@ def validate_value(field: str, readings: list[dict], region_texts: list, determi
+     return {**base, "state": "validated" if not reasons else "candidate", "support": support, "reasons": reasons}
+ 
+ 
++# --- Review 29, C1: identity role guard; C2: conflict adjudication (review29/CONTRACTS.md) -----------------------------
++#
++# Both decide from the literal, the readings' printed labels, the field region's geometry, discovery's other_numbers and
++# the source text of the read regions -- never from a format whitelist, the order of readings, a model's confidence,
++# a label file or an expected value.
++_OWN_IDENTITY_LABEL = re.compile(
++    r"(?:DRAWING|DWG|DRG|DOCUMENT|DOC|SHEET|SUBMITTAL|SUBMISSION|TRANSMITTAL)\s*\.?\s*(?:NO\b|NUMBER\b|NUM\b|#)"
++    r"|REVIEW\s*\.?\s*(?:NO\b|NUMBER\b|REF(?:ERENCE)?\b)|\bREFERENCE\s*\.?\s*NO\b|\bREF\s*\.?\s*NO\b", re.I)
++_OWN_REVISION_LABEL = re.compile(r"\bREV(?:ISION)?\b(?!\s*HISTORY)", re.I)
++_REFERENCE_LABEL = re.compile(
++    r"\b(?:DWG|DRAWING|DRG)\s*\.?\s*REF|\bREF(?:ERENCE)?\s*\.?\s*(?:DWG|DRAWING|DRG)\b|\bREFERENCE\s+DRAWING|\bRELATED\s+DRAWING"
++    r"|\bPROJECT\s*\.?\s*(?:NO\b|CODE\b|NUMBER\b|#)|\bCONTRACT\s*\.?\s*(?:NO\b|NUMBER\b|#)|\bJOB\s*\.?\s*(?:NO\b|NUMBER\b|#)|\bPLOT\b"
++    r"|\bBILL\s*\.?\s*(?:NO\b|NUMBER\b)|\bFORM\s*\.?\s*(?:NO\b|NUMBER\b|#|CODE\b)|\bTEMPLATE\b|\bSPEC(?:IFICATION)?S?\s*\.?\s*(?:REF|SECTION)"
++    r"|\bP\s*\.?\s*O\s*\.?\s*(?:NO\b|NUMBER\b)", re.I)
++NON_OWN_DISCOVERY_ROLES = frozenset({"referenced_drawing", "listed_item", "form_template", "revision_history", "quoted_reference",
++                                     "project_or_contract"})
++NON_OWN_TARGETED_ROLES = frozenset({"referenced_identity", "template_or_form_code", "date", "other"})
++_CLAUSE = re.compile(r"^\(?\d{1,3}(?:\.\d{1,3})+\)?\.?\s+[A-Za-z]{3,}"
++                     r"|^(?:PART|SECTION|CLAUSE|ARTICLE|APPENDIX|ANNEX|CHAPTER)\s+[A-Z0-9][A-Z0-9.\-]{0,7}\s+[A-Za-z]{3,}", re.I)
++_PAGE_COUNTER = re.compile(r"^\s*PAGE\s+\d+(?:\s*(?:OF|/)\s*\d+)?\s*$", re.I)
++GENERIC_LABELS = frozenset({
++    "ARCHITECTURAL", "ARCHITECTURE", "STRUCTURAL", "STRUCTURE", "MECHANICAL", "ELECTRICAL", "PLUMBING", "DRAINAGE", "FIRE", "ALARM",
++    "FIGHTING", "PROTECTION", "HVAC", "LIGHTING", "LOW", "CURRENT", "ELV", "MEP", "CIVIL", "LANDSCAPE", "INTERIOR", "INTERIORS",
++    "GENERAL", "NOTES", "NOTE", "LEGEND", "DETAILS", "DETAIL", "SCHEDULE", "SCHEDULES", "SPECIFICATION", "SPECIFICATIONS",
++    "DATASHEET", "DATA", "SHEET", "DRAWING", "DRAWINGS", "PLAN", "PLANS", "SECTION", "SECTIONS", "ELEVATION", "ELEVATIONS",
++    "LAYOUT", "LAYOUTS", "TITLE", "COVER", "INDEX", "CONTENTS", "ACCESSORIES", "SUMMARY", "SCOPE", "APPENDIX", "ATTACHMENT",
++    "SHOP", "BUILT", "CONSTRUCTION", "APPROVAL", "REVIEW", "INFORMATION", "SUBMITTAL", "MATERIAL", "TECHNICAL", "PRODUCT",
++    "SYSTEM", "SYSTEMS", "DIAGRAM", "RISER", "SCHEMATIC", "TYPICAL", "FLOOR", "GROUND", "ROOF", "BASEMENT"})
++MARGIN_BAND = 0.10          # C1 S4: the top / bottom band of a page that is not a drawing sheet
++
++
++def _plain_words(text: str) -> list[str]:
++    return [t for t in (re.sub(r"[.,:;]+$", "", w) for w in str(text or "").split()) if re.fullmatch(r"[A-Za-z]{3,}", t)]
++
++
++def _strip_label_word(value: str, labels: list) -> str:
++    """The literal without one leading word equal to a single-word printed label ("SECTION 28 20 00" read under the
++    label SECTION is "28 20 00")."""
++    v = str(value or "").strip()
++    for label in labels:
++        words = re.findall(r"[A-Za-z]+", str(label or ""))
++        if len(words) == 1 and len(words[0]) >= 3:
++            m = re.match(rf"^\s*{re.escape(words[0])}\b\.?\s*:?\s+(.+)$", v, re.I)
++            if m and m.group(1).strip():
++                return m.group(1).strip()
++    return v
++
++
++def identity_structure(value, labels: list | None = None) -> str | None:
++    """C1 S1-S3 from the literal and its printed labels: revision_token | generic_label | structural_heading | None."""
++    v = str(value or "").strip()
++    if not v:
++        return None
++    if bare_revision_token(v):
++        return "revision_token"
++    core = _strip_label_word(v, labels or [])
++    tokens = [re.sub(r"[.,:;]+$", "", t) for t in core.split()]
++    if tokens and all(re.fullmatch(r"[A-Za-z]+", t or "") and t.upper() in GENERIC_LABELS for t in tokens):
++        return "generic_label"
++    if _PAGE_COUNTER.match(core) or _CLAUSE.match(core) or len(_plain_words(core)) >= 2:
++        return "structural_heading"
++    return None
++
++
++def _in_margin_band(page, region) -> bool:
++    """C1 S4: the field region lies wholly in the top / bottom MARGIN_BAND of a page that is not a drawing sheet."""
++    if page is None or region is None:
++        return False
++    try:
++        from app.services import title_block as tb
++        if tb.is_drawing_sheet(page):
++            return False
++        h = page.rect.height
++        return region[3] <= MARGIN_BAND * h or region[1] >= (1 - MARGIN_BAND) * h
++    except Exception:  # noqa: BLE001 -- no geometry is no evidence of a header / footer
++        return False
++
++
++def _role_evidence(field: str, value, readings: list, discovered: dict | None) -> dict:
++    """What the readings, their printed labels and discovery say about the ROLE of one literal (C1 S5, C2 E2 / (a))."""
++    key = literal_key(field, value)
++    of_v = [r for r in readings if r.get("legible", True) and key and literal_key(field, r.get("value")) == key]
++    own_cue = _OWN_IDENTITY_LABEL if field == "identity" else _OWN_REVISION_LABEL
++    reference_labels = sorted({str(r.get("label")) for r in of_v if _REFERENCE_LABEL.search(str(r.get("label") or ""))})
++    own_label_sources = sorted({str(r.get("source")) for r in of_v
++                                if own_cue.search(str(r.get("label") or "")) and not _REFERENCE_LABEL.search(str(r.get("label") or ""))})
++    discovery_roles = sorted({str(n.get("role")) for n in (discovered or {}).get("other_numbers") or []
++                              if key and literal_key(field, n.get("literal")) == key and n.get("role") in NON_OWN_DISCOVERY_ROLES})
++    targeted_roles = sorted({str(r.get("role")) for r in of_v if r.get("source") == "blind_context" and r.get("role") in NON_OWN_TARGETED_ROLES})
++    targeted_own = any(r.get("source") == "blind_context" and r.get("role") == _EXPECTED_ROLE[field] for r in of_v)
++    contradiction = bool(reference_labels or discovery_roles or targeted_roles)
++    return {"literal": str(value or "").strip(), "sources": sorted({str(r.get("source")) for r in of_v}),
++            "reference_labels": reference_labels, "discovery_non_own_roles": discovery_roles, "targeted_non_own_roles": targeted_roles,
++            "own_label_sources": own_label_sources, "own_role": (bool(own_label_sources) or targeted_own) and not contradiction,
++            "role_contradiction": contradiction}
++
++
++def identity_role_guard(value, readings: list, discovered: dict | None, texts: list, *, page=None, region=None) -> dict | None:
++    """C1: None when the literal may be the page's own identity; else {guard, reason, evidence}. S2-S5 are lifted only by
++    two readings from distinct sources carrying an own-identity printed label, the literal source-bound, and no role
++    contradiction; a model's role claim never lifts. S1 (a bare revision token) is never lifted."""
++    labels = [r.get("label") for r in readings if r.get("label")]
++    cls = identity_structure(value, labels)
++    evidence = _role_evidence("identity", value, readings, discovered)
++    if cls is None and _in_margin_band(page, region):
++        cls = "running_header_footer"
++    if cls is None and evidence["role_contradiction"]:
++        cls = "reference_role"
++    if cls is None:
++        return None
++    support, _why = region_support("identity", value, texts)
++    evidence = {**evidence, "class": cls, "source_bound": support}
++    if cls != "revision_token" and len(evidence["own_label_sources"]) >= 2 and support is not None and not evidence["role_contradiction"]:
++        return None
++    reasons = {"revision_token": "a bare revision token is a revision, not the document's own identity",
++               "generic_label": "a generic discipline / document-type label, not an identity",
++               "structural_heading": "a section heading, clause title or page counter, not an identity",
++               "running_header_footer": "a running header / footer value of a page that is not a drawing sheet",
++               "reference_role": "the evidence names another role for this literal (a reference label, discovery's role or the targeted read's role)"}
++    return {"guard": f"identity_role:{cls}", "reason": "identity role guard: " + reasons[cls] +
++            " -- held; no independent evidence establishes it as the page's own identity", "evidence": evidence}
++
++
++def _guard_verdict(field: str, verdict: dict, readings: list, texts: list, discovered, page, region) -> dict:
++    if not (IDGUARD_ENABLED and field == "identity" and verdict.get("value")) or verdict.get("guard"):
++        return verdict
++    g = identity_role_guard(verdict["value"], readings, discovered, texts, page=page, region=region)
++    if g is None:
++        return verdict
++    return {**verdict, "state": "candidate" if verdict["state"] in ("validated", "candidate") else verdict["state"],
++            "guard": g["guard"], "guard_evidence": g["evidence"], "reasons": list(verdict.get("reasons") or []) + [g["reason"]]}
++
++
++def _value_verdict(field: str, readings: list, texts: list, deterministic, *, discovered=None, page=None, region=None) -> dict:
++    """validate_value, then (IG) the identity role guard. With IG off this IS validate_value."""
++    return _guard_verdict(field, validate_value(field, readings, texts, deterministic), readings, texts, discovered, page, region)
++
++
++def _discovery_reading(discovered: dict, field: str, disc_value) -> dict:
++    reading = {"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}
++    if IDGUARD_ENABLED or ADJUDICATE_ENABLED:      # C1 / C2 weigh the printed label discovery gave (never with both off)
++        reading["label"] = (discovered or {}).get(f"own_{field}_label") or ""
++    return reading
++
++
++def adjudicate_conflict(field: str, st: dict, discovered: dict | None, *, identity_established: bool = True) -> dict:
++    """C2 over one page field's readings (st: the reader's per-field state). Returns {"record", "verdict"?, "texts"?}.
++    A literal V resolves the conflict only when it meets E1-E4 (E5 for a revision), every other literal -- the
++    deterministic one included -- is disqualified by a role contradiction or by not being source-bound anywhere while V
++    is, and no other literal also meets E1-E4. The verdict is then validate_value over V's readings alone."""
++    readings = [r for r in st.get("readings") or [] if not r.get("excluded")]
++    by_source = st.get("texts_by_source") or {}
++    texts_of = lambda r: by_source.get(str(r.get("source")), st.get("texts") or [])
++    all_texts = [t for ts in by_source.values() for t in ts] or list(st.get("texts") or [])
++    groups: dict = {}
++    for r in readings:
++        if r.get("legible", True) and literal_key(field, r.get("value")):
++            groups.setdefault(literal_key(field, r["value"]), []).append(r)
++    det = st.get("det")
++    if det and literal_key(field, det) not in groups:
++        groups[literal_key(field, det)] = []
++    literals = {}
++    for k, rs in groups.items():
++        value = rs[0]["value"].strip() if rs else str(det).strip()
++        ev = _role_evidence(field, value, readings, discovered)
++        bound = [r for r in rs if region_support(field, value, texts_of(r))[0] is not None]
++        sources = {str(r.get("source")) for r in rs}
++        e = {"value": value, "readings": sorted(sources), "deterministic": bool(det) and literal_key(field, det) == k,
++             "E1_legible": bool(rs), "E2_own_role": ev["own_role"], "E3_source_bound": bool(bound),
++             "E4_independent_supports": sorted(sources),
++             "role_contradiction": ev["role_contradiction"], "role_evidence": ev,
++             "source_bound_anywhere": region_support(field, value, all_texts)[0] is not None}
++        # E4 (revision 1): two distinct MODEL readings, one blind; the source text is E3, never a support of its own
++        e["E4_met"] = len(sources) >= 2 and any(s.startswith("blind") for s in sources)
++        e["meets"] = bool(e["E1_legible"] and e["E2_own_role"] and e["E3_source_bound"] and e["E4_met"] and (field == "identity" or identity_established))
++        literals[k] = e
++    record = {"rule": ADJUDICATE_VERSION, "field": field, "literals": literals, "identity_established": identity_established, "resolved": False}
++    winners = [k for k, e in literals.items() if e["meets"]]
++    if len(winners) != 1:
++        record["why"] = ("no literal meets E1-E4" + ("" if field == "identity" else " and E5")) if not winners else "more than one literal meets E1-E4"
++        return {"record": record}
++    v = winners[0]
++    disq = {}
++    for k, e in literals.items():
++        if k == v:
++            continue
++        disq[k] = ("role_contradiction" if e["role_contradiction"] else
++                   "not_source_bound" if not e["source_bound_anywhere"] and literals[v]["E3_source_bound"] else None)
++    if any(d is None for d in disq.values()):
++        record["why"] = "a competing literal is not disqualified: " + ", ".join(literals[k]["value"] for k, d in disq.items() if d is None)
++        return {"record": record}
++    v_readings = groups[v]
++    bound = [r for r in v_readings if region_support(field, literals[v]["value"], texts_of(r))[0] is not None]
++    v_texts = texts_of(bound[0])
++    verdict = validate_value(field, v_readings, v_texts, det if (det and literal_key(field, det) == v) else None)
++    superseded = [{"source": r.get("source"), "value": r.get("value"), "disqualified_by": disq[literal_key(field, r.get("value"))]}
++                  for r in readings if r.get("legible", True) and literal_key(field, r.get("value")) in disq]
++    if det and literal_key(field, det) in disq:
++        superseded.append({"source": "deterministic", "value": det, "disqualified_by": disq[literal_key(field, det)]})
++    record.update(resolved=True, value=literals[v]["value"], disqualified=disq)
++    verdict = {**verdict, "adjudication": record, "superseded": superseded, "candidates": sorted({e["value"] for e in literals.values()})}
++    return {"record": record, "verdict": verdict, "texts": v_texts}
++
++
++def _identity_established(state: dict, fields: dict) -> bool:
++    """The page's own identity is established ON THIS PAGE: a validated, unguarded own identity read here (C2 E5, C4)."""
++    sti = state.get("identity") or {}
++    verdict = sti.get("verdict") or {}
++    return bool(sti and not sti.get("absent") and verdict.get("state") == "validated" and not verdict.get("guard")
++                and fields.get(sti.get("key")) == COMPLETED)
++
++
++def _adjudicate_page(state: dict, fields: dict, discovered: dict, page) -> None:
++    for field in ("identity", "revision"):
++        st = state.get(field)
++        if not st or st.get("absent") or (st.get("verdict") or {}).get("state") != "conflict":
++            continue
++        res = adjudicate_conflict(field, st, discovered, identity_established=field == "identity" or _identity_established(state, fields))
++        st["adjudication"] = res["record"]
++        if res.get("verdict") is not None:
++            st["verdict"] = _guard_verdict(field, res["verdict"], [r for r in st["readings"] if not r.get("excluded")], res["texts"],
++                                           discovered, page, st.get("region"))
++
++
+ def _legend_entry(marked: str, printed: list[str]) -> str | None:
+     """The printed option a marked option names: the same words, or its code ("B", "Code 3", "(A)") at the start
+     of a printed legend entry ("B = NO OBJECTION AS NOTED")."""
+@@ -604,6 +858,258 @@ def validate_decision(readings: list[dict], target: str | None = None) -> dict:
+             "legend": sorted({e for _r, e, _d in mapped if e}), "actor": next(iter(actors)) if len(actors) == 1 else None}
+ 
+ 
++# --- Review 29, C3: the bounded decision-region path (review29/CONTRACTS.md) -------------------------------------------
++#
++# Title-block (ROI) discovery gives identity / revision only. Decision blocks are found by the whole-page discovery's
++# decision signal, by decision vocabulary in the page's text layer / cached OCR outside the title-block zone, or -- when
++# neither gives a region and the page lacks full text coverage, or discovery was a located crop -- by one locate_decision
++# request on the whole page. At most DECISION_REGIONS_PER_PAGE regions and DECISION_READS_PER_PAGE reads per page, inside
++# the per-document cap. A crop that did not include a possible decision region is unknown, never absent. Acceptance needs
++# two readings from distinct sources (one blind) agreeing on the marked option, a printed legend mapping it to a decision,
++# a consultant / client actor in every reading and a target established on the page.
++DECISION_REGIONS_PER_PAGE = 2
++DECISION_READS_PER_PAGE = 3
++DECISION_UNKNOWN = "incomplete:decision_unknown"
++_DECISION_VOCAB = re.compile(r"APPROVED|NO\s+OBJECTION|REVISE|RESUBMIT|REJECTED|AS\s+NOTED|\bSTATUS\b|\bCODE\s*[:\-]?\s*['\"(]?[A-D1-4]\b|\bREVIEWED\b", re.I)
++_MARKS = ["tick", "circle", "stamp", "handwriting", "none", "unclear"]
++_ACTORS = ["consultant", "client", "contractor", "unknown"]
++LOCATE_DECISION_SCHEMA = {
++    "type": "object",
++    "properties": {
++        "stamps": {"type": "array", "items": {"type": "object", "properties": {
++            "region": _REGION, "options_printed": {"type": "array", "items": {"type": "string"}}, "marked_option": {"type": "string"},
++            "mark_type": {"type": "string", "enum": _MARKS}, "actor": {"type": "string", "enum": _ACTORS}, "legible": {"type": "boolean"}},
++            "required": ["region", "options_printed", "marked_option", "mark_type", "actor", "legible"], "additionalProperties": False}},
++        "notes": {"type": "string"},
++    },
++    "required": ["stamps", "notes"], "additionalProperties": False,
++}
++LOCATE_DECISION_TEXT = ("Page {page} of a construction document, the whole page. Find every consultant / client REVIEW STAMP or "
++                        "review STATUS BLOCK anywhere on the page -- often outside the title block: a stamp, a boxed status "
++                        "legend, a handwritten status code -- including ones you cannot read. For each give its region [x0, y0, "
++                        "x1, y1] in 0..1000 of the image, the options printed in it, the option that is marked (tick, circle, "
++                        "stamp or handwriting) exactly as written, who marked it as far as the block says, and whether it is "
++                        "legible. A receipt stamp, a signature or a DRAWN / CHECKED / APPROVED BY sign-off row is not a review "
++                        "status. An empty list when there is none.")
++
++
++def validate_decision_dr(readings: list[dict], target: str | None = None) -> dict:
++    """C3.5: as validate_decision, with the printed legend taken from every reading of the same region and the
++    corroboration rule: two readings from distinct sources (at least one blind) agree on the marked option."""
++    usable = [r for r in readings if r.get("legible", True)]
++    marked = [r for r in usable if r.get("marked_option") and r.get("mark_type") in ("tick", "circle", "stamp", "handwriting")]
++    if not marked:
++        return {"state": "no_decision_marked" if usable else "unreadable", "decision": None, "reasons": [], "target": target}
++    legend: list = []
++    for r in usable:
++        for option in r.get("options_printed") or []:
++            if option not in legend:
++                legend.append(option)
++    mapped = []
++    for r in marked:
++        entry = _legend_entry(r["marked_option"], legend)
++        text = entry if entry is not None else r["marked_option"]
++        mapped.append((r, entry, None if NOT_A_DECISION.search(text or "") else (option_decision(entry) if entry is not None else None)))
++    if all(NOT_A_DECISION.search((e if e is not None else r["marked_option"]) or "") for r, e, _d in mapped):
++        return {"state": "not_a_decision", "decision": None, "target": target,
++                "reasons": ["the marked words are a receipt / compliance statement, not a review decision: "
++                            + ", ".join(sorted({r["marked_option"] for r in marked}))]}
++    decisions = {d for _r, _e, d in mapped}
++    if len(decisions) > 1:
++        return {"state": "conflict", "decision": None, "target": target,
++                "reasons": ["the readings name different decisions: " + ", ".join(f"{r['source']}={r['marked_option']!r}" for r in marked)]}
++    decision = decisions.pop()
++    reasons = []
++    if decision is None:
++        reasons.append("the marked option maps to no decision through the printed legend")
++    sources = {str(r.get("source")) for r in marked}
++    if len(sources) < 2 or not any(s.startswith("blind") for s in sources):
++        reasons.append("not corroborated: two readings from distinct sources (one blind) must agree on the marked option")
++    actors = {r.get("actor") for r in marked}
++    if len(actors) > 1:
++        reasons.append("the readings disagree on who marked it: " + ", ".join(sorted(str(a) for a in actors)))
++    elif not actors <= {"consultant", "client"}:
++        reasons.append("the mark is not evidenced as the consultant's or the client's")
++    if not target:
++        reasons.append("no target component: the page's own identity is not established")
++    return {"state": "candidate" if reasons else "validated", "decision": decision, "target": target, "reasons": reasons,
++            "legend": sorted({e for _r, e, _d in mapped if e}), "actor": next(iter(actors)) if len(actors) == 1 else None}
++
++
++def _decision_vocab_regions(page, ocr_lines: list | None) -> list:
++    """C3.3 (b): display rectangles of decision vocabulary in the text layer / cached OCR outside the title-block zone,
++    clustered; the largest clusters first. Deterministic; no request."""
++    import pymupdf
++
++    from app.services import title_block as tb
++
++    w, h = page.rect.width, page.rect.height
++    boxes = []
++    try:
++        for b in page.get_text("blocks"):
++            if len(b) >= 5 and _DECISION_VOCAB.search(str(b[4] or "")):
++                boxes.append(pymupdf.Rect(b[:4]) * page.rotation_matrix)
++    except Exception:  # noqa: BLE001 -- no text layer: no deterministic candidate
++        pass
++    for line in ocr_lines or []:
++        if len(line) >= 5 and _DECISION_VOCAB.search(str(line[4] or "")):
++            boxes.append(pymupdf.Rect(line[:4]))
++    try:
++        sheet = tb.is_drawing_sheet(page)
++    except Exception:  # noqa: BLE001
++        sheet = False
++    # the title-block zone exists on a drawing sheet only; a form's decision block may sit anywhere on it
++    boxes = [r for r in boxes if not r.is_empty and not (sheet and tb._in_zone(tb.Line(r.x0, r.y0, r.x1, r.y1, ""), w, h))]
++    clusters: list = []
++    for r in boxes:
++        for c in clusters:
++            if (c[0] + (-30, -30, 30, 30)).intersects(r):
++                c[0] |= r
++                c[1] += 1
++                break
++        else:
++            clusters.append([pymupdf.Rect(r), 1])
++    clusters.sort(key=lambda c: (-c[1], c[0].y0, c[0].x0))
++    return [tuple(round(v, 2) for v in c[0]) for c in clusters]
++
++
++def _full_text_coverage(page) -> bool:
++    """C3.6: the page's text layer covers it -- 20 words or more spanning at least 60 % of its width and height."""
++    try:
++        words = page.get_text("words")
++        box = page.cropbox
++    except Exception:  # noqa: BLE001
++        return False
++    if len(words) < 20:
++        return False
++    xs0, ys0 = min(x[0] for x in words), min(x[1] for x in words)
++    xs1, ys1 = max(x[2] for x in words), max(x[3] for x in words)
++    return (xs1 - xs0) >= 0.6 * box.width and (ys1 - ys0) >= 0.6 * box.height
++
++
++def _overlaps(a, b) -> bool:
++    return not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1])
++
++
++def _decision_region_read(run, page, *, sha256: str, number: int, reason: str, discovered: dict, located, ocr_lines, fields: dict,
++                          requests: dict) -> dict | None:
++    """C3 for one page, in the required-first path. Returns the page's decision context ({readings, region, dr}) or None
++    (no candidate region; the outcome is then recorded as absent only under C3.6, else unknown)."""
++    whole = not (located and located.get("located") and not located.get("whole_page"))
++    info = {"rule": DECISION_REGION_VERSION, "whole_page_discovery": whole, "candidates": [], "locator": None}
++    candidates = []
++    signal = False
++    if whole:
++        signal = bool(discovered.get("decision_options_printed") or discovered.get("decision_marked_option") or discovered.get("decision_region")
++                      or discovered.get("decision_mark_type") not in (None, "", "none"))
++        if signal:
++            region = region_from_norm(page, discovered.get("decision_region"))
++            reading = {"source": "discovery", "options_printed": discovered.get("decision_options_printed") or [],
++                       "marked_option": discovered.get("decision_marked_option") or "", "mark_type": discovered.get("decision_mark_type"),
++                       "actor": discovered.get("decision_actor"), "legible": True}
++            if region is not None:
++                candidates.append((tuple(region), [reading], "discovery"))
++            else:
++                info["discovery_signal_without_region"] = True
++    info["discovery_signal"] = signal
++    for region in _decision_vocab_regions(page, ocr_lines):
++        if len(candidates) >= DECISION_REGIONS_PER_PAGE:
++            break
++        if not any(_overlaps(region, c[0]) for c in candidates):
++            candidates.append((region, [], "text"))
++    full_text = _full_text_coverage(page)
++    info["full_text_coverage"] = full_text
++    if not candidates and (not whole or not full_text or info.get("discovery_signal_without_region")):
++        got = run.call(sha256=sha256, task="locate_decision", page=number, reason=reason + ",decision_region",
++                       parts=[TextPart("task", LOCATE_DECISION_TEXT.format(page=number)), ImagePart("page", page_png(page))],
++                       schema=LOCATE_DECISION_SCHEMA, max_output=600)
++        info["locator"] = _request_outcome(run, got)
++        for stamp in ((got or {}).get("stamps") or [])[:DECISION_REGIONS_PER_PAGE]:
++            region = region_from_norm(page, stamp.get("region"))
++            if region is None:
++                continue
++            candidates.append((tuple(region), [{"source": "locator", "options_printed": stamp.get("options_printed") or [],
++                                                "marked_option": stamp.get("marked_option") or "", "mark_type": stamp.get("mark_type"),
++                                                "actor": stamp.get("actor"), "legible": bool(stamp.get("legible", True))}], "locator"))
++    fields["decision:route"] = "decision-region:" + (",".join(sorted({c[2] for c in candidates})) or "none")
++    if not candidates:
++        absent = whole and not signal and full_text and info["locator"] is None
++        fields["own:decision"] = ABSENT_BY_DISCOVERY if absent else DECISION_UNKNOWN
++        requests["own:decision"] = "not_attempted" if info["locator"] is None else info["locator"]
++        info["outcome"] = fields["own:decision"]
++        return None
++    reads, chosen, first = 0, [], None
++    for region, base, origin in candidates:
++        if reads >= DECISION_READS_PER_PAGE:
++            info["candidates"].append({"origin": origin, "region": [round(v, 2) for v in region], "read": "not_attempted:reads_per_page"})
++            continue
++        blind = run.call(sha256=sha256, task="read_decision", page=number, reason=reason + ",decision_region",
++                         parts=[TextPart("task", READ_TEXTS["read_decision"]), ImagePart("crop", crop_png(page, region, pad=0.15))],
++                         schema=READ_DECISION_SCHEMA, max_output=400)
++        reads += 1
++        entry = {"origin": origin, "region": [round(v, 2) for v in region], "read": _request_outcome(run, blind)}
++        readings = list(base)
++        if blind is not None:
++            readings.append({"source": "blind_small", **blind})
++            if blind.get("legible", True) and blind.get("marked_option") and reads < DECISION_READS_PER_PAGE:
++                wide = run.call(sha256=sha256, task="read_decision", page=number, reason=reason + ",decision_region,wide",
++                                parts=[TextPart("task", READ_TEXTS["read_decision"]), ImagePart("crop", crop_png(page, region, pad=0.35))],
++                                schema=READ_DECISION_SCHEMA, max_output=400)
++                reads += 1
++                entry["wide"] = _request_outcome(run, wide)
++                if wide is not None:
++                    readings.append({"source": "blind_wide", **wide})
++        info["candidates"].append(entry)
++        if first is None:
++            first = (region, readings, entry["read"], blind)
++        if blind is not None and blind.get("legible", True) and blind.get("marked_option"):
++            chosen.append((region, readings))
++    if chosen:
++        region = chosen[0][0]
++        readings = [r for _reg, rs in chosen for r in rs]
++        fields["own:decision"] = COMPLETED
++        requests["own:decision"] = "ok"
++    else:
++        region, readings, outcome, blind = first
++        requests["own:decision"] = outcome
++        fields["own:decision"] = (outcome if blind is None else COMPLETED if blind.get("legible", True) else "unusable:illegible")
++    info["outcome"] = fields["own:decision"]
++    return {"readings": readings, "region": region, "dr": info}
++
++
++# --- Review 29, C4: page / target association invariant (reader side) ----------------------------------------------------
++
++
++def _page_target(state: dict, fields: dict, det_identity) -> str | None:
++    """C4 A2: the identity a dependent fact of this page may bind to -- established on this page, else this page's
++    deterministic identity; never another page's."""
++    if _identity_established(state, fields):
++        return (state["identity"]["verdict"] or {}).get("value")
++    return det_identity or None
++
++
++def _apply_page_association(observations: list, *, number: int, state: dict, fields: dict, det_identity) -> None:
++    target = _page_target(state, fields, det_identity)
++    basis = ("own_page_identity" if _identity_established(state, fields) else "deterministic_page_identity" if det_identity else None)
++    sti = state.get("identity") or {}
++    candidates = sorted({str(r.get("value")).strip() for r in sti.get("readings") or [] if r.get("legible", True) and str(r.get("value") or "").strip()})
++    for o in observations:
++        if o.get("component") != "own":
++            continue
++        o["page_binding"] = {"page": number, "basis": basis, "rule": ASSOC_VERSION}
++        if o.get("field") not in ("revision", "decision"):
++            continue
++        if target:
++            o["target"] = target
++            continue
++        o.pop("target", None)
++        if o.get("state") == "validated":
++            o["state"] = "candidate"
++        o["association"] = {"status": "held:no_page_target", "candidates": candidates, "rule": ASSOC_VERSION,
++                            "reason": "no identity is established on this page; a dependent fact never binds to another page's identity"}
++        o["reasons"] = list(o.get("reasons") or []) + ["held: no target established on its own page (page association invariant)"]
++
++
+ # --- one document -----------------------------------------------------------------------------------------------------
+ 
+ 
+@@ -900,14 +1406,14 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+     for field, task, disc_value, disc_region, det_value in spec:
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+-        readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
++        readings = [_discovery_reading(discovered, field, disc_value)]
+         texts = _region_texts(page, region, ocr_lines, run)
+         if not (disc_value or det_value):
+             fields[key] = _absent(located, field, facts)
+             continue
+         if region is None:
+             fields[key], requests[key] = "incomplete:no_region", "not_attempted"
+-            verdict = validate_value(field, readings, texts, det_value)
++            verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+         else:
+             blind = run.call(sha256=sha256, task=task, page=number, reason=reason,
+                              parts=[TextPart("task", READ_TEXTS[task]), ImagePart("crop", crop_png(page, region))],
+@@ -916,7 +1422,7 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+             if blind is not None:
+                 readings.append({"source": "blind_small", "value": blind.get("value", ""), "legible": blind.get("legible", False),
+                                  "label": blind.get("label_text")})
+-            verdict = validate_value(field, readings, texts, det_value)
++            verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+             if blind is not None and run.variant == "EV2" and verdict["state"] in ("conflict", "candidate") and run.escalations < 2:
+                 run.escalations += 1
+                 strong = run.call(sha256=sha256, task=task, page=number, reason=reason + ",escalation", tier="standard",
+@@ -924,7 +1430,7 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                                   schema=READ_VALUE_SCHEMA, max_output=400)
+                 if strong is not None:
+                     readings.append({"source": "blind_standard", "value": strong.get("value", ""), "legible": strong.get("legible", False)})
+-                    verdict = validate_value(field, readings, texts, det_value)
++                    verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+                 else:
+                     fields[key + ":escalation"] = _call_outcome(run)
+             fields[key] = _value_read_outcome(field, readings, requests[key])
+@@ -1164,16 +1670,18 @@ def _read_page_required(run, page, *, sha256: str, number: int, facts, reason: s
+     for field, task, disc_value, disc_region, det_value in spec:
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+-        readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
++        readings = [_discovery_reading(discovered, field, disc_value)]
+         texts = _region_texts(page, region, ocr_lines, run)
+         st = state[field] = {"key": key, "region": region, "readings": readings, "texts": texts, "disc": disc_value, "det": det_value}
++        if ADJUDICATE_ENABLED:      # C2: each reading is weighed against the source text of the region it was made from
++            st["texts_by_source"] = {"discovery": texts, "blind_small": texts, "blind_standard": texts}
+         if not (disc_value or det_value):
+             fields[key] = _absent(located, field, facts)
+             st["absent"] = True
+             continue
+         if region is None:
+             fields[key], requests[key] = "incomplete:no_region", "not_attempted"
+-            verdict = validate_value(field, readings, texts, det_value)
++            verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+         else:
+             blind = run.call(sha256=sha256, task=task, page=number, reason=reason,
+                              parts=[TextPart("task", READ_TEXTS[task]), ImagePart("crop", crop_png(page, region))],
+@@ -1182,7 +1690,7 @@ def _read_page_required(run, page, *, sha256: str, number: int, facts, reason: s
+             if blind is not None:
+                 readings.append({"source": "blind_small", "value": blind.get("value", ""), "legible": blind.get("legible", False),
+                                  "label": blind.get("label_text")})
+-            verdict = validate_value(field, readings, texts, det_value)
++            verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+             if blind is not None and run.variant == "EV2" and verdict["state"] in ("conflict", "candidate") and run.escalations < 2:
+                 run.escalations += 1
+                 strong = run.call(sha256=sha256, task=task, page=number, reason=reason + ",escalation", tier="standard",
+@@ -1190,13 +1698,16 @@ def _read_page_required(run, page, *, sha256: str, number: int, facts, reason: s
+                                   schema=READ_VALUE_SCHEMA, max_output=400)
+                 if strong is not None:
+                     readings.append({"source": "blind_standard", "value": strong.get("value", ""), "legible": strong.get("legible", False)})
+-                    verdict = validate_value(field, readings, texts, det_value)
++                    verdict = _value_verdict(field, readings, texts, det_value, discovered=discovered, page=page, region=region)
+                 else:
+                     fields[key + ":escalation"] = _call_outcome(run)
+             fields[key] = _value_read_outcome(field, readings, requests[key])
+         st["verdict"] = verdict
+     decision = None
+-    if discovered.get("decision_options_printed") or discovered.get("decision_marked_option"):
++    if DECISION_REGION_ENABLED:
++        decision = _decision_region_read(run, page, sha256=sha256, number=number, reason=reason, discovered=discovered, located=located,
++                                         ocr_lines=ocr_lines, fields=fields, requests=requests)
++    elif discovered.get("decision_options_printed") or discovered.get("decision_marked_option"):
+         readings = [{"source": "discovery", "options_printed": discovered.get("decision_options_printed") or [],
+                      "marked_option": discovered.get("decision_marked_option") or "", "mark_type": discovered.get("decision_mark_type"),
+                      "actor": discovered.get("decision_actor"), "legible": True}]
+@@ -1250,6 +1761,8 @@ def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
+             fields[key + ":targeted"] = requests[key + ":targeted"]       # failed / budget: nothing changes
+             continue
+         reading, t_region, t_texts = got
++        if ADJUDICATE_ENABLED:
++            st.setdefault("texts_by_source", {})["blind_context"] = t_texts
+         usable = bool(reading.get("legible")) and bool(literal_key(field, reading.get("value")))
+         own_role = reading.get("role") == _EXPECTED_ROLE[field]
+         if usable and not own_role:
+@@ -1260,7 +1773,10 @@ def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
+         if usable and own_role:
+             st["region"], st["texts"] = t_region or st["region"], t_texts or st["texts"]
+             fields[key] = COMPLETED
+-        st["verdict"] = validate_value(field, [r for r in st["readings"] if not r.get("excluded")], st["texts"], st["det"])
++        st["verdict"] = _value_verdict(field, [r for r in st["readings"] if not r.get("excluded")], st["texts"], st["det"],
++                                     discovered=discovered, page=page, region=st["region"])
++    if ADJUDICATE_ENABLED:
++        _adjudicate_page(state, fields, discovered, page)
+     common = {"page": number, "kind": "ai_evidence", "version": READER_VERSION, "policy": EVIDENCE_POLICY_VERSION,
+               "variant": run.variant, "profile": run.profile, "page_kind": discovered.get("page_kind")}
+     observations = []
+@@ -1303,8 +1819,9 @@ def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
+                                  "readings": [{"source": "discovery", "value": other["literal"]}]})
+     decision = ctx["decision"]
+     if decision is not None:
+-        target = own_identity or det_identity
+-        verdict = validate_decision(decision["readings"], target)
++        target = _page_target(state, fields, det_identity) if ASSOC_ENABLED else own_identity or det_identity
++        verdict = (validate_decision_dr(decision["readings"], target) if decision.get("dr") is not None else
++                   validate_decision(decision["readings"], target))
+         reasons = list(verdict["reasons"])
+         state = verdict["state"]
+         if fields["own:decision"] != COMPLETED:
+@@ -1317,6 +1834,19 @@ def _finish_page(run, page, ctx: dict, *, may_call=None) -> dict:
+                              "region": list(region) if region else None, "read": fields["own:decision"],
+                              "request": requests.get("own:decision"),
+                              "deterministic": next((r.get("status") for r in facts.records if r.get("status") not in (None, "UR")), None)})
++    if decision is not None and decision.get("dr") is not None:
++        for o in observations:
++            if o.get("field") == "decision" and o.get("component") == "own":
++                o["decision_path"] = decision["dr"]
++    if ADJUDICATE_ENABLED:
++        for o in observations:
++            st = ctx["state"].get(o.get("field")) if o.get("component") == "own" else None   # `state` is rebound above
++            if st and st.get("adjudication"):
++                o["adjudication"] = st["adjudication"]
++                if (st.get("verdict") or {}).get("superseded"):
++                    o["superseded"] = st["verdict"]["superseded"]
++    if ASSOC_ENABLED:
++        _apply_page_association(observations, number=number, state=ctx["state"], fields=fields, det_identity=det_identity)
+     required = [fields.get(f) for f in REQUIRED_FIELDS]
+     complete = all(o in (COMPLETED, ABSENT_BY_DISCOVERY) for o in required)
+     outcome = ("evidence" if observations else "no_components") if complete else "partial"
+@@ -1956,6 +2486,9 @@ def association_of(o: dict, fields: dict, entry: dict | None = None, ai: dict |
+       held:revision_changed     a decision whose component's compatible revision changed since"""
+     if o.get("field") not in ("decision", "revision") or not _field_key(o).startswith("own:"):
+         return None
++    held = o.get("association") or {}
++    if o.get("page_binding") is not None and str(held.get("status", "")) == "held:no_page_target":
++        return held          # C4 A2: no target established on its own page; never reattached to another identity
+     ai = _normalise_ai(ai) if ai else _normalise_ai(None)
+     fkey = _field_key(o)
+     anchor = _anchor_of(ai, fields, fkey, entry)
+diff --git a/backend/scripts/m2_eval6.py b/backend/scripts/m2_eval6.py
+new file mode 100644
+index 0000000..7fee341
+--- /dev/null
++++ b/backend/scripts/m2_eval6.py
+@@ -0,0 +1,522 @@
++"""M2 pilot evaluator .10 (M2 review 29, C4): derived from .9 (scripts/m2_eval5.py, unchanged) with ONE change -- association
++is decided per fact. When a group associates with another page's component (cross_page / target_cross_page), only its
++identity facts take that association (a copy of the document's identity on a continuation page, the .6 rule); its
++dependent facts (revision, decision) are judged on their OWN page: a no-record page makes them false positives when
++asserted and held_on_negative when held; a page with exactly one component judges them against that component
++(own_page_component); otherwise they are unassociated. So a fact's outcome never depends on whether another fact of
++its group was asserted. Everything else is .9.
++
++M2 pilot evaluator .5 (M2 review 07, R7-01): every emitted fact is scored. Evaluator .4 (`scripts/m2_eval4.py`)
++stays unchanged as history; its truth states, expected records and register layer are reused as they are (the
++register-layer corrections R6-01..R6-03 were reproduced by the reviewer).
++
++What changes is the raw / evidence / AI accounting, which in .4 merged facts per page, judged only facts linked by a
++matching identity, and let a correct value mask a wrong one. In .5:
++
++1. **Facts, not pages.** Each emission unit -- a register record, a deterministic observation, an AI component read --
++   is a *group* of facts ``{field, value, state}`` with its page, component key, reader and provenance. Every value is
++   kept: two identities on one page are two groups; nothing is overwritten.
++2. **States.** ``accepted`` (a register record's values), ``observed`` (a deterministic source observation -- raw
++   evidence, not an automatic acceptance), ``validated`` (the AI validation policy accepted it), and the non-accepted
++   ``held`` (a flagged reference, an untrusted OCR number, an AI candidate / conflict, a decision candidate). Only the
++   first three are *asserted* facts; held facts earn evidence credit and are never precision errors.
++3. **Association is explicit.** A group is associated with a truth component by an asserted identity on its page
++   (exact / suffix), else on another page of the document (cross-page copy), else -- when the page has exactly one
++   component -- by that single component (and an asserted identity that does not match it is *wrong*, never missing),
++   else it stays ``unassociated``: its asserted identity is a wrong identity of no component on the page (critical),
++   and its other asserted facts are ``association_unknown`` (counted, never scored right or wrong). On a labelled page
++   with no component (a no-record page) every asserted fact is a false positive. Facts on unlabelled / unvalidated
++   pages are counted as ``unscored_page``.
++4. **Two measures, kept apart.**
++   - *accepted-output precision*: over **distinct** asserted facts (component, field, normalised value) -- a redundant
++     identical copy is one fact (counted in ``redundant``); each distinct wrong value is one error, whatever else is
++     correct;
++   - *deduplicated source-fact recovery*: per truth component and field, ``recovered_clean`` (a correct asserted value
++     and no wrong one), ``recovered_mixed`` (correct and wrong both asserted -- the wrong one is also a precision
++     error), ``wrong_only``, ``held_only`` (a correct value exists only as held evidence), ``missed``; negatives are
++     ``tn`` / ``fp``; conflict truth gives ``accepted_on_conflict`` (critical) / ``conflict_held`` / ``conflict_missing``.
++5. **Layers.** ``raw`` = register records (flagged references held) + deterministic observations; ``evidence`` = raw
++   + AI; ``ai`` = AI groups alone. ``introduced`` lists every asserted AI fact that is wrong or a false positive -- not
++   only fields whose raw verdict was clean.
++6. **Order does not matter.** Groups are judged independently and aggregated as sets.
++
++Usage: python -m scripts.m2_eval5 --labels L.json [--page-labels P.json] --rows rows.json --out out.json
++"""
++from __future__ import annotations
++
++import argparse
++import collections
++import json
++from pathlib import Path
++
++from scripts import m2_eval4 as ev4
++from scripts import m2_pilot_eval as v3
++
++EVALUATOR_VERSION = "m2-pilot-eval-2026-10-02.10"  # .10: association per fact -- no dependent fact crosses pages (review 29 C4)
++# m2-pilot-eval-2026-09-29.9: targetless retained facts held when their context changed (review 10)
++# m2-pilot-eval-2026-09-29.8: retained facts judged under their association; source identity (review 09)
++# m2-pilot-eval-2026-09-29.7: AI evidence selected for the run's declared context (review 08)
++# m2-pilot-eval-2026-09-29.6   # .6: a no-record page associates a cross-page copy of the document's own identity (as .4); pending-evidence records hold all their facts
++FIELDS = ("identity", "revision", "decision")
++ASSERTED = ("accepted", "observed", "validated")
++ACCEPTANCE = ("accepted", "validated")          # automatic acceptances: a register value, an AI-validated fact
++CRITICAL_OUTCOMES = ("wrong", "fp", "accepted_on_conflict", "wrong_unassociated")
++CARRIED = ("target", "target_revision", "association", "context_identity")   # association metadata kept on judgements
++
++
++# --- emitted facts ---------------------------------------------------------------------------------------------------
++
++
++def _group(page, layer, kind, reader, component, facts, provenance=None) -> dict:
++    return {"page": int(page or 1), "layer": layer, "kind": kind, "reader": reader, "component": component,
++            "facts": [f for f in facts if f.get("value") not in (None, "")], "provenance": provenance or {}}
++
++
++def _fact(field, value, state, **extra) -> dict:
++    return {"field": field, "value": value, "state": state, **extra}
++
++
++def record_groups(row: dict | None) -> list[dict]:
++    """Register records as raw groups: values accepted, a flagged reference held (the raw layer's view)."""
++    ex = (row or {}).get("extracted") or {}
++    pending = {int(str(p["key"]).rsplit(":r", 1)[1]) for p in ex.get("pending_evidence") or [] if ":r" in str(p.get("key"))}
++    out = []
++    for i, rec in enumerate(ex.get("records") or []):
++        ref, held = ev4.accepted_reference(rec)
++        # a record the application holds as pending evidence (review 07 guard) accepts nothing: all its facts are held
++        state = "held" if i in pending else "accepted"
++        facts = [_fact("identity", ref, "held" if held or i in pending else "accepted"),
++                 _fact("revision", v3.raw_revision(rec), state)]
++        if rec.get("status") in ev4.POSITIVE:
++            facts.append(_fact("decision", rec["status"], state))
++        facts += [_fact("decision", d, "held") for d in ev4.held_decisions(rec)]
++        out.append(_group(rec.get("page"), "raw", "record", "parser", f"record:{i}", facts,
++                          {"source": rec.get("source"), "flags": rec.get("flags")}))
++    return out
++
++
++def observation_groups(row: dict | None) -> list[dict]:
++    """Deterministic observations: every shape, every value (a transmittal's listed records are groups of their own)."""
++    ex = (row or {}).get("extracted") or {}
++    out = []
++    for i, obs in enumerate(ex.get("observations") or []):
++        kind, page = obs.get("kind"), ev4._obs_page(obs)
++        key = f"obs:{i}"
++        if kind == "title_block":
++            facts = [_fact("identity", obs.get("number"), "observed"), _fact("revision", obs.get("revision"), "observed")]
++            if not obs.get("number") and (obs.get("number_candidate") or obs.get("number_literal")):
++                facts.append(_fact("identity", obs.get("number_candidate") or obs.get("number_literal"), "held"))
++            out.append(_group(page, "raw", kind, "title_block", key, facts, {"source": obs.get("source")}))
++        elif kind == "transmittal":
++            own = obs.get("reference")
++            facts = [_fact("identity", own, "observed")] if own else [_fact("identity", obs.get("raw_reference"), "held")]
++            out.append(_group(page, "raw", kind, "transmittal", key, facts))
++            for j, rec in enumerate(obs.get("records") or []):
++                out.append(_group(page, "raw", "transmittal_record", "transmittal", f"{key}:rec:{j}",
++                                  [_fact("identity", rec.get("reference"), "observed")]))
++        elif kind == "cover_untracked":
++            rec = obs.get("record") or {}
++            facts = [_fact("identity", rec.get("reference"), "observed"), _fact("revision", v3.raw_revision(rec), "observed")]
++            if rec.get("status") in ev4.POSITIVE:
++                facts.append(_fact("decision", rec["status"], "observed"))
++            facts += [_fact("decision", d, "held") for d in ev4.held_decisions(rec)]
++            out.append(_group(page, "raw", kind, "parser", key, facts))
++        elif kind == "drawing_sheet":
++            out.append(_group(page, "raw", kind, "parser", key, [_fact("identity", obs.get("reference"), "observed")]))
++        elif kind == "decision_unpromoted":
++            cands = {c.get("status") if isinstance(c, dict) else c[0] for c in obs.get("candidates") or obs.get("marks") or [] if c}
++            out.append(_group(page, "raw", kind, "parser", key, [_fact("decision", c, "held") for c in sorted(c for c in cands if c)]))
++        elif kind == "consultant_comments":
++            if obs.get("decision") in ev4.POSITIVE:
++                out.append(_group(page, "raw", kind, "parser", key, [_fact("decision", obs["decision"], "observed")]))
++        elif kind in ("form_identity", "evidence", "ai_observation", "own_identity"):
++            facts = [_fact("identity", obs.get("identity") or obs.get("literal"), "observed"),
++                     _fact("revision", obs.get("revision"), "observed")]
++            if obs.get("decision") in ev4.POSITIVE:
++                facts.append(_fact("decision", obs["decision"], "observed"))
++            out.append(_group(page, "raw", kind, obs.get("source") or "fields", key, facts))
++    return out
++
++
++def ai_envelope(row: dict | None, ai_context: dict | None, doc: str | None = None) -> tuple[dict, str]:
++    """(envelope, state) of the AI evidence that applies to the evaluated run's declared context -- its variant,
++    its extraction profile (default: the row's own) and optionally the compatible policies -- through
++    `evidence_reader.evidence_for`. No context, no AI evidence: another run's envelope is never scored for this one
++    (review 08, R8-02). A historical run whose stored envelopes carry no profile is scored only when its context
++    declares `accept_unknown_profile` (from the run manifest). Evidence that records no source hash is scored only
++    under a declared historical binding -- `historical_source` {"manifest", "sha256_by_doc"} from a run manifest --
++    and only for the bytes that manifest names for this document (review 09, R9-03)."""
++    if ai_context is None:
++        return {}, "no_context"
++    from app.ai import evidence_reader
++
++    row = row or {}
++    ai = (row.get("extracted") or {}).get("ai_evidence") or {}
++    if not ai:
++        return {}, "none"
++    profile = ai_context.get("profile", (row.get("extracted") or {}).get("profile"))
++    hs = ai_context.get("historical_source") or None
++    binding = ({"manifest": hs.get("manifest"), "sha256": (hs.get("sha256_by_doc") or {}).get(doc)} if hs and doc else None)
++    got = evidence_reader.evidence_for(ai, sha256=row.get("sha256"), profile=profile, variant=ai_context.get("variant"),
++                                       policies=ai_context.get("policies"), accept_unknown_profile=bool(ai_context.get("accept_unknown_profile")),
++                                       historical_source=binding)
++    return (got.get("envelope") or {}) if got["state"] == "current" else {}, got["state"]
++
++
++def ai_groups(row: dict | None, ai_context: dict | None = None, doc: str | None = None) -> list[dict]:
++    """One group per AI component read. Review 07 observations carry a `component` key; review 06 observations do
++    not, so their page's single own-identity read is one component -- and where a page has several AI identity
++    observations, each is its own group and that page's revision / decision observations stay unassociated with any
++    of them (`component: None`), never merged into one.
++    Review 09 (R9-02): a dependent fact keeps its explicit association (`evidence_reader.association_of`). One whose
++    target is not the component's current identity -- `held:*` (held) or `by_target` (its own state) -- is a group of
++    its own, associated by its target (`association_identity`), never beside another identity. Target and association
++    travel with the fact into the judgement; a fact that never recorded a target is grouped as before.
++    Review 10 (R10-01): a held fact that never recorded a target (its component's identity or revision changed since it
++    was read) is a group of its own with no association (`unassigned_component`): judged held and unassociated -- no
++    target is invented and it is never reassigned. Target revision and recorded context identity travel with it."""
++    env, _state = ai_envelope(row, ai_context, doc)
++    obs_list = [o for o in env.get("observations") or [] if o.get("value") not in (None, "")]
++    state_of = lambda o: "validated" if o.get("state") == "validated" else "held"
++    groups: dict = {}
++    by_page = collections.defaultdict(list)
++    for o in obs_list:
++        by_page[ev4._obs_page(o)].append(o)
++    for page, items in by_page.items():
++        own_ids = [o for o in items if o.get("field") == "identity"]
++        for i, o in enumerate(items):
++            role = o.get("role") or "own"
++            assoc = o.get("association") or {}
++            status = assoc.get("status")
++            if status and (status.startswith("held:") or status == "by_target"):
++                key = (f"ai:{page}:{o.get('component') or 'own'}@{assoc['target']}" if assoc.get("target") else
++                       f"ai:{page}:{o.get('component') or 'own'}~unassociated")
++            elif o.get("component") is not None:
++                key = f"ai:{page}:{o['component']}"
++            elif len(own_ids) <= 1:
++                key = f"ai:{page}:0"
++            else:
++                key = f"ai:{page}:id{own_ids.index(o)}" if o in own_ids else f"ai:{page}:unassigned"
++            g = groups.setdefault(key, _group(page, "ai", "ai_evidence", f"ai:{o.get('variant') or env.get('variant')}", key, [],
++                                              {"version": o.get("version"), "policy": o.get("policy"), "profile": env.get("profile")}))
++            if "@" in key:
++                g["association_identity"] = assoc["target"]
++            if key.endswith("~unassociated"):
++                g["unassigned_component"] = True
++            if role != "own" and o.get("field") == "identity":
++                g["facts"].append(_fact("referenced_identity", o["value"], "observed_reference", role=role))
++                continue
++            state = "held" if status and status.startswith("held:") else state_of(o)
++            extra = {k: v for k, v in (("target", o.get("target")), ("target_revision", o.get("target_revision")),
++                                       ("association", status), ("context_identity", assoc.get("context_identity"))) if v}
++            g["facts"].append(_fact(o.get("field"), o["value"], state, ai_state=o.get("state"), **extra))
++            if key.endswith(":unassigned"):
++                g["unassigned_component"] = True
++    return list(groups.values())
++
++
++# --- judging -----------------------------------------------------------------------------------------------------------
++
++
++def _truth(e: dict, field: str):
++    if field == "identity":
++        return ev4.reference_truth(e.get("reference"))
++    if field == "revision":
++        return ev4.revision_truth(e.get("printed_revision"), e.get("reference"))
++    return ev4.decision_truth(e.get("decision"))
++
++
++def _norm(field: str, value) -> str:
++    if field == "identity":
++        return v3.norm_ref(str(value))
++    if field == "revision":
++        return v3.norm_rev(value) or ""
++    return str(value)
++
++
++def _same(field: str, truth, value) -> bool:
++    if field == "identity":
++        return v3.same_identity(truth, value) in ("exact", "suffix")
++    if field == "revision":
++        return truth == v3.norm_rev(value)
++    return truth == value
++
++
++def associate_group(g: dict, exp_by_page: dict, exp_all: list[dict]) -> tuple[dict | None, str]:
++    """(truth component, how): identity | cross_page | single_component | single_component_wrong_identity |
++    unassociated | no_component. Only asserted identities associate by value. A group of retained facts whose
++    association is their own recorded target (`association_identity`, review 09) associates by that target only:
++    target | target_cross_page | target_unmatched -- never by the page's other component."""
++    here = exp_by_page.get(g["page"], [])
++    if g.get("association_identity"):
++        target = g["association_identity"]
++        for strength in ("exact", "suffix"):
++            for e in here:
++                if ev4.reference_truth(e.get("reference"))[0] == "readable" and v3.same_identity(v3.literal(e["reference"]), target) == strength:
++                    return e, "target"
++        for e in exp_all:
++            if e["page"] != g["page"] and ev4.reference_truth(e.get("reference"))[0] == "readable" and \
++                    v3.same_identity(v3.literal(e["reference"]), target) in ("exact", "suffix"):
++                return e, "target_cross_page"
++        return None, "target_unmatched"
++    ids = [f["value"] for f in g["facts"] if f["field"] == "identity" and f["state"] in ASSERTED]
++    for strength in ("exact", "suffix"):
++        for e in here:
++            if ev4.reference_truth(e.get("reference"))[0] == "readable" and any(
++                    v3.same_identity(v3.literal(e["reference"]), i) == strength for i in ids):
++                return e, "identity"
++    for e in exp_all:
++        if e["page"] != g["page"] and ev4.reference_truth(e.get("reference"))[0] == "readable" and any(
++                v3.same_identity(v3.literal(e["reference"]), i) in ("exact", "suffix") for i in ids):
++            return e, "cross_page"
++    if not here:
++        return None, "no_component"
++    if len(here) == 1 and not g.get("unassigned_component"):
++        known = ev4.reference_truth(here[0].get("reference"))[0] == "readable"
++        return here[0], "single_component_wrong_identity" if (ids and known) else "single_component"
++    return None, "unassociated"
++
++
++def judge_group(g: dict, e: dict | None, how: str, negative_page: bool) -> list[dict]:
++    """Every fact of the group with its outcome (and the truth it was judged against)."""
++    out = []
++    for f in g["facts"]:
++        field, state = f["field"], f["state"]
++        asserted = state in ASSERTED
++        rec = {"field": field, "value": f["value"], "state": state, "how": how,
++               **{k: f[k] for k in CARRIED if f.get(k)}}
++        if field not in FIELDS:
++            rec["outcome"] = "not_scored"
++        elif negative_page:
++            rec["outcome"] = "fp" if asserted else "held_on_negative"
++        elif e is None:
++            rec["outcome"] = ("wrong_unassociated" if field == "identity" else "association_unknown") if asserted else "held_unassociated"
++        else:
++            tstate, tval = _truth(e, field)
++            rec["truth"] = tval
++            if tstate == "unscorable":
++                rec["outcome"] = "unscorable"
++            elif tstate == "negative":
++                rec["outcome"] = "fp" if asserted else "held_on_negative"
++            elif tstate == "conflict":
++                rec["outcome"] = "accepted_on_conflict" if asserted else "conflict_held"
++            else:
++                right = _same(field, tval, f["value"])
++                if field == "identity" and not right and v3.same_identity(tval, f["value"]) == "near":
++                    rec["near"] = True
++                rec["outcome"] = ("correct" if right else "wrong") if asserted else ("held_correct" if right else "held_wrong")
++        out.append(rec)
++    return out
++
++
++def score_layer(groups: list[dict], exp: list[dict], no_record: set, unvalidated: set, labelled_pages: set) -> dict:
++    exp_by_page = collections.defaultdict(list)
++    for e in exp:
++        exp_by_page[e["page"]].append(e)
++    judged, association = [], collections.Counter()
++    for g in groups:
++        if g["page"] not in labelled_pages or g["page"] in unvalidated:
++            for f in g["facts"]:
++                judged.append({"field": f["field"], "value": f["value"], "state": f["state"], "how": "unscored_page",
++                               "outcome": "unscored_page", "page": g["page"], "reader": g["reader"], "group": g["component"], "expected": None,
++                               **{k: f[k] for k in CARRIED if f.get(k)}})
++            association["unscored_page"] += 1
++            continue
++        negative_page = g["page"] in no_record and not exp_by_page.get(g["page"])
++        e, how = associate_group(g, exp_by_page, exp)
++        if negative_page and how not in ("cross_page", "target_cross_page"):
++            # a no-record page: only a copy of the document's own identity from another page associates (as .4 does);
++            # anything else asserted there is a false positive
++            e, how = None, "negative_page"
++        association[how] += 1
++        parts = [(g, e, how)]
++        if how in ("cross_page", "target_cross_page"):
++            # .10 (C4 A4 / A6): only identity facts cross pages; dependent facts are judged on their own page
++            ident = [f for f in g["facts"] if f["field"] in ("identity", "referenced_identity")]
++            deps = [f for f in g["facts"] if f["field"] not in ("identity", "referenced_identity")]
++            here = exp_by_page.get(g["page"], [])
++            if negative_page:
++                e_dep, how_dep = None, "negative_page"
++            elif len(here) == 1 and not g.get("unassigned_component"):
++                e_dep, how_dep = here[0], "own_page_component"
++            else:
++                e_dep, how_dep = None, "unassociated"
++            parts = [(dict(g, facts=ident), e, how)] + ([(dict(g, facts=deps), e_dep, how_dep)] if deps else [])
++            if deps:
++                association["dependents_on_own_page"] += 1
++        for gg, ee, hh in parts:
++            for rec in judge_group(gg, ee, hh, hh == "negative_page"):
++                rec.update(page=gg["page"], reader=gg["reader"], group=gg["component"], layer=gg["layer"],
++                           expected=ee["_id"] if ee is not None else None)
++                judged.append(rec)
++    # precision over distinct asserted facts: (component-or-group, field, normalised value)
++    distinct: dict = {}
++    for r in judged:
++        if r["state"] not in ASSERTED or r["field"] not in FIELDS or r["outcome"] in ("unscored_page", "not_scored"):
++            continue
++        anchor = f"exp:{r['expected']}" if r["expected"] is not None else f"page:{r['page']}:{r['group']}"
++        key = (anchor, r["field"], _norm(r["field"], r["value"]))
++        distinct.setdefault(key, []).append(r)
++    precision = collections.defaultdict(collections.Counter)
++    by_state = collections.defaultdict(collections.Counter)
++    for (anchor, field, _v), rs in distinct.items():
++        precision[field][rs[0]["outcome"]] += 1
++        precision[field]["redundant"] += len(rs) - 1
++        # the strongest state any copy of this distinct fact carries: an automatic acceptance outranks an observation
++        state = "accepted" if any(r["state"] in ACCEPTANCE for r in rs) else "observed"
++        by_state[f"{field}:{state}"][rs[0]["outcome"]] += 1
++    # recovery per truth component and field
++    recovery = collections.defaultdict(collections.Counter)
++    per_component = []
++    for e in exp:
++        mine = [r for r in judged if r["expected"] == e["_id"]]
++        entry = {"page": e["page"], "expected": {k: e.get(k) for k in ("component", "reference", "printed_revision", "decision")}, "fields": {}}
++        for field in FIELDS:
++            tstate, _ = _truth(e, field)
++            rs = [r for r in mine if r["field"] == field]
++            outs = {r["outcome"] for r in rs}
++            if tstate == "unscorable":
++                s = "unscorable"
++            elif tstate == "negative":
++                s = "fp" if "fp" in outs else "tn"
++            elif tstate == "conflict":
++                s = "accepted_on_conflict" if "accepted_on_conflict" in outs else "conflict_held" if "conflict_held" in outs else "conflict_missing"
++            else:
++                s = ("recovered_mixed" if "wrong" in outs else "recovered_clean") if "correct" in outs else \
++                    "wrong_only" if "wrong" in outs else "held_only" if "held_correct" in outs else "missed"
++            entry["fields"][field] = s
++            recovery[field][s] += 1
++        per_component.append(entry)
++    # critical: a wrong automatic acceptance (register value / AI-validated). A wrong deterministic *observation* is
++    # raw evidence that is wrong -- counted apart (`observed_errors`), never hidden, never called an acceptance.
++    critical = [r for r in judged if r["state"] in ACCEPTANCE and r["field"] in FIELDS and r["outcome"] in CRITICAL_OUTCOMES]
++    observed_errors = [r for r in judged if r["state"] == "observed" and r["field"] in FIELDS and r["outcome"] in CRITICAL_OUTCOMES]
++    return {"judged": judged, "association": dict(association), "precision": {f: dict(c) for f, c in precision.items()},
++            "precision_by_state": {k: dict(c) for k, c in by_state.items()},
++            "recovery": {f: dict(c) for f, c in recovery.items()}, "components": per_component, "critical": critical,
++            "observed_errors": observed_errors}
++
++
++# --- the evaluation --------------------------------------------------------------------------------------------------
++
++
++def register_view(rows: dict) -> dict:
++    """The rows as the register builders see them: a record the application holds as pending evidence (an incomplete
++    / uncertain reference, `extracted.pending_evidence`, review 07) keys no business row, so it is no register
++    emission. Rows read before that guard carry no such list and are scored as they were."""
++    out = {}
++    for key, row in rows.items():
++        ex = (row or {}).get("extracted") or {}
++        pending = ex.get("pending_evidence") or []
++        if not pending:
++            out[key] = row
++            continue
++        held = {int(str(p["key"]).rsplit(":r", 1)[1]) for p in pending if ":r" in str(p.get("key"))}
++        out[key] = {**row, "extracted": {**ex, "records": [r for i, r in enumerate(ex.get("records") or []) if i not in held]}}
++    return out
++
++
++def evaluate(labels: dict, page_labels: dict | None, rows: dict, corrections: list[dict] | None = None,
++             ai_context: dict | None = None) -> dict:
++    """Register layer as .4 over the register view (pending evidence withheld); raw / evidence / ai layers fact by fact."""
++    base = ev4.evaluate(labels, page_labels, register_view(rows), corrections)
++    rows = {k.replace("\\", "/"): v for k, v in rows.items()}
++    plabels = {k.replace("\\", "/"): v for k, v in ((page_labels or {}).get("documents") or {}).items()}
++    fixes = collections.defaultdict(list)
++    for c in corrections or ():
++        fixes[c["doc_suffix"]].append(c)
++    by_doc = {d["doc"]: d for d in base["documents"]}
++    docs = []
++    for doc in labels["documents"]:
++        key = doc["doc"].replace("\\", "/")
++        lab = dict(doc["labels"])
++        for suffix, items in fixes.items():
++            if key.endswith(suffix):
++                for c in items:
++                    lab[c["field"]] = c["new"]
++        doc = {**doc, "labels": lab}
++        row = rows.get(key)
++        exp, no_record, unvalidated, page_labelled = ev4.expected_records(doc, plabels.get(key))
++        pages_with_components = {e["page"] for e in exp}
++        labelled_pages = pages_with_components | no_record if page_labelled else {1}
++        raw = record_groups(row) + observation_groups(row)
++        ai = ai_groups(row, ai_context, key)
++        ai_state = ai_envelope(row, ai_context, key)[1]
++        entry = dict(by_doc[key])
++        entry["ai_evidence_state"] = ai_state
++        entry.pop("raw", None)
++        entry.pop("evidence", None)
++        entry["layers"] = {name: score_layer(groups, exp, no_record, unvalidated, labelled_pages)
++                           for name, groups in (("raw", raw), ("evidence", raw + ai), ("ai", ai))}
++        docs.append(entry)
++    t = totals(docs, base["totals"])
++    t["ai_evidence_states"] = dict(collections.Counter(d["ai_evidence_state"] for d in docs))
++    return {"evaluator": EVALUATOR_VERSION, "register_evaluator": ev4.EVALUATOR_VERSION, "ai_context": ai_context and
++            {k: (sorted(v) if isinstance(v, set) else v) for k, v in ai_context.items()}, "documents": docs, "totals": t}
++
++
++def layer_rates(precision: collections.Counter, recovery: collections.Counter) -> dict:
++    correct, wrong, fp = precision["correct"], precision["wrong"] + precision["wrong_unassociated"], precision["fp"]
++    aoc = precision["accepted_on_conflict"]
++    asserted = correct + wrong + fp + aoc
++    rec_ok = recovery["recovered_clean"] + recovery["recovered_mixed"]
++    readable = rec_ok + recovery["wrong_only"] + recovery["held_only"] + recovery["missed"]
++    return {"precision_counts": dict(precision), "recovery_counts": dict(recovery),
++            "asserted_distinct": asserted, "readable": readable,
++            "accepted_precision": round(correct / asserted, 4) if asserted else None,
++            "recovery": round(rec_ok / readable, 4) if readable else None,
++            "clean_recovery": round(recovery["recovered_clean"] / readable, 4) if readable else None,
++            "evidence_recovery_incl_held": round((rec_ok + recovery["held_only"]) / readable, 4) if readable else None}
++
++
++def totals(docs: list[dict], register_totals: dict) -> dict:
++    layers = {}
++    for name in ("raw", "evidence", "ai"):
++        precision = collections.defaultdict(collections.Counter)
++        recovery = collections.defaultdict(collections.Counter)
++        association, critical, observed = collections.Counter(), [], []
++        by_state = collections.defaultdict(collections.Counter)
++        for d in docs:
++            L = d["layers"][name]
++            for k, c in L.get("precision_by_state", {}).items():
++                by_state[k].update(c)
++            observed += [{"doc": d["doc"], **{k: r.get(k) for k in ("page", "field", "value", "state", "outcome", "truth", "how", "reader", "group")}}
++                         for r in L.get("observed_errors", [])]
++            for f, c in L["precision"].items():
++                precision[f].update(c)
++            for f, c in L["recovery"].items():
++                recovery[f].update(c)
++            association.update(L["association"])
++            critical += [{"doc": d["doc"], **{k: r.get(k) for k in ("page", "field", "value", "state", "outcome", "truth", "how", "reader", "group")}}
++                         for r in L["critical"]]
++        layers[name] = {"fields": {f: layer_rates(precision[f], recovery[f]) for f in FIELDS}, "association": dict(association),
++                        "critical": critical, "observed_errors": observed,
++                        "precision_by_state": {k: dict(c) for k, c in sorted(by_state.items())}}
++    introduced = [c for c in layers["evidence"]["critical"] if str(c.get("reader") or "").startswith("ai:")]
++    return {"register": register_totals, "raw": layers["raw"], "evidence": layers["evidence"], "ai": layers["ai"],
++            "introduced_ai_errors": introduced}
++
++
++def main(argv=None) -> int:
++    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
++    ap.add_argument("--labels", required=True)
++    ap.add_argument("--page-labels")
++    ap.add_argument("--rows", required=True)
++    ap.add_argument("--out", required=True)
++    args = ap.parse_args(argv)
++    labels = json.loads(Path(args.labels).read_text(encoding="utf-8-sig"))
++    page_labels = json.loads(Path(args.page_labels).read_text(encoding="utf-8-sig")) if args.page_labels else None
++    rows = json.loads(Path(args.rows).read_text(encoding="utf-8-sig"))
++    result = evaluate(labels, page_labels, rows, (page_labels or {}).get("page1_corrections"))
++    Path(args.out).write_text(json.dumps(result, indent=1, default=str, ensure_ascii=False), encoding="utf-8")
++    t = result["totals"]
++    print(json.dumps({"register_critical": len(t["register"]["critical"]),
++                      **{name: {"critical": len(t[name]["critical"]),
++                                **{f: {k: v[k] for k in ("asserted_distinct", "accepted_precision", "recovery", "readable")}
++                                   for f, v in t[name]["fields"].items()}} for name in ("raw", "evidence", "ai")},
++                      "introduced_ai_errors": len(t["introduced_ai_errors"])}, indent=1))
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/backend/tests/_r29.py b/backend/tests/_r29.py
+new file mode 100644
+index 0000000..764c4b7
+--- /dev/null
++++ b/backend/tests/_r29.py
+@@ -0,0 +1,151 @@
++"""Shared helpers for the Review 29 tests: explicit switch sets (every switch named, none implied), identities computed
++by a fresh interpreter, synthetic pages built from structure (no stored document, no expected string copied from a
++label file). No model, no network."""
++from __future__ import annotations
++
++import functools
++import io
++import json
++import os
++import subprocess
++import sys
++
++import pymupdf
++import pytest
++from PIL import Image, ImageDraw
++
++from app.ai import evidence_reader as er
++
++from .test_ai_pilot_r19 import _font
++
++BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++BASE_ENV = {"AI_EVIDENCE_GUARD": "1", "AI_EVIDENCE_SUPPORT": "v2", "AI_EVIDENCE_SCHEDULING": "required_first", "AI_EVIDENCE_DEADLINE": "1"}
++NEW = {"ig": "AI_EVIDENCE_IDGUARD", "ca": "AI_EVIDENCE_ADJUDICATE", "dr": "AI_EVIDENCE_DECISION_REGION", "pa": "AI_EVIDENCE_ASSOC"}
++
++
++@functools.lru_cache(maxsize=None)
++def _identities(env_items: tuple) -> tuple:
++    base = {k: v for k, v in os.environ.items() if not k.startswith("AI_EVIDENCE_")}
++    code = "import json; from app.ai import evidence_reader as er; print(json.dumps([er.READER_VERSION, er.EVIDENCE_POLICY_VERSION, er.PROMPTS]))"
++    out = subprocess.run([sys.executable, "-c", code], cwd=BACKEND, env={**base, "AI_ENABLED": "false", **dict(env_items)}, capture_output=True, text=True)
++    if out.returncode:
++        raise RuntimeError(out.stderr.strip().splitlines()[-1])
++    return tuple(json.loads(out.stdout.strip().splitlines()[-1]))
++
++
++def identities(env: dict) -> tuple:
++    return _identities(tuple(sorted(env.items())))
++
++
++def env_for(*, roi=False, x=False, ig=False, ca=False, dr=False, pa=False) -> dict:
++    env = dict(BASE_ENV)
++    if roi:
++        env["AI_EVIDENCE_ROI"] = "1"
++    if x:
++        env["AI_EVIDENCE_TARGETED"] = "1"
++    for name, on in (("ig", ig), ("ca", ca), ("dr", dr), ("pa", pa)):
++        if on:
++            env[NEW[name]] = "1"
++    return env
++
++
++def configure(monkeypatch, **switches) -> tuple:
++    """Set every reader switch explicitly (the R21 pattern) and the identities a fresh process derives for that set."""
++    env = env_for(**switches)
++    reader, policy, prompts = identities(env)
++    for k, v in (("GUARD_ENABLED", True), ("SUPPORT_V2", True), ("REQUIRED_FIRST", True), ("DEADLINE_ENABLED", True), ("EFFICIENT_ENABLED", False),
++                 ("ROI_ENABLED", bool(switches.get("roi"))), ("TARGETED_ENABLED", bool(switches.get("x"))),
++                 ("IDGUARD_ENABLED", bool(switches.get("ig"))), ("ADJUDICATE_ENABLED", bool(switches.get("ca"))),
++                 ("DECISION_REGION_ENABLED", bool(switches.get("dr"))), ("ASSOC_ENABLED", bool(switches.get("pa"))),
++                 ("READER_VERSION", reader), ("EVIDENCE_POLICY_VERSION", policy)):
++        monkeypatch.setattr(er, k, v)
++    monkeypatch.setattr(er, "PROMPTS", dict(prompts))
++    return reader, policy
++
++
++def text_page(lines, *, width=595, height=842, rotation=0, doc=None):
++    """A page with a text layer; lines: (x_frac, y_frac, text, fontsize) in DISPLAYED coordinates."""
++    doc = doc or pymupdf.open()
++    page = doc.new_page(width=width, height=height)
++    if rotation:
++        page.set_rotation(rotation)
++    W, H = page.rect.width, page.rect.height
++    for x, y, t, size in lines:
++        p = pymupdf.Point(W * x, H * y) * page.derotation_matrix
++        page.insert_text(p, t, fontsize=size, rotate=rotation)
++    return doc
++
++
++def png(lines, size=(640, 180), font=30):
++    img = Image.new("RGB", size, "white")
++    d = ImageDraw.Draw(img)
++    d.rectangle([2, 2, size[0] - 3, size[1] - 3], outline="black", width=3)
++    for i, t in enumerate(lines):
++        d.text((14, 12 + i * (font + 10)), t, fill="black", font=_font(font))
++    buf = io.BytesIO()
++    img.save(buf, "PNG")
++    return buf.getvalue()
++
++
++def scan_with_stamp(stamp_lines, *, rotation=0, at=(0.62, 0.08)):
++    """A wholly scanned A1-sized sheet (no text layer) with a raster consultant stamp at `at` (displayed fractions),
++    outside the title-block zone's bottom strip."""
++    W, H = 2384, 1684
++    img = Image.new("RGB", (W, H), "white")
++    d = ImageDraw.Draw(img)
++    for i, t in enumerate(["PROJECT EXAMPLE", "DWG NO. QQ-77-01", "REV 01"]):
++        d.text((int(W * 0.80), int(H * 0.86) + i * 34), t, fill="black", font=_font(26))
++    stamp = Image.open(io.BytesIO(png(stamp_lines)))
++    img.paste(stamp, (int(W * at[0]), int(H * at[1])))
++    buf = io.BytesIO()
++    img.save(buf, "PNG")
++    doc = pymupdf.open()
++    page = doc.new_page(width=W, height=H)
++    page.insert_image(page.rect, stream=buf.getvalue())
++    if rotation:
++        page.set_rotation(rotation)
++    return doc
++
++
++def norm_region(page, literal, *, pad=3):
++    """The literal's displayed rectangle as 0..1000 of the page image (what a reader of the whole page would give)."""
++    r = page.search_for(literal)[0] * page.rotation_matrix
++    w, h = page.rect.width, page.rect.height
++    return [max(0, int(r.x0 / w * 1000) - pad), max(0, int(r.y0 / h * 1000) - pad), min(1000, int(r.x1 / w * 1000) + pad), min(1000, int(r.y1 / h * 1000) + pad)]
++
++
++def frac_region(x0, y0, x1, y1):
++    return [int(x0 * 1000), int(y0 * 1000), int(x1 * 1000), int(y1 * 1000)]
++
++
++def discovery(**kw) -> dict:
++    base = {"page_kind": "other", "own_identity": "", "own_identity_label": "", "own_identity_region": [], "own_revision": "", "own_revision_label": "",
++            "own_revision_region": [], "decision_options_printed": [], "decision_marked_option": "", "decision_mark_type": "none",
++            "decision_actor": "unknown", "decision_region": [], "other_numbers": [], "notes": ""}
++    return {**base, **kw}
++
++
++def value_read(value, label="", legible=True):
++    return {"label_text": label, "value": value, "legible": legible, "other_values_in_crop": []}
++
++
++def context_read(value, label, role, region=(0, 0, 1000, 1000), legible=True):
++    return {"value": value, "printed_label": label, "role": role, "region": list(region), "legible": legible}
++
++
++def decision_read(marked, options, *, mark="stamp", actor="consultant", legible=True):
++    return {"options_printed": list(options), "marked_option": marked, "mark_type": mark, "actor": actor, "legible": legible}
++
++
++@pytest.fixture(autouse=False)
++def no_submittal_reader(monkeypatch):
++    from app.ai import submittal_reader
++    monkeypatch.setattr(submittal_reader, "available", lambda project, provider=None: None)
++
++
++def envelope_obs(stage, ai, *, field=None, page=None, component="own", raw=False):
++    """The observations the evaluator would see: the merged envelope for the stage's context, through evidence_for."""
++    got = er.evidence_for(ai, sha256=stage.sha, profile="default", variant="EV1")
++    assert got["state"] == "current", got
++    return [o for o in got["envelope"]["observations"] if (field is None or o.get("field") == field)
++            and (page is None or int(o.get("page") or 1) == page) and (component is None or o.get("component") == component)]
+diff --git a/backend/tests/test_r29_adjudication.py b/backend/tests/test_r29_adjudication.py
+new file mode 100644
+index 0000000..4f4c391
+--- /dev/null
++++ b/backend/tests/test_r29_adjudication.py
+@@ -0,0 +1,166 @@
++"""Review 29 C2 -- conflict adjudication (CA) under the written evidence-ordering contract. Synthetic fixtures built from
++STRUCTURE (a form number vs a referenced drawing under a reference label; a truncated first read vs a source-bound full
++number; two own-labelled numbering systems), with literals invented here -- never the stored documents' strings.
++Order / recency invariance, the deterministic reading, revision E5, and the reader path end to end. No model."""
++import itertools
++
++import pytest
++
++from app.ai import evidence_reader as er
++
++from ._keyed_provider import KeyedProvider
++from ._r29 import configure, context_read, discovery, envelope_obs, no_submittal_reader, norm_region, text_page, value_read  # noqa: F401
++from .test_ai_pilot_r19 import Stage
++
++
++@pytest.fixture(autouse=True)
++def _ready(no_submittal_reader):
++    yield
++
++
++def st_of(readings, texts, *, det=None, ctx_texts=None):
++    by = {"discovery": texts, "blind_small": texts, "blind_standard": texts}
++    if ctx_texts is not None:
++        by["blind_context"] = ctx_texts
++    return {"readings": readings, "texts": texts, "texts_by_source": by, "det": det}
++
++
++FORM_TEXT = [("text", "Submittal No. 42   Rev 00\nDwg. Ref. AB-12-345\nProject Code 777")]
++
++
++def form_readings():
++    return [{"source": "discovery", "value": "42", "legible": True, "label": "Submittal No."},
++            {"source": "blind_small", "value": "AB-12-345", "legible": True, "label": "Dwg. Ref."},
++            {"source": "blind_context", "value": "42", "legible": True, "label": "Submittal No.", "role": "own_identity"}]
++
++
++FORM_DISC = {"other_numbers": [{"role": "referenced_drawing", "literal": "AB-12-345"}, {"role": "project_or_contract", "literal": "777"}]}
++
++
++def test_d04_shape_the_own_form_number_resolves_over_a_referenced_drawing():
++    res = er.adjudicate_conflict("identity", st_of(form_readings(), FORM_TEXT, ctx_texts=FORM_TEXT), FORM_DISC)
++    assert res["record"]["resolved"] and res["verdict"]["value"] == "42" and res["verdict"]["state"] == "validated"
++    assert res["record"]["disqualified"] == {"AB-12-345": "role_contradiction"}
++    assert {s["value"] for s in res["verdict"]["superseded"]} == {"AB-12-345"}
++
++
++@pytest.mark.parametrize("order", list(itertools.permutations(range(3))))
++def test_order_and_recency_never_matter(order):
++    rs = [form_readings()[i] for i in order]
++    res = er.adjudicate_conflict("identity", st_of(rs, FORM_TEXT, ctx_texts=FORM_TEXT), FORM_DISC)
++    assert res["verdict"]["value"] == "42"
++
++
++def test_without_a_second_independent_support_nothing_resolves():
++    rs = [r for r in form_readings() if r["source"] != "blind_context"]          # the form number read by discovery only
++    res = er.adjudicate_conflict("identity", st_of(rs, FORM_TEXT), FORM_DISC)
++    assert not res["record"]["resolved"] and "verdict" not in res, "discovery + source text, no blind reading: E4 not met"
++
++
++def test_a_reference_reading_is_not_disqualified_without_evidence():
++    rs = form_readings()
++    rs[1] = {**rs[1], "label": "Drawing No."}                   # the competing reading now carries an OWN label
++    res = er.adjudicate_conflict("identity", st_of(rs, FORM_TEXT, ctx_texts=FORM_TEXT), {"other_numbers": []})
++    assert not res["record"]["resolved"], "a source-bound competitor with an own label keeps the conflict held"
++
++
++TRUNC_TEXT = [("text", "PROJECT NO. ZZ9\nDOCUMENT NO. XY1_ABC_DEF_MAIN\nREVISION NO. K")]
++
++
++def test_d12_shape_a_truncated_first_read_is_not_source_bound():
++    rs = [{"source": "discovery", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_small", "value": "XY1_ABC_DEF", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_context", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO.", "role": "own_identity"}]
++    res = er.adjudicate_conflict("identity", st_of(rs, TRUNC_TEXT, ctx_texts=TRUNC_TEXT), {})
++    assert res["verdict"]["value"] == "XY1_ABC_DEF_MAIN" and res["record"]["disqualified"] == {"XY1_ABC_DEF": "not_source_bound"}
++
++
++def test_one_model_reading_never_wins_even_with_source_text():
++    """C2 revision 1: three different readings, the full number read once (targeted) and source-bound: E4 needs two
++    distinct model readings, so nothing resolves."""
++    rs = [{"source": "discovery", "value": "XY1_ABC_DE", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_small", "value": "XY1_ABC_DEF", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_context", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO.", "role": "own_identity"}]
++    res = er.adjudicate_conflict("identity", st_of(rs, TRUNC_TEXT, ctx_texts=TRUNC_TEXT), {})
++    assert not res["record"]["resolved"] and "verdict" not in res
++
++
++def test_split_text_regression_a_truncation_that_is_a_whole_token_is_never_validated():
++    """The offline-regression shape (D12 / D19 in the L1 replay under revision 0): the text layer breaks a long number,
++    so the truncated first blind read is a whole token in the source text and the full number read by discovery is not.
++    Revision 0 validated the truncation; revision 1 keeps the conflict held."""
++    split = [("text", "DOCUMENT NO. XY1_ABC_DEF  REVISION NO. K\nPROJECT NO. ZZ9\n_MAIN")]
++    rs = [{"source": "discovery", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_small", "value": "XY1_ABC_DEF", "legible": True, "label": "DOCUMENT NO."}]
++    assert er.region_support("identity", "XY1_ABC_DEF", split)[0] == "text" and er.region_support("identity", "XY1_ABC_DEF_MAIN", split)[0] is None
++    res = er.adjudicate_conflict("identity", st_of(rs, split), {})
++    assert not res["record"]["resolved"] and "verdict" not in res
++
++
++def test_no_source_text_means_no_resolution():
++    rs = [{"source": "discovery", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_small", "value": "XY1_ABC_DEF", "legible": True, "label": "DOCUMENT NO."},
++          {"source": "blind_context", "value": "XY1_ABC_DEF_MAIN", "legible": True, "label": "DOCUMENT NO.", "role": "own_identity"}]
++    res = er.adjudicate_conflict("identity", st_of(rs, [], ctx_texts=[]), {})
++    assert not res["record"]["resolved"], "a scan with no text / OCR: the truncation cannot be shown, both stay held"
++
++
++TWO_SYSTEMS = [("text", "CLIENT DRAWING No. PQR-M-ZZ-ARC-1122\nMUNICIPALITY DRAWING No. ARC-1122\nREVISION E")]
++
++
++def test_d06_shape_two_own_labelled_numbering_systems_stay_held():
++    rs = [{"source": "discovery", "value": "PQR-M-ZZ-ARC-1122", "legible": True, "label": "CLIENT DRAWING No."},
++          {"source": "blind_small", "value": "ARC-1122", "legible": True, "label": "MUNICIPALITY DRAWING No."},
++          {"source": "blind_context", "value": "PQR-M-ZZ-ARC-1122", "legible": True, "label": "CLIENT DRAWING No.", "role": "own_identity"}]
++    res = er.adjudicate_conflict("identity", st_of(rs, TWO_SYSTEMS, ctx_texts=TWO_SYSTEMS), {"other_numbers": [{"role": "other", "literal": "ARC-1122"}]})
++    assert not res["record"]["resolved"] and "verdict" not in res, "the longer value containing the shorter is never a reason"
++    lit = res["record"]["literals"]
++    assert lit["ARC-1122"]["source_bound_anywhere"] and not lit["ARC-1122"]["role_contradiction"], "the competitor is printed and own-labelled"
++
++
++def test_a_supported_deterministic_reading_that_disagrees_blocks_resolution():
++    res = er.adjudicate_conflict("identity", st_of(form_readings(), FORM_TEXT + [("text", "Form 99")], det="99", ctx_texts=FORM_TEXT + [("text", "Form 99")]),
++                                 FORM_DISC)
++    assert not res["record"]["resolved"], "the deterministic literal is source-bound and carries no role contradiction"
++
++
++def test_a_revision_conflict_needs_an_identity_established_on_the_page():
++    texts = [("text", "REV C   Revision history B A")]
++    rs = [{"source": "discovery", "value": "C", "legible": True, "label": "REV"},
++          {"source": "blind_small", "value": "B", "legible": True, "label": "Revision history"},
++          {"source": "blind_context", "value": "C", "legible": True, "label": "REV", "role": "own_revision"}]
++    assert not er.adjudicate_conflict("revision", st_of(rs, texts, ctx_texts=texts), {}, identity_established=False)["record"]["resolved"]
++    res = er.adjudicate_conflict("revision", st_of(rs, texts, ctx_texts=texts), {"other_numbers": [{"role": "revision_history", "literal": "B"}]},
++                                 identity_established=True)
++    assert res["record"]["resolved"] and res["verdict"]["value"] == "C"
++
++
++def _form_doc():
++    return text_page([(0.10, 0.20, "Submittal No. 42", 11), (0.40, 0.20, "Rev 00", 11), (0.10, 0.24, "Dwg. Ref. AB-12-345", 11),
++                      (0.10, 0.28, "Project Code 777", 11), (0.10, 0.60, "Consultant review: A Approved  B Approved with comments", 10)])
++
++
++@pytest.mark.parametrize("ca", [False, True])
++def test_d04_shape_through_the_reader(db_session, tmp_path, monkeypatch, ca):
++    """L3 switch set (+CA): discovery reads the form number, the primary blind read lands on the referenced drawing
++    under its reference label, the targeted read reads the form number again. CA off: the conflict is held (the frozen
++    defect). CA on: the form number is validated under C2, the drawing reference kept as superseded evidence."""
++    configure(monkeypatch, x=True, ca=ca)
++    doc = _form_doc()
++    page = doc[0]
++    s = Stage(db_session, tmp_path, doc, f"d04{int(ca)}")
++    answers = {("discover_page", None, "small"): discovery(page_kind="submittal_form", own_identity="42", own_identity_label="Submittal No.",
++                                                           own_identity_region=norm_region(page, "Submittal No. 42"), own_revision="00",
++                                                           own_revision_label="Rev", own_revision_region=norm_region(page, "Rev 00"),
++                                                           other_numbers=[{"role": "referenced_drawing", "literal": "AB-12-345"}]),
++               ("read_identity", "identity", "small"): value_read("AB-12-345", "Dwg. Ref."),
++               ("read_revision", "revision", "small"): value_read("00", "Rev"),
++               ("read_field_context", "identity", "small"): context_read("42", "Submittal No.", "own_identity", region=norm_region(page, "Submittal No. 42", pad=20))}
++    ai = s.run(KeyedProvider(answers))
++    ident = envelope_obs(s, ai, field="identity")[0]
++    if not ca:
++        assert ident["state"] == "conflict" and ident["value"] == "AB-12-345"
++    else:
++        assert ident["state"] == "validated" and ident["value"] == "42"
++        assert ident["adjudication"]["resolved"] and [x["value"] for x in ident["superseded"]] == ["AB-12-345"]
++        assert {r["value"] for r in ident["readings"]} == {"42", "AB-12-345"}, "every reading is kept on the observation"
+diff --git a/backend/tests/test_r29_association.py b/backend/tests/test_r29_association.py
+new file mode 100644
+index 0000000..dfa7381
+--- /dev/null
++++ b/backend/tests/test_r29_association.py
+@@ -0,0 +1,128 @@
++"""Review 29 C4 -- the page / target association invariant: the reader side (PA) and evaluator .10. The D26 shape: a
++two-page specification whose continuation page repeats the section header and carries a running footer revision. The
++same page-2 revision observation must score the same whatever the page-2 identity emission was (.10); .9 reproduces the
++alternation. A dependent fact with no target established on its own page is held, keeps its reason and candidates,
++survives merge / evidence_for, and earns no recovery credit. No model."""
++import pytest
++
++from app.ai import evidence_reader as er
++from scripts import m2_eval5 as EV9
++from scripts import m2_eval6 as EV10
++
++from ._keyed_provider import KeyedProvider
++from ._r29 import configure, discovery, no_submittal_reader, norm_region, text_page, value_read  # noqa: F401
++from .test_ai_pilot_r19 import Stage
++
++CTX = {"variant": "EV1", "profile": "default"}
++
++
++@pytest.fixture(autouse=True)
++def _ready(no_submittal_reader):
++    yield
++
++
++def _spec():
++    doc = text_page([(0.30, 0.25, "SECTION 11 22 33", 14), (0.30, 0.30, "VIDEO SURVEILLANCE", 12), (0.70, 0.95, "Rev. 00 - Jan 2020", 8), (0.86, 0.95, "Page 1 of 9", 8)])
++    # the same running footer on both pages, with its page counter (identical crops would be one cached answer)
++    text_page([(0.30, 0.21, "SECTION 11 22 33", 10), (0.10, 0.40, "TABLE OF CONTENTS", 10), (0.70, 0.95, "Rev. 00 - Jan 2020", 8),
++               (0.86, 0.95, "Page 2 of 9", 8)], doc=doc)
++    return doc
++
++
++def _answers(doc, *, p2_identity_legible, p2_revision_blind):
++    p1, p2 = doc[0], doc[1]
++    d1 = discovery(page_kind="cover_sheet", own_identity="11 22 33", own_identity_label="SECTION", own_identity_region=norm_region(p1, "SECTION 11 22 33"),
++                   own_revision="00", own_revision_label="Rev.", own_revision_region=norm_region(p1, "Rev. 00 - Jan 2020"))
++    d2 = discovery(page_kind="other", own_identity="11 22 33", own_identity_label="SECTION", own_identity_region=norm_region(p2, "SECTION 11 22 33"),
++                   own_revision="Rev. 00 - Jan 2020", own_revision_label="Rev.", own_revision_region=norm_region(p2, "Rev. 00 - Jan 2020"))
++    return {("discover_page", None, "small"): [d1, d2],
++            ("read_identity", "identity", "small"): [value_read("11 22 33", "SECTION"),
++                                                     value_read("11 22 33", "SECTION") if p2_identity_legible else value_read("", "", legible=False)],
++            ("read_revision", "revision", "small"): [value_read("00", "Rev."), value_read(p2_revision_blind, "Rev.")]}
++
++
++def _score(ev, row, doc_key):
++    exp = [{"_id": 0, "page": 1, "component": "page1", "reference": "11 22 33", "printed_revision": "00", "decision": "n/a", "confidence": "high"}]
++    groups = ev.ai_groups(row, CTX, doc_key)
++    layer = ev.score_layer(groups, exp, {2}, set(), {1, 2})
++    return {(j["page"], j["field"]): (j["state"], j["outcome"]) for j in layer["judged"] if str(j.get("group", "")).find(":own") >= 0 or j["group"].endswith("own")}
++
++
++def _read(db, tmp_path, monkeypatch, name, *, pa, p2_identity_legible, p2_revision_blind):
++    configure(monkeypatch, pa=pa)
++    doc = _spec()
++    s = Stage(db, tmp_path, doc, name)
++    ai = s.run(KeyedProvider(_answers(doc, p2_identity_legible=p2_identity_legible, p2_revision_blind=p2_revision_blind)))
++    row = {"sha256": s.sha, "extracted": {"ai_evidence": ai, "profile": "default"}}
++    return s, ai, row
++
++
++def test_d26_shape_evaluator_9_alternates_and_10_does_not(db_session, tmp_path, monkeypatch):
++    """Two emissions of page 2, both with the footer revision HELD (discovery 'Rev. 00 - Jan 2020' vs blind '00'): in one
++    the page-2 header identity is held (illegible blind read), in the other it is validated. .9 judges the same held
++    revision held_on_negative vs held_correct (inherited through the identity's cross-page copy); .10 judges it
++    held_on_negative both times. The identity copy itself is credited by both (the .6 rule kept)."""
++    _s, _ai, held_id = _read(db_session, tmp_path, monkeypatch, "d26a", pa=False, p2_identity_legible=False, p2_revision_blind="00")
++    _s, _ai, valid_id = _read(db_session, tmp_path, monkeypatch, "d26b", pa=False, p2_identity_legible=True, p2_revision_blind="00")
++    r9 = (_score(EV9, held_id, "d"), _score(EV9, valid_id, "d"))
++    r10 = (_score(EV10, held_id, "d"), _score(EV10, valid_id, "d"))
++    assert r9[0][(2, "revision")][0] == "held" and r9[1][(2, "revision")][0] == "held", "the same held revision observation in both"
++    assert r9[0][(2, "revision")][1] == "held_on_negative" and r9[1][(2, "revision")][1] == "held_correct", "the .9 alternation reproduces"
++    assert r10[0][(2, "revision")][1] == r10[1][(2, "revision")][1] == "held_on_negative", ".10: the same observation, the same outcome"
++    assert r9[1][(2, "identity")][1] == r10[1][(2, "identity")][1] == "correct", "a copy of the document identity on a continuation page"
++
++
++def test_d26_shape_a_targetless_footer_revision_is_held_by_pa_not_a_false_positive(db_session, tmp_path, monkeypatch):
++    """The L2 emission: page-2 identity illegible (held), footer revision validated with no target. PA off: .9 and .10
++    both judge it a false positive (it is asserted). PA on: the reader holds it (no target established on page 2), with
++    its reason and candidates; it survives merge / evidence_for; both evaluators judge it held_on_negative."""
++    _s, _ai, off = _read(db_session, tmp_path, monkeypatch, "d26c", pa=False, p2_identity_legible=False, p2_revision_blind="Rev. 00 - Jan 2020")
++    assert _score(EV9, off, "d")[(2, "revision")][1] == "fp" and _score(EV10, off, "d")[(2, "revision")][1] == "fp"
++    s, ai, on = _read(db_session, tmp_path, monkeypatch, "d26d", pa=True, p2_identity_legible=False, p2_revision_blind="Rev. 00 - Jan 2020")
++    got = er.evidence_for(ai, sha256=s.sha, profile="default", variant="EV1")
++    rev2 = [o for o in got["envelope"]["observations"] if o.get("page") == 2 and o.get("field") == "revision" and o.get("component") == "own"][0]
++    assert rev2["state"] == "candidate" and "target" not in rev2
++    assert rev2["association"]["status"] == "held:no_page_target" and rev2["association"]["candidates"] == ["11 22 33"]
++    assert rev2["page_binding"] == {"page": 2, "basis": None, "rule": er.ASSOC_VERSION}
++    assert _score(EV9, on, "d")[(2, "revision")][1] == "held_on_negative" and _score(EV10, on, "d")[(2, "revision")][1] == "held_on_negative"
++
++
++def test_pa_binds_a_page_one_revision_only_to_page_one_and_keeps_its_credit(db_session, tmp_path, monkeypatch):
++    s, ai, on = _read(db_session, tmp_path, monkeypatch, "d26e", pa=True, p2_identity_legible=True, p2_revision_blind="00")
++    got = er.evidence_for(ai, sha256=s.sha, profile="default", variant="EV1")
++    rev1 = [o for o in got["envelope"]["observations"] if o.get("page") == 1 and o.get("field") == "revision" and o.get("component") == "own"][0]
++    assert rev1["target"] == "11 22 33" and rev1["page_binding"]["basis"] == "own_page_identity" and rev1["state"] == "validated"
++    assert _score(EV10, on, "d")[(1, "revision")][1] == "correct"
++
++
++def test_a_page_with_no_established_identity_holds_its_revision_and_earns_no_credit(db_session, tmp_path, monkeypatch):
++    """Page 1's identity read is illegible: PA holds page 1's validated revision (no target on its page). On a labelled
++    page with one component .10 judges it held_unassociated: no recovery credit, no false positive."""
++    configure(monkeypatch, pa=True)
++    doc = _spec()
++    s = Stage(db_session, tmp_path, doc, "noid")
++    answers = _answers(doc, p2_identity_legible=False, p2_revision_blind="00")
++    answers[("read_identity", "identity", "small")] = [value_read("", "", legible=False), value_read("", "", legible=False)]
++    ai = s.run(KeyedProvider(answers))
++    row = {"sha256": s.sha, "extracted": {"ai_evidence": ai, "profile": "default"}}
++    out = _score(EV10, row, "d")
++    assert out[(1, "revision")] == ("held", "held_unassociated")
++
++
++def test_association_of_never_reattaches_a_pa_hold():
++    o = {"field": "revision", "component": "own", "page": 2, "value": "00", "state": "candidate",
++         "association": {"status": "held:no_page_target", "candidates": ["X"], "rule": er.ASSOC_VERSION}, "page_binding": {"page": 2, "basis": None}}
++    assert er.association_of(o, {"own:identity": {"observations": [{"value": "X", "state": "validated"}]}}, None, None)["status"] == "held:no_page_target"
++    legacy = {k: v for k, v in o.items() if k != "page_binding"}       # not written by PA: the accepted rules apply as before
++    assert er.association_of(legacy, {}, None, None)["status"] != "held:no_page_target"
++
++
++def test_evaluator_10_changes_nothing_but_cross_page_dependents():
++    exp = [{"_id": 0, "page": 1, "component": "page1", "reference": "QX-1", "printed_revision": "A", "decision": "n/a", "confidence": "high"}]
++    g_same = {"page": 1, "layer": "ai", "kind": "ai_evidence", "reader": "ai:EV1", "component": "ai:1:own", "facts": [
++        {"field": "identity", "value": "QX-1", "state": "validated"}, {"field": "revision", "value": "A", "state": "validated"}], "provenance": {}}
++    assert EV9.score_layer([g_same], exp, set(), set(), {1})["judged"] == EV10.score_layer([g_same], exp, set(), set(), {1})["judged"]
++    g_cross = {**g_same, "page": 2, "component": "ai:2:own"}
++    j9 = {r["field"]: r["outcome"] for r in EV9.score_layer([g_cross], exp, {2}, set(), {1, 2})["judged"]}
++    j10 = {r["field"]: r["outcome"] for r in EV10.score_layer([g_cross], exp, {2}, set(), {1, 2})["judged"]}
++    assert j9 == {"identity": "correct", "revision": "correct"} and j10 == {"identity": "correct", "revision": "fp"}
+diff --git a/backend/tests/test_r29_decision_region.py b/backend/tests/test_r29_decision_region.py
+new file mode 100644
+index 0000000..8c4e5a1
+--- /dev/null
++++ b/backend/tests/test_r29_decision_region.py
+@@ -0,0 +1,191 @@
++"""Review 29 C3 -- the bounded decision-region path (DR). D16 / D18-shaped scans (a consultant stamp outside the title
++block, discovery reporting an unclear mark and no option words), a D17-shaped handwritten code read twice through the
++stamp's printed legend, rotations, a no-decision control, a receipt stamp, conflicting marks, the locator for located
++(ROI) discovery and for scans, and the request bound. Unknown is never absent. No model."""
++import pymupdf
++import pytest
++
++from app.ai import evidence_reader as er
++
++from ._keyed_provider import KeyedProvider, failure
++from ._r29 import (configure, decision_read, discovery, envelope_obs, frac_region, no_submittal_reader, norm_region, scan_with_stamp,  # noqa: F401
++                   text_page, value_read)
++from .test_ai_pilot_r19 import Stage
++
++LEGEND = ["A - APPROVED", "B - APPROVED AS NOTED, RESUBMIT", "C - REVISE AND RESUBMIT", "D - REJECTED"]
++
++
++@pytest.fixture(autouse=True)
++def _ready(no_submittal_reader, monkeypatch):
++    # the processing run's cached OCR text of a scan (as test_ai_pilot_r19 does): what makes a scanned page a reading candidate
++    monkeypatch.setattr(er, "cached_ocr", lambda sha, i: "DWG NO. QQ-77-01 REV 01 PROJECT EXAMPLE")
++    yield
++
++
++def _scan_answers(*, decision_region=True, mark="unclear", identity=True):
++    disc = discovery(page_kind="drawing_sheet",
++                     own_identity="QQ-77-01" if identity else "", own_identity_label="DWG NO." if identity else "",
++                     own_identity_region=frac_region(0.79, 0.88, 0.95, 0.91) if identity else [],
++                     decision_mark_type=mark, decision_actor="consultant" if mark != "none" else "unknown",
++                     decision_region=frac_region(0.61, 0.07, 0.92, 0.20) if decision_region else [])
++    return {("discover_page", None, "small"): disc, ("read_identity", "identity", "small"): value_read("QQ-77-01", "DWG NO.")}
++
++
++def _run(db, tmp_path, doc, name, answers):
++    s = Stage(db, tmp_path, doc, name)
++    p = KeyedProvider(answers)
++    ai = s.run(p)
++    att = ai["attempts"][-1]
++    assert not att.get("error") and att.get("outcome") != "failed", (att.get("error"), att.get("outcome"))
++    return s, p, ai, s.page_fields(ai)
++
++
++@pytest.mark.parametrize("dr", [False, True])
++def test_d16_shape_a_stamp_discovery_saw_but_could_not_name_is_read_not_absent(db_session, tmp_path, monkeypatch, dr):
++    configure(monkeypatch, dr=dr)
++    answers = {**_scan_answers(), ("read_decision", "decision", "small"): [decision_read("B", LEGEND), decision_read("B", LEGEND)]}
++    s, p, ai, f = _run(db_session, tmp_path, scan_with_stamp(["CONSULTANT REVIEW", "B - APPROVED AS NOTED", "STAMP"]), f"d16{int(dr)}", answers)
++    if not dr:
++        assert f["own:decision"] == er.ABSENT_BY_DISCOVERY and ("read_decision", "decision", "small") not in p.requests, \
++            "the frozen defect: a decision signal without option words became a verified absence"
++        return
++    assert f["own:decision"] == er.COMPLETED and p.requests.count(("read_decision", "decision", "small")) == 2
++    d = envelope_obs(s, ai, field="decision")[0]
++    assert d["value"] == "ANN" and d["decision_path"]["candidates"][0]["origin"] == "discovery" and d["decision_path"]["candidates"][0]["wide"] == "ok"
++    assert {r["source"] for r in d["readings"]} >= {"blind_small", "blind_wide"}
++
++
++def test_d18_shape_a_failed_read_is_a_failure_never_absence(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    answers = {**_scan_answers(), ("read_decision", "decision", "small"): failure("timeout")}
++    _s, _p, _ai, f = _run(db_session, tmp_path, scan_with_stamp(["APPROVED AS NOTED"]), "d18", answers)
++    assert f["own:decision"].startswith("failed") and f["own:decision"] != er.ABSENT_BY_DISCOVERY
++
++
++def test_a_signal_without_region_goes_to_the_locator_and_a_failed_locator_is_unknown(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    answers = {**_scan_answers(decision_region=False), ("locate_decision", None, "small"): failure("timeout")}
++    _s, p, _ai, f = _run(db_session, tmp_path, scan_with_stamp(["APPROVED"]), "noreg", answers)
++    assert ("locate_decision", None, "small") in p.requests and f["own:decision"] == er.DECISION_UNKNOWN
++
++
++def test_a_scan_with_no_signal_is_unknown_after_an_empty_locator_never_absent(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    answers = {**_scan_answers(decision_region=False, mark="none"), ("locate_decision", None, "small"): {"stamps": [], "notes": ""}}
++    _s, p, _ai, f = _run(db_session, tmp_path, scan_with_stamp(["(faint stamp)"]), "nosig", answers)
++    assert p.requests.count(("locate_decision", None, "small")) == 1 and f["own:decision"] == er.DECISION_UNKNOWN
++
++
++def test_no_decision_control_a_fully_texted_letter_keeps_its_verified_absence(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    lines = [(0.1, 0.06 + 0.035 * i, f"Paragraph {i} of an ordinary covering letter about delivery dates and site access.", 10) for i in range(26)]
++    lines.append((0.1, 0.04, "Ref No. LTR-0091", 10))
++    lines.append((0.72, 0.04, "Date: 12 March 2024", 10))      # a letter runs margin to margin
++    doc = text_page(lines)
++    page = doc[0]
++    answers = {("discover_page", None, "small"): discovery(page_kind="letter", own_identity="LTR-0091", own_identity_label="Ref No.",
++                                                           own_identity_region=norm_region(page, "LTR-0091")),
++               ("read_identity", "identity", "small"): value_read("LTR-0091", "Ref No.")}
++    _s, p, _ai, f = _run(db_session, tmp_path, doc, "letter", answers)
++    assert f["own:decision"] == er.ABSENT_BY_DISCOVERY and ("locate_decision", None, "small") not in p.requests
++
++
++def _form_with_status(rotation=0):
++    return text_page([(0.1, 0.10, "DOCUMENT NO. QX-500", 11), (0.6, 0.10, "REV 02", 11),
++                      (0.1, 0.55, "CONSULTANT STATUS: A - APPROVED   B - APPROVED AS NOTED   C - REVISE AND RESUBMIT", 9),
++                      *[(0.1, 0.15 + 0.012 * i, f"Item {i} cable tray support bracket detail and fixing schedule", 8) for i in range(30)]],
++                     rotation=rotation)
++
++
++@pytest.mark.parametrize("rotation", [0, 90, 270])
++def test_d17_shape_a_written_code_read_twice_through_the_printed_legend_is_validated(db_session, tmp_path, monkeypatch, rotation):
++    """Text-layer form (any rotation): discovery reports no decision; the decision vocabulary in the text layer gives the
++    candidate region (display coordinates); two blind reads agree on the written code; the legend maps it; the actor is
++    the consultant; the page's identity is validated on the page."""
++    configure(monkeypatch, dr=True, pa=True)
++    doc = _form_with_status(rotation)
++    page = doc[0]
++    regions = er._decision_vocab_regions(page, [])
++    assert regions and all(0 <= v for v in regions[0]) and regions[0][2] <= page.rect.width + 1 and regions[0][3] <= page.rect.height + 1
++    answers = {("discover_page", None, "small"): discovery(page_kind="review_form", own_identity="QX-500", own_identity_label="DOCUMENT NO.",
++                                                           own_identity_region=norm_region(page, "DOCUMENT NO. QX-500"), own_revision="02",
++                                                           own_revision_label="REV", own_revision_region=norm_region(page, "REV 02")),
++               ("read_identity", "identity", "small"): value_read("QX-500", "DOCUMENT NO."), ("read_revision", "revision", "small"): value_read("02", "REV"),
++               ("read_decision", "decision", "small"): [decision_read("B", LEGEND, mark="handwriting"), decision_read("B", LEGEND, mark="handwriting")]}
++    s, _p, ai, f = _run(db_session, tmp_path, doc, f"d17r{rotation}", answers)
++    d = envelope_obs(s, ai, field="decision")[0]
++    assert f["own:decision"] == er.COMPLETED and d["value"] == "ANN" and d["state"] == "validated" and d["target"] == "QX-500"
++    assert d["decision_path"]["candidates"][0]["origin"] == "text"
++
++
++def test_a_single_read_is_not_corroborated(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    doc = _form_with_status()
++    page = doc[0]
++    answers = {("discover_page", None, "small"): discovery(own_identity="QX-500", own_identity_label="DOCUMENT NO.", own_identity_region=norm_region(page, "DOCUMENT NO. QX-500")),
++               ("read_identity", "identity", "small"): value_read("QX-500", "DOCUMENT NO."),
++               ("read_decision", "decision", "small"): [decision_read("B", LEGEND), failure("timeout")]}
++    s, _p, ai, _f = _run(db_session, tmp_path, doc, "single", answers)
++    d = envelope_obs(s, ai, field="decision")[0]
++    assert d["state"] == "candidate" and any("not corroborated" in r for r in d["reasons"])
++
++
++def test_conflicting_marks_are_a_conflict_and_a_receipt_stamp_is_no_decision(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    doc = _form_with_status()
++    page = doc[0]
++    base = {("discover_page", None, "small"): discovery(own_identity="QX-500", own_identity_label="DOCUMENT NO.", own_identity_region=norm_region(page, "DOCUMENT NO. QX-500")),
++            ("read_identity", "identity", "small"): value_read("QX-500", "DOCUMENT NO.")}
++    s, _p, ai, _f = _run(db_session, tmp_path, doc, "conflict", {**base, ("read_decision", "decision", "small"): [decision_read("B", LEGEND), decision_read("C", LEGEND)]})
++    assert envelope_obs(s, ai, field="decision")[0]["state"] == "conflict"
++    receipt = ["RECEIVED 12 MAR", "DOCUMENT CONTROL"]
++    s, _p, ai, _f = _run(db_session, tmp_path, _form_with_status(), "receipt",
++                         {**base, ("read_decision", "decision", "small"): [decision_read("RECEIVED", receipt), decision_read("RECEIVED", receipt)]})
++    assert envelope_obs(s, ai, field="decision")[0]["state"] == "not_a_decision"
++
++
++def test_located_discovery_gives_no_decision_and_the_locator_finds_the_stamp(db_session, tmp_path, monkeypatch):
++    """ROI on: the title-block discovery's decision outputs are ignored (C3.1); the whole-page locator finds the stamp."""
++    configure(monkeypatch, roi=True, dr=True)
++    doc = text_page([(0.80, 0.86, "DRAWING NO QQ-77-02", 9), (0.80, 0.88, "REV 03", 9), (0.80, 0.90, "SCALE 1:100", 9),
++                     (0.80, 0.92, "DRAWN AB", 9), (0.80, 0.94, "CHECKED CD", 9)], width=2384, height=1684)
++    page = doc[0]
++    stamp_region = frac_region(0.05, 0.05, 0.30, 0.15)
++    answers = {("discover", None, "small"): discovery(page_kind="drawing_sheet", own_identity="QQ-77-02", own_identity_label="DRAWING NO",
++                                                      own_identity_region=[100, 100, 600, 300], decision_options_printed=LEGEND,
++                                                      decision_marked_option="A", decision_mark_type="tick", decision_actor="consultant",
++                                                      decision_region=[100, 400, 600, 600]),
++               ("read_identity", "identity", "small"): value_read("QQ-77-02", "DRAWING NO"),
++               ("locate_decision", None, "small"): {"stamps": [{"region": stamp_region, "options_printed": LEGEND, "marked_option": "B",
++                                                                "mark_type": "stamp", "actor": "consultant", "legible": True}], "notes": ""},
++               ("read_decision", "decision", "small"): [decision_read("B", LEGEND), decision_read("B", LEGEND)]}
++    s, p, ai, f = _run(db_session, tmp_path, doc, "roi", answers)
++    assert p.requests.count(("locate_decision", None, "small")) == 1 and f["own:decision"] == er.COMPLETED
++    d = envelope_obs(s, ai, field="decision")[0]
++    assert d["value"] == "ANN" and d["decision_path"]["candidates"][0]["origin"] == "locator" and not d["decision_path"]["whole_page_discovery"]
++    assert not any(r.get("source") == "discovery" for r in d["readings"]), "the located discovery's decision reading is not used"
++
++
++def test_the_decision_path_is_bounded(db_session, tmp_path, monkeypatch):
++    configure(monkeypatch, dr=True)
++    answers = {**_scan_answers(decision_region=False, mark="none"),
++               ("locate_decision", None, "small"): {"stamps": [{"region": frac_region(0.05, 0.05, 0.25, 0.15), "options_printed": LEGEND, "marked_option": "B",
++                                                                "mark_type": "stamp", "actor": "consultant", "legible": True},
++                                                               {"region": frac_region(0.40, 0.05, 0.60, 0.15), "options_printed": LEGEND, "marked_option": "B",
++                                                                "mark_type": "stamp", "actor": "consultant", "legible": True},
++                                                               {"region": frac_region(0.70, 0.05, 0.90, 0.15), "options_printed": LEGEND, "marked_option": "B",
++                                                                "mark_type": "stamp", "actor": "consultant", "legible": True}], "notes": ""},
++               ("read_decision", "decision", "small"): [decision_read("B", LEGEND)] * 6}
++    _s, p, _ai, _f = _run(db_session, tmp_path, scan_with_stamp(["B"]), "bound", answers)
++    assert p.requests.count(("locate_decision", None, "small")) == 1
++    assert p.requests.count(("read_decision", "decision", "small")) <= er.DECISION_READS_PER_PAGE
++
++
++def test_decision_region_off_is_the_accepted_decision_block(monkeypatch):
++    """DR off: validate_decision is unchanged and _decision_region_read is never reached (identity check)."""
++    monkeypatch.setattr(er, "DECISION_REGION_ENABLED", False)
++    rs = [{"source": "discovery", "options_printed": LEGEND, "marked_option": "B", "mark_type": "tick", "actor": "consultant", "legible": True},
++          {"source": "blind_small", "options_printed": LEGEND, "marked_option": "B", "mark_type": "tick", "actor": "consultant", "legible": True}]
++    assert er.validate_decision(rs, "QX-500")["state"] == "validated"
++    assert er.validate_decision_dr(rs, "QX-500")["state"] == "validated"
++    assert er.validate_decision_dr(rs[:1], "QX-500")["state"] == "candidate", "one source is never corroboration"
+diff --git a/backend/tests/test_r29_identity_guard.py b/backend/tests/test_r29_identity_guard.py
+new file mode 100644
+index 0000000..d5dede0
+--- /dev/null
++++ b/backend/tests/test_r29_identity_guard.py
+@@ -0,0 +1,136 @@
++"""Review 29 C1 -- the identity role guard (IG). Structural classes from the literal, the readings' printed labels, the
++field region's geometry and discovery's roles; positive controls for short / unusual real identifiers; the D03 shape end
++to end (a datasheet whose legible section heading was validated as its identity). No model, no network."""
++import pytest
++
++from app.ai import evidence_reader as er
++
++from ._keyed_provider import KeyedProvider
++from ._r29 import configure, context_read, discovery, envelope_obs, no_submittal_reader, norm_region, text_page, value_read  # noqa: F401
++from .test_ai_pilot_r19 import Stage
++
++POSITIVE = ["17", "3561", "0284", "101", "A1", "X", "FLS-107", "SK-01", "E-101", "EP-23091/AS/MS-EM /101", "TES/1343/NTH-MID-3B/SD/TEL-04",
++            "BH2031_DIB_AMB_ID_MAIN", "DCH-M-BSB-DWG-ZZ-ARC-41034", "MEC/SD/PR56/0284", "ID-01 / ED-01", "DJ-295-P-EN-SFD-01-ASY-0001-00",
++            "MEC/SD/PR56/0284 Rev. 00", "QQ-77-01"]
++NEGATIVE = {"2.4 Accessories": "structural_heading", "1.1 Summary": "structural_heading", "PART 1 GENERAL": "structural_heading",
++            "3.2.1 Installation": "structural_heading", "Page 2 of 52": "structural_heading", "Detector and Base": "structural_heading",
++            "ELECTRICAL": "generic_label", "GENERAL NOTES": "generic_label", "FIRE ALARM LAYOUT": "generic_label",
++            "Rev. 0": "revision_token", "REV 01": "revision_token", "R1": "revision_token"}
++
++
++@pytest.mark.parametrize("value", POSITIVE)
++def test_positive_controls_are_not_structural(value):
++    assert er.identity_structure(value, []) is None
++
++
++def test_a_section_number_read_under_its_label_is_not_a_heading_but_the_section_title_is():
++    assert er.identity_structure("SECTION 28 20 00", ["SECTION"]) is None
++    assert er.identity_structure("28 20 00", ["SECTION"]) is None
++    assert er.identity_structure("Section 28 20 00 Video Surveillance System", ["Section"]) == "structural_heading"
++    assert er.identity_structure("Section 28 20 00 Video Surveillance System", []) == "structural_heading"
++
++
++@pytest.mark.parametrize("value,cls", sorted(NEGATIVE.items()))
++def test_negative_controls_are_classified(value, cls):
++    assert er.identity_structure(value, []) == cls
++
++
++def _a4(lines):
++    return text_page(lines)[0]
++
++
++def test_running_footer_on_an_a4_page_is_guarded_but_not_on_a_drawing_sheet():
++    page = _a4([(0.1, 0.96, "CODE-ABC-9", 8), (0.1, 0.30, "Document No. CODE-ABC-9", 10)])
++    footer = tuple(page.search_for("CODE-ABC-9")[0])
++    readings = [{"source": "discovery", "value": "CODE-ABC-9", "legible": True, "label": ""}]
++    g = er.identity_role_guard("CODE-ABC-9", readings, {}, [("text", "CODE-ABC-9")], page=page, region=footer)
++    assert g and g["guard"] == "identity_role:running_header_footer"
++    sheet = text_page([(0.80, 0.96, "QQ-77-01", 8)], width=2384, height=1684)[0]
++    box = tuple(sheet.search_for("QQ-77-01")[0])
++    assert er.identity_role_guard("QQ-77-01", readings, {}, [("text", "QQ-77-01")], page=sheet, region=box) is None, \
++        "a drawing sheet's title block sits at the bottom edge: no footer class there"
++
++
++def test_a_form_number_in_the_top_band_is_lifted_by_two_own_labels_and_source_text():
++    page = _a4([(0.1, 0.04, "DOCUMENT NO. FRM-0042", 9)])
++    region = tuple(page.search_for("FRM-0042")[0])
++    texts = [("text", "DOCUMENT NO. FRM-0042")]
++    one = [{"source": "discovery", "value": "FRM-0042", "legible": True, "label": "DOCUMENT NO."}]
++    assert er.identity_role_guard("FRM-0042", one, {}, texts, page=page, region=region)["guard"] == "identity_role:running_header_footer"
++    two = one + [{"source": "blind_small", "value": "FRM-0042", "legible": True, "label": "DOCUMENT NO."}]
++    assert er.identity_role_guard("FRM-0042", two, {}, texts, page=page, region=region) is None
++    assert er.identity_role_guard("FRM-0042", two, {}, [], page=page, region=region) is not None, "no source text: no lift"
++
++
++def test_reference_role_from_a_reference_label_or_discovery_role_or_targeted_role():
++    texts = [("text", "Dwg. Ref. AB-12-345")]
++    by_label = [{"source": "blind_small", "value": "AB-12-345", "legible": True, "label": "Dwg. Ref."}]
++    assert er.identity_role_guard("AB-12-345", by_label, {}, texts)["guard"] == "identity_role:reference_role"
++    by_discovery = [{"source": "blind_small", "value": "AB-12-345", "legible": True, "label": ""}]
++    disc = {"other_numbers": [{"role": "referenced_drawing", "literal": "AB-12-345"}]}
++    assert er.identity_role_guard("AB-12-345", by_discovery, disc, texts)["guard"] == "identity_role:reference_role"
++    by_target = [{"source": "blind_context", "value": "AB-12-345", "legible": True, "label": "", "role": "referenced_identity"}]
++    assert er.identity_role_guard("AB-12-345", by_target, {}, texts)["guard"] == "identity_role:reference_role"
++    own = [{"source": "blind_small", "value": "AB-12-345", "legible": True, "label": "Drawing No."},
++           {"source": "discovery", "value": "AB-12-345", "legible": True, "label": "Drawing No."}]
++    assert er.identity_role_guard("AB-12-345", own, {}, texts) is None
++
++
++def test_a_heading_is_never_lifted_by_a_model_role_claim():
++    texts = [("text", "2.4 Accessories")]
++    claims = [{"source": "discovery", "value": "2.4 Accessories", "legible": True, "label": ""},
++              {"source": "blind_context", "value": "2.4 Accessories", "legible": True, "label": "", "role": "own_identity"}]
++    assert er.identity_role_guard("2.4 Accessories", claims, {}, texts)["guard"] == "identity_role:structural_heading"
++
++
++def test_a_bare_revision_token_is_never_lifted():
++    texts = [("text", "DRAWING NO. REV 01")]
++    rs = [{"source": s, "value": "REV 01", "legible": True, "label": "DRAWING NO."} for s in ("discovery", "blind_small")]
++    assert er.identity_role_guard("REV 01", rs, {}, texts)["guard"] == "identity_role:revision_token"
++
++
++def test_guard_off_is_validate_value_itself(monkeypatch):
++    monkeypatch.setattr(er, "IDGUARD_ENABLED", False)
++    readings = [{"source": "discovery", "value": "2.4 Accessories", "legible": True}, {"source": "blind_small", "value": "2.4 Accessories", "legible": True}]
++    texts = [("text", "2.4 Accessories")]
++    assert er._value_verdict("identity", readings, texts, None) == er.validate_value("identity", readings, texts, None)
++    monkeypatch.setattr(er, "IDGUARD_ENABLED", True)
++    v = er._value_verdict("identity", readings, texts, None)
++    assert v["state"] == "candidate" and v["guard"] == "identity_role:structural_heading" and v["value"] == "2.4 Accessories"
++
++
++@pytest.fixture(autouse=True)
++def _ready(no_submittal_reader):
++    yield
++
++
++def _datasheet():
++    return text_page([(0.40, 0.10, "2.4 Accessories", 14), (0.1, 0.30, "CAP320 addressable sensor", 10),
++                      (0.1, 0.35, "CAPT340 sensor", 10), (0.1, 0.96, "SGTEXT February 2015", 7)])
++
++
++@pytest.mark.parametrize("ig", [False, True])
++def test_d03_shape_heading_on_a_datasheet_is_held_with_its_region_and_never_read_again(db_session, tmp_path, monkeypatch, ig):
++    """Whole-page discovery reports a section heading as the page's identity; the primary blind read is illegible; L3's
++    targeted read then claims the heading's role. IG off reproduces the defect (validated); IG on holds it before any
++    targeted read, keeps its value and region, and leaves the page with no established identity."""
++    configure(monkeypatch, x=True, ig=ig)
++    doc = _datasheet()
++    page = doc[0]
++    s = Stage(db_session, tmp_path, doc, f"d03{int(ig)}")
++    answers = {("discover_page", None, "small"): discovery(page_kind="datasheet", own_identity="2.4 Accessories", own_identity_label="",
++                                                           own_identity_region=norm_region(page, "2.4 Accessories"),
++                                                           other_numbers=[{"role": "listed_item", "literal": "CAP320"}]),
++               ("read_identity", "identity", "small"): value_read("", "", legible=False),
++               ("read_field_context", "identity", "small"): context_read("2.4 Accessories", "", "own_identity", region=(0, 0, 1000, 1000))}
++    p = KeyedProvider(answers)
++    ai = s.run(p)
++    obs = envelope_obs(s, ai, field="identity")
++    assert len(obs) == 1 and obs[0]["value"] == "2.4 Accessories" and obs[0]["region"]
++    if not ig:
++        assert obs[0]["state"] == "validated", "the frozen defect reproduces with IG off"
++        assert ("read_field_context", "identity", "small") in p.requests
++    else:
++        assert obs[0]["state"] == "candidate" and "identity role guard" in " ".join(obs[0]["reasons"])
++        assert ("read_field_context", "identity", "small") not in p.requests, "a guarded identity gets no targeted read"
++        assert s.page_fields(ai).get("own:identity:targeted") is None
+diff --git a/backend/tests/test_r29_persistence.py b/backend/tests/test_r29_persistence.py
+new file mode 100644
+index 0000000..cc2a2ab
+--- /dev/null
++++ b/backend/tests/test_r29_persistence.py
+@@ -0,0 +1,136 @@
++"""Review 29 -- feature isolation, identities, persistence, cache, retry, profile and repeated processing. Each switch has
++its own identity (bound into every cache key and attempt); none implies another; CA / DR / PA refuse to start without
++the explicit required-first scheduling; flags off are the accepted identities. No model."""
++import pytest
++
++from app.ai import evidence_reader as er
++from app.models import ProjectDocument, ResultCache
++
++from ._keyed_provider import KeyedProvider, failure
++from ._r29 import (configure, decision_read, discovery, env_for, identities, no_submittal_reader, norm_region,  # noqa: F401
++                   text_page, value_read)
++from .test_ai_pilot_r19 import Stage
++
++ACCEPTED = ("evidence-reader-2026-09-29.7", "evidence-policy-2026-09-29.4")
++L3 = ("evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
++      "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2")
++SUFFIX = {"ig": ("", "+identity-role-guard-2026-10-02.1"), "ca": ("", "+conflict-adjudication-2026-10-02.2"),
++          "dr": ("+decision-region-2026-10-02.1", "+decision-region-2026-10-02.1"), "pa": ("", "+page-association-2026-10-02.1")}
++
++
++@pytest.fixture(autouse=True)
++def _ready(no_submittal_reader):
++    yield
++
++
++def test_flags_off_identities_are_the_accepted_ones_and_the_frozen_arms_are_unchanged():
++    assert identities({})[:2] == ACCEPTED
++    assert identities(env_for(x=True))[:2] == L3, "the frozen L3 identity is byte-for-byte unchanged"
++    assert "locate_decision" not in identities(env_for(x=True))[2]
++
++
++@pytest.mark.parametrize("flag", ["ig", "ca", "dr", "pa"])
++def test_each_switch_adds_only_its_own_suffix(flag):
++    reader, policy, prompts = identities(env_for(x=True, **{flag: True}))
++    assert reader == L3[0] + SUFFIX[flag][0] and policy == L3[1] + SUFFIX[flag][1]
++    assert ("locate_decision" in prompts) is (flag == "dr")
++
++
++def test_combined_identity_is_the_four_suffixes_in_order():
++    reader, policy, _ = identities(env_for(x=True, ig=True, ca=True, dr=True, pa=True))
++    assert reader == L3[0] + "+decision-region-2026-10-02.1"
++    assert policy == L3[1] + "+identity-role-guard-2026-10-02.1+conflict-adjudication-2026-10-02.2+decision-region-2026-10-02.1+page-association-2026-10-02.1"
++
++
++@pytest.mark.parametrize("var", ["AI_EVIDENCE_ADJUDICATE", "AI_EVIDENCE_DECISION_REGION", "AI_EVIDENCE_ASSOC"])
++def test_no_scheduling_is_ever_implied(var):
++    with pytest.raises(RuntimeError, match="requires AI_EVIDENCE_SCHEDULING=required_first"):
++        identities({var: "1"})
++    with pytest.raises(RuntimeError, match="requires AI_EVIDENCE_SCHEDULING=required_first"):
++        identities({var: "1", "AI_EVIDENCE_GUARD": "1", "AI_EVIDENCE_TARGETED": "1"}), "not even through T's legacy implication"
++    assert identities({"AI_EVIDENCE_IDGUARD": "1"})[1] == ACCEPTED[1] + "+identity-role-guard-2026-10-02.1", "IG needs no scheduling"
++
++
++def _doc():
++    return text_page([(0.10, 0.20, "Submittal No. 42", 11), (0.40, 0.20, "Rev 00", 11), (0.10, 0.24, "Dwg. Ref. AB-12-345", 11),
++                      (0.10, 0.55, "CONSULTANT STATUS: A - APPROVED   B - APPROVED AS NOTED", 9),
++                      *[(0.1, 0.30 + 0.012 * i, f"Item {i} cable tray support bracket detail and fixing schedule text", 8) for i in range(30)]])
++
++
++LEGEND = ["A - APPROVED", "B - APPROVED AS NOTED"]
++
++
++def _answers(page, *, decision=None):
++    return {("discover_page", None, "small"): discovery(page_kind="submittal_form", own_identity="42", own_identity_label="Submittal No.",
++                                                        own_identity_region=norm_region(page, "Submittal No. 42"), own_revision="00",
++                                                        own_revision_label="Rev", own_revision_region=norm_region(page, "Rev 00")),
++            ("read_identity", "identity", "small"): value_read("42", "Submittal No."), ("read_revision", "revision", "small"): value_read("00", "Rev"),
++            ("read_decision", "decision", "small"): decision if decision is not None else [decision_read("B", LEGEND), decision_read("B", LEGEND)]}
++
++
++def _run_keep_cache(s, provider):
++    row = s.db.get(ProjectDocument, s.id)
++    er.evidence_stage(s.db, s.project, [(row, s.path)], provider=provider, variant="EV1", profile="default")
++    s.db.commit()
++    s.db.expire_all()
++    return s.db.get(ProjectDocument, s.id).extracted["ai_evidence"]
++
++
++def test_configurations_never_share_answers_and_a_repeat_of_one_reuses_only_its_own(db_session, tmp_path, monkeypatch):
++    doc = _doc()
++    page = doc[0]
++    s = Stage(db_session, tmp_path, doc, "iso")
++    s.db.query(ResultCache).delete()
++    s.db.commit()
++    configure(monkeypatch, ig=True, dr=True)
++    p1 = KeyedProvider(_answers(page))
++    ai1 = _run_keep_cache(s, p1)
++    n = p1.calls
++    obs1 = er.evidence_for(ai1, sha256=s.sha, profile="default", variant="EV1")["envelope"]["observations"]
++    configure(monkeypatch, ig=True, dr=True)
++    p2 = KeyedProvider(_answers(page))
++    ai2 = _run_keep_cache(s, p2)
++    assert p2.calls == 0 and all(c["cache_hit"] for c in ai2["attempts"][-1]["calls"]), "repeated processing: its own answers, no request"
++    strip = lambda obs: [{k: v for k, v in o.items() if k != "provenance"} for o in obs]
++    assert strip(er.evidence_for(ai2, sha256=s.sha, profile="default", variant="EV1")["envelope"]["observations"]) == strip(obs1), "idempotent"
++    configure(monkeypatch, dr=True)
++    p3 = KeyedProvider(_answers(page))
++    ai3 = _run_keep_cache(s, p3)
++    assert p3.calls == n and not any(c["cache_hit"] for c in ai3["attempts"][-1]["calls"]), "another switch set never reuses IG+DR answers"
++    policies = [a["policy"] for a in ai3["attempts"]]
++    assert len(set(policies)) == 2 and policies[-1].endswith("+decision-region-2026-10-02.1") and "+identity-role-guard" in policies[0]
++
++
++def test_a_failed_decision_read_is_retried_and_the_last_good_evidence_kept(db_session, tmp_path, monkeypatch):
++    doc = _doc()
++    page = doc[0]
++    s = Stage(db_session, tmp_path, doc, "retry")
++    s.db.query(ResultCache).delete()
++    s.db.commit()
++    configure(monkeypatch, dr=True)
++    ai = _run_keep_cache(s, KeyedProvider(_answers(page, decision=failure("timeout"))))
++    assert s.page_fields(ai)["own:decision"].startswith("failed")
++    configure(monkeypatch, dr=True)
++    p = KeyedProvider(_answers(page))
++    ai = _run_keep_cache(s, p)
++    assert p.requests.count(("read_decision", "decision", "small")) == 2 and p.requests.count(("discover_page", None, "small")) == 0, \
++        "only the failed read is requested again; the discovery and value reads come from this switch set's own cache"
++    assert s.page_fields(ai)["own:decision"] == er.COMPLETED
++    dec = [o for o in er.evidence_for(ai, sha256=s.sha, profile="default", variant="EV1")["envelope"]["observations"] if o.get("field") == "decision"]
++    assert dec and dec[0]["value"] == "ANN"
++
++
++def test_profile_and_variant_keep_their_own_envelopes(db_session, tmp_path, monkeypatch):
++    doc = _doc()
++    page = doc[0]
++    s = Stage(db_session, tmp_path, doc, "profile")
++    configure(monkeypatch, ig=True)
++    _run_keep_cache(s, KeyedProvider(_answers(page)))
++    row = s.db.get(ProjectDocument, s.id)
++    er.evidence_stage(s.db, s.project, [(row, s.path)], provider=KeyedProvider(_answers(page)), variant="EV1", profile="strict")
++    s.db.commit()
++    s.db.expire_all()
++    ai = s.db.get(ProjectDocument, s.id).extracted["ai_evidence"]
++    assert set(ai["envelopes"]) == {"default|EV1", "strict|EV1"}
++    assert er.evidence_for(ai, sha256=s.sha, profile="default", variant="EV1")["state"] == "current"
++    assert er.evidence_for(ai, sha256=s.sha, profile="strict", variant="EV1")["state"] == "current"
+-- 
+2.55.0.windows.5
+

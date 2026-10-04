@@ -1,0 +1,198 @@
+{
+ "dimension": "D1",
+ "agent": {
+  "task_id": "ORCH-03.1/D1",
+  "label": "R33-D1",
+  "model_configured": "claude-opus-5-5",
+  "effort": "high",
+  "model_self_report": "Claude Opus 5.5 (claude-opus-5-5), per my system context; effort High as configured by the task. Fresh isolated subagent: not the drafter, not a label-review agent (R32REV-*), not the implementer (R32APPLY-*). No model or provider request, no network, no prediction, no state-changing git; package scripts were run only as copies in my scratchpad subfolder R33-D1."
+ },
+ "findings": [
+  {
+   "id": "D1-01",
+   "severity": "info",
+   "claim": "Preparation packet fresh-cohort-r32: evidence/EVIDENCE-MANIFEST.json hashes to 15c4114da23e3989b621fed0e43cf9519f9e82e075b972dc2d01f5583f82d0ed and lists 110 files; every listed file matches its sha256 and byte count; no listed file is missing.",
+   "verdict": "CONFIRMED",
+   "evidence": "scratchpad R33-D1/check1.py: manifest sha256 equal; listed 110; mismatches []; on disk 112; unlisted only evidence/EVIDENCE-MANIFEST.json (the manifest itself) and evidence/PACKAGE-CHECK.json (see D1-03). Named inputs recomputed equal: R32-LABELS-DRAFT-1.json ebd1e24d...a334, LABEL-CONVENTIONS-R32.md 5c09d4d2...e570 (and LABEL-CONVENTIONS-R32.sha256 records the same value), FROZEN-SELECTION.json bf71779a...5d21, SOURCE-MANIFEST.json 951e8697...e259, CROPS.jsonl b1760b64...d1ff, EVIDENCE-INDEX.json 0d0db4f8...08b8.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-02",
+   "severity": "info",
+   "claim": "Reviewed package fresh-cohort-r32-reviewed: evidence/EVIDENCE-MANIFEST.json hashes to 64c0366737a5567284c6b862e5addbb0091f7bf98066745f081407a8b3fe31c6 and lists 45 files, all matching sha256 and bytes; labels/R32-LABELS-REVIEWED-1.json is 00e53e8253adf86fc5cabbd1659576a2e728f4d0ef20b084f7aaba3157379779.",
+   "verdict": "CONFIRMED",
+   "evidence": "check1.py: listed 45, mismatches [], on disk 47, unlisted only evidence/EVIDENCE-MANIFEST.json and evidence/PACKAGE-CHECK.json. PACKAGE-CHECK.json reports ok with 18 of 18 checks ok (checked_at_utc 2026-10-03T06:32:34Z).",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-03",
+   "severity": "minor",
+   "claim": "evidence/PACKAGE-CHECK.json is not bound by any manifest in the packet, the reviewed package or review31, and its hash is not recorded in the response-ledger entries; the check reports could change without detection by the manifests.",
+   "verdict": "CONFIRMED",
+   "evidence": "Unlisted in all three manifests (check1.py). Current hashes: fresh-cohort-r32/evidence/PACKAGE-CHECK.json 6be077396b02f232822d0c38328fcf620771495ee52659e790def4f50b43739b; fresh-cohort-r32-reviewed/evidence/PACKAGE-CHECK.json 7ff3594bbf9956c7f95688ba77b06845ffd2ecc7ef1221d90bb24a04d3a63018; review31/evidence/PACKAGE-CHECK.json 301bb0518088f624bc39649675cfc626d99ddb1b6b88a9c95f7dc1b4d9a92b11. All three files were last modified before the 06:50Z cutoff and all report ok. The reviewed final response integrity block explicitly discloses the packet's PACKAGE-CHECK.json as unlisted by design.",
+   "required_action": "Record these three PACKAGE-CHECK.json hashes in the Review 33 record or the declaration bindings, or disclose that the check reports are unbound by design."
+  },
+  {
+   "id": "D1-04",
+   "severity": "info",
+   "claim": "The reviewed package's copies are byte-identical to the frozen originals: labels/R32-LABELS-DRAFT-1.json, the five packet-inputs files and all 23 files of the label review folder (review-r32-draft-1/); each COPY-MANIFEST.json agrees.",
+   "verdict": "CONFIRMED",
+   "evidence": "check1.py: draft_copy_identical true; packet_inputs_compare AUTHORIZATION-2026-10-02.md, EVIDENCE-INDEX.json, FROZEN-SELECTION.json, LABEL-CONVENTIONS-R32.md, SOURCE-MANIFEST.json all true; review_copy_compare mismatches [] over 23 source files; only extra file in the copy is COPY-MANIFEST.json (declared not part of the source). packet-inputs/COPY-MANIFEST.json and review-r32-draft-1/COPY-MANIFEST.json both all_equal true with source hashes matching recomputation.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-05",
+   "severity": "info",
+   "claim": "Label review folder M2-label-review-r32-draft-1 (23 files): REVIEWER-RESPONSE.final.json 920a21d6...4c5b, REVIEWER-RESPONSE.json 70f94632...3ff8, CRITIQUE.json ad6798dc...7eef, DISPOSITIONS.json e8828bec...30a7; RESPONSE.sha256 and RESPONSE.final.sha256 record exactly these hashes.",
+   "verdict": "CONFIRMED",
+   "evidence": "check1.py named-hash table all true; RESPONSE.sha256 content '70f94632884af028f31d66f76557807801cf00fcca37251a2ade25c9de3a3ff8 *REVIEWER-RESPONSE.json'; RESPONSE.final.sha256 content '920a21d63871d1618b36deb623e4121d31f3d52949d9c5617536aab7af9d4c5b *REVIEWER-RESPONSE.final.json'. File count 23.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-06",
+   "severity": "info",
+   "claim": "Staging C:/t/r2x/r32-stage is fully bound: 72 staged PDFs hash to SOURCE-MANIFEST staged_sha256 with source_sha256 == staged_sha256; 149 renders (PNG and .txt) match RENDERS.json and EVIDENCE-INDEX.json; 189 crops match CROPS.jsonl and EVIDENCE-INDEX.json; RENDERS.json source_manifest_sha256 binds SOURCE-MANIFEST.json.",
+   "verdict": "CONFIRMED",
+   "evidence": "check2.py: staged_checked 72, staged_bad [] (also size == bytes == selected_size, state staged, source_unchanged true, file name == pool id); files/ holds exactly 72 PDFs, none unlisted. RENDERS.json source_manifest_sha256 == 951e8697...e259. renders_checked 149, renders_bad [] (png_sha256, txt_sha256, staged hash and png_px vs actual PIL size); EVIDENCE-INDEX renders 149, all equal and same set as RENDERS.json, text_sha256 equal. CROPS.jsonl 189 lines, 189 unique, all present and hash-equal, staged hash equal; EVIDENCE-INDEX crops 189 equal to CROPS.jsonl; crops/ holds 189 files, none unbound. FROZEN-SELECTION pool (72) agrees with SOURCE-MANIFEST on ep, relative_path, size and modified time; SOURCE-MANIFEST selection_sha256 == bf71779a...5d21. Staging total 708 files = 72 + 447 + 189. Render sizes: long side 1800 on all 149; short side 1172 to 1391 (only 9 are exactly 1272x1800), each equal to its recorded png_px.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-07",
+   "severity": "minor",
+   "claim": "The 149 renders/F###-pN.words.json text-layer files in staging are not hash-bound by RENDERS.json, EVIDENCE-INDEX.json or any manifest (only png_sha256 and txt_sha256 are recorded).",
+   "verdict": "CONFIRMED",
+   "evidence": "check2.py renders_dir_unbound lists exactly the 149 *.words.json files and nothing else. render_r32.py writes them (get_text('words')) as locating aids; batch B7 lists one (F043-p1.words.json) among files it opened. They are not label evidence under the task rules, so no label depends on them.",
+   "required_action": "Disclose that words.json locating aids are unbound, or bind their hashes in a later evidence index; no relabelling needed."
+  },
+  {
+   "id": "D1-08",
+   "severity": "info",
+   "claim": "Every evidence path in the reviewed labels exists in staging and is bound: 1167 evidence / evidence_checked values resolve to 324 distinct bound images (144 renders, 180 crops), all re-hashed equal to EVIDENCE-INDEX.json; no reference to an unbound or missing image.",
+   "verdict": "CONFIRMED",
+   "evidence": "check2b.py: R32-LABELS-REVIEWED-1.json refs 1167 = 1145 exact path or name (including 'render F###-pN.png' and rotated -r90/-r270 crops) + 7 image names inside prose + 15 prose notes without any path (convention_rulings); unbound_or_bad [], dir_mismatch []. Full-text scan of the reviewed labels: 1163 image-name occurrences, 324 distinct, 0 unbound. Draft labels: 295 refs to 193 bound files, 0 unbound.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-09",
+   "severity": "info",
+   "claim": "Two review notes copied into the reviewed labels (F010 decision, F022 revision) cite reviewer scratch enlargements z_F010_box.png and z_F022_tb.png, and the final response lists further reviewer_working_images in the session scratchpad (r32rev-B1/B3/B7); these images are unbound derivatives. The evidence fields of those rows cite only bound renders and crops.",
+   "verdict": "CONFIRMED",
+   "evidence": "Regex scan of R32-LABELS-REVIEWED-1.json and REVIEWER-RESPONSE.final.json; each working image is declared 'batch reviewer working image (derivative of a bound render or crop; not evidence)'. The two cited files exist (os.path.exists only, not opened) under scratchpad/r32rev-B1/.",
+   "required_action": "None for integrity; disclose in Review 33 that these confirmations relied on unbound scratch derivatives of bound images."
+  },
+  {
+   "id": "D1-10",
+   "severity": "info",
+   "claim": "OneDrive originals unchanged by metadata: for all 72 pool files, os.stat size and mtime equal SOURCE-MANIFEST selected_size and selected_modified_utc (files not opened).",
+   "verdict": "CONFIRMED",
+   "evidence": "check5.py: path = long-path prefix + PROJECT-VERIFICATION results[ep].folder + relative_path; checked 72, ok 72, bad []; max absolute mtime delta 0.0 s (72 exact). PROJECT-VERIFICATION folders equal FROZEN-SELECTION project_folders for the six cohort projects (3563, 22349, 27331, 15744, 26687, 29255). Note: a first attempt failed to stat because a shell heredoc stripped the backslashes of the long-path prefix; corrected with chr(92), no file opened in either attempt.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-11",
+   "severity": "info",
+   "claim": "Frozen state holds: review31 manifest d5fe1649...c460 with 58 files all matching; candidate C:/t/iso/cand-r29 HEAD a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d clean; baseline C:/t/iso/frozen-r12 HEAD 3d5607d99fcebf08ac45f5df937ad615ecc16fb3 clean; AI ledger 483 entries / 17 scopes, newest entry 2026-10-01T18:17:43Z.",
+   "verdict": "CONFIRMED",
+   "evidence": "check1.py review31: listed 58, mismatches [], unlisted only EVIDENCE-MANIFEST.json and PACKAGE-CHECK.json; DRAFT-DECLARATION.v2.json 19720ad9...8b5d. git rev-parse HEAD / git status --porcelain: 0 lines each (only ignored __pycache__ under --ignored). Ledger via file:...?mode=ro, uri=True: entries 483, scopes 17, limit_amendments 0, sqlite_sequence 483, max(entries.at) 2026-10-01 18:17:43Z (scope m2-four-arm-final-2026-10-01-L4), newest scope created 2026-10-01 17:51:15Z. review31/dry-run/LABELS-NORMALISED.json was hashed only as part of the manifest; its rows were not parsed or displayed.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-12",
+   "severity": "info",
+   "claim": "The AI ledger's WAL shared-memory file r2x-ledger.sqlite-shm has mtime 2026-10-03T06:53:10Z, after the cutoff; this is the effect of read-only WAL connections (including this review's), not a content change.",
+   "verdict": "CONFIRMED",
+   "evidence": "os.stat: r2x-ledger.sqlite 110592 bytes mtime 2026-10-01T18:17:50Z; -wal 0 bytes mtime 2026-10-01T18:26:41Z; -shm 32768 bytes mtime 2026-10-03T06:53:10Z. Entry and scope counts unchanged (483/17). The ledger is outside the five trees of check (8).",
+   "required_action": "None; future checks should bind the main .sqlite file and counts, not the -shm mtime."
+  },
+  {
+   "id": "D1-13",
+   "severity": "info",
+   "claim": "M2-REVIEW-RESPONSE.md is append-only and its two r32 entries describe the packages consistently: first 156880 bytes hash 6e296c28...0d4, whole file f0a4fffa...c65b; the r32 entry is appended after a prefix that hashes to the claimed afddd562...; the reviewed-package entry's hashes and counts match the package.",
+   "verdict": "CONFIRMED",
+   "evidence": "sha256sum: whole file f0a4ffacba2c7765133475352e939a8149e119f7eb1efef73c2faec77774c65b (160093 bytes); head -c 156880 = 6e296c28160b138d140d6c6dd275e1cd41e0a19827b24136b76dbabbf33fa0d4; head -c 153812 = afddd562d2bb153c6092765de31022e12c66906b49b4f03507a0183179202ab4 (entry 1 heading at byte 153813, entry 2 heading at byte 156881). Entry 1 claims match: manifest 15c4114d (110 files), 72 staged, 149 renders, 189 crops, FROZEN-SELECTION bf71779a, pool 40/20/12 and 12 per project, SOURCE-MANIFEST 951e8697, conventions 5c09d4d2, draft ebd1e24d, projection 62/39/39 of 70 distinct (packet FIELD-POPULATION.json), two byte-identical pairs (F038=F052, F067=F070, recomputed). Entry 2 claims match: manifest 64c03667 (45 files), PACKAGE-CHECK 18/18 ok, reviewed labels 00e53e82, rulings 432/210/56, status counts 128/14/2, 123/20/1, 131/13, gate 57/38/38, excluded F069 identity and F019 revision, upper bound 57/39/38, 72/70/68 documents, aliases, ledger 483/17. Entry 1 calls the reviewer 'owner-delegated Codex reviewer'; AUTHORITY-REGISTER A-03 explicitly amends that naming.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-14",
+   "severity": "info",
+   "claim": "Agent provenance list: the reviewed labels' agents array (copied from REVIEWER-RESPONSE.final.json) lists 9 agents (R32REV-B1..B7, CONSOLIDATE, DISPOSE) and omits R32REV-CRITIC, while the labels' status text and response-ledger entry 2 name CRITIC.",
+   "verdict": "CONFIRMED",
+   "evidence": "apply_rulings_r32.py line 418 copies final['agents']; final agents labels = B1..B7, CONSOLIDATE, DISPOSE. The CRITIC's identity (ORCH-01A.4, claude-opus-5-5, high) is recorded in CRITIQUE.json 'critic', which is hash-bound (ad6798dc...7eef) and named in applied.critique_sha256.",
+   "required_action": "None required; optionally note in Review 33 that CRITIC provenance lives in CRITIQUE.json."
+  },
+  {
+   "id": "D1-15",
+   "severity": "info",
+   "claim": "No file or directory in the five checked trees was modified (or created) after 2026-10-03T06:50:00Z.",
+   "verdict": "CONFIRMED",
+   "evidence": "os.walk + os.stat (mtime and ctime) at about 06:55Z: fresh-cohort-r32 112 files, newest 2026-10-02T20:06:25Z; M2-label-review-r32-draft-1 23 files, newest 2026-10-03T06:12:39Z; fresh-cohort-r32-reviewed 47 files, newest 2026-10-03T06:32:34Z; C:/t/r2x/r32-stage 708 files, newest 2026-10-02T20:00:27Z; review31 60 files, newest 2026-10-02T18:25:29Z; late [] for all, directories included.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-16",
+   "severity": "info",
+   "claim": "No network-capable code in fresh-cohort-r32/scripts or fresh-cohort-r32-reviewed/scripts: no requests, urllib, http client, socket, anthropic, openai, httpx/aiohttp, curl/wget, or subprocess call of claude.",
+   "verdict": "CONFIRMED",
+   "evidence": "grep -E over both script folders and an import census: imports are argparse, collections, copy, csv, datetime, glob, hashlib, importlib.util, io, json, os, pathlib, pymupdf, PIL, pytest, re, shutil, sqlite3, stat, subprocess, sys, xml.etree and local modules (apply_rulings_r32, count_population_r32, selector_core, used_sets). Only hits: the word 'requests' in a docstring (lib/arex.py) and a key 'model_requests' (assemble_draft_r32.py); 'http:' in verify_r32_packet.py is a markdown-link filter. subprocess is used only in verify_r32_packet.py for 'git -C <tree> rev-parse HEAD' / 'status --porcelain' and to run the drafter's validate_drafts_r32.py.",
+   "required_action": "None."
+  },
+  {
+   "id": "D1-17",
+   "severity": "minor",
+   "claim": "The packet's verifier (fresh-cohort-r32/scripts/verify_r32_packet.py) runs C:/t/iso/work/r2x/r32/validate_drafts_r32.py from the drafter's isolated folder, not the packaged copy, so the 'Validation: 0 problems' result in the packet check cannot be reproduced from the package alone; whether the packaged copy is identical to the script that ran cannot be checked without opening the forbidden folder.",
+   "verdict": "UNVERIFIABLE",
+   "evidence": "verify_r32_packet.py line 58: subprocess.run([venv python, 'C:/t/iso/work/r2x/r32/validate_drafts_r32.py'], ...). The packaged copy fresh-cohort-r32/scripts/validate_drafts_r32.py is in the 110-file manifest; the drafter's folder C:/t/iso/work/r2x/r32 is out of bounds for this review and was not opened.",
+   "required_action": "Re-run draft validation from the packaged copy (in a scratch location) or record the drafter-folder script's sha256 against the packaged copy, and disclose the result in Review 33."
+  },
+  {
+   "id": "D1-18",
+   "severity": "info",
+   "claim": "The reviewed labels and FIELD-POPULATION.json rebuild byte-identically from the package's own copies, and an independent recount gives identity 57, revision 38, decision 38 with F069 (identity) and F019 (revision) excluded as unresolved.",
+   "verdict": "CONFIRMED",
+   "evidence": "rebuild.py imported scratch copies of scripts/apply_rulings_r32.py (sha256 8e3d0bbc...f252 = labels generator.sha256) and count_population_r32.py; build_reviewed(draft copy, final copy, dispositions copy, stored meta) serialised to 00e53e82...9779 (identical); count_population output identical to FIELD-POPULATION.json bytes. Own recount code: 57/38/38, excluded identity [F069], revision [F019], decision []; aliases F031->F001, F052->F038, F059->F046, F070->F067. F069 identity is resolved_for_scoring 'unresolved', carries_fact 'no', so the upper-bound rule leaves identity at 57. Packaged tests run from the scratch copy: 21 passed (15 + 6), matching tests/*.xml.",
+   "required_action": "None."
+  }
+ ],
+ "files_opened": [
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/PACKAGE-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/RENDERS.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/CROPS.jsonl",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/EVIDENCE-INDEX.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-VERIFICATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FROZEN-SELECTION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FIELD-POPULATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.sha256",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/labels/R32-LABELS-DRAFT-1.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/append_response_r32.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/stage_r32.py (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/render_r32.py (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/verify_r32_packet.py",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/* (grep only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/PACKAGE-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/evidence/INPUT-HASH-CHECK.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/FIELD-POPULATION.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/labels/R32-LABELS-REVIEWED-1.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/packet-inputs/COPY-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/COPY-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/REVIEWER-RESPONSE.final.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/REVIEWER-RESPONSE.json (keys only)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/CRITIQUE.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/DISPOSITIONS.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/review-r32-draft-1/batches/REVIEWER-RESPONSE.batch-B7.json (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/COMMANDS-AND-AUDIT-LOG.md (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed/scripts/*.py",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-label-review-r32-draft-1/RESPONSE.sha256",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-label-review-r32-draft-1/RESPONSE.final.sha256",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md (grep)",
+  "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/DECISION-LEDGER.md (grep)",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/evidence/EVIDENCE-MANIFEST.json",
+  "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/M2-REVIEW-RESPONSE.md (tail from byte 153813)",
+  "C:/t/r2x/ledger/r2x-ledger.sqlite (mode=ro, uri=True)",
+  "C:/t/r2x/r32-stage/files/*.pdf, renders/*, crops/* (hashed; PNG headers read by PIL for size only)",
+  "Hashed only, not parsed: all files listed in the three manifests and the 23-file label review folder"
+ ],
+ "summary": "Integrity and bindings hold. Both package manifests (15c4114d, 110 files; 64c03667, 45 files), the review31 manifest (d5fe1649, 58 files), the label-review hashes, the byte-identical copies, the 72 staged PDFs, 149 renders, 189 crops, the 72 OneDrive originals (size and mtime by os.stat), candidate/baseline HEADs, the AI ledger (483/17) and the append-only response ledger were recomputed and match. All 1167 evidence references in the reviewed labels resolve to 324 bound images. Nothing in the five trees changed after 06:50Z, and the scripts contain no network code. The reviewed labels and FIELD-POPULATION rebuild byte-identically, giving 57/38/38. No blocker or major finding. Minor: PACKAGE-CHECK.json reports are unbound (D1-03); 149 words.json locating aids are unbound (D1-07); the packet verifier ran the drafter-folder validate script, which cannot be checked against the packaged copy (D1-17, UNVERIFIABLE)."
+}

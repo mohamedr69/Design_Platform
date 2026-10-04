@@ -1,0 +1,428 @@
+{
+ "declared_at_utc": "2026-09-30T13:14:29+00:00",
+ "name": "M2 Review 18 correction + efficiency-first continuation (2026-09-30)",
+ "status": "DRY-RUN DECLARATION (scripted provider) -- not the experiment's",
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "reused_not_requested_again": true,
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)",
+   "19144": "exploration (new)",
+   "23323": "exploration (new)",
+   "26208": "exploration (new)",
+   "27421": "exploration (new)",
+   "30549": "exploration (new)",
+   "8430": "regression / exposed (R5 holdout (exposed))"
+  },
+  "sealed": "ten sealed projects: not opened, rendered or sent",
+  "task": {
+   "file": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-18/TASK-AI-PILOT-CORRECTION-AND-CONTINUATION.md",
+   "sha256": "5a842e4f6e0c27c4196d44c0f765e3df2dbdddd0c70061d66d78bf4a577d2442"
+  },
+  "review_18": {
+   "file": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-18/REVIEW-18-REPORT.md",
+   "sha256": "dabfdf90c5d557599e8e63aaf3f416c12a0703f587a669d5594b8b9974dc9121"
+  },
+  "allowance": "no new 150: the residual of the original aggregate (reconciled below)"
+ },
+ "code": {
+  "accepted_app": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12",
+   "clean": true
+  },
+  "submitted_baseline": {
+   "commit": "e5a0a94a4235282797bed302f6bb14acba70db01",
+   "evidence_reader_sha256": "ae66397826d12714de44746765b2c5daf8a86b7619a3bdd172c1197845eb4335"
+  },
+  "successor": {
+   "repository": "C:/t/iso/ep-platform (scratch clone; not the owner repository)",
+   "tree": "C:/t/iso/cand-ai2",
+   "commit": "c216206df6812fb17b32719a28cdd4300d44a5c1",
+   "parent": "e5a0a94a4235282797bed302f6bb14acba70db01",
+   "changed_files_vs_accepted": {
+    "backend/app/ai/evidence_reader.py": "75ed39726841e6a0499048d1148217cfc917a15c8b0c022df8be69db40ffff51",
+    "backend/tests/_e_frame_shim.py": "5f7be2fa2ebcd09360f4611dc1cb9fe674adf1210f16913c64926538e75d1b48",
+    "backend/tests/_keyed_provider.py": "09292999ebbb6c9c1dc69cfdaa66ba261e29fa7520418bb65a6c4a9e2078ed59",
+    "backend/tests/test_ai_pilot_2026_09_30.py": "79d3816c571c686102a8a3b92bf0df53d624fdf8f18cbb1a42a6c4d81b8fa891",
+    "backend/tests/test_ai_pilot_r18.py": "9d99495d3be62ea36894ae3054f9a4bd55a431f555660089248ccae5394aab04",
+    "backend/tests/test_evidence_reader_r7.py": "6990ccb63879147158a6a1d6ab941600fc8e77343da49f74c682c7cb3813c90f",
+    "backend/tests/test_m2_review08.py": "83225af21d70380e6062ae1ab6253c2d2f8091fc968848dd951ed33ae73ed8a1",
+    "backend/tests/test_m2_review10.py": "f526389488a4cc7a5fabfa013b0fa3efbccbec95053d1017878e086ff3c86ba4"
+   },
+   "diff_vs_e5a0a94_sha256": "4baf0cc9c9829e31618f26761276ec55fa95a790aeb6b8487c13a86f0ed65764"
+  },
+  "evaluator": {
+   "module": "scripts.m2_eval5",
+   "version": "m2-pilot-eval-2026-09-29.9",
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "boq_harness_r16": {
+   "boq_harness.py": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf",
+   "boq_contract.py": "ea1852741662adbd3d66dd73c699d4c6d179a397ac917e0fc2ef0fc90a1c199e",
+   "replay_core.py": "dbd88158c206c4db270f2f592ea6e3b86876717d5984bc33601d50d056a43689"
+  },
+  "boq_queue_sha256": "58ad035ecf3aefb7119babb3862085bb48a77f1075fdc8735d7541c3c98d0e4b",
+  "xtrack": "373147e2abe38c777ffe85e98543d309c4a98b0b74b7277dc129f7d50e59ae7c",
+  "dry_provider": "c6d5263ed01d85409d8ac29bdce3da2812bf7c82060a6bac471d99d6db529a51",
+  "scripts": {
+   "cont_stage.py": "3c3e136b0f4dcdb043c055e3cd85ce1a50eabcbd4cb937969959592fac04cba7",
+   "cont_a.py": "9ff157b37a82772080a6bfecaddd42449583a03fca6cc937bfaab44cf183e490",
+   "cont_shares.py": "969e2b572c01cba76d2cbc93d8a37f6ce2eaef84a1ac7cd50d5d236a8d96da97",
+   "cont_ev.py": "f2ce29174bebc80672b93f9e2ccee1d564a808ad88a9d2d729e37f5ef19a7be9",
+   "cont_boq.py": "8ff5ada3c080869a3ef1ded3a33f4ae0308db2dcfc0f728f56ae2c4430df70aa",
+   "derive_runners.py": "c5e9219ef9c510557c15a7d73edd3a64e5103c9eb160c241a7fb4d808174c6e1",
+   "score_cont.py": "f4f3307baceb1caba65c3f7311b8d6e05158287451b55857271672ceb073e04e",
+   "select_continuation.py": "3b3977f484e3c12dbc09fde3c2bf76d21840ec945430b0dbb4d3ab3c924f25a2",
+   "labels_continuation.py": "9b16b7f121568c60deff2209e9594ae8a7870b14bb9898ced9273b164a52f9d5",
+   "labels_v2.py": "d62904ff3c6f69e033e1cc5c9937ea7e68ae8d618c7e3e3b14b306194f5e189a",
+   "rescore_v2.py": "d2fc3dd4d7f5e0748e70a30b75a4072abf4a4af3cd5d53e10eacbda10e3fee01",
+   "locator_eval.py": "b390ca8d8652263e4135c9e8d4f3ff2ad075dfa2b0f23905a58eedeba5a9b62c",
+   "patch_successor.py": "2fdee8d209c40e2d9bc4d9fb877e5dd4436dd339dc443ff32b98057d69783851",
+   "patch_successor_2.py": "25bc6b1ee51af2c19dc85eeeb112e26aef15799fa1e49b7ae094736acbc6d9fb",
+   "patch_successor_3.py": "bc498705953f2589a25c52e3d7e7956d0fc15efa79fbdde94da973efb4c005ec",
+   "repair_tests.py": "65aa60d4ab011b95806516223d9ab9e85c8a3ff4198f9befb87b078d0eb3a28b",
+   "declare_continuation.py": "99e84ef0d43ac7e962e8c597c7b85cf0cd2fce02a4fff1cc570bf81fbb98930a"
+  }
+ },
+ "arms": {
+  "S": {
+   "meaning": "unchanged baseline: accepted application 3d5607d, existing EV1 policy (the same S as the pilot, re-run on the continuation sample)",
+   "tree": "C:/t/iso/frozen-r12",
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": null,
+    "TARGETED_ENABLED": null,
+    "EFFICIENT_ENABLED": null
+   }
+  },
+  "T2": {
+   "meaning": "the successor candidate: G (guard) + T .2 (R18-01 completion, R18-02 gate, required-first scheduling) + E (located discovery for drawing sheets, located-absence outcomes, job-deadline-bound request / OCR timeouts)",
+   "tree": "C:/t/iso/cand-ai2",
+   "commit": "c216206df6812fb17b32719a28cdd4300d44a5c1",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_TARGETED": "1",
+    "AI_EVIDENCE_EFFICIENT": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+located-discovery-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+located-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": true
+   }
+  }
+ },
+ "doc_arms": [
+  "S",
+  "T2"
+ ],
+ "expected_call_order": {
+  "S": "per triggered page: discover_page (full page, 1600 px) -> read_identity -> read_revision -> read_decision (when discovery shows a block)",
+  "T2": "per document: every triggered page's required reads first -- discover_region (drawing sheet: located title-block crop, <= 1568 px) or discover_page (other pages) -> read_identity -> read_revision -> read_decision -- then, page by page, the optional read_field_context (identity, then revision) only where a proposed own field is not validated and no failure / refusal / budget stop preceded it; every request's timeout = min(300 s, the job's remaining time); none started with < 20 s left"
+ },
+ "sources": {
+  "sample": {
+   "file": "CONTINUATION-SAMPLE.json",
+   "sha256": "ddbceb3f75ee2d44a654a68d6a54b41875cc37f0f26899d4806239cfd3e3c7f3",
+   "documents": {
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf": "500833f7db2b83beb195c6ef404769d57b66dc66769aac0e8bbd27a22be36dba",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf": "b713d5e56599da949cb14fa5fabb1607acdee31c617ab55a7d3de663fdde3a8c",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "e740af95461002eb9851c86c5b77a9a672720f1dc9ba71428acfb2f4f05f6088",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf": "1e98dc27bfaf7905570bce6c71a27beff7150877d0715c2c73d824944314e8bc",
+    "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf": "87c43a7d1395c25d8cd31ffb0668c5e7d1b51e45ded3e3b4a9b20b8eff299bcf",
+    "EP-26208/EP-26208 drawing/Shop dwg/CBS System/Rev-0/B16/ELEC-B16-EM-101.pdf": "2253a7db7b41bbaca0e472a45728e73b40924d867a7e9ac5aac1e71e56e26100",
+    "EP-16830/Drawing/Shop dwg/Structure Cabling/Cafe/REV-1/pdf/819-TL-101 LATEST-CAFE DWG.pdf": "273f8052cef38513e771562667dc73f650b278b6f655ded714a0f45b441ecaf4"
+   },
+   "roles": {
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf": "control_exposed",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf": "control_exposed",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "control_exposed",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf": "control_exposed",
+    "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EM-SCH/EML-09-SCH.pdf": "new",
+    "EP-26208/EP-26208 drawing/Shop dwg/CBS System/Rev-0/B16/ELEC-B16-EM-101.pdf": "new",
+    "EP-16830/Drawing/Shop dwg/Structure Cabling/Cafe/REV-1/pdf/819-TL-101 LATEST-CAFE DWG.pdf": "new"
+   }
+  },
+  "boq_sheet": {
+   "doc_key": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "sha256": "719f8714d2a75673c8ba390a884a2d2889b2438fd587eaa2c42f62d75f344fec",
+   "staged_path": "C:/t/holdout/stage/EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "cohort": "regression / exposed (R5 holdout (exposed))"
+  },
+  "boq_extraction_A": {
+   "file": "C:/t/iso/work/r2x/boq/holdout-A-r12-extraction.json",
+   "sha256": "62a9a29ddd785677ed93787d25f4e5929d88ea0c949a3a4648024acf7274197c"
+  },
+  "h06_labels": {
+   "file": "C:/t/iso/work/r2x/labels/r14/BOQ-LABELS.amended-r14.1.json",
+   "sha256": "4235ce60149ab24c240b3b96b483d044151a13f331abd53bfb9ba0fb3ed580aa",
+   "verified_geometry": "the four H-06 row positions verified by byte-identical crop regeneration (Review 14), used by the r16.1 join",
+   "use": "EVALUATION ONLY -- never in the prompt, the queue or the selection"
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/cont-stage",
+  "manifest": "CONT-STAGE.json",
+  "manifest_sha256": "29aaf3764094ba5adb27a4ba0a4fa1c45b800b6effb052438c8b4d81467b1dca"
+ },
+ "labels": {
+  "dir": "labels-continuation",
+  "register": "CONT-REGISTER-LABELS.json",
+  "page": "CONT-PAGE-LABELS.json",
+  "uncertainty": "CONT-UNCERTAINTY-AND-EXPOSURE.json",
+  "files": {
+   "CONT-REGISTER-LABELS.json": "e9923fc3fcc37582edc0fbaf5c2c03125fce973461af0bb9013a57c7bcd5d05d",
+   "CONT-PAGE-LABELS.json": "24ee61d0a2d8f467a10640d384015fe753aca3eecbce2acb7902ddb3fe256911",
+   "CONT-UNCERTAINTY-AND-EXPOSURE.json": "2d4fabb0a8be369f15ff727519d4b544f307739438f12d0a6df0f424d4c9e198"
+  },
+  "v2": {
+   "PILOT-REGISTER-LABELS.v2.json": "078fe52838e1ebeca5372105f7edc8294196b3dca8fa8cb0f1532005f97c8bc5",
+   "PILOT-PAGE-LABELS.v2.json": "b8fa41e7ece67efc7592426cf9dac0537f6cf6ca30ef8e09532cb53a3b502724",
+   "PILOT-UNCERTAINTY-AND-EXPOSURE.v2.json": "b1e5da5ba7b57ee6038d238e5b8efebc0593fb49b3b21718bc6b23d0925b0a36",
+   "LABEL-CHANGES-v2.json": "0a525b327ab14317f32be7ce42323bb4f581f299e8532db54366cc79c38391ac"
+  },
+  "status": "controls: v2 (v1 + Review 18 AI source review of four pages); new: Claude-drafted before prediction; PROVISIONAL",
+  "resolved_for_stop_rule": "confidence 'high' and no uncertainty entry"
+ },
+ "provider": {
+  "adapter": "claude-code (the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  },
+  "actual_model": "recorded per response"
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "ledger": {
+  "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "reconciliation": {
+   "pilot_settled_by_scope": {
+    "ai-pilot-2026-09-30-A": 2,
+    "ai-pilot-2026-09-30-S": 18,
+    "ai-pilot-2026-09-30-G": 26,
+    "ai-pilot-2026-09-30-T": 9,
+    "ai-pilot-2026-09-30-BOQ-S": 5,
+    "ai-pilot-2026-09-30-BOQ-T": 12
+   },
+   "pilot_open_reservations": {
+    "ai-pilot-2026-09-30-A": 0,
+    "ai-pilot-2026-09-30-S": 0,
+    "ai-pilot-2026-09-30-G": 0,
+    "ai-pilot-2026-09-30-T": 0,
+    "ai-pilot-2026-09-30-BOQ-S": 0,
+    "ai-pilot-2026-09-30-BOQ-T": 0
+   },
+   "pilot_refused_not_requests": {
+    "ai-pilot-2026-09-30-A": 0,
+    "ai-pilot-2026-09-30-S": 0,
+    "ai-pilot-2026-09-30-G": 0,
+    "ai-pilot-2026-09-30-T": 8,
+    "ai-pilot-2026-09-30-BOQ-S": 0,
+    "ai-pilot-2026-09-30-BOQ-T": 0
+   },
+   "used_of_150": 72,
+   "residual": 78
+  },
+  "scopes": {
+   "BOQ-S": {
+    "scope": "ai-pilot-r18-2026-09-30-H06-S",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 12
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-r18-2026-09-30-H06-S",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 12}"
+    }
+   },
+   "BOQ-T": {
+    "scope": "ai-pilot-r18-2026-09-30-H06-T",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 12
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-r18-2026-09-30-H06-T",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 12}"
+    }
+   },
+   "A": {
+    "scope": "ai-pilot-r18-2026-09-30-A",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 4
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-r18-2026-09-30-A",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 4}"
+    }
+   },
+   "S": {
+    "scope": "ai-pilot-r18-2026-09-30-S",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 21
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-r18-2026-09-30-S",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 21}"
+    }
+   },
+   "T2": {
+    "scope": "ai-pilot-r18-2026-09-30-T2",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 29
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-r18-2026-09-30-T2",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 29}"
+    }
+   }
+  },
+  "subcaps": {
+   "BOQ-S": 12,
+   "BOQ-T": 12,
+   "A": 4,
+   "S": 21,
+   "T2": 29
+  },
+  "sum_subcaps": 78,
+  "closed_scope": "ai-pilot-2026-09-30-T stays closed by its breaker; it is not resumed, reset or renamed",
+  "token_contract": "total reported input INCLUDING cached input (the existing breaker, 70,000 per request); cached / uncached shown as diagnostics only",
+  "enforcement": {
+   "requests": "hard, reserved before dispatch",
+   "elapsed": "hard for new requests (ledger 14,400 s; job 120 s)",
+   "tokens": "estimate + breaker after completion (CLI), NOT provider-enforced",
+   "in_flight": "a running CLI request is killed at its timeout (subprocess timeout; its usage is then unknown and charged at the estimate); a grandchild process of a CLI wrapper may outlive the kill"
+  }
+ },
+ "project_day": {
+  "limit": 60,
+  "reconciled_at_declaration": {
+   "16830": 23,
+   "17428": 30,
+   "19144": 11,
+   "23323": 8,
+   "26208": 2,
+   "27421": 6,
+   "30549": 12,
+   "8430": 60
+  },
+  "arm_shares": "after the continuation A base: share(ep) = floor((60 - used(ep)) / 2) for S and T2",
+  "h06": "EP-8430 is 60/60 in its rolling window at declaration; the H-06 runner refuses to start until 12 fit (EP-8430 calls expire 2026-09-30 18:52:31-19:00:02 UTC: 12 fit from 18:53:57 UTC, 24 from 18:55:21 UTC)"
+ },
+ "pricing": "unknown (no valid price configured): cost UNKNOWN, never zero",
+ "cache_mode": "application result cache ON; new sandboxes: cont-A (new), S and T2 each from a WAL-consistent copy of cont-A (and a copy of its file caches); arms have different policy / reader / prompt identities, so no cross-arm reuse; no pilot evidence (G or T) is loaded into a continuation arm",
+ "offline_replays": "labelled OFFLINE and separate: the reviewer probes on e5a0a94 and the successor; the stored pilot results under labels v1 / v2; the confirmed Rev.0 acceptance through the guard; the locator evaluation. None is a new model result.",
+ "run_order": [
+  "cont-A: cont_a.py",
+  "cont_shares.py",
+  "S: cont_ev.py S",
+  "T2: cont_ev.py T2",
+  "H-06 BOQ-S: cont_boq.py S (when EP-8430 fits)",
+  "H-06 BOQ-T: cont_boq.py T (when EP-8430 fits)"
+ ],
+ "stop_rules": [
+  "an evaluator-flagged critical acceptance by the arm's AI on a RESOLVED label (checked after each project): stop the arm",
+  "three consecutive provider failures",
+  "a breaker or any ledger / project-day / share / per-document refusal: a budget stop, recorded, never raised",
+  "an undeclared source, changed hash, sealed project, existing sandbox or changed declaration: the runner refuses"
+ ],
+ "evaluation": {
+  "documents": "scripts.m2_eval5 (evaluator .9, unchanged) on the continuation labels; contexts {EV1, default, the arm's policy}",
+  "report": [
+   "precision numerator / denominator",
+   "correctly associated recovery",
+   "held evidence",
+   "false accepts",
+   "budget / timeout / not-attempted",
+   "latency and requests per task (discovery timing: S vs T2, and S's pilot timings for the controls)",
+   "complete planned coverage and the matched completed subset"
+  ],
+  "h06": "r16.1 replay_core + boq_contract (unchanged) with the r14.1 amended labels and the verified geometry; the three wrong-quantity targets and the control are identified in the evaluation only; reached / unreached rows; comparison at equal requests and at each arm's cap"
+ }
+}

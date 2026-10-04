@@ -196,7 +196,11 @@ def test_without_the_model_the_sheet_is_recorded_as_not_read(client, db_session,
 
     body = client.post(f"/projects/{project.id}/boq/ensure").json()
 
-    assert body["extracted"] and body["items"] == [] and body["reading"] is None
+    # Not stamped as the BOQ's read: nothing was read, so the next open tries again (M2 review 05, R5-04; it used
+    # to answer extracted=true with no line, and every later open returned that empty BOQ).
+    assert not body["extracted"] and body["items"] == [] and body["reading"] is None
+    db_session.expire_all()
+    assert db_session.get(Project, project.id).boq_extracted_at is None
     assert body["warnings"] and "Not read: AI assistance is disabled" in body["warnings"][0], body["warnings"]
     run = db_session.query(ExtractionRun).filter(ExtractionRun.project_id == project.id).one()
     assert run.reader == "ai" and run.reading_id is None and run.failure.startswith("Not read")

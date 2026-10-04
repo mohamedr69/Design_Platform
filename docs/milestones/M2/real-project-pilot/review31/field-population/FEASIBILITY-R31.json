@@ -1,0 +1,165 @@
+{
+ "planning_ranges": {
+  "identity": [
+   0.45,
+   0.5925925925925926,
+   0.7
+  ],
+  "revision": [
+   0.45,
+   0.5925925925925926,
+   0.7
+  ],
+  "decision_by_stratum": {
+   "review_signal": [
+    0.2,
+    0.3,
+    0.45
+   ],
+   "drawing_signal": [
+    0.05,
+    0.1,
+    0.15
+   ],
+   "other": [
+    0.05,
+    0.1,
+    0.15
+   ]
+  },
+  "source": "r26.2 prevalence (Review 30)"
+ },
+ "first_pool": {
+  "review_signal": 40,
+  "drawing_signal": 20,
+  "other": 12
+ },
+ "extensions": {
+  "extension-1": {
+   "review_signal": 36
+  },
+  "extension-2": {
+   "review_signal": 36
+  },
+  "max_extensions": 2
+ },
+ "minimum_resolved_per_field": 12,
+ "rows": [
+  {
+   "design": "first pool (72)",
+   "field": "identity",
+   "pool_documents": 72,
+   "expected": 42.7,
+   "min_p5_at_low_rate": 25,
+   "max_p95_at_high_rate": 57,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "first pool (72)",
+   "field": "revision",
+   "pool_documents": 72,
+   "expected": 42.7,
+   "min_p5_at_low_rate": 25,
+   "max_p95_at_high_rate": 57,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "first pool (72)",
+   "field": "decision",
+   "pool_documents": 72,
+   "expected": 15.2,
+   "min_p5_at_low_rate": 5,
+   "max_p95_at_high_rate": 29,
+   "p_below_12_at_low_rate": 0.7569
+  },
+  {
+   "design": "pool + extension 1 (108)",
+   "field": "identity",
+   "pool_documents": 108,
+   "expected": 64.0,
+   "min_p5_at_low_rate": 40,
+   "max_p95_at_high_rate": 83,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "pool + extension 1 (108)",
+   "field": "revision",
+   "pool_documents": 108,
+   "expected": 64.0,
+   "min_p5_at_low_rate": 40,
+   "max_p95_at_high_rate": 83,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "pool + extension 1 (108)",
+   "field": "decision",
+   "pool_documents": 108,
+   "expected": 26.0,
+   "min_p5_at_low_rate": 11,
+   "max_p95_at_high_rate": 47,
+   "p_below_12_at_low_rate": 0.0707
+  },
+  {
+   "design": "pool + extensions 1 and 2 (144)",
+   "field": "identity",
+   "pool_documents": 144,
+   "expected": 85.3,
+   "min_p5_at_low_rate": 55,
+   "max_p95_at_high_rate": 110,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "pool + extensions 1 and 2 (144)",
+   "field": "revision",
+   "pool_documents": 144,
+   "expected": 85.3,
+   "min_p5_at_low_rate": 55,
+   "max_p95_at_high_rate": 110,
+   "p_below_12_at_low_rate": 0.0
+  },
+  {
+   "design": "pool + extensions 1 and 2 (144)",
+   "field": "decision",
+   "pool_documents": 144,
+   "expected": 36.8,
+   "min_p5_at_low_rate": 17,
+   "max_p95_at_high_rate": 65,
+   "p_below_12_at_low_rate": 0.0011
+  }
+ ],
+ "path_capacity": [
+  {
+   "stage": "pool",
+   "cumulative_per_project_cap": 12,
+   "review_signal_paths_needed_cumulative": 40,
+   "available_in_picks_under_cap": 60,
+   "alternates_entered_in_seeded_order": [],
+   "available_total": 60,
+   "feasible": true
+  },
+  {
+   "stage": "extension-1",
+   "cumulative_per_project_cap": 18,
+   "review_signal_paths_needed_cumulative": 76,
+   "available_in_picks_under_cap": 78,
+   "alternates_entered_in_seeded_order": [],
+   "available_total": 78,
+   "feasible": true
+  },
+  {
+   "stage": "extension-2",
+   "cumulative_per_project_cap": 24,
+   "review_signal_paths_needed_cumulative": 112,
+   "available_in_picks_under_cap": 96,
+   "alternates_entered_in_seeded_order": [
+    {
+     "ep": "22317",
+     "review_signal_paths_available": 24
+    }
+   ],
+   "available_total": 120,
+   "feasible": true
+  }
+ ],
+ "rule": "after independent label review of each stage: all three fields >= 12 -> select the run set; otherwise the next extension; after extension 2 still short -> PREPARATION BLOCKED (no dispatch, no partial closure run)"
+}

@@ -1,0 +1,320 @@
+{
+ "cost": "unknown (no authoritative price for the declared provider)",
+ "caps": {
+  "A": 8,
+  "L1": 160,
+  "L2": 160,
+  "L3": 180,
+  "L4": 180
+ },
+ "scopes": {
+  "A": {
+   "scope": "m2-four-arm-final-2026-10-01-A",
+   "exists": true,
+   "limits": {
+    "elapsed_s": 14400,
+    "input_tokens": 4000000,
+    "output_tokens": 600000,
+    "per_request_input": 70000,
+    "per_request_output": 20000,
+    "requests": 8
+   },
+   "breaker": null,
+   "dispatched": 4,
+   "cap": 8,
+   "states": {
+    "settled": 4
+   },
+   "refused_before_dispatch": null,
+   "provider_reported": {
+    "requests": 4,
+    "input": 46729,
+    "output": 5519,
+    "cached_input_within_input": 21559
+   },
+   "estimated_charge_unknown_usage": {
+    "requests": 0,
+    "outcomes": {},
+    "input": 0,
+    "output": 0
+   },
+   "ledger_total": {
+    "input": 46729,
+    "output": 5519
+   },
+   "pre_dispatch_estimates": {
+    "input": 100228,
+    "output": 15524
+   },
+   "largest_request": {
+    "id": 250,
+    "task": "read_submittal_form",
+    "model": "claude-sonnet-5",
+    "act_in": 12411,
+    "act_out": 1262,
+    "cached_in": 3463
+   },
+   "threshold_breaches": [],
+   "models": {
+    "claude-sonnet-5 / ok": 4
+   },
+   "first_at": 1790869479.6872022,
+   "last_at": 1790869545.4455671
+  },
+  "L1": {
+   "scope": "m2-four-arm-final-2026-10-01-L1",
+   "exists": true,
+   "limits": {
+    "elapsed_s": 345600,
+    "input_tokens": 4000000,
+    "output_tokens": 600000,
+    "per_request_input": 70000,
+    "per_request_output": 20000,
+    "requests": 160
+   },
+   "breaker": "request 287 used 70264 input tokens > per-request 70000",
+   "dispatched": 34,
+   "cap": 160,
+   "states": {
+    "settled": 34
+   },
+   "refused_before_dispatch": {
+    "ledger_precheck_refusals": 10,
+    "xtrack_refusals": 0,
+    "allowance_refusals": 0
+   },
+   "provider_reported": {
+    "requests": 31,
+    "input": 430943,
+    "output": 56708,
+    "cached_input_within_input": 277813
+   },
+   "estimated_charge_unknown_usage": {
+    "requests": 3,
+    "outcomes": {
+     "timeout": 3
+    },
+    "input": 109259,
+    "output": 28091
+   },
+   "ledger_total": {
+    "input": 540202,
+    "output": 84799
+   },
+   "pre_dispatch_estimates": {
+    "input": 970413,
+    "output": 210458
+   },
+   "largest_request": {
+    "id": 287,
+    "task": "discover_page",
+    "model": "claude-sonnet-5",
+    "act_in": 70264,
+    "act_out": 10159,
+    "cached_in": 50585
+   },
+   "threshold_breaches": [
+    287
+   ],
+   "models": {
+    "claude-sonnet-5 / ok": 31,
+    "sonnet / timeout": 3
+   },
+   "first_at": 1790870025.895768,
+   "last_at": 1790870812.423731
+  },
+  "L2": {
+   "scope": "m2-four-arm-final-2026-10-01-L2",
+   "exists": true,
+   "limits": {
+    "elapsed_s": 345600,
+    "input_tokens": 4000000,
+    "output_tokens": 600000,
+    "per_request_input": 70000,
+    "per_request_output": 20000,
+    "requests": 160
+   },
+   "breaker": null,
+   "dispatched": 64,
+   "cap": 160,
+   "states": {
+    "settled": 64
+   },
+   "refused_before_dispatch": {
+    "ledger_precheck_refusals": 0,
+    "xtrack_refusals": 0,
+    "allowance_refusals": 0
+   },
+   "provider_reported": {
+    "requests": 62,
+    "input": 648129,
+    "output": 85097,
+    "cached_input_within_input": 409162
+   },
+   "estimated_charge_unknown_usage": {
+    "requests": 2,
+    "outcomes": {
+     "timeout": 2
+    },
+    "input": 22786,
+    "output": 1600
+   },
+   "ledger_total": {
+    "input": 670915,
+    "output": 86697
+   },
+   "pre_dispatch_estimates": {
+    "input": 1197581,
+    "output": 216764
+   },
+   "largest_request": {
+    "id": 314,
+    "task": "discover_region",
+    "model": "claude-sonnet-5",
+    "act_in": 50287,
+    "act_out": 6923,
+    "cached_in": 34080
+   },
+   "threshold_breaches": [],
+   "models": {
+    "claude-sonnet-5 / ok": 62,
+    "sonnet / timeout": 2
+   },
+   "first_at": 1790870986.98601,
+   "last_at": 1790872348.6615975
+  },
+  "L3": {
+   "scope": "m2-four-arm-final-2026-10-01-L3",
+   "exists": true,
+   "limits": {
+    "elapsed_s": 345600,
+    "input_tokens": 4000000,
+    "output_tokens": 600000,
+    "per_request_input": 70000,
+    "per_request_output": 20000,
+    "requests": 180
+   },
+   "breaker": null,
+   "dispatched": 66,
+   "cap": 180,
+   "states": {
+    "settled": 66
+   },
+   "refused_before_dispatch": {
+    "ledger_precheck_refusals": 0,
+    "xtrack_refusals": 0,
+    "allowance_refusals": 0
+   },
+   "provider_reported": {
+    "requests": 63,
+    "input": 711471,
+    "output": 104982,
+    "cached_input_within_input": 438103
+   },
+   "estimated_charge_unknown_usage": {
+    "requests": 3,
+    "outcomes": {
+     "timeout": 3
+    },
+    "input": 136632,
+    "output": 32610
+   },
+   "ledger_total": {
+    "input": 848103,
+    "output": 137592
+   },
+   "pre_dispatch_estimates": {
+    "input": 1688967,
+    "output": 350347
+   },
+   "largest_request": {
+    "id": 393,
+    "task": "discover_page",
+    "model": "claude-sonnet-5",
+    "act_in": 41265,
+    "act_out": 3790,
+    "cached_in": 29998
+   },
+   "threshold_breaches": [],
+   "models": {
+    "claude-sonnet-5 / ok": 63,
+    "sonnet / timeout": 3
+   },
+   "first_at": 1790875044.3231335,
+   "last_at": 1790876855.8025641
+  },
+  "L4": {
+   "scope": "m2-four-arm-final-2026-10-01-L4",
+   "exists": true,
+   "limits": {
+    "elapsed_s": 345600,
+    "input_tokens": 4000000,
+    "output_tokens": 600000,
+    "per_request_input": 70000,
+    "per_request_output": 20000,
+    "requests": 180
+   },
+   "breaker": null,
+   "dispatched": 66,
+   "cap": 180,
+   "states": {
+    "settled": 66
+   },
+   "refused_before_dispatch": {
+    "ledger_precheck_refusals": 0,
+    "xtrack_refusals": 0,
+    "allowance_refusals": 0
+   },
+   "provider_reported": {
+    "requests": 64,
+    "input": 634893,
+    "output": 100950,
+    "cached_input_within_input": 387305
+   },
+   "estimated_charge_unknown_usage": {
+    "requests": 2,
+    "outcomes": {
+     "timeout": 2
+    },
+    "input": 23669,
+    "output": 1600
+   },
+   "ledger_total": {
+    "input": 658562,
+    "output": 102550
+   },
+   "pre_dispatch_estimates": {
+    "input": 1169506,
+    "output": 189317
+   },
+   "largest_request": {
+    "id": 418,
+    "task": "discover_page",
+    "model": "claude-sonnet-5",
+    "act_in": 28176,
+    "act_out": 1853,
+    "cached_in": 20500
+   },
+   "threshold_breaches": [],
+   "models": {
+    "claude-sonnet-5 / ok": 64,
+    "sonnet / timeout": 2
+   },
+   "first_at": 1790877075.2193296,
+   "last_at": 1790878663.0726764
+  }
+ },
+ "totals": {
+  "dispatched": 234,
+  "provider_input": 2472165,
+  "estimated_unknown_input": 292346,
+  "ledger_input": 2764511,
+  "provider_output": 353256,
+  "estimated_unknown_output": 63901,
+  "ledger_output": 417157,
+  "cached_input": 1533942,
+  "cap": 688
+ },
+ "original_150_request_experiment_settled": 128,
+ "undeclared_family_scopes": []
+}

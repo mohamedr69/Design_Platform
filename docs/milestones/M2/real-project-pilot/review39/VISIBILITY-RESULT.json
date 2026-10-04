@@ -1,0 +1,6064 @@
+{
+ "ai_ledger": {
+  "after": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+   "scopes": 17
+  },
+  "before": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+   "scopes": 17
+  },
+  "unchanged": true
+ },
+ "all_visible": true,
+ "breaches_only_where_injected": true,
+ "contract_breaches": {
+  "missing_context": "missing_context",
+  "undeclared_task_kind": "undeclared_task_kind"
+ },
+ "finished_utc": "2026-10-04T10:18:30+00:00",
+ "kind": "ORCH-08C visibility dry exercise (r39 harness)",
+ "model_requests": 0,
+ "no_resend": true,
+ "scenarios": {
+  "application_path": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "comparison_state": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 3,
+      "pages": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "C": {
+       "SYN001": "INCOMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "INCOMPLETE"
+      },
+      "R": {
+       "SYN001": "INCOMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 1,
+      "P": 0,
+      "R": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {
+       "SYN003": {
+        "status": "INCOMPLETE",
+        "unread_page_count": 1,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: harness allowance refused (lane_allowance): lane C: its own allowance 1 is used (lanes never borrow)"
+          }
+         ]
+        }
+       }
+      },
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "provider_timeout",
+    "lane_allowance"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "discover_page",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[2]"
+     },
+     {
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "page": "1",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN001"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit",
+       "lane_allowance"
+      ],
+      "pages": {
+       "1": [
+        "application_document_limit",
+        "lane_allowance"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN003"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.SYN001"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.SYN001"
+     },
+     {
+      "classes": [
+       "arm_policy",
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: harness allowance refused (lane_allowance): lane C: its own allowance 1 is used (lanes never borrow)"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-C.r32.json documents.SYN003"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.SYN001"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.B.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.SYN003"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.SYN001"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 3,
+    "lane_rows": 3,
+    "run_state": 3,
+    "scorer": 10
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-application-path-82d9fc",
+   "silent_places": [],
+   "stamp": "vis-application-path-82d9fc",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "SYNTHETIC EP-990001 documents through the application readers: a timeout on a page, then C's allowance"
+  },
+  "application_project_limit": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "comparison_state": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 3,
+      "pages": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "C": {
+       "SYN001": "INCOMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "INCOMPLETE"
+      },
+      "R": {
+       "SYN001": "INCOMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 0,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {
+       "SYN001": {
+        "status": "INCOMPLETE",
+        "unread_page_count": 1,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_project_per_day"
+          }
+         ]
+        }
+       },
+       "SYN003": {
+        "status": "INCOMPLETE",
+        "unread_page_count": 1,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_project_per_day"
+          }
+         ]
+        }
+       }
+      },
+      "R": {
+       "SYN001": {
+        "status": "INCOMPLETE",
+        "unread_page_count": 1,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_project_per_day"
+          }
+         ]
+        }
+       },
+       "SYN003": {
+        "status": "INCOMPLETE",
+        "unread_page_count": 1,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_project_per_day"
+          }
+         ]
+        }
+       }
+      }
+     }
+    }
+   ],
+   "kinds": [
+    "application_project_limit"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[5]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[7]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "page": "1",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "page": "1",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "page": "1",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "application_project_limit",
+      "page": "1",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit",
+       "application_project_limit"
+      ],
+      "pages": {
+       "1": [
+        "application_document_limit",
+        "application_project_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN001"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit",
+       "application_project_limit"
+      ],
+      "pages": {
+       "1": [
+        "application_document_limit",
+        "application_project_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN003"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit",
+       "application_project_limit"
+      ],
+      "pages": {
+       "1": [
+        "application_document_limit",
+        "application_project_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.SYN001"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit",
+       "application_project_limit"
+      ],
+      "pages": {
+       "1": [
+        "application_document_limit",
+        "application_project_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.SYN003"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "arm_policy",
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_project_per_day"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-C.r32.json documents.SYN001"
+     },
+     {
+      "classes": [
+       "arm_policy",
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_project_per_day"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-C.r32.json documents.SYN003"
+     },
+     {
+      "classes": [
+       "arm_policy",
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_project_per_day"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-R.r32.json documents.SYN001"
+     },
+     {
+      "classes": [
+       "arm_policy",
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_project_per_day"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-R.r32.json documents.SYN003"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.B.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.SYN001"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.SYN003"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 3
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 4,
+    "lane_rows": 4,
+    "run_state": 4,
+    "scorer": 11
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-application-project--2a1000",
+   "silent_places": [],
+   "stamp": "vis-application-project--2a1000",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "SYNTHETIC EP-990001: the application's own per-project limit lowered to 1 (dry drill only) refuses C before the harness -- the R38-08 failure mode -- and is recorded, never silent"
+  },
+  "bound_passed_while_deferred": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "DEFERRED: B documents deferred by the project window; C not started (earliest retry 2026-10-04T10:15:52+00:00)",
+     "denominator": null,
+     "documents": {
+      "B": {
+       "F009": "DEFERRED",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "P": {
+       "F009": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "R": {
+       "F009": "DEFERRED",
+       "F037": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1
+     },
+     "earliest_retry_utc": "2026-10-04T10:15:52+00:00",
+     "kind": "fresh",
+     "lane_gates": {
+      "C": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:15:52+00:00)",
+      "P": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:15:52+00:00)",
+      "R": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:15:52+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-04T10:15:52+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:15:52+00:00",
+      "structural": "2026-10-04T10:15:52+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "P": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": null,
+     "comparison_state": "INCOMPLETE: the deferral could not complete within the elapsed bound",
+     "denominator": null,
+     "documents": {},
+     "dry_stub_calls": {},
+     "earliest_retry_utc": null,
+     "kind": "close",
+     "lane_gates": null,
+     "ledger_unchanged": null,
+     "model_requests": null,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "INCOMPLETE",
+     "status": "closed",
+     "store_retries": null,
+     "unread_pages": null
+    }
+   ],
+   "kinds": [
+    "project_window"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "resume_not_before_utc": "2026-10-04T10:15:52+00:00",
+      "resume_policy": "full",
+      "retry_at_earliest_utc": "2026-10-04T10:15:52+00:00",
+      "retry_at_full_utc": {
+       "planning": "2026-10-04T10:15:52+00:00",
+       "structural": "2026-10-04T10:15:52+00:00"
+      },
+      "where": "inv-1/out/RUN-REPORT.json retry_at_earliest / retry_at_full / resume_not_before"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "project_window"
+      ],
+      "pages": {
+       "1": [
+        "project_window"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:15:52+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F037"
+     },
+     {
+      "comparison_state": "INCOMPLETE: the deferral could not complete within the elapsed bound",
+      "deferred_now_incomplete": {
+       "B": {
+        "F009": "2026-10-04T10:15:52+00:00"
+       },
+       "C": {
+        "F009": "2026-10-04T10:15:52+00:00",
+        "F037": "2026-10-04T10:15:52+00:00"
+       },
+       "P": {
+        "F009": "2026-10-04T10:15:52+00:00",
+        "F037": "2026-10-04T10:15:52+00:00"
+       },
+       "R": {
+        "F009": "2026-10-04T10:15:52+00:00",
+        "F037": "2026-10-04T10:15:52+00:00"
+       }
+      },
+      "invocation": 2,
+      "where": "RUN-STATE.json invocations[-1] (closed)"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.F009"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 1,
+    "lane_rows": 1,
+    "run_state": 9,
+    "scorer": 1
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-bound-passed-while-d-ec7355",
+   "silent_places": [],
+   "stamp": "vis-bound-passed-while-d-ec7355",
+   "status_word": "DEFERRED, then CLOSED INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "refused",
+     "why": "refused: the elapsed bound ended at 2026-10-04T10:16:23+00:00"
+    },
+    {
+     "command": "resume",
+     "result": "refused",
+     "why": "refused: the run was closed (INCOMPLETE: the deferral could not complete within the elapsed bound)"
+    }
+   ],
+   "what": "deferred, then resumed only after the elapsed bound: the run is CLOSED INCOMPLETE"
+  },
+  "breaker": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE",
+       "_reference_only": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 1,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "breaker"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": 6,
+      "outcome": "budget",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[6]"
+     },
+     {
+      "invocation": 1,
+      "kind": "breaker",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 1,
+      "kind": "ledger",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.R"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "breaker",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "breaker"
+      ],
+      "pages": {
+       "1": [
+        "breaker"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 3,
+    "lane_rows": 1,
+    "run_state": 1,
+    "scorer": 7
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-breaker-1601fd",
+   "silent_places": [],
+   "stamp": "vis-breaker-1601fd",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "C's 1st response reports 200,000 input tokens to the FAKE ledger (per-request 100,000): its breaker opens; the next request is refused"
+  },
+  "deferral_beyond_bound": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 6,
+      "pages": 6,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "_reference_only": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 0,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "deferral_beyond_bound"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.B"
+     },
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.R"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "deferral_beyond_bound",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": "2026-10-04T11:15:37+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "deferral_beyond_bound"
+      ],
+      "pages": {
+       "1": [
+        "deferral_beyond_bound"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "deferral_beyond_bound"
+      ],
+      "pages": {
+       "1": [
+        "deferral_beyond_bound"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "deferral_beyond_bound"
+      ],
+      "pages": {
+       "1": [
+        "deferral_beyond_bound"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F037"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F037"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.F037"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.B.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F037"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 6,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 7,
+      "status_rows": {
+       "incomplete_document_rows": 7
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 7,
+      "status_rows": {
+       "incomplete_document_rows": 7
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 6,
+    "lane_rows": 3,
+    "run_state": 3,
+    "scorer": 9
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-deferral-beyond-boun-699e9f",
+   "silent_places": [],
+   "stamp": "vis-deferral-beyond-boun-699e9f",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "the window frees after the elapsed bound: the deferral cannot complete, the document is INCOMPLETE"
+  },
+  "failed_read_retry": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "comparison_state": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 3,
+      "pages": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "C": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "R": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 2,
+      "C": 2,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [
+      {
+       "lane": "B",
+       "n": 1,
+       "ordinal": 2,
+       "previous_outcome": "timeout"
+      }
+     ],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "retry_dispatched",
+    "provider_timeout"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "lane": "B",
+      "note": "retry 2 of 1e7dee538774e1ceba86354b1397d8c686752b8ece3ba7bf94f205fdc50ac1ef (previous seq 1: timeout)",
+      "outcome": "dry_refused",
+      "task": "read_submittal_form",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json retries[2]"
+     },
+     {
+      "invocation": 1,
+      "lane": "B",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": null,
+      "task": "read_submittal_form",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[1]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": null,
+      "pool_id": "SYN002",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     },
+     {
+      "class": "retry",
+      "invocation": 1,
+      "kind": "retry_dispatched",
+      "page": null,
+      "pool_id": "SYN002",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "prerequisite_failed",
+       "provider_timeout",
+       "retry_dispatched"
+      ],
+      "pages": {
+       "*": [
+        "prerequisite_failed",
+        "provider_timeout",
+        "retry_dispatched"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.SYN002"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "failure",
+       "retry"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "*"
+      ],
+      "retries": 1,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.SYN002"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.B.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 2,
+    "lane_rows": 2,
+    "run_state": 1,
+    "scorer": 6
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-failed-read-retry-55e904",
+   "silent_places": [],
+   "stamp": "vis-failed-read-retry-55e904",
+   "status_word": "retry dispatched and charged (ordinal 2); the B row stays INCOMPLETE (failure)",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "SYNTHETIC: B's first form read times out; the application's reconcile check repeats the read: it is dispatched again (a retry with its ordinal, charged), never served the failure"
+  },
+  "identity_mismatch": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INVALID",
+     "comparison_state": "INVALID: model identity mismatch (C)",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 8
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {
+      "P": "not started: the run is INVALID (model identity mismatch (C))",
+      "R": "not started: the run is INVALID (model identity mismatch (C))"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "INVALID",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "identity_mismatch",
+    "identity_invalid"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "identity_mismatch",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[5]"
+     },
+     {
+      "invocation": 1,
+      "kind": "identity_mismatch",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "identity_mismatch",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "identity_mismatch"
+      ],
+      "pages": {
+       "1": [
+        "identity_mismatch"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F037"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F037"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 8
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 9
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 9
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 2,
+    "lane_rows": 1,
+    "run_state": 1,
+    "scorer": 8
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-identity-mismatch-db5b3d",
+   "silent_places": [],
+   "stamp": "vis-identity-mismatch-db5b3d",
+   "status_word": "INVALID",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "refused",
+     "why": "refused: the run is INVALID (model identity mismatch recorded in IDENTITY-INVALID.json); it is never resumed"
+    }
+   ],
+   "what": "C's 1st response names claude-sonnet-5-1, not the pinned claude-sonnet-5: the run is INVALID"
+  },
+  "interrupted": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": null,
+     "comparison_state": null,
+     "denominator": null,
+     "documents": {},
+     "dry_stub_calls": {},
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": null,
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": null,
+     "status": "interrupted",
+     "store_retries": null,
+     "unread_pages": null
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 2,
+      "P": 0,
+      "R": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "interrupted_charged"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 2,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "dispatched",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json charges[6]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "interrupted_charged",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "interrupted_charged",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 2,
+      "kinds": [
+       "interrupted_charged"
+      ],
+      "pages": {
+       "1": [
+        "interrupted_charged"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "interrupted_charged"
+      ],
+      "pages": {
+       "1": [
+        "interrupted_charged"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.R.F009"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-R.r32.json documents.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.F009"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 1,
+    "lane_rows": 2,
+    "run_state": 2,
+    "scorer": 6
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-interrupted-e88390",
+   "silent_places": [],
+   "stamp": "vis-interrupted-e88390",
+   "status_word": "INCOMPLETE (served interrupted_charged)",
+   "steps": [
+    {
+     "command": "run",
+     "result": "error",
+     "why": "lane C failed (75); see C:\\t\\r2x\\r39-sandbox\\vis-interrupted-e88390\\inv-1\\out\\lane-C.log"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "C's process dies inside its 2nd dispatch (no response): the row stays reserved, the charge 'dispatched'"
+  },
+  "lane_allowance": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 1,
+      "P": 0,
+      "R": 4
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 0,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "lane_allowance",
+    "terminal_stop"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 2,
+      "kind": "lane_allowance",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": null,
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 2,
+      "kind": "terminal_stop",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": null,
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 2,
+      "kind": "lane_allowance",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json stops.C"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 2,
+      "kind": "terminal_stop",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "lane_allowance"
+      ],
+      "pages": {
+       "1": [
+        "lane_allowance"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "terminal_stop"
+      ],
+      "pages": {
+       "1": [
+        "terminal_stop"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.C.F009"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 5,
+    "lane_rows": 2,
+    "run_state": 2,
+    "scorer": 14
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-lane-allowance-8d04ea",
+   "silent_places": [],
+   "stamp": "vis-lane-allowance-8d04ea",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "C's own allowance is 1: its 2nd request is refused (C budget-stopped); the resume re-opens the stop"
+  },
+  "ledger": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE",
+       "_reference_only": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 1,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "ledger"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": 6,
+      "outcome": "budget",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[6]"
+     },
+     {
+      "invocation": 1,
+      "kind": "ledger",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 1,
+      "kind": "ledger",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.R"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "ledger",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "ledger",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "ledger"
+      ],
+      "pages": {
+       "1": [
+        "ledger"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "ledger"
+      ],
+      "pages": {
+       "1": [
+        "ledger"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F009"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 3,
+    "lane_rows": 2,
+    "run_state": 2,
+    "scorer": 8
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-ledger-5153a8",
+   "silent_places": [],
+   "stamp": "vis-ledger-5153a8",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "the FAKE ledger scope allows 5 requests: B takes 4, C's 2nd request is refused by the ledger"
+  },
+  "missing_context": {
+   "contract_breach": {
+    "at_utc": "2026-10-04T10:14:56+00:00",
+    "context": {
+     "page": null,
+     "profile": null,
+     "sha256": null,
+     "variant": null
+    },
+    "declared_task_kinds": [
+     "discover_page",
+     "locate_decision",
+     "r33_dry_probe",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ],
+    "detail": "lane C: task 'discover_page' arrived with no document context (the lane clears the context after each document)",
+    "document": null,
+    "expected_sha256": null,
+    "invocation": 1,
+    "kind": "missing_context",
+    "lane": "C",
+    "rule": "an undeclared request path is a contract breach: the run is INVALID; the request was not charged",
+    "task": "discover_page"
+   },
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INVALID",
+     "comparison_state": "INVALID: contract breach (C: missing_context, task 'discover_page')",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {
+      "P": "not started: the run is INVALID (contract breach (C: missing_context, task 'discover_page'))",
+      "R": "not started: the run is INVALID (contract breach (C: missing_context, task 'discover_page'))"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "INVALID",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "missing_context"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "missing_context",
+      "lane": "C",
+      "page": null,
+      "project": "EP-27331",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "missing_context",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "missing_context",
+      "page": null,
+      "pool_id": null,
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "comparison_state": "INVALID: contract breach (C: missing_context, task 'discover_page')",
+      "context": {
+       "page": null,
+       "profile": null,
+       "sha256": null,
+       "variant": null
+      },
+      "invocation": 1,
+      "kind": "missing_context",
+      "lane": "C",
+      "task": "discover_page",
+      "where": "inv-1/out/RUN-REPORT.json contract_breach (and RUN-STATE / CONTRACT-BREACH.json)"
+     }
+    ],
+    "scorer": [
+     {
+      "comparison_state": "INVALID",
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json comparison_state"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 6
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 2,
+    "lane_rows": 1,
+    "run_state": 1,
+    "scorer": 7
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-missing-context-9955b9",
+   "silent_places": [],
+   "stamp": "vis-missing-context-9955b9",
+   "status_word": "INVALID (contract breach; never charged)",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "after its 1st document C sends a DECLARED task kind with no document context (the context is cleared after each document): refused at the gate as a contract breach, never charged, the run INVALID"
+  },
+  "project_window": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "DEFERRED: B documents deferred by the project window; C not started (earliest retry 2026-10-04T10:12:27+00:00)",
+     "denominator": null,
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "DEFERRED",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "P": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "R": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 2
+     },
+     "earliest_retry_utc": "2026-10-04T10:12:27+00:00",
+     "kind": "fresh",
+     "lane_gates": {
+      "C": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:12:27+00:00)",
+      "P": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:12:27+00:00)",
+      "R": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:12:27+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-04T10:12:27+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:12:27+00:00",
+      "structural": "2026-10-04T10:12:27+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "P": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {
+       "deferred_document_rows": 7
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "COMPLETE"
+      },
+      "P": {},
+      "R": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 1
+     },
+     "earliest_retry_utc": "2026-10-04T10:12:47+00:00",
+     "kind": "resume",
+     "lane_gates": {
+      "P": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-04T10:12:47+00:00)",
+      "R": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-04T10:12:47+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": "2026-10-04T10:12:47+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:12:49+00:00",
+      "structural": "2026-10-04T10:12:49+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "P": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE",
+       "_reference_only": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 2,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": "2026-10-04T10:13:13+00:00",
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 3,
+     "resume_not_before_utc": "2026-10-04T10:13:13+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:13:13+00:00",
+      "structural": "2026-10-04T10:13:13+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 0,
+      "P": 0,
+      "R": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 4,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "project_window"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:13+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[4]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:13+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[4]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F032",
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 2,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "served": false,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 2,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F032",
+      "retry_at_utc": "2026-10-04T10:12:47+00:00",
+      "served": false,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 3,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "_reference_only",
+      "retry_at_utc": "2026-10-04T10:13:13+00:00",
+      "served": false,
+      "where": "inv-3/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "resume_not_before_utc": "2026-10-04T10:12:27+00:00",
+      "resume_policy": "earliest",
+      "retry_at_earliest_utc": "2026-10-04T10:12:27+00:00",
+      "retry_at_full_utc": {
+       "planning": "2026-10-04T10:12:27+00:00",
+       "structural": "2026-10-04T10:12:27+00:00"
+      },
+      "where": "inv-1/out/RUN-REPORT.json retry_at_earliest / retry_at_full / resume_not_before"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "project_window"
+      ],
+      "pages": {
+       "1": [
+        "project_window"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:12:27+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F037"
+     },
+     {
+      "invocation": 2,
+      "resume_not_before_utc": "2026-10-04T10:12:47+00:00",
+      "resume_policy": "earliest",
+      "retry_at_earliest_utc": "2026-10-04T10:12:47+00:00",
+      "retry_at_full_utc": {
+       "planning": "2026-10-04T10:12:49+00:00",
+       "structural": "2026-10-04T10:12:49+00:00"
+      },
+      "where": "inv-2/out/RUN-REPORT.json retry_at_earliest / retry_at_full / resume_not_before"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.F032"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F032"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.deferred.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.deferred.F032"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "deferred_document_rows": 7
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 11,
+      "status_rows": {
+       "deferred_document_rows": 8
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 11,
+      "status_rows": {
+       "deferred_document_rows": 8
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 12,
+    "lane_rows": 4,
+    "run_state": 19,
+    "scorer": 8
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-project-window-ecbe30",
+   "silent_places": [],
+   "stamp": "vis-project-window-ecbe30",
+   "status_word": "DEFERRED",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:12:27+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:12:27+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:12:27+00:00",
+      "structural": "2026-10-04T10:12:27+00:00"
+     },
+     "why": "refused: the resume policy 'earliest' allows a resume at 2026-10-04T10:12:27+00:00 (earliest retry 2026-10-04T10:12:27+00:00, full 2026-10-04T10:12:27+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:12:47+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:12:47+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:12:49+00:00",
+      "structural": "2026-10-04T10:12:49+00:00"
+     },
+     "why": "refused: the resume policy 'earliest' allows a resume at 2026-10-04T10:12:47+00:00 (earliest retry 2026-10-04T10:12:47+00:00, full 2026-10-04T10:12:49+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:13:13+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:13:13+00:00",
+     "resume_policy": "earliest",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:13:13+00:00",
+      "structural": "2026-10-04T10:13:13+00:00"
+     },
+     "why": "refused: the resume policy 'earliest' allows a resume at 2026-10-04T10:13:13+00:00 (earliest retry 2026-10-04T10:13:13+00:00, full 2026-10-04T10:13:13+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "3 EP-27331 documents, a rolling window of 2 per 12 s, resume policy 'earliest': deferrals, retry times, resumes until finished"
+  },
+  "provider_timeout": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 8
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE",
+       "_reference_only": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 4,
+      "C": 3,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 8
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE",
+       "_reference_only": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 0,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "provider_timeout"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[5]"
+     },
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[6]"
+     },
+     {
+      "invocation": 1,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json charges[7]"
+     },
+     {
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.R"
+     },
+     {
+      "invocation": 2,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json charges[5]"
+     },
+     {
+      "invocation": 2,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json charges[6]"
+     },
+     {
+      "invocation": 2,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "timeout",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json charges[7]"
+     },
+     {
+      "invocation": 2,
+      "kind": "provider_timeout",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json stops.C"
+     },
+     {
+      "invocation": 2,
+      "kind": "provider_timeout",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json stops.R"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F051",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F051",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F037",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "provider_timeout",
+      "page": "1",
+      "pool_id": "F051",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F051"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F051"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.R.F009"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.R.F037"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "provider_timeout"
+      ],
+      "pages": {
+       "1": [
+        "provider_timeout"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.R.F051"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F037"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-C.r32.json documents.F051"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.F037"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-R.r32.json documents.F051"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.limit_incomplete.F066"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.F009"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.F037"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.F051"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 8
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 9
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 10,
+    "lane_rows": 9,
+    "run_state": 9,
+    "scorer": 23
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-provider-timeout-87e2d2",
+   "silent_places": [],
+   "stamp": "vis-provider-timeout-87e2d2",
+   "status_word": "INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "C's first three requests time out: three consecutive failures make C terminal"
+  },
+  "retry_policy_full": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "DEFERRED: B documents deferred by the project window; C not started (earliest retry 2026-10-04T10:13:46+00:00)",
+     "denominator": null,
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "DEFERRED",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "P": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      },
+      "R": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 2
+     },
+     "earliest_retry_utc": "2026-10-04T10:13:46+00:00",
+     "kind": "fresh",
+     "lane_gates": {
+      "C": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:13:46+00:00)",
+      "P": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:13:46+00:00)",
+      "R": "not started: 1 B document(s) DEFERRED (earliest retry 2026-10-04T10:13:46+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-04T10:13:46+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:13:46+00:00",
+      "structural": "2026-10-04T10:13:46+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "P": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "INCOMPLETE",
+     "comparison_state": "INCOMPLETE",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {
+       "deferred_document_rows": 7
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "COMPLETE"
+      },
+      "P": {},
+      "R": {
+       "F009": "DEFERRED",
+       "F032": "DEFERRED",
+       "F037": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 1
+     },
+     "earliest_retry_utc": "2026-10-04T10:14:05+00:00",
+     "kind": "resume",
+     "lane_gates": {
+      "P": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-04T10:14:05+00:00)",
+      "R": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-04T10:14:05+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": "2026-10-04T10:14:07+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:14:07+00:00",
+      "structural": "2026-10-04T10:14:07+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "P": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE",
+       "_reference_only": "DEFERRED"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 2,
+      "P": 0,
+      "R": 0
+     },
+     "earliest_retry_utc": "2026-10-04T10:14:28+00:00",
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 3,
+     "resume_not_before_utc": "2026-10-04T10:14:28+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:14:28+00:00",
+      "structural": "2026-10-04T10:14:28+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 2,
+      "other:not_attempted": 9,
+      "pages": 9,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "C": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "R": {
+       "F009": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 0,
+      "P": 0,
+      "R": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 4,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "project_window"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 2,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 3,
+      "kind": "project_window",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:28+00:00",
+      "where": "inv-3/out/ALLOWANCE-AUDIT.json refusals[4]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "B",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 4,
+      "kind": "project_window",
+      "lane": "R",
+      "page": "1",
+      "project": "EP-27331",
+      "retry_at_utc": "2026-10-04T10:14:28+00:00",
+      "where": "inv-4/out/ALLOWANCE-AUDIT.json refusals[4]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F032",
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 2,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "served": false,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 2,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "F032",
+      "retry_at_utc": "2026-10-04T10:14:05+00:00",
+      "served": false,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "limit",
+      "invocation": 3,
+      "kind": "project_window",
+      "page": "1",
+      "pool_id": "_reference_only",
+      "retry_at_utc": "2026-10-04T10:14:28+00:00",
+      "served": false,
+      "where": "inv-3/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "resume_not_before_utc": "2026-10-04T10:13:46+00:00",
+      "resume_policy": "full",
+      "retry_at_earliest_utc": "2026-10-04T10:13:46+00:00",
+      "retry_at_full_utc": {
+       "planning": "2026-10-04T10:13:46+00:00",
+       "structural": "2026-10-04T10:13:46+00:00"
+      },
+      "where": "inv-1/out/RUN-REPORT.json retry_at_earliest / retry_at_full / resume_not_before"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "project_window"
+      ],
+      "pages": {
+       "1": [
+        "project_window"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.P.F037"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F009"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F032"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "waiting"
+      ],
+      "pages": {
+       "*": [
+        "waiting"
+       ]
+      },
+      "retry_at_utc": "2026-10-04T10:13:46+00:00",
+      "status": "DEFERRED",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.F037"
+     },
+     {
+      "invocation": 2,
+      "resume_not_before_utc": "2026-10-04T10:14:07+00:00",
+      "resume_policy": "full",
+      "retry_at_earliest_utc": "2026-10-04T10:14:05+00:00",
+      "retry_at_full_utc": {
+       "planning": "2026-10-04T10:14:07+00:00",
+       "structural": "2026-10-04T10:14:07+00:00"
+      },
+      "where": "inv-2/out/RUN-REPORT.json retry_at_earliest / retry_at_full / resume_not_before"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.F032"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "DEFERRED",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F032"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.deferred.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.deferred.F032"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "deferred_document_rows": 7
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 11,
+      "status_rows": {
+       "deferred_document_rows": 8
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 11,
+      "status_rows": {
+       "deferred_document_rows": 8
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 12,
+    "lane_rows": 4,
+    "run_state": 19,
+    "scorer": 8
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-retry-policy-full-52b0b2",
+   "silent_places": [],
+   "stamp": "vis-retry-policy-full-52b0b2",
+   "status_word": "DEFERRED (retry_at_earliest and retry_at_full; resume refused before the 'full' time), then FINISHED",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:13:46+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:13:46+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:13:46+00:00",
+      "structural": "2026-10-04T10:13:46+00:00"
+     },
+     "why": "refused: the resume policy 'full' allows a resume at 2026-10-04T10:13:46+00:00 (earliest retry 2026-10-04T10:13:46+00:00, full 2026-10-04T10:13:46+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:14:05+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:14:07+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:14:07+00:00",
+      "structural": "2026-10-04T10:14:07+00:00"
+     },
+     "why": "refused: the resume policy 'full' allows a resume at 2026-10-04T10:14:07+00:00 (earliest retry 2026-10-04T10:14:05+00:00, full 2026-10-04T10:14:07+00:00); nothing was created"
+    },
+    {
+     "between_earliest_and_full": true,
+     "command": "resume",
+     "result": "refused",
+     "why": "refused: the resume policy 'full' allows a resume at 2026-10-04T10:14:07+00:00 (earliest retry 2026-10-04T10:14:05+00:00, full 2026-10-04T10:14:07+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-04T10:14:28+00:00",
+     "early": true,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-04T10:14:28+00:00",
+     "resume_policy": "full",
+     "retry_at_full_utc": {
+      "planning": "2026-10-04T10:14:28+00:00",
+      "structural": "2026-10-04T10:14:28+00:00"
+     },
+     "why": "refused: the resume policy 'full' allows a resume at 2026-10-04T10:14:28+00:00 (earliest retry 2026-10-04T10:14:28+00:00, full 2026-10-04T10:14:28+00:00); nothing was created"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "the same 3 EP-27331 documents under the 'full' resume policy: every DEFERRED record carries retry_at_earliest and retry_at_full (planning / structural); a resume before the policy's time is refused and creates nothing"
+  },
+  "undeclared_task_kind": {
+   "contract_breach": {
+    "at_utc": "2026-10-04T10:14:47+00:00",
+    "context": {
+     "page": null,
+     "profile": "drill",
+     "sha256": "009717871f15d1021291f77ecf0b29a4e2e7362e8087e89a11bc48e02c84cf34",
+     "variant": "drill"
+    },
+    "declared_task_kinds": [
+     "r33_dry_probe",
+     "read_submittal_form"
+    ],
+    "detail": "lane B: task kind 'drawings_reply_match' is not declared for this lane (declared ['r33_dry_probe', 'read_submittal_form']); context '009717871f15d1021291f77ecf0b29a4e2e7362e8087e89a11bc48e02c84cf34'",
+    "document": "F037",
+    "expected_sha256": "009717871f15d1021291f77ecf0b29a4e2e7362e8087e89a11bc48e02c84cf34",
+    "invocation": 1,
+    "kind": "undeclared_task_kind",
+    "lane": "B",
+    "rule": "an undeclared request path is a contract breach: the run is INVALID; the request was not charged",
+    "task": "drawings_reply_match"
+   },
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "INVALID",
+     "comparison_state": "INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')",
+     "denominator": null,
+     "documents": {
+      "B": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "INCOMPLETE",
+       "F051": "INCOMPLETE",
+       "F066": "INCOMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {
+      "C": "not started: INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')",
+      "P": "not started: INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')",
+      "R": "not started: INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "INVALID",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "undeclared_task_kind",
+    "contract_breach_invalid"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "undeclared_task_kind",
+      "lane": "B",
+      "page": null,
+      "project": "EP-27331",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "undeclared_task_kind",
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json stops.B"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "limit",
+      "invocation": 1,
+      "kind": "undeclared_task_kind",
+      "page": null,
+      "pool_id": "F037",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-B.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "comparison_state": "INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')",
+      "context": {
+       "page": null,
+       "profile": "drill",
+       "sha256": "009717871f15d1021291f77ecf0b29a4e2e7362e8087e89a11bc48e02c84cf34",
+       "variant": "drill"
+      },
+      "invocation": 1,
+      "kind": "undeclared_task_kind",
+      "lane": "B",
+      "task": "drawings_reply_match",
+      "where": "inv-1/out/RUN-REPORT.json contract_breach (and RUN-STATE / CONTRACT-BREACH.json)"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "undeclared_task_kind"
+      ],
+      "pages": {
+       "*": [
+        "undeclared_task_kind"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.B.F037"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "limit"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "*"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-1/out/lane-B.r32.json documents.F037"
+     },
+     {
+      "candidate_outcome": "INVALID",
+      "comparison_state": "INVALID: contract breach (B: undeclared_task_kind, task 'drawings_reply_match')",
+      "invocation": 1,
+      "where": "inv-1/out/RUN-REPORT.json comparison_state (no B/C score: C did not run)"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 2,
+    "lane_rows": 1,
+    "run_state": 2,
+    "scorer": 2
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-undeclared-task-kind-9cb5b9",
+   "silent_places": [],
+   "stamp": "vis-undeclared-task-kind-9cb5b9",
+   "status_word": "INVALID (contract breach; never charged; never resumed)",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "refused",
+     "why": "refused: the run is INVALID (contract breach recorded in CONTRACT-BREACH.json: an undeclared request path); it is never resumed"
+    }
+   ],
+   "what": "after its 1st document B sends a 'drawings_reply_match' request (the drawings-AI task, undeclared for B): refused at the gate, recorded with the lane, task and context, CONTRACT-BREACH.json written, the run INVALID, the resume refused"
+  },
+  "unread_pages": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "comparison_state": "NOT DISPATCHABLE (EXTEND:extension-1)",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:missing_page": 1,
+      "other:not_attempted": 2,
+      "pages": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "C": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      },
+      "R": {
+       "SYN001": "COMPLETE",
+       "SYN002": "INCOMPLETE",
+       "SYN003": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 1,
+      "C": 2,
+      "P": 0,
+      "R": 2
+     },
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {
+       "SYN001": {
+        "status": "COMPLETE",
+        "unread_page_count": 2,
+        "unread_pages": {
+         "3": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ],
+         "4": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ]
+        }
+       },
+       "SYN003": {
+        "status": "COMPLETE",
+        "unread_page_count": 4,
+        "unread_pages": {
+         "1": [
+          {
+           "kind": "application_reader_exception",
+           "partial": false,
+           "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+          }
+         ],
+         "2": [
+          {
+           "kind": "application_reader_exception",
+           "partial": false,
+           "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+          }
+         ],
+         "3": [
+          {
+           "kind": "application_reader_exception",
+           "partial": false,
+           "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+          }
+         ],
+         "4": [
+          {
+           "kind": "application_reader_exception",
+           "partial": false,
+           "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+          }
+         ]
+        }
+       }
+      },
+      "R": {
+       "SYN001": {
+        "status": "COMPLETE",
+        "unread_page_count": 2,
+        "unread_pages": {
+         "3": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ],
+         "4": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ]
+        }
+       },
+       "SYN003": {
+        "status": "COMPLETE",
+        "unread_page_count": 2,
+        "unread_pages": {
+         "3": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ],
+         "4": [
+          {
+           "kind": "application_document_limit",
+           "partial": false,
+           "reason": "not read: budget: calls_per_document"
+          }
+         ]
+        }
+       }
+      }
+     }
+    }
+   ],
+   "kinds": [
+    "application_document_limit",
+    "application_reader_exception",
+    "application_reader_cap"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "C",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[1]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "C",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[2]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "C",
+      "page": "4",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[3]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "lane": "C",
+      "page": "1",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[4]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "lane": "C",
+      "page": "2",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[5]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "lane": "C",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[6]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "lane": "C",
+      "page": "4",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[7]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "R",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[8]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "R",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[9]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "R",
+      "page": "4",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[10]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "R",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[11]"
+     },
+     {
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "lane": "R",
+      "page": "3",
+      "project": "EP-990001",
+      "retry_at_utc": null,
+      "where": "inv-1/out/ALLOWANCE-AUDIT.json refusals[12]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "4",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "page": "1",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "page": "2",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "page": "3",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_reader_exception",
+      "page": "4",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "4",
+      "pool_id": "SYN001",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     },
+     {
+      "class": "arm_policy",
+      "invocation": 1,
+      "kind": "application_document_limit",
+      "page": "3",
+      "pool_id": "SYN003",
+      "retry_at_utc": null,
+      "served": false,
+      "where": "inv-1/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit"
+      ],
+      "pages": {
+       "3": [
+        "application_document_limit"
+       ],
+       "4": [
+        "application_document_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "COMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN001"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_reader_exception"
+      ],
+      "pages": {
+       "1": [
+        "application_reader_exception"
+       ],
+       "2": [
+        "application_reader_exception"
+       ],
+       "3": [
+        "application_reader_exception"
+       ],
+       "4": [
+        "application_reader_exception"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "COMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.C.SYN003"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit"
+      ],
+      "pages": {
+       "3": [
+        "application_document_limit"
+       ],
+       "4": [
+        "application_document_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "COMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.SYN001"
+     },
+     {
+      "invocation": 1,
+      "kinds": [
+       "application_document_limit"
+      ],
+      "pages": {
+       "3": [
+        "application_document_limit"
+       ],
+       "4": [
+        "application_document_limit"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "COMPLETE",
+      "where": "inv-1/out/RUN-REPORT.json documents.R.SYN003"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "arm_policy"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "3",
+       "4"
+      ],
+      "retries": 0,
+      "status": "COMPLETE",
+      "unread_pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-C.r32.json documents.SYN001"
+     },
+     {
+      "classes": [
+       "arm_policy"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ],
+      "retries": 0,
+      "status": "COMPLETE",
+      "unread_pages": {
+       "1": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "2": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "3": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-C.r32.json documents.SYN003"
+     },
+     {
+      "classes": [
+       "arm_policy"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "3",
+       "4"
+      ],
+      "retries": 0,
+      "status": "COMPLETE",
+      "unread_pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-R.r32.json documents.SYN001"
+     },
+     {
+      "classes": [
+       "arm_policy"
+      ],
+      "in_denominator": true,
+      "invocation": 1,
+      "pages": [
+       "3",
+       "4"
+      ],
+      "retries": 0,
+      "status": "COMPLETE",
+      "unread_pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "where": "inv-1/out/lane-R.r32.json documents.SYN003"
+     },
+     {
+      "invocation": 1,
+      "pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "status": "COMPLETE",
+      "unread_page_count": 2,
+      "where": "inv-1/out/SCORE-BCR-R32.json unread_pages.C.documents.SYN001"
+     },
+     {
+      "invocation": 1,
+      "pages": {
+       "1": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "2": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "3": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_reader_exception",
+         "partial": false,
+         "reason": "the evidence reader raised: RuntimeError: r39 drill: injected evidence-reader exception (dry only)"
+        }
+       ]
+      },
+      "status": "COMPLETE",
+      "unread_page_count": 4,
+      "where": "inv-1/out/SCORE-BCR-R32.json unread_pages.C.documents.SYN003"
+     },
+     {
+      "invocation": 1,
+      "pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "status": "COMPLETE",
+      "unread_page_count": 2,
+      "where": "inv-1/out/SCORE-BCR-R32.json unread_pages.R.documents.SYN001"
+     },
+     {
+      "invocation": 1,
+      "pages": {
+       "3": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ],
+       "4": [
+        {
+         "kind": "application_document_limit",
+         "partial": false,
+         "reason": "not read: budget: calls_per_document"
+        }
+       ]
+      },
+      "status": "COMPLETE",
+      "unread_page_count": 2,
+      "where": "inv-1/out/SCORE-BCR-R32.json unread_pages.R.documents.SYN003"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.B.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "where": "inv-1/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.SYN002"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 1,
+      "pages_denominator": 3,
+      "status_rows": {
+       "incomplete_document_rows": 1
+      },
+      "where": "inv-1/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 13,
+    "lane_rows": 13,
+    "run_state": 4,
+    "scorer": 13
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-unread-pages-86a266",
+   "silent_places": [],
+   "stamp": "vis-unread-pages-86a266",
+   "status_word": "COMPLETE with unread_pages (application-internal); limit refusals stay INCOMPLETE",
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ],
+   "what": "SYNTHETIC 4-page documents, the per-document JobBudget lowered to 2 (dry only): pages left unread or read in part by the application's own budget, and an evidence-reader exception on the 2nd document -- every such page recorded per page; the documents stay COMPLETE with unread_pages"
+  },
+  "unsaved": {
+   "contract_breach": null,
+   "duplicates_in_capture_store": 0,
+   "invocations": [
+    {
+     "candidate_outcome": null,
+     "comparison_state": null,
+     "denominator": null,
+     "documents": {},
+     "dry_stub_calls": {},
+     "earliest_retry_utc": null,
+     "kind": "fresh",
+     "lane_gates": null,
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": null,
+     "status": "interrupted",
+     "store_retries": null,
+     "unread_pages": null
+    },
+    {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "denominator": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 1,
+      "other:not_attempted": 8,
+      "pages": 8,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "documents": {
+      "B": {
+       "F009": "COMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "C": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE"
+      },
+      "R": {
+       "F009": "INCOMPLETE",
+       "F037": "COMPLETE",
+       "F051": "COMPLETE",
+       "F066": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      }
+     },
+     "dry_stub_calls": {
+      "B": 0,
+      "C": 2,
+      "P": 0,
+      "R": 1
+     },
+     "earliest_retry_utc": null,
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "resume_policy": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished",
+     "store_retries": [],
+     "unread_pages": {
+      "B": {},
+      "C": {},
+      "R": {}
+     }
+    }
+   ],
+   "kinds": [
+    "interrupted_charged"
+   ],
+   "locations": {
+    "audit": [
+     {
+      "invocation": 2,
+      "lane": "C",
+      "ledger_entry": null,
+      "outcome": "dispatched",
+      "page": "1",
+      "task": "r33_dry_probe",
+      "where": "inv-2/out/ALLOWANCE-AUDIT.json charges[6]"
+     }
+    ],
+    "lane_rows": [
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "interrupted_charged",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-C.json limit_events"
+     },
+     {
+      "class": "failure",
+      "invocation": 2,
+      "kind": "interrupted_charged",
+      "page": "1",
+      "pool_id": "F009",
+      "retry_at_utc": null,
+      "served": true,
+      "where": "inv-2/out/LANE-R.json limit_events"
+     }
+    ],
+    "run_state": [
+     {
+      "invocation": 2,
+      "kinds": [
+       "interrupted_charged"
+      ],
+      "pages": {
+       "1": [
+        "interrupted_charged"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.C.F009"
+     },
+     {
+      "invocation": 2,
+      "kinds": [
+       "interrupted_charged"
+      ],
+      "pages": {
+       "1": [
+        "interrupted_charged"
+       ]
+      },
+      "retry_at_utc": null,
+      "status": "INCOMPLETE",
+      "where": "inv-2/out/RUN-REPORT.json documents.R.F009"
+     }
+    ],
+    "scorer": [
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-C.r32.json documents.F009"
+     },
+     {
+      "classes": [
+       "failure"
+      ],
+      "in_denominator": true,
+      "invocation": 2,
+      "pages": [
+       "1"
+      ],
+      "retries": 0,
+      "status": "INCOMPLETE",
+      "unread_pages": null,
+      "where": "inv-2/out/lane-R.r32.json documents.F009"
+     },
+     {
+      "invocation": 2,
+      "where": "inv-2/out/SCORE-BCR-R32.json limit_incomplete.C.other_incomplete.F009"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 8,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.decision.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.identity.coverage_resolved"
+     },
+     {
+      "invocation": 2,
+      "pages_denominator": 9,
+      "status_rows": {
+       "incomplete_document_rows": 4
+      },
+      "where": "inv-2/out/SCORE-BCR-R32.json metrics.C.fields.revision.coverage_resolved"
+     }
+    ]
+   },
+   "locations_truncated_at": 12,
+   "model_requests_total": 0,
+   "recorded_in": {
+    "audit": 1,
+    "lane_rows": 2,
+    "run_state": 2,
+    "scorer": 6
+   },
+   "run_folder": "C:/t/r2x/r39-sandbox/vis-unsaved-5cbfea",
+   "silent_places": [],
+   "stamp": "vis-unsaved-5cbfea",
+   "status_word": "INCOMPLETE (served interrupted_charged)",
+   "steps": [
+    {
+     "command": "run",
+     "result": "error",
+     "why": "lane C failed (76); see C:\\t\\r2x\\r39-sandbox\\vis-unsaved-5cbfea\\inv-1\\out\\lane-C.log"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "what": "C's 2nd response came back (identity logged) and the process died before saving it"
+  }
+ },
+ "started_utc": "2026-10-04T10:11:43+00:00",
+ "statement": "dry runs only: the refusing stub (run_control_r38.DryStub) answers nothing usable, no provider is built, no model request is made; the application path reads only SYNTHETIC EP-990001 documents; the real reviewed-2 labels are read only by the adapter (reader 'none' runs read no document); FAKE ledgers live inside the dry run folders",
+ "work": "C:/t/r2x/r39-sandbox/visx"
+}

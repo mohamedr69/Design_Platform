@@ -1,0 +1,300 @@
+{
+ "statement": "no model request: the child's provider is a local fake; the trees are used read-only",
+ "summary": {
+  "baseline": {
+   "declared_false_switches_off": true,
+   "feed_answer_applied": {
+    "source": "ai",
+    "status": "approved"
+   },
+   "feed_provider_asked": [
+    "drawings_reply_match"
+   ],
+   "measured_unchanged": true,
+   "project_documents_flushed": [],
+   "true_goes_live": true
+  },
+  "candidate": {
+   "declared_false_switches_off": true,
+   "feed_answer_applied": {
+    "source": "ai",
+    "status": "approved"
+   },
+   "feed_provider_asked": [
+    "drawings_reply_match"
+   ],
+   "measured_unchanged": true,
+   "project_documents_flushed": [],
+   "true_goes_live": true
+  }
+ },
+ "taken_utc": "2026-10-04T10:00:46+00:00",
+ "trees": {
+  "baseline": {
+   "feed-true": {
+    "enabled": {
+     "on": true,
+     "why": null
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "true"
+    },
+    "measured_columns": [
+     "role",
+     "state",
+     "error",
+     "sha256",
+     "reference",
+     "revision",
+     "status",
+     "system_code",
+     "extracted"
+    ],
+    "measured_unchanged": true,
+    "mode": "feed",
+    "project_documents_after": [
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"reply\", \"reference\": \"ABC-FA-0101\", \"revision\": \"R1\", \"status\": \"approved\", \"reply_text\": \"approved\"}], \"notes\": []}",
+      "id": 1,
+      "reference": "ABC-FA-0101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "state": "fresh",
+      "status": "approved",
+      "system_code": "FAS"
+     },
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"drawings\", \"reference\": \"ABC-FA-101\", \"revision\": \"R1\"}], \"notes\": []}",
+      "id": 2,
+      "reference": "ABC-FA-101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "state": "fresh",
+      "status": null,
+      "system_code": "FAS"
+     }
+    ],
+    "project_documents_before": [
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"reply\", \"reference\": \"ABC-FA-0101\", \"revision\": \"R1\", \"status\": \"approved\", \"reply_text\": \"approved\"}], \"notes\": []}",
+      "id": 1,
+      "reference": "ABC-FA-0101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "state": "fresh",
+      "status": "approved",
+      "system_code": "FAS"
+     },
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"drawings\", \"reference\": \"ABC-FA-101\", \"revision\": \"R1\"}], \"notes\": []}",
+      "id": 2,
+      "reference": "ABC-FA-101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "state": "fresh",
+      "status": null,
+      "system_code": "FAS"
+     }
+    ],
+    "project_documents_flushed_during_review": [],
+    "provider_calls": [
+     "drawings_reply_match"
+    ],
+    "revision_after": {
+     "source": "ai",
+     "status": "approved"
+    },
+    "revision_before": {
+     "source": "sync",
+     "status": "under_review"
+    },
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": true
+    },
+    "tree": "C:/t/iso/frozen-r12/backend"
+   },
+   "switch-false": {
+    "ai_review": "returned at enabled(): nothing read, nothing asked",
+    "enabled": {
+     "on": false,
+     "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "false"
+    },
+    "mode": "switch",
+    "provider_calls": [],
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": false
+    },
+    "tree": "C:/t/iso/frozen-r12/backend"
+   },
+   "switch-true": {
+    "ai_review": "went past enabled() to the database ('NoneType' object has no attribute 'query')",
+    "enabled": {
+     "on": true,
+     "why": null
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "true"
+    },
+    "mode": "switch",
+    "provider_calls": [],
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": true
+    },
+    "tree": "C:/t/iso/frozen-r12/backend"
+   }
+  },
+  "candidate": {
+   "feed-true": {
+    "enabled": {
+     "on": true,
+     "why": null
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "true"
+    },
+    "measured_columns": [
+     "role",
+     "state",
+     "error",
+     "sha256",
+     "reference",
+     "revision",
+     "status",
+     "system_code",
+     "extracted"
+    ],
+    "measured_unchanged": true,
+    "mode": "feed",
+    "project_documents_after": [
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"reply\", \"reference\": \"ABC-FA-0101\", \"revision\": \"R1\", \"status\": \"approved\", \"reply_text\": \"approved\"}], \"notes\": []}",
+      "id": 1,
+      "reference": "ABC-FA-0101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "state": "fresh",
+      "status": "approved",
+      "system_code": "FAS"
+     },
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"drawings\", \"reference\": \"ABC-FA-101\", \"revision\": \"R1\"}], \"notes\": []}",
+      "id": 2,
+      "reference": "ABC-FA-101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "state": "fresh",
+      "status": null,
+      "system_code": "FAS"
+     }
+    ],
+    "project_documents_before": [
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"reply\", \"reference\": \"ABC-FA-0101\", \"revision\": \"R1\", \"status\": \"approved\", \"reply_text\": \"approved\"}], \"notes\": []}",
+      "id": 1,
+      "reference": "ABC-FA-0101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "state": "fresh",
+      "status": "approved",
+      "system_code": "FAS"
+     },
+     {
+      "error": null,
+      "extracted": "{\"records\": [{\"category\": \"drawings\", \"reference\": \"ABC-FA-101\", \"revision\": \"R1\"}], \"notes\": []}",
+      "id": 2,
+      "reference": "ABC-FA-101",
+      "revision": "R1",
+      "role": "document",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "state": "fresh",
+      "status": null,
+      "system_code": "FAS"
+     }
+    ],
+    "project_documents_flushed_during_review": [],
+    "provider_calls": [
+     "drawings_reply_match"
+    ],
+    "revision_after": {
+     "source": "ai",
+     "status": "approved"
+    },
+    "revision_before": {
+     "source": "sync",
+     "status": "under_review"
+    },
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": true
+    },
+    "tree": "C:/t/iso/cand-r29/backend"
+   },
+   "switch-false": {
+    "ai_review": "returned at enabled(): nothing read, nothing asked",
+    "enabled": {
+     "on": false,
+     "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "false"
+    },
+    "mode": "switch",
+    "provider_calls": [],
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": false
+    },
+    "tree": "C:/t/iso/cand-r29/backend"
+   },
+   "switch-true": {
+    "ai_review": "went past enabled() to the database ('NoneType' object has no attribute 'query')",
+    "enabled": {
+     "on": true,
+     "why": null
+    },
+    "env": {
+     "AI_ENABLED": "true",
+     "DRAWINGS_AI_REVIEW_ENABLED": "true"
+    },
+    "mode": "switch",
+    "provider_calls": [],
+    "settings": {
+     "ai_enabled": true,
+     "drawings_ai_max_calls_per_sync": 10,
+     "drawings_ai_review_enabled": true
+    },
+    "tree": "C:/t/iso/cand-r29/backend"
+   }
+  }
+ }
+}

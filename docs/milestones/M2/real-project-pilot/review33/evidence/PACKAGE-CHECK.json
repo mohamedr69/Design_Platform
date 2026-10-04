@@ -1,0 +1,281 @@
+{
+ "checked_at_utc": "2026-10-03T11:31:00+00:00",
+ "checks": {
+  "binding": {
+   "equals_the_dry_run_binding": true,
+   "files": 68,
+   "mismatches": [],
+   "sha256": "d1a8a40100fc05a937ccf40f6fb02a5788bfbea8a74adafcfc68b0f01a53936e"
+  },
+  "copies": {
+   "harness_base_equals_review31": true,
+   "package_harness_equals_bound": true,
+   "package_scripts_equal_work": {
+    "append_response_r33.py": true,
+    "audit.py": true,
+    "dry_run_r33.py": true,
+    "make_binding_r33.py": true,
+    "package_r33.py": true,
+    "preflight_inputs.py": true,
+    "prepare_r33.py": true,
+    "run_tests_r33.py": true,
+    "verify_review33_package.py": true
+   },
+   "unchanged_review31_modules": {
+    "capture_store.py": true,
+    "state_check.py": true,
+    "stop_rules.py": true,
+    "test_capture_store.py": true,
+    "test_state_check.py": true,
+    "test_stop_rules.py": true
+   }
+  },
+  "derived": {
+   "eval_input": true,
+   "population": {
+    "decision": 38,
+    "identity": 57,
+    "revision": 38
+   },
+   "reconciliation_totals": {
+    "decision_alternatives": 7,
+    "distinct": 432,
+    "documents": 68,
+    "every_row_once": true,
+    "excluded": 15,
+    "excluded_by_kind": {
+     "absent": 8,
+     "value": 7
+    },
+    "identity_alternates": 20,
+    "mapped": 417,
+    "mapped_by_kind": {
+     "absent": 140,
+     "not_scorable": 32,
+     "value": 245
+    },
+    "no_record_pages": 24,
+    "planned": 68,
+    "reconciled_rows": 432,
+    "records": 115,
+    "suffix_revision_divergences": 0,
+    "truth_rows": 432,
+    "unvalidated_pages": 0
+   },
+   "run_set": true,
+   "truth": true
+  },
+  "dry_run": {
+   "guard_refused": true,
+   "ingest_72_ok": true,
+   "ledger_after": {
+    "entries": 483,
+    "limit_amendments": 0,
+    "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+    "scopes": 17
+   },
+   "ledger_before": {
+    "entries": 483,
+    "limit_amendments": 0,
+    "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+    "scopes": 17
+   },
+   "ledger_unchanged": true,
+   "live_attempts_blocked": {
+    "B": [],
+    "C": [],
+    "P": [],
+    "R": []
+   },
+   "model_requests": 0,
+   "provider_calls": 0,
+   "readers": {
+    "B": "none",
+    "C": "none",
+    "P": "none",
+    "R": "none"
+   },
+   "resume_drill_passes": true,
+   "runner_model_requests": 0,
+   "state_checks": [
+    true,
+    true,
+    true
+   ]
+  },
+  "format": {
+   "authorization_file_in_package": false,
+   "crlf_files": [],
+   "missing_required": []
+  },
+  "frozen_trees": {
+   "cutoff_utc": "2026-10-03T10:30:00+00:00",
+   "modified_after_cutoff": [],
+   "roots": [
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review31",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\fresh-cohort-r32",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\fresh-cohort-r32-reviewed",
+    "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\fresh-cohort-r32-reviewed-2",
+    "C:\\Users\\moham\\.codex\\visualizations\\2026\\09\\27\\01a0e218-6014-77a0-be80-501dcc922424\\master-roadmap\\reviews\\M2-review-33",
+    "C:\\Users\\moham\\.codex\\visualizations\\2026\\09\\27\\01a0e218-6014-77a0-be80-501dcc922424\\master-roadmap\\reviews\\M2-label-review-r32-draft-1",
+    "C:\\Users\\moham\\.codex\\visualizations\\2026\\09\\27\\01a0e218-6014-77a0-be80-501dcc922424\\master-roadmap\\AI-ACCURACY-POLICY.md",
+    "C:\\Users\\moham\\.codex\\visualizations\\2026\\09\\27\\01a0e218-6014-77a0-be80-501dcc922424\\master-roadmap\\AI-ACCURACY-POLICY-AMENDMENT-R32-01.md",
+    "C:\\t\\r2x\\r32-stage",
+    "C:\\t\\iso\\cand-r29",
+    "C:\\t\\iso\\frozen-r12",
+    "C:\\t\\iso\\work\\r2x\\r32",
+    "C:\\t\\iso\\work\\r2x\\r32b",
+    "C:\\t\\iso\\work\\r2x\\r32c",
+    "C:\\t\\r2x\\ledger\\r2x-ledger.sqlite"
+   ]
+  },
+  "guard": {
+   "authorization_file": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review33\\OWNER-DISPATCH-AUTHORIZATION.json",
+   "check_fake_hash": {
+    "authorized": false,
+    "reason": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review33\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)"
+   },
+   "check_none": {
+    "authorized": false,
+    "reason": "refused: no owner dispatch authorization (C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review33\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)"
+   },
+   "exists": false,
+   "guarded_provider_built": false,
+   "guarded_provider_response": "dispatch_refused"
+  },
+  "heads": {
+   "C:/t/iso/cand-r29": {
+    "clean": true,
+    "expected": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+    "head": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d"
+   },
+   "C:/t/iso/frozen-r12": {
+    "clean": true,
+    "expected": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+    "head": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3"
+   }
+  },
+  "junit_packaged": {
+   "errors": 0,
+   "failures": 0,
+   "files": {
+    "test_allowance_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_capture_store.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 21
+    },
+    "test_concentration_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 12
+    },
+    "test_converter_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 7
+    },
+    "test_dispatch_guard_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 11
+    },
+    "test_labels_adapter_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 13
+    },
+    "test_lane_judge_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 7
+    },
+    "test_literal_compare_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 13
+    },
+    "test_run_set_selector_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 8
+    },
+    "test_runner_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 8
+    },
+    "test_sandbox_ingest_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_score_bcr_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 16
+    },
+    "test_state_check.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_stop_rules.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 8
+    },
+    "test_tripwire_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    }
+   },
+   "tests": 144
+  },
+  "ledger": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "scopes": 17
+  },
+  "preflight_inputs": "PACKET OK",
+  "response_ledger": {
+   "expected_before_append": "da5cc7981f6e65e05e843ee5a3b8e3520b2daa957acb8b1e7981e17abf7997f7",
+   "sha256": "da5cc7981f6e65e05e843ee5a3b8e3520b2daa957acb8b1e7981e17abf7997f7",
+   "unchanged": true
+  },
+  "tests_rerun": {
+   "all_passed": true,
+   "total": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 144
+   }
+  }
+ },
+ "model_requests": 0,
+ "ok": true,
+ "package": "review33 (ORCH-05.1)",
+ "problems": [],
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed"
+}

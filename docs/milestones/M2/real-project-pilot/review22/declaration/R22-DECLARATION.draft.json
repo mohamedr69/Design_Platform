@@ -1,0 +1,3806 @@
+{
+ "declared_at_utc": "2026-09-30T20:05:20+00:00",
+ "name": "four-arm isolated accuracy experiment (R21, harness v4 / review 22)",
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "harness_dir": "C:/t/iso/work/r2x/review21",
+ "status": "DRAFT / NOT EXECUTED / NO NEW MODEL BUDGET APPROVED -- a proposal for the owner's budget decision; nothing in it may run before authorization",
+ "executed": false,
+ "new_model_budget_approved": false,
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "scope_note": "the recorded Round 2 permission covers the cohort / provider; a NEW request allowance is required and NOT granted by this declaration",
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)",
+   "19144": "exploration (new)",
+   "22510": "exploration (new)",
+   "23091": "exploration (new)",
+   "23323": "exploration (new)",
+   "26208": "exploration (new)",
+   "27421": "exploration (new)",
+   "28745": "exploration (new)",
+   "30549": "exploration (new)"
+  },
+  "sealed": "not opened"
+ },
+ "code": {
+  "accepted_app": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "successor": {
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "tree": "C:/t/iso/cand-ai4",
+   "parent": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+   "evidence_reader_sha256": "c04b173b0d68fc1fd96e603344387020bd38d1348a6542bf736b0ef88907d495"
+  },
+  "evaluator": {
+   "module": "scripts.m2_eval5",
+   "version": "m2-pilot-eval-2026-09-29.9",
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "coverage_scorer": {
+   "file": "harness-v4/score_arms_v4.py",
+   "sha256": "75924b86949d8d823bd6a8fc3d9447658221b07021dc10b07a4c472131388218",
+   "coverage_v4_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "contract": "harness-contract-2026-09-30.v4"
+  },
+  "runners": {
+   "harness-v4/arm_a.py": "1197bc1841c6a7af7c3b06802e381b44b6d52708565f008ef951dd3ff69cffc6",
+   "harness-v4/arm_ev.py": "d4662cacbabfe1b6557f23823ff344995a6447a9e744058480f9abbc87e7133f"
+  },
+  "dry_provider": "e50dcfbc2cbff51f946350570f10be8392fcda85aa44206d6ae6e415176724e4",
+  "xtrack": "076535460b061ebe724172c0f9c22c05e7b1f845f4f1092e24f1d4246e64a1dc",
+  "durable_allowance": {
+   "file": "C:/t/iso/work/r2x/r16/boq_harness.py",
+   "sha256": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf"
+  },
+  "schedule_sim": "5f60804a4c58934f18a552a25d821f3d37de67024349d15f2e61b660b862d542"
+ },
+ "arms": {
+  "L1": {
+   "meaning": "whole-page discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L2": {
+   "meaning": "title-block (ROI) discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  },
+  "L3": {
+   "meaning": "whole-page discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L4": {
+   "meaning": "ROI discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  }
+ },
+ "doc_arms": [
+  "L1",
+  "L2",
+  "L3",
+  "L4"
+ ],
+ "common": {
+  "G": true,
+  "support": "v2 (rotation-correct clip + bounded local OCR)",
+  "scheduling": "required_first",
+  "deadline": "min(provider timeout, remaining job time); 20 s floor; OCR bound"
+ },
+ "pairs": {
+  "ROI alone": [
+   "L1",
+   "L2"
+  ],
+  "X on whole page": [
+   "L1",
+   "L3"
+  ],
+  "X on ROI": [
+   "L2",
+   "L4"
+  ],
+  "ROI under X": [
+   "L3",
+   "L4"
+  ]
+ },
+ "offline_replays": "on each arm's own captured responses: P0 (guard off, accepted text) -> P1 (+guard) -> P2 (+rotation clip) -> P3 (+local OCR): conditional field-value re-validation on fixed responses, never a replay of requests, images, scheduling or deadlines",
+ "expected_call_order": {
+  "all arms": "per triggered page: discover_page (L1/L3) or discover_region (L2/L4) -> read_identity -> read_revision -> read_decision (when a block was discovered); then, L3/L4 only, page by page: read_field_context for own identity, then revision, when not validated and no failure / refusal preceded"
+ },
+ "sources": {
+  "stage": {
+   "root": "C:/t/r2x/r21-stage",
+   "manifest": "R21-STAGE.json",
+   "manifest_sha256": "e8277a6bb9774d7c48d9d1bfcb64e5d30f80a3f4553d407b7380a44e59f17e0b"
+  },
+  "sample": {
+   "documents": {
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+    "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+    "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+    "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+    "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+    "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+    "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+    "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+    "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+    "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+    "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+    "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+    "EP-23091/O&M/EM/Content.pdf": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+    "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+    "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+    "EP-23091/EP-23091 Material Submittal/cs eml.pdf": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+    "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+    "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+    "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+    "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f"
+   },
+   "documents_planned": [
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+     "sha256": "35af9c319feb200639a34e341f40fe04e11542b8d8ad499e8dbc42536e53660c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+     "sha256": "8257e4caad10d1b250089327216ebf892ea94bce824fa6784de1f4bb59e07d9e",
+     "pages": 2,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+     "sha256": "d5a36f9a4e572e69ded9dff0db2febef55b6d227de546f28f1686ea2c2fb1c27",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+     "sha256": "806a94fe74920fbf71a3866d6e838175e868eaeb467882b8660d24f6283a9019",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+     "sha256": "18692b30c1cc89f020a21ee5514e8d9d0b8ae877a59f40e50047529e8a0c5a15",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+     "sha256": "9524d3599d648a1c3b0a0af9b2e8772d7d6952c833245adfadd4bb8cd0f67c6f",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+     "sha256": "d54d64bfdb3a40be18d4bcc5ade284dacb334bb0df3f4a3c6ad1e414813a8851",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+     "sha256": "cd219c71fa00b6680b39458cf0b7e935a9308e9b9fa7a5cf18d480d8e0d365cd",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+     "sha256": "4dd108ff70a7390ade24050bfcf68461dd4022d025777e832f447c5508d2c4f9",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+     "sha256": "84c34af14f4f20ec908e4ae3e0a03100c391ddca55102ebe28b36828ca2031ed",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+     "sha256": "fcafbd6fc76e5b07f1048045620bc26e4ff1f6085634253647749fd99ac340e2",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+     "sha256": "96dc92365dea40d5bf157a6ece8f4cb9db67df050965a2f050c70acbe757627c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+     "sha256": "57d3e0f9ba597c2655ece1ada7b627e23e400fd0f28d8f126d28b12c7fe082e8",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+     "sha256": "500e599fd2d8c20e38db6d2a0991c08da565bf3870e1b8e809167c2c6320b579",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+     "sha256": "9fa7b3ca1e0eb9840c7f6faeff12111352841d7d764ed9f7621b124558e92cf4",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "f869d5b3311138321d2d16f2c866f8205990ac439aa620413737e1311bdc28a1",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "d191296f53e096743b87cfe4fa6fc3ad08a0240ecbb9e86fec5a897db757bb2b",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+     "sha256": "4bc0c71af74b7e4bf7b0f191ef6595802e074ea5c4e06266f8407a07015bbfb7",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+     "sha256": "9c13aeb1050b8a1373a47c38ea4574f843a60f587f184632b1d36640d1de2482",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/O&M/EM/Content.pdf",
+     "sha256": "6c141d9fa150ec704bf9927b398e1016a25b66f90fc8e11adfeccf9e2de011ee",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+     "sha256": "516df239b210b9a8237a15d796ca88a09a15d9a7dd7f3ee887399a621924a1aa",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+     "sha256": "f33ae7a9205d1c381985a98b295adb01ea45751abd8dda99f94411b2ec81aab8",
+     "pages": 4,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+     "sha256": "8571bfbf81fa8f22f512aaaa354ea1025d7cff3307a62854c652f4f99a3289af",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+     "sha256": "50e1c9de3db71b800c527bca584c9ab1dcc6208e0cc556f713f1832aee36883c",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+     "sha256": "a69237cd51dda0f2c3773f437f922a54a289c32f04ac77458367bc51450ae0de",
+     "pages": 10,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+     "sha256": "0aff7c8f7e13d563febabf9b50406797b83470c804a3ba20a13db75647432082",
+     "pages": 52,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+     "sha256": "fc5c48397bb59d4cc61027d74620d5df87a597f202802290eb4e680763c21b1f",
+     "pages": null,
+     "extension": ".doc"
+    }
+   ],
+   "n_planned": 27
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/r21-stage",
+  "manifest": "R21-STAGE.json",
+  "manifest_sha256": "e8277a6bb9774d7c48d9d1bfcb64e5d30f80a3f4553d407b7380a44e59f17e0b"
+ },
+ "labels": {
+  "dir": "labels-r21",
+  "register": "R21-REGISTER-LABELS.json",
+  "page": "R21-PAGE-LABELS.json",
+  "uncertainty": "R21-UNCERTAINTY-AND-EXPOSURE.json",
+  "files": {
+   "R21-REGISTER-LABELS.json": "288cb83f443dd3fcab364f7d5ff9ea56f371b3f2cf7cc9d0cc5a167e1b4ad558",
+   "R21-PAGE-LABELS.json": "2b2e87e1eb2b959ba7fbc329e3ab76bcda061012dd0cb7e5cce223218dc45759",
+   "R21-UNCERTAINTY-AND-EXPOSURE.json": "83431ae2e2dcb406854f3435608d6a4098834635133a033395864798564c4f16"
+  }
+ },
+ "provider": {
+  "adapter": "claude-code (the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  },
+  "actual_model": "recorded per response"
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "ledger": {
+  "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scopes": {
+   "A": {
+    "scope": "r22-four-arm-2026-09-30-A",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 8
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-2026-09-30-A",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 8}"
+    }
+   },
+   "L1": {
+    "scope": "r22-four-arm-2026-09-30-L1",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 160
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-2026-09-30-L1",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 160}"
+    }
+   },
+   "L2": {
+    "scope": "r22-four-arm-2026-09-30-L2",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 160
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-2026-09-30-L2",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 160}"
+    }
+   },
+   "L3": {
+    "scope": "r22-four-arm-2026-09-30-L3",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 180
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-2026-09-30-L3",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 180}"
+    }
+   },
+   "L4": {
+    "scope": "r22-four-arm-2026-09-30-L4",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 180
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-2026-09-30-L4",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 180}"
+    }
+   }
+  },
+  "caps": {
+   "A": 8,
+   "L1": 160,
+   "L2": 160,
+   "L3": 180,
+   "L4": 180
+  },
+  "sum_caps": 688,
+  "note": "a NEW scope family; the original 150-request experiment's residual is not used; nothing here is reserved until authorized"
+ },
+ "project_day": {
+  "limit": 60,
+  "rule_version": "whole-project-reservation-2026-09-30.v4",
+  "rule": "before a project-arm batch the runner checks the project's rolling 24 h capacity (60 minus every track's requests in the last 24 h, the A base included) against the batch's WORST case (the remaining durable allowance, 12 minus charged, of every pending PDF); if it does not fit, the project is persisted as deferred for that arm and ZERO requests are sent; a later resume takes deferred projects in declared order (arms in the frozen order, projects by EP, documents in stage order); no static per-arm share, never a partial project, never a raised cap",
+  "durable_allowance": "per (ledger scope, arm|profile|policy, document sha256), charged before dispatch, kept across restarts and tags; a sent request whose result was lost stays charged; a cache hit charges nothing"
+ },
+ "stop_rules": [
+  "critical acceptance by the arm's AI on a resolved label (eligible evidence only): stop the arm",
+  "three consecutive provider failures",
+  "any breaker / ledger / allowance / counter refusal: a budget stop, never raised",
+  "undeclared source, changed hash, sealed project, existing sandbox without --resume, existing allowance under a new tag, second writer, changed declaration: refuse before any dispatch"
+ ],
+ "cache_mode": "result cache on; arms start from copies of one A base; distinct reader / policy / prompt identities per arm: no cross-arm reuse",
+ "sample_rule": "R21 sample selection, FROZEN BEFORE LABELLING (no prediction, no model): from the 415-document non-sealed exploration\nmanifest, every content hash ever predicted or held out is excluded (small batch, pilot, continuation, both BOQ sheets,\nreview05 holdout files: by sha256 found in those files), duplicates by sha256 collapse to one, staged copies are\nhash-checked and EVERY page is classified (size class, rotation, text layer vs scan-like) -- the earlier availability\ntable described first pages only. A deterministic PRE-LABEL SCREEN of the text layer / cached OCR flags pages whose\ndecision words lie OUTSIDE the application's title-block strip (candidate off-title-block decisions); it is a selection\naid only, never a label.\n\nRule (declared here, applied by seed order sha256(seed | doc_key) inside each stratum):\n  24 primary documents: rotated text-layer drawing sheets 8; rotation-0 text-layer drawing sheets 4; drawing-sheet scans 3;\n  A3/A4 text 5; A3/A4 scans 4 -- each with every page within the reader's 4-page scope; at most 3 per project;\n  MINIMUM off-title-block decision stratum: >= 4 of the 24 must carry a screened candidate off-title-block decision on an\n  in-scope page (filled first from the screened pool, in seed order, within their strata); if labelling later finds\n  fewer than 4 confirmed, the shortfall is topped up from the screened pool in seed order BEFORE any prediction, and the\n  final count is reported; a shortfall that cannot be filled is reported, never hidden.\n  3 coverage controls (in the planned denominator, outside the 24): 2 PDFs with more than 4 pages (their supported first\n  4 pages are read and consume real budget; pages beyond are 'unsupported:beyond_reader_scope'), 1 Word file (unsupported input).\nWrites R21-SAMPLE.json and R21-PAGE-CLASSES.json (every page of every candidate, for the workload).",
+ "sample_sha256": "18b480631547270e9aca26df1d8576ba8924b8e7ec608fd180655a303cd335d9",
+ "workload": {
+  "version": "r22-workload-2026-09-30.v2",
+  "replaces": "review21/workload/R21-WORKLOAD.json (same sample, stage, rates and assumptions; schedule generated; labels corrected)",
+  "stage_files": 27,
+  "pdf_documents": 26,
+  "pages_total": 96,
+  "pages_in_scope": 42,
+  "pages_beyond_scope": 54,
+  "assumptions": {
+   "expected_reads_per_triggered_page": {
+    "discovery": 1.0,
+    "read_identity": 0.85,
+    "read_revision": 0.8,
+    "read_decision": 0.15,
+    "targeted": 0.6,
+    "escalation": 0.0
+   },
+   "observed_rates": {
+    "discover_page": {
+     "input_mean": 26492,
+     "input_p90": 55102,
+     "output_mean": 4611,
+     "latency_p50_ms": 38990
+    },
+    "discover_region": {
+     "input_mean": 13891,
+     "input_p90": 25963,
+     "output_mean": 3502,
+     "latency_p50_ms": 35860
+    },
+    "read_identity": {
+     "input_mean": 7841,
+     "input_p90": 10732,
+     "output_mean": 414,
+     "latency_p50_ms": 7481
+    },
+    "read_revision": {
+     "input_mean": 6097,
+     "input_p90": 7569,
+     "output_mean": 235,
+     "latency_p50_ms": 6143
+    },
+    "read_decision": {
+     "input_mean": 6239,
+     "input_p90": 6239,
+     "output_mean": 362,
+     "latency_p50_ms": 7944
+    },
+    "read_field_context": {
+     "input_mean": 6703,
+     "input_p90": 7507,
+     "output_mean": 316,
+     "latency_p50_ms": 6936
+    },
+    "read_submittal_form": {
+     "input_mean": 20579,
+     "input_p90": 26121,
+     "output_mean": 1907,
+     "latency_p50_ms": 24635
+    }
+   },
+   "trigger_rate_note": "EV1 selects pages with form / title-block cues and no deterministic identity, plus a seeded 20 % audit; the expected table assumes every in-scope page is triggered (conservative)"
+  },
+  "per_document": [
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40060_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT - SHEET 2 OF 4.pdf",
+    "ep": "30549",
+    "role": "primary:screened_off_title_block",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "text",
+      true
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-27421/wetransfer_drawings_2024-04-01_1039/04-GATE LEVEL/49354- EYAD AL KURRDY/FOHC-221023-09509.pdf",
+    "ep": "27421",
+    "role": "primary:screened_off_title_block",
+    "pages_in_scope": 2,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ],
+     [
+      2,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 5.6,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 77941,
+      "p90_based_input_tokens_ESTIMATE": 217524,
+      "expected_output_tokens": 10520,
+      "expected_seconds_sequential": 103
+     },
+     "L2": {
+      "expected_requests": 5.6,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 77941,
+      "p90_based_input_tokens_ESTIMATE": 217524,
+      "expected_output_tokens": 10520,
+      "expected_seconds_sequential": 103
+     },
+     "L3": {
+      "expected_requests": 6.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 85984,
+      "p90_based_input_tokens_ESTIMATE": 217524,
+      "expected_output_tokens": 10899,
+      "expected_seconds_sequential": 111
+     },
+     "L4": {
+      "expected_requests": 6.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 85984,
+      "p90_based_input_tokens_ESTIMATE": 217524,
+      "expected_output_tokens": 10899,
+      "expected_seconds_sequential": 111
+     }
+    }
+   },
+   {
+    "doc": "EP-28745/MS/Copper/R0/PDF/Detector and Base.pdf",
+    "ep": "28745",
+    "role": "primary:screened_off_title_block",
+    "pages_in_scope": 4,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ],
+     [
+      2,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      3,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      4,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L2": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L3": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     },
+     "L4": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     }
+    }
+   },
+   {
+    "doc": "EP-23091/MS FA + CMS MATERIAL APPROVAL.pdf",
+    "ep": "23091",
+    "role": "primary:screened_off_title_block",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     }
+    }
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/AsBuilt/FA system/R0/B9/B9/BUILDING-9.pdf",
+    "ep": "26208",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41034_E_GF (PARKING 1) MAIN LV ROOM 4 DETAILS.pdf",
+    "ep": "30549",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      90,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/Shop dwg/PAVA System/Rev-0/ELEC-B11-PAVA-101.pdf",
+    "ep": "26208",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-27421/EP-27421 Shop Drawings/EMERGENCY LIGHTING LAYOUT/EML-04.pdf",
+    "ep": "27421",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Shop Drawing/REV-01/Central Battery System/DJ-295-P-EN-SEE-04-ASY-0020-01.pdf",
+    "ep": "23323",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-41000_MEP DETAILED PLANS/DCH-M-BSB-DWG-ZZ-ARC-41012_D_GF ( PARKING 1 ) - ETS ROOM 2 DETAIL - SHEET 1 OF 2.pdf",
+    "ep": "30549",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      90,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-02.pdf",
+    "ep": "27421",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-00-001-00_H.pdf",
+    "ep": "17428",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      90,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/06-Fire Alarm System/PDF/ID-R-100.pdf",
+    "ep": "17428",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Inputs/2. Fire Alarm System/PDF/DJ-295-O-EN-DFD-02-0003_01_OPERATION FACILITY SECOND FLOOR  FIRE ALARM LAYOUT.pdf",
+    "ep": "23323",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK_ - Sheet - FLS-107 - FLS PLAN_FIRST FLOOR.pdf",
+    "ep": "17428",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-MID-RISER TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "ep": "19144",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-19144/EP-18101 T&C/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-04-END-RISER TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf",
+    "ep": "19144",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-01-MID-GR FLR TELEPHONE  (R.01, DT-12-09-19), ST-B+R.pdf",
+    "ep": "19144",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "drawing_sheet",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 26369,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 48
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 30391,
+      "p90_based_input_tokens_ESTIMATE": 144015,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 52
+     }
+    }
+   },
+   {
+    "doc": "EP-23323/EP-23323 - AKI Logistics/Approvals & Comments/DJ-295-P-KNA-EN-DWG-6013-00-Warehouse Ground Floor Fire Alarm System(C).pdf",
+    "ep": "23323",
+    "role": "primary",
+    "pages_in_scope": 4,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      270,
+      "text",
+      false
+     ],
+     [
+      2,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ],
+     [
+      3,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ],
+     [
+      4,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L2": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 118078,
+      "p90_based_input_tokens_ESTIMATE": 218847,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 196
+     },
+     "L3": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     },
+     "L4": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 134165,
+      "p90_based_input_tokens_ESTIMATE": 218847,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 213
+     }
+    }
+   },
+   {
+    "doc": "EP-23091/O&M/EM/Content.pdf",
+    "ep": "23091",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     }
+    }
+   },
+   {
+    "doc": "EP-28745/EP-28745 Scan/EP-28745 DRF.pdf",
+    "ep": "28745",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     }
+    }
+   },
+   {
+    "doc": "EP-26208/EP-26208 drawing/wetransfer_fire-alarm-system_2023-10-03_0541/Emergency Lighting System/MEC-SD-PR56-0284 Rev.0- Schematic Raiser for Emergency Lighting System.pdf",
+    "ep": "26208",
+    "role": "primary",
+    "pages_in_scope": 4,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      270,
+      "scan_like",
+      false
+     ],
+     [
+      2,
+      "a3_a4",
+      270,
+      "scan_like",
+      false
+     ],
+     [
+      3,
+      "a3_a4",
+      270,
+      "scan_like",
+      false
+     ],
+     [
+      4,
+      "drawing_sheet",
+      270,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L2": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 143280,
+      "p90_based_input_tokens_ESTIMATE": 277125,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 203
+     },
+     "L3": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     },
+     "L4": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 159367,
+      "p90_based_input_tokens_ESTIMATE": 277125,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 219
+     }
+    }
+   },
+   {
+    "doc": "EP-23091/EP-23091 Material Submittal/cs eml.pdf",
+    "ep": "23091",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     }
+    }
+   },
+   {
+    "doc": "EP-22510/EP-22510 Commercial/EP-22510 EML Design.pdf",
+    "ep": "22510",
+    "role": "primary",
+    "pages_in_scope": 1,
+    "pages_beyond_scope": 0,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "scan_like",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L2": {
+      "expected_requests": 2.8,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 38970,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5260,
+      "expected_seconds_sequential": 51
+     },
+     "L3": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     },
+     "L4": {
+      "expected_requests": 3.4,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 42992,
+      "p90_based_input_tokens_ESTIMATE": 173154,
+      "expected_output_tokens": 5450,
+      "expected_seconds_sequential": 56
+     }
+    }
+   },
+   {
+    "doc": "EP-22510/EP-22510 MS/R0/PDF/6. Test Report.pdf",
+    "ep": "22510",
+    "role": "control:pdf_over_4_pages",
+    "pages_in_scope": 4,
+    "pages_beyond_scope": 6,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      2,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      3,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      4,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L2": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L3": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     },
+     "L4": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     }
+    }
+   },
+   {
+    "doc": "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Spec for CCTV.pdf",
+    "ep": "16830",
+    "role": "control:pdf_over_4_pages",
+    "pages_in_scope": 4,
+    "pages_beyond_scope": 48,
+    "page_classes": [
+     [
+      1,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ],
+     [
+      2,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ],
+     [
+      3,
+      "a3_a4",
+      0,
+      "text",
+      true
+     ],
+     [
+      4,
+      "a3_a4",
+      0,
+      "text",
+      false
+     ]
+    ],
+    "per_arm": {
+     "L1": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L2": {
+      "expected_requests": 11.2,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 155881,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21040,
+      "expected_seconds_sequential": 206
+     },
+     "L3": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     },
+     "L4": {
+      "expected_requests": 12,
+      "cap_requests_durable": 12,
+      "reader_per_reading_constant": 8,
+      "expected_input_tokens": 171968,
+      "p90_based_input_tokens_ESTIMATE": 306264,
+      "expected_output_tokens": 21798,
+      "expected_seconds_sequential": 222
+     }
+    }
+   },
+   {
+    "doc": "EP-16830/EP-16830 - Transmittal/SCS SD R0 13.04.2019.doc",
+    "ep": "16830",
+    "role": "control:unsupported_input",
+    "pages_in_scope": 0,
+    "pages_beyond_scope": 0,
+    "shape": "unsupported_input",
+    "per_arm": {}
+   }
+  ],
+  "per_project": {
+   "30549": {
+    "L1": 8.4,
+    "L2": 8.4,
+    "L3": 10.2,
+    "L4": 10.2
+   },
+   "27421": {
+    "L1": 11.2,
+    "L2": 11.2,
+    "L3": 13.6,
+    "L4": 13.6
+   },
+   "28745": {
+    "L1": 14.0,
+    "L2": 14.0,
+    "L3": 15.4,
+    "L4": 15.4
+   },
+   "23091": {
+    "L1": 8.4,
+    "L2": 8.4,
+    "L3": 10.2,
+    "L4": 10.2
+   },
+   "26208": {
+    "L1": 16.8,
+    "L2": 16.8,
+    "L3": 18.8,
+    "L4": 18.8
+   },
+   "23323": {
+    "L1": 16.8,
+    "L2": 16.8,
+    "L3": 18.8,
+    "L4": 18.8
+   },
+   "17428": {
+    "L1": 8.4,
+    "L2": 8.4,
+    "L3": 10.2,
+    "L4": 10.2
+   },
+   "19144": {
+    "L1": 8.4,
+    "L2": 8.4,
+    "L3": 10.2,
+    "L4": 10.2
+   },
+   "22510": {
+    "L1": 14.0,
+    "L2": 14.0,
+    "L3": 15.4,
+    "L4": 15.4
+   },
+   "16830": {
+    "L1": 11.2,
+    "L2": 11.2,
+    "L3": 12.0,
+    "L4": 12.0
+   }
+  },
+  "per_arm_totals": {
+   "L1": {
+    "expected_requests": 117.6,
+    "expected_input_tokens": 1636746.0,
+    "p90_based_input_tokens_ESTIMATE": 5211924.0,
+    "expected_output_tokens": 220920.0,
+    "expected_seconds_sequential": 2153.0,
+    "cap_requests_durable": 312.0
+   },
+   "L2": {
+    "expected_requests": 117.6,
+    "expected_input_tokens": 1397327.0,
+    "p90_based_input_tokens_ESTIMATE": 4658283.0,
+    "expected_output_tokens": 220920.0,
+    "expected_seconds_sequential": 2095.0,
+    "cap_requests_durable": 312.0
+   },
+   "L3": {
+    "expected_requests": 134.8,
+    "expected_input_tokens": 1805664.0,
+    "p90_based_input_tokens_ESTIMATE": 5211924.0,
+    "expected_output_tokens": 228889.0,
+    "expected_seconds_sequential": 2341.0,
+    "cap_requests_durable": 312.0
+   },
+   "L4": {
+    "expected_requests": 134.8,
+    "expected_input_tokens": 1566245.0,
+    "p90_based_input_tokens_ESTIMATE": 4658283.0,
+    "expected_output_tokens": 228889.0,
+    "expected_seconds_sequential": 2269.0,
+    "cap_requests_durable": 312.0
+   }
+  },
+  "a_base": {
+   "expected_requests": 4.1,
+   "cap": 8
+  },
+  "schedule": {
+   "rule_version": "whole-project-reservation-2026-09-30.v4",
+   "implemented_in": "harness-v4/arm_ev.py (worst_case + xtrack2.capacity before each project-arm batch)",
+   "rule": "before a project-arm batch: the project's rolling 24 h capacity (60 minus every track's requests in the last 24 h, the A base included) must cover the batch's worst case (the remaining durable allowance, 12 minus charged, of every pending PDF); otherwise the project is persisted as deferred for that arm and zero requests are sent; a later resume takes deferred projects in declared order (arms in the frozen order, projects by EP, documents in stage order)",
+   "simulator": "harness-v4/schedule_sim.py (hourly steps; a batch's requests are charged to the window at its start; arms strictly in order, each arm over all projects before the next)",
+   "assumptions": [
+    "each arm's batch for a project sends its whole demand at the batch start (the real batch spreads over its run time, so real windows free up later, never earlier)",
+    "sequential requests at the observed p50 latencies; the run time of a batch is NOT added to the window arithmetic (reported separately)",
+    "no failures, timeouts, tripwire stops or cap refusals; a cap refusal only shortens a batch",
+    "the A base's requests are either aged out (L1 starts >= 24 h after A) or its cap of 8 is spent on the largest project at t = 0"
+   ],
+   "worst_case_per_project_per_arm": {
+    "30549": 36,
+    "27421": 36,
+    "28745": 24,
+    "23091": 36,
+    "26208": 36,
+    "23323": 36,
+    "17428": 36,
+    "19144": 36,
+    "22510": 24,
+    "16830": 12
+   },
+   "frozen_order": [
+    "A",
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+   ],
+   "simulations": {
+    "worst_case_demand/A_aged_out": {
+     "complete": true,
+     "elapsed_hours_to_last_batch_start": 72.0,
+     "deferral_events": 92,
+     "requests_sent_in_simulation": 1248,
+     "batches": [
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 48
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L4",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      }
+     ],
+     "unfinished": {}
+    },
+    "worst_case_demand/A_cap_spent_on_the_largest_project_at_start": {
+     "complete": true,
+     "elapsed_hours_to_last_batch_start": 72.0,
+     "deferral_events": 92,
+     "requests_sent_in_simulation": 1248,
+     "batches": [
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 48
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 16
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L4",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L2",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 36
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 24,
+       "capacity_before": 12
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 48.0,
+       "arm": "L3",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      },
+      {
+       "t_h": 72.0,
+       "arm": "L4",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 36,
+       "capacity_before": 24
+      }
+     ],
+     "unfinished": {}
+    },
+    "expected_demand/A_aged_out": {
+     "complete": true,
+     "elapsed_hours_to_last_batch_start": 24.0,
+     "deferral_events": 22,
+     "requests_sent_in_simulation": 504.8,
+     "batches": [
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 11.200000000000001,
+       "capacity_before": 48.8
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 46.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 11.200000000000001,
+       "capacity_before": 48.8
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 46.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 11.200000000000001,
+       "capacity_before": 37.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 31.999999999999996
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 26.4
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 26.4
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 11.200000000000001,
+       "capacity_before": 37.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 31.999999999999996
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 25.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 16.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 13.600000000000001,
+       "capacity_before": 24.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 16.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L4",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 13.599999999999994
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 41.2
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 41.2
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 44.6
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 22.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 22.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 13.600000000000001,
+       "capacity_before": 46.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 44.6
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      }
+     ],
+     "unfinished": {}
+    },
+    "expected_demand/A_cap_spent_on_the_largest_project_at_start": {
+     "complete": true,
+     "elapsed_hours_to_last_batch_start": 24.0,
+     "deferral_events": 24,
+     "requests_sent_in_simulation": 504.8,
+     "batches": [
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 11.200000000000001,
+       "capacity_before": 48.8
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 46.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 51.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 11.200000000000001,
+       "capacity_before": 48.8
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 46.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.6
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 11.200000000000001,
+       "capacity_before": 37.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 31.999999999999996
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 43.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 26.4
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 16.8,
+       "capacity_before": 26.4
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 11.200000000000001,
+       "capacity_before": 37.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 14.000000000000002,
+       "capacity_before": 31.999999999999996
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L2",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 8.4,
+       "capacity_before": 35.2
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 25.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 16.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 33.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 13.600000000000001,
+       "capacity_before": 24.0
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L3",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 16.599999999999994
+      },
+      {
+       "t_h": 0.0,
+       "arm": "L4",
+       "ep": "16830",
+       "worst_case_reserved": 12,
+       "sent": 12,
+       "capacity_before": 13.599999999999994
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 41.2
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 41.2
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L3",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "17428",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "19144",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "22510",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 44.6
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "23091",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 49.8
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "23323",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 22.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "26208",
+       "worst_case_reserved": 36,
+       "sent": 18.8,
+       "capacity_before": 22.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "27421",
+       "worst_case_reserved": 36,
+       "sent": 13.600000000000001,
+       "capacity_before": 46.4
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "28745",
+       "worst_case_reserved": 24,
+       "sent": 15.4,
+       "capacity_before": 44.6
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L4",
+       "ep": "30549",
+       "worst_case_reserved": 36,
+       "sent": 10.200000000000001,
+       "capacity_before": 39.599999999999994
+      }
+     ],
+     "unfinished": {}
+    }
+   },
+   "expected_run_time_hours_sequential_per_arm": {
+    "L1": 0.6,
+    "L2": 0.58,
+    "L3": 0.65,
+    "L4": 0.63
+   },
+   "fake_clock_example": {
+    "dry_runner_evidence_S7": {
+     "T0": 1790798579.219064,
+     "seeded_other_track_requests": {
+      "16830": 50
+     },
+     "first": {
+      "run": {
+       "exit": 0,
+       "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+       "tail": [
+        "16830 L1 DEFERRED: needs 24 capacity 10",
+        "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 1.3 s | critical 0",
+        "done L1 L1 deferred requests 8 seconds 1.5 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 8, 'cache_hits': 0, 'deferred': ['16830'], 'skipped_projects': [], 'interrupted_seen': []} {'17428': 8}"
+       ],
+       "refused": null
+      },
+      "status": "deferred",
+      "deferred": [
+       {
+        "ep": "16830",
+        "needed_worst_case": 24,
+        "capacity": 10,
+        "clock": 1790798579.219064,
+        "pending": [
+         {
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "charged": 0,
+          "remaining": 12
+         },
+         {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "charged": 0,
+          "remaining": 12
+         }
+        ],
+        "requests_sent": 0
+       }
+      ],
+      "requests": {
+       "17428": 8
+      },
+      "sent_16830": 0,
+      "zero_requests_for_deferred_project": true,
+      "capacity_16830_at_T0": 10
+     },
+     "resumed": {
+      "run": {
+       "exit": 0,
+       "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --resume",
+       "tail": [
+        "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 12, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 12 req 1.6 s | critical 0",
+        "done L1 L1 completed requests 12 seconds 1.7 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 12, 'cache_hits': 0, 'deferred': [], 'skipped_projects': ['17428'], 'interrupted_seen': []} {'16830': 12}"
+       ],
+       "refused": null
+      },
+      "status": "completed",
+      "deferred_before_resume": [
+       {
+        "ep": "16830",
+        "needed_worst_case": 24,
+        "capacity": 10,
+        "clock": 1790798579.219064,
+        "pending": [
+         {
+          "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+          "charged": 0,
+          "remaining": 12
+         },
+         {
+          "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+          "charged": 0,
+          "remaining": 12
+         }
+        ],
+        "requests_sent": 0
+       }
+      ],
+      "deferred_after": [],
+      "requests": {
+       "16830": 12
+      },
+      "skipped_completed": [],
+      "skipped_projects": [
+       "17428"
+      ],
+      "charged_17428_unchanged": true,
+      "sent_17428_unchanged": true,
+      "charged_final": {
+       "0909d684": 4,
+       "395f76c1": 8,
+       "41d54518": 8,
+       "a733b0ba": 0
+      },
+      "capacity_16830_at_resume": 60
+     }
+    },
+    "same_scenario_in_the_simulator": {
+     "complete": true,
+     "batches": [
+      {
+       "t_h": 0.0,
+       "arm": "L1",
+       "ep": "17428",
+       "worst_case_reserved": 24,
+       "sent": 5,
+       "capacity_before": 55
+      },
+      {
+       "t_h": 24.0,
+       "arm": "L1",
+       "ep": "16830",
+       "worst_case_reserved": 24,
+       "sent": 12,
+       "capacity_before": 48
+      }
+     ],
+     "deferral_events": 2
+    }
+   },
+   "note": "elapsed hours are to the START of the last batch; add that batch's run time; nothing here is a completion guarantee",
+   "pairs_first": "L1 and L2 are completed (or deferred per project) before L3 and L4, so the ROI contrast is complete first; within an arm, projects in EP order, documents in stage order",
+   "incomplete_pairs": "a document an arm could not attempt (deferred beyond the run window, share refusal, cap, breaker) stays in the all-planned denominator as not_attempted / budget for that arm; each pair's analysis reports (a) all planned, (b) documents attempted by both arms of the pair, (c) field-specific read-in-both sets, all with document IDs; a pair with fewer than 12 attempted-by-both documents is reported INCONCLUSIVE",
+   "r21_table_correction": "R21 reported 'worst case 3 days / expected 2 days' from a rounded rule of thumb; the simulated figures above replace them"
+  },
+  "proposed_caps": {
+   "caps": {
+    "A": 8,
+    "L1": 160,
+    "L2": 160,
+    "L3": 180,
+    "L4": 180
+   },
+   "status": "PROPOSED, NOT APPROVED",
+   "total": 688
+  },
+  "budget": {
+   "price": "UNKNOWN: no dollar amount; no cost guarantee",
+   "three_request_figures": {
+    "expected_workload_requests": 509,
+    "proposed_authorized_maximum_requests_IF_APPROVED": 688,
+    "uncapped_structural_maximum_requests": 1256,
+    "note": "688 is NOT approved by this package; 509 is an expectation under the stated assumptions; 1,256 is 12 x 26 PDFs x 4 arms + A's 8"
+   },
+   "core_expected_input_tokens_incl_cached": 6490356,
+   "core_p90_based_input_tokens_ESTIMATE": 19740414,
+   "p90_label": "an ESTIMATE (p90 of the observed per-task input incl. cached, times the counts), not an upper bound",
+   "core_expected_output_tokens": 899618,
+   "escalations": "EV1 makes none; the cap of 2 per document stays declared",
+   "retries": "the CLI adapter does not retry; a timeout is one request charged at its estimate (45,544 input) with unknown usage",
+   "timeouts_observed": {
+    "discover_page": 2,
+    "discover_region": 1
+   },
+   "offline_replays": "0 requests",
+   "completion": "a cap below the worst case means arms may stop with documents not attempted; those documents enter the all-planned comparison as budget stops; no completion guarantee"
+  }
+ }
+}

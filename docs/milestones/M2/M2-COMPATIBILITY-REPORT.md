@@ -178,3 +178,29 @@ Established: the default path adds no decision method, cover kind or transmittal
 - A bounded reading's carried records are **retained evidence**, not current observations: each keeps its source hash, parser, profile and time (or None), flagged `carried_unvisited` and, as its provenance says, `carried_unverified` / `carried_other_profile`; its decision is a candidate (method `retained`) until its bytes and profile are the current ones. `extracted.retained` summarises them. A reading with other-profile retained records is a mixed reading: `parser_current` is False, it is not reused for its hash nor copied to a duplicate file, the repair tool selects it; it is replaced when the row is next processed or repaired with a reader that visits the page or under the profile that read it.
 - **SAR case (stamp over tick)**: old result `rejected` (the OCR stamp won implicitly), new result UR with `decision_conflict` and both candidates; the raw conflict is kept apart from any domain resolution, of which none is authorised; the owner decision needed is stated in the response. Affected consumer: the samples register built from records (UR instead of rejected for the R0 sample once re-read).
 - Clone repair under the Review 03 writer: `evidence/r5__repair_r5_comparison.json` (the table in the response).
+
+
+## 10. Real-project pilot (2026-09-28)
+
+Compatibility and persistence on real documents, the regression-control clone workflow and the BOQ path with the model disabled are reported in `real-project-pilot/COMPATIBILITY-AND-PERSISTENCE.md`; the observed reconciliation defect (floor keys from drawing titles, P-05) and the telemetry label (P-obs-2) are in `real-project-pilot/DEFECTS.md`.
+
+## 11. Review 05 correction (2026-09-28)
+
+- **Parser identity** `parse-2026-09-28.6`: stored readings of .5 and earlier are re-read by ordinary processing (the
+  R4-01 rules on retained / carried readings unchanged). New raw facts ride on existing fields: `printed_revision` (the
+  REV cell, as printed, letters kept), `flags` (`revision_conflict`, `printed_revision_unmapped`, `reference_uncertain`),
+  and observations (`title_block`: number, REV cell, revision history, reference drawings, title; `ocr_retry`;
+  `transmittal` with `reference_unread`). No schema or migration change; `ControlledDocument` is unchanged, so a
+  stored record still loads in the previous code.
+- **Grammar**: code `MTG` (CSCEC material sample tag) maps to the existing `samples` category; no existing code changed.
+  The legacy R-number projection is kept: a numeric printed REV cell still becomes `R<n>` (source `printed`); letters
+  and self-contradicting sheets fall back to suffix / folder / default, as before for a sheet with no REV.
+- **Design-sheet extractor** `2026-09-28.2`: rows it no longer accepts become review issues (never dropped);
+  `catalog_check.agreement = "correlated"` is new. `DesignSheetExtraction.attempted` is in-memory only.
+- **BOQ contract**: `/boq/ensure` with no sheet attempted now answers `extracted=false` and does not stamp
+  `boq_extracted_at` (was: `extracted=true`, stamped, empty forever); a sheet read and found unreadable is stamped as
+  before. A re-read's summary gains `not_reread`; a re-read with no sheet read raises `CandidateError` (HTTP 409 / job
+  failed). Engineer overrides and the snapshot-before-apply are unchanged.
+- **Profiles**: default / promoted separation unchanged; the band re-read and title-block reading run on both.
+- **Operational files**: the live database and `library/symbols/symbol_library.json` are rewritten by the running
+  API's reloads, not by this correction, and are not part of its diff (`evidence/r7__live_check.json`).

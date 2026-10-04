@@ -1,0 +1,415 @@
+From e5a0a94a4235282797bed302f6bb14acba70db01 Mon Sep 17 00:00:00 2001
+From: ai-pilot <ai-pilot@local>
+Date: Wed, 30 Sep 2026 10:12:25 +0400
+Subject: [PATCH] ai-pilot candidate: guard (G) and targeted verification (T),
+ flag-gated, off by default
+
+Scratch worktree only (C:/t/iso/ep-platform); not the owner repository.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ backend/app/ai/evidence_reader.py         | 137 +++++++++++++-
+ backend/tests/test_ai_pilot_2026_09_30.py | 206 ++++++++++++++++++++++
+ 2 files changed, 341 insertions(+), 2 deletions(-)
+ create mode 100644 backend/tests/test_ai_pilot_2026_09_30.py
+
+diff --git a/backend/app/ai/evidence_reader.py b/backend/app/ai/evidence_reader.py
+index b4cc05c..472508b 100644
+--- a/backend/app/ai/evidence_reader.py
++++ b/backend/app/ai/evidence_reader.py
+@@ -55,6 +55,30 @@ PROMPTS = {"discover_page": "discover-2026-09-29.1", "read_identity": "read-iden
+            "read_revision": "read-revision-2026-09-29.1", "read_decision": "read-decision-2026-09-29.1",
+            "read_boq_row": "read-boq-row-2026-09-29.2"}
+ VARIANTS = ("off", "EV1", "EV2")
++# --- AI accuracy pilot (2026-09-30), isolated candidate only -----------------------------------------------------------
++# G  AI_EVIDENCE_GUARD=1     a bare revision token (Rev.0, REV 01, R1 ...) is never accepted as a document identity
++# T  AI_EVIDENCE_TARGETED=1  (requires G) one targeted, independent context read of an own identity / revision that
++#                            is not validated, with region-bound support from the rotation-correct text layer or a
++#                            local OCR of the read region; acceptance rule (validate_value) unchanged
++import os as _os  # noqa: E402
++
++GUARD_ENABLED = _os.environ.get("AI_EVIDENCE_GUARD") == "1"
++TARGETED_ENABLED = _os.environ.get("AI_EVIDENCE_TARGETED") == "1"
++if TARGETED_ENABLED and not GUARD_ENABLED:
++    raise RuntimeError("AI_EVIDENCE_TARGETED requires AI_EVIDENCE_GUARD (T = G + targeted verification)")
++if GUARD_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+guard-rev-token-2026-09-30.1"
++if TARGETED_ENABLED:
++    EVIDENCE_POLICY_VERSION = EVIDENCE_POLICY_VERSION + "+region-support-2026-09-30.1"
++    READER_VERSION = READER_VERSION + "+targeted-2026-09-30.1"
++    PROMPTS = {**PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"}
++_BARE_REVISION = re.compile(r"^\s*(?:REV(?:ISION)?\.?\s*[-:]?\s*(?:\d{1,3}|[A-Z])|R\.?\s*\d{1,2})\s*$", re.I)
++
++
++def bare_revision_token(value) -> bool:
++    """The WHOLE value is a revision token ('Rev.0', 'REV 01', 'Rev A', 'R1'); identifiers that merely contain one
++    ('EP-23091 R1', '...-003-R3', 'REVIEW-001') are not."""
++    return bool(_BARE_REVISION.match(str(value or "")))
+ AUDIT_RATE = 0.20
+ AUDIT_SEED = "audit-2026-09-29"
+ MAX_PAGES_PER_DOCUMENT = 4
+@@ -444,6 +468,9 @@ def validate_value(field: str, readings: list[dict], region_texts: list, determi
+     chosen = (blind[0] if blind else legible[0])["value"].strip()
+     base = {"value": chosen, "value_literal": chosen, "value_normalized": literal_key(field, chosen),
+             "candidates": sorted({r["value"].strip() for r in legible})}
++    if GUARD_ENABLED and field == "identity" and bare_revision_token(chosen):
++        return {**base, "state": "candidate", "support": None, "guard": "bare_revision_token",
++                "reasons": ["a bare revision token is not a document identity (kept as revision evidence, no target)"]}
+     if len(keys) > 1:
+         return {**base, "state": "conflict", "support": None,
+                 "reasons": ["the readings disagree: " + ", ".join(f"{r['source']}={r['value']!r}" for r in legible)]}
+@@ -605,6 +632,93 @@ def region_texts(page, region_display: tuple | None, ocr_lines: list, *, pad: fl
+     return out
+ 
+ 
++def _local_ocr(page, clip) -> str:
++    """Local Tesseract OCR of the read region (the application's own OCR configuration); '' on any failure."""
++    try:
++        import io
++
++        import pymupdf
++        from PIL import Image
++
++        from app.services import document_control
++        pix = page.get_pixmap(matrix=pymupdf.Matrix(300 / 72, 300 / 72), clip=clip)
++        img = Image.open(io.BytesIO(pix.tobytes("png")))
++        return document_control._tesseract().image_to_string(img, config="--psm 6", timeout=30) or ""
++    except Exception:  # noqa: BLE001 -- no OCR is no support, never a failure of the read
++        return ""
++
++
++def region_texts_v2(page, region_display: tuple | None, ocr_lines: list, *, pad: float = 0.35) -> list:
++    """T only. As `region_texts`, but the text layer is clipped in the page's UNROTATED coordinates (a display rectangle
++    of a rotated page is mapped through the derotation matrix; `region_texts` clips with the display rectangle and so
++    reads the wrong area of a rotated page), and a region with no source text at all is OCR'd locally."""
++    if region_display is None:
++        return []
++    clip = crop_clip(page, region_display, pad=pad)
++    out = []
++    try:
++        text = page.get_text("text", clip=clip * page.derotation_matrix)
++    except Exception:  # noqa: BLE001
++        text = ""
++    if text.strip():
++        out.append(("text", text))
++    inside = [str(l[4]) for l in ocr_lines or [] if len(l) >= 5 and clip.x0 <= l[0] and l[2] <= clip.x1 and clip.y0 <= l[1] and l[3] <= clip.y1]
++    if inside:
++        out.append(("ocr", "\n".join(inside)))
++    if not out:
++        local = _local_ocr(page, clip)
++        if local.strip():
++            out.append(("ocr_local", local))
++    return out
++
++
++CONTEXT_SCHEMA = {
++    "type": "object",
++    "properties": {"value": {"type": "string"}, "printed_label": {"type": "string"},
++                   "role": {"type": "string", "enum": ["own_identity", "own_revision", "referenced_identity", "template_or_form_code", "date", "other"]},
++                   "region": {"type": "array", "items": {"type": "integer"}}, "legible": {"type": "boolean"}},
++    "required": ["value", "printed_label", "role", "region", "legible"], "additionalProperties": False,
++}
++CONTEXT_TEXT = ("Read one field printed on this image of a construction document (a page, or a part of a page around "
++                "its title block or header). The field is: {what}. Give the value EXACTLY as printed (keep every letter, "
++                "digit, hyphen, slash, dot and plus sign; do not complete or correct it), the printed label next to it, "
++                "and its role: own_identity = the number THIS document or sheet is filed under; own_revision = THIS "
++                "document's current revision; referenced_identity = another document's or drawing's number; "
++                "template_or_form_code = a form, template, edition or letterhead code; date; other. Give its region "
++                "[x0, y0, x1, y1] in 0..1000 of this image. If the field is not present or not legible, set legible to "
++                "false and value to an empty string.")
++CONTEXT_WHAT = {"identity": "this document's OWN identity (document / drawing / sheet / reference number)",
++                "revision": "this document's OWN current revision"}
++_EXPECTED_ROLE = {"identity": "own_identity", "revision": "own_revision"}
++
++
++def _targeted_read(run, page, *, sha256: str, number: int, reason: str, field: str, region, ocr_lines):
++    """T only: one independent context read (never shown any proposed value). Returns (reading, region, texts) or None."""
++    import pymupdf
++
++    if region is not None:
++        clip = crop_clip(page, region, pad=1.5)
++        scale = min(300 / 72, 2400 / max(clip.width, clip.height))
++        png = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), clip=clip).tobytes("png")
++    else:
++        clip = page.rect
++        png = page_png(page, long_side=2400)
++    got = run.call(sha256=sha256, task="read_field_context", page=number, reason=reason + ",targeted",
++                   parts=[TextPart("task", CONTEXT_TEXT.format(what=CONTEXT_WHAT[field])), ImagePart("context", png)],
++                   schema=CONTEXT_SCHEMA, max_output=400)
++    if got is None:
++        return None
++    new_region = None
++    box = got.get("region") or []
++    if len(box) == 4 and all(isinstance(v, (int, float)) for v in box) and 0 <= box[0] < box[2] <= 1000 and 0 <= box[1] < box[3] <= 1000:
++        new_region = (clip.x0 + box[0] / 1000 * clip.width, clip.y0 + box[1] / 1000 * clip.height,
++                      clip.x0 + box[2] / 1000 * clip.width, clip.y0 + box[3] / 1000 * clip.height)
++    reading = {"source": "blind_context", "value": got.get("value", ""), "legible": bool(got.get("legible", False)),
++               "label": got.get("printed_label"), "role": got.get("role")}
++    use = new_region or region
++    return reading, use, region_texts_v2(page, use, ocr_lines)
++
++
+ # --- read outcomes (M2 review 08, R8-01) ------------------------------------------------------------------------------
+ #
+ # Every required read of a page has an outcome of its own, recorded in the page's coverage (`fields`), and the
+@@ -683,7 +797,7 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+         key = f"own:{field}"
+         region = _det_region(facts, field) or region_from_norm(page, disc_region)
+         readings = [{"source": "discovery", "value": disc_value or "", "legible": bool(disc_value)}]
+-        texts = region_texts(page, region, ocr_lines or [])
++        texts = (region_texts_v2 if TARGETED_ENABLED else region_texts)(page, region, ocr_lines or [])
+         if not (disc_value or det_value):
+             fields[key] = ABSENT_BY_DISCOVERY
+             continue
+@@ -710,9 +824,23 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                 else:
+                     fields[key + ":escalation"] = _call_outcome(run)
+             fields[key] = _value_read_outcome(field, readings, requests[key])
++        if TARGETED_ENABLED and (disc_value or det_value) and verdict["state"] != "validated" and not verdict.get("guard") \
++                and not str(requests.get(key) or "").startswith(("failed", "budget")):
++            got = _targeted_read(run, page, sha256=sha256, number=number, reason=reason, field=field, region=region, ocr_lines=ocr_lines or [])
++            requests[key + ":targeted"] = _request_outcome(run, got[0] if got else None)
++            if got is not None:
++                reading, t_region, t_texts = got
++                readings.append(reading)
++                region, texts = t_region or region, t_texts or texts
++                verdict = validate_value(field, readings, texts, det_value)
++                if verdict["state"] == "validated" and reading.get("legible") and reading.get("role") != _EXPECTED_ROLE[field]:
++                    verdict = {**verdict, "state": "candidate",
++                               "reasons": verdict["reasons"] + [f"the targeted read gives the role {reading.get('role')!r}, not {_EXPECTED_ROLE[field]!r}"]}
++                if fields.get(key) in ("incomplete:no_region", None) or requests.get(key) == "not_attempted":
++                    fields[key] = _value_read_outcome(field, readings, requests[key + ":targeted"])
+         if verdict["state"] == "unreadable" and not disc_value:
+             continue
+-        if field == "identity" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED:
++        if field == "identity" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED and not verdict.get("guard"):
+             own_identity = verdict.get("value")
+         if field == "revision" and verdict["state"] in ("validated", "candidate") and fields[key] == COMPLETED:
+             own_revision = verdict.get("value")
+@@ -727,6 +855,11 @@ def _read_page(run: EvidenceRun, page, *, sha256: str, number: int, facts: PageF
+                              "deterministic": det_value, "read": fields[key], "request": requests.get(key),
+                              # the component identity this revision was read for (R9-02); an identity is its own
+                              **({"target": own_identity or det_identity} if field == "revision" else {})})
++    for o in [o for o in observations if o.get("field") == "identity" and "a bare revision token is not a document identity" in " ".join(o.get("reasons") or [])]:
++        observations.append({**common, "field": "revision", "component": "revtok", "role": "revision_token", "value": o.get("value"),
++                             "value_literal": o.get("value_literal"), "value_normalized": o.get("value_normalized"), "state": "observed_reference",
++                             "reasons": ["a revision token read in the identity position: raw revision evidence, no target"], "read": COMPLETED,
++                             "readings": o.get("readings")})
+     # identities the page references: facts of their own, read by discovery (completed with it)
+     for i, other in enumerate(discovered.get("other_numbers") or []):
+         if other.get("literal"):
+diff --git a/backend/tests/test_ai_pilot_2026_09_30.py b/backend/tests/test_ai_pilot_2026_09_30.py
+new file mode 100644
+index 0000000..a2652d2
+--- /dev/null
++++ b/backend/tests/test_ai_pilot_2026_09_30.py
+@@ -0,0 +1,206 @@
++"""AI accuracy pilot (2026-09-30), isolated candidate: G (bare revision token guard) and T (targeted independent
++context read + rotation-correct / local-OCR region support). Scripted provider only; synthetic pages.
++With both flags off the reader behaves as accepted (the existing modules run unchanged in that mode)."""
++import io
++
++import pymupdf
++import pytest
++from PIL import Image, ImageDraw, ImageFont
++
++from app.ai import evidence_reader as er
++from app.ai.budget import open_budget
++from app.ai.provider import RecordingProvider
++
++REGION = [760, 900, 900, 950]
++
++
++def blind(value, source="blind_small"):
++    return {"source": source, "value": value, "legible": True}
++
++
++def _page(text="Drawing No X-SD-1", rotation=0):
++    doc = pymupdf.open()
++    page = doc.new_page(width=1684, height=1190)
++    page.insert_text((1300, 1100), text, fontsize=9)
++    if rotation:
++        page.set_rotation(rotation)
++    return doc, page
++
++
++def _image_page(text="Drawing No ABC-123"):
++    """An image-only (scanned) page: the text is pixels, there is no text layer."""
++    img = Image.new("RGB", (1684, 1190), "white")
++    d = ImageDraw.Draw(img)
++    try:
++        font = ImageFont.truetype("arial.ttf", 40)
++    except OSError:
++        font = ImageFont.load_default()
++    d.text((1130, 1045), text, fill="black", font=font)
++    buf = io.BytesIO()
++    img.save(buf, "PNG")
++    doc = pymupdf.open()
++    page = doc.new_page(width=1684, height=1190)
++    page.insert_image(page.rect, stream=buf.getvalue())
++    return doc, page
++
++
++def _run(db, provider, variant="EV1"):
++    return er.EvidenceRun(db=db, project_id=None, provider=provider, budget=open_budget(db, None), variant=variant, fresh=True)
++
++
++def _discover(identity="", revision="", region=REGION):
++    return {"page_kind": "drawing_sheet", "own_identity": identity, "own_identity_label": "", "own_identity_region": region if identity else [],
++            "own_revision": revision, "own_revision_label": "", "own_revision_region": region if revision else [],
++            "decision_options_printed": [], "decision_marked_option": "", "decision_mark_type": "none", "decision_actor": "unknown",
++            "decision_region": [], "other_numbers": [], "notes": ""}
++
++
++def _read(value):
++    return {"label_text": "", "value": value, "legible": True, "other_values_in_crop": []}
++
++
++def _ctx(value, role="own_identity", region=(300, 300, 700, 700), legible=True):
++    return {"value": value, "printed_label": "Drawing No", "role": role, "region": list(region), "legible": legible}
++
++
++def _own(out, field="identity"):
++    return next(o for o in out["_observations"] if o["field"] == field and o["component"] == "own")
++
++
++# --- G -------------------------------------------------------------------------------------------------------------------
++@pytest.mark.parametrize("value, bare", [("Rev.0", True), ("REV 01", True), ("Rev A", True), ("R1", True), ("rev-2", True),
++                                         ("EP-23091 R1", False), ("25H-S202-NCC-SD-MEP-ELE-FA-003-R3", False), ("REVIEW-001", False),
++                                         ("R1029-07-W&A-DWG-TYP-GRO-INT-9011-01", False), ("FAS-09", False), ("3105", False), ("P06/TRANS/R1", False)])
++def test_bare_revision_token_is_the_whole_value_only(value, bare):
++    assert er.bare_revision_token(value) is bare
++
++
++def test_guard_holds_rev0_as_identity_and_leaves_real_identifiers(monkeypatch):
++    texts = [("text", "Submittal No.: Rev.0  Drawing No FAS-09 EP-23091 R1")]
++    monkeypatch.setattr(er, "GUARD_ENABLED", False)
++    assert er.validate_value("identity", [blind("Rev.0")], texts, None)["state"] == "validated"        # accepted behaviour
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    v = er.validate_value("identity", [blind("Rev.0")], texts, None)
++    assert v["state"] == "candidate" and v["guard"] == "bare_revision_token"
++    for real in ("FAS-09", "EP-23091 R1"):
++        assert er.validate_value("identity", [blind(real)], texts, None)["state"] == "validated"
++    assert er.validate_value("revision", [blind("Rev.0")], [("text", "Rev.0")], None)["state"] == "validated"   # revisions untouched
++
++
++def test_guarded_identity_is_raw_revision_evidence_and_never_a_target(db_session, monkeypatch):
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    doc, page = _page("Submittal No.: Rev.0")
++    provider = RecordingProvider([_discover("Rev.0", "Rev.0"), _read("Rev.0"), _read("Rev.0")])
++    out = er._read_page(_run(db_session, provider), page, sha256="a" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "candidate" and "bare revision token" in " ".join(ident["reasons"])
++    rev = _own(out, "revision")
++    assert rev.get("target") in (None, "")                                   # no invented target
++    tok = [o for o in out["_observations"] if o["component"] == "revtok"]
++    assert tok and tok[0]["state"] == "observed_reference" and tok[0]["field"] == "revision"
++
++
++# --- T: region support ------------------------------------------------------------------------------------------------
++def test_rotated_page_region_text_is_clipped_in_unrotated_coordinates():
++    doc, page = _page("Drawing No X-SD-1", rotation=270)
++    words = page.get_text("words")
++    w = next(w for w in words if w[4] == "X-SD-1")
++    display = pymupdf.Rect(w[:4]) * page.rotation_matrix                  # where the value appears on the rotated page
++    region = (display.x0, display.y0, display.x1, display.y1)
++    assert not any("X-SD-1" in t for _s, t in er.region_texts(page, region, []))    # accepted: reads the wrong area
++    assert any("X-SD-1" in t for _s, t in er.region_texts_v2(page, region, []))
++
++
++def test_scanned_region_gets_local_ocr_support():
++    doc, page = _image_page("Drawing No ABC-123")
++    region = (1120, 1035, 1600, 1100)
++    assert er.region_texts(page, region, []) == []
++    texts = er.region_texts_v2(page, region, [])
++    assert texts and texts[0][0] == "ocr_local" and "ABC-123" in texts[0][1]
++
++
++# --- T: the targeted read ---------------------------------------------------------------------------------------------
++def _t(monkeypatch):
++    """T as the environment flags set it at import: guard + targeted + the targeted prompt's identity."""
++    monkeypatch.setattr(er, "GUARD_ENABLED", True)
++    monkeypatch.setattr(er, "TARGETED_ENABLED", True)
++    monkeypatch.setattr(er, "PROMPTS", {**er.PROMPTS, "read_field_context": "read-field-context-2026-09-30.1"})
++
++
++BOX = (int(1120 / 1684 * 1000), int(1035 / 1190 * 1000), int(1600 / 1684 * 1000), int(1100 / 1190 * 1000))
++
++
++def test_scan_with_agreeing_reads_is_supported_by_local_ocr_without_a_targeted_read(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=list(BOX)), _read("ABC-123")])
++    out = er._read_page(_run(db_session, provider), page, sha256="b" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "validated" and ident["support"] == "ocr_local"
++    assert [r["source"] for r in ident["readings"]] == ["discovery", "blind_small"]
++    assert not any(r.task == "read_field_context" for r in provider.requests)
++
++
++def test_targeted_request_is_blind_to_the_proposed_value(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[]), _ctx("ABC-123", region=BOX)])
++    er._read_page(_run(db_session, provider), page, sha256="c" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    targeted = [r for r in provider.requests if r.task == "read_field_context"]
++    assert len(targeted) == 1
++    assert all("ABC-123" not in getattr(p, "text", "") for p in targeted[0].parts)
++
++
++def test_targeted_read_with_another_role_stays_held(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[]), _ctx("ABC-123", role="referenced_identity", region=BOX)])
++    out = er._read_page(_run(db_session, provider), page, sha256="d" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "candidate" and "referenced_identity" in " ".join(ident["reasons"])
++
++
++def test_targeted_disagreement_is_a_conflict_not_a_choice(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[]), _ctx("ABC-128", region=BOX)])
++    out = er._read_page(_run(db_session, provider), page, sha256="e" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    assert _own(out)["state"] == "conflict"
++
++
++def test_no_region_discovery_gets_a_bounded_page_context_read(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[]), _ctx("ABC-123", region=BOX)])
++    out = er._read_page(_run(db_session, provider), page, sha256="f" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "validated" and ident["support"] == "ocr_local" and out["_fields"]["own:identity"] == er.COMPLETED
++
++
++def test_a_failed_targeted_read_keeps_the_prior_evidence(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[]), RuntimeError("scripted transport failure")])
++    out = er._read_page(_run(db_session, provider), page, sha256="1" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    ident = _own(out)
++    assert ident["state"] == "candidate" and ident["value"] == "ABC-123"
++    assert out["_requests"]["own:identity:targeted"].startswith("failed")
++
++
++def test_targeted_reads_count_against_the_document_budget(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _image_page("Drawing No ABC-123")
++    provider = RecordingProvider([_discover("ABC-123", region=[])])
++    run = _run(db_session, provider)
++    run.budget.calls = run.budget.limits.max_calls_per_document - 1        # room for discovery only
++    out = er._read_page(run, page, sha256="2" * 64, number=1, facts=er.PageFacts(1, "", [], []), reason="probe")
++    assert provider.calls == 1 and out["_requests"]["own:identity:targeted"] == "budget"
++    assert _own(out)["state"] == "candidate"
++
++
++def test_no_targeted_read_when_already_validated(db_session, monkeypatch):
++    _t(monkeypatch)
++    doc, page = _page("Drawing No X-SD-1")
++    provider = RecordingProvider([_discover("X-SD-1"), _read("X-SD-1")])
++    out = er._read_page(_run(db_session, provider), page, sha256="3" * 64, number=1, facts=er.PageFacts(1, page.get_text(), [], []), reason="probe")
++    assert _own(out)["state"] == "validated" and not any(r.task == "read_field_context" for r in provider.requests)
+-- 
+2.55.0.windows.5
+

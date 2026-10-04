@@ -1,0 +1,164 @@
+{
+ "frozen_at": "2026-09-29T07:17:09",
+ "rule": "frozen before the matched real-model run and the hermetic suite; not changed after seeing their results",
+ "source": {
+  "repository": "C:/t/iso/ep-platform (isolated scratch repository; the owner's tree is untouched)",
+  "commit": "c9a1a1459c30115daf8bb40f47aba542f2b6079a",
+  "parent": "043dee9 review06-final (reconstructed, hash-verified)",
+  "baseline": "c692f1e (Review 05 Candidate C)",
+  "frozen_worktree": "C:/t/iso/frozen-r7 (no .env: hermetic)",
+  "git_ls_tree_sha256": "b321dc8b0f5e86952a09496a2393540fe2802364eae3f5cd84049827f197db54",
+  "tracked_files": 410
+ },
+ "identities": {
+  "parser": "parse-2026-09-29.9",
+  "title_block": "titleblock-3",
+  "labelled_fields": "fields-2026-09-29.1",
+  "transmittal_observe": "transmittal-observe-2026-09-29.1",
+  "sheet_extractor": "2026-09-29.2",
+  "listed_item_association": "listed-item-2026-09-29.1",
+  "evidence_reader": "evidence-reader-2026-09-29.2",
+  "evidence_policy": "evidence-policy-2026-09-29.2",
+  "evidence_schema": "evidence-schema-1",
+  "evidence_prompts": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2"
+  },
+  "evidence_prompt_texts_sha256": {
+   "read_identity": "0709975b6a71bf43ebf225a6d98728791f9cd3d9e166ee7a0a1a4a9c3df21b50",
+   "read_revision": "a2e193b666dc2318262b09fa0505ced5e98d6a772869b5d3b74197b63fd2906b",
+   "read_decision": "6cc568410a2d708ab785a4a71d0e76bd85cdec75f9c4410c27dcb49bd3e05827",
+   "read_boq_row": "645304176cd31f406b5b60ad6be74dea62c235bd134c4522d90b9aaed361ec0b"
+  },
+  "discover_text_sha256": "37369046b5e4dd74ee15662de00513677f84116d7489ac8e8ceb691ea46b88b9",
+  "system_prompt_sha256": "efb1e2ea3008c63c21339595cb8d6fa7c3b8f41532e46ce7cc71cc2441db16e2",
+  "schemas_sha256": {
+   "DISCOVER_SCHEMA": "ea31b5f8149d43418ce9966ec7f58ad10ec0356c8802341442f7ee33c775a610",
+   "READ_VALUE_SCHEMA": "00361459dc495358844cf196bca3aafdf65b0aa00e8d5755bc6cb6d2e7945ece",
+   "READ_DECISION_SCHEMA": "e8b754539a37e82690bb7d9cc1b5ac52c5cac26add05e5cca1acec77013ac57b",
+   "BOQ_ROW_SCHEMA": "986600748a1c199f4475d755c26100a4550822f1bb37ea750239b4cd1d2b1991"
+  },
+  "audit": {
+   "rate": 0.2,
+   "seed": "audit-2026-09-29"
+  },
+  "limits": {
+   "pages_per_document": 4,
+   "calls_per_document": 8
+  },
+  "ledger": "ai-ledger-2026-09-29.1",
+  "estimator": "estimator-2026-09-29.1",
+  "calibration_p95": {
+   "discover_page": [
+    45544,
+    10870
+   ],
+   "read_identity": [
+    10283,
+    1102
+   ],
+   "read_revision": [
+    8573,
+    508
+   ],
+   "read_decision": [
+    18171,
+    6351
+   ],
+   "read_boq_row": [
+    5523,
+    628
+   ],
+   "read_submittal_form": [
+    25057,
+    3881
+   ],
+   "read_sheet_page": [
+    7756,
+    14726
+   ],
+   "read_sheet_row_close_up": [
+    6110,
+    1722
+   ],
+   "read_cell": [
+    5676,
+    643
+   ],
+   "verify_boq_row_crops": [
+    17143,
+    16210
+   ]
+  },
+  "submittal_reader_prompt": "submittal-2026-09-17.1",
+  "sheet_reader_prompts": [
+   "read-sheet-2026-09-16.1",
+   "verify-rows-2026-09-27.1"
+  ]
+ },
+ "evaluators": {
+  "document_.5": "m2-pilot-eval-2026-09-29.5",
+  "document_.4": "m2-pilot-eval-2026-09-29.4",
+  "boq": "m2-boq-eval-2026-09-29.3",
+  "files_sha256": {
+   "scripts/m2_eval5.py": "1e3a269e5b52ac1cd541fede539745aecb7879a380b7c55e3e621ecc57fd7ab1",
+   "scripts/m2_eval4.py": "65f3e096dd8ec93be38f50db445eeb0a9837c1acde605f5569a575f1f31f79b5",
+   "scripts/m2_pilot_eval.py": "845584b076a42ad26eb576c23034890851d35d386e558437c06501399950fe97",
+   "scripts/m2_boq_eval.py": "550e1a3c8eafcc93f97d95e801854b713f39e4206e9b6a900e0a09d691cdbe25",
+   "tests/test_m2_eval5.py": "f5a1062d4cd15456919ae2bd799afecb36acddf9f242f7384e07e955ae8dcec4",
+   "tests/test_m2_eval4.py": "96ad942e2ea7d0bc901fad0b3808e1379e256a6e315b19e3f5753e102da22798",
+   "tests/test_m2_boq_eval3.py": "b6e9201009e9a0884e0a620066ed91b14d1e6cd1068174cdb0c1c3d9d75d496f"
+  },
+  "document_current": "m2-pilot-eval-2026-09-29.6"
+ },
+ "labels_sha256": {
+  "GOLDEN-LABELS.json": "9c320849a7242a02e875619b7628154c76c7a80347c91beb331e86543fa97ca1",
+  "review05\\labels\\GOLDEN-LABELS-v2-PAGES.json": "06929f64b43430b0cd4b61b3f61949e41a9b153947e9e1f8e2b12e2b5f488ba9",
+  "review05\\labels\\BOQ-LABEL-CORRECTIONS-v2.json": "0da748dcb13da15881e4a7ab3f34b830efecc93fb662751efe380076cb444db3",
+  "review05\\holdout\\HOLDOUT-LABELS.json": "73b0520f4937682b5758b0763334adedaae6e1114c7021eeeee4ae81afa771c9",
+  "review05\\holdout\\HOLDOUT-PAGE-LABELS.json": "ae1dd8ac4070f44154caf7870da1e99d6cd7e682f7d5d7b4f5510ee302f7da7a",
+  "review05\\holdout\\HOLDOUT-BOQ-LABELS.json": "f8136f49be8c48c6ed205ddd05894b54187ad46d1a7103d1305d358dbe298fa4",
+  "FROZEN-SAMPLE.json": "74a07d0364bbfcf5cf8fe4b72173a5c93cac2191d9608bef30b4807a4c0b7f56",
+  "FROZEN-BOQ-SET.json": "c7d0274989d317e857f32a7cc77b4fe43e0a83e7f526a7d36574c31d70fa60dc",
+  "review05\\holdout\\HOLDOUT-BOQ-SET.json": "b03f448a47908336dd862db70faa15814b70ded9f4454fcfde0908fc8c0960c1"
+ },
+ "models": {
+  "provider": "claude-code (CLI)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "returned_identifiers_seen": [
+   "claude-sonnet-5",
+   "claude-opus-5"
+  ],
+  "note": "aliases are configuration, not model versions; the returned identifier is recorded per call"
+ },
+ "dependencies": {
+  "python": "3.12.10",
+  "pip_freeze_sha256": "259bca05d8d33b398107c44b1bb1232dd6008faadc369065f7afce473b6cce72"
+ },
+ "settings_defaults": {
+  "ai_evidence_variant": "off",
+  "ai_ledger_path": null,
+  "extraction_profile": "default (EXTRACTION_PROMOTE_OBSERVATIONS=false)"
+ },
+ "amendments": [
+  {
+   "at": "2026-09-29T07:21:19",
+   "commit": "1455f8b",
+   "what": "evaluator .5 -> .6 (scripts/m2_eval5.py, tests/test_m2_eval5.py): a no-record page associates a cross-page copy of the document's own identity (as evaluator .4 does); records the application holds as pending evidence hold all their facts",
+   "why": "inspection of the stored re-scores showed two false 'fp' findings that were copies of page-1 identities on labelled no-record pages",
+   "when_relative_to_results": "after the stored-output re-scores, before any matched-run result was read (EV0 had finished processing; no score was computed)",
+   "application_code": "unchanged from c9a1a14 (the matched run and the hermetic suite run the c9a1a14 application)",
+   "files_sha256": {
+    "scripts/m2_eval5.py": "c327d945486ba8518aee53105db4fe4d64562aeb13120088db0c03fcae731e66",
+    "tests/test_m2_eval5.py": "921913a2f1ab4c90c333111474c5d2ba30a14ee1b22e1a05382232d6406045dd"
+   },
+   "superseded_outputs_kept": "C:/t/iso/work/r7/eval5_superseded (evaluator .5)"
+  }
+ ]
+}

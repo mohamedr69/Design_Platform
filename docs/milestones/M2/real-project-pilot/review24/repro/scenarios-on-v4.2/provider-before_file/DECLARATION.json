@@ -1,0 +1,440 @@
+{
+ "declared_at_utc": "2026-09-30T19:56:39+00:00",
+ "name": "four-arm isolated accuracy experiment (R21, harness v4 / review 22)",
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "harness_dir": "C:/t/r2x/dry-runs/r24-repro-v4.2/provider-before_file",
+ "status": "DRY-RUN DECLARATION (scripted provider over a SYNTHETIC stage; harness plumbing only) -- not an experiment",
+ "executed": false,
+ "new_model_budget_approved": false,
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "scope_note": "the recorded Round 2 permission covers the cohort / provider; a NEW request allowance is required and NOT granted by this declaration",
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)"
+  },
+  "sealed": "not opened"
+ },
+ "code": {
+  "accepted_app": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "successor": {
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "tree": "C:/t/iso/cand-ai4",
+   "parent": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+   "evidence_reader_sha256": "c04b173b0d68fc1fd96e603344387020bd38d1348a6542bf736b0ef88907d495"
+  },
+  "evaluator": {
+   "module": "scripts.m2_eval5",
+   "version": "m2-pilot-eval-2026-09-29.9",
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "coverage_scorer": {
+   "file": "harness-v4/score_arms_v4.py",
+   "sha256": "75924b86949d8d823bd6a8fc3d9447658221b07021dc10b07a4c472131388218",
+   "coverage_v4_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "contract": "harness-contract-2026-09-30.v4"
+  },
+  "runners": {
+   "harness-v4/arm_a.py": "1197bc1841c6a7af7c3b06802e381b44b6d52708565f008ef951dd3ff69cffc6",
+   "harness-v4/arm_ev.py": "d4662cacbabfe1b6557f23823ff344995a6447a9e744058480f9abbc87e7133f"
+  },
+  "dry_provider": "e50dcfbc2cbff51f946350570f10be8392fcda85aa44206d6ae6e415176724e4",
+  "xtrack": "076535460b061ebe724172c0f9c22c05e7b1f845f4f1092e24f1d4246e64a1dc",
+  "durable_allowance": {
+   "file": "C:/t/iso/work/r2x/r16/boq_harness.py",
+   "sha256": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf"
+  },
+  "schedule_sim": "5f60804a4c58934f18a552a25d821f3d37de67024349d15f2e61b660b862d542"
+ },
+ "arms": {
+  "L1": {
+   "meaning": "whole-page discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L2": {
+   "meaning": "title-block (ROI) discovery, X off",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  },
+  "L3": {
+   "meaning": "whole-page discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": false
+   }
+  },
+  "L4": {
+   "meaning": "ROI discovery, X on",
+   "tree": "C:/t/iso/cand-ai4",
+   "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_ROI": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1",
+     "discover_region": "discover-region-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true,
+    "EFFICIENT_ENABLED": false,
+    "SUPPORT_V2": true,
+    "REQUIRED_FIRST": true,
+    "DEADLINE_ENABLED": true,
+    "ROI_ENABLED": true
+   }
+  }
+ },
+ "doc_arms": [
+  "L1",
+  "L2",
+  "L3",
+  "L4"
+ ],
+ "common": {
+  "G": true,
+  "support": "v2 (rotation-correct clip + bounded local OCR)",
+  "scheduling": "required_first",
+  "deadline": "min(provider timeout, remaining job time); 20 s floor; OCR bound"
+ },
+ "pairs": {
+  "ROI alone": [
+   "L1",
+   "L2"
+  ],
+  "X on whole page": [
+   "L1",
+   "L3"
+  ],
+  "X on ROI": [
+   "L2",
+   "L4"
+  ],
+  "ROI under X": [
+   "L3",
+   "L4"
+  ]
+ },
+ "offline_replays": "on each arm's own captured responses: P0 (guard off, accepted text) -> P1 (+guard) -> P2 (+rotation clip) -> P3 (+local OCR): conditional field-value re-validation on fixed responses, never a replay of requests, images, scheduling or deadlines",
+ "expected_call_order": {
+  "all arms": "per triggered page: discover_page (L1/L3) or discover_region (L2/L4) -> read_identity -> read_revision -> read_decision (when a block was discovered); then, L3/L4 only, page by page: read_field_context for own identity, then revision, when not validated and no failure / refusal preceded"
+ },
+ "sources": {
+  "stage": {
+   "root": "C:/t/r2x/dry-runs/r22-stage",
+   "manifest": "R22-DRY-STAGE.json",
+   "manifest_sha256": "037a95b601f381b01e24870b81fdbb1f48a3623f01f1134ae7316b677713b788"
+  },
+  "sample": {
+   "documents": {
+    "EP-16830/synth/raster-6pages.pdf": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+    "EP-16830/synth/raster-1page.pdf": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+    "EP-17428/synth/raster-2pages.pdf": "41d5451824706cb78a07f8d5e85cc7c025bf906f68849b852971e686e3bdf64a",
+    "EP-17428/synth/text-sheet.pdf": "a733b0ba459750a099722c2f85a14b7a727d46bcc33225f6269484eaf599bce6",
+    "EP-17428/synth/note.docx": "7567dd2384a9454e2bdb8ea3eb3775c83ad409051167011bd2fe6f72697cbe21"
+   },
+   "documents_planned": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+     "pages": 6,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-16830/synth/raster-1page.pdf",
+     "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/synth/raster-2pages.pdf",
+     "sha256": "41d5451824706cb78a07f8d5e85cc7c025bf906f68849b852971e686e3bdf64a",
+     "pages": 2,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/synth/text-sheet.pdf",
+     "sha256": "a733b0ba459750a099722c2f85a14b7a727d46bcc33225f6269484eaf599bce6",
+     "pages": 1,
+     "extension": ".pdf"
+    },
+    {
+     "doc": "EP-17428/synth/note.docx",
+     "sha256": "7567dd2384a9454e2bdb8ea3eb3775c83ad409051167011bd2fe6f72697cbe21",
+     "pages": null,
+     "extension": ".docx"
+    }
+   ],
+   "n_planned": 5
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/dry-runs/r22-stage",
+  "manifest": "R22-DRY-STAGE.json",
+  "manifest_sha256": "037a95b601f381b01e24870b81fdbb1f48a3623f01f1134ae7316b677713b788"
+ },
+ "labels": {
+  "dir": "labels",
+  "register": "DRY-REGISTER-LABELS.json",
+  "page": "DRY-PAGE-LABELS.json",
+  "uncertainty": "DRY-UNCERTAINTY-AND-EXPOSURE.json",
+  "files": {
+   "DRY-REGISTER-LABELS.json": "fe9cc5233a2fa4744834e61ab95d443ab41ded71c08f1090fc499bbf426564a6",
+   "DRY-PAGE-LABELS.json": "c44914ab934b789271a8c3ad4816ace21a4bad3a758c045d6590b500761afbc2",
+   "DRY-UNCERTAINTY-AND-EXPOSURE.json": "2d44fc6c8ec22caec0eec089c18d8a90cce377b788d01b48f9ab20f92d545667"
+  }
+ },
+ "provider": {
+  "adapter": "claude-code (the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  },
+  "actual_model": "recorded per response"
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "ledger": {
+  "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scopes": {
+   "A": {
+    "scope": "r22-four-arm-dry-2026-09-30-A",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 4
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-dry-2026-09-30-A",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 4}"
+    }
+   },
+   "L1": {
+    "scope": "r22-four-arm-dry-2026-09-30-L1",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 40
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-dry-2026-09-30-L1",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 40}"
+    }
+   },
+   "L2": {
+    "scope": "r22-four-arm-dry-2026-09-30-L2",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 40
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-dry-2026-09-30-L2",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 40}"
+    }
+   },
+   "L3": {
+    "scope": "r22-four-arm-dry-2026-09-30-L3",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 40
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-dry-2026-09-30-L3",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 40}"
+    }
+   },
+   "L4": {
+    "scope": "r22-four-arm-dry-2026-09-30-L4",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 40
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "r22-four-arm-dry-2026-09-30-L4",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 40}"
+    }
+   }
+  },
+  "caps": {
+   "A": 4,
+   "L1": 40,
+   "L2": 40,
+   "L3": 40,
+   "L4": 40
+  },
+  "sum_caps": 164,
+  "note": "a NEW scope family; the original 150-request experiment's residual is not used; nothing here is reserved until authorized"
+ },
+ "project_day": {
+  "limit": 60,
+  "rule_version": "whole-project-reservation-2026-09-30.v4",
+  "rule": "before a project-arm batch the runner checks the project's rolling 24 h capacity (60 minus every track's requests in the last 24 h, the A base included) against the batch's WORST case (the remaining durable allowance, 12 minus charged, of every pending PDF); if it does not fit, the project is persisted as deferred for that arm and ZERO requests are sent; a later resume takes deferred projects in declared order (arms in the frozen order, projects by EP, documents in stage order); no static per-arm share, never a partial project, never a raised cap",
+  "durable_allowance": "per (ledger scope, arm|profile|policy, document sha256), charged before dispatch, kept across restarts and tags; a sent request whose result was lost stays charged; a cache hit charges nothing"
+ },
+ "stop_rules": [
+  "critical acceptance by the arm's AI on a resolved label (eligible evidence only): stop the arm",
+  "three consecutive provider failures",
+  "any breaker / ledger / allowance / counter refusal: a budget stop, never raised",
+  "undeclared source, changed hash, sealed project, existing sandbox without --resume, existing allowance under a new tag, second writer, changed declaration: refuse before any dispatch"
+ ],
+ "cache_mode": "result cache on; arms start from copies of one A base; distinct reader / policy / prompt identities per arm: no cross-arm reuse"
+}

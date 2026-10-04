@@ -1,0 +1,527 @@
+{
+ "at": "2026-10-01T00:02:00",
+ "declaration_sha256": "452f9e65ce44ae8bb58687da0735373b05dab5ca5c31d324d27ef120ea9bb8a0",
+ "stage": {
+  "root": "C:/t/r2x/dry-runs/r22-stage",
+  "manifest": "R22-DRY-STAGE.json",
+  "manifest_sha256": "037a95b601f381b01e24870b81fdbb1f48a3623f01f1134ae7316b677713b788"
+ },
+ "cap_per_document": 12,
+ "scenarios": {
+  "S1_baseline": {
+   "run": {
+    "exit": 0,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+    "tail": [
+     "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 12, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 12 req 1.5 s | critical 0",
+     "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.8 s | critical 0",
+     "done L1 L1 completed requests 20 seconds 2.5 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 20, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 12, '17428': 8}"
+    ],
+    "refused": null
+   },
+   "status": "completed",
+   "requests": {
+    "16830": 12,
+    "17428": 8
+   },
+   "cache_hits": 0,
+   "charged": {
+    "eb93689339b1ff4de058": 4,
+    "a38fd059fbd24651280e": 8,
+    "9b852971e686e3bdf64a": 8,
+    "25f6269484eaf599bce6": 0
+   },
+   "sent": {
+    "eb93689339b1ff4de058": 4,
+    "a38fd059fbd24651280e": 8,
+    "9b852971e686e3bdf64a": 8
+   },
+   "charged_equals_sent": true,
+   "no_trigger_control_sent": 0,
+   "worst_case_reserved": {
+    "16830": 24,
+    "17428": 24
+   },
+   "capacity_before": {
+    "16830": 60,
+    "17428": 60
+   },
+   "counter_used": {
+    "16830": 12,
+    "17428": 8
+   },
+   "tripwire_binding": [
+    {
+     "after": "16830",
+     "critical_on_resolved": [],
+     "binding": {
+      "eligibility": {
+       "EP-16830/synth/raster-6pages.pdf": "eligible",
+       "EP-16830/synth/raster-1page.pdf": "eligible"
+      },
+      "rejected": 2
+     }
+    },
+    {
+     "after": "17428",
+     "critical_on_resolved": [],
+     "binding": {
+      "eligibility": {
+       "EP-16830/synth/raster-6pages.pdf": "eligible",
+       "EP-16830/synth/raster-1page.pdf": "eligible",
+       "EP-17428/synth/raster-2pages.pdf": "eligible",
+       "EP-17428/synth/text-sheet.pdf": "eligible",
+       "EP-17428/synth/note.docx": "ineligible"
+      },
+      "rejected": 0
+     }
+    }
+   ]
+  },
+  "S2_kill_resume": {
+   "killed": {
+    "run": {
+     "exit": 97,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L3 L3 --declaration",
+     "tail": [],
+     "refused": null
+    },
+    "exit_97_expected": true,
+    "charged_at_kill": {
+     "0909d684": 5,
+     "395f76c1": 3,
+     "41d54518": 0,
+     "a733b0ba": 0
+    },
+    "sent_recorded_at_kill": {
+     "0909d684": 5,
+     "395f76c1": 2
+    },
+    "lost_request_charged": true,
+    "open_attempt_visible_after_kill": [
+     "395f76c1"
+    ],
+    "attempt_statuses_at_kill": {
+     "0909d684": [
+      "completed"
+     ],
+     "395f76c1": [
+      "open"
+     ],
+     "41d54518": [],
+     "a733b0ba": []
+    }
+   },
+   "resumed": {
+    "run": {
+     "exit": 0,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L3 L3 --resume",
+     "tail": [
+      "16830 L3 {'variant': 'EV1', 'profile': 'default', 'documents': 1, 'calls': 9, 'cache_hits': 2, 'failed': 0, 'budget_stopped': 1} 9 req 1.5 s | critical 0",
+      "17428 L3 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.9 s | critical 0",
+      "done L3 L3 completed requests 17 seconds 2.6 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 1, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 17, 'cache_hits': 2, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': [{'sha256': '395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e', 'attempts': [{'attempt': 2, 'pid': 4612, 'started': 1790798526.5510173, 'calls_at_start': 0}], 'calls_already_charged': 3}]} {'16830': 9, '17428': 8}"
+     ],
+     "refused": null
+    },
+    "status": "completed",
+    "interrupted_seen": [
+     {
+      "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+      "attempts": [
+       {
+        "attempt": 2,
+        "pid": 4612,
+        "started": 1790798526.5510173,
+        "calls_at_start": 0
+       }
+      ],
+      "calls_already_charged": 3
+     }
+    ],
+    "skipped_completed": [
+     "0909d684"
+    ],
+    "charged_final": {
+     "0909d684": 5,
+     "395f76c1": 12,
+     "41d54518": 8,
+     "a733b0ba": 0
+    },
+    "attempt_statuses": {
+     "0909d684": [
+      "completed"
+     ],
+     "395f76c1": [
+      "interrupted",
+      "completed:budget_stop"
+     ],
+     "41d54518": [
+      "completed"
+     ],
+     "a733b0ba": [
+      "completed"
+     ]
+    },
+    "sent_total_by_doc": {
+     "0909d684": 5,
+     "395f76c1": 11,
+     "41d54518": 8
+    },
+    "allowance_refusals_in_resume": 1,
+    "six_page_doc": {
+     "charged": 12,
+     "sent_recorded": 11,
+     "cap": 12,
+     "capped_at_12": true,
+     "attempted_beyond_cap": true,
+     "sent_plus_lost_equals_charged": true
+    },
+    "one_page_doc_not_resent": true,
+    "resumes": [
+     {
+      "at_utc": "2026-09-30T20:02:07+00:00",
+      "pid": 15824,
+      "clock": 1790798527.9735036,
+      "reread": false
+     }
+    ]
+   }
+  },
+  "S3_new_tag": {
+   "refused": {
+    "run": {
+     "exit": 1,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L3-newtag L3 --declaration",
+     "tail": [
+      "REFUSED: the allowance of r22-four-arm-dry-2026-09-30-L3 / L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2 already exists (4 documents, 25 requests charged): resume the existing sandbox; a new tag never recreates an allowance"
+     ],
+     "refused": "REFUSED: the allowance of r22-four-arm-dry-2026-09-30-L3 / L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2 already exists (4 documents, 25 requests charged): resume the existing sandbox; a new tag never recreates an allowance"
+    },
+    "refused_before_dispatch": true,
+    "charged_unchanged": true,
+    "sandbox_created": false
+   },
+   "override_dry_only": {
+    "run": {
+     "exit": 0,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L3-newtag2 L3 --declaration",
+     "tail": [
+      "16830 L3 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 5, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 5 req 0.9 s | critical 0",
+      "17428 L3 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 4, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 4 req 0.5 s | critical 0",
+      "done L3-newtag2 L3 completed requests 9 seconds 1.6 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 2, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 9, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 5, '17428': 4}"
+     ],
+     "refused": null
+    },
+    "status": "completed",
+    "six_page_doc_sent": 0,
+    "six_page_doc_charged": 12,
+    "six_page_doc_charged_before_override": 12,
+    "cap_holds_across_tags": true,
+    "other_docs_charged_total": {
+     "0909d684": 10,
+     "395f76c1": 12,
+     "41d54518": 12,
+     "a733b0ba": 0
+    },
+    "all_within_cap": true,
+    "allowance_refusals": 2
+   },
+   "refusal_records": [
+    {
+     "at_utc": "2026-09-30T20:02:11+00:00",
+     "tag": "L3-newtag",
+     "arm": "L3",
+     "resume": false,
+     "refused": "the allowance of r22-four-arm-dry-2026-09-30-L3 / L3|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2 already exists (4 documents, 25 requests charged): resume the existing sandbox; a new tag never recreates an allowance",
+     "requests_sent": 0
+    }
+   ]
+  },
+  "S4_second_writer": {
+   "slow_writer_exit": 0,
+   "slow_writer_status": "completed",
+   "slow_writer_requests": 20,
+   "second_writer": {
+    "exit": 1,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --resume",
+    "tail": [
+     "REFUSED: another writer holds C:\\t\\r2x\\dry-runs\\r22-probes\\s4-second-writer\\runs\\L1"
+    ],
+    "refused": "REFUSED: another writer holds C:\\t\\r2x\\dry-runs\\r22-probes\\s4-second-writer\\runs\\L1"
+   },
+   "second_refused_before_dispatch": true,
+   "document_lock_probe": {
+    "doc": "0909d684",
+    "busy_while_held": true
+   },
+   "refusal_records": [
+    {
+     "at_utc": "2026-09-30T20:02:15+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "another writer holds C:\\t\\r2x\\dry-runs\\r22-probes\\s4-second-writer\\runs\\L1",
+     "requests_sent": 0
+    }
+   ]
+  },
+  "S5_cache_hit": {
+   "first": {
+    "exit": 0,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+    "tail": [
+     "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 12, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 12 req 1.7 s | critical 0",
+     "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 0.9 s | critical 0",
+     "done L1 L1 completed requests 20 seconds 2.7 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 20, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 12, '17428': 8}"
+    ],
+    "refused": null
+   },
+   "reread": {
+    "exit": 0,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --resume",
+    "tail": [
+     "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 4, 'cache_hits': 12, 'failed': 0, 'budget_stopped': 1} 4 req 2.1 s | critical 0",
+     "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 0, 'cache_hits': 8, 'failed': 0, 'budget_stopped': 0} 0 req 0.8 s | critical 0",
+     "done L1 L1 completed requests 4 seconds 3.0 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 1, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 4, 'cache_hits': 20, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 4}"
+    ],
+    "refused": null
+   },
+   "fresh_sends_in_reread": 4,
+   "cache_hits_in_reread": 20,
+   "fresh_sends_first_run": 20,
+   "cache_hits_first_run": 0,
+   "charged_unchanged": false,
+   "attempts_after_reread": {
+    "0909d684": [
+     "completed",
+     "completed"
+    ],
+    "395f76c1": [
+     "completed",
+     "completed:budget_stop"
+    ],
+    "41d54518": [
+     "completed",
+     "completed"
+    ],
+    "a733b0ba": [
+     "completed",
+     "completed"
+    ]
+   },
+   "per_document": {
+    "0909d684": {
+     "first_reading_budget_stopped": false,
+     "charged_before": 4,
+     "charged_after": 4,
+     "fresh_sends_in_reread": 0,
+     "fresh_equals_charge_delta": true,
+     "completed_doc_unchanged": true
+    },
+    "395f76c1": {
+     "first_reading_budget_stopped": true,
+     "charged_before": 8,
+     "charged_after": 12,
+     "fresh_sends_in_reread": 4,
+     "fresh_equals_charge_delta": true,
+     "completed_doc_unchanged": false
+    },
+    "41d54518": {
+     "first_reading_budget_stopped": false,
+     "charged_before": 8,
+     "charged_after": 8,
+     "fresh_sends_in_reread": 0,
+     "fresh_equals_charge_delta": true,
+     "completed_doc_unchanged": true
+    },
+    "a733b0ba": {
+     "first_reading_budget_stopped": false,
+     "charged_before": 0,
+     "charged_after": 0,
+     "fresh_sends_in_reread": 0,
+     "fresh_equals_charge_delta": true,
+     "completed_doc_unchanged": true
+    }
+   },
+   "counter_delta": 4,
+   "counter_unchanged": false,
+   "charged": {
+    "0909d684": 4,
+    "395f76c1": 12,
+    "41d54518": 8,
+    "a733b0ba": 0
+   },
+   "requests_in_reread_process": {
+    "16830": 4
+   }
+  },
+  "S6_scope_exhaust": {
+   "run": {
+    "exit": 0,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+    "tail": [
+     "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 10, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 10 req 1.5 s | critical 0",
+     "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 0, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 1} 0 req 0.1 s | critical 0",
+     "done L1 L1 completed requests 10 seconds 1.7 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 2, 'requests_io': 10, 'cache_hits': 0, 'deferred': [], 'skipped_projects': [], 'interrupted_seen': []} {'16830': 10}"
+    ],
+    "refused": null
+   },
+   "status": "completed",
+   "arm_cap": 10,
+   "requests_sent": 10,
+   "sent_by_doc": {
+    "0909d684": 4,
+    "395f76c1": 6
+   },
+   "charged_total": 10,
+   "ledger_scope_rows": null,
+   "counter_used": {
+    "16830": 10,
+    "17428": 0
+   },
+   "documents_budget_stopped": 2,
+   "ledger_precheck_refusals": 2,
+   "exhaustion_is_a_budget_stop": true,
+   "counter_equals_sent": true
+  },
+  "S7_deferral": {
+   "T0": 1790798579.219064,
+   "seeded_other_track_requests": {
+    "16830": 50
+   },
+   "first": {
+    "run": {
+     "exit": 0,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+     "tail": [
+      "16830 L1 DEFERRED: needs 24 capacity 10",
+      "17428 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 8, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 8 req 1.3 s | critical 0",
+      "done L1 L1 deferred requests 8 seconds 1.5 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 8, 'cache_hits': 0, 'deferred': ['16830'], 'skipped_projects': [], 'interrupted_seen': []} {'17428': 8}"
+     ],
+     "refused": null
+    },
+    "status": "deferred",
+    "deferred": [
+     {
+      "ep": "16830",
+      "needed_worst_case": 24,
+      "capacity": 10,
+      "clock": 1790798579.219064,
+      "pending": [
+       {
+        "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+        "charged": 0,
+        "remaining": 12
+       },
+       {
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "charged": 0,
+        "remaining": 12
+       }
+      ],
+      "requests_sent": 0
+     }
+    ],
+    "requests": {
+     "17428": 8
+    },
+    "sent_16830": 0,
+    "zero_requests_for_deferred_project": true,
+    "capacity_16830_at_T0": 10
+   },
+   "resumed": {
+    "run": {
+     "exit": 0,
+     "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --resume",
+     "tail": [
+      "16830 L1 {'variant': 'EV1', 'profile': 'default', 'documents': 2, 'calls': 12, 'cache_hits': 0, 'failed': 0, 'budget_stopped': 0} 12 req 1.6 s | critical 0",
+      "done L1 L1 completed requests 12 seconds 1.7 state {'consecutive_failures': 0, 'stopped': None, 'xtrack_refusals': 0, 'allowance_refusals': 0, 'allowance_busy': 0, 'ledger_precheck_refusals': 0, 'requests_io': 12, 'cache_hits': 0, 'deferred': [], 'skipped_projects': ['17428'], 'interrupted_seen': []} {'16830': 12}"
+     ],
+     "refused": null
+    },
+    "status": "completed",
+    "deferred_before_resume": [
+     {
+      "ep": "16830",
+      "needed_worst_case": 24,
+      "capacity": 10,
+      "clock": 1790798579.219064,
+      "pending": [
+       {
+        "sha256": "0909d6846d0152599c5779631b73fd52412f117fcc9ceb93689339b1ff4de058",
+        "charged": 0,
+        "remaining": 12
+       },
+       {
+        "sha256": "395f76c1aa82b41e8a516f27eac6b0a50a0203eb023ba38fd059fbd24651280e",
+        "charged": 0,
+        "remaining": 12
+       }
+      ],
+      "requests_sent": 0
+     }
+    ],
+    "deferred_after": [],
+    "requests": {
+     "16830": 12
+    },
+    "skipped_completed": [],
+    "skipped_projects": [
+     "17428"
+    ],
+    "charged_17428_unchanged": true,
+    "sent_17428_unchanged": true,
+    "charged_final": {
+     "0909d684": 4,
+     "395f76c1": 8,
+     "41d54518": 8,
+     "a733b0ba": 0
+    },
+    "capacity_16830_at_resume": 60
+   }
+  },
+  "S8_refusals": {
+   "resume_nonexistent": {
+    "exit": 1,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --resume",
+    "tail": [
+     "REFUSED: C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 has no run to resume"
+    ],
+    "refused": "REFUSED: C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 has no run to resume"
+   },
+   "first_run_exit": 0,
+   "repeat_without_resume": {
+    "exit": 1,
+    "cmd": "C:\\t\\iso\\work\\r2x\\review22\\harness-v4\\arm_ev.py r22dry-A L1 L1 --declaration",
+    "tail": [
+     "REFUSED: C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 exists: a run is never repeated over its own sandbox (use --resume to continue it)"
+    ],
+    "refused": "REFUSED: C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 exists: a run is never repeated over its own sandbox (use --resume to continue it)"
+   },
+   "both_refused_before_dispatch": true,
+   "refusal_records": [
+    {
+     "at_utc": "2026-09-30T20:03:05+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": true,
+     "refused": "C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 has no run to resume",
+     "requests_sent": 0
+    },
+    {
+     "at_utc": "2026-09-30T20:03:09+00:00",
+     "tag": "L1",
+     "arm": "L1",
+     "resume": false,
+     "refused": "C:\\t\\r2x\\dry-runs\\r22-probes\\s8-refusals\\runs\\L1 exists: a run is never repeated over its own sandbox (use --resume to continue it)",
+     "requests_sent": 0
+    }
+   ],
+   "counter_after": {
+    "16830": 12,
+    "17428": 8
+   },
+   "requests_first_run": 20
+  }
+ }
+}

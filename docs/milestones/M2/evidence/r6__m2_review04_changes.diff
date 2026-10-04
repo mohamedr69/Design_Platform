@@ -1,0 +1,411 @@
+diff --git a/backend/app/services/document_control.py b/backend/app/services/document_control.py
+index 5c326cd..95ad097 100644
+--- a/backend/app/services/document_control.py
++++ b/backend/app/services/document_control.py
+@@ -358,13 +358,15 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
+ # covers and scanned transmittals are promoted to records only on the
+ # evaluation path (EXTRACTION_PROMOTE_OBSERVATIONS), else kept as
+ # observations; a reference cut at a hyphen is flagged incomplete.
+-PARSER_VERSION = "parse-2026-09-28.4"
++PARSER_VERSION = "parse-2026-09-28.5"
+ 
+ # The codes a controlled document's reference carries. Contractors number
+ # them their own way: MAS and MAR are both a material submittal (material
+ # approval request), SDW, DWG and SD a shop drawing, SAR a sample. MS is a
+ # method statement and is not one of these.
+-_CODES = r"(MAS|MAR|SDW|DWG|SD|SAR)"
++# MAT: a material submittal in Emaar / Voltas and EFECO numbering ("EBF-DCP-6374-VL-MAT-ELV-0003", "A23-EFE-MAT-E-00033";
++# real-project pilot, 2026-09-28).
++_CODES = r"(MAS|MAR|MAT|SDW|DWG|SD|SAR)"
+ # A reference may go on past a slash with the sheets it covers -- the
+ # submission "â€¦-SD-MEP-FA-0054" lists "â€¦-SD-MEP/FA-104 A~104 M", the reply
+ # answers "â€¦-SD-MEP/FA-100,101,102,104&105", a sheet is "â€¦-SD-MEP/FA-104-M".
+@@ -379,13 +381,14 @@ _SHEETS = r"(?:/[A-Z0-9]{1,6}-\d{1,5}(?:[ -]?[A-Z](?![A-Z0-9]))?(?:\s*[,&~]\s*\d
+ # is never glued on -- that made a serial of a base and unfolded the reply
+ # behind EP-30088's FA-0042 cover.
+ _SEGMENT = r"(?:-[A-Z0-9]+|-\n[A-Z][A-Z0-9]*)"
+-REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
++# The code itself may follow a wrapped hyphen ("EBF-DCP-6374-VL-" / "MAT-ELV-0003"), like any segment.
++REF = re.compile(r"\b[A-Z0-9]+" + _SEGMENT + r"*-\n?" + _CODES + r"-[A-Z0-9]+" + _SEGMENT + r"*-?" + _SHEETS, re.I)
+ # A date written "6-Mar-2026" has the shape of a MAR reference and is not
+ # one: a number, a month, a year. A real reference with a numeric prefix
+ # ("123-MAR-001") has no year where the year would be.
+ _DATE_SHAPED = re.compile(r"^\d{1,2}-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-(?:\d{2}|\d{4})$", re.I)
+-_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "SAR": "samples", "SDW": "drawings", "DWG": "drawings",
+-                     "SD": "drawings"}
++_CATEGORY_OF_CODE = {"MAS": "submittals", "MAR": "submittals", "MAT": "submittals", "SAR": "samples", "SDW": "drawings",
++                     "DWG": "drawings", "SD": "drawings"}
+ 
+ 
+ def is_date_shaped(reference: str | None) -> bool:
+@@ -426,16 +429,44 @@ def reference_candidates(text: str) -> list[ReferenceCandidate]:
+     out = []
+     for match in REF.finditer(text):
+         raw = match.group()
++        start = match.start()
++        # OCR of a form glues the field's label to its value ("Reference25H-S202-â€¦",
++        # "No.R1029-â€¦"): the label is not part of the number (pilot P-01).
++        glued = _GLUED_LABEL.match(raw)
++        if glued:
++            raw = raw[glued.end():]
++            start += glued.end()
+         reference = raw.replace("-\n", "-").rstrip("-.")
++        # OCR reads the zero of a revision suffix as the letter O ("-RO", "-R0O"):
++        # the suffix is a revision, not part of the number (pilot P-03).
++        reference = _OCR_REVISION_SUFFIX.sub(lambda m: "-R" + m.group(1).upper().replace("O", "0"), reference)
+         if is_date_shaped(reference):
+             continue
+         base = reference.split("/", 1)[0]
+         kind = "sheets" if "/" in reference else "serial" if re.search(r"-\d{2,}[A-Z]?$", base, re.I) else "other"
+-        out.append(ReferenceCandidate(reference, match.group(1).upper(), match.start(), match.end(), kind,
++        out.append(ReferenceCandidate(reference, match.group(1).upper(), start, match.end(), kind,
+                                       incomplete=raw.rstrip(".").endswith("-")))
+     return out
+ 
+ 
++_GLUED_LABEL = re.compile(r"^(?:Reference|Ref\.?|No\.?)(?=[A-Z0-9]*\d)", re.I)
++_OCR_REVISION_SUFFIX = re.compile(r"-R([O0]{1,2}\d{0,2}|\d{0,2}[O0]{1,2})$", re.I)
++# A drawing-number field's value is a number, never the next field's label:
++# an empty "Drawing No:" in front of "Reference No: â€¦" read "Reference" as
++# the number (pilot P-02).
++_FIELD_LABEL = re.compile(r"^(?:Reference|Ref|Rev|Revision|Date|Title|Sheet|Scale|No|Number|Drawn|Checked|Approved)\b\.?\s*(?:No\.?)?\s*:?$", re.I)
++
++
++def drawing_number(text: str):
++    """The first drawing-number field whose value holds a digit and is not a
++    field label, as a match (group 1 is the number); None for none."""
++    for match in DRAW_REF.finditer(text):
++        value = match.group(1).strip()
++        if re.search(r"\d", value) and not _FIELD_LABEL.match(value):
++            return match
++    return None
++
++
+ def first_reference(text: str) -> ReferenceCandidate | None:
+     """The first reference on the page that is not a date; None for none."""
+     found = reference_candidates(text)
+@@ -1049,7 +1080,7 @@ def parse_page(text: str, path: str, modified: datetime, page: int) -> list[Cont
+                 schedule.append(ControlledDocument(code, title, path, modified, re.sub(r"\s+", " ", ref.strip()), "R0", "UR", floor_name(title), page=page, source="drawing schedule", category="drawings"))
+         return schedule
+     candidate = first_reference(text)
+-    drawing_match = DRAW_REF.search(text)
++    drawing_match = drawing_number(text)
+     # A reply sheet quotes the reference it answers. Registering it would
+     # displace the submission form carrying that reference, so it is only
+     # ever read for the decision it may carry (source="reply"), and
+diff --git a/backend/app/services/document_processing.py b/backend/app/services/document_processing.py
+index 1f1cd32..0b0ea1b 100644
+--- a/backend/app/services/document_processing.py
++++ b/backend/app/services/document_processing.py
+@@ -224,10 +224,11 @@ def parser_current(row: ProjectDocument) -> bool:
+             # not assumed to be either ...
+             and extracted.get("profile") == document_control.extraction_profile()
+             # ... and not carrying records read under another or an unknown
+-            # profile (M2 review 03, R3-02): such a reading is a mixed one,
+-            # never reused as this profile's; it is read again when the row
+-            # is next processed or repaired (not on its own: no retry loop).
+-            and not retained.get("other_profile"))
++            # profile (M2 review 03, R3-02) or by another or an unknown parser
++            # (M2 review 04, R4-01): such a reading is a mixed one, never
++            # reused as this parser's and profile's; it is read again when the
++            # row is next processed or repaired (not on its own: no retry loop).
++            and not retained.get("other_profile") and not retained.get("other_parser"))
+ 
+ 
+ # --- the job -----------------------------------------------------------------------------
+@@ -321,8 +322,11 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
+             _report(ctx, done, total, path.name)
+             continue
+         timing = dict(result.get("timing") or {})
+-        if result["unchanged"]:
++        if result.get("unchanged"):
+             # Touched, not changed: the content already read. Nothing opened.
++            # (`.get`: a duplicate-content result carries no "unchanged" key --
++            # M2 real-project pilot: the duplicate branch below raised KeyError
++            # here and failed the whole processing job.)
+             row.sha256, row.size, row.mtime, row.last_seen_at = result["sha"], result["size"], result["mtime"], now
+             row.state, row.error = FRESH, None
+             counts["unchanged_after_hash"] += 1
+diff --git a/backend/app/services/document_sync.py b/backend/app/services/document_sync.py
+index a54e8d9..291371a 100644
+--- a/backend/app/services/document_sync.py
++++ b/backend/app/services/document_sync.py
+@@ -356,10 +356,22 @@ def staleness(kept: dict, sha256: str | None):
+ CARRIED_UNVISITED = "carried_unvisited"
+ CARRIED_UNVERIFIED = "carried_unverified"
+ CARRIED_OTHER_PROFILE = "carried_other_profile"
+-CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE)
++CARRIED_OTHER_PARSER = "carried_other_parser"
++CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE, CARRIED_OTHER_PARSER)
+ RETAINED_METHOD = "retained"
+ 
+ 
++def parser_compatible(version: str | None) -> bool:
++    """Whether a record read under `version` may stand as read by the parser
++    as it is now (M2 review 04, R4-01). The contract is explicit and narrow:
++    only the current `document_control.PARSER_VERSION` is compatible with
++    itself; an earlier or an unknown version is not, whatever it read -- a
++    known defect of an earlier parser would otherwise stand for ever on a
++    page the current parser never visited. (A future version may name the
++    versions whose records it accepts; none does now.)"""
++    return version is not None and version == document_control.PARSER_VERSION
++
++
+ def retained_provenance(record: dict, kept: dict) -> dict:
+     """Where a carried record was read: its own retained provenance when it
+     was carried before (it travels with the record and is never restamped
+@@ -407,18 +419,22 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
+         retained = retained_provenance(record, kept)
+         unverified = retained["source_sha256"] is None or retained["source_sha256"] != sha256
+         other_profile = profile is not None and (retained["profile"] is None or retained["profile"] != profile)
++        other_parser = not parser_compatible(retained.get("parser_version"))
+         flags = [f for f in (record.get("flags") or []) if f not in CARRY_FLAGS] + [CARRIED_UNVISITED]
+         if unverified:
+             flags.append(CARRIED_UNVERIFIED)
+         if other_profile:
+             flags.append(CARRIED_OTHER_PROFILE)
++        if other_parser:
++            flags.append(CARRIED_OTHER_PARSER)
+         new = {**record, "flags": flags, "retained": retained}
+         candidates = [list(c) for c in (record.get("decision_candidates") or [])]
+         held = next((c for c in candidates if len(c) == 3 and c[2] == RETAINED_METHOD), None)
+-        if unverified or other_profile:
++        if unverified or other_profile or other_parser:
+             status = record.get("status")
+             if status not in (None, "UR") and held is None:
+-                why = f"retained from a {retained['profile'] or 'unknown-profile'} reading of " + ("other bytes" if unverified else "these bytes")
++                why = (f"retained from a {retained['profile'] or 'unknown-profile'} reading by {retained.get('parser_version') or 'an unknown parser'} of "
++                       + ("other bytes" if unverified else "these bytes"))
+                 candidates.append([status, why, RETAINED_METHOD])
+             new["status"] = "UR"
+             new["decision_candidates"] = candidates
+@@ -431,11 +447,13 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
+         return [], None
+     pages = sorted({r.get("page") for r in carried if r.get("page") is not None})
+     unverified_n = sum(1 for r in carried if CARRIED_UNVERIFIED in r["flags"]); other_n = sum(1 for r in carried if CARRIED_OTHER_PROFILE in r["flags"])
++    parser_n = sum(1 for r in carried if CARRIED_OTHER_PARSER in r["flags"])
+     note = (f"{len(carried)} record{'s' if len(carried) != 1 else ''} on page{'s' if len(pages) != 1 else ''} "
+             f"{', '.join(str(p) for p in pages) if pages else 'unknown'} not visited by this reading "
+             f"{'were' if len(carried) != 1 else 'was'} kept from the previous reading"
+             + (f"; {unverified_n} read from other or unknown bytes (unverified)" if unverified_n else "")
+-            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "") + ".")
++            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "")
++            + (f"; {parser_n} read by another or unknown parser (decision held until the page is read again)" if parser_n else "") + ".")
+     return carried, note
+ 
+ 
+@@ -448,8 +466,11 @@ def retained_summary(records: list[dict]) -> dict | None:
+     if not kept:
+         return None
+     return {"records": len(kept), "pages": sorted({r.get("page") for r in kept if r.get("page") is not None}),
++            # a mixed reading: some record of it stands under another profile or parser than the envelope's
++            "mixed": any(CARRIED_OTHER_PROFILE in r["flags"] or CARRIED_OTHER_PARSER in r["flags"] for r in kept),
+             "unverified": sum(1 for r in kept if CARRIED_UNVERIFIED in r["flags"]),
+             "other_profile": sum(1 for r in kept if CARRIED_OTHER_PROFILE in r["flags"]),
++            "other_parser": sum(1 for r in kept if CARRIED_OTHER_PARSER in r["flags"]),
+             "sources": sorted({json.dumps({k: (r.get("retained") or {}).get(k) for k in ("source_sha256", "parser_version", "profile")}, sort_keys=True) for r in kept})}
+ 
+ 
+diff --git a/backend/scripts/repair_extraction.py b/backend/scripts/repair_extraction.py
+index fd00790..c1e9c3d 100644
+--- a/backend/scripts/repair_extraction.py
++++ b/backend/scripts/repair_extraction.py
+@@ -111,6 +111,8 @@ def select_rows(db: Session, project: Project | None, selections: set[str], ids:
+             reasons.append(f"read under another extraction profile ({(row.extracted or {}).get('profile') or 'not recorded'}, now {document_control.extraction_profile()})")
+         elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_profile"):
+             reasons.append("carries records read under another or an unknown extraction profile")
++        elif "parser-outdated" in selections and ((row.extracted or {}).get("retained") or {}).get("other_parser"):
++            reasons.append("carries records read by another or an unknown parser")
+         if "all" in selections:
+             reasons.append("every row of the project")
+         if reasons:
+diff --git a/backend/tests/test_extraction_m2_review02.py b/backend/tests/test_extraction_m2_review02.py
+index ebfd9cd..83039e7 100644
+--- a/backend/tests/test_extraction_m2_review02.py
++++ b/backend/tests/test_extraction_m2_review02.py
+@@ -234,15 +234,15 @@ def test_a_bounded_re_read_carries_the_records_of_the_pages_it_did_not_visit(cli
+ 
+ 
+ def test_carry_unvisited_keeps_records_of_unknown_page_and_flags_by_source_identity():
+-    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same"}
++    kept = {"records": [{"reference": "A", "page": 1}, {"reference": "B", "page": 13}, {"reference": "C"}], "read_sha256": "same", "parser_version": dc.PARSER_VERSION, "profile": "default"}
+     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
+-    carried, note = document_sync.carry_unvisited(kept, coverage, "same")
++    carried, note = document_sync.carry_unvisited(kept, coverage, "same", "default")
+     assert [(r["reference"], r["flags"]) for r in carried] == [("B", ["carried_unvisited"]), ("C", ["carried_unvisited"])]
+     assert "2 records" in note and "unverified" not in note
+-    carried, note = document_sync.carry_unvisited(kept, coverage, "other")
++    carried, note = document_sync.carry_unvisited(kept, coverage, "other", "default")
+     assert all(r["flags"] == ["carried_unvisited", "carried_unverified"] for r in carried) and "unverified" in note
+-    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same")
+-    assert all("carried_unverified" in r["flags"] for r in carried), "unknown source identity: unverified"
++    carried, note = document_sync.carry_unvisited({"records": kept["records"]}, coverage, "same", "default")
++    assert all("carried_unverified" in r["flags"] and "carried_other_parser" in r["flags"] for r in carried), "unknown source identity and parser: unverified, held"
+     assert document_sync.carry_unvisited(kept, {"pages_skipped": []}, "same") == ([], None)
+ 
+ 
+diff --git a/backend/tests/test_extraction_m2_review03.py b/backend/tests/test_extraction_m2_review03.py
+index 51e4719..f931a6b 100644
+--- a/backend/tests/test_extraction_m2_review03.py
++++ b/backend/tests/test_extraction_m2_review03.py
+@@ -78,8 +78,8 @@ def test_repeated_bounded_reads_keep_the_carried_records_provenance_and_uncertai
+     record = _carried(row)
+     assert set(record["flags"]) == {"carried_unvisited", "carried_unverified"}
+     assert record["retained"] == {"source_sha256": original_sha, "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": original_at}
+-    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "unverified": 1, "other_profile": 0,
+-                                                                                         "sources": row.extracted["retained"]["sources"]}
++    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "mixed": False, "unverified": 1, "other_profile": 0,
++                                                                                         "other_parser": 0, "sources": row.extracted["retained"]["sources"]}
+     assert original_sha in row.extracted["retained"]["sources"][0]
+ 
+     # the same new bytes read again, twice, by the repair tool: nothing certified, nothing lost
+@@ -135,16 +135,16 @@ def test_a_legacy_record_carried_into_a_bounded_reading_has_unknown_provenance_a
+     _sync(client, project_id)
+     db_session.refresh(row)
+     record = _carried(row)
+-    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile"}
++    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile", "carried_other_parser"}
+     assert record["retained"] == {"source_sha256": None, "parser_version": None, "profile": None, "read_at": None}, "unknown stays unknown"
+-    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading of other bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading by an unknown parser of other bytes", "retained"] in record["decision_candidates"]
+     assert row.status == "UR", "the mirror does not project a decision of unknown provenance"
+     assert row.extracted["retained"]["other_profile"] == 1 and document_processing.parser_current(row) is False
+ 
+ 
+ def test_carry_unvisited_follows_the_records_own_provenance_not_the_envelope():
+     kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": ["carried_unvisited", "carried_unverified"],
+-                         "retained": {"source_sha256": "original", "parser_version": "p1", "profile": "default", "read_at": "t0"},
++                         "retained": {"source_sha256": "original", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t0"},
+                          "decision_candidates": [["approved", "retained from a default reading of other bytes", "retained"]]}],
+             "read_sha256": "new", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t1"}
+     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
+@@ -190,7 +190,7 @@ def test_a_promoted_record_on_an_unvisited_page_is_held_by_a_default_bounded_rea
+     assert _processed(client, result).get("failed", 0) == 0
+     record = _carried(row)
+     assert row.extracted["profile"] == "default" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
+-    assert record["status"] == "UR" and ["rejected", "retained from a promoted reading of these bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and ["rejected", f"retained from a promoted reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
+     assert record["retained"]["profile"] == "promoted" and record["retained"]["source_sha256"] == promoted_sha
+     assert row.status == "UR" and row.reference == REFERENCE, "the mirror shows no default status the reader did not read"
+     assert row.extracted["retained"]["other_profile"] == 1
+@@ -260,5 +260,119 @@ def test_a_default_record_is_held_by_a_promoted_bounded_reading_too(client, db_s
+     db_session.refresh(row)
+     record = _carried(row)
+     assert row.extracted["profile"] == "promoted" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
+-    assert record["status"] == "UR" and row.status == "UR" and ["approved", "retained from a default reading of these bytes", "retained"] in record["decision_candidates"]
++    assert record["status"] == "UR" and row.status == "UR" and ["approved", f"retained from a default reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
+     assert document_processing.parser_current(row) is False
++
++
++# --- R4-01 (review 04): the parser that read a carried record is part of its identity -------------
++
++
++def test_a_record_read_by_an_older_parser_is_held_by_a_bounded_reading_until_its_page_is_read_again(client, db_session, tmp_path, inline, monkeypatch):
++    """Same bytes, same profile, an older parser: a formerly authoritative
++    decision on the skipped page is retained with its parser, its decision
++    withheld, the reading not current and not reused; the repair tool
++    selects it; a wider read by the current parser clears it."""
++    from scripts import repair_extraction as tool
++
++    folder = tmp_path / "EP-30925"
++    with pymupdf.open() as document:
++        _page(document, SEPARATOR)
++        for _ in range(11):
++            _page(document, SEPARATOR)
++        _page(document, FA_COVER + "Review status: (A) Approved\n")
++        path = folder / "05- Drawings" / "package.pdf"
++        path.parent.mkdir(parents=True)
++        path.write_bytes(document.tobytes())
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
++    project_id = _project(client, folder, ep="30925")
++    _sync(client, project_id)
++    row = _row(db_session, project_id)
++    assert row.status == "approved" and _carried(row)["page"] == 13
++    # the reading as an older parser left it: the same bytes, the same profile, another parser version
++    older = dict(row.extracted)
++    older["parser_version"] = "parse-older-defective"
++    row.extracted = older
++    db_session.commit()
++    assert document_processing.parser_current(row) is False
++
++    # the current parser, narrower budget, unchanged bytes: it must read the file (no reuse) and hold page 13
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 12)
++    _touch(path)
++    result = _sync(client, project_id)
++    db_session.refresh(row)
++    assert _processed(client, result)["unchanged_after_hash"] == 0
++    record = _carried(row)
++    assert set(record["flags"]) == {"carried_unvisited", "carried_other_parser"}
++    assert record["retained"]["parser_version"] == "parse-older-defective" and record["retained"]["source_sha256"] == row.sha256
++    assert record["status"] == "UR" and ["approved", "retained from a default reading by parse-older-defective of these bytes", "retained"] in record["decision_candidates"]
++    assert row.status == "UR", "an old parser's decision is not certified by the new envelope"
++    assert row.extracted["parser_version"] == dc.PARSER_VERSION and row.extracted["retained"]["other_parser"] == 1 and row.extracted["retained"]["mixed"] is True
++    assert document_processing.parser_current(row) is False and document_processing._previous_sha(row) is None
++    reloaded = _reload(row.id)
++    assert _carried(reloaded)["status"] == "UR" and reloaded.status == "UR"
++
++    # repeated bounded runs (the repair tool twice) and reload: the old parser stays in the record's provenance
++    monkeypatch.setattr(tool, "root_of", lambda r: str(folder))
++    selected = dict((r.id, reasons) for r, reasons in tool.select_rows(db_session, db_session.get(Project, project_id), {"parser-outdated"}, []))
++    assert any(reason.startswith("carries records read by another") for reason in selected.get(row.id, []))
++    for _ in range(2):
++        entry = tool.preview(db_session, row, selected[row.id], False)
++        tool.apply_row(db_session, row, entry)
++        db_session.refresh(row)
++        record = _carried(row)
++        assert record["retained"]["parser_version"] == "parse-older-defective" and "carried_other_parser" in record["flags"] and record["status"] == "UR"
++    assert _carried(_reload(row.id))["retained"]["parser_version"] == "parse-older-defective"
++
++    # a duplicate of the same bytes is not given the mixed reading
++    copy = folder / "05- Drawings" / "Archive" / "package.pdf"
++    copy.parent.mkdir(parents=True)
++    copy.write_bytes(path.read_bytes())
++    result = _sync(client, project_id)
++    assert _processed(client, result).get("failed", 0) == 0, _processed(client, result)
++    twin = db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id, ProjectDocument.relative_path == "05- Drawings/Archive/package.pdf").one()
++    assert twin.extracted.get("retained") is None and twin.extracted["records"] == [] and not twin.status, "read on its own (page 13 unvisited: no record), not copied"
++    # and the mixed row is not refreshed from the twin's current reading either: it keeps its retained evidence
++    db_session.refresh(row)
++    assert "carried_other_parser" in _carried(row)["flags"]
++
++    # the copy leaves; its row is removed by the sync
++    copy.unlink()
++    _sync(client, project_id)
++    db_session.refresh(twin)
++    assert twin.state == "removed"
++
++    # a missing retained parser identity: unknown is not compatible
++    stripped = dict(row.extracted)
++    stripped["records"] = [{**r, "retained": {**r["retained"], "parser_version": None}} for r in stripped["records"]]
++    row.extracted = stripped
++    db_session.commit()
++    entry = tool.preview(db_session, row, ["selected by id"], False)
++    tool.apply_row(db_session, row, entry)
++    db_session.refresh(row)
++    assert "carried_other_parser" in _carried(row)["flags"] and _carried(row)["retained"]["parser_version"] is None and row.status == "UR"
++
++    # the current parser reaches page 13: read afresh, current, idempotent
++    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
++    _touch(path)
++    result = _sync(client, project_id)
++    db_session.refresh(row)
++    processed = _processed(client, result)
++    assert processed.get("processed", 0) >= 1, (result, processed, row.state, row.extracted.get("retained"))
++    record = _carried(row)
++    assert record["flags"] == [] and record.get("retained") is None and record["status"] == "approved" and row.status == "approved"
++    assert "retained" not in row.extracted and document_processing.parser_current(row) is True and document_processing._previous_sha(row) == row.sha256
++    _touch(path)
++    result = _sync(client, project_id)
++    assert _processed(client, result)["unchanged_after_hash"] >= 1
++
++
++def test_parser_compatibility_is_explicit_and_narrow():
++    assert document_sync.parser_compatible(dc.PARSER_VERSION) is True
++    assert document_sync.parser_compatible("parse-2026-09-28.3") is False and document_sync.parser_compatible(None) is False
++    kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": []}], "read_sha256": "same", "parser_version": "older", "profile": "default", "read_at": "t0"}
++    coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
++    [carried], note = document_sync.carry_unvisited(kept, coverage, "same", "default")
++    assert set(carried["flags"]) == {"carried_unvisited", "carried_other_parser"} and carried["status"] == "UR" and "another or unknown parser" in note
++    kept["parser_version"] = dc.PARSER_VERSION
++    [carried], _ = document_sync.carry_unvisited(kept, coverage, "same", "default")
++    assert carried["flags"] == ["carried_unvisited"] and carried["status"] == "approved"

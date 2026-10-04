@@ -1,0 +1,20 @@
+# Change map — Review 23 correction (runner lifecycle, harness v4.1)
+
+**Application code: no change.** Frozen R21 candidate `719e8de661b8b10427ef6cff5d2d277a53b64dc6` and accepted baseline `3d5607d` untouched and clean ([bindings/SOURCE-BINDINGS.json](bindings/SOURCE-BINDINGS.json)). The accepted reader, labels, thresholds, prompts, matching policies, the scorer (`coverage_v4.py`, `score_arms_v4.py`), the scheduler (`schedule_sim.py`, the whole-project rule) and the durable-allowance module (r16.1) are unchanged — the scoring files in `harness-v4.1/` are byte-identical to review22's frozen v4 ([bindings/FROZEN-HARNESS.json](bindings/FROZEN-HARNESS.json)).
+
+| File (`harness-v4.1/`) | Change | Why |
+|---|---|---|
+| `arm_ev.py` (runner `arm-ev-2026-10-01.v4.1`) | **R23-01.** Lifecycle contract `runner-lifecycle-2026-10-01.v1` ([LIFECYCLE-CONTRACT.md](LIFECYCLE-CONTRACT.md)): a terminal stop (critical acceptance on a resolved label; three consecutive provider failures) is persisted atomically to `out/TERMINAL-STOP.json` the moment it is decided, before any manifest update, and never overwritten; `--resume` loads and validates the persisted state (file → manifest `terminal_stop` → a v4 manifest's terminal `stopped` reason → offline reconstruction by the same tripwire over the projects already read) **before** the startup manifest write and before any call can leave, and returns the preserved stopped result with zero requests (exit 4, refusal recorded, lists preserved, status `stopped`); every terminal stop leaves the remaining projects `not_attempted` (previously only the critical one); the final status is `stopped` whenever the state or the stop file says so (never relabelled `completed`); the evidence of a failure stop is the last three failed requests across documents. Dry-only kill points `PILOT_DRY_KILL_AT_STOP=before_file|after_file`. Deferral, interruption recovery, completed-document skips, cache accounting, the 12 / document allowance, the arm scope and the rolling project limit are untouched. | Review 23: plain `--resume` cleared a recorded critical stop and dispatched 8 requests. |
+| `dry_provider2.py` | `PILOT_DRY_FAIL_FROM=n [PILOT_DRY_FAIL_COUNT=k]`: scripted provider failures (`error="transport"`). | To trigger and to contrast the consecutive-failure stop offline. |
+| `runner_probes.py`, `test_runner_v4.py` | Output / root paths for review23; the env cleared of the new dry devices; the test fixture passes `PILOT_DRY` when regenerating. | The eight R22 scenarios are rerun with the v4.1 runner as positive controls. |
+| `lifecycle_probes.py`, `test_lifecycle_v4_1.py` | New: T1–T5 through the actual runner with the scripted provider, disagreeing synthetic labels (the reviewer's device) and privately rebound declarations in isolated roots; 5 regressions. | Required offline validation. |
+| `patch_lifecycle.py`, `patch_lifecycle_2.py` | The recorded edits (applied to a copy of review22's frozen v4). | Traceability. |
+| `run_r23_chain.sh`, `bindings_r23.py`, `package_r23.py`, `verify_r23_package.py`, `append_response.py` | New / re-pointed packaging. | |
+
+## Reproduction of the reviewer's finding
+
+[repro/](repro/): byte copies of the reviewer's `resume_stop_probe.py` and `test_review23_terminal_stop.py` (hash-checked; the reviewer folder was never written to) run by `run_stop_probe.py` in this package's own output directories and private workspaces: on the submitted v4 runner (`repro/on-v4/`) the first invocation stops after EP-16830 with one critical tripwire result and 12 scripted requests, and plain `--resume` dispatches 8 requests to EP-17428 — **1 failed, 2 controls passed** (the reviewer's result); on v4.1 (`repro/on-v4.1/`) the resume sends zero requests and preserves the stop — **3 passed**. The only substitutions are the probe's output directory, workspace and the runner path.
+
+## Not done, on purpose
+
+No override flag, approval flow, new budget scope or amendment mechanism; no scorer / extraction / scheduler rebuild; no application change; no rerun of the application suites (nothing in the application changed); no model call.

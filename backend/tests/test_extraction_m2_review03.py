@@ -78,8 +78,8 @@ def test_repeated_bounded_reads_keep_the_carried_records_provenance_and_uncertai
     record = _carried(row)
     assert set(record["flags"]) == {"carried_unvisited", "carried_unverified"}
     assert record["retained"] == {"source_sha256": original_sha, "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": original_at}
-    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "unverified": 1, "other_profile": 0,
-                                                                                         "sources": row.extracted["retained"]["sources"]}
+    assert row.extracted["read_sha256"] == changed_sha and row.extracted["retained"] == {"records": 1, "pages": [13], "mixed": False, "unverified": 1, "other_profile": 0,
+                                                                                         "other_parser": 0, "sources": row.extracted["retained"]["sources"]}
     assert original_sha in row.extracted["retained"]["sources"][0]
 
     # the same new bytes read again, twice, by the repair tool: nothing certified, nothing lost
@@ -135,16 +135,16 @@ def test_a_legacy_record_carried_into_a_bounded_reading_has_unknown_provenance_a
     _sync(client, project_id)
     db_session.refresh(row)
     record = _carried(row)
-    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile"}
+    assert set(record["flags"]) == {"carried_unvisited", "carried_unverified", "carried_other_profile", "carried_other_parser"}
     assert record["retained"] == {"source_sha256": None, "parser_version": None, "profile": None, "read_at": None}, "unknown stays unknown"
-    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading of other bytes", "retained"] in record["decision_candidates"]
+    assert record["status"] == "UR" and ["approved", "retained from a unknown-profile reading by an unknown parser of other bytes", "retained"] in record["decision_candidates"]
     assert row.status == "UR", "the mirror does not project a decision of unknown provenance"
     assert row.extracted["retained"]["other_profile"] == 1 and document_processing.parser_current(row) is False
 
 
 def test_carry_unvisited_follows_the_records_own_provenance_not_the_envelope():
     kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": ["carried_unvisited", "carried_unverified"],
-                         "retained": {"source_sha256": "original", "parser_version": "p1", "profile": "default", "read_at": "t0"},
+                         "retained": {"source_sha256": "original", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t0"},
                          "decision_candidates": [["approved", "retained from a default reading of other bytes", "retained"]]}],
             "read_sha256": "new", "parser_version": dc.PARSER_VERSION, "profile": "default", "read_at": "t1"}
     coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
@@ -190,7 +190,7 @@ def test_a_promoted_record_on_an_unvisited_page_is_held_by_a_default_bounded_rea
     assert _processed(client, result).get("failed", 0) == 0
     record = _carried(row)
     assert row.extracted["profile"] == "default" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
-    assert record["status"] == "UR" and ["rejected", "retained from a promoted reading of these bytes", "retained"] in record["decision_candidates"]
+    assert record["status"] == "UR" and ["rejected", f"retained from a promoted reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
     assert record["retained"]["profile"] == "promoted" and record["retained"]["source_sha256"] == promoted_sha
     assert row.status == "UR" and row.reference == REFERENCE, "the mirror shows no default status the reader did not read"
     assert row.extracted["retained"]["other_profile"] == 1
@@ -260,5 +260,119 @@ def test_a_default_record_is_held_by_a_promoted_bounded_reading_too(client, db_s
     db_session.refresh(row)
     record = _carried(row)
     assert row.extracted["profile"] == "promoted" and set(record["flags"]) == {"carried_unvisited", "carried_other_profile"}
-    assert record["status"] == "UR" and row.status == "UR" and ["approved", "retained from a default reading of these bytes", "retained"] in record["decision_candidates"]
+    assert record["status"] == "UR" and row.status == "UR" and ["approved", f"retained from a default reading by {dc.PARSER_VERSION} of these bytes", "retained"] in record["decision_candidates"]
     assert document_processing.parser_current(row) is False
+
+
+# --- R4-01 (review 04): the parser that read a carried record is part of its identity -------------
+
+
+def test_a_record_read_by_an_older_parser_is_held_by_a_bounded_reading_until_its_page_is_read_again(client, db_session, tmp_path, inline, monkeypatch):
+    """Same bytes, same profile, an older parser: a formerly authoritative
+    decision on the skipped page is retained with its parser, its decision
+    withheld, the reading not current and not reused; the repair tool
+    selects it; a wider read by the current parser clears it."""
+    from scripts import repair_extraction as tool
+
+    folder = tmp_path / "EP-30925"
+    with pymupdf.open() as document:
+        _page(document, SEPARATOR)
+        for _ in range(11):
+            _page(document, SEPARATOR)
+        _page(document, FA_COVER + "Review status: (A) Approved\n")
+        path = folder / "05- Drawings" / "package.pdf"
+        path.parent.mkdir(parents=True)
+        path.write_bytes(document.tobytes())
+    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
+    project_id = _project(client, folder, ep="30925")
+    _sync(client, project_id)
+    row = _row(db_session, project_id)
+    assert row.status == "approved" and _carried(row)["page"] == 13
+    # the reading as an older parser left it: the same bytes, the same profile, another parser version
+    older = dict(row.extracted)
+    older["parser_version"] = "parse-older-defective"
+    row.extracted = older
+    db_session.commit()
+    assert document_processing.parser_current(row) is False
+
+    # the current parser, narrower budget, unchanged bytes: it must read the file (no reuse) and hold page 13
+    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 12)
+    _touch(path)
+    result = _sync(client, project_id)
+    db_session.refresh(row)
+    assert _processed(client, result)["unchanged_after_hash"] == 0
+    record = _carried(row)
+    assert set(record["flags"]) == {"carried_unvisited", "carried_other_parser"}
+    assert record["retained"]["parser_version"] == "parse-older-defective" and record["retained"]["source_sha256"] == row.sha256
+    assert record["status"] == "UR" and ["approved", "retained from a default reading by parse-older-defective of these bytes", "retained"] in record["decision_candidates"]
+    assert row.status == "UR", "an old parser's decision is not certified by the new envelope"
+    assert row.extracted["parser_version"] == dc.PARSER_VERSION and row.extracted["retained"]["other_parser"] == 1 and row.extracted["retained"]["mixed"] is True
+    assert document_processing.parser_current(row) is False and document_processing._previous_sha(row) is None
+    reloaded = _reload(row.id)
+    assert _carried(reloaded)["status"] == "UR" and reloaded.status == "UR"
+
+    # repeated bounded runs (the repair tool twice) and reload: the old parser stays in the record's provenance
+    monkeypatch.setattr(tool, "root_of", lambda r: str(folder))
+    selected = dict((r.id, reasons) for r, reasons in tool.select_rows(db_session, db_session.get(Project, project_id), {"parser-outdated"}, []))
+    assert any(reason.startswith("carries records read by another") for reason in selected.get(row.id, []))
+    for _ in range(2):
+        entry = tool.preview(db_session, row, selected[row.id], False)
+        tool.apply_row(db_session, row, entry)
+        db_session.refresh(row)
+        record = _carried(row)
+        assert record["retained"]["parser_version"] == "parse-older-defective" and "carried_other_parser" in record["flags"] and record["status"] == "UR"
+    assert _carried(_reload(row.id))["retained"]["parser_version"] == "parse-older-defective"
+
+    # a duplicate of the same bytes is not given the mixed reading
+    copy = folder / "05- Drawings" / "Archive" / "package.pdf"
+    copy.parent.mkdir(parents=True)
+    copy.write_bytes(path.read_bytes())
+    result = _sync(client, project_id)
+    assert _processed(client, result).get("failed", 0) == 0, _processed(client, result)
+    twin = db_session.query(ProjectDocument).filter(ProjectDocument.project_id == project_id, ProjectDocument.relative_path == "05- Drawings/Archive/package.pdf").one()
+    assert twin.extracted.get("retained") is None and twin.extracted["records"] == [] and not twin.status, "read on its own (page 13 unvisited: no record), not copied"
+    # and the mixed row is not refreshed from the twin's current reading either: it keeps its retained evidence
+    db_session.refresh(row)
+    assert "carried_other_parser" in _carried(row)["flags"]
+
+    # the copy leaves; its row is removed by the sync
+    copy.unlink()
+    _sync(client, project_id)
+    db_session.refresh(twin)
+    assert twin.state == "removed"
+
+    # a missing retained parser identity: unknown is not compatible
+    stripped = dict(row.extracted)
+    stripped["records"] = [{**r, "retained": {**r["retained"], "parser_version": None}} for r in stripped["records"]]
+    row.extracted = stripped
+    db_session.commit()
+    entry = tool.preview(db_session, row, ["selected by id"], False)
+    tool.apply_row(db_session, row, entry)
+    db_session.refresh(row)
+    assert "carried_other_parser" in _carried(row)["flags"] and _carried(row)["retained"]["parser_version"] is None and row.status == "UR"
+
+    # the current parser reaches page 13: read afresh, current, idempotent
+    monkeypatch.setattr(dc, "PAGE_SCAN_LIMIT", 20)
+    _touch(path)
+    result = _sync(client, project_id)
+    db_session.refresh(row)
+    processed = _processed(client, result)
+    assert processed.get("processed", 0) >= 1, (result, processed, row.state, row.extracted.get("retained"))
+    record = _carried(row)
+    assert record["flags"] == [] and record.get("retained") is None and record["status"] == "approved" and row.status == "approved"
+    assert "retained" not in row.extracted and document_processing.parser_current(row) is True and document_processing._previous_sha(row) == row.sha256
+    _touch(path)
+    result = _sync(client, project_id)
+    assert _processed(client, result)["unchanged_after_hash"] >= 1
+
+
+def test_parser_compatibility_is_explicit_and_narrow():
+    assert document_sync.parser_compatible(dc.PARSER_VERSION) is True
+    assert document_sync.parser_compatible("parse-2026-09-28.3") is False and document_sync.parser_compatible(None) is False
+    kept = {"records": [{"reference": "A", "page": 13, "status": "approved", "flags": []}], "read_sha256": "same", "parser_version": "older", "profile": "default", "read_at": "t0"}
+    coverage = {"pages_skipped": [{"page": 13, "reason": "page scan limit"}]}
+    [carried], note = document_sync.carry_unvisited(kept, coverage, "same", "default")
+    assert set(carried["flags"]) == {"carried_unvisited", "carried_other_parser"} and carried["status"] == "UR" and "another or unknown parser" in note
+    kept["parser_version"] = dc.PARSER_VERSION
+    [carried], _ = document_sync.carry_unvisited(kept, coverage, "same", "default")
+    assert carried["flags"] == ["carried_unvisited"] and carried["status"] == "approved"

@@ -1,0 +1,1007 @@
+{
+ "all_ok": true,
+ "checked_utc": "2026-10-04T10:19:27+00:00",
+ "checks": {
+  "ai_ledger": {
+   "entries": 483,
+   "limit_amendments": 0,
+   "ok": true,
+   "opened": "file:...?mode=ro, uri=True",
+   "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+   "scopes": 17
+  },
+  "binding": {
+   "binding_manifest": "C:\\Users\\moham\\Desktop\\dev\\dev\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review39\\BINDING-MANIFEST-R39.json",
+   "files_verified": 239,
+   "ok": true,
+   "sha256": "a6f703b427e59d47214a2f8e23f7af90263d19a93fcd35649cc3ead0b72c567b"
+  },
+  "bounds": {
+   "EP-27331": {
+    "change_from_r38_model": {
+     "B_reconcile_retry": 6,
+     "r38_structural_all_lanes": 154,
+     "why": "ORCH-08C (R39-16): the reconcile check's repeat of a failed form read is dispatched again"
+    },
+    "drawings_ai_if_enabled": {
+     "B_add_per_invocation": 10,
+     "application_rows_added": 0,
+     "r38_model_all_lanes": 164,
+     "structural_all_lanes": 170,
+     "windows_needed": 3
+    },
+    "planning": {
+     "B": 6,
+     "C": 46,
+     "P": 6.9,
+     "R": 4.1,
+     "all_lanes": 63.0
+    },
+    "structural_maximum": {
+     "B": 12,
+     "C": 72,
+     "P": 36,
+     "R": 40,
+     "all_lanes": 160
+    }
+   },
+   "differs_in": [],
+   "ok": true,
+   "required_minimum": {
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 84,
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 84
+   },
+   "sha256": "99be01fbf25ed6e6219cc6b09b56aa9cd728ad9b30379e6b4b157aa394131721"
+  },
+  "frozen_trees": {
+   "after_taken_utc": "2026-10-04T10:19:13+00:00",
+   "before_taken_utc": "2026-10-04T09:55:49+00:00",
+   "ledger_after": {
+    "entries": 483,
+    "limit_amendments": 0,
+    "opened": "file:...?mode=ro, uri=True",
+    "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+    "scopes": 17
+   },
+   "note": "SNAPSHOT-BEFORE was taken before packaging (after development); the task-start integrity check is in the audit log (09:00:34Z)",
+   "ok": true,
+   "repos_after": {
+    "baseline": {
+     "clean": true,
+     "expected": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+     "head": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+     "tree": "C:/t/iso/frozen-r12"
+    },
+    "candidate": {
+     "clean": true,
+     "expected": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+     "head": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+     "tree": "C:/t/iso/cand-r29"
+    }
+   },
+   "task_start_utc": "2026-10-04T09:00:00+00:00",
+   "trees": {
+    "MR-orchestrator": {
+     "compared": false,
+     "equal": true,
+     "why": "the orchestrator's own folder (updated by the orchestrator); recorded only"
+    },
+    "MR-reviews": {
+     "equal_to_before": true,
+     "files": 1870,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "declaration-r32": {
+     "equal_to_before": true,
+     "files": 57,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "evaluator-offline-r32": {
+     "equal_to_before": true,
+     "files": 26,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "four-arm-final": {
+     "equal_to_before": true,
+     "files": 136,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "fresh-cohort-r32": {
+     "equal_to_before": true,
+     "files": 112,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "fresh-cohort-r32-reviewed": {
+     "equal_to_before": true,
+     "files": 47,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "fresh-cohort-r32-reviewed-2": {
+     "equal_to_before": true,
+     "files": 45,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "review31": {
+     "equal_to_before": true,
+     "files": 60,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "review33": {
+     "equal_to_before": true,
+     "files": 113,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "review34": {
+     "equal_to_before": true,
+     "files": 125,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "review36": {
+     "equal_to_before": true,
+     "files": 136,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "review38": {
+     "equal_to_before": true,
+     "files": 129,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "staging-r32": {
+     "equal_to_before": true,
+     "files": 708,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r32": {
+     "equal_to_before": true,
+     "files": 118,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r32b": {
+     "equal_to_before": true,
+     "files": 10,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r32c": {
+     "equal_to_before": true,
+     "files": 11,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r33": {
+     "equal_to_before": true,
+     "files": 59,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r34": {
+     "equal_to_before": true,
+     "files": 88,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r35": {
+     "equal_to_before": true,
+     "files": 17,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r36": {
+     "equal_to_before": true,
+     "files": 239,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r37": {
+     "equal_to_before": true,
+     "files": 53,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    },
+    "work-r38": {
+     "equal_to_before": true,
+     "files": 220,
+     "newer_count": 0,
+     "newer_than_task_start": []
+    }
+   }
+  },
+  "gate": {
+   "bound": "C_GE_B_ONLY",
+   "ok": true,
+   "refused": [
+    "refused: decision coverage gate 'C_GE_B_AND_C_GE_R' binds R into eligibility -- superseded by the owner's ruling A-10 (C",
+    "refused: unknown decision coverage gate definition 'C_GE_R_ONLY' (only 'C_GE_B_ONLY' is bound, A-10)"
+   ],
+   "stated_in": {
+    "change_record": true,
+    "live_run_contract": true,
+    "report_template": true,
+    "scorer_changes": true
+   }
+  },
+  "guard_refusals": {
+   "check_without_declaration": {
+    "authorized": false,
+    "reason": "refused: no verified declaration (path and 64-hex sha256 are both required)"
+   },
+   "dry_exercise_declaration": "refused: not a live declaration",
+   "guarded_provider": {
+    "error": "dispatch_refused",
+    "inner_built": false
+   },
+   "ok": true
+  },
+  "harness": {
+   "carried_unchanged": {
+    "capture_store.py": {
+     "equal": true,
+     "review38_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+     "review39_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3"
+    },
+    "concentration_r32.py": {
+     "equal": true,
+     "review38_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+     "review39_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe"
+    },
+    "converter_r32.py": {
+     "equal": true,
+     "review38_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+     "review39_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704"
+    },
+    "coverage_v4.py": {
+     "equal": true,
+     "review38_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+     "review39_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad"
+    },
+    "dispatch_guard_r32.py": {
+     "equal": true,
+     "review38_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+     "review39_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863"
+    },
+    "inputs_r32.py": {
+     "equal": true,
+     "review38_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+     "review39_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3"
+    },
+    "labels_adapter_r32.py": {
+     "equal": true,
+     "review38_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+     "review39_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab"
+    },
+    "lane_judge_r32.py": {
+     "equal": true,
+     "review38_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+     "review39_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70"
+    },
+    "literal_compare_r32.py": {
+     "equal": true,
+     "review38_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+     "review39_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09"
+    },
+    "model_identity_r38.py": {
+     "equal": true,
+     "review38_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+     "review39_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68"
+    },
+    "page_relations_r38.py": {
+     "equal": true,
+     "review38_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+     "review39_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94"
+    },
+    "r34_scenarios.py": {
+     "equal": true,
+     "review38_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+     "review39_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1"
+    },
+    "run_set_selector_r32.py": {
+     "equal": true,
+     "review38_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+     "review39_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4"
+    },
+    "sandbox_child_r32.py": {
+     "equal": true,
+     "review38_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+     "review39_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba"
+    },
+    "state_check.py": {
+     "equal": true,
+     "review38_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+     "review39_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3"
+    },
+    "stop_rules.py": {
+     "equal": true,
+     "review38_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+     "review39_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996"
+    },
+    "test_capture_store.py": {
+     "equal": true,
+     "review38_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+     "review39_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936"
+    },
+    "test_concentration_r32.py": {
+     "equal": true,
+     "review38_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+     "review39_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787"
+    },
+    "test_converter_r32.py": {
+     "equal": true,
+     "review38_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+     "review39_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b"
+    },
+    "test_dispatch_guard_r32.py": {
+     "equal": true,
+     "review38_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+     "review39_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301"
+    },
+    "test_labels_adapter_r32.py": {
+     "equal": true,
+     "review38_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+     "review39_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9"
+    },
+    "test_lane_judge_r32.py": {
+     "equal": true,
+     "review38_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+     "review39_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4"
+    },
+    "test_literal_compare_r32.py": {
+     "equal": true,
+     "review38_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+     "review39_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713"
+    },
+    "test_model_identity_r38.py": {
+     "equal": true,
+     "review38_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+     "review39_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8"
+    },
+    "test_run_set_selector_r32.py": {
+     "equal": true,
+     "review38_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+     "review39_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5"
+    },
+    "test_state_check.py": {
+     "equal": true,
+     "review38_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+     "review39_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6"
+    },
+    "test_stop_rules.py": {
+     "equal": true,
+     "review38_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+     "review39_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30"
+    },
+    "test_tripwire_r32.py": {
+     "equal": true,
+     "review38_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+     "review39_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25"
+    },
+    "tripwire_r32.py": {
+     "equal": true,
+     "review38_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+     "review39_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389"
+    }
+   },
+   "counts": {
+    "changed": 21,
+    "new": 6,
+    "removed": 0,
+    "unchanged": 29
+   },
+   "files": 56,
+   "ok": true,
+   "package_equals_work": true,
+   "review38_base_copy_equal": true,
+   "table_ok": true,
+   "work_equals_freeze_1": true
+  },
+  "inputs": {
+   "inputs": {
+    "BINDING-MANIFEST-R38": {
+     "equal": true,
+     "expected": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/BINDING-MANIFEST-R38.json",
+     "sha256": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d"
+    },
+    "RUN-SET-PROPOSAL": {
+     "equal": true,
+     "expected": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json",
+     "sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8"
+    },
+    "TRUTH-R32": {
+     "equal": true,
+     "expected": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/dry-run/TRUTH-R32.json",
+     "sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064"
+    },
+    "Verification 39 findings": {
+     "equal": true,
+     "expected": "5976db3818000242ec32ef16323516ca29270e74027f7b10cef22fe3e2b8028a",
+     "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/FINDINGS.json",
+     "sha256": "5976db3818000242ec32ef16323516ca29270e74027f7b10cef22fe3e2b8028a"
+    },
+    "Verification 39 package check": {
+     "equal": true,
+     "expected": "cd8ec9fdfe222013b2e1e60890e4a56417a9f23f337ca63ad21671b140c8d8d3",
+     "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/INDEPENDENT-PACKAGE-CHECK.json",
+     "sha256": "cd8ec9fdfe222013b2e1e60890e4a56417a9f23f337ca63ad21671b140c8d8d3"
+    },
+    "Verification 39 report": {
+     "equal": true,
+     "expected": "5bb967f278fd331047df3b8026432bc01ac4b678d4cc48286e50dbc6fba46598",
+     "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/INDEPENDENT-VERIFICATION.md",
+     "sha256": "5bb967f278fd331047df3b8026432bc01ac4b678d4cc48286e50dbc6fba46598"
+    },
+    "evaluator-offline-r32 manifest": {
+     "equal": true,
+     "expected": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7"
+    },
+    "review36 manifest": {
+     "equal": true,
+     "expected": "5e9508136663a1dac096bcc697345a527726705ad6c96e46c52839371c9de9d0",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "5e9508136663a1dac096bcc697345a527726705ad6c96e46c52839371c9de9d0"
+    },
+    "review38 manifest": {
+     "equal": true,
+     "expected": "07c2fb78bedc44c4145f8ff24f2f9c4e4407de4adc2706392b2560afe56b8ce9",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/evidence/EVIDENCE-MANIFEST.json",
+     "sha256": "07c2fb78bedc44c4145f8ff24f2f9c4e4407de4adc2706392b2560afe56b8ce9"
+    },
+    "reviewed-2 labels": {
+     "equal": true,
+     "expected": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6",
+     "path": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/labels/R32-LABELS-REVIEWED-2.json",
+     "sha256": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6"
+    }
+   },
+   "manifests": {
+    "declaration-r32": {
+     "bad": [],
+     "expected": 56,
+     "listed": 56,
+     "ok": true
+    },
+    "evaluator-offline-r32": {
+     "bad": [],
+     "expected": 25,
+     "listed": 25,
+     "ok": true
+    },
+    "review36": {
+     "bad": [],
+     "expected": 135,
+     "listed": 135,
+     "ok": true
+    },
+    "review38": {
+     "bad": [],
+     "expected": 128,
+     "listed": 128,
+     "ok": true
+    }
+   },
+   "ok": true
+  },
+  "model_identity": {
+   "cli_sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+   "executed": false,
+   "ok": true,
+   "relocated": {
+    "alias_list": true,
+    "alias_opus": true,
+    "alias_sonnet": true,
+    "catalog_entry_opus5": true,
+    "catalog_entry_sonnet5": true,
+    "catalog_first_party_opus5": true,
+    "catalog_first_party_sonnet5": true,
+    "catalog_url": true,
+    "export_names": true,
+    "identity_passthrough": true,
+    "ledger_record_cost": true,
+    "package_and_version": true,
+    "parse_user_model": true,
+    "recognized_ids": true,
+    "refusal_fallback_key": true,
+    "result_model_usage": true,
+    "sonnet_default_getter": true,
+    "usage_entry_fields": true,
+    "usage_keyed_by_request_model": true,
+    "version_banner": true,
+    "vet_user_model": true
+   }
+  },
+  "no_authorization": {
+   "found": [],
+   "ok": true,
+   "roots": [
+    "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot",
+    "C:/t/iso/work/r2x/r39",
+    "C:/t/r2x/r39-sandbox"
+   ],
+   "rule": "no OWNER-DISPATCH-AUTHORIZATION*, no *.RUN.json declaration, no file named *token*"
+  },
+  "probes": {
+   "drawings": {
+    "baseline": {
+     "declared_false_switches_off": true,
+     "feed_answer_applied": {
+      "source": "ai",
+      "status": "approved"
+     },
+     "feed_provider_asked": [
+      "drawings_reply_match"
+     ],
+     "measured_unchanged": true,
+     "project_documents_flushed": [],
+     "true_goes_live": true
+    },
+    "candidate": {
+     "declared_false_switches_off": true,
+     "feed_answer_applied": {
+      "source": "ai",
+      "status": "approved"
+     },
+     "feed_provider_asked": [
+      "drawings_reply_match"
+     ],
+     "measured_unchanged": true,
+     "project_documents_flushed": [],
+     "true_goes_live": true
+    }
+   },
+   "ok": true,
+   "unread": {
+    "A": [
+     [
+      "3",
+      "application_reader_cap"
+     ],
+     [
+      "4",
+      "application_reader_cap"
+     ]
+    ],
+    "B": [
+     [
+      "3",
+      "application_document_limit"
+     ],
+     [
+      "4",
+      "application_document_limit"
+     ]
+    ],
+    "C": [
+     [
+      "1",
+      "application_reader_exception"
+     ],
+     [
+      "2",
+      "application_reader_exception"
+     ],
+     [
+      "3",
+      "application_reader_exception"
+     ],
+     [
+      "4",
+      "application_reader_exception"
+     ]
+    ]
+   }
+  },
+  "repos": {
+   "ok": true,
+   "repos": {
+    "baseline": {
+     "clean": true,
+     "expected": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+     "head": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+     "ok": true
+    },
+    "candidate": {
+     "clean": true,
+     "expected": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+     "head": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+     "ok": true
+    }
+   }
+  },
+  "request_paths": {
+   "ok": true,
+   "reached": {
+    "B": [
+     "app.ai.evidence_reader:EvidenceRun.call",
+     "app.ai.evidence_reader:evidence_stage",
+     "app.ai.ledger:LedgerProvider.complete",
+     "app.ai.submittal_reader:available",
+     "app.ai.submittal_reader:check",
+     "app.compliance.assist:_call",
+     "app.services.document_processing:run",
+     "app.services.drawing_ai_review:_ask",
+     "app.services.drawing_ai_review:enabled"
+    ],
+    "C": [
+     "app.ai.evidence_reader:EvidenceRun.call",
+     "app.ai.evidence_reader:evidence_stage",
+     "app.ai.ledger:LedgerProvider.complete",
+     "app.ai.submittal_reader:available",
+     "app.compliance.assist:_call"
+    ],
+    "R": [
+     "app.ai.evidence_reader:EvidenceRun.call",
+     "app.ai.evidence_reader:evidence_stage",
+     "app.ai.ledger:LedgerProvider.complete",
+     "app.ai.submittal_reader:available",
+     "app.compliance.assist:_call"
+    ]
+   }
+  },
+  "response_ledger": {
+   "expected_before_append": "49b4ca01f4135418129f0b5a1d863f06ba9cf9879d4ed51f579d9bf81fc9ffc7",
+   "ok": true,
+   "sha256": "49b4ca01f4135418129f0b5a1d863f06ba9cf9879d4ed51f579d9bf81fc9ffc7"
+  },
+  "resume_model": {
+   "ok": true,
+   "table": {
+    "planning": {
+     "earliest_burst": 4,
+     "earliest_paced": 2,
+     "full": 2,
+     "full_burst": 2
+    },
+    "structural": {
+     "earliest_burst": 101,
+     "earliest_paced": 3,
+     "full": 3,
+     "full_burst": 3
+    }
+   }
+  },
+  "tests": {
+   "guard_refused": 0,
+   "modules": 22,
+   "no_twin": true,
+   "ok": true,
+   "per_module": {
+    "test_allowance_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 19
+    },
+    "test_capture_store.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 21
+    },
+    "test_concentration_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 28
+    },
+    "test_converter_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 7
+    },
+    "test_dispatch_guard_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 15
+    },
+    "test_labels_adapter_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 13
+    },
+    "test_lane_judge_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 23
+    },
+    "test_literal_compare_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 48
+    },
+    "test_model_identity_r38.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 8
+    },
+    "test_preflight_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 82
+    },
+    "test_project_bounds_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 9
+    },
+    "test_request_paths_r39.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 11
+    },
+    "test_run_control_r38.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 22
+    },
+    "test_run_set_selector_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 9
+    },
+    "test_runner_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 50
+    },
+    "test_sandbox_ingest_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_score_bcr_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 43
+    },
+    "test_state_check.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_stop_rules.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 8
+    },
+    "test_tripwire_r32.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 5
+    },
+    "test_unread_pages_r39.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 17
+    },
+    "test_visibility_r38.xml": {
+     "errors": 0,
+     "failures": 0,
+     "skipped": 0,
+     "tests": 18
+    }
+   },
+   "total": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 466
+   }
+  },
+  "visibility": {
+   "ai_ledger": {
+    "after": {
+     "entries": 483,
+     "limit_amendments": 0,
+     "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+     "scopes": 17
+    },
+    "before": {
+     "entries": 483,
+     "limit_amendments": 0,
+     "scope_names_sha256": "a037785aba929442f67a179eff144e06c2777f72a42bc4741f6165f952db663e",
+     "scopes": 17
+    },
+    "unchanged": true
+   },
+   "contract_breaches": {
+    "missing_context": "missing_context",
+    "undeclared_task_kind": "undeclared_task_kind"
+   },
+   "model_requests": 0,
+   "ok": true,
+   "scenarios": {
+    "application_path": {
+     "recorded_in": {
+      "audit": 3,
+      "lane_rows": 3,
+      "run_state": 3,
+      "scorer": 10
+     },
+     "silent_places": []
+    },
+    "application_project_limit": {
+     "recorded_in": {
+      "audit": 4,
+      "lane_rows": 4,
+      "run_state": 4,
+      "scorer": 11
+     },
+     "silent_places": []
+    },
+    "bound_passed_while_deferred": {
+     "recorded_in": {
+      "audit": 1,
+      "lane_rows": 1,
+      "run_state": 9,
+      "scorer": 1
+     },
+     "silent_places": []
+    },
+    "breaker": {
+     "recorded_in": {
+      "audit": 3,
+      "lane_rows": 1,
+      "run_state": 1,
+      "scorer": 7
+     },
+     "silent_places": []
+    },
+    "deferral_beyond_bound": {
+     "recorded_in": {
+      "audit": 6,
+      "lane_rows": 3,
+      "run_state": 3,
+      "scorer": 9
+     },
+     "silent_places": []
+    },
+    "failed_read_retry": {
+     "recorded_in": {
+      "audit": 2,
+      "lane_rows": 2,
+      "run_state": 1,
+      "scorer": 6
+     },
+     "silent_places": []
+    },
+    "identity_mismatch": {
+     "recorded_in": {
+      "audit": 2,
+      "lane_rows": 1,
+      "run_state": 1,
+      "scorer": 8
+     },
+     "silent_places": []
+    },
+    "interrupted": {
+     "recorded_in": {
+      "audit": 1,
+      "lane_rows": 2,
+      "run_state": 2,
+      "scorer": 6
+     },
+     "silent_places": []
+    },
+    "lane_allowance": {
+     "recorded_in": {
+      "audit": 5,
+      "lane_rows": 2,
+      "run_state": 2,
+      "scorer": 14
+     },
+     "silent_places": []
+    },
+    "ledger": {
+     "recorded_in": {
+      "audit": 3,
+      "lane_rows": 2,
+      "run_state": 2,
+      "scorer": 8
+     },
+     "silent_places": []
+    },
+    "missing_context": {
+     "recorded_in": {
+      "audit": 2,
+      "lane_rows": 1,
+      "run_state": 1,
+      "scorer": 7
+     },
+     "silent_places": []
+    },
+    "project_window": {
+     "recorded_in": {
+      "audit": 12,
+      "lane_rows": 4,
+      "run_state": 19,
+      "scorer": 8
+     },
+     "silent_places": []
+    },
+    "provider_timeout": {
+     "recorded_in": {
+      "audit": 10,
+      "lane_rows": 9,
+      "run_state": 9,
+      "scorer": 23
+     },
+     "silent_places": []
+    },
+    "retry_policy_full": {
+     "recorded_in": {
+      "audit": 12,
+      "lane_rows": 4,
+      "run_state": 19,
+      "scorer": 8
+     },
+     "silent_places": []
+    },
+    "undeclared_task_kind": {
+     "recorded_in": {
+      "audit": 2,
+      "lane_rows": 1,
+      "run_state": 2,
+      "scorer": 2
+     },
+     "silent_places": []
+    },
+    "unread_pages": {
+     "recorded_in": {
+      "audit": 13,
+      "lane_rows": 13,
+      "run_state": 4,
+      "scorer": 13
+     },
+     "silent_places": []
+    },
+    "unsaved": {
+     "recorded_in": {
+      "audit": 1,
+      "lane_rows": 2,
+      "run_state": 2,
+      "scorer": 6
+     },
+     "silent_places": []
+    }
+   }
+  }
+ },
+ "kind": "ORCH-08C review39 package check",
+ "package": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39",
+ "statement": "a self-check by the implementer; not an independent verification (Verification 40 follows); it authorizes nothing"
+}

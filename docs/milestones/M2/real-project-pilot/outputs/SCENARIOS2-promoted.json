@@ -1,0 +1,5782 @@
+{
+ "at_utc": "2026-09-28T12:43:38+00:00",
+ "profile": "promoted",
+ "database": "C:\\t\\pilot\\db\\scenarios2_promoted.db",
+ "chosen": {
+  "text_cover": {
+   "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/R1/rejected/BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf",
+   "pages": 2,
+   "scan_like": false,
+   "records_in_default_run": [
+    [
+     "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+     "drawings",
+     1
+    ],
+    [
+     "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+     "drawings",
+     2
+    ]
+   ]
+  },
+  "scan": {
+   "doc": "EP-29076/06- Drawings/01- FA/03- SD/25H-AAEM-SD-ELEC-FA-152 -L 64/R1/25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf",
+   "pages": 1,
+   "scan_like": true,
+   "records_in_default_run": [
+    [
+     "25H-AAEM-SD-ELEC-FA-64F-053A",
+     "drawings",
+     1
+    ]
+   ]
+  },
+  "package": {
+   "doc": "EP-26082/EP-26082 SCAN DOC/R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf",
+   "pages": 11,
+   "scan_like": false,
+   "records_in_default_run": [
+    [
+     "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+     "submittals",
+     1
+    ],
+    [
+     "R1029-CSCEC-FM-MAR-001",
+     "submittals",
+     6
+    ]
+   ]
+  },
+  "scan_package": {
+   "doc": "EP-29076/05- MS/01- FA/02- R1/data sheet_pagenumber.pdf",
+   "pages": 204,
+   "scan_like": true,
+   "records_in_default_run": []
+  }
+ },
+ "steps": [
+  {
+   "step": "1 first read",
+   "note": "",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 4,
+    "changed": 0,
+    "unchanged": 0,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 4,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 4,
+    "processed": 4,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:43.675392"
+   },
+   "jobs": [
+    {
+     "id": 2,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 1,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "2 unchanged rerun (touched)",
+   "note": "same bytes: unchanged after hash, readings reused",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 4,
+    "unchanged": 0,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 4,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 4,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 4,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:43.961704"
+   },
+   "jobs": [
+    {
+     "id": 4,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 3,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 2,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "3 duplicate copy",
+   "note": "the same bytes under another path: the reading copied, its own row",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 1,
+    "changed": 0,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "duplicates_reused": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:44.107872"
+   },
+   "jobs": [
+    {
+     "id": 6,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 5,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 4,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "4 corrupt replacement",
+   "note": "the file replaced by a non-PDF: failed attempt, last reading kept, stale",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 1,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 1,
+    "finished_at": "2026-09-28T12:43:44.234072"
+   },
+   "jobs": [
+    {
+     "id": 8,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 7,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 6,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "failed",
+     "error": "FileDataError: Failed to open file 'C:\\\\t\\\\pilot\\\\scenarios2\\\\05- Documents\\\\tex",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": "failed",
+     "stale": true,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "5 retry, nothing changed",
+   "note": "a failed row whose file has not changed: is it planned again?",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 1,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 1,
+    "finished_at": "2026-09-28T12:43:44.355564"
+   },
+   "jobs": [
+    {
+     "id": 10,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 9,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 8,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "failed",
+     "error": "FileDataError: Failed to open file 'C:\\\\t\\\\pilot\\\\scenarios2\\\\05- Documents\\\\tex",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": "failed",
+     "stale": true,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "5b retry after a touch",
+   "note": "the same corrupt bytes, newer mtime: planned again, still failed",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 1,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 1,
+    "finished_at": "2026-09-28T12:43:44.478738"
+   },
+   "jobs": [
+    {
+     "id": 12,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 11,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 10,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "failed",
+     "error": "FileDataError: Failed to open file 'C:\\\\t\\\\pilot\\\\scenarios2\\\\05- Documents\\\\tex",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": "failed",
+     "stale": true,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "6 restored",
+   "note": "the good bytes back: read (or the duplicate's reading reused), attempt cleared",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "duplicates_reused": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:44.624338"
+   },
+   "jobs": [
+    {
+     "id": 14,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 13,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 12,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "7 file removed",
+   "note": "gone from the folder: removed by the sync",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 0,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 1,
+    "pending": 0,
+    "stale": 1
+   },
+   "processing": {
+    "status": null,
+    "error": null
+   },
+   "processing_result": {},
+   "jobs": [
+    {
+     "id": 15,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 14,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 13,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "removed",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "8 file back",
+   "note": "",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 1,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:44.825446"
+   },
+   "jobs": [
+    {
+     "id": 17,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 16,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 15,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "9 scan re-read with OCR failing",
+   "note": "changed bytes, OCR raises: partial attempt beside the kept reading",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 1,
+    "finished_at": "2026-09-28T12:43:44.996670"
+   },
+   "jobs": [
+    {
+     "id": 19,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 18,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 17,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": "partial",
+     "stale": true,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "bd567d6eb8552aae79f2a8e72f1353c7686c19f2f531b06c54cd2882258c38af"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "10a partial, nothing changed",
+   "note": "a partial row whose file has not changed: planned again?",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:45.151243"
+   },
+   "jobs": [
+    {
+     "id": 21,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 20,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 19,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "10b OCR back after a touch",
+   "note": "the partial attempt retried and superseded",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 1,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:45.290656"
+   },
+   "jobs": [
+    {
+     "id": 23,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 22,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 21,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "e6cdc14ba830ce55c2ea2490c12203accfbcb31f32b9ed6e7ee70ae304a29ad8"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "11 wide read of the package",
+   "note": "every page visited",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:45.565477"
+   },
+   "jobs": [
+    {
+     "id": 25,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 24,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 23,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "88d3396228d088926bca5f882fe1564ecd75cf526245f8309659fca23181b86b"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 400
+  },
+  {
+   "step": "12 narrow read (limits 3) of changed bytes",
+   "note": "bounded: records on the pages now skipped carried from the earlier reading of other bytes (unverified)",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:45.779765"
+   },
+   "jobs": [
+    {
+     "id": 27,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 26,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 25,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": false,
+      "unverified": 1,
+      "other_profile": 0,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"promoted\", \"source_sha256\": \"88d3396228d088926bca5f882fe1564ecd75cf526245f8309659fca23181b86b\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "341598afd7b377baac7410854d135673229373f984fea059ecafd5da6391e624"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 3
+  },
+  {
+   "step": "13 narrow read again, same bytes",
+   "note": "unchanged after hash: the bounded reading stands",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 1,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:45.899309"
+   },
+   "jobs": [
+    {
+     "id": 29,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 28,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 27,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": false,
+      "unverified": 1,
+      "other_profile": 0,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"promoted\", \"source_sha256\": \"88d3396228d088926bca5f882fe1564ecd75cf526245f8309659fca23181b86b\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "341598afd7b377baac7410854d135673229373f984fea059ecafd5da6391e624"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 3
+  },
+  {
+   "step": "13b narrow read of changed bytes again",
+   "note": "repeated bounded run: carried records keep their original provenance, never restamped",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:46.108118"
+   },
+   "jobs": [
+    {
+     "id": 31,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 30,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 29,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": false,
+      "unverified": 1,
+      "other_profile": 0,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"promoted\", \"source_sha256\": \"88d3396228d088926bca5f882fe1564ecd75cf526245f8309659fca23181b86b\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "69a98bfc18bc2b2790b2e36fb89145166441fc3782b38977e40208619a82fcc5"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 3
+  },
+  {
+   "step": "14 wide read again",
+   "note": "the pages read: nothing carried",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:46.367985"
+   },
+   "jobs": [
+    {
+     "id": 33,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 32,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 31,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "b6f6396933489a9e6235b17522a5c3970e653a22286c84e84ba0349719cedc30"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 400
+  },
+  {
+   "step": "15 narrow read after a parser change",
+   "note": "the older parser's records on skipped pages held (carried_other_parser): not current, decision withheld",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:46.572919"
+   },
+   "jobs": [
+    {
+     "id": 35,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 34,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 33,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_other_parser",
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-older"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": true,
+      "unverified": 1,
+      "other_profile": 0,
+      "other_parser": 1,
+      "sources": [
+       "{\"parser_version\": \"parse-older\", \"profile\": \"promoted\", \"source_sha256\": \"b6f6396933489a9e6235b17522a5c3970e653a22286c84e84ba0349719cedc30\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "4bd2eb678aca27a088d324feba3ec76066194e39c07baede9ee97ab24860877b"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 3
+  },
+  {
+   "step": "16 wide read by the current parser",
+   "note": "cleared",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:46.821712"
+   },
+   "jobs": [
+    {
+     "id": 37,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 36,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 35,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "1113d63e4452018de6f1ebd97ba35d8b875eafda951a0533c6aca3a6108e1110"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 400
+  },
+  {
+   "step": "17 wide read under the other profile",
+   "note": "",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:47.075658"
+   },
+   "jobs": [
+    {
+     "id": 39,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 38,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 37,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "default",
+     "read_sha": "8d457720aac542660b5ca4f233b2c2a89d57cd83a0f156aefd4db39c96b5c3c3"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 400,
+   "profile": "default"
+  },
+  {
+   "step": "18 narrow read under this profile",
+   "note": "the other profile's records on skipped pages held (carried_other_profile)",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 0,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 1,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 1,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:47.282447"
+   },
+   "jobs": [
+    {
+     "id": 41,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 40,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 39,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_other_profile",
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": true,
+      "unverified": 1,
+      "other_profile": 1,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"default\", \"source_sha256\": \"8d457720aac542660b5ca4f233b2c2a89d57cd83a0f156aefd4db39c96b5c3c3\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "042eeb0e94eca3cfae898949d30b3776c1bc9fa9189ef3f35bb35fb75e0ab321"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "ebb9571b1378aed328d056b0e85fed5c16defba5afaa881d04dfe2f5091299ac"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "limits": 3
+  },
+  {
+   "step": "18b scanned package under an OCR budget of 2",
+   "note": "bounded by the OCR budget: pages visited, OCR left out on the later ones",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 1,
+    "unchanged": 4,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 1,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 1,
+    "processed": 1,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 0,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:47.814307"
+   },
+   "jobs": [
+    {
+     "id": 43,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 42,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 41,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_other_profile",
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": true,
+      "unverified": 1,
+      "other_profile": 1,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"default\", \"source_sha256\": \"8d457720aac542660b5ca4f233b2c2a89d57cd83a0f156aefd4db39c96b5c3c3\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "042eeb0e94eca3cfae898949d30b3776c1bc9fa9189ef3f35bb35fb75e0ab321"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "f06cd467d2640f9f097ca9afd4fcc02265981fcb6583ed94d169713d66a665f4"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   },
+   "ocr_limit": 2
+  },
+  {
+   "step": "19 cancelled after the first file",
+   "note": "the finished file written; the rest left pending; the job cancelled",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 4,
+    "unchanged": 1,
+    "already_pending": 0,
+    "removed": 0,
+    "pending": 4,
+    "stale": 0
+   },
+   "processing": {
+    "status": "cancelled",
+    "error": null
+   },
+   "processing_result": {},
+   "jobs": [
+    {
+     "id": 45,
+     "kind": "process_documents",
+     "status": "cancelled",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 44,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 43,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "pending",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "bounded",
+     "stop": "reply_search_limit",
+     "visited": 3,
+     "skipped": 8,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [
+        "carried_other_profile",
+        "carried_unverified",
+        "carried_unvisited"
+       ],
+       "parse-2026-09-28.4"
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": {
+      "records": 1,
+      "pages": [
+       6
+      ],
+      "mixed": true,
+      "unverified": 1,
+      "other_profile": 1,
+      "other_parser": 0,
+      "sources": [
+       "{\"parser_version\": \"parse-2026-09-28.4\", \"profile\": \"default\", \"source_sha256\": \"8d457720aac542660b5ca4f233b2c2a89d57cd83a0f156aefd4db39c96b5c3c3\"}"
+      ]
+     },
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "042eeb0e94eca3cfae898949d30b3776c1bc9fa9189ef3f35bb35fb75e0ab321"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "pending",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "a6007149ca5dad1f26a5e4913975e4364788a56dde160e85681c4fce3f5f4d22"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "pending",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "f06cd467d2640f9f097ca9afd4fcc02265981fcb6583ed94d169713d66a665f4"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "pending",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  },
+  {
+   "step": "20 resumed",
+   "note": "the pending files read; the finished one not read again",
+   "sync": {
+    "status": "succeeded",
+    "error": null
+   },
+   "sync_counts": {
+    "new": 0,
+    "changed": 0,
+    "unchanged": 1,
+    "already_pending": 4,
+    "removed": 0,
+    "pending": 4,
+    "stale": 0
+   },
+   "processing": {
+    "status": "succeeded",
+    "error": null
+   },
+   "processing_result": {
+    "planned": 4,
+    "processed": 4,
+    "failed": 0,
+    "unavailable": 0,
+    "partial": 0,
+    "unchanged_after_hash": 0,
+    "missing": 0,
+    "read_by_ai": 0,
+    "stale": 3,
+    "forms_changed": false,
+    "remaining": 0,
+    "finished_at": "2026-09-28T12:43:49.591075"
+   },
+   "jobs": [
+    {
+     "id": 47,
+     "kind": "process_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 46,
+     "kind": "sync_documents",
+     "status": "succeeded",
+     "error": null,
+     "cancel_requested": 0
+    },
+    {
+     "id": 45,
+     "kind": "process_documents",
+     "status": "cancelled",
+     "error": null,
+     "cancel_requested": 0
+    }
+   ],
+   "rows": {
+    "05- Documents/package-R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+      "R1",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 11,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 4,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-Rev",
+       "UR",
+       1,
+       [],
+       null
+      ],
+      [
+       "R1029-CSCEC-FM-MAR-001",
+       "UR",
+       6,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3e55e917495f7881defee084627e53bb84ea95dbbf9fb8d70ebb7f30dee29eec"
+    },
+    "05- Documents/scan-25H-AAEM-SD-ELEC-FA-64F-53A-R00.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "25H-AAEM-SD-ELEC-FA-64F-053A",
+      "R0",
+      "UR"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 1,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 1,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "25H-AAEM-SD-ELEC-FA-64F-053A",
+       "UR",
+       1,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "b9c4a08e1ad6dfa8346500b261dbdfc9c1a21e25062ec80343d7e34b0f983370"
+    },
+    "05- Documents/scan_package-data sheet_pagenumber.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      null,
+      null,
+      null
+     ],
+     "outcome": "bounded",
+     "stop": "page_scan_limit",
+     "visited": 12,
+     "skipped": 192,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "678479b446616fa5c42b9336a9a6e52ab882d2beb2cb6c71b9ed12d30888b477"
+    },
+    "05- Documents/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "08b479634022f7a863d1ce0c94c33d7642e91f236f3200388c88e40b3ecc4e6e"
+    },
+    "05- Documents/Archive/text_cover-BBY006-GME-SDW-FP-FA-ZZZ-L01-010006 Shop Drawing for L01 Amenities Floor Plan - Fire Alarm Layout.pdf": {
+     "state": "fresh",
+     "error": "",
+     "mirror": [
+      "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+      "R0",
+      "rejected"
+     ],
+     "outcome": "complete",
+     "stop": null,
+     "visited": 2,
+     "skipped": 0,
+     "ocr": {
+      "attempted": 2,
+      "failed": [],
+      "skipped_budget": []
+     },
+     "records": [
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       1,
+       [],
+       null
+      ],
+      [
+       "BBY006-GME-SDW-FP-FA-ZZZ-L01-010006",
+       "rejected",
+       2,
+       [],
+       null
+      ]
+     ],
+     "attempt": null,
+     "stale": null,
+     "retained": null,
+     "parser": "parse-2026-09-28.4",
+     "profile": "promoted",
+     "read_sha": "3bd2a1c24a9ccd93f3ce95361634cdfa9f876c9c06d45f38a3afaf1d98fdcfb2"
+    }
+   }
+  }
+ ]
+}

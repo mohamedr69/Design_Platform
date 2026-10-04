@@ -1,0 +1,189 @@
+{
+ "at_utc": "2026-09-30T20:51:19+00:00",
+ "a_tag": "r22dry-A",
+ "tag": "L1",
+ "arm": "L1",
+ "track": "r22-L1",
+ "dry_run": true,
+ "declaration_sha256": "24bcf7bebfdf202181806561b1b0ffd9bdacd9010c2579aa2cd95735f6c8cfc3",
+ "identities": {
+  "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+  "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+  "SCHEMA_VERSION": "evidence-schema-1",
+  "PROMPTS": {
+   "discover_page": "discover-2026-09-29.1",
+   "read_identity": "read-identity-2026-09-29.1",
+   "read_revision": "read-revision-2026-09-29.1",
+   "read_decision": "read-decision-2026-09-29.1",
+   "read_boq_row": "read-boq-row-2026-09-29.2"
+  },
+  "AUDIT_RATE": 0.2,
+  "AUDIT_SEED": "audit-2026-09-29",
+  "MAX_PAGES_PER_DOCUMENT": 4,
+  "MAX_CALLS_PER_DOCUMENT": 8,
+  "GUARD_ENABLED": true,
+  "TARGETED_ENABLED": false,
+  "EFFICIENT_ENABLED": false,
+  "SUPPORT_V2": true,
+  "REQUIRED_FIRST": true,
+  "DEADLINE_ENABLED": true,
+  "ROI_ENABLED": false
+ },
+ "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+ "tree": "C:/t/iso/cand-ai4",
+ "context": {
+  "variant": "EV1",
+  "profile": "default",
+  "policies": [
+   "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+  ],
+  "declared": "pilot arm L1"
+ },
+ "harness_contract": "harness-contract-2026-09-30.v4",
+ "runner_version": "arm-ev-2026-10-01.v4.2",
+ "allowance_key": {
+  "scope": "r22-four-arm-dry-2026-09-30-L1",
+  "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+  "path": "C:/t/r2x/dry-runs/r24-lifecycle/t5b-kill-after-stop-file/dry-allowance.sqlite"
+ },
+ "caps": {
+  "durable_per_document": 12,
+  "reader_per_reading": 8,
+  "project_rolling_day": 60
+ },
+ "projects": {},
+ "not_attempted": [],
+ "deferred": [],
+ "tripwire": [],
+ "resumes": [
+  {
+   "at_utc": "2026-09-30T20:51:22+00:00",
+   "pid": 19972,
+   "clock": 1790801482.4120662,
+   "reread": false,
+   "refused": "terminal stop preserved (plain --resume is not approval to clear it)",
+   "requests_sent": 0,
+   "terminal_kind": "critical_acceptance"
+  }
+ ],
+ "seconds": 0.0,
+ "runner_state": {
+  "consecutive_failures": 0,
+  "recent_failures": [],
+  "stopped": "stop: critical acceptance on a resolved label after EP-16830",
+  "terminal_stop": {
+   "lifecycle": "runner-lifecycle-2026-10-01.v2",
+   "terminal": true,
+   "kind": "critical_acceptance",
+   "reason": "stop: critical acceptance on a resolved label after EP-16830",
+   "evidence": [
+    {
+     "doc": "EP-16830/synth/raster-6pages.pdf",
+     "page": 2,
+     "field": "identity",
+     "value": "X-DRY-1",
+     "state": "validated",
+     "outcome": "wrong",
+     "truth": "X-DRY-9",
+     "how": "single_component_wrong_identity",
+     "reader": "ai:EV1",
+     "group": "ai:2:own"
+    }
+   ],
+   "reconstructed": false,
+   "at_utc": "2026-09-30T20:51:21+00:00",
+   "pid": 18992,
+   "clock": 1790801481.2851806,
+   "tag": "L1",
+   "arm": "L1",
+   "declaration_sha256": "24bcf7bebfdf202181806561b1b0ffd9bdacd9010c2579aa2cd95735f6c8cfc3",
+   "allowance_key": {
+    "scope": "r22-four-arm-dry-2026-09-30-L1",
+    "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+   }
+  },
+  "xtrack_refusals": 0,
+  "allowance_refusals": 0,
+  "allowance_busy": 0,
+  "ledger_precheck_refusals": 0,
+  "per_ep": {},
+  "requests_io": 0,
+  "cache_hits": 0,
+  "deferred": [],
+  "skipped_completed": [],
+  "skipped_projects": [],
+  "interrupted_seen": []
+ },
+ "final": true,
+ "allowance": {
+  "EP-16830/synth/raster-6pages.pdf": {
+   "charged": 8,
+   "attempts": [
+    {
+     "id": 2,
+     "pid": 18992,
+     "started": 1790801480.4237285,
+     "ended": 1790801481.2465034,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 8
+    }
+   ]
+  },
+  "EP-16830/synth/raster-1page.pdf": {
+   "charged": 4,
+   "attempts": [
+    {
+     "id": 1,
+     "pid": 18992,
+     "started": 1790801479.9036953,
+     "ended": 1790801480.402563,
+     "status": "completed",
+     "calls_at_start": 0,
+     "calls_at_end": 4
+    }
+   ]
+  },
+  "EP-17428/synth/raster-2pages.pdf": {
+   "charged": 0,
+   "attempts": []
+  },
+  "EP-17428/synth/text-sheet.pdf": {
+   "charged": 0,
+   "attempts": []
+  }
+ },
+ "deferred_before_resume": [],
+ "terminal_stop": {
+  "lifecycle": "runner-lifecycle-2026-10-01.v2",
+  "terminal": true,
+  "kind": "critical_acceptance",
+  "reason": "stop: critical acceptance on a resolved label after EP-16830",
+  "evidence": [
+   {
+    "doc": "EP-16830/synth/raster-6pages.pdf",
+    "page": 2,
+    "field": "identity",
+    "value": "X-DRY-1",
+    "state": "validated",
+    "outcome": "wrong",
+    "truth": "X-DRY-9",
+    "how": "single_component_wrong_identity",
+    "reader": "ai:EV1",
+    "group": "ai:2:own"
+   }
+  ],
+  "reconstructed": false,
+  "at_utc": "2026-09-30T20:51:21+00:00",
+  "pid": 18992,
+  "clock": 1790801481.2851806,
+  "tag": "L1",
+  "arm": "L1",
+  "declaration_sha256": "24bcf7bebfdf202181806561b1b0ffd9bdacd9010c2579aa2cd95735f6c8cfc3",
+  "allowance_key": {
+   "scope": "r22-four-arm-dry-2026-09-30-L1",
+   "profile": "L1|default|evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1"
+  }
+ },
+ "status": "stopped"
+}

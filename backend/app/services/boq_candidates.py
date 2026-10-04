@@ -189,10 +189,23 @@ def build(db: Session, project: Project, user: User | None, ctx=None) -> BoqCand
         for line in result.lines:
             new_lines.append(_candidate_line(project, sheet, line, run, len(new_lines)))
 
+    # A sheet this read could not read says nothing about the lines the BOQ took from it: they are not
+    # "no longer yielded" -- nobody looked. Offered as removals they could be accepted and the BOQ lose
+    # them (M2 review 05, R5-04). They are left out of the comparison and stand as they are; a re-read that
+    # read no sheet at all is not a re-read, and fails with the reasons.
+    unread = [(sheet, s) for sheet, s in zip(project.design_sheets, sheets) if s["failure"]]
+    if sheets and len(unread) == len(sheets):
+        raise CandidateError("No Design Sheet could be read, so nothing was compared and the BOQ is unchanged: "
+                             + "; ".join(f"{s['document_name']}: {s['failure']}" for _sheet, s in unread))
+    unread_paths = {str(sheet.document_path) for sheet, _s in unread}
+    run_paths = {run.id: str(run.document_path) for run in db.query(ExtractionRun).filter(ExtractionRun.project_id == project.id)}
     library = boq_provenance.part_library(db)
     for record in new_lines:
         boq_provenance.check_catalog(record, library)
-    old_lines = [_old_line(item) for item in project.boq_items]
+    old_lines, not_reread = [], []
+    for item in project.boq_items:
+        (not_reread if item.extraction_run_id is not None and run_paths.get(item.extraction_run_id) in unread_paths
+         else old_lines).append(_old_line(item))
     changes, unchanged = compare(old_lines, new_lines)
     summary = {
         "old_lines": len(old_lines), "new_lines": len(new_lines),
@@ -204,6 +217,8 @@ def build(db: Session, project: Project, user: User | None, ctx=None) -> BoqCand
         "removed": sum(1 for c in changes if c["kind"] == "removed"),
         "sheets": sheets,
         "failed_sheets": [s["document_name"] for s in sheets if s["failure"]],
+        # Lines from those sheets, left as they are: not compared, never offered for removal.
+        "not_reread": len(not_reread),
     }
     candidate = BoqCandidate(
         project_id=project.id, status="pending", base_boq_version=project.boq_version,

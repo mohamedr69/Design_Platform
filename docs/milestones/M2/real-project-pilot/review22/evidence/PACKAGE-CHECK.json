@@ -1,0 +1,147 @@
+{
+ "manifest": {
+  "files": 221,
+  "mismatched_or_missing": [],
+  "unlisted": []
+ },
+ "markdown_links": {
+  "checked": 52,
+  "broken": []
+ },
+ "trees": {
+  "accepted": true,
+  "reviewed": true,
+  "frozen_r21_candidate": true,
+  "reader_unchanged": true,
+  "application_change": "none (harness, tests and documents only)"
+ },
+ "harness_frozen": {
+  "packaged_files_equal_frozen_hashes": true,
+  "contract": "harness-contract-2026-09-30.v4",
+  "scorer": "score-arms-2026-09-30.v4",
+  "runner": "arm-ev-2026-09-30.v4",
+  "durable_allowance_module_unchanged": true,
+  "submitted_r21_harness_equals_package": true
+ },
+ "reviewer_files_unchanged": true,
+ "earlier_packages_unchanged": {
+  "review13": true,
+  "review14": true,
+  "review15": true,
+  "review16": true,
+  "ai-accuracy-pilot": true,
+  "ai-pilot-r18-correction": true,
+  "review19": true,
+  "review20": true,
+  "review21": true
+ },
+ "labels_r21_unchanged": true,
+ "draft": {
+  "not_executed": true,
+  "no_budget": true,
+  "candidate_719e8de": true,
+  "contract_v4": true,
+  "rule_v4": true,
+  "no_static_share": true,
+  "bound": true,
+  "caps": {
+   "A": 8,
+   "L1": 160,
+   "L2": 160,
+   "L3": 180,
+   "L4": 180
+  },
+  "sum_caps": 688
+ },
+ "workload_v2": {
+  "three_figures": {
+   "expected_workload_requests": 509,
+   "proposed_authorized_maximum_requests_IF_APPROVED": 688,
+   "uncapped_structural_maximum_requests": 1256,
+   "note": "688 is NOT approved by this package; 509 is an expectation under the stated assumptions; 1,256 is 12 x 26 PDFs x 4 arms + A's 8"
+  },
+  "distinct_and_labelled": true,
+  "p90_labelled_estimate": true,
+  "price_unknown": true,
+  "schedule_simulated": true,
+  "elapsed_hours": {
+   "worst_case_demand/A_aged_out": 72.0,
+   "worst_case_demand/A_cap_spent_on_the_largest_project_at_start": 72.0,
+   "expected_demand/A_aged_out": 24.0,
+   "expected_demand/A_cap_spent_on_the_largest_project_at_start": 24.0
+  },
+  "fake_clock_example_present": true
+ },
+ "tests": {
+  "HARNESS-V4": {
+   "tests": 19,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "RUNNER-V4": {
+   "tests": 8,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "HARNESS-V3-UNCHANGED": {
+   "tests": 13,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "R16-HARNESS": {
+   "tests": 66,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-REGRESSIONS-on-r21": {
+   "tests": 5,
+   "failures": 2,
+   "errors": 0,
+   "skipped": 0
+  },
+  "REVIEWER-REGRESSIONS-on-v4": {
+   "tests": 5,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  }
+ },
+ "tests_ok": true,
+ "replays": {
+  "r21_dry_recovery_unchanged_under_v4_with_correct_sources": true,
+  "r21_dry_mismatched_sources_v3_still_credited": {
+   "L1": 9,
+   "L2": 9,
+   "L3": 9,
+   "L4": 9
+  },
+  "r21_dry_mismatched_sources_v4_credited": {
+   "L1": 0,
+   "L2": 0,
+   "L3": 0,
+   "L4": 0
+  },
+  "h06_replay_all_json_equal": true,
+  "ok": true
+ },
+ "runner_evidence": {
+  "S1_charged_equals_sent": true,
+  "S2_capped_at_12_across_kill_resume": true,
+  "S3_new_tag_refused": true,
+  "S4_second_writer_refused": true,
+  "S5_cache_hits_charge_nothing": true,
+  "S6_scope_exhaustion_budget_stop": true,
+  "S7_deferred_zero_requests_then_resumed": true,
+  "S8_refusals_before_dispatch": true
+ },
+ "ledger": {
+  "settled_original_experiment": 128,
+  "r21_r22_live_entries": 0,
+  "r21_r22_live_scopes": []
+ },
+ "ok": true
+}

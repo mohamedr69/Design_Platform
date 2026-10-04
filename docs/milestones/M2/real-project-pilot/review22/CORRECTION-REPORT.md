@@ -1,0 +1,86 @@
+# Review 22 correction: offline four-arm harness readiness (2026-09-30 / 10-01)
+
+**Scope:** the three Review 22 findings on the prospective experiment harness (R22-01 source binding, R22-02 page bounds, R22-03 durable resume and rolling-day scheduling) and the requested corrections to the workload, declaration and report text. Everything is offline: **no provider or model request was made**, no live schedule exists, no cap was raised, no budget was reset, no new live scope was opened, H-06 was not rerun, sealed projects and the frozen R21 sample are untouched. **The 688-request proposal is not approved.** No application code changed (frozen candidate `719e8de`, accepted `3d5607d`). Status by item: [STATUS.md](STATUS.md). File-level changes: [CHANGE-MAP.md](CHANGE-MAP.md). Commands and exit codes: [COMMANDS.md](COMMANDS.md). M2 remains **CHANGES STILL REQUIRED**.
+
+## 1. Reproduction before changing anything
+
+Byte copies of the reviewer's `scorer_probes.py`, `test_review22_scoring.py` and `final_checks.py` (hashes in [bindings/SOURCE-BINDINGS.json](bindings/SOURCE-BINDINGS.json); the reviewer folder was never written to) were run against the submitted Review 21 harness in this package's own output directory ([repro/on-r21/](repro/on-r21/)): the probes exit 0 and produce an `INDEPENDENT-PROBES.json` identical to the reviewer's; the five regressions give **2 failed, 3 passed** (the reviewer's result). Under the all-hashes-mismatched declaration every arm still received 9 clean identity and 8 clean revision recoveries — the R22-01 defect — and the one-page document's page 3 fact was not counted as extra — R22-02. The static-share guard probe was reproduced on the submitted `arm_ev.py` guard ([repro/guard/](repro/guard/): 6 sent, then 9 of 10, refusal at the frozen share of 15, a fresh document refused). The submitted runner's restart / scheduling path was traced: a run tag could not be reused, a new tag copied the A base and re-requested everything, and the per-arm share `(60 − used_after_A) // 4` was applied per call with no whole-project reservation or deferral — R22-03. The R21 dry-chain evidence is preserved in the review21 package; the submitted harness files are kept here byte-identical under [harness-r21-submitted/](harness-r21-submitted/).
+
+## 2. R22-01 — one eligibility contract before accuracy
+
+`harness-v4/coverage_v4.py::eligible_rows(rows, planned, ctx)` (contract `harness-contract-2026-09-30.v4`) decides, per planned document, from the document key, the declared source hash and the arm context (profile, variant, policy):
+
+| Binding | Evaluator sees | Credit | Reported as |
+|---|---|---|---|
+| bound (same hash, this arm's attempt read from those bytes) | the row | yes | `eligible` |
+| `context_mismatch` / `not_attempted` (right bytes, no attempt of this arm) | the row's raw layer only; any other context's `ai_evidence` removed from the copy | raw layer only; no AI credit | `raw_only`; the removed evidence listed under `rejected_evidence` |
+| `source_mismatch`, `no_row`, `planned_hash_missing` | nothing | none | `ineligible`; the row listed under `rejected_evidence`; the document stays in the planned denominator |
+| unplanned row | nothing | none | `rejected_evidence` (`unplanned`) |
+
+`score_arms_v4.py::score_arm` applies it **before** `EV.evaluate`; the coverage, the matched subsets (`field_read_in_both`) and the pair comparisons use the same binding; the runner's tripwire ([harness-v4/arm_ev.py](harness-v4/arm_ev.py)) scores only bound evidence. A run whose present documents are all ineligible is reported `valid_accuracy_claim = false` (the recovery counts stay counts, carry `invalid_reason`, and hold no AI credit because the evaluator saw no eligible row); pairs carry `valid` only when both arms are valid. The evaluator (.9), the retained-evidence, association and `evidence_for` contracts are untouched.
+
+Tests through the actual scoring entry point ([harness-v4/test_harness_v4.py](harness-v4/test_harness_v4.py), **19 passed**): correct-source control earns recovery; the reviewer's all-mismatched example emits no valid claim (4 × `source_mismatch`, 0 recoveries, 4 rejected-evidence entries, planned denominator unchanged); a missing planned hash is ineligible; a wrong arm context scores the raw layer only (0 AI credit, rejected evidence listed); mixed valid / invalid rows keep the readable denominator and never exceed the control's recoveries. The reviewer's own regressions run against v4 with only the module / metrics-file names substituted: **5 passed** ([repro/on-v4/](repro/on-v4/)).
+
+Replay ([replays/REPLAY-DELTAS.json](replays/REPLAY-DELTAS.json)): on the saved R21 dry outputs with correct sources, v4 reports the same recovery counts as v3 for every arm and every field (delta 0); under the mismatched declaration v3 still credits 9 identity recoveries per arm, v4 credits 0 and marks every arm invalid. No stored real-model score is affected (the defect was adversarial-harness only, as the reviewer stated).
+
+## 3. R22-02 — page bounds against the document and the reader scope
+
+`coverage_v4.page_position(page_id, planned, max_pages)` distinguishes `invalid_page_identifier` (non-integer, zero, negative: fails closed with a diagnostic), `page_not_in_document` (beyond the declared file's page count; every page of an unplanned document or unsupported input) and `page_beyond_reader_scope` (a real page beyond the reader's 4). Tests: page 3 of a one-page PDF → `page_not_in_document`; page 1 control → nothing; page 3 of a six-page PDF → nothing (in scope); page 5 of a six-page PDF → `page_beyond_reader_scope`; page 7 → `page_not_in_document`; `"x"`, `"0"`, `"1.5"` → `invalid_page_identifier`; other-context / other-policy exclusion preserved; and the same facts injected into a copy of the stored dry rows carried through `score_arms_v4.main()` into `coverage.<arm>.extra_facts_outside_scope`.
+
+## 4. R22-03 — the declared execution contract, in the actual runner
+
+[harness-v4/arm_ev.py](harness-v4/arm_ev.py) (runner `arm-ev-2026-09-30.v4`) integrates the reviewed r16.1 `DocAllowance` / `DurableBudget` (`C:/t/iso/work/r2x/r16/boq_harness.py`, unchanged, hash in the bindings) and the whole-project rule:
+
+- **Durable allowance** keyed by (the arm's ledger scope, `arm|profile|policy`, document sha256); identity independent of the run tag. The count is charged at `reserve()` — **before dispatch** — and the application's own per-document `JobBudget` continues from the durable count; the reader's own per-reading constant (8 charged reads, plus the page in progress) still bounds one reading, the durable 12 bounds the document across readings. A sent request whose result is lost stays charged. The arm's ledger scope is pre-checked before the charge (a request the scope would refuse is never charged); a refusal on another ledger limit after the charge stays charged (conservative, never reclaimed). A cache hit never reaches `reserve()`, so it charges nothing.
+- **Concurrency:** one writer per sandbox (exclusive OS lock on `out/RUNNER.lock`) and per document (the allowance's key lock; a second holder gets an `allowance busy` budget stop).
+- **Resume:** `--resume` continues the same sandbox (no new copy of A). Projects already in the run record are skipped; a document is skipped only when the scoring contract binds it; an interrupted document (attempt left `open`, marked `interrupted` on resume and reported) may use only its remaining allowance. A **new tag** for an arm whose allowance exists is **refused before any dispatch**; a repeat over an existing sandbox without `--resume`, a resume of a non-existent sandbox and a second writer are refused the same way (refusals are recorded with `requests_sent: 0`). The run record (`RUN.json`) is written before the first dispatch and after every project or deferral; `progress.jsonl` records every document start / end with the charged counts.
+- **Whole-project deferral (rule `whole-project-reservation-2026-09-30.v4`):** before a project-arm batch, the project's rolling 24 h capacity (60 minus every track's requests in the last 24 h, the A base included) must cover the batch's worst case (the remaining allowance of every pending PDF, 12 each before any request); otherwise the project is persisted as deferred, **zero requests** are sent, and the run ends in state `deferred`; a later `--resume` takes deferred projects in declared order (arms in the frozen order, projects by EP, documents in stage order). The static per-arm share and `arm_shares.py` are withdrawn; the cross-track rolling counter and the durable allowance replace it. This is the rule the R21 declaration described in prose; it is now versioned in the declaration and implemented.
+
+**Exercised through the actual runner** ([runner-evidence/RUNNER-INTEGRATION.json](runner-evidence/RUNNER-INTEGRATION.json), scripted provider `dry_provider2.py`, fake clock `XTRACK_FAKE_NOW` honoured only under `PILOT_DRY=1`, one isolated dry root per scenario; regressions [harness-v4/test_runner_v4.py](harness-v4/test_runner_v4.py), **8 passed**). The synthetic stage ([dry/R22-DRY-STAGE.json](dry/R22-DRY-STAGE.json)) has a 6-page sheet (4 in scope), a 1-page and a 2-page sheet whose values are raster (every page triggers a read; four required reads per page with the scripted decision block, so a 4-page reading attempts 16), a vector-text control that triggers nothing, and a Word control.
+
+| Scenario | What happened |
+|---|---|
+| S1 baseline (L1) | 20 requests; per document charged == sent (4 / 8 / 8 / 0); the no-trigger control sent 0; worst case reserved 24 per project against capacity 60; counter == sent; tripwire binding: every PDF eligible, the Word file ineligible, 0 rejected |
+| S2 kill / resume (L3, killed inside the 8th dispatched request) | at the kill: the 6-page document had 3 charged and 2 recorded (the lost request stays charged), its attempt visible as `open`; on `--resume`: the interrupted attempt reported, the 1-page document skipped (bound), the 6-page document continued with its remaining allowance and **stopped at 12 charged** (11 recorded + 1 lost; 1 refusal of a 13th attempted read) — the cap held across the restart |
+| S3 new tag (after S2) | `L3-newtag` **refused before dispatch** (allowance exists: 4 documents, 25 charged); with the dry-only override the capped document sent 0 more and every document stayed ≤ 12 (2 refusals) |
+| S4 second writer | a slow L1 held the sandbox: a concurrent `--resume` was refused ("another writer"); the document key lock was busy while the document was being read; the first writer completed (20 requests) |
+| S5 cache-hit control (`--resume --reread`) | 20 cache hits, 0 fresh sends and an unchanged charge for every document whose first reading had completed; the one document that had stopped on the reader's per-reading constant continued with 4 fresh sends charged exactly once (8 → 12); counter delta == fresh sends |
+| S6 arm scope exhaustion (declaration variant, L1 cap 10) | exactly 10 sent, then ledger pre-check refusals (2 documents budget-stopped); charged == sent == counter == 10; run state `completed`, nothing raised |
+| S7 deferral with a fake clock | 50 other-track requests seeded for EP-16830 at T0: L1 deferred that project (**needs 24, capacity 10, 0 requests**) and ran EP-17428 (8); run state `deferred`, the deferral persisted; at T0 + 24 h 1 s `--resume` ran EP-16830 (12) and skipped EP-17428 at project level; EP-17428's charges and sends unchanged; durable totals never reset |
+| S8 refusals | `--resume` of a non-existent sandbox and a repeat without `--resume` both refused before dispatch; counter unchanged |
+
+The canonical dry chain ([dry/](dry/)) ran A → L1 → L2 → L3 → L4 on the same stage; L4 was deferred for EP-16830 by the real counter (the earlier arms had used the window) and completed on the simulated next window; the v4 scorer reports every arm valid, 4 eligible / 1 ineligible (the Word control) documents, 0 extra facts, business hashes equal A's.
+
+## 5. Workload and declaration, corrected
+
+[workload/R22-WORKLOAD.json](workload/R22-WORKLOAD.json) keeps the R21 sample, stage, observed rates and assumptions (every in-scope page triggered; price unknown) and corrects what Review 22 asked:
+
+| Figure | Value | Meaning |
+|---|---|---|
+| Expected workload | **509** requests (L1 118, L2 118, L3 135, L4 135, A 4) | an expectation under the stated assumptions |
+| Proposed authorized maximum | **688** (A 8, L1 160, L2 160, L3 180, L4 180) | the R21 caps, **not approved**; only a maximum *if* the owner approves |
+| Uncapped structural maximum | **1,256** | 12 × 26 PDFs × 4 arms + A's 8; not an authorized spend |
+
+Tokens: ~6.49M input (incl. cached) expected, ~0.90M output expected; the p90-based figure (~19.7M input) is labelled a **statistical planning estimate**, not a bound. Price: UNKNOWN; no dollar figure; no cost or completion guarantee (a cap below the worst case means arms may stop with documents not attempted, which enter the comparison as budget stops).
+
+**Schedule generated from the implemented rule** ([harness-v4/schedule_sim.py](harness-v4/schedule_sim.py), hourly steps, frozen order A → L1 → L2 → L3 → L4, worst case 36 per 3-PDF project): under worst-case demand the last batch starts at **72 h** (batches start at 0 / 24 / 48 / 72 h: 15, 11, 7, 7; 92 deferral events), whether A's 8 requests are aged out or spent on the largest project at the start; under expected demand the last batch starts at **24 h** (29 + 11 batches, 22–24 deferrals). Each arm's own run time is about 0.6 h at the observed p50 latencies (sequential), to be added to the last batch's start. The R21 wording "worst case 3 days, expected 2 days" is replaced by these figures with their assumptions. The fake-clock example is the S7 runner evidence, and the simulator reproduces it (deferral at T0, batch at 24 h).
+
+[declaration/R22-DECLARATION.draft.json](declaration/R22-DECLARATION.draft.json) is marked `DRAFT / NOT EXECUTED / NO NEW MODEL BUDGET APPROVED`, bound to the frozen candidate **`719e8de661b8b10427ef6cff5d2d277a53b64dc6`** (the R21 report's prose `58ff6fc…` was a stale short ID; the frozen commit file and bindings in that package already said `719e8de`; the R21 package is not altered), the frozen R21 sample and stage, the R21 labels manifest, workload v2, harness contract v4 and the versioned scheduling rule. The frozen selection and the sealed projects are unchanged. Labels remain the prerequisite: the R21 skeletons and manifest (AI-drafted / AI-reviewed provenance, unresolved items listed, no human sign-off, no model call made to finish them) are untouched. The owner is not asked to repeat the existing Round 2 permission; a new experiment budget is a decision for after this review.
+
+## 6. Freeze, tests, replays
+
+- **Frozen harness:** [bindings/FROZEN-HARNESS.json](bindings/FROZEN-HARNESS.json) — hashes of every `harness-v4/` file, contract `harness-contract-2026-09-30.v4`, scorer `score-arms-2026-09-30.v4`, runner `arm-ev-2026-09-30.v4`, scheduling rule `whole-project-reservation-2026-09-30.v4`, the r16.1 allowance module, evaluator .9, dry stage / labels / declaration hashes.
+- **Tests:** harness v4 **19 passed**; runner integration **8 passed**; the 13 unchanged v3 coverage / harness tests **13 passed**; the r16.1 durable-budget / BOQ controls **66 passed**; the reviewer's regressions **2 failed** on the submitted harness (the defects, demonstrated) and **5 passed** on v4. JUnit and exit codes in [tests/](tests/), [harness-v4/logs/](harness-v4/logs/), [repro/](repro/).
+- **Replays:** R21 dry outputs — v4 equals v3 with correct sources, 0 credit under mismatched sources ([replays/](replays/)); the r22 dry chain scored by v4 ([dry/score/](dry/score/)); H-06 scored again through the unchanged continuation scorer: **six JSON files byte-identical** to the stored review21 result ([h06-replay/](h06-replay/)).
+- **Not rerun:** the application suites (no application file changed; the R21 results stand, including the disclosed T+E / L2 / L4 crop-contract failures and the 2 known baseline failures — none weakened).
+- **Package check:** [evidence/PACKAGE-CHECK.json](evidence/PACKAGE-CHECK.json) (manifest, links, trees, frozen hashes, reviewer files unchanged, earlier packages and labels unchanged, draft bound, tests, replays, runner evidence, live ledger 128 settled with no r21 / r22 live scope).
+
+## 7. Honest limits
+
+- The dry evidence is synthetic (scripted provider, synthetic sheets): it proves the accounting and scheduling contracts, not extraction accuracy, latency, timeouts or real cache behaviour.
+- A ledger refusal on a limit other than the requests cap would leave one charged, unsent request on a document (conservative; never reclaimed).
+- The schedule simulation charges a batch's requests at its start and ignores run time inside the window arithmetic; real windows free up later, never earlier.
+- The reader's per-reading constant (8) means a document can reach the durable 12 only across a resume; the workload's per-document expectation is capped at 12 as before.
+- Nothing here changes the R19-accepted corrections, the ROI decision-coverage loss, the unresolved labels, or the M2 status.
+
+**Submitted for independent review; not self-approved.**

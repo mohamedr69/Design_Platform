@@ -1,0 +1,755 @@
+{
+ "answers": "Verification 39 R39-04 (major), R39-06, R39-08, R39-16, R39-15 (gate as a named constant; owner ruling A-10: C >= B only, a change from plan v2, C >= R a mandatory diagnostic), R39-09 (model-identity evidence), R39-02 and R39-17 (records)",
+ "application_env": {
+  "DRAWINGS_AI_REVIEW_ENABLED": "false"
+ },
+ "baseline": {
+  "clean": true,
+  "expected": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "head": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "tree": "C:/t/iso/frozen-r12"
+ },
+ "binds": {
+  "review36": {
+   "binding": "5a1a6aad63df91bbf6de1eb9d80fff44e4e05a2f70642bfa58f216ebf06fe568",
+   "manifest": "5e9508136663a1dac096bcc697345a527726705ad6c96e46c52839371c9de9d0"
+  },
+  "review38": {
+   "binding": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d",
+   "manifest": "07c2fb78bedc44c4145f8ff24f2f9c4e4407de4adc2706392b2560afe56b8ce9"
+  }
+ },
+ "candidate": {
+  "clean": true,
+  "expected": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+  "head": "a8aacedd21cceb751a2f55ac07d1dc55b5fbaa1d",
+  "tree": "C:/t/iso/cand-r29"
+ },
+ "changed_from_review38": [
+  "allowance_r32.py",
+  "lane_r32.py",
+  "preflight_r32.py",
+  "project_bounds_r32.py",
+  "r32_test_helpers.py",
+  "run_control_r38.py",
+  "run_state_r38.py",
+  "runner_r32.py",
+  "sandbox_ingest_r32.py",
+  "score_bcr_r32.py",
+  "score_lane_r32.py",
+  "synthetic_r32.py",
+  "test_allowance_r32.py",
+  "test_preflight_r32.py",
+  "test_project_bounds_r32.py",
+  "test_run_control_r38.py",
+  "test_runner_r32.py",
+  "test_sandbox_ingest_r32.py",
+  "test_score_bcr_r32.py",
+  "test_visibility_r38.py",
+  "visibility_r38.py"
+ ],
+ "compatible_limits_required_minimum": {
+  "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 84,
+  "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 84
+ },
+ "contract": "r39-live-contract-4",
+ "decision_coverage_gate": {
+  "authority": "owner ruling A-10 (2026-10-04)",
+  "bound": "C_GE_B_ONLY",
+  "change_from_plan_v2": "plan v2 gated on C >= B and C >= R; C >= R is now a mandatory diagnostic, never eligibility"
+ },
+ "files": {
+  "application_bound_sources": {
+   "C:/t/iso/cand-r29/backend/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "C:/t/iso/cand-r29/backend/app/ai/evidence_reader.py": "d74397b374fc91a69ed6b4d2ba4306e5fe89682144b2cf5275c7c4091c7ca07a",
+   "C:/t/iso/cand-r29/backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155",
+   "C:/t/iso/frozen-r12/backend/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "C:/t/iso/frozen-r12/backend/app/ai/sheet_reader.py": "900e159f131b293b48a36a433362e0b252b38c0538df8dce85b18fcb98a507f0",
+   "C:/t/iso/frozen-r12/backend/app/ai/submittal_reader.py": "7127640681241387b1fdd538180c11aa9eb0d347859ee7b806aa7503b8e0d5bd",
+   "C:/t/iso/frozen-r12/backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155",
+   "C:/t/iso/frozen-r12/backend/app/services/document_processing.py": "5f5b25940ad0677f655febf14d6af8ccd6b038232bc1c800efa4496a0f31bf0f",
+   "C:/t/iso/frozen-r12/backend/app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d",
+   "C:/t/iso/frozen-r12/backend/app/services/shop_drawings.py": "ae9eb36eaded3a782a37e750c1f0732a7882093c8293387f026c0ace6421392e"
+  },
+  "application_request_path_sources": {
+   "C:/t/iso/cand-r29/backend/app/ai/evidence_reader.py": "d74397b374fc91a69ed6b4d2ba4306e5fe89682144b2cf5275c7c4091c7ca07a",
+   "C:/t/iso/cand-r29/backend/app/ai/provider.py": "d465961efb07b7f9df2597b37a228735238af433d950bf7095925e8cc43eb5ba",
+   "C:/t/iso/cand-r29/backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155",
+   "C:/t/iso/cand-r29/backend/app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d",
+   "C:/t/iso/cand-r29/backend/app/services/shop_drawings.py": "ae9eb36eaded3a782a37e750c1f0732a7882093c8293387f026c0ace6421392e",
+   "C:/t/iso/frozen-r12/backend/app/ai/provider.py": "d465961efb07b7f9df2597b37a228735238af433d950bf7095925e8cc43eb5ba",
+   "C:/t/iso/frozen-r12/backend/app/ai/submittal_reader.py": "7127640681241387b1fdd538180c11aa9eb0d347859ee7b806aa7503b8e0d5bd",
+   "C:/t/iso/frozen-r12/backend/app/compliance/assist.py": "8fff1704146451d499cc71837b70204b20d60d3d108a73f144517d10d53cdb87",
+   "C:/t/iso/frozen-r12/backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155",
+   "C:/t/iso/frozen-r12/backend/app/services/document_processing.py": "5f5b25940ad0677f655febf14d6af8ccd6b038232bc1c800efa4496a0f31bf0f",
+   "C:/t/iso/frozen-r12/backend/app/services/document_sync.py": "5992f72647c857b0686ad9ada5ef4ab0e8a9cfa25631b24cd1f6eb363e6e8413",
+   "C:/t/iso/frozen-r12/backend/app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d",
+   "C:/t/iso/frozen-r12/backend/app/services/shop_drawings.py": "ae9eb36eaded3a782a37e750c1f0732a7882093c8293387f026c0ace6421392e"
+  },
+  "carried": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/ADAPTER-CONTRACT.md": "871c103d45b9f1b4a4d6f159a804c3bfda242b84e6c6c2e794f37aa97465148a",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/CONVERTER-RECONCILIATION.json": "e350d2fe78d6062cf59328d1caedfca8f8a72210d2d043c5c37068033b2624f3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/LABELS-R32-EVAL-INPUT.json": "4b2c73d59ab852fa45eb46ff58f0ee13242c2ccac4db0221f4b1b607edede5cc",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-RULE.md": "9ee2ccecce2eb26722c51fa74b93dbcb94a1e70fd59ac46b92530dd3f832dad0",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/dry-run/TRUTH-R32.json": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064"
+  },
+  "declaration_r32_superseded": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32/FRESH-VALIDATION-DECLARATION-R32.json": "38e08df9bed5582bcf171129654fe93984caab4251f8ddbd3dd2e164a3d876b0",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32/evidence/EVIDENCE-MANIFEST.json": "59361b9331cf3d28979129dfa1749b10f345e5ad24f26b9691012423fd1be2c8"
+  },
+  "evaluator_offline_r32": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/BINDING-MANIFEST-R35.json": "1de0773a23a38b39ffad770cf23d9d61d7e7ca1187693bbc29dbaccbcbbd62cb",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/PARITY-MATRIX.json": "73e189f2d0cfe05e55ba58837e991c008eaaf11fb928c300cf0670ead60aaccc",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/SYNTHETIC-PREDICTIONS.json": "9f3e0e56bace4ae5fe2724d259ab657ef63490f0a5afc2f5291d78fbb4d1f774",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/evaluator-offline-r32/evidence/EVIDENCE-MANIFEST.json": "86dd81d3dcbc139f35495946b400c82d50c65feb21dda6fa0ab2558e1d634db7"
+  },
+  "harness_r39": {
+   "C:/t/iso/work/r2x/r39/harness-r32/allowance_r32.py": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "C:/t/iso/work/r2x/r39/harness-r32/capture_store.py": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "C:/t/iso/work/r2x/r39/harness-r32/concentration_r32.py": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "C:/t/iso/work/r2x/r39/harness-r32/converter_r32.py": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "C:/t/iso/work/r2x/r39/harness-r32/coverage_v4.py": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "C:/t/iso/work/r2x/r39/harness-r32/dispatch_guard_r32.py": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "C:/t/iso/work/r2x/r39/harness-r32/drawings_ai_probe_r39.py": "510ac22b5498850dd7851ea674d35f821df96d2fd4b080e787e309aac5d8da93",
+   "C:/t/iso/work/r2x/r39/harness-r32/inputs_r32.py": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "C:/t/iso/work/r2x/r39/harness-r32/labels_adapter_r32.py": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "C:/t/iso/work/r2x/r39/harness-r32/lane_judge_r32.py": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "C:/t/iso/work/r2x/r39/harness-r32/lane_r32.py": "493c0a9f248a9ceeba0ab2089a86ffed1c0bc142acdde9117012960a36088e6f",
+   "C:/t/iso/work/r2x/r39/harness-r32/literal_compare_r32.py": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "C:/t/iso/work/r2x/r39/harness-r32/model_identity_r38.py": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "C:/t/iso/work/r2x/r39/harness-r32/page_relations_r38.py": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "C:/t/iso/work/r2x/r39/harness-r32/preflight_r32.py": "0e59dbff5e87c1f5a9df2520bc82db7cf01b7086a314a9cefb56bcff47ea442f",
+   "C:/t/iso/work/r2x/r39/harness-r32/project_bounds_r32.py": "6abbf5eb04a72e55feb3883cb50730006f2caf1224c2e0edc63a23ef978c859b",
+   "C:/t/iso/work/r2x/r39/harness-r32/r32_test_helpers.py": "64c9ffcd341570d83e4cff272c16882dee0a6991537423bffc76ccdcfd7edf09",
+   "C:/t/iso/work/r2x/r39/harness-r32/r34_scenarios.py": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "C:/t/iso/work/r2x/r39/harness-r32/request_paths_r39.py": "0ee519859cca6921b57f082cd8b58b91cd429521a47ecf0f7066fd7a1950aee0",
+   "C:/t/iso/work/r2x/r39/harness-r32/resume_invocations_r39.py": "b217b053f69213e7320469584e748d2b15679ed39d4345e0e95cfce6ebf36864",
+   "C:/t/iso/work/r2x/r39/harness-r32/run_control_r38.py": "d30de813c1092d46e3af940a4b0e3b03b9820c2b96c28b81ca71f40981bc42d1",
+   "C:/t/iso/work/r2x/r39/harness-r32/run_set_selector_r32.py": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "C:/t/iso/work/r2x/r39/harness-r32/run_state_r38.py": "5e789b05a23beae15195590ae0497739f87a493ea06acae3e8a798d054e653f8",
+   "C:/t/iso/work/r2x/r39/harness-r32/runner_r32.py": "b290dd1c8ddda1b8d16117789f2f7691e792830e5a99e6b3b5a0963780027108",
+   "C:/t/iso/work/r2x/r39/harness-r32/sandbox_child_r32.py": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "C:/t/iso/work/r2x/r39/harness-r32/sandbox_ingest_r32.py": "8fb5c891a41bba5f86c6426fb4784ec4dd0b029cc2733893b17a23712aa56ef5",
+   "C:/t/iso/work/r2x/r39/harness-r32/score_bcr_r32.py": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "C:/t/iso/work/r2x/r39/harness-r32/score_lane_r32.py": "33a102d04bac562add88638008cd4561347225347115a3ad647b264a8a83832c",
+   "C:/t/iso/work/r2x/r39/harness-r32/state_check.py": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "C:/t/iso/work/r2x/r39/harness-r32/stop_rules.py": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "C:/t/iso/work/r2x/r39/harness-r32/synthetic_r32.py": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_allowance_r32.py": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_capture_store.py": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_concentration_r32.py": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_converter_r32.py": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_dispatch_guard_r32.py": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_labels_adapter_r32.py": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_lane_judge_r32.py": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_literal_compare_r32.py": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_model_identity_r38.py": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_preflight_r32.py": "096535e0c6d75060493dfab472c8f12c9c2b21faaa15b4d7c8342953b2747ba4",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_project_bounds_r32.py": "8a47c286c2de3ba41f78d03cb6c809df8c4e8877df143663185f2eaefca58ac4",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_request_paths_r39.py": "ed1bc99df9f8b9bbdd02534602919b99d1c8a8d6eefb68dfe22de3c357707c76",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_run_control_r38.py": "43ef8d0e1571ed6665854b7dd79de55ca37e2e767fbf2a92941619b572e81768",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_run_set_selector_r32.py": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_runner_r32.py": "6897891a35cdad75d2f48fc9dea70821c6308e05dd4bd0f1aced9f90ddb82605",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_sandbox_ingest_r32.py": "0da051961c548f35733bf69ca3d21440f1ea3697ea0b4ad62ffaf7f5ce60d16c",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_score_bcr_r32.py": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_state_check.py": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_stop_rules.py": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_tripwire_r32.py": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_unread_pages_r39.py": "329208bca4b4e03ccaf2eb0e9c5a28407e0b35bf31402fdfabe41e9489fb7604",
+   "C:/t/iso/work/r2x/r39/harness-r32/test_visibility_r38.py": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "C:/t/iso/work/r2x/r39/harness-r32/tripwire_r32.py": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "C:/t/iso/work/r2x/r39/harness-r32/unread_pages_probe_r39.py": "f326c362a0920e9c7f58d237d2cc41b4b5fc0525c5cb64f979f3c9166bbaf2cd",
+   "C:/t/iso/work/r2x/r39/harness-r32/visibility_r38.py": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156"
+  },
+  "harness_r39_package": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/allowance_r32.py": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/capture_store.py": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/concentration_r32.py": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/converter_r32.py": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/coverage_v4.py": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/dispatch_guard_r32.py": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/drawings_ai_probe_r39.py": "510ac22b5498850dd7851ea674d35f821df96d2fd4b080e787e309aac5d8da93",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/inputs_r32.py": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/labels_adapter_r32.py": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/lane_judge_r32.py": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/lane_r32.py": "493c0a9f248a9ceeba0ab2089a86ffed1c0bc142acdde9117012960a36088e6f",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/literal_compare_r32.py": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/model_identity_r38.py": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/page_relations_r38.py": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/preflight_r32.py": "0e59dbff5e87c1f5a9df2520bc82db7cf01b7086a314a9cefb56bcff47ea442f",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/project_bounds_r32.py": "6abbf5eb04a72e55feb3883cb50730006f2caf1224c2e0edc63a23ef978c859b",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/r32_test_helpers.py": "64c9ffcd341570d83e4cff272c16882dee0a6991537423bffc76ccdcfd7edf09",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/r34_scenarios.py": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/request_paths_r39.py": "0ee519859cca6921b57f082cd8b58b91cd429521a47ecf0f7066fd7a1950aee0",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/resume_invocations_r39.py": "b217b053f69213e7320469584e748d2b15679ed39d4345e0e95cfce6ebf36864",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/run_control_r38.py": "d30de813c1092d46e3af940a4b0e3b03b9820c2b96c28b81ca71f40981bc42d1",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/run_set_selector_r32.py": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/run_state_r38.py": "5e789b05a23beae15195590ae0497739f87a493ea06acae3e8a798d054e653f8",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/runner_r32.py": "b290dd1c8ddda1b8d16117789f2f7691e792830e5a99e6b3b5a0963780027108",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/sandbox_child_r32.py": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/sandbox_ingest_r32.py": "8fb5c891a41bba5f86c6426fb4784ec4dd0b029cc2733893b17a23712aa56ef5",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/score_bcr_r32.py": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/score_lane_r32.py": "33a102d04bac562add88638008cd4561347225347115a3ad647b264a8a83832c",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/state_check.py": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/stop_rules.py": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/synthetic_r32.py": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_allowance_r32.py": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_capture_store.py": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_concentration_r32.py": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_converter_r32.py": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_dispatch_guard_r32.py": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_labels_adapter_r32.py": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_lane_judge_r32.py": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_literal_compare_r32.py": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_model_identity_r38.py": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_preflight_r32.py": "096535e0c6d75060493dfab472c8f12c9c2b21faaa15b4d7c8342953b2747ba4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_project_bounds_r32.py": "8a47c286c2de3ba41f78d03cb6c809df8c4e8877df143663185f2eaefca58ac4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_request_paths_r39.py": "ed1bc99df9f8b9bbdd02534602919b99d1c8a8d6eefb68dfe22de3c357707c76",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_run_control_r38.py": "43ef8d0e1571ed6665854b7dd79de55ca37e2e767fbf2a92941619b572e81768",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_run_set_selector_r32.py": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_runner_r32.py": "6897891a35cdad75d2f48fc9dea70821c6308e05dd4bd0f1aced9f90ddb82605",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_sandbox_ingest_r32.py": "0da051961c548f35733bf69ca3d21440f1ea3697ea0b4ad62ffaf7f5ce60d16c",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_score_bcr_r32.py": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_state_check.py": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_stop_rules.py": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_tripwire_r32.py": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_unread_pages_r39.py": "329208bca4b4e03ccaf2eb0e9c5a28407e0b35bf31402fdfabe41e9489fb7604",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/test_visibility_r38.py": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/tripwire_r32.py": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/unread_pages_probe_r39.py": "f326c362a0920e9c7f58d237d2cc41b4b5fc0525c5cb64f979f3c9166bbaf2cd",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/scripts/harness-r32/visibility_r38.py": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156"
+  },
+  "harness_review38_base": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/allowance_r32.py": "2868e8ee1476f466a22374a11b2592bc4ae774a7c7178c8e5661ca3681c4e30c",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/capture_store.py": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/concentration_r32.py": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/converter_r32.py": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/coverage_v4.py": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/dispatch_guard_r32.py": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/inputs_r32.py": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/labels_adapter_r32.py": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/lane_judge_r32.py": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/lane_r32.py": "2c4aa742a6469045d7670bb1bd7450bd9d2f13ef4ab77062e7ca312e3405ecf9",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/literal_compare_r32.py": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/model_identity_r38.py": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/page_relations_r38.py": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/preflight_r32.py": "2bfba6a10a4c04207ce4e9139f9c0fa3c1aa21f0086c9d312df90af223619e91",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/project_bounds_r32.py": "33053d8ff3351424618f303d4f1c0d2d01768222bafce8f9e10706043d58efdb",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/r32_test_helpers.py": "15e5d82de7fd2183b8eaf2e2911bafd3fad1e6ad09c38314112299c9f0bc8eb9",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/r34_scenarios.py": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/run_control_r38.py": "d226e1733be1861eecf6211906e53bbf5677731194c9fcb4458c3c69304c2715",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/run_set_selector_r32.py": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/run_state_r38.py": "ca47ad48fdc6fa3c14f06425db560618fac0fcefa67b843ee3b7291de8cbad35",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/runner_r32.py": "5475f2918bb234db87c2bdaa2241a41d9bb624c56569a54f07e15278fded9407",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/sandbox_child_r32.py": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/sandbox_ingest_r32.py": "3e0e906df9aa1d387bc8a018142e122c1c9545f54f6d2aa311718c75e45e92a6",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/score_bcr_r32.py": "77b226e30412b4dd2d29af8932a3b748504597ba204bd00a873e6d5a4374c6d2",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/score_lane_r32.py": "79530a3013cac748df7887db6ee9a038c17f0450abe438f2dcfc7bf3e272eec3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/state_check.py": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/stop_rules.py": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/synthetic_r32.py": "cc125b2725a525e0b5629e948cfb77ca8394d13adca3d649334e8dcdf60e2cf7",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_allowance_r32.py": "354fd032a22b746862a574847eda025ad3f6d15833e2825d3c766bd9c7d664c9",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_capture_store.py": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_concentration_r32.py": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_converter_r32.py": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_dispatch_guard_r32.py": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_labels_adapter_r32.py": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_lane_judge_r32.py": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_literal_compare_r32.py": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_model_identity_r38.py": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_preflight_r32.py": "76399aef5c15507cb4d245b3eeb8a1601b6d1ee4175fbfdc57dc9191b2bc0bfa",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_project_bounds_r32.py": "e8e54cf48e3f8f51a2eaebc19f67e064776c03a28e1e46a5a13e163b67309cad",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_run_control_r38.py": "f83ee0a65da7304eebe023dd7dd71bfba4eff2981c537a627f0b752132d2f059",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_run_set_selector_r32.py": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_runner_r32.py": "f8b6ef55b15def470235ceac0267cf25c1699b2833675c51e0233fad015382aa",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_sandbox_ingest_r32.py": "e4f67c701923b6a5e29e9db201829c55563b4cfc252abd65071ab2a9550a0b0f",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_score_bcr_r32.py": "e090cf4a8d07c345a78b7e56bbb78cefb25270340f488b3f722f8badf55f5fba",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_state_check.py": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_stop_rules.py": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_tripwire_r32.py": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/test_visibility_r38.py": "e19b7afdf600a782e5eab3f3610c655150db2b5cbcbb7ec1e997b84f170cab7f",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/tripwire_r32.py": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/scripts/harness-r32/visibility_r38.py": "4f4066e0b073666348f4f4964c0e2344a7421bdaa09d7ce7c388e24cfa1c2e8a"
+  },
+  "inputs": {
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY-AMENDMENT-R32-01.md": "815d43fdb1e2177c5bc8e9bd680f6756acbdf3707ac8f19ca4fe9dc264205de6",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY.md": "7efa891b55fd6a4113f08cff8d0acdca7832d611524bb7f884ec4e5bc30a4f47",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-33/INDEPENDENT-REVIEW.md": "8d20baecc8eef24d2047287de77b3c252c1e5641f2dc61c5ffe449f6bbd97804",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/FIELD-POPULATION.json": "799a4b8f97c4560a2906da84f94515711cf9841b3bb3a9529ad6f5cde338539e",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/evidence/EVIDENCE-MANIFEST.json": "1f27a544fa9fb839f5ae9bed721f1e00e7d5cbe1f63f56dd5bbf6fa8086bdb76",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32-reviewed-2/labels/R32-LABELS-REVIEWED-2.json": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/EVIDENCE-INDEX.json": "0d0db4f8dbb0143cd4756986024dd43c531ffee2f17a1dd784e9d4bd32ba08b8",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/FROZEN-SELECTION.json": "bf71779a612afb1207ac96cb7925979ae3682ea815d137b05eab8968212a5d21",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/LABEL-CONVENTIONS-R32.md": "5c09d4d2bc0867b8af93c93cd0e67c362f96bfeed5a0c109361931ce7dd5e570",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/PROJECT-VERIFICATION.json": "4cecf2fca13fe9d46eb1aa2f547b58fe5b584fea46446ca4597cda44dabdf1c4",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/RENDERS.json": "175a3a10ac871540dbbeb87f1ec7d2e68b369186d05a60bf5dd751b18e51e8be",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/SOURCE-MANIFEST.json": "951e8697a69c3576c24ecdaf0b28de563d35ae7e99addca1fc60e3992df0e259",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/evidence/EVIDENCE-MANIFEST.json": "15c4114da23e3989b621fed0e43cf9519f9e82e075b972dc2d01f5583f82d0ed",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/lib/arex.py": "5d1cb2b060015acdec9336b9036b3d58c4ffe9a2d3fc53b83f5bca918c344c75",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/lib/dewan.py": "d7e0134e581ca507b158e189dd8bdfe714b3e2d04a0d40ecc8b688e007dba9aa",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/lib/emaar.py": "b30d121c315fae3d3ebbef58670dd0b5f89850e9509c1c1ef939f50fda26198f",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/lib/enco.py": "0cb981135e5e56b517935660d59a45735a294d427dd0bbc0b0010c438c83c15d",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/fresh-cohort-r32/scripts/lib/infinity.py": "e21afe1038ce6ce4fbcf7657c7c7c4cd09d7d8b90d7090d9d68b2f7a4b0c093d",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review31/evidence/EVIDENCE-MANIFEST.json": "d5fe164918741014ded7425cda7679bd310a97b07511dd85bb65ec642077c460"
+  },
+  "outputs": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/PROJECT-REQUEST-BOUNDS.json": "99be01fbf25ed6e6219cc6b09b56aa9cd728ad9b30379e6b4b157aa394131721",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/REQUEST-PATHS-STATIC.json": "c0e6a43951d1eadc9c6602c5e05c4d2ce532d680ec7c445c9e6cf2266d14ac5b",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review39/RESUME-INVOCATIONS-R39.json": "9791fa897587fd83e1a087e302487ce245470a41c32f9aa10b48c1211e7dcf6b"
+  },
+  "review36": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/BINDING-MANIFEST-R36.json": "5a1a6aad63df91bbf6de1eb9d80fff44e4e05a2f70642bfa58f216ebf06fe568",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/H1-WHATIF-RESULT.json": "19b14ab3b23eb0be818ddb6c131a88bff116abb13ce5b7eac932313f925343aa",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review36/evidence/EVIDENCE-MANIFEST.json": "5e9508136663a1dac096bcc697345a527726705ad6c96e46c52839371c9de9d0"
+  },
+  "review38": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/BINDING-MANIFEST-R38.json": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/CROSS-PAGE-WHATIF.json": "491f9590e775fa5367569787cbc3394d8db1b82908f5f6111a2a7491da8c6fe6",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/evidence/EVIDENCE-MANIFEST.json": "07c2fb78bedc44c4145f8ff24f2f9c4e4407de4adc2706392b2560afe56b8ce9"
+  },
+  "reviews": {
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-34/FINDINGS.json": "af99a772cafac9ef24be67902e6769fb92f544be76df3ed2f25969c1642f9fd8",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-34/INDEPENDENT-REVIEW.md": "75061210ff7af6b3619d86563af308caf65d706b4b5dc760288899524bbc8f47",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-35/FINDINGS.json": "b3ae349a876e823e4e945013756fb8324b1a53cdfe2faacb73aaf37d5d9aaa57",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-35/INDEPENDENT-REVIEW.md": "f4f668ac240cfdde229febe03f7a6a1b28a1120ab50c6b8ed04264ed2987fe31",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-36/FINDINGS.json": "9e65a5c0275625d7bc624617971ee1dc4cd34fbc609a054f7a0a897933eb8be8",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-36/INDEPENDENT-VERIFICATION.md": "f698c2ffebc44df0487edce762a3f1bd561b2cbbda7b3d844dbd7d6c15173a00",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-37/FINDINGS.json": "2f77e707059e00a36a6169cca823e39f007de340492b4c6532b9ae89e359b11b",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-37/INDEPENDENT-VERIFICATION.md": "288983f25996ce9143ea95f1b7d98f1ac1c581fcefb386014e407e8ecfe84126",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-38/FINDINGS.json": "d432e3f5d5e8391c4dbf1f6b91b432d07d06606bd4afb9971750ca126c91d38a",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-38/INDEPENDENT-VERIFICATION.md": "006d0203aaa98a9973de140ab73ac2e127df06f827c686b1f2629c1ae607f5c7",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/FINDINGS.json": "5976db3818000242ec32ef16323516ca29270e74027f7b10cef22fe3e2b8028a",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/INDEPENDENT-PACKAGE-CHECK.json": "cd8ec9fdfe222013b2e1e60890e4a56417a9f23f337ca63ad21671b140c8d8d3",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-39/INDEPENDENT-VERIFICATION.md": "5bb967f278fd331047df3b8026432bc01ac4b678d4cc48286e50dbc6fba46598"
+  },
+  "run_set": {
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review34/RUN-SET-PROPOSAL.json": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8"
+  }
+ },
+ "harness_files": {
+  "allowance_r32.py": {
+   "lines_added": 48,
+   "lines_removed": 8,
+   "r39_sha256": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "review38_sha256": "2868e8ee1476f466a22374a11b2592bc4ae774a7c7178c8e5661ca3681c4e30c",
+   "status": "changed"
+  },
+  "capture_store.py": {
+   "r39_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "review38_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "status": "unchanged"
+  },
+  "concentration_r32.py": {
+   "r39_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "review38_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "status": "unchanged"
+  },
+  "converter_r32.py": {
+   "r39_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "review38_sha256": "4095a4967a7e7caa992feec4901e06c1836d263f62ab1ba884db8355c30f9704",
+   "status": "unchanged"
+  },
+  "coverage_v4.py": {
+   "r39_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "review38_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "status": "unchanged"
+  },
+  "dispatch_guard_r32.py": {
+   "r39_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "review38_sha256": "9cd6068f50c50c94904f4f4cdb15176a92063697b4c999dc29d9600bb0893863",
+   "status": "unchanged"
+  },
+  "drawings_ai_probe_r39.py": {
+   "lines_added": 142,
+   "lines_removed": 0,
+   "r39_sha256": "510ac22b5498850dd7851ea674d35f821df96d2fd4b080e787e309aac5d8da93",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "inputs_r32.py": {
+   "r39_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "review38_sha256": "41309ae85a091944f53e10797c424a711a80ef106c91974a5ca2401f42a014e3",
+   "status": "unchanged"
+  },
+  "labels_adapter_r32.py": {
+   "r39_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "review38_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "status": "unchanged"
+  },
+  "lane_judge_r32.py": {
+   "r39_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "review38_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "status": "unchanged"
+  },
+  "lane_r32.py": {
+   "lines_added": 143,
+   "lines_removed": 33,
+   "r39_sha256": "493c0a9f248a9ceeba0ab2089a86ffed1c0bc142acdde9117012960a36088e6f",
+   "review38_sha256": "2c4aa742a6469045d7670bb1bd7450bd9d2f13ef4ab77062e7ca312e3405ecf9",
+   "status": "changed"
+  },
+  "literal_compare_r32.py": {
+   "r39_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "review38_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "status": "unchanged"
+  },
+  "model_identity_r38.py": {
+   "r39_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "review38_sha256": "433d0e5afff55af94f58291c96bce3b92905b31f6d5737c26b3eb7193d811a68",
+   "status": "unchanged"
+  },
+  "page_relations_r38.py": {
+   "r39_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "review38_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "status": "unchanged"
+  },
+  "preflight_r32.py": {
+   "lines_added": 128,
+   "lines_removed": 13,
+   "r39_sha256": "0e59dbff5e87c1f5a9df2520bc82db7cf01b7086a314a9cefb56bcff47ea442f",
+   "review38_sha256": "2bfba6a10a4c04207ce4e9139f9c0fa3c1aa21f0086c9d312df90af223619e91",
+   "status": "changed"
+  },
+  "project_bounds_r32.py": {
+   "lines_added": 58,
+   "lines_removed": 10,
+   "r39_sha256": "6abbf5eb04a72e55feb3883cb50730006f2caf1224c2e0edc63a23ef978c859b",
+   "review38_sha256": "33053d8ff3351424618f303d4f1c0d2d01768222bafce8f9e10706043d58efdb",
+   "status": "changed"
+  },
+  "r32_test_helpers.py": {
+   "lines_added": 10,
+   "lines_removed": 6,
+   "r39_sha256": "64c9ffcd341570d83e4cff272c16882dee0a6991537423bffc76ccdcfd7edf09",
+   "review38_sha256": "15e5d82de7fd2183b8eaf2e2911bafd3fad1e6ad09c38314112299c9f0bc8eb9",
+   "status": "changed"
+  },
+  "r34_scenarios.py": {
+   "r39_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "review38_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "status": "unchanged"
+  },
+  "request_paths_r39.py": {
+   "lines_added": 178,
+   "lines_removed": 0,
+   "r39_sha256": "0ee519859cca6921b57f082cd8b58b91cd429521a47ecf0f7066fd7a1950aee0",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "resume_invocations_r39.py": {
+   "lines_added": 83,
+   "lines_removed": 0,
+   "r39_sha256": "b217b053f69213e7320469584e748d2b15679ed39d4345e0e95cfce6ebf36864",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "run_control_r38.py": {
+   "lines_added": 211,
+   "lines_removed": 31,
+   "r39_sha256": "d30de813c1092d46e3af940a4b0e3b03b9820c2b96c28b81ca71f40981bc42d1",
+   "review38_sha256": "d226e1733be1861eecf6211906e53bbf5677731194c9fcb4458c3c69304c2715",
+   "status": "changed"
+  },
+  "run_set_selector_r32.py": {
+   "r39_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "review38_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "status": "unchanged"
+  },
+  "run_state_r38.py": {
+   "lines_added": 136,
+   "lines_removed": 18,
+   "r39_sha256": "5e789b05a23beae15195590ae0497739f87a493ea06acae3e8a798d054e653f8",
+   "review38_sha256": "ca47ad48fdc6fa3c14f06425db560618fac0fcefa67b843ee3b7291de8cbad35",
+   "status": "changed"
+  },
+  "runner_r32.py": {
+   "lines_added": 117,
+   "lines_removed": 25,
+   "r39_sha256": "b290dd1c8ddda1b8d16117789f2f7691e792830e5a99e6b3b5a0963780027108",
+   "review38_sha256": "5475f2918bb234db87c2bdaa2241a41d9bb624c56569a54f07e15278fded9407",
+   "status": "changed"
+  },
+  "sandbox_child_r32.py": {
+   "r39_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "review38_sha256": "70684eb0a2b1a208dcf1e4e217bf039ed37cf4593b7fc1a0d63e21920cc27bba",
+   "status": "unchanged"
+  },
+  "sandbox_ingest_r32.py": {
+   "lines_added": 7,
+   "lines_removed": 1,
+   "r39_sha256": "8fb5c891a41bba5f86c6426fb4784ec4dd0b029cc2733893b17a23712aa56ef5",
+   "review38_sha256": "3e0e906df9aa1d387bc8a018142e122c1c9545f54f6d2aa311718c75e45e92a6",
+   "status": "changed"
+  },
+  "score_bcr_r32.py": {
+   "lines_added": 150,
+   "lines_removed": 10,
+   "r39_sha256": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "review38_sha256": "77b226e30412b4dd2d29af8932a3b748504597ba204bd00a873e6d5a4374c6d2",
+   "status": "changed"
+  },
+  "score_lane_r32.py": {
+   "lines_added": 10,
+   "lines_removed": 1,
+   "r39_sha256": "33a102d04bac562add88638008cd4561347225347115a3ad647b264a8a83832c",
+   "review38_sha256": "79530a3013cac748df7887db6ee9a038c17f0450abe438f2dcfc7bf3e272eec3",
+   "status": "changed"
+  },
+  "state_check.py": {
+   "r39_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "review38_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "status": "unchanged"
+  },
+  "stop_rules.py": {
+   "r39_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "review38_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "status": "unchanged"
+  },
+  "synthetic_r32.py": {
+   "lines_added": 13,
+   "lines_removed": 9,
+   "r39_sha256": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "review38_sha256": "cc125b2725a525e0b5629e948cfb77ca8394d13adca3d649334e8dcdf60e2cf7",
+   "status": "changed"
+  },
+  "test_allowance_r32.py": {
+   "lines_added": 36,
+   "lines_removed": 0,
+   "r39_sha256": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "review38_sha256": "354fd032a22b746862a574847eda025ad3f6d15833e2825d3c766bd9c7d664c9",
+   "status": "changed"
+  },
+  "test_capture_store.py": {
+   "r39_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "review38_sha256": "456f5a9e4a4aeb2946b009c9ca20229bc6344245a0539dacda9e9a855bf06936",
+   "status": "unchanged"
+  },
+  "test_concentration_r32.py": {
+   "r39_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "review38_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "status": "unchanged"
+  },
+  "test_converter_r32.py": {
+   "r39_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "review38_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "status": "unchanged"
+  },
+  "test_dispatch_guard_r32.py": {
+   "r39_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "review38_sha256": "8797e662f0deb6a095ffe9747d62af47c663024a11c13715eda0774cc4ecd301",
+   "status": "unchanged"
+  },
+  "test_labels_adapter_r32.py": {
+   "r39_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "review38_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "status": "unchanged"
+  },
+  "test_lane_judge_r32.py": {
+   "r39_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "review38_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "status": "unchanged"
+  },
+  "test_literal_compare_r32.py": {
+   "r39_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "review38_sha256": "b7850ef748eb39f3307020b3a4e30221afeb7cb63befe7562ee6793f7934b713",
+   "status": "unchanged"
+  },
+  "test_model_identity_r38.py": {
+   "r39_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "review38_sha256": "03b244d05ff116d1fe615b8c89ecdf0ea0a2b5d65fee84c159fb517553c27ed8",
+   "status": "unchanged"
+  },
+  "test_preflight_r32.py": {
+   "lines_added": 76,
+   "lines_removed": 4,
+   "r39_sha256": "096535e0c6d75060493dfab472c8f12c9c2b21faaa15b4d7c8342953b2747ba4",
+   "review38_sha256": "76399aef5c15507cb4d245b3eeb8a1601b6d1ee4175fbfdc57dc9191b2bc0bfa",
+   "status": "changed"
+  },
+  "test_project_bounds_r32.py": {
+   "lines_added": 8,
+   "lines_removed": 3,
+   "r39_sha256": "8a47c286c2de3ba41f78d03cb6c809df8c4e8877df143663185f2eaefca58ac4",
+   "review38_sha256": "e8e54cf48e3f8f51a2eaebc19f67e064776c03a28e1e46a5a13e163b67309cad",
+   "status": "changed"
+  },
+  "test_request_paths_r39.py": {
+   "lines_added": 149,
+   "lines_removed": 0,
+   "r39_sha256": "ed1bc99df9f8b9bbdd02534602919b99d1c8a8d6eefb68dfe22de3c357707c76",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "test_run_control_r38.py": {
+   "lines_added": 147,
+   "lines_removed": 4,
+   "r39_sha256": "43ef8d0e1571ed6665854b7dd79de55ca37e2e767fbf2a92941619b572e81768",
+   "review38_sha256": "f83ee0a65da7304eebe023dd7dd71bfba4eff2981c537a627f0b752132d2f059",
+   "status": "changed"
+  },
+  "test_run_set_selector_r32.py": {
+   "r39_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "review38_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "status": "unchanged"
+  },
+  "test_runner_r32.py": {
+   "lines_added": 77,
+   "lines_removed": 10,
+   "r39_sha256": "6897891a35cdad75d2f48fc9dea70821c6308e05dd4bd0f1aced9f90ddb82605",
+   "review38_sha256": "f8b6ef55b15def470235ceac0267cf25c1699b2833675c51e0233fad015382aa",
+   "status": "changed"
+  },
+  "test_sandbox_ingest_r32.py": {
+   "lines_added": 1,
+   "lines_removed": 1,
+   "r39_sha256": "0da051961c548f35733bf69ca3d21440f1ea3697ea0b4ad62ffaf7f5ce60d16c",
+   "review38_sha256": "e4f67c701923b6a5e29e9db201829c55563b4cfc252abd65071ab2a9550a0b0f",
+   "status": "changed"
+  },
+  "test_score_bcr_r32.py": {
+   "lines_added": 63,
+   "lines_removed": 0,
+   "r39_sha256": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "review38_sha256": "e090cf4a8d07c345a78b7e56bbb78cefb25270340f488b3f722f8badf55f5fba",
+   "status": "changed"
+  },
+  "test_state_check.py": {
+   "r39_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "review38_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "status": "unchanged"
+  },
+  "test_stop_rules.py": {
+   "r39_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "review38_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "status": "unchanged"
+  },
+  "test_tripwire_r32.py": {
+   "r39_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "review38_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "status": "unchanged"
+  },
+  "test_unread_pages_r39.py": {
+   "lines_added": 114,
+   "lines_removed": 0,
+   "r39_sha256": "329208bca4b4e03ccaf2eb0e9c5a28407e0b35bf31402fdfabe41e9489fb7604",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "test_visibility_r38.py": {
+   "lines_added": 90,
+   "lines_removed": 2,
+   "r39_sha256": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "review38_sha256": "e19b7afdf600a782e5eab3f3610c655150db2b5cbcbb7ec1e997b84f170cab7f",
+   "status": "changed"
+  },
+  "tripwire_r32.py": {
+   "r39_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "review38_sha256": "2a67c268ac4ac641f59d6acca5867e1419670dd885a2340d4d64af60161ca389",
+   "status": "unchanged"
+  },
+  "unread_pages_probe_r39.py": {
+   "lines_added": 100,
+   "lines_removed": 0,
+   "r39_sha256": "f326c362a0920e9c7f58d237d2cc41b4b5fc0525c5cb64f979f3c9166bbaf2cd",
+   "review38_sha256": null,
+   "status": "new"
+  },
+  "visibility_r38.py": {
+   "lines_added": 66,
+   "lines_removed": 9,
+   "r39_sha256": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156",
+   "review38_sha256": "4f4066e0b073666348f4f4964c0e2344a7421bdaa09d7ce7c388e24cfa1c2e8a",
+   "status": "changed"
+  }
+ },
+ "immutable": "written once per freeze; a changed file is a new manifest with a new hash, never an edit",
+ "name": "ORCH-08C (R39HARNESS-IMPL) binding manifest: the r32 harness corrected after Verification 39 (review39)",
+ "new_in_review39": [
+  "drawings_ai_probe_r39.py",
+  "request_paths_r39.py",
+  "resume_invocations_r39.py",
+  "test_request_paths_r39.py",
+  "test_unread_pages_r39.py",
+  "unread_pages_probe_r39.py"
+ ],
+ "not_bound_but_recorded": {
+  "authority_register": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md",
+   "sha256_at_binding": "346597d3c482cf66b7daeaec17a1334715d6e000be68725679013184361ffcfd",
+   "why": "append-only, updated by the orchestrator"
+  },
+  "claude_cli": {
+   "bytes": 218746016,
+   "embedded_version": "2.1.263",
+   "path": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+   "sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+   "why": "an external program: the runner records `claude --version` per invocation and refuses a different declared version"
+  },
+  "decision_ledger": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/DECISION-LEDGER.md",
+   "sha256_at_binding": "e4ea890b3c31d6acaf9094b54c4dd4374f806e3031eed53539bbe79540e69d19",
+   "why": "append-only, updated by the orchestrator"
+  }
+ },
+ "pinned_model_ids": {
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "project_request_bounds_EP_27331": {
+  "drawings_ai_enabled_alternative": 170,
+  "planning": 63.0,
+  "structural": 160
+ },
+ "reference_set": {
+  "name": "r32-labels-reviewed-2",
+  "populations": {
+   "decision": 38,
+   "identity": 57,
+   "revision": 38
+  },
+  "sha256": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6"
+ },
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "run_set_sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+ "sandbox_base": "declared by the declaration (run.sandbox_base); dry / tests default C:/t/r2x/r39-sandbox",
+ "statement": "binds code and inputs only; it authorizes nothing (no run, budget, scope, token or default); M2 CHANGES STILL REQUIRED; M3 not started",
+ "supersedes": {
+  "file": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review38/BINDING-MANIFEST-R38.json",
+  "for": "the harness-r32 code; the carried groups are re-hashed and equal",
+  "sha256": "4c2904cd0f3c78131bdc15910db4206398bcf7fee871f4496cee97fa5e9f314d"
+ },
+ "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+ "unchanged_from_review38": [
+  "capture_store.py",
+  "concentration_r32.py",
+  "converter_r32.py",
+  "coverage_v4.py",
+  "dispatch_guard_r32.py",
+  "inputs_r32.py",
+  "labels_adapter_r32.py",
+  "lane_judge_r32.py",
+  "literal_compare_r32.py",
+  "model_identity_r38.py",
+  "page_relations_r38.py",
+  "r34_scenarios.py",
+  "run_set_selector_r32.py",
+  "sandbox_child_r32.py",
+  "state_check.py",
+  "stop_rules.py",
+  "test_capture_store.py",
+  "test_concentration_r32.py",
+  "test_converter_r32.py",
+  "test_dispatch_guard_r32.py",
+  "test_labels_adapter_r32.py",
+  "test_lane_judge_r32.py",
+  "test_literal_compare_r32.py",
+  "test_model_identity_r38.py",
+  "test_run_set_selector_r32.py",
+  "test_state_check.py",
+  "test_stop_rules.py",
+  "test_tripwire_r32.py",
+  "tripwire_r32.py"
+ ],
+ "written_at_utc": "2026-10-04T10:19:05+00:00"
+}

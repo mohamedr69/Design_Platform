@@ -1,0 +1,431 @@
+{
+  "declared_at_utc": "2026-09-30T18:13:23+00:00",
+  "name": "four-arm isolated accuracy experiment (R21)",
+  "status": "DRY-RUN DECLARATION (scripted provider over a SYNTHETIC stage; harness plumbing only) -- not an experiment",
+  "executed": false,
+  "new_model_budget_approved": false,
+  "authorization": {
+    "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+    "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+    "scope_note": "the recorded Round 2 permission covers the cohort / provider; a NEW request allowance is required and NOT granted by this declaration",
+    "projects_resolved": {
+      "16830": "exploration (new)",
+      "17428": "exploration (new)"
+    },
+    "sealed": "not opened"
+  },
+  "code": {
+    "accepted_app": {
+      "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+      "tree": "C:/t/iso/frozen-r12"
+    },
+    "successor": {
+      "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+      "tree": "C:/t/iso/cand-ai4",
+      "parent": "69ee75937bf190a0bf605dc0b79eecf29b0f3dc6",
+      "evidence_reader_sha256": "c04b173b0d68fc1fd96e603344387020bd38d1348a6542bf736b0ef88907d495"
+    },
+    "evaluator": {
+      "module": "scripts.m2_eval5",
+      "version": "m2-pilot-eval-2026-09-29.9",
+      "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+      "tree": "C:/t/iso/frozen-r12"
+    },
+    "coverage_scorer": {
+      "file": "score_arms_v3.py",
+      "sha256": "7022b6bab700180bc59d0f290a8c4d776a542a553b879b5c9d548e88795a933e",
+      "coverage_v3_sha256": "ab7c3cc6cd93e5be7f47d51ad82fd59ad19877318409f63050861bb4f2360ab0"
+    },
+    "runners": {
+      "arm_a.py": "b9d04205453c674740e907eaefba5828b47eec6cbdf08e834e1aca4277122f3f",
+      "arm_shares.py": "b40340bd59f3f530172187d86097804cdd0c41251358257bae12b577a55c8a7b",
+      "arm_ev.py": "4aa1ae7ad2c52c8741d958287cf2602bf7e9fbc0d7ecb4abeb18fe21cdd8fbc3"
+    },
+    "dry_provider": "c6d5263ed01d85409d8ac29bdce3da2812bf7c82060a6bac471d99d6db529a51",
+    "xtrack": "373147e2abe38c777ffe85e98543d309c4a98b0b74b7277dc129f7d50e59ae7c"
+  },
+  "arms": {
+    "L1": {
+      "meaning": "whole-page discovery, X off",
+      "tree": "C:/t/iso/cand-ai4",
+      "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+      "env": {
+        "AI_EVIDENCE_VARIANT": "EV1",
+        "AI_EVIDENCE_GUARD": "1",
+        "AI_EVIDENCE_SUPPORT": "v2",
+        "AI_EVIDENCE_SCHEDULING": "required_first",
+        "AI_EVIDENCE_DEADLINE": "1"
+      },
+      "identities": {
+        "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+deadline-2026-09-30.1",
+        "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+        "SCHEMA_VERSION": "evidence-schema-1",
+        "PROMPTS": {
+          "discover_page": "discover-2026-09-29.1",
+          "read_identity": "read-identity-2026-09-29.1",
+          "read_revision": "read-revision-2026-09-29.1",
+          "read_decision": "read-decision-2026-09-29.1",
+          "read_boq_row": "read-boq-row-2026-09-29.2"
+        },
+        "AUDIT_RATE": 0.2,
+        "AUDIT_SEED": "audit-2026-09-29",
+        "MAX_PAGES_PER_DOCUMENT": 4,
+        "MAX_CALLS_PER_DOCUMENT": 8,
+        "GUARD_ENABLED": true,
+        "TARGETED_ENABLED": false,
+        "EFFICIENT_ENABLED": false,
+        "SUPPORT_V2": true,
+        "REQUIRED_FIRST": true,
+        "DEADLINE_ENABLED": true,
+        "ROI_ENABLED": false
+      }
+    },
+    "L2": {
+      "meaning": "title-block (ROI) discovery, X off",
+      "tree": "C:/t/iso/cand-ai4",
+      "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+      "env": {
+        "AI_EVIDENCE_VARIANT": "EV1",
+        "AI_EVIDENCE_GUARD": "1",
+        "AI_EVIDENCE_SUPPORT": "v2",
+        "AI_EVIDENCE_SCHEDULING": "required_first",
+        "AI_EVIDENCE_DEADLINE": "1",
+        "AI_EVIDENCE_ROI": "1"
+      },
+      "identities": {
+        "READER_VERSION": "evidence-reader-2026-09-29.7+required-first-2026-09-30.1+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+        "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+roi-discovery-2026-09-30.1",
+        "SCHEMA_VERSION": "evidence-schema-1",
+        "PROMPTS": {
+          "discover_page": "discover-2026-09-29.1",
+          "read_identity": "read-identity-2026-09-29.1",
+          "read_revision": "read-revision-2026-09-29.1",
+          "read_decision": "read-decision-2026-09-29.1",
+          "read_boq_row": "read-boq-row-2026-09-29.2",
+          "discover_region": "discover-region-2026-09-30.1"
+        },
+        "AUDIT_RATE": 0.2,
+        "AUDIT_SEED": "audit-2026-09-29",
+        "MAX_PAGES_PER_DOCUMENT": 4,
+        "MAX_CALLS_PER_DOCUMENT": 8,
+        "GUARD_ENABLED": true,
+        "TARGETED_ENABLED": false,
+        "EFFICIENT_ENABLED": false,
+        "SUPPORT_V2": true,
+        "REQUIRED_FIRST": true,
+        "DEADLINE_ENABLED": true,
+        "ROI_ENABLED": true
+      }
+    },
+    "L3": {
+      "meaning": "whole-page discovery, X on",
+      "tree": "C:/t/iso/cand-ai4",
+      "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+      "env": {
+        "AI_EVIDENCE_VARIANT": "EV1",
+        "AI_EVIDENCE_GUARD": "1",
+        "AI_EVIDENCE_SUPPORT": "v2",
+        "AI_EVIDENCE_SCHEDULING": "required_first",
+        "AI_EVIDENCE_DEADLINE": "1",
+        "AI_EVIDENCE_TARGETED": "1"
+      },
+      "identities": {
+        "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+deadline-2026-09-30.1",
+        "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+        "SCHEMA_VERSION": "evidence-schema-1",
+        "PROMPTS": {
+          "discover_page": "discover-2026-09-29.1",
+          "read_identity": "read-identity-2026-09-29.1",
+          "read_revision": "read-revision-2026-09-29.1",
+          "read_decision": "read-decision-2026-09-29.1",
+          "read_boq_row": "read-boq-row-2026-09-29.2",
+          "read_field_context": "read-field-context-2026-09-30.1"
+        },
+        "AUDIT_RATE": 0.2,
+        "AUDIT_SEED": "audit-2026-09-29",
+        "MAX_PAGES_PER_DOCUMENT": 4,
+        "MAX_CALLS_PER_DOCUMENT": 8,
+        "GUARD_ENABLED": true,
+        "TARGETED_ENABLED": true,
+        "EFFICIENT_ENABLED": false,
+        "SUPPORT_V2": true,
+        "REQUIRED_FIRST": true,
+        "DEADLINE_ENABLED": true,
+        "ROI_ENABLED": false
+      }
+    },
+    "L4": {
+      "meaning": "ROI discovery, X on",
+      "tree": "C:/t/iso/cand-ai4",
+      "commit": "719e8de661b8b10427ef6cff5d2d277a53b64dc6",
+      "env": {
+        "AI_EVIDENCE_VARIANT": "EV1",
+        "AI_EVIDENCE_GUARD": "1",
+        "AI_EVIDENCE_SUPPORT": "v2",
+        "AI_EVIDENCE_SCHEDULING": "required_first",
+        "AI_EVIDENCE_DEADLINE": "1",
+        "AI_EVIDENCE_ROI": "1",
+        "AI_EVIDENCE_TARGETED": "1"
+      },
+      "identities": {
+        "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.2+roi-discovery-2026-09-30.1+deadline-2026-09-30.1",
+        "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2+roi-discovery-2026-09-30.1",
+        "SCHEMA_VERSION": "evidence-schema-1",
+        "PROMPTS": {
+          "discover_page": "discover-2026-09-29.1",
+          "read_identity": "read-identity-2026-09-29.1",
+          "read_revision": "read-revision-2026-09-29.1",
+          "read_decision": "read-decision-2026-09-29.1",
+          "read_boq_row": "read-boq-row-2026-09-29.2",
+          "read_field_context": "read-field-context-2026-09-30.1",
+          "discover_region": "discover-region-2026-09-30.1"
+        },
+        "AUDIT_RATE": 0.2,
+        "AUDIT_SEED": "audit-2026-09-29",
+        "MAX_PAGES_PER_DOCUMENT": 4,
+        "MAX_CALLS_PER_DOCUMENT": 8,
+        "GUARD_ENABLED": true,
+        "TARGETED_ENABLED": true,
+        "EFFICIENT_ENABLED": false,
+        "SUPPORT_V2": true,
+        "REQUIRED_FIRST": true,
+        "DEADLINE_ENABLED": true,
+        "ROI_ENABLED": true
+      }
+    }
+  },
+  "doc_arms": [
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "common": {
+    "G": true,
+    "support": "v2 (rotation-correct clip + bounded local OCR)",
+    "scheduling": "required_first",
+    "deadline": "min(provider timeout, remaining job time); 20 s floor; OCR bound"
+  },
+  "pairs": {
+    "ROI alone": [
+      "L1",
+      "L2"
+    ],
+    "X on whole page": [
+      "L1",
+      "L3"
+    ],
+    "X on ROI": [
+      "L2",
+      "L4"
+    ],
+    "ROI under X": [
+      "L3",
+      "L4"
+    ]
+  },
+  "offline_replays": "on each arm's own captured responses: P0 (guard off, accepted text) -> P1 (+guard) -> P2 (+rotation clip) -> P3 (+local OCR): conditional field-value re-validation on fixed responses, never a replay of requests, images, scheduling or deadlines",
+  "expected_call_order": {
+    "all arms": "per triggered page: discover_page (L1/L3) or discover_region (L2/L4) -> read_identity -> read_revision -> read_decision (when a block was discovered); then, L3/L4 only, page by page: read_field_context for own identity, then revision, when not validated and no failure / refusal preceded"
+  },
+  "sources": {
+    "stage": {
+      "root": "C:/t/r2x/dry-runs/r21-stage",
+      "manifest": "R21-DRY-STAGE.json",
+      "manifest_sha256": "b3db813d7f2d892436dec9777fe49d5f745a25d1d65761996208e71ef494d6dc"
+    },
+    "sample": {
+      "documents": {
+        "EP-16830/synth/rot270-sheet.pdf": "8393be2040acff4506160db0940e3559107cd93f2681b0b54c99587ee0719364",
+        "EP-16830/synth/long-6pages.pdf": "05c933457a519122b7a082898baa71006c26900d54d5dfe2599e4ef866a7577d",
+        "EP-17428/synth/a4-letter.pdf": "2e3caee669cac9ac797edea26e790fc98fbd5f2cfbc8a86e3d913e9e0bebf5bc",
+        "EP-17428/synth/stamp-outside.pdf": "05f3e4a310384721d5222bf080b3d5f3d7edc685444f26edb3682feea7d8a8a9",
+        "EP-17428/synth/note.docx": "5b124ad0df83475add4d55fad67ecd8e890bbdd5dbd8f957587125646fac72d6"
+      },
+      "documents_planned": [
+        {
+          "doc": "EP-16830/synth/rot270-sheet.pdf",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pages": 1,
+          "extension": ".pdf"
+        },
+        {
+          "doc": "EP-16830/synth/long-6pages.pdf",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pages": 6,
+          "extension": ".pdf"
+        },
+        {
+          "doc": "EP-17428/synth/a4-letter.pdf",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pages": 1,
+          "extension": ".pdf"
+        },
+        {
+          "doc": "EP-17428/synth/stamp-outside.pdf",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pages": 1,
+          "extension": ".pdf"
+        },
+        {
+          "doc": "EP-17428/synth/note.docx",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pages": null,
+          "extension": ".docx"
+        }
+      ],
+      "n_planned": 5
+    }
+  },
+  "stage": {
+    "root": "C:/t/r2x/dry-runs/r21-stage",
+    "manifest": "R21-DRY-STAGE.json",
+    "manifest_sha256": "b3db813d7f2d892436dec9777fe49d5f745a25d1d65761996208e71ef494d6dc"
+  },
+  "labels": {
+    "dir": "labels-dry",
+    "register": "DRY-REGISTER-LABELS.json",
+    "page": "DRY-PAGE-LABELS.json",
+    "uncertainty": "DRY-UNCERTAINTY-AND-EXPOSURE.json",
+    "files": {
+      "DRY-REGISTER-LABELS.json": "273d43f8750d997aed0add80949f5a7eea8fc1b003c79a9be53a6ea928145369",
+      "DRY-PAGE-LABELS.json": "57fd489161d7a0b34515bed4cbbcc67980bae51c63565d432f79eeec20fb6fdc",
+      "DRY-UNCERTAINTY-AND-EXPOSURE.json": "ff9b0c8aa015b5074871b6ee343f06b13f32644217e3212e45d49f04ceb17712"
+    }
+  },
+  "provider": {
+    "adapter": "claude-code (the existing evaluation provider)",
+    "cli_version": "2.1.263 (Claude Code)",
+    "aliases": {
+      "small": "sonnet",
+      "standard": "opus"
+    },
+    "env": {
+      "AI_PROVIDER": "claude-code",
+      "AI_MODEL_SMALL": "sonnet",
+      "AI_MODEL_STANDARD": "opus"
+    },
+    "actual_model": "recorded per response"
+  },
+  "application_limits": {
+    "ai_max_input_tokens_per_task": 6000,
+    "ai_max_output_tokens_per_task": 800,
+    "ai_max_calls_per_document": 12,
+    "ai_max_calls_per_project_per_day": 60,
+    "ai_max_cost_per_job": 0.5,
+    "ai_max_elapsed_s_per_job": 120.0,
+    "ai_max_escalations_per_document": 2,
+    "ai_max_concurrency": 2,
+    "ai_max_retries": 3,
+    "ai_cli_timeout_s": 300.0,
+    "ai_price_input_per_million": 0.0,
+    "ai_price_output_per_million": 0.0,
+    "ai_price_cached_input_per_million": 0.0,
+    "ai_cache_ttl_days": 90
+  },
+  "ledger": {
+    "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+    "scopes": {
+      "A": {
+        "scope": "r21-four-arm-dry-2026-09-30-A",
+        "limits": {
+          "per_request_input": 70000,
+          "per_request_output": 20000,
+          "input_tokens": 4000000,
+          "output_tokens": 600000,
+          "elapsed_s": 14400,
+          "requests": 4
+        },
+        "env": {
+          "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+          "AI_LEDGER_SCOPE": "r21-four-arm-dry-2026-09-30-A",
+          "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 4}"
+        }
+      },
+      "L1": {
+        "scope": "r21-four-arm-dry-2026-09-30-L1",
+        "limits": {
+          "per_request_input": 70000,
+          "per_request_output": 20000,
+          "input_tokens": 4000000,
+          "output_tokens": 600000,
+          "elapsed_s": 14400,
+          "requests": 30
+        },
+        "env": {
+          "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+          "AI_LEDGER_SCOPE": "r21-four-arm-dry-2026-09-30-L1",
+          "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 30}"
+        }
+      },
+      "L2": {
+        "scope": "r21-four-arm-dry-2026-09-30-L2",
+        "limits": {
+          "per_request_input": 70000,
+          "per_request_output": 20000,
+          "input_tokens": 4000000,
+          "output_tokens": 600000,
+          "elapsed_s": 14400,
+          "requests": 30
+        },
+        "env": {
+          "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+          "AI_LEDGER_SCOPE": "r21-four-arm-dry-2026-09-30-L2",
+          "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 30}"
+        }
+      },
+      "L3": {
+        "scope": "r21-four-arm-dry-2026-09-30-L3",
+        "limits": {
+          "per_request_input": 70000,
+          "per_request_output": 20000,
+          "input_tokens": 4000000,
+          "output_tokens": 600000,
+          "elapsed_s": 14400,
+          "requests": 30
+        },
+        "env": {
+          "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+          "AI_LEDGER_SCOPE": "r21-four-arm-dry-2026-09-30-L3",
+          "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 30}"
+        }
+      },
+      "L4": {
+        "scope": "r21-four-arm-dry-2026-09-30-L4",
+        "limits": {
+          "per_request_input": 70000,
+          "per_request_output": 20000,
+          "input_tokens": 4000000,
+          "output_tokens": 600000,
+          "elapsed_s": 14400,
+          "requests": 30
+        },
+        "env": {
+          "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+          "AI_LEDGER_SCOPE": "r21-four-arm-dry-2026-09-30-L4",
+          "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 30}"
+        }
+      }
+    },
+    "caps": {
+      "A": 4,
+      "L1": 30,
+      "L2": 30,
+      "L3": 30,
+      "L4": 30
+    },
+    "sum_caps": 124,
+    "note": "a NEW scope family; the original 150-request experiment's residual is not used; nothing here is reserved until authorized"
+  },
+  "project_day": {
+    "limit": 60,
+    "rule": "after A: share(ep) = floor((60 - used(ep)) / 4) per arm; the worst-case schedule is in the workload table"
+  },
+  "stop_rules": [
+    "critical acceptance by the arm's AI on a resolved label: stop the arm",
+    "three consecutive provider failures",
+    "any breaker / ledger / share / cap refusal: a budget stop, never raised",
+    "undeclared source, changed hash, sealed project, existing sandbox, changed declaration: refuse to start"
+  ],
+  "cache_mode": "result cache on; arms start from copies of one A base; distinct reader / policy / prompt identities per arm: no cross-arm reuse"
+}

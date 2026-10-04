@@ -44,7 +44,8 @@ settings = get_settings()
 
 # Part of every cache key: a change to how a sheet is read is a change to
 # what a cached result means.
-PARSER_VERSION = "2026-09-28.1"   # M2 review 02: band rows, quantity recheck < 90 %, part-number check, heading carry-over
+PARSER_VERSION = "2026-09-28.2"   # M2 review 05: correlated part-number agreement is not confirmation; item-number and misassigned columns held
+# 2026-09-28.1 -- M2 review 02: band rows, quantity recheck < 90 %, part-number check, heading carry-over
 if settings.tesseract_cmd:
     pytesseract.pytesseract.tesseract_cmd = settings.tesseract_cmd
 
@@ -528,6 +529,10 @@ class DesignSheetExtraction:
     # it, when one did. A partial read's lines are what was settled; its
     # rows still pending are review rows that a resumed read settles.
     state: str = "completed"
+    # False where no reader looked at the sheet at all -- the model switched off or unavailable, the file not
+    # there -- as against a sheet read and found unreadable. A read nothing attempted is not a completed read:
+    # it is not stamped as the project's BOQ read, and its sheet's lines are not re-read away (M2 review 05).
+    attempted: bool = True
     budget_exhausted: str | None = None
 
     @property
@@ -791,6 +796,12 @@ def _confirm_catalog(image: Image.Image, line: ExtractedBoqLine, catalog_span: t
         return o.upper() not in strip.upper() and len(o) >= 0.6 * len(strip)
 
     agreed = len(others) >= 2 and len(set(_part_key(o) for o in others)) == 1 and whole(others[0])
+    # The passes read the strip's own pixels again with the same engine, preprocessed two ways: when the
+    # strip itself was unsure, their agreeing is the same misreading repeated, not a second witness. On the
+    # pilot's frozen sheets, 8 of the 64 strip reads under 90 % that both passes "confirmed" were wrong --
+    # KCW019ML-IP65 read KCWO019ML-IP65 at 51 % by the strip and both passes (EP-19977), G1ARN read GIARN,
+    # CTR160 read CTRI60 (M2 review 05, R5-04). Agreement stays recorded; it no longer accepts the row.
+    correlated = confirmed and line.catalog_confidence is not None and line.catalog_confidence < RECHECK_QUANTITY_BELOW
     # a near miss: the same length, one or two characters read as others
     # (I for 1, O for 0, Z for 2); a separator more or fewer (a wrap's "-")
     # is the pass's own artefact, not another part
@@ -806,6 +817,11 @@ def _confirm_catalog(image: Image.Image, line: ExtractedBoqLine, catalog_span: t
         # every pass read.
         line.catalog_uncertain = True
         line.catalog_check = {"confirmed": False, "multiline": multiline, "reason": "no independent pass read the whole part number"}
+    elif correlated:
+        line.catalog_uncertain = True
+        line.catalog_check = {"confirmed": False, "multiline": multiline, "agreement": "correlated",
+                              "reason": f"the strip read it at {line.catalog_confidence:.0f}% and the passes that agree read the same "
+                                        "pixels with the same engine: repeated, not independent, evidence"}
     else:
         line.catalog_check = {"confirmed": True, "multiline": multiline, "reason": "an independent pass read the same part number"}
 
@@ -1049,6 +1065,7 @@ def extract_design_sheet(pdf_path: Path, on_page=None) -> DesignSheetExtraction:
                                     f"(y {region.top}-{region.bottom}) was read as {region.rows_accepted} row(s)")
         read.extend(page_lines)
 
+    _hold_implausible_columns(read, result.notes)
     result.buildings = settle_identity(read)
 
     # A BOQ line is something being quoted in some amount, so a row whose
@@ -1077,6 +1094,60 @@ def extract_design_sheet(pdf_path: Path, on_page=None) -> DesignSheetExtraction:
         result.issues.append(Issue(IssueCode.UNRECOGNIZED_TABLE_LAYOUT, detail={"pages": document.page_count}))
         result.lines = []
     return result
+
+
+# A run of this many rows whose "quantities" count 1, 2, 3 ... is the item-number column, not quantities.
+ITEM_NUMBER_RUN = 5
+
+
+def _hold_implausible_columns(lines: list[ExtractedBoqLine], notes: list[str]) -> None:
+    """Hold rows whose columns do not read as a BOQ's, for the engineer, with the cell and what was read
+    (M2 review 05, R5-04). Two checks on what a column holds, never on what a value should be:
+
+    - a quantity column that counts 1, 2, 3 ... down consecutive rows is the item numbers (EP-26369's
+      MS FAS BOQ, laid out Item | Model | Description | Quantity: items 1-13 read as quantities 1-13).
+      Once a run shows it, every row the same column layout gives is held, on every page: the column
+      is the item column throughout, whatever the shorter sections happen to count;
+    - a table whose descriptions are mostly bare numbers has its columns crossed (EP-26082's aspiration
+      sheet: part numbers read as quantities, quantities as descriptions).
+
+    Nothing is dropped: each held row's quantity is set aside with the reason, so it becomes a review row
+    with its cell (`_dropped_row_issue`). Runs over the whole sheet, after every page is read."""
+    def hold(line: ExtractedBoqLine, rule: str) -> None:
+        line.quantity_parse = {**(line.quantity_parse or {}), "status": values.AMBIGUOUS, "held_quantity": line.quantity, "rule": rule}
+        line.quantity = None
+
+    def counted(line: ExtractedBoqLine) -> str | None:
+        value = line.quantity or line.raw_quantity
+        value = (value or "").strip()
+        return value if value.isdigit() else None
+
+    by_table: dict[tuple, list[ExtractedBoqLine]] = {}
+    for line in lines:
+        by_table.setdefault((line.page, line.table_span), []).append(line)
+    item_columns: dict[tuple | None, str] = {}
+    for (page, span), rows in by_table.items():
+        rows = sorted(rows, key=lambda l: l.y_px or 0)
+        numeric = [l for l in rows if re.fullmatch(r"\d[\d.,]*", (l.description or "").strip())]
+        if len(rows) >= 3 and len(numeric) >= 0.6 * len(rows):
+            for line in rows:
+                if line.quantity:
+                    hold(line, "the table's description column reads as numbers: its columns do not read as a BOQ's")
+            notes.append(f"page {page}: a table of {len(rows)} rows whose descriptions are numbers was held for review")
+            continue
+        run: list[ExtractedBoqLine] = []
+        for line in [l for l in rows if counted(l)] + [None]:
+            if line is not None and run and int(counted(line)) == int(counted(run[-1])) + 1:
+                run.append(line)
+                continue
+            if len(run) >= ITEM_NUMBER_RUN and span not in item_columns:
+                item_columns[span] = f"page {page}: the quantity column counts {counted(run[0])}..{counted(run[-1])} down {len(run)} rows"
+            run = [line] if line is not None else []
+    for span, why in item_columns.items():
+        held = [l for l in lines if l.table_span == span and l.quantity]
+        for line in held:
+            hold(line, f"{why}: it reads as the item numbers, not quantities, wherever this column layout is read")
+        notes.append(f"{why}; {len(held)} rows read in that column layout were held for review")
 
 
 def settle_identity(read: list[ExtractedBoqLine]) -> list[dict]:

@@ -356,8 +356,20 @@ def staleness(kept: dict, sha256: str | None):
 CARRIED_UNVISITED = "carried_unvisited"
 CARRIED_UNVERIFIED = "carried_unverified"
 CARRIED_OTHER_PROFILE = "carried_other_profile"
-CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE)
+CARRIED_OTHER_PARSER = "carried_other_parser"
+CARRY_FLAGS = (CARRIED_UNVISITED, CARRIED_UNVERIFIED, CARRIED_OTHER_PROFILE, CARRIED_OTHER_PARSER)
 RETAINED_METHOD = "retained"
+
+
+def parser_compatible(version: str | None) -> bool:
+    """Whether a record read under `version` may stand as read by the parser
+    as it is now (M2 review 04, R4-01). The contract is explicit and narrow:
+    only the current `document_control.PARSER_VERSION` is compatible with
+    itself; an earlier or an unknown version is not, whatever it read -- a
+    known defect of an earlier parser would otherwise stand for ever on a
+    page the current parser never visited. (A future version may name the
+    versions whose records it accepts; none does now.)"""
+    return version is not None and version == document_control.PARSER_VERSION
 
 
 def retained_provenance(record: dict, kept: dict) -> dict:
@@ -407,18 +419,22 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
         retained = retained_provenance(record, kept)
         unverified = retained["source_sha256"] is None or retained["source_sha256"] != sha256
         other_profile = profile is not None and (retained["profile"] is None or retained["profile"] != profile)
+        other_parser = not parser_compatible(retained.get("parser_version"))
         flags = [f for f in (record.get("flags") or []) if f not in CARRY_FLAGS] + [CARRIED_UNVISITED]
         if unverified:
             flags.append(CARRIED_UNVERIFIED)
         if other_profile:
             flags.append(CARRIED_OTHER_PROFILE)
+        if other_parser:
+            flags.append(CARRIED_OTHER_PARSER)
         new = {**record, "flags": flags, "retained": retained}
         candidates = [list(c) for c in (record.get("decision_candidates") or [])]
         held = next((c for c in candidates if len(c) == 3 and c[2] == RETAINED_METHOD), None)
-        if unverified or other_profile:
+        if unverified or other_profile or other_parser:
             status = record.get("status")
             if status not in (None, "UR") and held is None:
-                why = f"retained from a {retained['profile'] or 'unknown-profile'} reading of " + ("other bytes" if unverified else "these bytes")
+                why = (f"retained from a {retained['profile'] or 'unknown-profile'} reading by {retained.get('parser_version') or 'an unknown parser'} of "
+                       + ("other bytes" if unverified else "these bytes"))
                 candidates.append([status, why, RETAINED_METHOD])
             new["status"] = "UR"
             new["decision_candidates"] = candidates
@@ -431,11 +447,13 @@ def carry_unvisited(kept: dict | None, coverage: dict | None, sha256: str | None
         return [], None
     pages = sorted({r.get("page") for r in carried if r.get("page") is not None})
     unverified_n = sum(1 for r in carried if CARRIED_UNVERIFIED in r["flags"]); other_n = sum(1 for r in carried if CARRIED_OTHER_PROFILE in r["flags"])
+    parser_n = sum(1 for r in carried if CARRIED_OTHER_PARSER in r["flags"])
     note = (f"{len(carried)} record{'s' if len(carried) != 1 else ''} on page{'s' if len(pages) != 1 else ''} "
             f"{', '.join(str(p) for p in pages) if pages else 'unknown'} not visited by this reading "
             f"{'were' if len(carried) != 1 else 'was'} kept from the previous reading"
             + (f"; {unverified_n} read from other or unknown bytes (unverified)" if unverified_n else "")
-            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "") + ".")
+            + (f"; {other_n} read under another or unknown extraction profile (decision held)" if other_n else "")
+            + (f"; {parser_n} read by another or unknown parser (decision held until the page is read again)" if parser_n else "") + ".")
     return carried, note
 
 
@@ -448,8 +466,11 @@ def retained_summary(records: list[dict]) -> dict | None:
     if not kept:
         return None
     return {"records": len(kept), "pages": sorted({r.get("page") for r in kept if r.get("page") is not None}),
+            # a mixed reading: some record of it stands under another profile or parser than the envelope's
+            "mixed": any(CARRIED_OTHER_PROFILE in r["flags"] or CARRIED_OTHER_PARSER in r["flags"] for r in kept),
             "unverified": sum(1 for r in kept if CARRIED_UNVERIFIED in r["flags"]),
             "other_profile": sum(1 for r in kept if CARRIED_OTHER_PROFILE in r["flags"]),
+            "other_parser": sum(1 for r in kept if CARRIED_OTHER_PARSER in r["flags"]),
             "sources": sorted({json.dumps({k: (r.get("retained") or {}).get(k) for k in ("source_sha256", "parser_version", "profile")}, sort_keys=True) for r in kept})}
 
 

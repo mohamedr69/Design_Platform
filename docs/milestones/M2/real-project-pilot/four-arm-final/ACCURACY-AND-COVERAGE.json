@@ -1,0 +1,540 @@
+{
+ "declaration_sha256": "6c0189b3dc30e721c318a5df44fac3507c5804430c85d3bdf6f23615002a70c1",
+ "scorer": "score-arms-2026-09-30.v4",
+ "evaluator": "m2-pilot-eval-2026-09-29.9",
+ "contract": "harness-contract-2026-09-30.v4",
+ "denominators": {
+  "documents_planned": 27,
+  "pdf_documents": 26,
+  "in_scope_pages": 42,
+  "pages_beyond_reader_scope": 54,
+  "unsupported_documents": [
+   "D27"
+  ]
+ },
+ "decision_no_fact_values": "UR and n/a are treated as 'no consultant decision' for absence classification",
+ "arms": {
+  "L1": {
+   "tag": "final-L1",
+   "fields": {
+    "identity": {
+     "counts": {
+      "pages": 42,
+      "class:not_attempted": 11,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:completed_read": 8,
+      "field_read_completed": 8,
+      "class:budget": 6,
+      "class:no_region": 3,
+      "class:discovery_absent": 1,
+      "verified_absence": 1,
+      "class:unusable": 1,
+      "unsupported_document": 1,
+      "held_candidate": 12,
+      "held_wrong": 4,
+      "held_correct": 7,
+      "accepted_fact": 2,
+      "accepted_correct": 2,
+      "held_on_negative": 1
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 14,
+      "missed": 12,
+      "held_only": 5
+     },
+     "accepted_precision": "14/14",
+     "documents_usable_on_all_in_scope_pages": 6
+    },
+    "revision": {
+     "counts": {
+      "pages": 42,
+      "class:not_attempted": 11,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:completed_read": 5,
+      "field_read_completed": 5,
+      "class:budget": 6,
+      "class:no_region": 4,
+      "class:unusable": 1,
+      "class:discovery_absent": 3,
+      "verified_absence": 1,
+      "wrong_absence": 2,
+      "unsupported_document": 1,
+      "accepted_fact": 2,
+      "accepted_correct": 2,
+      "held_candidate": 4,
+      "held_correct": 3,
+      "held_on_negative": 1
+     },
+     "wrong_absence_pages": [
+      "D24 p1",
+      "D25 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 12,
+      "tn": 6,
+      "missed": 8,
+      "held_only": 4,
+      "wrong_only": 1
+     },
+     "accepted_precision": "12/13",
+     "documents_usable_on_all_in_scope_pages": 5
+    },
+    "decision": {
+     "counts": {
+      "pages": 42,
+      "class:not_attempted": 11,
+      "class:not_selected_by_policy": 12,
+      "class:completed_read": 1,
+      "field_read_completed": 1,
+      "pages_with_fact": 7,
+      "class:budget": 6,
+      "class:discovery_absent": 10,
+      "verified_absence": 9,
+      "wrong_absence": 1,
+      "class:failed": 1,
+      "class:no_region": 1,
+      "unsupported_document": 1,
+      "held_candidate": 1,
+      "held_correct": 1
+     },
+     "wrong_absence_pages": [
+      "D16 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 6
+     },
+     "accepted_precision": "no accepted fact",
+     "documents_usable_on_all_in_scope_pages": 7
+    }
+   },
+   "document_states": {
+    "incomplete": 22,
+    "complete": 4,
+    "unsupported_input": 1
+   },
+   "required_complete_documents": [
+    "D04",
+    "D16",
+    "D20",
+    "D24"
+   ],
+   "populations": {
+    "unsupported_documents": 1,
+    "incomplete_documents": 22,
+    "page_fields_budget": 18,
+    "page_fields_not_attempted": 33,
+    "page_fields_beyond_scope": 162
+   },
+   "valid_accuracy_claim_flag": true,
+   "valid_flag_meaning": "technical only: some eligible evidence exists; it is not statistical or product validity"
+  },
+  "L2": {
+   "tag": "final-L2",
+   "fields": {
+    "identity": {
+     "counts": {
+      "pages": 42,
+      "class:completed_read": 15,
+      "field_read_completed": 15,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:unusable": 3,
+      "class:no_region": 3,
+      "class:not_attempted": 4,
+      "class:located_incomplete": 1,
+      "class:budget": 3,
+      "class:discovery_absent": 1,
+      "verified_absence": 1,
+      "unsupported_document": 1,
+      "accepted_fact": 9,
+      "accepted_correct": 9,
+      "held_candidate": 13,
+      "held_on_negative": 4,
+      "held_wrong": 4,
+      "held_correct": 5
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 20,
+      "missed": 7,
+      "held_only": 4
+     },
+     "accepted_precision": "20/20",
+     "documents_usable_on_all_in_scope_pages": 12
+    },
+    "revision": {
+     "counts": {
+      "pages": 42,
+      "class:completed_read": 12,
+      "field_read_completed": 12,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 4,
+      "verified_absence": 2,
+      "class:unusable": 2,
+      "class:not_attempted": 4,
+      "class:located_incomplete": 1,
+      "class:budget": 3,
+      "class:no_region": 4,
+      "wrong_absence": 2,
+      "unsupported_document": 1,
+      "accepted_fact": 9,
+      "accepted_correct": 8,
+      "held_candidate": 4,
+      "held_correct": 2,
+      "accepted_wrong": 1,
+      "held_on_negative": 2
+     },
+     "wrong_absence_pages": [
+      "D24 p1",
+      "D25 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 14,
+      "tn": 6,
+      "held_only": 4,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "accepted_precision": "14/16",
+     "documents_usable_on_all_in_scope_pages": 11
+    },
+    "decision": {
+     "counts": {
+      "pages": 42,
+      "class:located_incomplete": 9,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 9,
+      "verified_absence": 9,
+      "class:completed_read": 6,
+      "field_read_completed": 6,
+      "pages_with_fact": 7,
+      "class:not_attempted": 4,
+      "class:budget": 2,
+      "unsupported_document": 1,
+      "held_candidate": 1,
+      "held_correct": 1,
+      "accepted_fact": 1,
+      "accepted_correct": 1
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "accepted_precision": "1/1",
+     "documents_usable_on_all_in_scope_pages": 7
+    }
+   },
+   "document_states": {
+    "incomplete": 22,
+    "complete": 4,
+    "unsupported_input": 1
+   },
+   "required_complete_documents": [
+    "D04",
+    "D09",
+    "D20",
+    "D24"
+   ],
+   "populations": {
+    "unsupported_documents": 1,
+    "incomplete_documents": 22,
+    "page_fields_budget": 8,
+    "page_fields_not_attempted": 12,
+    "page_fields_beyond_scope": 162
+   },
+   "valid_accuracy_claim_flag": true,
+   "valid_flag_meaning": "technical only: some eligible evidence exists; it is not statistical or product validity"
+  },
+  "L3": {
+   "tag": "final-L3",
+   "fields": {
+    "identity": {
+     "counts": {
+      "pages": 42,
+      "class:completed_read": 16,
+      "field_read_completed": 16,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 2,
+      "verified_absence": 2,
+      "class:no_region": 2,
+      "class:not_attempted": 5,
+      "class:budget": 4,
+      "class:unusable": 1,
+      "unsupported_document": 1,
+      "held_candidate": 16,
+      "held_correct": 9,
+      "held_wrong": 4,
+      "accepted_fact": 6,
+      "accepted_correct": 6,
+      "held_on_negative": 3
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 19,
+      "missed": 6,
+      "held_only": 6
+     },
+     "accepted_precision": "19/19",
+     "documents_usable_on_all_in_scope_pages": 13
+    },
+    "revision": {
+     "counts": {
+      "pages": 42,
+      "class:budget": 6,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 5,
+      "verified_absence": 2,
+      "class:completed_read": 10,
+      "field_read_completed": 10,
+      "class:unusable": 1,
+      "class:not_attempted": 5,
+      "wrong_absence": 3,
+      "class:no_region": 3,
+      "unsupported_document": 1,
+      "accepted_fact": 5,
+      "accepted_correct": 5,
+      "held_candidate": 8,
+      "held_correct": 4,
+      "held_wrong": 1,
+      "held_on_negative": 3
+     },
+     "wrong_absence_pages": [
+      "D21 p1",
+      "D24 p1",
+      "D25 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 13,
+      "tn": 6,
+      "held_only": 5,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "accepted_precision": "13/14",
+     "documents_usable_on_all_in_scope_pages": 11
+    },
+    "decision": {
+     "counts": {
+      "pages": 42,
+      "class:discovery_absent": 17,
+      "verified_absence": 16,
+      "class:not_selected_by_policy": 12,
+      "class:completed_read": 5,
+      "field_read_completed": 5,
+      "pages_with_fact": 7,
+      "class:not_attempted": 5,
+      "class:budget": 2,
+      "wrong_absence": 1,
+      "class:no_region": 1,
+      "unsupported_document": 1,
+      "held_candidate": 1,
+      "held_correct": 1,
+      "accepted_fact": 1,
+      "accepted_correct": 1
+     },
+     "wrong_absence_pages": [
+      "D18 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "accepted_precision": "1/1",
+     "documents_usable_on_all_in_scope_pages": 16
+    }
+   },
+   "document_states": {
+    "incomplete": 15,
+    "complete": 11,
+    "unsupported_input": 1
+   },
+   "required_complete_documents": [
+    "D04",
+    "D05",
+    "D06",
+    "D07",
+    "D09",
+    "D11",
+    "D12",
+    "D20",
+    "D21",
+    "D23",
+    "D24"
+   ],
+   "populations": {
+    "unsupported_documents": 1,
+    "incomplete_documents": 15,
+    "page_fields_budget": 12,
+    "page_fields_not_attempted": 15,
+    "page_fields_beyond_scope": 162
+   },
+   "valid_accuracy_claim_flag": true,
+   "valid_flag_meaning": "technical only: some eligible evidence exists; it is not statistical or product validity"
+  },
+  "L4": {
+   "tag": "final-L4",
+   "fields": {
+    "identity": {
+     "counts": {
+      "pages": 42,
+      "class:completed_read": 19,
+      "field_read_completed": 19,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:budget": 6,
+      "class:not_attempted": 3,
+      "class:located_incomplete": 1,
+      "class:discovery_absent": 1,
+      "verified_absence": 1,
+      "unsupported_document": 1,
+      "accepted_fact": 12,
+      "accepted_correct": 11,
+      "accepted_wrong": 1,
+      "held_candidate": 10,
+      "held_wrong": 6,
+      "held_correct": 3,
+      "held_on_negative": 1
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 23,
+      "missed": 7,
+      "held_only": 1
+     },
+     "accepted_precision": "23/24",
+     "documents_usable_on_all_in_scope_pages": 13
+    },
+    "revision": {
+     "counts": {
+      "pages": 42,
+      "class:completed_read": 12,
+      "field_read_completed": 12,
+      "pages_with_fact": 30,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 5,
+      "verified_absence": 2,
+      "class:budget": 5,
+      "class:located_incomplete": 2,
+      "class:not_attempted": 3,
+      "wrong_absence": 3,
+      "class:no_region": 3,
+      "unsupported_document": 1,
+      "accepted_fact": 6,
+      "accepted_correct": 6,
+      "held_candidate": 6,
+      "held_correct": 5,
+      "held_on_negative": 1
+     },
+     "wrong_absence_pages": [
+      "D21 p1",
+      "D24 p1",
+      "D25 p1"
+     ],
+     "evaluator_recovery_counts": {
+      "recovered_clean": 13,
+      "tn": 6,
+      "held_only": 5,
+      "missed": 6,
+      "wrong_only": 1
+     },
+     "accepted_precision": "13/14",
+     "documents_usable_on_all_in_scope_pages": 13
+    },
+    "decision": {
+     "counts": {
+      "pages": 42,
+      "class:located_incomplete": 10,
+      "class:not_selected_by_policy": 12,
+      "class:discovery_absent": 8,
+      "verified_absence": 8,
+      "class:completed_read": 3,
+      "field_read_completed": 3,
+      "pages_with_fact": 7,
+      "class:budget": 5,
+      "class:not_attempted": 3,
+      "class:no_region": 1,
+      "unsupported_document": 1,
+      "held_candidate": 1,
+      "held_correct": 1,
+      "accepted_fact": 1,
+      "accepted_correct": 1
+     },
+     "wrong_absence_pages": [],
+     "evaluator_recovery_counts": {
+      "tn": 24,
+      "held_only": 1,
+      "missed": 5,
+      "recovered_clean": 1
+     },
+     "accepted_precision": "1/1",
+     "documents_usable_on_all_in_scope_pages": 5
+    }
+   },
+   "document_states": {
+    "incomplete": 21,
+    "complete": 5,
+    "unsupported_input": 1
+   },
+   "required_complete_documents": [
+    "D04",
+    "D20",
+    "D21",
+    "D23",
+    "D24"
+   ],
+   "populations": {
+    "unsupported_documents": 1,
+    "incomplete_documents": 21,
+    "page_fields_budget": 16,
+    "page_fields_not_attempted": 9,
+    "page_fields_beyond_scope": 162
+   },
+   "valid_accuracy_claim_flag": true,
+   "valid_flag_meaning": "technical only: some eligible evidence exists; it is not statistical or product validity"
+  }
+ },
+ "A": {
+  "note": "the accepted application path, evidence reader off; deterministic + existing AI layer only",
+  "recovery_all_planned": {
+   "identity": {
+    "recovery": {
+     "recovered_clean": 13,
+     "missed": 18
+    },
+    "precision_numerator": 13,
+    "precision_denominator": 13
+   },
+   "revision": {
+    "recovery": {
+     "recovered_clean": 10,
+     "tn": 6,
+     "missed": 14,
+     "wrong_only": 1
+    },
+    "precision_numerator": 10,
+    "precision_denominator": 11
+   },
+   "decision": {
+    "recovery": {
+     "tn": 24,
+     "missed": 7
+    },
+    "precision_numerator": 0,
+    "precision_denominator": 0
+   }
+  }
+ }
+}

@@ -1,0 +1,1272 @@
+{
+ "note": "SYNTHETIC lane results built from the frozen truth itself (correct values copied from it, wrong values invented); no application reader, no model, no prediction; these exercise score_bcr_r32 and concentration_r32 on the real run-set structure and are NOT results",
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "scenarios": {
+  "S1 uniform gain (C clean on every scorable value row)": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.8125
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.9375
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 23 over 23 matched documents; largest project share of the gain 0.2609 (EP-27331); largest contractor share of the gain 0.2609 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.2609 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.2609
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.5652
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.2609
+      ],
+      "project": [
+       "EP-27331",
+       0.2609
+      ],
+      "stratum": [
+       "review_signal",
+       0.6522
+      ]
+     },
+     "net_gain": 23,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.6875
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.75
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    }
+   },
+   "critical_C": {
+    "resolved": [],
+    "unresolved": 0
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 16,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [],
+    "identity": [],
+    "revision": []
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 4.4,
+    "net_correct_facts": 55,
+    "passes": true
+   }
+  },
+  "S2 gain concentrated in EP-27331": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 7 over 16 matched documents; largest project share of the gain 0.8571 (EP-27331); largest contractor share of the gain 0.8571 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.8571 (emaar-mirage-document-submittal); failures 0; gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.8571
+      ],
+      "decision_type": [
+       "approved as noted",
+       1.0
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.8571
+      ],
+      "project": [
+       "EP-27331",
+       0.8571
+      ],
+      "stratum": [
+       "review_signal",
+       1.0
+      ]
+     },
+     "net_gain": 7,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 6 of the net gain 7 (> half) from one project (EP-27331)",
+      "decision: 6 of the net gain 7 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "decision: 6 of the net gain 7 (> half) from one layout_key (emaar-mirage-document-submittal)"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 7 over 23 matched documents; largest project share of the gain 0.8571 (EP-27331); largest contractor share of the gain 0.8571 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.8571 (emaar-mirage-document-submittal); failures 0; gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.8571
+      ],
+      "decision_type": [
+       "approved as noted",
+       1.0
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.8571
+      ],
+      "project": [
+       "EP-27331",
+       0.8571
+      ],
+      "stratum": [
+       "review_signal",
+       1.0
+      ]
+     },
+     "net_gain": 7,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "identity: 6 of the net gain 7 (> half) from one project (EP-27331)",
+      "identity: 6 of the net gain 7 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "identity: 6 of the net gain 7 (> half) from one layout_key (emaar-mirage-document-submittal)"
+     ]
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 6 over 16 matched documents; largest project share of the gain 1.0 (EP-27331); largest contractor share of the gain 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 1.0 (emaar-mirage-document-submittal); failures 0; gains come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       1.0
+      ],
+      "decision_type": [
+       "approved as noted",
+       1.0
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       1.0
+      ],
+      "project": [
+       "EP-27331",
+       1.0
+      ],
+      "stratum": [
+       "review_signal",
+       1.0
+      ]
+     },
+     "net_gain": 6,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "revision: 6 of the net gain 6 (> half) from one project (EP-27331)",
+      "revision: 6 of the net gain 6 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+      "revision: 6 of the net gain 6 (> half) from one layout_key (emaar-mirage-document-submittal)"
+     ]
+    }
+   },
+   "critical_C": {
+    "resolved": [],
+    "unresolved": 0
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 7,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.375,
+      0.5
+     ],
+     "estimate": 0.4375,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      0.2609,
+      0.3478
+     ],
+     "estimate": 0.3043,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      0.375,
+      0.375
+     ],
+     "estimate": 0.375,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [
+     "decision: clean recovery 0.4242 < 0.90",
+     "concentration: decision: 6 of the net gain 7 (> half) from one project (EP-27331)",
+     "concentration: decision: 6 of the net gain 7 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: decision: 6 of the net gain 7 (> half) from one layout_key (emaar-mirage-document-submittal)"
+    ],
+    "identity": [
+     "identity: clean recovery 0.4255 < 0.90",
+     "concentration: identity: 6 of the net gain 7 (> half) from one project (EP-27331)",
+     "concentration: identity: 6 of the net gain 7 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: identity: 6 of the net gain 7 (> half) from one layout_key (emaar-mirage-document-submittal)"
+    ],
+    "revision": [
+     "revision: clean recovery 0.5143 < 0.90",
+     "concentration: revision: 6 of the net gain 6 (> half) from one project (EP-27331)",
+     "concentration: revision: 6 of the net gain 6 (> half) from one contractor (Euro Gulf Technoservices LLC)",
+     "concentration: revision: 6 of the net gain 6 (> half) from one layout_key (emaar-mirage-document-submittal)"
+    ]
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 1.6,
+    "net_correct_facts": 20,
+    "passes": true
+   }
+  },
+  "S3 one wrong revision acceptance in C (F009 p1)": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.8125
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.9375
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 23 over 23 matched documents; largest project share of the gain 0.2609 (EP-27331); largest contractor share of the gain 0.2609 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.2609 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.2609
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.5652
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.2609
+      ],
+      "project": [
+       "EP-27331",
+       0.2609
+      ],
+      "stratum": [
+       "review_signal",
+       0.6522
+      ]
+     },
+     "net_gain": 23,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 15 over 16 matched documents; largest project share of the gain 0.3333 (EP-27331); largest contractor share of the gain 0.3333 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.3333 (emaar-mirage-document-submittal); failures 1; largest project share of the failures 1.0 (EP-27331); largest contractor share of the failures 1.0 (Euro Gulf Technoservices LLC); largest layout_key share of the failures 1.0 (emaar-mirage-document-submittal); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-27331, contractor=Euro Gulf Technoservices LLC, layout_key=emaar-mirage-document-submittal",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.3333
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.6667
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.3333
+      ],
+      "project": [
+       "EP-27331",
+       0.3333
+      ],
+      "stratum": [
+       "review_signal",
+       0.7333
+      ]
+     },
+     "net_gain": 15,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    }
+   },
+   "critical_C": {
+    "resolved": [
+     [
+      "F009",
+      "1",
+      "revision"
+     ]
+    ],
+    "unresolved": 0
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 16,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      0.8125,
+      1.0
+     ],
+     "estimate": 0.9375,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [
+     "critical acceptance on resolved truth in C: revision F009 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "identity": [
+     "critical acceptance on resolved truth in C: revision F009 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "critical acceptance on resolved truth in C: revision F009 p1 (candidate-level safety gate)",
+     "request-normalised gate not met",
+     "revision: accepted precision 0.9714 < 0.98"
+    ]
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 4.32,
+    "net_correct_facts": 54,
+    "passes": false
+   }
+  },
+  "S4 a decision false acceptance on negative control F042": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 1; largest project share of the failures 1.0 (EP-22349); largest contractor share of the failures 1.0 (Ardh Al Kananh Building Contracting); largest layout_key share of the failures 1.0 (infinity-al-arabia-drawing-sheet); gains do not come mainly from one project, contractor or layout; failures come mainly from one project=EP-22349, contractor=Ardh Al Kananh Building Contracting, layout_key=infinity-al-arabia-drawing-sheet",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.8125
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.9375
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "NOT ELIGIBLE",
+     "reasons": [
+      "decision: 1 false acceptance(s) by C on negative decision controls"
+     ]
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 23 over 23 matched documents; largest project share of the gain 0.2609 (EP-27331); largest contractor share of the gain 0.2609 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.2609 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.2609
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.5652
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.2609
+      ],
+      "project": [
+       "EP-27331",
+       0.2609
+      ],
+      "stratum": [
+       "review_signal",
+       0.6522
+      ]
+     },
+     "net_gain": 23,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.6875
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.75
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    }
+   },
+   "critical_C": {
+    "resolved": [
+     [
+      "F042",
+      "1",
+      "decision"
+     ]
+    ],
+    "unresolved": 0
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 7,
+      "documents": 8,
+      "false_accept": 1,
+      "false_accept_documents": [
+       "F042"
+      ]
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 16,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [
+     "critical acceptance on resolved truth in C: decision F042 p1 (candidate-level safety gate)",
+     "request-normalised gate not met",
+     "decision: accepted precision 0.9706 < 0.98",
+     "concentration: decision: 1 false acceptance(s) by C on negative decision controls"
+    ],
+    "identity": [
+     "critical acceptance on resolved truth in C: decision F042 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "critical acceptance on resolved truth in C: decision F042 p1 (candidate-level safety gate)",
+     "request-normalised gate not met"
+    ]
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 4.4,
+    "net_correct_facts": 55,
+    "passes": false
+   }
+  },
+  "S5 acceptances on every NOT_SCORABLE run-set row (12 rows)": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.8125
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.9375
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 23 over 23 matched documents; largest project share of the gain 0.2609 (EP-27331); largest contractor share of the gain 0.2609 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.2609 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.2609
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.5652
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.2609
+      ],
+      "project": [
+       "EP-27331",
+       0.2609
+      ],
+      "stratum": [
+       "review_signal",
+       0.6522
+      ]
+     },
+     "net_gain": 23,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.6875
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.75
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    }
+   },
+   "critical_C": {
+    "resolved": [],
+    "unresolved": 12
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 16,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [
+     "request-normalised gate not met"
+    ],
+    "identity": [
+     "request-normalised gate not met"
+    ],
+    "revision": [
+     "request-normalised gate not met"
+    ]
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 4.4,
+    "net_correct_facts": 55,
+    "passes": false
+   }
+  },
+  "S6 small decision gain (3 documents)": {
+   "concentration": {
+    "decision": {
+     "attribution_statement": "decision: net gain 3 over 16 matched documents; largest project share of the gain 0.6667 (EP-29255); largest contractor share of the gain 0.6667 (Scale EMC); largest layout_key share of the gain 0.3333 (single:F006); failures 0; gains come mainly from one project=EP-29255, contractor=Scale EMC; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Scale EMC",
+       0.6667
+      ],
+      "decision_type": [
+       "approved as noted",
+       1.0
+      ],
+      "layout_key": [
+       "single:F006",
+       0.3333
+      ],
+      "project": [
+       "EP-29255",
+       0.6667
+      ],
+      "stratum": [
+       "review_signal",
+       1.0
+      ]
+     },
+     "net_gain": 3,
+     "outcome": "UNDETERMINED",
+     "reasons": []
+    },
+    "identity": {
+     "attribution_statement": "identity: net gain 23 over 23 matched documents; largest project share of the gain 0.2609 (EP-27331); largest contractor share of the gain 0.2609 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.2609 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.2609
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.5652
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.2609
+      ],
+      "project": [
+       "EP-27331",
+       0.2609
+      ],
+      "stratum": [
+       "review_signal",
+       0.6522
+      ]
+     },
+     "net_gain": 23,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    },
+    "revision": {
+     "attribution_statement": "revision: net gain 16 over 16 matched documents; largest project share of the gain 0.375 (EP-27331); largest contractor share of the gain 0.375 (Euro Gulf Technoservices LLC); largest layout_key share of the gain 0.375 (emaar-mirage-document-submittal); failures 0; gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+     "largest_shares": {
+      "contractor": [
+       "Euro Gulf Technoservices LLC",
+       0.375
+      ],
+      "decision_type": [
+       "approved as noted",
+       0.6875
+      ],
+      "layout_key": [
+       "emaar-mirage-document-submittal",
+       0.375
+      ],
+      "project": [
+       "EP-27331",
+       0.375
+      ],
+      "stratum": [
+       "review_signal",
+       0.75
+      ]
+     },
+     "net_gain": 16,
+     "outcome": "ELIGIBLE",
+     "reasons": []
+    }
+   },
+   "critical_C": {
+    "resolved": [],
+    "unresolved": 0
+   },
+   "decision_controls": {
+    "B": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 0,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    },
+    "C": {
+     "negative": {
+      "attempted": 8,
+      "by_stratum": {
+       "drawing_signal": 7,
+       "other": 1
+      },
+      "correct": 8,
+      "documents": 8,
+      "false_accept": 0,
+      "false_accept_documents": []
+     },
+     "positive": {
+      "attempted": 16,
+      "by_stratum": {
+       "other": 1,
+       "review_signal": 15
+      },
+      "correct": 3,
+      "documents": 16,
+      "false_accept": 0,
+      "false_accept_documents": []
+     }
+    }
+   },
+   "default_selected": null,
+   "matched": {
+    "decision": 16,
+    "identity": 23,
+    "revision": 16
+   },
+   "outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "ELIGIBLE FOR A SEPARATE SELECTION DECISION",
+    "revision": "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+   },
+   "paired": {
+    "decision": {
+     "ci95": [
+      0.125,
+      0.3125
+     ],
+     "estimate": 0.1875,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:decision",
+     "stratified_by": "project"
+    },
+    "identity": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 23,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:identity",
+     "stratified_by": "project"
+    },
+    "revision": {
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "estimate": 1.0,
+     "n_documents": 16,
+     "resamples": 2000,
+     "seed": "m2-r30-bootstrap-2026-10-02:revision",
+     "stratified_by": "project"
+    }
+   },
+   "reasons": {
+    "decision": [
+     "decision: clean recovery 0.1515 < 0.90"
+    ],
+    "identity": [],
+    "revision": []
+   },
+   "request_gate": {
+    "extra_requests": 100,
+    "facts_per_8_extra": 3.36,
+    "net_correct_facts": 42,
+    "passes": true
+   }
+  }
+ }
+}

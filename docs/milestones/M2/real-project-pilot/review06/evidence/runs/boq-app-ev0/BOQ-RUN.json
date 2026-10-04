@@ -1,0 +1,202 @@
+{
+ "at_utc": "2026-09-28T22:50:19+00:00",
+ "tag": "boq-app-ev0",
+ "ai": true,
+ "database": "C:\\t\\r6\\boq-app-ev0\\db\\boq.db",
+ "projects": {
+  "30784": {
+   "project_id": 1,
+   "ensure_1": {
+    "status": 200,
+    "seconds": 565.9,
+    "items": 82,
+    "warnings": []
+   },
+   "ensure_2": {
+    "status": 200,
+    "items": 82
+   },
+   "reread": {
+    "status": 202,
+    "job": {
+     "id": 2,
+     "project_id": 1,
+     "kind": "boq_reread",
+     "status": "succeeded",
+     "progress": {
+      "done": 100,
+      "total": 200,
+      "message": "Finished"
+     },
+     "cancel_requested": false,
+     "result": {
+      "candidate_id": 1,
+      "summary": {
+       "old_lines": 82,
+       "new_lines": 82,
+       "old_quantity": 12251,
+       "new_quantity": 12251,
+       "unchanged": 82,
+       "changed": 0,
+       "probable": 0,
+       "added": 0,
+       "removed": 0,
+       "failed_sheets": [],
+       "not_reread": 0
+      }
+     },
+     "error": null,
+     "created_at": "2026-09-28T22:59:47.106729",
+     "started_at": "2026-09-28T22:59:47.106729",
+     "finished_at": "2026-09-28T22:59:47.193800",
+     "already_active": false
+    }
+   },
+   "items_before_reread": 82,
+   "items_after_reread": 82,
+   "no_removal": {
+    "before": 82,
+    "kept": 82,
+    "removed": []
+   }
+  },
+  "30088": {
+   "project_id": 2,
+   "ensure_1": {
+    "status": 200,
+    "seconds": 971.2,
+    "items": 84,
+    "warnings": []
+   },
+   "ensure_2": {
+    "status": 200,
+    "items": 84
+   },
+   "reread": {
+    "status": 202,
+    "job": {
+     "id": 4,
+     "project_id": 2,
+     "kind": "boq_reread",
+     "status": "succeeded",
+     "progress": {
+      "done": 100,
+      "total": 200,
+      "message": "Finished"
+     },
+     "cancel_requested": false,
+     "result": {
+      "candidate_id": 2,
+      "summary": {
+       "old_lines": 84,
+       "new_lines": 86,
+       "old_quantity": 3327,
+       "new_quantity": 3329,
+       "unchanged": 84,
+       "changed": 0,
+       "probable": 0,
+       "added": 2,
+       "removed": 0,
+       "failed_sheets": [],
+       "not_reread": 0
+      }
+     },
+     "error": null,
+     "created_at": "2026-09-28T23:15:58.551214",
+     "started_at": "2026-09-28T23:15:58.566872",
+     "finished_at": "2026-09-28T23:19:34.134268",
+     "already_active": false
+    }
+   },
+   "items_before_reread": 84,
+   "items_after_reread": 84,
+   "no_removal": {
+    "before": 84,
+    "kept": 84,
+    "removed": []
+   }
+  }
+ },
+ "stored": {
+  "boq_items": 166,
+  "projects": [
+   {
+    "id": 1,
+    "ep_number": "30784",
+    "boq_extracted_at": "2026-09-28 22:59:29.118506",
+    "boq_extraction_warnings": "null",
+    "boq_version": 1
+   },
+   {
+    "id": 2,
+    "ep_number": "30088",
+    "boq_extracted_at": "2026-09-28 23:15:12.557795",
+    "boq_extraction_warnings": "null",
+    "boq_version": 1
+   }
+  ],
+  "document_readings": [
+   {
+    "id": 1,
+    "project_id": 1,
+    "kind": "design_sheet",
+    "document_path": "C:\\t\\pilot\\stage\\EP-30784\\01- EP-30784 Scan\\EP-30784 FAS Design.pdf",
+    "document_sha256": "1eb94a160ad34d65c662a9ec4fb7994d7b7d21d79db904990d5bf9a3d31a5899",
+    "model": "claude-sonnet-5",
+    "prompt_version": "read-sheet-2026-09-16.1",
+    "pages": 2,
+    "status": "completed",
+    "error": null,
+    "calls": 6,
+    "created_by_id": 1,
+    "created_at": "2026-09-28 22:57:01.766621"
+   },
+   {
+    "id": 2,
+    "project_id": 1,
+    "kind": "design_sheet",
+    "document_path": "C:\\t\\pilot\\stage\\EP-30784\\01- EP-30784 Scan\\EP-30784 EML Design.pdf",
+    "document_sha256": "39a20e17215be7bde7d2da60e9124eac26482a72403d451003295d2f23d4189d",
+    "model": "claude-sonnet-5",
+    "prompt_version": "read-sheet-2026-09-16.1",
+    "pages": 1,
+    "status": "completed",
+    "error": null,
+    "calls": 3,
+    "created_by_id": 1,
+    "created_at": "2026-09-28 22:58:25.637218"
+   },
+   {
+    "id": 3,
+    "project_id": 2,
+    "kind": "design_sheet",
+    "document_path": "C:\\t\\pilot\\stage\\EP-30088\\01. Commercial Document\\EP-30088 Design Sheet FAS.pdf",
+    "document_sha256": "522b3edde4ed441957dfff67fd7ddf52161f8e89d9b4056db2ffff7eb159235c",
+    "model": "claude-sonnet-5",
+    "prompt_version": "read-sheet-2026-09-16.1",
+    "pages": 2,
+    "status": "completed",
+    "error": null,
+    "calls": 6,
+    "created_by_id": 1,
+    "created_at": "2026-09-28 23:05:21.797784"
+   },
+   {
+    "id": 4,
+    "project_id": 2,
+    "kind": "design_sheet",
+    "document_path": "C:\\t\\pilot\\stage\\EP-30088\\01. Commercial Document\\EP-30088 Design Sheet ELS.pdf",
+    "document_sha256": "80c43d652683884420df1e6d2bebfa9059f86eb78d4bbdec05d00b8e79567b83",
+    "model": "claude-sonnet-5",
+    "prompt_version": "read-sheet-2026-09-16.1",
+    "pages": 1,
+    "status": "completed",
+    "error": null,
+    "calls": 3,
+    "created_by_id": 1,
+    "created_at": "2026-09-28 23:12:13.850037"
+   }
+  ]
+ },
+ "ai_usage_rows": 41
+}

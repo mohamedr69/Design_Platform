@@ -1,0 +1,99 @@
+{
+ "credit": "none: reference / report-only diagnostic, never accuracy or recovery credit (A-09 point 6)",
+ "diagnostic_population": {
+  "complete": 2,
+  "documents": 2,
+  "state": "COMPLETE"
+ },
+ "documents": {
+  "F006": {
+   "attempted": false,
+   "coverage": {
+    "1": {
+     "decision": "not_attempted",
+     "identity": "not_attempted",
+     "revision": "not_attempted"
+    },
+    "2": {
+     "decision": "not_attempted",
+     "identity": "not_attempted",
+     "revision": "not_attempted"
+    }
+   },
+   "doc_key": "EP-29255/Project document_Scale Jumeriah Garden/MS Approval Copy/ACS_Approval.pdf",
+   "eligibility": "ineligible",
+   "facts": [],
+   "limit_kinds": [],
+   "limit_pages": [],
+   "partially_read_pages": [],
+   "retries": 0,
+   "retry_at_full_utc": null,
+   "retry_at_utc": null,
+   "row_state": "pending",
+   "source_sha256": null,
+   "status": "COMPLETE",
+   "status_classes": [],
+   "status_reason": "probe sent through the full chain (reader 'none': no document read)",
+   "unread_page_count": 0,
+   "unread_pages": {},
+   "unsupported": false
+  },
+  "F015": {
+   "attempted": false,
+   "coverage": {
+    "1": {
+     "decision": "not_attempted",
+     "identity": "not_attempted",
+     "revision": "not_attempted"
+    }
+   },
+   "doc_key": "EP-29255/T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-005-R00-AAN(Typical 2nd to 8th Floor Plan Telephone Layout).pdf",
+   "eligibility": "ineligible",
+   "facts": [],
+   "limit_kinds": [],
+   "limit_pages": [],
+   "partially_read_pages": [],
+   "retries": 0,
+   "retry_at_full_utc": null,
+   "retry_at_utc": null,
+   "row_state": "pending",
+   "source_sha256": null,
+   "status": "COMPLETE",
+   "status_classes": [],
+   "status_reason": "probe sent through the full chain (reader 'none': no document read)",
+   "unread_page_count": 0,
+   "unread_pages": {},
+   "unsupported": false
+  }
+ },
+ "evaluator_emission": "m2-pilot-eval-2026-10-02.10",
+ "lane": "R",
+ "policy": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1+targeted-completion-2026-09-30.2",
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "rejected_evidence": [
+  {
+   "doc": "EP-29255/Project document_Scale Jumeriah Garden/MS Approval Copy/ACS_Approval.pdf",
+   "planned_sha256": "f6a57dfdeb5be0080dc8eed6cd43b7b4ee761791fd1fb74c27cf8ffc13b1395e",
+   "row_sha256": null,
+   "why": "source_mismatch"
+  },
+  {
+   "doc": "EP-29255/T&C/SD-Approval Copy/SCS_Approved/NBC-JGH-SCALE-SDS-MEP-ELE-TEL-2025-005-R00-AAN(Typical 2nd to 8th Floor Plan Telephone Layout).pdf",
+   "planned_sha256": "0089f564d9be2b6d32241a324d3b94518d72138268ef92ce3678c9536b341c74",
+   "row_sha256": null,
+   "why": "source_mismatch"
+  }
+ ],
+ "requests": {
+  "inherited_from_b": 2,
+  "own_dispatched": 1
+ },
+ "rows": "C:\\t\\r2x\\r40-sandbox\\r40d-m29255-52050f\\inv-1\\out\\rows-R.json",
+ "scorer": "score_lane_r32",
+ "tokens": "dry run: no tokens",
+ "unread": {
+  "documents_with_unread_pages": [],
+  "rule": "pages not read under the application's own per-document limits: the document stays COMPLETE, the pages count as unread",
+  "unread_pages": 0
+ }
+}

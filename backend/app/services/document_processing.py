@@ -224,10 +224,11 @@ def parser_current(row: ProjectDocument) -> bool:
             # not assumed to be either ...
             and extracted.get("profile") == document_control.extraction_profile()
             # ... and not carrying records read under another or an unknown
-            # profile (M2 review 03, R3-02): such a reading is a mixed one,
-            # never reused as this profile's; it is read again when the row
-            # is next processed or repaired (not on its own: no retry loop).
-            and not retained.get("other_profile"))
+            # profile (M2 review 03, R3-02) or by another or an unknown parser
+            # (M2 review 04, R4-01): such a reading is a mixed one, never
+            # reused as this parser's and profile's; it is read again when the
+            # row is next processed or repaired (not on its own: no retry loop).
+            and not retained.get("other_profile") and not retained.get("other_parser"))
 
 
 # --- the job -----------------------------------------------------------------------------
@@ -321,8 +322,11 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
             _report(ctx, done, total, path.name)
             continue
         timing = dict(result.get("timing") or {})
-        if result["unchanged"]:
+        if result.get("unchanged"):
             # Touched, not changed: the content already read. Nothing opened.
+            # (`.get`: a duplicate-content result carries no "unchanged" key --
+            # M2 real-project pilot: the duplicate branch below raised KeyError
+            # here and failed the whole processing job.)
             row.sha256, row.size, row.mtime, row.last_seen_at = result["sha"], result["size"], result["mtime"], now
             row.state, row.error = FRESH, None
             counts["unchanged_after_hash"] += 1

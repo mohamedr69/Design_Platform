@@ -1,0 +1,260 @@
+"""score_bcr_r32: the Review 31 rules per field, NOT_SCORABLE excluded, per-field tripwire, and (Review 34 RC-2 / R34-02)
+ONE candidate-level outcome; (RC-1) the project-stratified bootstrap that justifies the concentration rule without a floor;
+(RC-6) one wrong acceptance is one failure. Synthetic lanes only (Review 34's scenarios use the real truth and run set,
+with lanes made from the truth). Run: python -m pytest -q test_score_bcr_r32.py"""
+import copy
+
+import pytest
+
+import inputs_r32 as I
+import labels_adapter_r32 as A
+import lane_judge_r32 as J
+import r32_test_helpers as H
+import r34_scenarios as SC
+import score_bcr_r32 as S
+
+ELIGIBLE = "ELIGIBLE FOR A SEPARATE SELECTION DECISION"
+
+CAPS = {"B": 240, "C": 240}
+F = H.FIELDS
+
+
+def ev(B, C, T, R=None, **kw):
+    return S.evaluate(B, C, R, T, caps=kw.pop("caps", CAPS), extensions_used=kw.pop("extensions_used", 0), seed="t", **kw)
+
+
+def test_population_gate_on_the_real_reference_set_is_dispatch_eligible():
+    x = I.load_all()
+    T = A.build_truth(x["reviewed2"], renders=x["renders"], source_manifest=x["source_manifest"], selection=x["selection"], verification=x["verification"])
+    g = S.population_gate(T, 0)
+    assert g["counts"] == {"identity": 57, "revision": 38, "decision": 38} and g["action"] == "DISPATCH_ELIGIBLE"
+
+
+def test_population_gate_extends_then_blocks_and_blocked_is_never_a_result():
+    T = H.truth(n=8)
+    assert S.population_gate(T, 0)["action"] == "EXTEND:extension-1"
+    assert S.population_gate(T, 2)["action"] == "PREPARATION BLOCKED"
+    r = ev(H.lane("B", T), H.lane("C", T, correct=H.all_fields(T)), T, extensions_used=2)
+    assert set(r["outcome_by_field"].values()) == {"PREPARATION BLOCKED"} and r["exercise_only"] and r["default_selected"] is None
+    assert r["outcome"] == "PREPARATION BLOCKED", "the comparison state is the candidate outcome"
+    r1 = ev(H.lane("B", T), H.lane("C", T, correct=H.all_fields(T)), T, extensions_used=0)
+    assert r1["outcome"] == "NOT DISPATCHABLE (EXTEND:extension-1)" and set(r1["outcome_by_field"].values()) == {r1["outcome"]}
+
+
+def test_all_good_and_spread_gain_is_eligible_for_every_field_and_the_candidate_and_never_a_default():
+    T = H.truth(n=16, projects=4)
+    B = H.lane("B", T, requests=6)
+    C = H.lane("C", T, correct=H.all_fields(T), requests=20, inherited=6)
+    r = ev(B, C, T)
+    assert r["outcome_by_field"] == {f: ELIGIBLE for f in F}, r["fields"]
+    assert r["outcome"] == ELIGIBLE and r["candidate"]["basis"] == "all three fields ELIGIBLE" and r["candidate"]["fields_not_eligible"] == []
+    assert r["default_selected"] is None and all(v["default_selected"] is None for v in r["fields"].values())
+    assert r["reference_set_statement"].startswith("reference set independently AI-reviewed")
+
+
+def test_field_outcomes_are_diagnostics_and_the_candidate_outcome_is_conjunctive():
+    """RC-2: revision clean recovery 0.75 makes revision NOT ELIGIBLE; identity and decision stay ELIGIBLE as diagnostics,
+    and the candidate (one switch set) is NOT ELIGIBLE."""
+    T = H.truth(n=16, projects=4)
+    good = {pid: {"identity", "decision"} for pid in T["documents"]}
+    for i, pid in enumerate(sorted(T["documents"])):
+        if i < 12:
+            good[pid].add("revision")
+    r = ev(H.lane("B", T), H.lane("C", T, correct=good, requests=10), T)
+    assert r["outcome_by_field"]["identity"] == ELIGIBLE and r["outcome_by_field"]["decision"] == ELIGIBLE
+    assert r["outcome_by_field"]["revision"] == "NOT ELIGIBLE"
+    assert any("revision: clean recovery 0.75" in x for x in r["fields"]["revision"]["reasons_not_eligible"])
+    assert not any("revision" in x for x in r["fields"]["identity"]["reasons_not_eligible"])
+    assert r["outcome"] == "NOT ELIGIBLE" and r["candidate"]["fields_not_eligible"] == ["revision"]
+    assert "revision" in r["candidate"]["reasons_not_eligible"] and r["fields"]["identity"]["role"].startswith("diagnostic")
+
+
+@pytest.mark.parametrize("fields,expected", [
+    ({"identity": ELIGIBLE, "revision": ELIGIBLE, "decision": ELIGIBLE}, ELIGIBLE),
+    ({"identity": ELIGIBLE, "revision": ELIGIBLE, "decision": "NOT ELIGIBLE"}, "NOT ELIGIBLE"),
+    ({"identity": "INCOMPLETE", "revision": ELIGIBLE, "decision": ELIGIBLE}, "INCOMPLETE"),
+    ({"identity": "INCOMPLETE", "revision": "NOT ELIGIBLE", "decision": ELIGIBLE}, "NOT ELIGIBLE"),
+    ({"identity": "INCOMPLETE", "revision": "NOT ELIGIBLE", "decision": "INVALID"}, "INVALID"),
+    ({"identity": "INVALID", "revision": ELIGIBLE, "decision": ELIGIBLE}, "INVALID"),
+])
+def test_candidate_precedence_invalid_over_not_eligible_over_incomplete(fields, expected):
+    assert S.candidate_outcome(fields)["outcome"] == expected
+    assert S.CANDIDATE_PRECEDENCE == ("INVALID", "NOT ELIGIBLE", "INCOMPLETE")
+
+
+@pytest.fixture(scope="module")
+def real():
+    T, run = SC.load()
+    return T, run, SC.build(T, run)
+
+
+def _ev_real(real, name):
+    T, run, sc = real
+    B, C, R, stop, _ = sc[name]
+    return S.evaluate(B, C, R, T, caps=CAPS, extensions_used=0, stop_state=stop, docs=set(run))
+
+
+def test_s5_decision_recovery_0_7576_makes_the_candidate_not_eligible(real):
+    """Review 34 S5: identity gain 8; B and C both miss three decision documents (C decision clean recovery 0.7576)."""
+    r = _ev_real(real, "S5 identity gain 8 and decision recovery below 0.90")
+    assert r["metrics"]["C"]["fields"]["decision"]["clean_recovery"] == 0.7576
+    assert r["outcome_by_field"] == {"identity": ELIGIBLE, "revision": ELIGIBLE, "decision": "NOT ELIGIBLE"}
+    assert r["outcome"] == "NOT ELIGIBLE" and r["candidate"]["fields_not_eligible"] == ["decision"]
+    assert r["default_selected"] is None
+
+
+def test_s3b_and_s3c_concentrated_decision_gains_make_the_candidate_not_eligible(real):
+    for name in ("S3b decision gain 3 inside EP-27331", "S3c decision gain 4 inside EP-27331", "S3a decision gain 2 inside one project"):
+        r = _ev_real(real, name)
+        assert r["outcome_by_field"]["decision"] == "NOT ELIGIBLE" and r["outcome"] == "NOT ELIGIBLE", name
+        assert any(x.startswith("concentration: decision:") for x in r["fields"]["decision"]["reasons_not_eligible"]), name
+
+
+def test_s4b_incomplete_and_spread_gain_reach_their_candidate_outcomes(real):
+    assert _ev_real(real, "S4b as S4a with the comparison INCOMPLETE")["outcome"] == "INCOMPLETE"
+    assert _ev_real(real, "S4a C does not attempt five decision documents")["outcome"] == "NOT ELIGIBLE"
+    r = _ev_real(real, "S3c-spread decision gain 4 over four projects")
+    assert r["outcome"] == ELIGIBLE, "ELIGIBLE stays reachable on the real run set when the gain is spread"
+
+
+def test_s1_one_wrong_acceptance_is_exactly_one_failure_and_fails_the_candidate(real):
+    """RC-6: one wrong revision acceptance (that also loses the fact) is ONE failure; the candidate-level safety gate fails."""
+    r = _ev_real(real, "S1 one wrong revision acceptance in C")
+    c = r["concentration"]["fields"]["revision"]
+    assert c["failures"] == 1 and len(c["failure_documents"]) == 1 and c["failure_documents"][0]["kinds"] == ["wrong_acceptance", "lost_fact"]
+    assert len(r["metrics"]["C"]["critical"]["resolved"]) == 1 and r["outcome"] == "NOT ELIGIBLE"
+
+
+def test_a_critical_in_c_is_attributed_to_its_field_and_document_and_fails_the_candidate():
+    T = H.truth(n=16, projects=4)
+    good = H.all_fields(T)
+    good["D03"] = {"identity", "decision"}
+    C = H.lane("C", T, correct=good, wrong={"D03": {"revision"}}, requests=10)
+    r = ev(H.lane("B", T), C, T)
+    assert [(c["pool_id"], c["field"], c["page"]) for c in r["fields"]["revision"]["critical_resolved_in_C"]] == [("D03", "revision", "1")]
+    assert r["fields"]["identity"]["critical_resolved_in_C"] == []
+    assert all(v == "NOT ELIGIBLE" for v in r["outcome_by_field"].values()), "the safety gate is candidate-level"
+    assert any("revision D03 p1" in x for x in r["fields"]["identity"]["reasons_not_eligible"])
+
+
+def test_not_scorable_rows_are_excluded_and_their_acceptances_are_unresolved_findings():
+    T = H.truth(n=16, projects=4)
+    T["rows"]["D05|1|revision"] = H.row("D05", 1, "revision", "not_scorable", literal=None, candidates=["00", "01"])
+    T["documents"]["D05"]["fields"]["revision"] = {"resolved_for_scoring": "no", "carries_fact": "no", "primary": False, "has_fact": False}
+    extra = {"D05": [{"page": "1", "field": "revision", "value": "07", "state": "accepted"}],
+             "D06": []}
+    good = H.all_fields(T)
+    good["D05"] = {"identity", "decision"}
+    C = H.lane("C", T, correct=good, extra_facts=extra, requests=10)
+    jd = J.judge_document(T, "D05", C["documents"]["D05"])
+    assert jd["fields"]["revision"]["critical"] == [] and jd["fields"]["revision"]["unresolved"][0]["kind"] == "critical_on_unresolved_truth"
+    r = ev(H.lane("B", T), C, T)
+    m = r["metrics"]["C"]["fields"]["revision"]
+    assert m["critical_resolved"] == [] and len(m["critical_unresolved"]) == 1
+    assert r["paired"]["revision"]["matched"] == 15, "a document whose field is not resolved is not matched"
+    ok = copy.deepcopy(extra)
+    ok["D05"][0]["value"] = "01"
+    jd2 = J.judge_document(T, "D05", H.lane("C", T, correct=good, extra_facts=ok)["documents"]["D05"])
+    assert jd2["fields"]["revision"]["unresolved"][0]["kind"] == "not_scorable_matching"
+
+
+def test_not_scorable_is_never_a_verified_absence():
+    T = H.truth(n=16, projects=4)
+    T["rows"]["D02|1|decision"] = H.row("D02", 1, "decision", "not_scorable", literal="B+R?")
+    cov = {pid: {"decision": "discovery_absent"} for pid in T["documents"]}
+    c = J.coverage_counts(H.lane("C", T, cov=cov), T, "decision")
+    assert c["not_scorable"] == 1 and c["verified_absence"] == 0 and c["wrong_absence"] == 15
+
+
+def test_none_is_not_absent_an_unlabelled_page_fact_is_unscored():
+    T = H.truth(n=16, projects=4)
+    C = H.lane("C", T, extra_facts={"D00": [{"page": "5", "field": "identity", "value": "X", "state": "accepted"}]})
+    jd = J.judge_document(T, "D00", C["documents"]["D00"])
+    assert jd["unscored_facts"] == 1 and jd["fields"]["identity"]["critical"] == []
+
+
+def test_request_gate_equal_caps_only_and_one_fact_per_eight():
+    T = H.truth(n=16, projects=4)
+    B = H.lane("B", T, requests=6)
+    C = H.lane("C", T, correct={pid: {"identity"} for pid in T["documents"]}, requests=100, inherited=6)
+    jB, jC = J.judge_lane(B, T), J.judge_lane(C, T)
+    g = S.request_gate(B, C, T, CAPS, "t", jB, jC)
+    assert g["requests"] == {"B": 6, "C": 106} and g["extra_requests"] == 100 and g["net_correct_facts"] == 16 and g["passes"]
+    C2 = H.lane("C", T, correct={pid: {"identity"} for pid in T["documents"]}, requests=200, inherited=6)
+    assert not S.request_gate(B, C2, T, CAPS, "t", jB, J.judge_lane(C2, T))["passes"]
+    na = S.request_gate(B, C, T, {"B": 16, "C": 240}, "t", jB, jC)
+    assert na["applicable"] is False and "R31-03" in na["reason"]
+
+
+def test_stop_states_override_every_field():
+    T = H.truth(n=16, projects=4)
+    B, C = H.lane("B", T), H.lane("C", T, correct=H.all_fields(T))
+    r = ev(B, C, T, stop_state={"comparison": "INVALID: x"})
+    assert set(r["outcome_by_field"].values()) == {"INVALID"} and r["outcome"] == "INVALID"
+    r = ev(B, C, T, stop_state={"comparison": "INCOMPLETE: x"})
+    assert set(r["outcome_by_field"].values()) == {"INCOMPLETE"} and r["outcome"] == "INCOMPLETE"
+    r = ev(B, C, T, stop_state={"comparison": "RESULT: candidate failed"})
+    assert set(r["outcome_by_field"].values()) == {"NOT ELIGIBLE"} and r["outcome"] == "NOT ELIGIBLE"
+
+
+def test_decision_coverage_gate_binds_only_the_decision_field():
+    T = H.truth(n=16, projects=4)
+    none = {pid: {"decision": "located_incomplete"} for pid in T["documents"]}
+    B = H.lane("B", T)
+    C = H.lane("C", T, correct=H.all_fields(T), cov=none, requests=10)
+    R = H.lane("R", T)
+    r = ev(B, C, T, R=R)
+    assert not r["decision_coverage_gate"]["passes"]
+    assert "decision coverage of C below B or R" in r["fields"]["decision"]["reasons_not_eligible"]
+    assert r["outcome_by_field"]["identity"].startswith("ELIGIBLE")
+    assert r["outcome"] == "NOT ELIGIBLE", "the decision coverage gate fails the candidate"
+
+
+def test_stratum_concentration_no_longer_blocks_decision():
+    T = H.truth(n=16, projects=4)          # every document review_signal: the R33-01 situation
+    r = ev(H.lane("B", T), H.lane("C", T, correct=H.all_fields(T), requests=10), T)
+    assert r["concentration"]["fields"]["decision"]["groupings"]["stratum"]["largest_gain_share"] == 1.0
+    assert r["outcome_by_field"]["decision"].startswith("ELIGIBLE") and r["outcome"] == ELIGIBLE
+
+
+def test_aliases_are_never_matched():
+    T = H.truth(n=16, projects=4)
+    T["documents"]["D15"]["is_alias"] = True
+    r = ev(H.lane("B", T), H.lane("C", T, correct=H.all_fields(T)), T)
+    assert "D15" not in r["paired"]["identity"]["matched_documents"] and r["paired"]["identity"]["matched"] == 15
+
+
+def test_the_bootstrap_is_seeded():
+    T = H.truth(n=16, projects=4)
+    B, C = H.lane("B", T), H.lane("C", T, correct={pid: {"identity"} for pid in list(T["documents"])[:9]})
+    jB, jC = J.judge_lane(B, T), J.judge_lane(C, T)
+    assert S.paired(B, C, T, "identity", "s", jB, jC) == S.paired(B, C, T, "identity", "s", jB, jC)
+
+
+RUN_SET_DECISION_STRATA = {"EP-27331": 6, "EP-22349": 2, "EP-26687": 3, "EP-3563": 3, "EP-29255": 2}   # 16 matched (run set)
+
+
+def _strata(gained):
+    return {p: [1] * gained.get(p, 0) + [0] * (n - gained.get(p, 0)) for p, n in RUN_SET_DECISION_STRATA.items()}
+
+
+@pytest.mark.parametrize("gained,ci95", [({"EP-22349": 2}, [0.125, 0.125]), ({"EP-27331": 3}, None), ({"EP-27331": 4}, None)])
+def test_the_project_stratified_bootstrap_excludes_zero_for_a_gain_concentrated_in_one_project(gained, ci95):
+    """RC-1 justification (replaces version 1's refuted 'net gain 4 is the smallest whose interval can exclude zero'): the
+    scorer's bootstrap resamples documents WITHIN each project, so a gain that fills or dominates one project has little
+    or no resampling variance; its interval excludes zero at net 2 (S3a) and net 3 (S3b). The interval therefore cannot
+    protect against a concentrated gain -- the concentration legs must apply at every size."""
+    bt = S.bootstrap(_strata(gained), "m2-r30-bootstrap-2026-10-02:decision")
+    assert bt["stratified_by"] == "project" and bt["ci95"][0] > 0, bt
+    if ci95:
+        assert bt["ci95"] == ci95
+
+
+def test_version_one_floor_rested_on_an_unstratified_bootstrap_that_the_scorer_does_not_use():
+    seed = "m2-r30-bootstrap-2026-10-02"
+    one_group = S.bootstrap({"p": [1] * 3 + [0] * 13}, seed)
+    stratified = S.bootstrap(_strata({"EP-27331": 3}), seed)
+    assert one_group["ci95"][0] == 0, "version 1's test: one unstratified group, net 3 -> includes zero"
+    assert stratified["ci95"][0] > 0, "the scorer's project-stratified bootstrap, net 3 inside one project -> excludes zero"
+    single = S.bootstrap({"A": [1], "B": [0] * 15}, seed)
+    assert single["ci95"] == [0.0625, 0.0625], "a gain of ONE in a one-document project is 'established' by the stratified interval"

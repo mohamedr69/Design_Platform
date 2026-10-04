@@ -1,0 +1,68 @@
+{
+ "ledger_module": "C:\\t/iso/cand-ai4/backend\\app\\ai\\ledger.py",
+ "throwaway_ledger": "C:\\t\\iso\\tmp\\r26-enforcement-q30v8q4g\\throwaway-ledger.sqlite",
+ "cases": {
+  "E1_cap_enforced_at_reserve": {
+   "cap": 3,
+   "reserved": 3,
+   "fourth": "requests",
+   "ok": true
+  },
+  "E2_interrupted_request_stays_counted": {
+   "totals": {
+    "requests": 2,
+    "input_tokens": 190,
+    "output_tokens": 15,
+    "cache_hits": 0,
+    "refused": 1,
+    "usage_unknown": 0,
+    "in_flight": 1,
+    "elapsed_s": 0.0461885929107666,
+    "breaker": null
+   },
+   "third": "requests",
+   "ok": true
+  },
+  "E3_cache_hits_not_counted": {
+   "totals": {
+    "requests": 1,
+    "input_tokens": 100,
+    "output_tokens": 10,
+    "cache_hits": 2,
+    "refused": 0,
+    "usage_unknown": 0,
+    "in_flight": 1,
+    "elapsed_s": 0.032073259353637695,
+    "breaker": null
+   },
+   "ok": true
+  },
+  "E4_limits_persisted_no_silent_increase": {
+   "attempt": "reopen scope E1 with requests=999",
+   "raised": "ledger scope 'E1': the supplied limits differ from its persisted policy {'requests': {'supplied': 999, 'stored': 3}}; use the stored policy, or amend it explicitly (Ledger.amend_limits)",
+   "ok": true
+  },
+  "E5_elapsed_from_scope_creation": {
+   "elapsed_limit_s": 1,
+   "second_reservation_after_s": 1.5,
+   "refused": "elapsed_s",
+   "ok": true,
+   "consequence": "with the R21/R22 limit of 14,400 s, an arm whose project is deferred to the next rolling day is refused when it resumes; the revised proposal sets 345,600 s (96 h) for the document-arm scopes"
+  },
+  "E6_failed_request_counted": {
+   "totals": {
+    "requests": 1,
+    "input_tokens": 100,
+    "output_tokens": 10,
+    "cache_hits": 0,
+    "refused": 0,
+    "usage_unknown": 1,
+    "in_flight": 0,
+    "elapsed_s": 0.03125572204589844,
+    "breaker": null
+   },
+   "ok": true
+  }
+ },
+ "all_ok": true
+}

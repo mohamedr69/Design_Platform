@@ -1,0 +1,335 @@
+===== D03 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'completed', 'own:revision': 'absent_by_discovery', 'own:decision': 'absent_by_discovery', 'own:identity:primary': 'unusable:illegible', 'own:identity:targeted': 'completed'} outcome evidence
+ page 2 {} outcome no_trigger
+ page 3 {} outcome no_trigger
+ page 4 {} outcome no_trigger
+  obs p 1 identity own validated '2.4 Accessories' region [242.89387896728516, 54.80703995361328, 305.23840824584966, 63.94154661254882] support text read completed tgt None assoc None
+     readings [('discovery', '2.4 Accessories', None, None), ('blind_small', '', '', None), ('blind_context', '2.4 Accessories', '', 'own_identity')]
+     reasons []
+  DISC p 1 discover_page {'page_kind': 'datasheet', 'own_identity': '2.4 Accessories', 'own_identity_label': '(section heading, no explicit label word)', 'own_identity_region': [430, 100, 610, 125], 'own_revision': '', 'own_revision_label': '', 'own_revision_region': [], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'listed_item', 'literal': 'CAP320'}, {'role': 'listed_item', 'literal': 'CAPT340'}, {'role': 'listed_item', 'literal': 'CAH330'}, {'role': 'quoted_reference', 'literal': 'EN54'}, {'role': 'quoted_reference', 'literal': 'part 7'}, {'role': 'quoted_reference', 'literal': 'part 5'}, {'role': 'other', 'literal': 'SGTEXT'}, {'role': 'other', 'literal': '©February 2015'}]
+  CALL p 1 read_identity {"label_text": "", "value": "", "legible": false, "other_values_in_crop": ["2.4 Accessories", "CAPT340", "CAH330"]} ['ok']
+  CALL p 1 read_field_context {"value": "2.4 Accessories", "printed_label": "", "role": "own_identity", "region": [350, 168, 465, 196], "legible": true} ['ok']
+===== D04 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'completed', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed'} outcome evidence
+  obs p 1 decision own candidate 'ANN' region [44.675999999999995, 468.864, 302.328, 536.1840000000001] support None read completed tgt None assoc None
+     readings [('discovery', None, None, None), ('blind_small', None, None, None)]
+     reasons ["no target component: the page's own identity is not established"]
+  obs p 1 identity own conflict 'FA-101-10' region [48.05459999999998, 140.19984000000002, 187.4129399999999, 161.86895999999996] support None read completed tgt None assoc None
+     readings [('discovery', '17', None, None), ('blind_small', 'FA-101-10', 'Dwg. Ref.', None), ('blind_context', '17', 'Submittal No.', 'own_identity')]
+     reasons ["the readings disagree: discovery='17', blind_small='FA-101-10', blind_context='17'"]
+  obs p 1 revision own validated '00' region [193.392, 146.52, 238.068, 161.56799999999998] support text read completed tgt None assoc None
+     readings [('discovery', '00', None, None), ('blind_small', '00', 'Rev', None)]
+     reasons []
+  DISC p 1 discover_page {'page_kind': 'submittal_form', 'own_identity': '17', 'own_identity_label': 'Submittal No.', 'own_identity_region': [81, 185, 284, 204], 'own_revision': '00', 'own_revision_label': 'Rev', 'own_revision_region': [316, 185, 389, 204], 'decision_options_printed': ['Approved', 'Approved with Comments', 'Revise and Resubmit', 'Rejected, not comply with Specifications'], 'decision_marked_option': 'Approved with Comments', 'decision_mark_type': 'tick', 'decision_actor': 'consultant', 'decision_region': [73, 592, 494, 677]}
+     other [{'role': 'form_template', 'literal': 'IPDD/PIS/F-15-24'}, {'role': 'project_or_contract', 'literal': '01'}, {'role': 'project_or_contract', 'literal': '1170252'}, {'role': 'referenced_drawing', 'literal': 'FA-101-106'}, {'role': 'quoted_reference', 'literal': 'SECTION 283100'}, {'role': 'quoted_reference', 'literal': 'BILL NO-11-B-B'}, {'role': 'other', 'literal': '04-2273612'}, {'role': 'other', 'literal': '7-11-2021'}]
+  CALL p 1 read_identity {"label_text": "Dwg. Ref.", "value": "FA-101-10", "legible": true, "other_values_in_crop": ["Submittal No. 17", "Rev 00", "Project No. 01", "Project Code 1170252", "Specs Ref. SECTION 283100"]} ['ok']
+  CALL p 1 read_revision {"label_text": "Rev", "value": "00", "legible": true, "other_values_in_crop": ["17", "Date: 7-11-2021", "01", "Project Code: 1170252", "Dwg. Ref.: FA-101-106"]} ['ok']
+  CALL p 1 read_decision {"options_printed": ["Approved", "Approved with Comments", "Revise and Resubmit", "Rejected, not comply with Specifications"], "marked_option": "Approved with Comments", "mark_type": "tick", "actor": "consultant", "legible": true} ['ok']
+  CALL p 1 read_field_context {"value": "17", "printed_label": "Submittal No.", "role": "own_identity", "region": [100, 255, 390, 345], "legible": true} ['ok']
+===== D04 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'completed', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed'} outcome evidence
+  obs p 1 decision own candidate 'ANN' region [53.855999999999995, 495.0, 306.0, 554.4] support None read completed tgt None assoc None
+     readings [('discovery', None, None, None), ('blind_small', None, None, None)]
+     reasons ["no target component: the page's own identity is not established"]
+  obs p 1 identity own conflict 'FA-101-106' region [120.73762799999997, 146.07648, 195.13151999999994, 160.26912] support None read completed tgt None assoc None
+     readings [('discovery', '17', None, None), ('blind_small', 'FA-101-106', 'Dwg. Ref.', None), ('blind_context', '17', 'Submittal No.', 'own_identity')]
+     reasons ["the readings disagree: discovery='17', blind_small='FA-101-106', blind_context='17'"]
+  obs p 1 revision own validated '00' region [192.78, 146.52, 238.68, 168.696] support text read completed tgt None assoc None
+     readings [('discovery', '00', None, None), ('blind_small', '00', 'Rev', None)]
+     reasons []
+  DISC p 1 discover_page {'page_kind': 'submittal_form', 'own_identity': '17', 'own_identity_label': 'Submittal No.', 'own_identity_region': [104, 185, 345, 213], 'own_revision': '00', 'own_revision_label': 'Rev', 'own_revision_region': [315, 185, 390, 213], 'decision_options_printed': ['Approved', 'Approved with Comments', 'Revise and Resubmit', 'Rejected, not comply with Specifications'], 'decision_marked_option': 'Approved with Comments', 'decision_mark_type': 'tick', 'decision_actor': 'consultant', 'decision_region': [88, 625, 500, 700]}
+     other [{'role': 'form_template', 'literal': 'IPDD/PIS/F-15-24'}, {'role': 'project_or_contract', 'literal': '01'}, {'role': 'project_or_contract', 'literal': '1170252'}, {'role': 'quoted_reference', 'literal': 'SECTION 283100'}, {'role': 'referenced_drawing', 'literal': 'FA-101-106'}, {'role': 'quoted_reference', 'literal': 'BILL NO-11-B-B'}, {'role': 'other', 'literal': '04-2273612'}, {'role': 'other', 'literal': '7-11-2021'}]
+  CALL p 1 read_identity {"label_text": "Dwg. Ref.", "value": "FA-101-106", "legible": true, "other_values_in_crop": ["Submittal No. 17", "Rev 00", "Project No. 01", "Project Code 1170252", "SECTION 283100"]} ['ok']
+  CALL p 1 read_revision {"label_text": "Rev", "value": "00", "legible": true, "other_values_in_crop": ["17", "Date 7-11-2021", "01", "Project Code 1170252", "1170252"]} ['ok']
+  CALL p 1 read_decision {"options_printed": ["Approved", "Approved with Comments", "Revise and Resubmit", "Rejected, not comply with Specifications"], "marked_option": "Approved with Comments", "mark_type": "tick", "actor": "consultant", "legible": true} ['ok']
+  CALL p 1 read_field_context {"value": "17", "printed_label": "Submittal No.", "role": "own_identity", "region": [198, 280, 320, 320], "legible": true} ['ok']
+===== D06 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'completed', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed'} outcome evidence
+  obs p 1 decision own no_decision_marked None region [3049.85, 226.48, 3370.0, 274.16] support None read completed tgt DCH-M-BSB-DWG-ZZ-ARC-41034 assoc None
+     readings [('discovery', None, None, None), ('blind_small', None, None, None)]
+     reasons []
+  obs p 1 identity own conflict 'ARC-41034' region [3043.2, 2287.8, 3125.5, 2295.9] support None read completed tgt None assoc None
+     readings [('discovery', 'DCH-M-BSB-DWG-ZZ-ARC-41034', None, None), ('blind_small', 'ARC-41034', 'MUNICIPALITY DRAWING No.', None), ('blind_context', 'DCH-M-BSB-DWG-ZZ-ARC-41034', 'CLIENT DRAWING No.', 'own_identity')]
+     reasons ["the readings disagree: discovery='DCH-M-BSB-DWG-ZZ-ARC-41034', blind_small='ARC-41034', blind_context='DCH-M-BSB-DWG-ZZ-ARC-41034'"]
+  obs p 1 revision own validated 'E' region [3296.3, 2287.8, 3332.0, 2295.9] support text read completed tgt DCH-M-BSB-DWG-ZZ-ARC-41034 assoc None
+     readings [('discovery', 'E', None, None), ('blind_small', 'E', 'REVISION', None)]
+     reasons []
+  DISC p 1 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'DCH-M-BSB-DWG-ZZ-ARC-41034', 'own_identity_label': 'CLIENTDRAWING No.', 'own_identity_region': [895, 950, 1000, 972], 'own_revision': 'E', 'own_revision_label': 'REVISION', 'own_revision_region': [985, 950, 1000, 1000], 'decision_options_printed': ['CLIENT', 'ARCHITECTURAL'], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': [905, 95, 1000, 115]}
+     other [{'role': 'other', 'literal': 'ARC-41034'}, {'role': 'other', 'literal': 'A0'}, {'role': 'listed_item', 'literal': 'ID-01 / ED-01'}, {'role': 'listed_item', 'literal': 'ID-02 / ED-02'}]
+  CALL p 1 read_identity {"label_text": "MUNICIPALITY DRAWING No.", "value": "ARC-41034", "legible": true, "other_values_in_crop": ["CLIENT DRAWING No.: DCH-M-BSB-DWG-ZZ-ARC-4 (truncated/cut off in crop)"]} ['ok']
+  CALL p 1 read_revision {"label_text": "REVISION", "value": "E", "legible": true, "other_values_in_crop": ["KH", "DCH", "DCH-M-BSB-MOD-05-ARC-5"]} ['ok']
+  CALL p 1 read_decision {"options_printed": ["CLIENT", "ARCHITECTURAL"], "marked_option": "", "mark_type": "none", "actor": "unknown", "legible": true} ['ok']
+  CALL p 1 read_field_context {"value": "DCH-M-BSB-DWG-ZZ-ARC-41034", "printed_label": "CLIENT DRAWING No.", "role": "own_identity", "region": [582, 194, 1458, 287], "legible": true} ['ok']
+===== D06 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'located:labels:text', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'incomplete:located_region_only', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed'} outcome partial
+  obs p 1 identity own conflict 'ARC-41034' region [3043.2, 2287.8, 3125.5, 2295.9] support None read completed tgt None assoc None
+     readings [('discovery', 'DCH-M-BSB-DWG-ZZ-ARC-41034', None, None), ('blind_small', 'ARC-41034', 'MUNICIPALITY DRAWING No.', None), ('blind_context', 'DCH-M-BSB-DWG-ZZ-ARC-41034', 'CLIENT DRAWING No.', 'own_identity')]
+     reasons ["the readings disagree: discovery='DCH-M-BSB-DWG-ZZ-ARC-41034', blind_small='ARC-41034', blind_context='DCH-M-BSB-DWG-ZZ-ARC-41034'"]
+  obs p 1 revision own validated 'E' region [3296.3, 2287.8, 3332.0, 2295.9] support text read completed tgt DCH-M-BSB-DWG-ZZ-ARC-41034 assoc None
+     readings [('discovery', 'E', None, None), ('blind_small', 'E', 'REVISION', None)]
+     reasons []
+  DISC p 1 discover_region {'page_kind': 'drawing_sheet', 'own_identity': 'DCH-M-BSB-DWG-ZZ-ARC-41034', 'own_identity_label': 'CLIENT DRAWING No.', 'own_identity_region': [549, 885, 936, 926], 'own_revision': 'E', 'own_revision_label': 'REVISION', 'own_revision_region': [906, 885, 936, 926], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': 'ARC-41034'}, {'role': 'project_or_contract', 'literal': 'DCH'}, {'role': 'revision_history', 'literal': 'E  VALUE ENGINEERING  14.11.2025  KH'}, {'role': 'revision_history', 'literal': 'D  DEWA APPLICATION  28.10.2025  KH'}, {'role': 'revision_history', 'literal': 'C  IFC SUBMISSION  26.08.2025  KH'}, {'role': 'revision_history', 'literal': 'B  100% DETAILED DESIGN  04.07.2025  KH'}, {'role': 'revision_history', 'literal': 'A  50% DETAILED DESIGN  30.04.2025  KH'}, {'role': 'other', 'literal': 'DCH-M-BSB-MOD-05-ARC-5000 1_PART 5 INT'}]
+  CALL p 1 read_identity {"label_text": "MUNICIPALITY DRAWING No.", "value": "ARC-41034", "legible": true, "other_values_in_crop": ["CLIENT DRAWING No.: DCH-M-BSB-DWG-ZZ-ARC-4... (truncated at crop edge, not fully legible)"]} ['ok']
+  CALL p 1 read_revision {"label_text": "REVISION", "value": "E", "legible": true, "other_values_in_crop": ["KH", "DCH", "DCH-M-BSB-MOD-05-ARC-5"]} ['ok']
+  CALL p 1 read_field_context {"value": "DCH-M-BSB-DWG-ZZ-ARC-41034", "printed_label": "CLIENT DRAWING No.", "role": "own_identity", "region": [594, 192, 1456, 282], "legible": true} ['ok']
+===== D12 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed', 'own:revision:primary': 'incomplete:no_region', 'own:revision:targeted': 'completed'} outcome evidence
+  obs p 1 identity own conflict 'BH2031_DIB_AMB_ID' region [1459.504, 1499.8419999999996, 2253.1500000000005, 1511.6469999999997] support None read completed tgt None assoc None
+     readings [('discovery', 'BH2031_DIB_AMB_ID_MAIN', None, None), ('blind_small', 'BH2031_DIB_AMB_ID', 'DOCUMENT NO.', None), ('blind_context', 'BH2031_DIB_AMB_ID_MAIN', 'DOCUMENT NO.', 'own_identity')]
+     reasons ["the readings disagree: discovery='BH2031_DIB_AMB_ID_MAIN', blind_small='BH2031_DIB_AMB_ID', blind_context='BH2031_DIB_AMB_ID_MAIN'"]
+  obs p 1 revision own candidate 'H' region None support None read completed tgt BH2031_DIB_AMB_ID_MAIN assoc None
+     readings [('discovery', 'H', None, None), ('blind_context', 'H', 'REVISION NO.', 'own_revision')]
+     reasons ['no source text for the read region']
+  DISC p 1 discover_page {'page_kind': 'cover_sheet', 'own_identity': 'BH2031_DIB_AMB_ID_MAIN', 'own_identity_label': 'DOCUMENT NO.', 'own_identity_region': [971, 1057, 1460, 1072], 'own_revision': 'H', 'own_revision_label': 'REVISION NO.', 'own_revision_region': [971, 1043, 1210, 1058], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'BH2031'}, {'role': 'other', 'literal': '03/08/2021'}]
+  CALL p 1 read_identity {"label_text": "DOCUMENT NO.", "value": "BH2031_DIB_AMB_ID", "legible": true, "other_values_in_crop": ["PROJECT NO.: BH2031", "REVISION NO.: H"]} ['ok']
+  CALL p 1 read_field_context {"value": "BH2031_DIB_AMB_ID_MAIN", "printed_label": "DOCUMENT NO.", "role": "own_identity", "region": [344, 220, 925, 270], "legible": true} ['ok']
+  CALL p 1 read_field_context {"value": "H", "printed_label": "REVISION NO.", "role": "own_revision", "region": [1206, 1304, 1270, 1324], "legible": true} ['ok']
+===== D12 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'located:labels:text', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'incomplete:located_region_only', 'own:identity:primary': 'completed', 'own:identity:targeted': 'completed'} outcome partial
+  obs p 1 identity own conflict 'BH2031_DIB_AMB_ID' region [1445.844, 1499.8419999999996, 2273.6400000000003, 1511.6469999999997] support None read completed tgt None assoc None
+     readings [('discovery', 'BH2031_DIB_AM', None, None), ('blind_small', 'BH2031_DIB_AMB_ID', 'DOCUMENT NO.', None), ('blind_context', 'BH2031_DIB_AMB_ID_MAIN', 'DOCUMENT NO.', 'own_identity')]
+     reasons ["the readings disagree: discovery='BH2031_DIB_AM', blind_small='BH2031_DIB_AMB_ID', blind_context='BH2031_DIB_AMB_ID_MAIN'"]
+  obs p 1 revision own validated 'H' region [1444.3464, 1553.47316, 1780.0851199999997, 1585.3512799999999] support text read completed tgt BH2031_DIB_AMB_ID_MAIN assoc None
+     readings [('discovery', 'H', None, None), ('blind_small', 'H', 'REVISION NO.', None)]
+     reasons []
+  DISC p 1 discover_region {'page_kind': 'drawing_sheet', 'own_identity': 'BH2031_DIB_AM', 'own_identity_label': 'DOCUMENT NO.', 'own_identity_region': [342, 730, 1000, 825], 'own_revision': 'H', 'own_revision_label': 'REVISION NO.', 'own_revision_region': [342, 611, 745, 706], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': '03/08/2021'}, {'role': 'project_or_contract', 'literal': 'BH2031'}]
+  CALL p 1 read_identity {"label_text": "DOCUMENT NO.", "value": "BH2031_DIB_AMB_ID", "legible": true, "other_values_in_crop": ["PROJECT NO. : BH2031", "REVISION NO. : H"]} ['ok']
+  CALL p 1 read_revision {"label_text": "REVISION NO.", "value": "H", "legible": true, "other_values_in_crop": ["DATE: 03/08/2021", "PROJECT NO.: BH2031", "DOCUMENT NO.: BH2031_DIB_AMB_ID_MAIN"]} ['ok']
+  CALL p 1 read_field_context {"value": "BH2031_DIB_AMB_ID_MAIN", "printed_label": "DOCUMENT NO.", "role": "own_identity", "region": [334, 220, 940, 270], "legible": true} ['ok']
+===== D16 L1
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery'} outcome evidence
+  obs p 1 identity own conflict 'TES/1343/NTH-MID-3B/SD/TEL-04' region [1515.3479736328125, 219.7511865234375, 1682.0362507324219, 262.74598388671876] support None read completed tgt None assoc None
+     readings [('discovery', 'TES/1343/NTF-HFMID-3B/SD/TEL-04', None, None), ('blind_small', 'TES/1343/NTH-MID-3B/SD/TEL-04', 'DRG.No.', None)]
+     reasons ["the readings disagree: discovery='TES/1343/NTF-HFMID-3B/SD/TEL-04', blind_small='TES/1343/NTH-MID-3B/SD/TEL-04'"]
+  obs p 1 revision own conflict '1' region [1650.0455712890625, 66.8807958984375, 1683.719970703125, 114.65279296875] support None read completed tgt None assoc None
+     readings [('discovery', '04', None, None), ('blind_small', '1', 'REV.NO.', None)]
+     reasons ["the readings disagree: discovery='04', blind_small='1'"]
+  DISC p 1 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'TES/1343/NTF-HFMID-3B/SD/TEL-04', 'own_identity_label': 'DWG NO.', 'own_identity_region': [900, 92, 999, 110], 'own_revision': '04', 'own_revision_label': 'REV. NO.', 'own_revision_region': [980, 28, 1000, 48], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'unclear', 'decision_actor': 'unknown', 'decision_region': [755, 115, 850, 178]}
+     other [{'role': 'project_or_contract', 'literal': 'PH-11'}, {'role': 'project_or_contract', 'literal': '1343'}, {'role': 'listed_item', 'literal': '08 PLEX (3BR)'}, {'role': 'listed_item', 'literal': '06 PLEX (3BR)'}, {'role': 'listed_item', 'literal': '04 PLEX (3BR)'}, {'role': 'other', 'literal': '51109314'}, {'role': 'other', 'literal': '1:75 (A1)'}, {'role': 'revision_history', 'literal': '00'}, {'role': 'revision_history', 'literal': '01'}, {'role': 'revision_history', 'literal': '02'}, {'role': 'revision_history', 'literal': '03'}, {'role': 'revision_history', 'literal': '04'}]
+  CALL p 1 read_identity {"label_text": "DRG.No.", "value": "TES/1343/NTH-MID-3B/SD/TEL-04", "legible": true, "other_values_in_crop": ["PH-11", "CERTIFICATE NO:MEA 6007252", "JOB: 1343", "REV.NO 1"]} ['ok']
+  CALL p 1 read_revision {"label_text": "REV.NO.", "value": "1", "legible": true, "other_values_in_crop": ["1:75 (A1)", "14-08-19", "25 SEP 2019"]} ['ok']
+===== D16 L2
+ page 1 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  DISC p 1 discover_region {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D16 L3
+ page 1 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  DISC p 1 discover_page {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D16 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'located:strip:ocr_local', 'own:identity': 'budget', 'own:revision': 'incomplete:located_region_only', 'own:decision': 'incomplete:located_region_only', 'own:identity:targeted': 'not_attempted:after_failure'} outcome partial
+  obs p 1 identity own candidate 'TES/1343/NTH-MID-3B/SD/TEL-04' region [1273.5657858398438, 358.28997802734375, 1339.5676086914061, 441.89097290039064] support None read budget tgt None assoc None
+     readings [('discovery', 'TES/1343/NTH-MID-3B/SD/TEL-04', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (budget): unverified']
+  DISC p 1 discover_region {'page_kind': 'drawing_sheet', 'own_identity': 'TES/1343/NTH-MID-3B/SD/TEL-04', 'own_identity_label': '', 'own_identity_region': [130, 150, 270, 185], 'own_revision': '', 'own_revision_label': 'REVD', 'own_revision_region': [270, 100, 300, 140], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'stamp', 'decision_actor': 'consultant', 'decision_region': [20, 130, 290, 330]}
+     other [{'role': 'listed_item', 'literal': 'ITEM NO.11'}, {'role': 'other', 'literal': '(PH-11)'}, {'role': 'other', 'literal': '5108214'}, {'role': 'other', 'literal': '14492'}, {'role': 'other', 'literal': '1:75 (A1)'}, {'role': 'other', 'literal': '14-08-18'}, {'role': 'other', 'literal': '17-SEP-18'}, {'role': 'other', 'literal': '25 SEP 2018'}]
+===== D17 L1
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'failed:timeout'} outcome partial
+  obs p 1 decision own candidate None region [1010.2319824218749, 824.1911865234374, 1515.3479736328125, 1027.252783203125] support None read failed:timeout tgt TES/1343/NTH-END-3B/SD/TEL-04 assoc None
+     readings [('discovery', None, None, None)]
+     reasons ['the marked option is not one of the options printed on the form, or its printed legend names no decision', 'not corroborated: needs the discovery reading and a blind reading of the block to agree', 'read not completed (failed:timeout): unverified']
+  obs p 1 identity own candidate 'TES/1343/NTH-END-3B/SD/TEL-04' region [1574.278172607422, 441.9575927734375, 1683.719970703125, 561.4055908203125] support None read completed tgt None assoc None
+     readings [('discovery', 'TES/1343/NTH-END-3B/SD/TEL-04', None, None), ('blind_small', 'TES/1343/NTH-END-3B/SD/TEL-04', 'DRG.No.', None)]
+     reasons ["the literal is not in the read region's source text"]
+  obs p 1 revision own conflict '1' region [1506.9293737792968, 453.902392578125, 1574.278172607422, 561.4055908203125] support None read completed tgt TES/1343/NTH-END-3B/SD/TEL-04 assoc None
+     readings [('discovery', '04', None, None), ('blind_small', '1', 'REV.NO', None)]
+     reasons ["the readings disagree: discovery='04', blind_small='1'"]
+  DISC p 1 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'TES/1343/NTH-END-3B/SD/TEL-04', 'own_identity_label': 'DRAWING No.', 'own_identity_region': [935, 185, 1000, 235], 'own_revision': '04', 'own_revision_label': 'REV', 'own_revision_region': [895, 190, 935, 235], 'decision_options_printed': [], 'decision_marked_option': "Code 'B' - APPROVED AS NOTED, RESUBMIT", 'decision_mark_type': 'handwriting', 'decision_actor': 'consultant', 'decision_region': [600, 345, 900, 430]}
+     other [{'role': 'project_or_contract', 'literal': 'PH-11'}, {'role': 'quoted_reference', 'literal': 'ANNEXURE-7 VALUE ENGINEERING ITEM NO.11'}, {'role': 'revision_history', 'literal': '14-08-19'}, {'role': 'revision_history', 'literal': '13-09-19'}, {'role': 'listed_item', 'literal': 'ATK-A-P300'}, {'role': 'listed_item', 'literal': 'ATK-A4-P300'}, {'role': 'other', 'literal': '25 Sep 2019'}, {'role': 'other', 'literal': '17-SEP-2019'}, {'role': 'other', 'literal': '30-09'}, {'role': 'other', 'literal': 'NTS'}]
+  CALL p 1 read_identity {"label_text": "DRG.No.", "value": "TES/1343/NTH-END-3B/SD/TEL-04", "legible": true, "other_values_in_crop": ["JOB:1343", "CERTIFICATE NO.:MEA 6007252", "REV.NO. 1"]} ['ok']
+  CALL p 1 read_revision {"label_text": "REV.NO", "value": "1", "legible": true, "other_values_in_crop": []} ['ok']
+  CALL p 1 read_decision null ['timeout']
+===== D17 L2
+ page 1 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  DISC p 1 discover_region {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D17 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'budget', 'own:revision': 'budget', 'own:decision': 'budget', 'own:identity:targeted': 'not_attempted:after_failure', 'own:revision:targeted': 'not_attempted:after_failure'} outcome partial
+  obs p 1 decision own candidate None region [1035.487781982422, 1086.9767822265626, 1439.580574951172, 1254.2039794921875] support None read budget tgt None assoc None
+     readings [('discovery', None, None, None)]
+     reasons ['the marked option is not one of the options printed on the form, or its printed legend names no decision', 'not corroborated: needs the discovery reading and a blind reading of the block to agree', "no target component: the page's own identity is not established", 'read not completed (budget): unverified']
+  obs p 1 identity own candidate 'TES/1343/NTH-END-3B/SD/TEL-04' region [1422.7433752441407, 353.56607421875, 1683.719970703125, 410.90111328125] support None read budget tgt None assoc None
+     readings [('discovery', 'TES/1343/NTH-END-3B/SD/TEL-04', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (budget): unverified']
+  obs p 1 revision own candidate '04' region [1607.9525720214842, 353.56607421875, 1683.719970703125, 410.90111328125] support None read budget tgt None assoc None
+     readings [('discovery', '04', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (budget): unverified']
+  DISC p 1 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'TES/1343/NTH-END-3B/SD/TEL-04', 'own_identity_label': 'DRAWING No.', 'own_identity_region': [845, 148, 1000, 172], 'own_revision': '04', 'own_revision_label': 'REV', 'own_revision_region': [955, 148, 1000, 172], 'decision_options_printed': [], 'decision_marked_option': "STATUS: 'B' APPROVED AS NOTED, RESUBMIT", 'decision_mark_type': 'handwriting', 'decision_actor': 'consultant', 'decision_region': [615, 455, 855, 525]}
+     other [{'role': 'quoted_reference', 'literal': 'ANNEXURE-7'}, {'role': 'listed_item', 'literal': 'ITEM NO.11'}, {'role': 'project_or_contract', 'literal': 'PH-11'}, {'role': 'other', 'literal': '17 SEP 2019'}, {'role': 'other', 'literal': '25 SEP 2018'}]
+===== D17 L4
+ page 1 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  DISC p 1 discover_region {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D18 L1
+ page 1 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  DISC p 1 discover_page {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D18 L2
+ page 1 {'discovery': 'ok', 'discovery:route': 'located:strip:ocr_cached', 'own:identity': 'incomplete:located_region_only', 'own:revision': 'incomplete:located_region_only', 'own:decision': 'incomplete:located_region_only'} outcome partial
+  DISC p 1 discover_region {'page_kind': 'drawing_sheet', 'own_identity': '', 'own_identity_label': '', 'own_identity_region': [], 'own_revision': '', 'own_revision_label': '', 'own_revision_region': [], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': '16800'}, {'role': 'other', 'literal': 'SCALE:1:40'}, {'role': 'other', 'literal': 'DRAFT11'}, {'role': 'other', 'literal': 'SEPTEMBER/14/2019'}, {'role': 'other', 'literal': '10:00AM'}]
+===== D18 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'budget', 'own:revision': 'budget', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:after_failure', 'own:revision:targeted': 'not_attempted:after_failure'} outcome partial
+  obs p 1 identity own candidate 'TES/1343/NTH-MID-3B/SD/TEL-01' region [1346.9759765625001, 257.9299189453125, 1683.719970703125, 346.29479858398435] support None read budget tgt None assoc None
+     readings [('discovery', 'TES/1343/NTH-MID-3B/SD/TEL-01', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (budget): unverified']
+  obs p 1 revision own candidate '01' region [1607.9525720214842, 257.9299189453125, 1683.719970703125, 346.29479858398435] support None read budget tgt None assoc None
+     readings [('discovery', '01', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (budget): unverified']
+  DISC p 1 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'TES/1343/NTH-MID-3B/SD/TEL-01', 'own_identity_label': 'DWG. NO.', 'own_identity_region': [800, 108, 1000, 145], 'own_revision': '01', 'own_revision_label': 'REV', 'own_revision_region': [955, 108, 1000, 145], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'unclear', 'decision_actor': 'consultant', 'decision_region': [640, 225, 830, 265]}
+     other [{'role': 'project_or_contract', 'literal': 'PHASE - 11 (AMARANTA - 3)'}, {'role': 'other', 'literal': '5108214'}, {'role': 'quoted_reference', 'literal': 'AS PER ANNEXURE-7 VALUE ENGINEERING ITEM NO.11'}, {'role': 'revision_history', 'literal': '00 / 13-09-19'}, {'role': 'revision_history', 'literal': '01 / 14-09-19'}, {'role': 'other', 'literal': '1:75'}, {'role': 'other', 'literal': 'A1'}, {'role': 'other', 'literal': '25 SEP 2010'}]
+===== D18 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'located:strip:ocr_cached', 'own:identity': 'incomplete:located_region_only', 'own:revision': 'incomplete:located_region_only', 'own:decision': 'incomplete:located_region_only'} outcome partial
+  DISC p 1 discover_region {'page_kind': 'drawing_sheet', 'own_identity': '', 'own_identity_label': '', 'own_identity_region': [], 'own_revision': '', 'own_revision_label': '', 'own_revision_region': [], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': '00800'}, {'role': 'other', 'literal': 'SCALE:1:40'}, {'role': 'other', 'literal': '+1.025 FFL'}, {'role': 'other', 'literal': '+1.450 FFL'}, {'role': 'other', 'literal': '+0.000'}, {'role': 'other', 'literal': 'SEPTEMBER/14/2019 - 10:00AM'}, {'role': 'other', 'literal': 'DRAFT11'}]
+===== D26 L1
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery'} outcome partial
+ page 2 {'discovery': 'ok', 'own:identity': 'unusable:illegible', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery'} outcome partial
+ page 3 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery'} outcome evidence
+ page 4 {'discovery': 'failed:timeout', 'own:identity': 'not_attempted', 'own:revision': 'not_attempted', 'own:decision': 'not_attempted'} outcome failed
+  obs p 1 identity own validated '28 20 00' region [171.36, 261.36, 397.8, 304.92] support text read completed tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '28 20 00', 'SECTION', None)]
+     reasons []
+  obs p 1 revision own candidate '00' region None support None read incomplete:no_region tgt 28 20 00 assoc None
+     readings [('discovery', '00', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 2 identity own candidate '28 20 00' region [249.696, 166.32, 501.84, 182.16] support None read unusable:illegible tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '', '""', None)]
+     reasons ['discovery only: no blind reading of the region', "the literal is not in the read region's source text", 'read not completed (unusable:illegible): unverified']
+  obs p 2 revision own candidate 'Rev. 00 – Sep. 2018' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', 'Rev. 00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 3 identity own validated '28 20 00' region [71.604, 716.76, 211.75199999999998, 736.5600000000001] support text read completed tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '28 20 00', 'Section', None)]
+     reasons []
+  obs p 3 revision own validated '00' region [468.18, 716.76, 557.532, 736.5600000000001] support text read completed tgt 28 20 00 assoc None
+     readings [('discovery', '00', None, None), ('blind_small', '00', 'Rev.', None)]
+     reasons []
+  DISC p 1 discover_page {'page_kind': 'cover_sheet', 'own_identity': '28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [280, 330, 650, 385], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [845, 1458, 1085, 1485], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'listed_item', 'literal': 'Page 1 of 52'}, {'role': 'revision_history', 'literal': '00'}, {'role': 'revision_history', 'literal': 'Sep. 2018'}]
+  CALL p 1 read_identity {"label_text": "SECTION", "value": "28 20 00", "legible": true, "other_values_in_crop": ["Rev. 00 - Sep. 2018"]} ['ok']
+  DISC p 2 discover_page {'page_kind': 'other', 'own_identity': '28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [408, 210, 820, 230], 'own_revision': 'Rev. 00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [870, 1483, 1090, 1503], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}, {'role': 'other', 'literal': 'Page 2 of 52'}, {'role': 'listed_item', 'literal': '3'}, {'role': 'listed_item', 'literal': '9'}, {'role': 'listed_item', 'literal': '10'}, {'role': 'listed_item', 'literal': '18'}, {'role': 'listed_item', 'literal': '20'}, {'role': 'listed_item', 'literal': '21'}, {'role': 'listed_item', 'literal': '23'}, {'role': 'listed_item', 'literal': '24'}, {'role': 'listed_item', 'literal': '25'}, {'role': 'listed_item', 'literal': '35'}, {'role': 'listed_item', 'literal': '45'}, {'role': 'listed_item', 'literal': '48'}, {'role': 'listed_item', 'literal': '50'}, {'role': 'listed_item', 'literal': '51'}, {'role': 'listed_item', 'literal': '52'}]
+  CALL p 2 read_identity {"label_text": "\"\"", "value": "", "legible": false, "other_values_in_crop": []} ['ok']
+  DISC p 3 discover_page {'page_kind': 'drawing_sheet', 'own_identity': '28 20 00', 'own_identity_label': 'Section', 'own_identity_region': [117, 905, 346, 930], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [765, 905, 911, 930], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'Plot No. 7.0002'}, {'role': 'other', 'literal': 'Page 3 of 52'}, {'role': 'listed_item', 'literal': '1-13 (General Scope sub-items A.1 through A.13)'}]
+  CALL p 3 read_identity {"label_text": "Section", "value": "28 20 00", "legible": true, "other_values_in_crop": ["Page 3 of 52"]} ['ok']
+  CALL p 3 read_revision {"label_text": "Rev.", "value": "00", "legible": true, "other_values_in_crop": ["Sep. 2018"]} ['ok']
+  DISC p 4 discover_page {'page_kind': None, 'own_identity': None, 'own_identity_label': None, 'own_identity_region': None, 'own_revision': None, 'own_revision_label': None, 'own_revision_region': None, 'decision_options_printed': None, 'decision_marked_option': None, 'decision_mark_type': None, 'decision_actor': None, 'decision_region': None}
+     other None
+===== D26 L2
+ page 1 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery'} outcome evidence
+ page 2 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'unusable:illegible', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery'} outcome partial
+ page 3 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'incomplete:no_region', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery'} outcome partial
+ page 4 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'budget', 'own:revision': 'budget', 'own:decision': 'absent_by_discovery'} outcome partial
+  obs p 1 identity own conflict '28 20 00' region [171.36, 174.24, 397.8, 205.92000000000002] support None read completed tgt None assoc None
+     readings [('discovery', 'SECTION 28 20 00', None, None), ('blind_small', '28 20 00', 'SECTION', None)]
+     reasons ["the readings disagree: discovery='SECTION 28 20 00', blind_small='28 20 00'"]
+  obs p 1 revision own validated '00' region [441.864, 730.224, 555.696, 747.6479999999999] support text read completed tgt None assoc None
+     readings [('discovery', '00', None, None), ('blind_small', '00', 'Rev.', None)]
+     reasons []
+  obs p 2 identity own candidate '28 20 00' region [246.63600000000002, 168.696, 437.58, 182.16] support None read unusable:illegible tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '', '', None)]
+     reasons ['discovery only: no blind reading of the region', "the literal is not in the read region's source text", 'read not completed (unusable:illegible): unverified']
+  obs p 2 revision own validated '00' region [428.4, 741.312, 533.052, 752.4] support text read completed tgt None assoc None
+     readings [('discovery', '00', None, None), ('blind_small', '00', 'Rev.', None)]
+     reasons []
+  obs p 3 identity own candidate '28 20 00 Video Surveillance System' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '28 20 00 Video Surveillance System', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 3 revision own candidate '00 – Sep. 2018' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 4 identity own candidate '28 20 00 Video Surveillance System' region [77.724, 723.096, 214.2, 734.976] support text read budget tgt None assoc None
+     readings [('discovery', '28 20 00 Video Surveillance System', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'read not completed (budget): unverified']
+  obs p 4 revision own candidate '00 – Sep. 2018' region [483.48, 723.096, 550.8000000000001, 734.976] support text read budget tgt None assoc None
+     readings [('discovery', '00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'read not completed (budget): unverified']
+  DISC p 1 discover_page {'page_kind': 'cover_sheet', 'own_identity': 'SECTION 28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [280, 220, 650, 260], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [722, 922, 908, 944], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}, {'role': 'other', 'literal': 'Page 1 of 52'}, {'role': 'revision_history', 'literal': '00 | Sep. 2018 | Specification Documents | AH | NM | RT'}]
+  CALL p 1 read_identity {"label_text": "SECTION", "value": "28 20 00", "legible": true, "other_values_in_crop": []} ['ok']
+  CALL p 1 read_revision {"label_text": "Rev.", "value": "00", "legible": true, "other_values_in_crop": ["Sep. 2018", "Specification document"]} ['ok']
+  DISC p 2 discover_page {'page_kind': 'drawing_sheet', 'own_identity': '28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [403, 213, 715, 230], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [700, 936, 871, 950], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'other', 'literal': 'Page 2 of 52'}, {'role': 'other', 'literal': 'Sep. 2018'}, {'role': 'listed_item', 'literal': '3, 9, 10, 18, 20, 21, 21, 23, 24, 24, 25, 25, 25, 25, 25, 35, 45, 45, 48, 48, 48, 50, 51, 51, 52, 52, 52 (table of contents page references)'}]
+  CALL p 2 read_identity {"label_text": "", "value": "", "legible": false, "other_values_in_crop": ["3", "9", "10", "18", "20", "21", "21", "23", "24"]} ['ok']
+  CALL p 2 read_revision {"label_text": "Rev.", "value": "00", "legible": true, "other_values_in_crop": ["Sep. 2018", "Specification document"]} ['ok']
+  DISC p 3 discover_page {'page_kind': 'other', 'own_identity': '28 20 00 Video Surveillance System', 'own_identity_label': 'Section', 'own_identity_region': [145, 1500, 630, 1520], 'own_revision': '00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [880, 1500, 1090, 1520], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': 'Page 3 of 52'}, {'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'listed_item', 'literal': '1.1'}]
+  DISC p 4 discover_page {'page_kind': 'other', 'own_identity': '28 20 00 Video Surveillance System', 'own_identity_label': 'Section', 'own_identity_region': [127, 913, 350, 928], 'own_revision': '00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [790, 913, 900, 928], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'other', 'literal': 'Page 4 of 52'}, {'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}]
+===== D26 L3
+ page 1 {'discovery': 'ok', 'own:identity': 'completed', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:budget', 'own:revision:targeted': 'not_attempted:budget'} outcome partial
+ page 2 {'discovery': 'ok', 'own:identity': 'unusable:illegible', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:budget', 'own:revision:targeted': 'not_attempted:budget'} outcome partial
+ page 3 {'discovery': 'ok', 'own:identity': 'incomplete:no_region', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:budget', 'own:revision:targeted': 'not_attempted:budget'} outcome partial
+ page 4 {'discovery': 'ok', 'own:identity': 'budget', 'own:revision': 'budget', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:after_failure', 'own:revision:targeted': 'not_attempted:after_failure'} outcome partial
+  obs p 1 identity own conflict '28 20 00' region [177.48, 261.36, 397.8, 297.0] support None read completed tgt None assoc None
+     readings [('discovery', 'SECTION 28 20 00', None, None), ('blind_small', '28 20 00', 'SECTION', None)]
+     reasons ["the readings disagree: discovery='SECTION 28 20 00', blind_small='28 20 00'"]
+  obs p 1 revision own candidate '00 – Sep. 2018' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 2 identity own candidate '28 20 00' region [280.908, 169.488, 454.716, 183.744] support None read unusable:illegible tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '', '', None)]
+     reasons ['discovery only: no blind reading of the region', "the literal is not in the read region's source text", 'read not completed (unusable:illegible): unverified']
+  obs p 2 revision own candidate '00' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '00', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 3 identity own candidate '28 20 00' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '28 20 00', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 3 revision own candidate 'Rev. 00 – Sep. 2018' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', 'Rev. 00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 4 identity own candidate 'Section 28 20 00 Video Surveillance System' region [79.56, 728.64, 306.0, 748.4399999999999] support text read budget tgt None assoc None
+     readings [('discovery', 'Section 28 20 00 Video Surveillance System', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'read not completed (budget): unverified']
+  obs p 4 revision own candidate '00 – Sep. 2018' region [428.4, 728.64, 550.8000000000001, 748.4399999999999] support text read budget tgt None assoc None
+     readings [('discovery', '00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'read not completed (budget): unverified']
+  DISC p 1 discover_page {'page_kind': 'cover_sheet', 'own_identity': 'SECTION 28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [290, 330, 650, 375], 'own_revision': '00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [740, 1455, 925, 1480], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'other', 'literal': 'Page 1 of 52'}, {'role': 'revision_history', 'literal': '00'}, {'role': 'revision_history', 'literal': 'Sep. 2018'}, {'role': 'revision_history', 'literal': 'AH'}, {'role': 'revision_history', 'literal': 'NM'}, {'role': 'revision_history', 'literal': 'RT'}]
+  CALL p 1 read_identity {"label_text": "SECTION", "value": "28 20 00", "legible": true, "other_values_in_crop": ["Rev. 00"]} ['ok']
+  DISC p 2 discover_page {'page_kind': 'other', 'own_identity': '28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [459, 214, 743, 232], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [934, 1830, 1120, 1860], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'other', 'literal': 'Page 2 of 52'}, {'role': 'other', 'literal': 'Sep. 2018'}]
+  CALL p 2 read_identity {"label_text": "", "value": "", "legible": false, "other_values_in_crop": ["3", "9", "10", "18", "20", "21", "21", "23", "24", "24"]} ['ok']
+  DISC p 3 discover_page {'page_kind': 'other', 'own_identity': '28 20 00', 'own_identity_label': 'Section', 'own_identity_region': [144, 1465, 420, 1480], 'own_revision': 'Rev. 00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [940, 1465, 1120, 1480], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': '7.0002'}, {'role': 'other', 'literal': 'Page 3 of 52'}]
+  DISC p 4 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'Section 28 20 00 Video Surveillance System', 'own_identity_label': 'Section', 'own_identity_region': [130, 920, 500, 945], 'own_revision': '00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [700, 920, 900, 945], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'listed_item', 'literal': 'Page 4 of 52'}, {'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}, {'role': 'quoted_reference', 'literal': '28 20 00'}]
+===== D26 L4
+ page 1 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'completed', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:budget', 'own:revision:targeted': 'not_attempted:budget'} outcome partial
+ page 2 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'completed', 'own:revision': 'completed', 'own:decision': 'absent_by_discovery', 'own:revision:targeted': 'not_attempted:budget'} outcome evidence
+ page 3 {'discovery': 'ok', 'discovery:route': 'full_page', 'own:identity': 'budget', 'own:revision': 'incomplete:no_region', 'own:decision': 'absent_by_discovery', 'own:identity:targeted': 'not_attempted:after_failure', 'own:revision:targeted': 'not_attempted:budget'} outcome partial
+ page 4 {} outcome budget: elapsed_time
+  obs p 1 identity own conflict '28 20 00' region [179.928, 168.696, 390.456, 191.664] support None read completed tgt None assoc None
+     readings [('discovery', 'SECTION 28 20 00', None, None), ('blind_small', '28 20 00', 'SECTION', None)]
+     reasons ["the readings disagree: discovery='SECTION 28 20 00', blind_small='28 20 00'"]
+  obs p 1 revision own candidate '00' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '00', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  obs p 2 identity own validated '28 20 00' region [214.2, 93.45599999999999, 379.44, 107.712] support text read completed tgt None assoc None
+     readings [('discovery', '28 20 00', None, None), ('blind_small', '28 20 00', 'SECTION', None)]
+     reasons []
+  obs p 2 revision own conflict '00' region [422.28, 754.776, 612.0, 776.16] support None read completed tgt 28 20 00 assoc None
+     readings [('discovery', 'Rev. 00 – Sep. 2018', None, None), ('blind_small', '00', 'Rev.', None)]
+     reasons ["the readings disagree: discovery='Rev. 00 – Sep. 2018', blind_small='00'"]
+  obs p 3 identity own candidate 'Section 28 20 00 Video Surveillance System' region [79.56, 734.976, 306.0, 746.064] support text read budget tgt None assoc None
+     readings [('discovery', 'Section 28 20 00 Video Surveillance System', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'read not completed (budget): unverified']
+  obs p 3 revision own candidate '00 – Sep. 2018' region None support None read incomplete:no_region tgt None assoc None
+     readings [('discovery', '00 – Sep. 2018', None, None)]
+     reasons ['discovery only: no blind reading of the region', 'no source text for the read region', 'read not completed (incomplete:no_region): unverified']
+  DISC p 1 discover_page {'page_kind': 'cover_sheet', 'own_identity': 'SECTION 28 20 00', 'own_identity_label': 'SECTION', 'own_identity_region': [294, 213, 638, 242], 'own_revision': '00', 'own_revision_label': 'Rev.', 'own_revision_region': [855, 1459, 1098, 1479], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}, {'role': 'revision_history', 'literal': '00'}, {'role': 'revision_history', 'literal': 'Sep. 2018'}, {'role': 'other', 'literal': 'Page 1 of 52'}]
+  CALL p 1 read_identity {"label_text": "SECTION", "value": "28 20 00", "legible": true, "other_values_in_crop": []} ['ok']
+  DISC p 2 discover_page {'page_kind': 'cover_sheet', 'own_identity': '28 20 00', 'own_identity_label': 'Section', 'own_identity_region': [350, 118, 620, 136], 'own_revision': 'Rev. 00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [690, 953, 1000, 980], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'PLOT 7.0002'}, {'role': 'other', 'literal': 'Page 2 of 52'}, {'role': 'listed_item', 'literal': '3'}, {'role': 'listed_item', 'literal': '9'}, {'role': 'listed_item', 'literal': '10'}, {'role': 'listed_item', 'literal': '18'}, {'role': 'listed_item', 'literal': '20'}, {'role': 'listed_item', 'literal': '21'}, {'role': 'listed_item', 'literal': '23'}, {'role': 'listed_item', 'literal': '24'}, {'role': 'listed_item', 'literal': '25'}, {'role': 'listed_item', 'literal': '35'}, {'role': 'listed_item', 'literal': '45'}, {'role': 'listed_item', 'literal': '48'}, {'role': 'listed_item', 'literal': '50'}, {'role': 'listed_item', 'literal': '51'}, {'role': 'listed_item', 'literal': '52'}]
+  CALL p 2 read_identity {"label_text": "SECTION", "value": "28 20 00", "legible": true, "other_values_in_crop": ["PLOT 7.0002"]} ['ok']
+  CALL p 2 read_revision {"label_text": "Rev.", "value": "00", "legible": true, "other_values_in_crop": ["of 52", "Sep. 2018", "Specification document"]} ['ok']
+  DISC p 3 discover_page {'page_kind': 'drawing_sheet', 'own_identity': 'Section 28 20 00 Video Surveillance System', 'own_identity_label': 'Section', 'own_identity_region': [130, 928, 500, 942], 'own_revision': '00 – Sep. 2018', 'own_revision_label': 'Rev.', 'own_revision_region': [840, 928, 1010, 942], 'decision_options_printed': [], 'decision_marked_option': '', 'decision_mark_type': 'none', 'decision_actor': 'unknown', 'decision_region': []}
+     other [{'role': 'project_or_contract', 'literal': 'Plot No. 7.0002'}, {'role': 'project_or_contract', 'literal': 'PLOT 7.0002- RETAIL & NURSERY'}, {'role': 'other', 'literal': 'Page 3 of 52'}, {'role': 'listed_item', 'literal': '1'}, {'role': 'listed_item', 'literal': '2'}, {'role': 'listed_item', 'literal': '3'}, {'role': 'listed_item', 'literal': '4'}, {'role': 'listed_item', 'literal': '5'}, {'role': 'listed_item', 'literal': '6'}, {'role': 'listed_item', 'literal': '7'}, {'role': 'listed_item', 'literal': '8'}, {'role': 'listed_item', 'literal': '9'}, {'role': 'listed_item', 'literal': '10'}, {'role': 'listed_item', 'literal': '11'}, {'role': 'listed_item', 'literal': '12'}, {'role': 'listed_item', 'literal': '13'}, {'role': 'other', 'literal': 'PART 1'}, {'role': 'other', 'literal': '1.1'}]

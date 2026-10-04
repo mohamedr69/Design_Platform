@@ -1,0 +1,60 @@
+{
+ "review": "Independent M2 Preparation Review 33 (draft, ORCH-03.2)",
+ "agent": "R33-SYNTH, Claude Opus 5.5 (claude-opus-5-5), effort High; fresh isolated agent",
+ "status": "Rulings of this owner-delegated independent Claude AI review, adopted from R33-D3 (D3-escalation-rulings.json sha256 4a26e8c631ac91cae40653e18c690947d1569313cb7d8a7f195da465fa8dfb47) after R33-SYNTH re-read the decisive images. NOT owner decisions, NOT human sign-off; they authorize nothing. Subject to R33-CRITIC and R33-FINAL.",
+ "application_rule": "Any ruling below that changes a row is NOT written into r32-labels-reviewed-1 (00e53e82..., frozen). It must be applied mechanically as r32-labels-reviewed-2 in a NEW package with its own manifest, a recount and a new FIELD-POPULATION, before any declaration. r32-labels-draft-1 and r32-labels-reviewed-1 stay unchanged.",
+ "D-004": {
+  "rows": ["F069/p1/identity", "F069/p3/identity", "F069/identity (document)"],
+  "page_evidence": {
+   "C:/t/r2x/r32-stage/renders/F069-p1.png": "Al Arabia 'Design Sheet' to M/s Al Abdouli Group, Date 5-Aug-18, Validity 20 Days, 'Refrence : EP-15744', Project 'Command Of Military Works 17045 at Al minhad', Subject 'Quotation for Fire Alarm System'. Re-read by R33-SYNTH: CONFIRMED.",
+   "C:/t/r2x/r32-stage/renders/F069-p3.png": "Second 'Design Sheet', Date 4-Aug-18, 'Refrence : EP-15744', Project 'CMW 17045 at Al Awir', Subject 'Quotation for Emergency Lighting System'. Re-read by R33-SYNTH (header zoom): CONFIRMED.",
+   "C:/t/r2x/r32-stage/renders/F062-p1.png": "Al Arabia DOCUMENT TRANSMITTAL: 'AASS Ref. : TR/3544/18', 'Project ID : EP-15744', Document No. 'EP-15744/SM/FAS/201'. Re-read by R33-SYNTH: CONFIRMED.",
+   "C:/t/r2x/r32-stage/renders/F068-p1.png": "Per R33-D3: 'Oracle Job No. / OM No.' EP-15744, Job Title CMW 17045. Not re-read by R33-SYNTH (not needed: F062 already corroborates the job-number role)."
+  },
+  "ruling": "AMBIGUOUS (confirmed). Frozen LABEL-CONVENTIONS-R32 section 2 defines 'ambiguous' as a readable value whose role cannot be established from the page. On the F069 pages EP-15744 sits under a bare 'Refrence' label and the page does not state its role. Section 3 forbids a project/job number as identity, so 'present' is not defensible given that the same issuer prints EP-15744 as its 'Project ID' (F062) and 'Oracle Job No.' (F068) and repeats it on two quotations of different dates. 'Absent' would require reading the role from other documents, which is topic (h2), an amendment to section 3 that the owner has not adopted.",
+  "resulting_rows": {
+   "F069/p1/identity": {"state": "ambiguous", "literal": null, "candidates": [{"literal": "EP-15744", "printed_label": "Refrence", "role": "not established on the page (issuer's project/job number on F062/F068)"}], "association": "resolved", "excluded_from_scoring": true, "review_status": "ruled (Review 33, D-004)"},
+   "F069/p3/identity": {"state": "ambiguous", "literal": null, "candidates": [{"literal": "EP-15744", "printed_label": "Refrence", "role": "not established on the page"}], "association": "resolved", "excluded_from_scoring": true, "review_status": "ruled (Review 33, D-004)"},
+   "other_identities": "unchanged (no role is asserted for EP-15744 on these pages)"
+  },
+  "document_level": {"F069/identity": {"resolved_for_scoring": "no", "carries_fact": "no"}},
+  "row_change": "YES: reviewed-1 stores state 'present', literal 'EP-15744', review_status 'unresolved' on both pages (finding R33-03). reviewed-2 must write the rows above.",
+  "count_impact": "None. Identity population stays 57 (F069 carries_fact is no under every option). Identity resolved_for_scoring 'yes' stays 67.",
+  "owner_alternative": "If the owner adopts (h2) as an amendment to section 3: state 'absent', EP-15744 recorded in other_identities (role: issuer project/job number), F069 identity resolved_for_scoring yes / carries_fact no; identity population still 57."
+ },
+ "D-005": {
+  "rows": ["F019/p1/revision", "F019/revision (document)", "F019 question"],
+  "page_evidence": {
+   "C:/t/r2x/r32-stage/crops/F019-p1-0.03_0.84_0.2_1-r90.png": "Title block: DATE 09-05-16, DRAWN AHMED, SCALE 1:150 @ A1, CHKD MJ, APPD MJ; DWG. NO: FAM-PIV-MAH-SPD-FA-2633-007; 'Rev. no.' 00. Dewan REVIEW NOTE stamp with red arrow to APPROVED AS NOTED, 16.5.16. Re-read by R33-SYNTH: CONFIRMED.",
+   "C:/t/r2x/r32-stage/renders/F019-p1.png": "Revision table (printed rotated; read on a scratch rotation of the bound render): 'REV DATE DESCRIPTION DRAWN CHKD'; '00 05-03-16 ISSUED FOR APPROVAL AHMED MJ'; '01 09-05-16 AS PER CONSULTANT COMMENTS AHMED MJ'. Re-read by R33-SYNTH: CONFIRMED, including the REV column values 00 and 01.",
+   "C:/t/r2x/r32-stage/crops/F019-p1-0.38_0.86_0.44_0.99-r90.png": "The same two table rows (dates and descriptions; the REV column falls outside this crop). Re-read by R33-SYNTH: CONFIRMED."
+  },
+  "ruling": "PRESENT '00' under the frozen conventions (confirmed). Frozen section 4 makes the page's revision cell or title-block REV field the primary source and uses a revision-history table only 'when only a revision-history table is printed'. Here a revision cell is printed, so the frozen text itself establishes which candidate is the field, and section 2 'ambiguous' does not apply. The rule that a cell/table conflict is ambiguous is topic (i), an amendment to section 4 that the owner has not adopted. Disclosure: the page carries contrary evidence (table row 01 dated 09-05-16, equal to the title-block DATE), so a prediction of '01' is plausible; the declaration must name F019 revision as a contested row.",
+  "resulting_rows": {
+   "F019/p1/revision": {"state": "present", "literal": "00", "printed_label": "Rev. no.", "semantic_role": "title-block revision cell (frozen section 4 primary source)", "association": "resolved", "region": [0.04, 0.86, 0.43, 0.99], "excluded_from_scoring": false, "review_status": "ruled (Review 33, D-005)", "note": "revision table latest row 01 (09-05-16, AS PER CONSULTANT COMMENTS) and title-block DATE 09-05-16 recorded as a note; no inference from dates"}
+  },
+  "document_level": {"F019/revision": {"resolved_for_scoring": "yes", "carries_fact": "yes"}},
+  "row_change": "YES: reviewed-1 stores state 'ambiguous' with candidates 00/01, excluded_from_scoring true, review_status 'unresolved'; document F019 revision unresolved/unresolved. reviewed-2 must write the rows above.",
+  "count_impact": "Revision population 38 -> 39 (F019, project EP-3563; stratum per FROZEN-SELECTION). Identity 57 and decision 38 unchanged. Equals FIELD-POPULATION upper_bound_if_resolved revision 39. Expected reviewed-2 counts: 57/39/38.",
+  "owner_alternative": "If the owner adopts topic (i) as an amendment to section 4: state 'ambiguous' with candidates 00 (cell) and 01 (latest table entry), excluded; F019 revision resolved_for_scoring no / carries_fact no; revision population stays 38."
+ },
+ "carried_over": [
+  {"item": "count-once alias F031 -> F001 (content duplicate)", "verdict": "CONFIRMED with caveat", "synth_check": "R33-SYNTH pixel comparison of bound renders: F001-p1 vs F031-p1 and F001-p2 vs F031-p2, 0 differing pixels (1800x1272). Staged sha256 differ (F001 d701f99d..., F031 4f1ffdfc...).", "ruling": "Count once is defensible (F031 adds no field value F001 lacks; F031 p3 Comments Resolution Sheet carries MAT - 116 / Rev 02, the same values as F001). Topic (c)(ii) is an unrecorded amendment to frozen section 1 (byte-identical only) and its condition 'in-scope fact-carrying pages render-identical' is not literally met for F031 p3. Must be recorded as an amendment with this caveat (finding R33-04).", "count_impact": "Without (c)(ii): identity 59, revision 40, decision 39 (reviewed-1 basis); with it 57/38/38."},
+  {"item": "count-once alias F059 -> F046 (content duplicate)", "verdict": "CONFIRMED", "synth_check": "R33-SYNTH: F046-p1 vs F059-p1 (1272x1800), 77,603 pixels differ at all, 1,183 by more than 64 grey levels, all inside x 0.842-0.882, y 0.856-0.911 (the seal region per D3).", "ruling": "Render-identical except a company seal that carries no field fact; count once is defensible under (c)(ii), which remains an unrecorded amendment (R33-04).", "count_impact": "Included in the 59/40/39 vs 57/38/38 difference."},
+  {"item": "byte-identical aliases F052 -> F038, F070 -> F067", "verdict": "CONFIRMED", "synth_check": "R33-SYNTH: SOURCE-MANIFEST staged_sha256 groups are exactly [F038, F052] and [F067, F070].", "ruling": "Frozen section 1 applies; count once.", "count_impact": "None beyond the frozen rule."},
+  {"item": "page-keyed scoring of compilation files F002, F035, F043 (and F069)", "verdict": "CONFIRMED as necessary (per D3 image reading; not re-read by R33-SYNTH)", "ruling": "A file-level truth would compare one prediction with several documents' truths; truth must be keyed (pool id, page), consistent with frozen section 7. D-003 (F043 revision no/no -> yes/yes) follows section 7 and is accepted (+1 revision, already in 38). Scorer rule to be bound (R33-05, R33-09).", "count_impact": "None beyond D-003, already counted."},
+  {"item": "whitespace-insensitive literal comparison (F023, F067, '- R0n', 'FA- 6001', 'EM- 104')", "verdict": "CONFIRMED (labels keep printed form per section 3)", "ruling": "Scorer rule, not a convention change; must be stated and implemented in the bound scorer (R33-09).", "count_impact": "None."},
+  {"item": "LACASA/Scale '- R0n' suffix as revision", "verdict": "CONFIRMED (not counted)", "ruling": "Sections 4 ('embedded only', association uncertain) and 7 (only resolved values carry) keep these documents out of the revision population. Counting them is a convention change requiring an owner decision (up to +8: F002, F003, F004, F005, F006, F007, F011, F015).", "count_impact": "None unless the owner amends sections 4 and 7."},
+  {"item": "resubmission_required on mixed-option rows ((d1); 9 rows F001/F031 p2, F017, F022, F026, F033, F030 p1/p3/p4)", "verdict": "CONFIRMED (marks) / amendment not recorded", "ruling": "Class 'approved as noted' with resubmission_required yes is defensible, but departs from the literal 'resubmit' marker in frozen section 5; record as an amendment and define the scorer tolerance in the declaration (R33-11, R33-09).", "count_impact": "None (decision carries either way)."},
+  {"item": "(e)/D-001 F025 Code C 'Not Approved (Re-submit ...)' classed revise and resubmit", "verdict": "CONFIRMED (defensible)", "ruling": "Overrides the literal section 5 'not approved' marker; add to the declaration's amendment list (R33-11).", "count_impact": "None."},
+  {"item": "(g)(1), (g2)/D-002, (h)/D-003, (d2), (f) interpretive rulings", "verdict": "CONFIRMED as interpretations", "ruling": "List as interpretations in the declaration (R33-11). D-003 contributes +1 to revision (37 -> 38).", "count_impact": "D-003 +1 revision, already in 38."}
+ ],
+ "resulting_populations": {
+  "reviewed_1_as_frozen": {"identity": 57, "revision": 38, "decision": 38, "excluded_unresolved": {"identity": ["F069"], "revision": ["F019"]}},
+  "after_reviewed_2_with_these_rulings": {"identity": 57, "revision": 39, "decision": 38, "excluded_unresolved": {}},
+  "if_owner_adopts_h2_and_i": {"identity": 57, "revision": 38, "decision": 38},
+  "without_count_once_content_aliases_c_ii": {"identity": 59, "revision": 41, "decision": 39, "note": "reviewed-2 basis (reviewed-1 basis 59/40/39)"},
+  "gate_minimum": 12,
+  "gate_met_under_every_option": true
+ }
+}

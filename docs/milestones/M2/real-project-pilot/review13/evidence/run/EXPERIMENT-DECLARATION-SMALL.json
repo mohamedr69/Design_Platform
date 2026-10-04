@@ -1,0 +1,253 @@
+{
+ "declared_at_utc": "2026-09-29T18:24:30+00:00",
+ "name": "r2x-small: Round 2 exploration, small matched A/B/C batch (M2 Review 13 follow-up)",
+ "scope_statement": "exploration on exposed + exploration projects only; no sealed content; not a generalization claim; no winning variant while truth is unconfirmed",
+ "candidate": {
+  "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+  "worktree": "C:/t/iso/frozen-r12",
+  "tree_clean": true,
+  "freeze_manifest": "review12/evidence/freeze/FREEZE-R12.json",
+  "freeze_manifest_sha256": "431af30c23b88be809ddd38fb219a4e9c46e779f0f7f942dfbe819ac0ea996ff",
+  "accepted_by": "reviewer Review 13 (M2-REREVIEW.md), on 3d5607d",
+  "source_sha256": {
+   "backend/app/ai/evidence_reader.py": "22999476256a415a95f45dc865fc9858f1507e9ebebb60e74040dfcb6a70abd9",
+   "backend/app/ai/ledger.py": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+   "backend/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+   "backend/app/ai/provider.py": "d465961efb07b7f9df2597b37a228735238af433d950bf7095925e8cc43eb5ba",
+   "backend/app/ai/cache.py": "408b8a3ea5b70fd36118bebdf1ae1162d25525b2336952f7a8dfad04854ec206",
+   "backend/app/services/document_control.py": "78e392c4b880b37c3750d24e54d5300e767fdd041bfcd15a6ac826bf731ed374",
+   "backend/app/services/design_sheet_extractor.py": "b110d172df487aaadf24fef629e3278ff86776ff2c35bd1b524c44c97dcb8d8f",
+   "backend/scripts/m2_eval5.py": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "backend/scripts/m2_eval4.py": "65f3e096dd8ec93be38f50db445eeb0a9837c1acde605f5569a575f1f31f79b5",
+   "backend/scripts/m2_boq_eval.py": "550e1a3c8eafcc93f97d95e801854b713f39e4206e9b6a900e0a09d691cdbe25",
+   "backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155"
+  }
+ },
+ "identities": {
+  "evidence_reader": {
+   "READER_VERSION": "evidence-reader-2026-09-29.7",
+   "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4",
+   "SCHEMA_VERSION": "evidence-schema-1",
+   "PROMPTS": {
+    "discover_page": "discover-2026-09-29.1",
+    "read_identity": "read-identity-2026-09-29.1",
+    "read_revision": "read-revision-2026-09-29.1",
+    "read_decision": "read-decision-2026-09-29.1",
+    "read_boq_row": "read-boq-row-2026-09-29.2"
+   },
+   "AUDIT_RATE": 0.2,
+   "AUDIT_SEED": "audit-2026-09-29",
+   "MAX_PAGES_PER_DOCUMENT": 4,
+   "MAX_CALLS_PER_DOCUMENT": 8
+  },
+  "ledger": "ai-ledger-2026-09-29.2",
+  "parser": "parse-2026-09-29.9",
+  "design_sheet_extractor": "2026-09-29.2",
+  "evaluator": "m2-pilot-eval-2026-09-29.9",
+  "boq_evaluator": "m2-boq-eval-2026-09-29.3"
+ },
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "summary": "owner reply (Yes), 2026-09-29: model use for documents of the existing 34 frozen Round 2 projects through the existing evaluation provider; reused, not asked again",
+  "frozen_selection": {
+   "file": "review06/evidence/round2/ROUND2-SELECTION.json",
+   "sha256": "5437e16449ece38c8b169dc26416521bb5ed576c953d56df76317fe0694ca3a7"
+  },
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)",
+   "19144": "exploration (new)",
+   "22510": "exploration (new)",
+   "23091": "exploration (new)",
+   "23323": "exploration (new)",
+   "26208": "exploration (new)",
+   "27421": "exploration (new)",
+   "28745": "exploration (new)",
+   "30549": "exploration (new)",
+   "8430": "regression / exposed (R5 holdout (exposed))"
+  },
+  "sealed_excluded": [
+   "13705",
+   "17323",
+   "18196",
+   "19245",
+   "25651",
+   "27092",
+   "27519",
+   "29343",
+   "29648",
+   "31441"
+  ],
+  "sandbox_project_policy": "sandbox projects are created with the application default ai_policy 'allowed' (models.py), on the strength of this permission; live projects.ai_policy is not read or changed",
+  "not_authorized": [
+   "sealed holdout content",
+   "live settings / services / data",
+   "production processing or promotion",
+   "M3"
+  ]
+ },
+ "sources": {
+  "exploration_manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+  "small_batch": {
+   "file": "SMALL-BATCH.json",
+   "sha256": "7039daa3f04935a35d9a272076be16510d4eb0a8885651f83f07af51f44d7139",
+   "seed": "m2-round2-small-batch-2026-09-29"
+  },
+  "stage": {
+   "root": "C:/t/r2x/small-stage",
+   "manifest_sha256": "b17c23f6590708229ae90af524734a92df44e51cd8aacb47a7232331f529e455",
+   "files": {
+    "EP-16830/EP-16830 - PQ/Rev.01/0.0 Table of Content.pdf": "d7ac7576420de6db7fadf78d59c694fca373b573a439c86eca5dede3d07d71bf",
+    "EP-17428/EP-17428 MS/FA MS/Rev.01/1-7.pdf": "535ffbdabfcf0e50343da44cf5692d295e5ddda39824d2dd3ea75965d7e704ba",
+    "EP-19144/EP-18101 Commercial/EP-18101 SCS Estimation.pdf": "a0db0f066f4eb1076cfcd80e29b1c62b093e4b0e2a567881b65109d933d01eb9",
+    "EP-22510/EP-22510 Scan/EP-22510 DRF.pdf": "0c9737211762c99d4e49f3c132f179333a5ea4bf9d99e6487890d3cca5b9f5f0",
+    "EP-23091/EP-23091 Commercial Documents/EP-23091 EML Design.pdf": "bdce7913eb15dd34b377a3ac91076f4fa40176fb6e6bcf3a771ecfe0726b3475",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B01-Warehouse Updated Full Package & Compliance Sheet/1- Approval Drawings/PDF/DJ-295-O-EN-DST-00-ASS-0157-01.pdf": "35bd128789deb10d9550fad52ecdf1657838ada0076cf5a6af0965a229102f15",
+    "EP-26208/Lux Calculation/Lux calculation/LUX CALCULATIN17.7.23.pdf": "a7763559b0bcec10076f5bf402239bca146df7d416af2bf830bff56d2a3dbb42",
+    "EP-27421/EP-27421 Shop Drawings/FIRE ALARM SYSTEM LAYOUT/FAS-SCH/FAS-09-SCH.pdf": "79e7e35bd807185fbc175b1cea0d8b86c34827aca76d43d9561d148a81570a5c",
+    "EP-28745/MS/Edwards/R0/PDF/Previous Project List.pdf": "d8ba80a74660665b763a5aa3011491726b25926d98899a73c6bfb2d2abaa77e3",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-40000_DETAILED PLANS (ID)/DCH-M-BSB-DWG-ZZ-ARC-40075_E_GF (PARKING 1) - EMERGENCY RESPONSE- CRISIS MANAGEMENT RM - SHEET 1 OF 2.pdf": "73a723f4200975cd903af33012aacc9b3b4ec319cfc31966613baf2f27ca71c5",
+    "EP-27421/Transmittal/EP-27421 EML Sam B.docx": "2ddc88e23639ae62a940751a62d4b0e5a605a8545f3d87a4701b62fe9b96d7a9",
+    "EP-30549/Inputs/DUTCO DOC/03_CALCULATIONS/03_CALCULATIONS/ELECTRICAL/DCH-M-MHT-CAL-IFC-ELE-0001-00.pdf": "2472d2cc65c3bac476d4f71c8a77da6e614401f7836d8ad47964598d2cab8fa9"
+   }
+  },
+  "boq_sheet": {
+   "doc_key": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "cohort": "exposed (Review 05 holdout, H-06)"
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/small-stage"
+ },
+ "proposed_truth": {
+  "status": "AI-DRAFTED PROPOSALS, written before any prediction for these documents; no human review yet; every metric is PROVISIONAL",
+  "page_labels": {
+   "file": "labels/SMALL-BATCH-LABELS.json",
+   "sha256": "d21a83fd407d5954d77c24a9a42bdd9c3b673d4b645e0c6a27046a5e21782379"
+  },
+  "register_labels_derived": {
+   "file": "labels/SMALL-BATCH-REGISTER-LABELS.json",
+   "sha256": "fb65f3c29df16abf71205a216b1bf1398d0d6a848066b877061aaaff67ff4951"
+  },
+  "boq_labels": {
+   "file": "review05/holdout/HOLDOUT-BOQ-LABELS.json",
+   "sha256": "f8136f49be8c48c6ed205ddd05894b54187ad46d1a7103d1305d358dbe298fa4",
+   "status": "Review 05 AI-drafted labels; the H-06 quantity (printed 1) is crop-confirmed in C:/t/r2x/worklist/h06, still pending human confirmation"
+  }
+ },
+ "provider": {
+  "adapter": "claude-code (the Claude Code CLI; the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "actual_model": "recorded per response (ai_usage.model / ledger entries.model), never inferred",
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  }
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "application_limits_note": "the frozen candidate's defaults, NOT overridden (Review 07 raised the per-project day limit and job time to 300; this round does not). ai_max_input/output_tokens_per_task gate the application's reservation ESTIMATE (the evidence reader reserves 4,000 input), not actual usage; ai_max_cost_per_job is inert while unpriced. The per-project day limit (60) is applied across all tracks by xtrack.py.",
+ "ledger": {
+  "version": "ai-ledger-2026-09-29.2",
+  "path": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scope": "r2x-small-2026-09-29",
+  "limits": {
+   "requests": 150,
+   "per_request_input": 70000,
+   "per_request_output": 20000,
+   "input_tokens": 4000000,
+   "output_tokens": 600000,
+   "elapsed_s": 14400
+  },
+  "shared_by": "every track of this batch (A application path, B, C, BOQ-B, BOQ-C), across processes",
+  "env": {
+   "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+   "AI_LEDGER_SCOPE": "r2x-small-2026-09-29",
+   "AI_LEDGER_LIMITS": "{\"requests\": 150, \"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400}"
+  },
+  "enforcement": {
+   "requests": "hard (reserved before dispatch; a refused request is never sent)",
+   "elapsed_s": "hard for new requests",
+   "per_request_input / per_request_output / input_tokens / output_tokens": "CLI adapter: ESTIMATE plus circuit breaker, NOT provider-enforced caps; a completed request cannot be made smaller"
+  },
+  "previous_scope": {
+   "r7-matched": "C:/t/r7/ledger/matched.sqlite: 120 settled + 1 refused = exhausted; NOT reset, amended or reused. The file is Review 07 evidence and is not opened for writing (ledger .2 would add a column to it); Round 2 therefore uses its own ledger file"
+  }
+ },
+ "pricing": {
+  "status": "unknown: no trustworthy price configured (prices 0.0); cost is reported as UNKNOWN, never zero; the CLI's total_cost_usd is not used",
+  "spend_cap": "not establishable (no valid pricing / account control) -- the request cap and time caps are the binding controls"
+ },
+ "cache_mode": "application result cache ON with its keys (reader / prompt / schema / policy / variant / tier / model). Each track starts from a sandbox with no evidence-cache entries: B and C start from a copy of A's database, which holds only A's application-path caches; A's and the deterministic track's sandboxes are new. Cache hits are recorded as cache hits (no request, no tokens).",
+ "profiles": {
+  "det": "AI disabled: the deterministic track (no model request), a reference only",
+  "A": "AI_EVIDENCE_VARIANT=off with AI enabled: the application's existing AI path (submittal form / sheet readers) -- baseline",
+  "B": "EV1: targeted triggers (form_or_title_block_without_identity, identity_without_revision, decision_block_unread, flagged_by_reader, unexplained_empty_document) + the seeded 20% audit of confident pages (AUDIT_RATE 0.2, seed by sha256 and page); BOQ: held rows + 20% audit of accepted rows",
+  "C": "EV2: broad verification of every confident page + standard-tier escalation (<=2 per document); BOQ: every row",
+  "verifier_blindness": "blind readers see the page / crop only, never the first reader's values (evidence_reader contract; BOQ crops carry the row, not its values)"
+ },
+ "run_order": [
+  "det: r2x_ev0.py C:/t/r2x/small-stage r2x-small-det",
+  "A: r2x_ev0.py C:/t/r2x/small-stage r2x-small-A --ai",
+  "B: r2x_ev.py r2x-small-A r2x-small-B EV1",
+  "C: r2x_ev.py r2x-small-A r2x-small-C EV2",
+  "BOQ-B: r2x_boq.py r2x-small-boq-B EV1",
+  "BOQ-C: r2x_boq.py r2x-small-boq-C EV2"
+ ],
+ "boq": {
+  "sheets": [
+   "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf"
+  ],
+  "scored": "C:/t/iso/work/r2x/boq/holdout-A-r12.json",
+  "extraction": "C:/t/iso/work/r2x/boq/holdout-A-r12-extraction.json",
+  "set": "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-BOQ-SET.json",
+  "inputs_sha256": {
+   "C:/t/iso/work/r2x/boq/holdout-A-r12.json": "2b2fb81307e44a2d69d8cb8c05b606690ae5c69204d095ef2a2d5e0d62ff6ae9",
+   "C:/t/iso/work/r2x/boq/holdout-A-r12-extraction.json": "62a9a29ddd785677ed93787d25f4e5929d88ea0c949a3a4648024acf7274197c",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-BOQ-SET.json": "b03f448a47908336dd862db70faa15814b70ded9f4454fcfde0908fc8c0960c1",
+   "C:/Users/moham/Desktop/dev/dev/ep-platform/docs/milestones/M2/real-project-pilot/review05/holdout/HOLDOUT-BOQ-LABELS.json": "f8136f49be8c48c6ed205ddd05894b54187ad46d1a7103d1305d358dbe298fa4"
+  }
+ },
+ "stop_conditions": [
+  "ledger refusal (requests / elapsed / token breaker): no further request in the scope; each later read is a recorded budget stop",
+  "application limits (per document calls / escalations / elapsed, per project day) as the application enforces them",
+  "per-project rolling-24-hour total across all tracks reaches 60 (xtrack.py): further requests for that project are budget stops",
+  "three consecutive provider failures (transport, timeout, refusal): the run stops",
+  "a stage project outside the declaration, a sealed project, a changed source / truth / declaration hash: the runner refuses to start",
+  "a sandbox that already exists: the runner refuses (runs are never repeated in place; failed or stopped runs are preserved)"
+ ],
+ "partial_results": "kept as they are; a budget-stopped page is 'budget', never absent or negative; failed and stopped attempts stay in the outputs and the ledger",
+ "continuation": "the remaining exploration batch runs only after the small-batch gate passes, under a new declaration (or addendum) naming its own scope, within the same application limits and the cross-track project-day limit; nothing in this scope is reset",
+ "small_batch_gate": [
+  "every staged document persisted in every track (rows == stage files)",
+  "no business-row change between A and B / C (project_submittals, project_shop_drawings counts equal)",
+  "ledger settled + unknown-usage requests == fresh ai_usage requests over all tracks",
+  "no authentication / configuration failure of the provider",
+  "outputs scored by evaluator .9 against the PROVISIONAL labels, with truth status stated"
+ ],
+ "evaluation": {
+  "documents": "scripts.m2_eval5 (evaluator .9) --labels SMALL-BATCH-REGISTER-LABELS.json --page-labels SMALL-BATCH-LABELS.json --rows <track rows.json>",
+  "boq": "row outcomes of r2x_boq.py joined to the m2_boq_eval pairs of the AI-off extraction",
+  "goals": "0 critical false accepts; >= 90% correct automatic recovery of critical fields; 98% for other fields (reported, not claimed on provisional truth)"
+ }
+}

@@ -1,0 +1,480 @@
+{
+ "declared_at_utc": "2026-09-30T06:34:04+00:00",
+ "dry_run_before_declaration": "the runners' plumbing was exercised end to end with a scripted provider (PILOT_DRY=1: C:/t/r2x/dry-runs, own ledger / counter / allowance files, no model request) before this declaration",
+ "name": "M2 targeted AI accuracy pilot (2026-09-30)",
+ "status": "DIAGNOSTIC PILOT on AI-drafted PROVISIONAL labels; not M2 acceptance; not a generalization claim; no variant adoption",
+ "question": "can targeted AI recover supported identities, revisions and consultant decisions currently missed or held, without new false accepted facts or wrong associations?",
+ "comparisons": {
+  "S->G": "the guard effect only (a validator fix, not AI)",
+  "G->T": "the targeted verification effect; T gains are attributed by route: region support (text-layer rotation / local OCR) versus the targeted context read",
+  "BOQ-S->BOQ-T": "the declared risk-ordered row queue versus the accepted EV1 row selection, one 12-request allowance each; also compared at BOQ-S's request count (T's queue prefix)"
+ },
+ "authorization": {
+  "document": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/OWNER-AI-PERMISSION-ROUND2.md",
+  "sha256": "8710d439079f21b5f31fd5579800a3c1aaddafed488c788b6b68796d0a613dce",
+  "reused_not_requested_again": true,
+  "frozen_selection": {
+   "file": "review06/evidence/round2/ROUND2-SELECTION.json",
+   "sha256": "5437e16449ece38c8b169dc26416521bb5ed576c953d56df76317fe0694ca3a7"
+  },
+  "projects_resolved": {
+   "16830": "exploration (new)",
+   "17428": "exploration (new)",
+   "19144": "exploration (new)",
+   "22510": "exploration (new)",
+   "23323": "exploration (new)",
+   "30549": "exploration (new)",
+   "8430": "regression / exposed (R5 holdout (exposed))"
+  },
+  "sealed": "ten sealed projects: not opened, rendered or sent",
+  "task": {
+   "file": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-17/TASK-TARGETED-AI-ACCURACY.md",
+   "sha256": "99c62e8c9dce742eef2eb4ef52570075cdcc2b2051fb43ce6342b554bca62011"
+  },
+  "review_17": {
+   "file": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-17/REVIEW-17-REPORT.md",
+   "sha256": "a665ff23fad5b56db7f5233d4905a1b314b5e10cfa087a9fe6ad2a576f1b3643"
+  },
+  "sandbox_project_policy": "sandbox projects use the application default ai_policy 'allowed' on the strength of this permission; live projects are not read or changed"
+ },
+ "code": {
+  "accepted_app": {
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "tree": "C:/t/iso/frozen-r12",
+   "clean": true,
+   "source_sha256": {
+    "backend/app/ai/evidence_reader.py": "22999476256a415a95f45dc865fc9858f1507e9ebebb60e74040dfcb6a70abd9",
+    "backend/app/ai/budget.py": "da647b1c67ef59252cf336bd771add9d3d211cf6d74368f29c9130e3f75cb23c",
+    "backend/app/ai/ledger.py": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+    "backend/app/ai/provider.py": "d465961efb07b7f9df2597b37a228735238af433d950bf7095925e8cc43eb5ba",
+    "backend/app/ai/cache.py": "408b8a3ea5b70fd36118bebdf1ae1162d25525b2336952f7a8dfad04854ec206",
+    "backend/app/services/document_control.py": "78e392c4b880b37c3750d24e54d5300e767fdd041bfcd15a6ac826bf731ed374",
+    "backend/app/services/design_sheet_extractor.py": "b110d172df487aaadf24fef629e3278ff86776ff2c35bd1b524c44c97dcb8d8f",
+    "backend/scripts/m2_eval5.py": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+    "backend/scripts/m2_eval4.py": "65f3e096dd8ec93be38f50db445eeb0a9837c1acde605f5569a575f1f31f79b5",
+    "backend/scripts/m2_boq_eval.py": "550e1a3c8eafcc93f97d95e801854b713f39e4206e9b6a900e0a09d691cdbe25",
+    "backend/app/core/config.py": "b4fbc07f5a50e147b3ca0d9ca70c5b52a062f2aab7b56c5ce9e468257e361155"
+   }
+  },
+  "candidate": {
+   "repository": "C:/t/iso/ep-platform (scratch clone; not the owner repository)",
+   "tree": "C:/t/iso/cand-ai",
+   "branch": "ai-pilot-2026-09-30",
+   "commit": "e5a0a94a4235282797bed302f6bb14acba70db01",
+   "parent": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "clean": true,
+   "changed_files": {
+    "backend/app/ai/evidence_reader.py": "ae66397826d12714de44746765b2c5daf8a86b7619a3bdd172c1197845eb4335",
+    "backend/tests/test_ai_pilot_2026_09_30.py": "512177a4b98fc2619a60b0c35d4a7f69d6c80a81cc349e3fd089adfff8f1a08a"
+   },
+   "diff_sha256": "577073283a8e841639f71d0b77c1317a451650aaaf5d3ad1edb3ca6f0ac2fc95",
+   "default_behaviour": "flags unset: byte-identical accepted behaviour (flag-gated; version strings unchanged)",
+   "the_function_that_changes": "app.ai.evidence_reader: validate_value (G guard), _read_page (T: region_texts_v2 support + targeted read), new helpers bare_revision_token / _local_ocr / region_texts_v2 / _targeted_read; nothing outside evidence_reader"
+  },
+  "evaluator": {
+   "module": "scripts.m2_eval5",
+   "version": "m2-pilot-eval-2026-09-29.9",
+   "sha256": "38326f149a7f49246413427cf4a661134cc7d31734faa13fe80f8ad967a3e451",
+   "tree": "C:/t/iso/frozen-r12"
+  },
+  "parser": "parse-2026-09-29.9",
+  "design_sheet_extractor": "2026-09-29.2",
+  "ledger": "ai-ledger-2026-09-29.2",
+  "boq_harness_r16": {
+   "boq_harness.py": "b4bc7888a8bb872e6c5f0ef7c65d1657181382733bfc1e06da4c7634d916fbdf",
+   "boq_contract.py": "ea1852741662adbd3d66dd73c699d4c6d179a397ac917e0fc2ef0fc90a1c199e",
+   "replay_core.py": "dbd88158c206c4db270f2f592ea6e3b86876717d5984bc33601d50d056a43689"
+  },
+  "xtrack": "373147e2abe38c777ffe85e98543d309c4a98b0b74b7277dc129f7d50e59ae7c",
+  "pilot_scripts": {
+   "make_pilot_stage.py": "4e54a7d5945e77c0dcaa92d583e93f7822647263b9991f9336de7ff1233ce947",
+   "pilot_a.py": "4f052261da20b06d6f701a95a4caa3d9e79a168d9b4b4e75f3a6494297323fd2",
+   "pilot_shares.py": "f8513a02575cfe479fd121391f39bc8eb737f96ebf155a3cd54d2c9b03657409",
+   "pilot_ev.py": "ae466d5f827077f4d587877d3f8f6f6bfb1a4728d42bb91c023a6695c25a6f80",
+   "pilot_boq.py": "f4500997fa4c941480e5c7aeded98a625c71dc997fa734689b137b9f65775709",
+   "boq_queue.py": "58ad035ecf3aefb7119babb3862085bb48a77f1075fdc8735d7541c3c98d0e4b",
+   "tests/test_boq_queue.py": "339d563cdc2e2d1a7a4ee9a89793e4db1b2afffd86159fb8f7275a3f6244ac22",
+   "select_pilot.py": "b1ffe5209be6da9c471306189a5f13f088160116e26970426e2196e3b3fed777",
+   "labels_pilot.py": "5ef8ca0b62668f246544b0ff3274ac6fa6937131f2b37da1d0dcff93fbc4b00c",
+   "patch_candidate.py": "59a154e6153ab7fb0453d30d44279392309863d082b16e3ebd36a0bf3c9d1fac",
+   "patch_candidate_2.py": "3823c91d806fdd1854f0beef7c681a6894fa798ec8fc9c799fe643959e503486",
+   "zoom.py": "330338507ca5bc523fee92e236790bad3f4842314bf64a6db859f6dfaf303292",
+   "dry_provider.py": "c6d5263ed01d85409d8ac29bdce3da2812bf7c82060a6bac471d99d6db529a51",
+   "score_pilot.py": "30559793f41d84e21532c207c99a9455d15484dee019125d1dfbe784b49e5aa0"
+  }
+ },
+ "offline_tests": {
+  "files": {
+   "ACCEPTED-two-failures-EXIT.txt": "0c6868c2c44f053619cef1cc383e1d530743b574ca192ace9168a9ccf46a86e3",
+   "ACCEPTED-two-failures.log": "7a4adcb6b75e822352c9ba2847817becc5ea6dc0bb4fcb7989c3787993a25df4",
+   "ACCEPTED-two-failures.xml": "f20030de312505c5191a16cfeaa3cb5c552015e0ccb440a1cda1d473fe7084ac",
+   "BOQ-QUEUE.log": "09a19bcbb569531c5d114b2d37697fc3a6820789128b556658d4c1f823761111",
+   "BOQ-QUEUE.xml": "6cc6cecf073db7de7784b71b28c1225b470beb67f977d7aeb4e3e1b41ce94f5b",
+   "FOCUSED-G-EXIT.txt": "28d3b9e880a77975493dc7e359144c0295a4f694cfe0af4f928c22307bc5c320",
+   "FOCUSED-G.log": "6c2ff6876aed2f5bb4108c7b358801479d06dc709d9190632c4ddf6f1b73320b",
+   "FOCUSED-G.xml": "c488ac87cbeb65de796e7e89a1da52dc93656181370521beebf34a18a4eeb9d5",
+   "FOCUSED-MODULES.txt": "ebdf842a681490cc7b11ee64883c1b596118c1435b5f5673c4dcd0dedd383616",
+   "FOCUSED-off-EXIT.txt": "28d3b9e880a77975493dc7e359144c0295a4f694cfe0af4f928c22307bc5c320",
+   "FOCUSED-off.log": "c6bd6c095e86ded5f00adca583e0ffc2cd7fb91afd0f901b8d07b2c69c5b4bf8",
+   "FOCUSED-off.xml": "ee206c952ba0fbbed15716682d41d71daac827e00872de5412e0866a822e48d4",
+   "FOCUSED-T-EXIT.txt": "0c6868c2c44f053619cef1cc383e1d530743b574ca192ace9168a9ccf46a86e3",
+   "FOCUSED-T.log": "ecacf796278558a1c40f1dcb76ccc1e1b0c97409258971d6c43739f5cdff36bf",
+   "FOCUSED-T.xml": "bdafae6a98e5f8b890d1163755f689008a8c84a66755f1f58071fca01a997e4d",
+   "FULL-flags-off-EXIT.txt": "0c6868c2c44f053619cef1cc383e1d530743b574ca192ace9168a9ccf46a86e3",
+   "FULL-flags-off.log": "bca1b8a23fa2683e9117108afd32e0978eb31763301185af319ea8a870da9068",
+   "FULL-flags-off.xml": "d50fb4c61175b20964410e6d69d4c8776b79fdba6f84e23420075e5732c63295"
+  },
+  "summary": {
+   "candidate full suite, flags off (e5a0a94)": "1681 passed, 2 failed, 35 skipped -- both failures reproduce on the accepted 3d5607d (ACCEPTED-two-failures: test_ep_archive_models::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index FOREIGN KEY; test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it extra catalogue items): pre-existing, unrelated",
+   "focused AI / evidence modules (14), flags off": "216 passed",
+   "focused, G": "216 passed",
+   "focused, T": "213 passed, 3 failed -- expected T-only scripted-sequence differences (the extra targeted request is appended / consumes the next scripted answer): test_evidence_reader_r7::test_escalation_keeps_the_earlier_disagreement (one more reading 'blind_context'), test_m2_review08::test_identity_completes_while_revision_times_out_and_decision_is_refused_by_budget (revision 'completed' / decision 'budget' instead of 'failed:timeout'), test_m2_review10::test_a_known_revision_constraint_holds_a_decision_without_an_ai_identity (decision 'candidate' instead of 'validated': more conservative). None is a new acceptance",
+   "pilot BOQ queue tests (tests/test_boq_queue.py)": "8 passed",
+   "dry run (scripted provider)": "A, shares, S, G, T, BOQ-S, BOQ-T and score_pilot ran end to end in C:/t/r2x/dry-runs; business hashes S = G = T = A"
+  }
+ },
+ "arms": {
+  "S": {
+   "meaning": "unchanged baseline: the accepted application (3d5607d), existing targeted EV1 policy",
+   "tree": "C:/t/iso/frozen-r12",
+   "commit": "3d5607d99fcebf08ac45f5df937ad615ecc16fb3",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": null,
+    "TARGETED_ENABLED": null
+   }
+  },
+  "G": {
+   "meaning": "S + the guard only: a bare revision token (Rev.0, REV 01, R1 ...) is never validated as a document identity; it is kept as a raw revision-token observation with no target. Candidate commit, AI_EVIDENCE_GUARD=1",
+   "tree": "C:/t/iso/cand-ai",
+   "commit": "e5a0a94a4235282797bed302f6bb14acba70db01",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": false
+   }
+  },
+  "T": {
+   "meaning": "G + targeted verification: (a) region support read from the rotation-correct text layer, or local Tesseract OCR of the read region when the page has no text there; (b) one independent context read (task read_field_context: a wider crop, or the whole page when no region was found) of an own identity / revision that discovery or the deterministic reader proposed and the blind read did not validate (never after a failed or budget-refused request). Structured evidence (literal, printed label, role, region, legibility); the answer joins the readings and the UNCHANGED acceptance rule decides (agreement of all legible readings + region support + no deterministic conflict); a role other than the own role holds. Candidate commit, AI_EVIDENCE_GUARD=1 AI_EVIDENCE_TARGETED=1",
+   "tree": "C:/t/iso/cand-ai",
+   "commit": "e5a0a94a4235282797bed302f6bb14acba70db01",
+   "env": {
+    "AI_EVIDENCE_VARIANT": "EV1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_TARGETED": "1"
+   },
+   "identities": {
+    "READER_VERSION": "evidence-reader-2026-09-29.7+targeted-2026-09-30.1",
+    "EVIDENCE_POLICY_VERSION": "evidence-policy-2026-09-29.4+guard-rev-token-2026-09-30.1+region-support-2026-09-30.1",
+    "SCHEMA_VERSION": "evidence-schema-1",
+    "PROMPTS": {
+     "discover_page": "discover-2026-09-29.1",
+     "read_identity": "read-identity-2026-09-29.1",
+     "read_revision": "read-revision-2026-09-29.1",
+     "read_decision": "read-decision-2026-09-29.1",
+     "read_boq_row": "read-boq-row-2026-09-29.2",
+     "read_field_context": "read-field-context-2026-09-30.1"
+    },
+    "AUDIT_RATE": 0.2,
+    "AUDIT_SEED": "audit-2026-09-29",
+    "MAX_PAGES_PER_DOCUMENT": 4,
+    "MAX_CALLS_PER_DOCUMENT": 8,
+    "GUARD_ENABLED": true,
+    "TARGETED_ENABLED": true
+   }
+  }
+ },
+ "sources": {
+  "exploration_manifest_sha256": "ee9df7b5e3e6f0035beec01643435e46f63d7f59eccfb9102d6633bf2b6f97cd",
+  "sample": {
+   "file": "PILOT-SAMPLE.json",
+   "sha256": "3822df9ef792e6c6277e0bec3271dcee06dcdc6a15291a3e03ab0b25b6bf1917",
+   "documents": {
+    "EP-17428/EP-17428 Drawing/FA SYSTEM/REV-1/PDF/FA-105-BASEMENT-01 FLOOR.pdf": "a092c82bf7feffd47ef2449ba7b4144fb1d26f9b739d078c548310dda52a7f0d",
+    "EP-19144/EP-18101 DWGS/SD recieved from Trinity/TELEPHONE LAYOUTs/TELEPHONE LAYOUT/03#END-3B TELEPHONE DATA/TEL-02-END-1ST FLR TELEPHONE (R.01, DT-12-09-19), ST-SUB-BIND.pdf": "b8df3dee0bb7db68c7cbadc215465ed432ec926dbd638d1119dafbbfae038932",
+    "EP-17428/EP-17428 Drawing/Inputs/From CD/DIB IFC DWGS/ARCH/PDF/1159-DUBAI ISLAMIC BANK - Sheet - AR-101 - WATER TANK & PUMP LEVEL.pdf": "7577b344abed8e39da608061eb2b06f9a806e9380f3cb8b6c4fdc94c524a47bf",
+    "EP-17428/VARIATION - NEW ID - OFFICES/FA EM INPUT/210307_DIB_AMB_ Tender Package/2. Drawings/PDF/BH2031-ID-OFF-23-109-00_H.pdf": "500833f7db2b83beb195c6ef404769d57b66dc66769aac0e8bbd27a22be36dba",
+    "EP-23323/EP-23323 - AKI Logistics/Inputs/Amana - Life and Safety/File-4/Structure Drawings/Steel/B03 - Vehicle Repair Yard/01-Approval Drawings/PDF/DJ-295-0-EN-DST-07-ASS-0301-00.dwg.pdf": "b713d5e56599da949cb14fa5fabb1607acdee31c617ab55a7d3de663fdde3a8c",
+    "EP-19144/EP-18101 DWGS/Approved SD/TELEPHONE APPRVED SHOP DRGS/TEL-00-END-UG. GR FLR TELEPHONE (R.01, DT-12-09-19), ST-B+R.pdf": "e740af95461002eb9851c86c5b77a9a672720f1dc9ba71428acfb2f4f05f6088",
+    "EP-16830/EP-16830 - PQ/EP-16830 Reply to Comments.pdf": "1b4770e3ca6eb70e62fb31971a9ae3ab109999d0006861afb359e5e4fd9a3425",
+    "EP-30549/Inputs/DUTCO DOC/05.05.2026/01. ARCHITECTURE/A. ARCHITECTURAL FOLDER/DRAWINGS/AR-74000_WET AREAS/DCH-M-BSB-DWG-ZZ-ARC-74028_E_B1 (LOADING BAY) - EMERGENCY RESPONSE UNIT RM - TOILETS - PLAN, RCP & SECTION.pdf": "1e98dc27bfaf7905570bce6c71a27beff7150877d0715c2c73d824944314e8bc",
+    "EP-16830/EP-16830-MS-ELV/CCTV/Nursery & Retail/Rev.01/Content 14.pdf": "101bbcb94999adf1f67b9cf439c69f0feaf314078af02ac6cdd559dc389b368c",
+    "EP-16830/EP-16830-MS-ELV/EM lighting system/Nursery & Retail/pdf/Al Arabia - Authorization.pdf": "f8e0aae242f54be9b09fd7ac06ae1b5a37af0c8349ef1d90d4791472d4d8a063",
+    "EP-19144/EP-18101 Scan/EP-19144 SCS DRF.pdf": "02fd23fe6c3042f4792db6e3ca9ad85e5de6d2cd64b8246da1035ce1bf241e5f",
+    "EP-23323/EP-23323 - AKI Logistics/O&M/FAS/R0/SOV.pdf": "125e73464eb78875b6fb6ffd753c1d3af02554aef283afe3c8b894b1130bf7b8"
+   },
+   "pages": "every page (<= 3 per document; the reader's 4-page scope covers all)"
+  },
+  "boq_sheet": {
+   "doc_key": "EP-22510/EP-22510 Commercial/EP-22510 FA Design.pdf",
+   "sha256": "6153dfe701f57131a4689fc8cd14999ce5efee3099a9dda77a85f2f8bfc16c0f",
+   "staged_path": "C:\\t\\r2x\\stage\\EP-22510\\EP-22510 Commercial\\EP-22510 FA Design.pdf",
+   "cohort": "exploration (new)"
+  },
+  "boq_extraction_A": {
+   "file": "boq/PILOT-BOQ-A-extraction.json",
+   "sha256": "b55bdd5579ba424d84c0ac67008e7024942dd07f47fc9812750e1d777b3c6630",
+   "made_by": "the accepted AI-off design-sheet extractor (3d5607d), before any label comparison"
+  }
+ },
+ "stage": {
+  "root": "C:/t/r2x/pilot-stage",
+  "manifest_sha256": "fc9bd6252c8f25a6906458ca8ca77d5226cf565a84096ab465533ef6379efd03"
+ },
+ "labels": {
+  "files": {
+   "PILOT-PAGE-LABELS.json": "e543132254815a993b9816d77ebd0c8b24e33cb9cd2cd619963e16f09643707c",
+   "PILOT-REGISTER-LABELS.json": "e4ec4c3f65a075365e13423f2c3d6fcb942944d34f057dcd88e68577157ad75a",
+   "PILOT-BOQ-LABELS.json": "dfd19d479d66a02accd476c4b24c2128c511b4b23e7491884b305233a2843502",
+   "PILOT-UNCERTAINTY-AND-EXPOSURE.json": "0f7ffe9f95886c7fcb80845c53ef8cf2fdfdee372f2471224a0671c98b0dbedb"
+  },
+  "status": "AI-drafted proposals written before any pilot prediction; not reviewed by a person; PROVISIONAL",
+  "resolved_for_stop_rule": "a label with confidence 'high' and no entry in the uncertainty register",
+  "unchanged_unresolved": "F09 / F10 / F06 revision, +SL23I/+SL231, the footer role: not in this sample, not ruled on"
+ },
+ "provider": {
+  "adapter": "claude-code (the existing evaluation provider)",
+  "cli_version": "2.1.263 (Claude Code)",
+  "aliases": {
+   "small": "sonnet",
+   "standard": "opus"
+  },
+  "env": {
+   "AI_PROVIDER": "claude-code",
+   "AI_MODEL_SMALL": "sonnet",
+   "AI_MODEL_STANDARD": "opus"
+  },
+  "actual_model": "recorded per response"
+ },
+ "application_limits": {
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 60,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_concurrency": 2,
+  "ai_max_retries": 3,
+  "ai_cli_timeout_s": 300.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_cache_ttl_days": 90
+ },
+ "application_limits_note": "the accepted defaults, NOT overridden (asserted by every runner): 12 requests / 2 escalations / 120 s per document job; 60 per project per day (applied across tracks by xtrack); concurrency 2; CLI timeout 300 s",
+ "ledger": {
+  "version": "ai-ledger-2026-09-29.2",
+  "file": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+  "scopes": {
+   "A": {
+    "scope": "ai-pilot-2026-09-30-A",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 12
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-A",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 12}"
+    }
+   },
+   "S": {
+    "scope": "ai-pilot-2026-09-30-S",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 36
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-S",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 36}"
+    }
+   },
+   "G": {
+    "scope": "ai-pilot-2026-09-30-G",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 36
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-G",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 36}"
+    }
+   },
+   "T": {
+    "scope": "ai-pilot-2026-09-30-T",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 42
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-T",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 42}"
+    }
+   },
+   "BOQ-S": {
+    "scope": "ai-pilot-2026-09-30-BOQ-S",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 12
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-BOQ-S",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 12}"
+    }
+   },
+   "BOQ-T": {
+    "scope": "ai-pilot-2026-09-30-BOQ-T",
+    "limits": {
+     "per_request_input": 70000,
+     "per_request_output": 20000,
+     "input_tokens": 4000000,
+     "output_tokens": 600000,
+     "elapsed_s": 14400,
+     "requests": 12
+    },
+    "env": {
+     "AI_LEDGER_PATH": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+     "AI_LEDGER_SCOPE": "ai-pilot-2026-09-30-BOQ-T",
+     "AI_LEDGER_LIMITS": "{\"per_request_input\": 70000, \"per_request_output\": 20000, \"input_tokens\": 4000000, \"output_tokens\": 600000, \"elapsed_s\": 14400, \"requests\": 12}"
+    }
+   }
+  },
+  "total_requests_cap": 150,
+  "earlier_scopes": {
+   "r2x-small-2026-09-29": "113 entries, left untouched (not reset, amended or reused)"
+  },
+  "enforcement": {
+   "requests": "hard, reserved before dispatch",
+   "elapsed_s": "hard for new requests",
+   "tokens": "CLI adapter: ESTIMATE plus breaker, NOT provider-enforced"
+  },
+  "mismatch": "a handle with different limits for an existing scope is refused (ledger .2); no scope is reset"
+ },
+ "project_day": {
+  "limit": 60,
+  "counter": "C:/t/r2x/ledger/project-day.sqlite (xtrack), shared with the earlier Round 2 tracks",
+  "reconciled_at_declaration": {
+   "16830": 2,
+   "17428": 14,
+   "19144": 2,
+   "22510": 7,
+   "23323": 2,
+   "30549": 9,
+   "8430": 60
+  },
+  "EP-8430": "60 used 2026-09-29 18:52-19:00 UTC: FULL until 2026-09-30 ~18:52-19:00 UTC",
+  "A_base": "A's worst case is its scope cap (12); every pilot project has >= 46 left, so A cannot breach 60; its actual requests are recorded afterwards",
+  "arm_shares": "after A, pilot_shares.py freezes share(ep) = floor((60 - used(ep)) / 3) for S, G and T alike (written and hashed before S); an arm's request beyond its share of a project is refused as a budget stop, so an earlier arm cannot starve a later one",
+  "boq": "EP-22510: BOQ-S + BOQ-T <= 24 after the document arms; checked by xtrack at each request"
+ },
+ "pricing": "unknown (no valid price configured; prices 0.0): cost reported as UNKNOWN, never zero; the CLI's total_cost_usd is not used",
+ "cache_mode": "application result cache ON. A is a new sandbox. S, G and T each start from a WAL-consistent copy of A's database; the evidence cache key includes the policy / reader / prompt identities, which differ per arm, so no arm can reuse another's evidence. BOQ-S and BOQ-T have their own new sandboxes. Cache hits are recorded as cache hits (no request, no tokens).",
+ "run_order": [
+  "A: pilot_a.py (accepted app path, AI enabled, evidence variant off)",
+  "pilot_shares.py",
+  "S: pilot_ev.py S",
+  "G: pilot_ev.py G",
+  "T: pilot_ev.py T",
+  "BOQ-S: pilot_boq.py S",
+  "BOQ-T: pilot_boq.py T"
+ ],
+ "project_order": "by project id as A creates them (EP numbers sorted); documents by id",
+ "boq": {
+  "sheet": "EP-22510/EP-22510 Commercial/EP-22510 FA Design.pdf",
+  "labels": "labels/PILOT-BOQ-LABELS.json (kind 'line' rows are the replay truth; the part_only battery row is reported separately)",
+  "S_policy": "the accepted EV1 selection (every held row + the seeded 20 % audit of accepted rows) through boq_harness.verify_sheet, unchanged",
+  "T_policy": "boq_queue.risk_queue (queue ai-pilot-boq-queue-2026-09-30.1): held rows; accepted rows with reader uncertainty signals (application thresholds RECHECK_QUANTITY_BELOW / CONFIRM_CATALOG_BELOW = 90); a seeded audit of 2 confident rows; residual seeded audit to the cap. Written to disk before the first request; one row per request; one allowance",
+  "allowance": "per (scope, profile, document): 12 requests / 2 escalations / 120 s, durable (r16.1 DocAllowance / DurableBudget)",
+  "matcher": "accepted r16.1 boq_contract + replay_core, unchanged",
+  "h06_control": {
+   "sheet": "EP-8430/EP-8430 Commercial/EP-8430 PAVA Revised Design Sheet - 23.10.2017.pdf",
+   "status": "DECLARED, NOT RUN IN THIS WINDOW",
+   "reason": "EP-8430's rolling-24-hour project allowance is full (60/60) until about 2026-09-30 19:00 UTC; any request now would breach the 60/project/day limit. Its stored r2x-small BOQ-B/-C replays remain the diagnostic history (printed quantities 1, 1, 1; control 2)"
+  },
+  "claims": "verified rows are listed; unreached rows are listed; no full-sheet verification claim when any row was not reached"
+ },
+ "stop_rules": [
+  "an evaluator-flagged critical automatic acceptance by the arm's AI on a RESOLVED label (checked after each project): stop the arm; the remaining projects are not attempted; the counterexample is preserved",
+  "three consecutive provider failures (transport, timeout, refusal)",
+  "an undeclared source, changed hash, sealed project, existing sandbox or changed declaration: the runner refuses to start",
+  "any ledger / project-day / share / per-document refusal: a budget stop, recorded; nothing is raised or reset"
+ ],
+ "evaluation": {
+  "documents": "scripts.m2_eval5 (evaluator .9, unchanged) with labels/PILOT-REGISTER-LABELS.json + labels/PILOT-PAGE-LABELS.json; ai_context per arm {variant EV1, profile default, policies [the arm's EVIDENCE_POLICY_VERSION]}; A scored with no AI context",
+  "metrics": [
+   "supported raw-observation correctness",
+   "automatic-acceptance precision and critical false accepts",
+   "correctly associated accepted recovery",
+   "correct-but-held and ambiguous / unresolved",
+   "unread / failed / budget / not attempted",
+   "requests, time, actual tokens, cost status"
+  ],
+  "breakdowns": [
+   "field",
+   "project",
+   "document type (stratum)",
+   "arm",
+   "resolved vs provisional-uncertain labels"
+  ],
+  "success": "an evidence-supported G->T recovery gain with no new critical false acceptance on resolved labels, controls preserved, complete usage accounting",
+  "otherwise": "no gain / unsafe / inconclusive"
+ }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="0.100" timestamp="2026-09-30T08:04:15.344093+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="probes.review16_original.test_review16_contract" name="test_verified_source_position_constrains_all_fallback_matches[True]" time="0.001"><failure message="AssertionError: {'held': {}, 'pairs': [('anchor', 2, 'matched_geometry'), ('below-anchor', 1, 'matched')], 'unmatched_emitted': [], 'unmatched_truth': [3]}&#10;assert ('below-anchor', 1) not in [('anchor', 2), ('below-anchor', 1)]">anchor_emitted = True
+
+    @pytest.mark.parametrize('anchor_emitted',[True,False])
+    def test_verified_source_position_constrains_all_fallback_matches(anchor_emitted):
+     truth,anchor,below=rows()
+     result=bc.join_rows(([anchor] if anchor_emitted else [])+[below],truth)
+     accepted=[(eid,ordinal) for eid,ordinal,state in result['pairs'] if state.startswith('matched')]
+&gt;    assert ('below-anchor',1) not in accepted, result
+E    AssertionError: {'held': {}, 'pairs': [('anchor', 2, 'matched_geometry'), ('below-anchor', 1, 'matched')], 'unmatched_emitted': [], 'unmatched_truth': [3]}
+E    assert ('below-anchor', 1) not in [('anchor', 2), ('below-anchor', 1)]
+
+probes\review16_original\test_review16_contract.py:20: AssertionError</failure></testcase><testcase classname="probes.review16_original.test_review16_contract" name="test_verified_source_position_constrains_all_fallback_matches[False]" time="0.001"><failure message="AssertionError: {'held': {}, 'pairs': [('below-anchor', 1, 'matched')], 'unmatched_emitted': [], 'unmatched_truth': [2, 3]}&#10;assert ('below-anchor', 1) not in [('below-anchor', 1)]">anchor_emitted = False
+
+    @pytest.mark.parametrize('anchor_emitted',[True,False])
+    def test_verified_source_position_constrains_all_fallback_matches(anchor_emitted):
+     truth,anchor,below=rows()
+     result=bc.join_rows(([anchor] if anchor_emitted else [])+[below],truth)
+     accepted=[(eid,ordinal) for eid,ordinal,state in result['pairs'] if state.startswith('matched')]
+&gt;    assert ('below-anchor',1) not in accepted, result
+E    AssertionError: {'held': {}, 'pairs': [('below-anchor', 1, 'matched')], 'unmatched_emitted': [], 'unmatched_truth': [2, 3]}
+E    assert ('below-anchor', 1) not in [('below-anchor', 1)]
+
+probes\review16_original\test_review16_contract.py:20: AssertionError</failure></testcase><testcase classname="probes.review16_original.test_review16_contract" name="test_above_anchor_positive_control[False]" time="0.001" /><testcase classname="probes.review16_original.test_review16_contract" name="test_above_anchor_positive_control[True]" time="0.001" /><testcase classname="probes.review16_original.test_review16_contract" name="test_scored_values_still_cannot_choose_a_truth_row" time="0.001" /></testsuite></testsuites>

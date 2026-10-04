@@ -1,0 +1,1643 @@
+{
+ "source": "C:\\t\\iso\\work\\r12\\eval9-reader7",
+ "evaluator": "m2-pilot-eval-2026-09-29.9 with evidence-reader-2026-09-29.7 (accepted Review 12 re-score)",
+ "decide_groups": [
+  "F01",
+  "F02",
+  "F07",
+  "F08",
+  "F09",
+  "F10",
+  "F12",
+  "F13"
+ ],
+ "summary": {
+  "deterministic baseline, pilot (r7-det9, default)": {
+   "denominators": {
+    "identity": 363,
+    "revision": 310,
+    "decision": 80
+   },
+   "by_field": {
+    "identity": {
+     "recovered_clean": 237,
+     "missed_discovery": 76,
+     "failed_reading": 11,
+     "literal_misread": 6,
+     "disputed_label": 5,
+     "wrong_association": 12,
+     "withheld_correct": 9,
+     "literal_misread (alongside a correct reading)": 7
+    },
+    "revision": {
+     "recovered_clean": 220,
+     "missed_discovery": 84,
+     "disputed_label": 1,
+     "failed_reading": 3,
+     "withheld_correct": 2
+    },
+    "decision": {
+     "recovered_clean": 26,
+     "missed_discovery": 46,
+     "withheld_correct": 3,
+     "failed_reading": 2,
+     "disputed_label": 3
+    }
+   },
+   "critical": [],
+   "observed_errors": 21
+  },
+  "deterministic baseline, holdout (r7-det9, default)": {
+   "denominators": {
+    "identity": 20,
+    "revision": 13,
+    "decision": 4
+   },
+   "by_field": {
+    "identity": {
+     "recovered_clean": 14,
+     "missed_discovery": 2,
+     "failed_reading": 3,
+     "disputed_label": 1
+    },
+    "revision": {
+     "recovered_clean": 7,
+     "failed_reading": 3,
+     "missed_discovery": 2,
+     "disputed_label": 1
+    },
+    "decision": {
+     "failed_reading": 2,
+     "missed_discovery": 1,
+     "disputed_label": 1
+    }
+   },
+   "critical": [],
+   "observed_errors": 2
+  },
+  "matched: model-disabled (det9)": {
+   "denominators": {
+    "identity": 16,
+    "revision": 16,
+    "decision": 9
+   },
+   "by_field": {
+    "identity": {
+     "recovered_clean": 14,
+     "missed_discovery": 1,
+     "wrong_association": 1
+    },
+    "revision": {
+     "recovered_clean": 13,
+     "missed_discovery": 3
+    },
+    "decision": {
+     "recovered_clean": 6,
+     "missed_discovery": 3
+    }
+   },
+   "critical": [],
+   "observed_errors": 2
+  },
+  "matched: AI-EV1 (default|EV1)": {
+   "denominators": {
+    "identity": 16,
+    "revision": 16,
+    "decision": 9
+   },
+   "by_field": {
+    "identity": {
+     "recovered_clean": 14,
+     "withheld_correct": 1,
+     "wrong_association": 1
+    },
+    "revision": {
+     "recovered_clean": 13,
+     "withheld_correct": 2,
+     "missed_discovery": 1
+    },
+    "decision": {
+     "recovered_clean": 7,
+     "withheld_correct": 2
+    }
+   },
+   "critical": [
+    {
+     "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+     "page": 3,
+     "field": "identity",
+     "value": "EP-30627/SS/EML/ 1293",
+     "truth": null,
+     "outcome": "fp",
+     "state": "validated"
+    },
+    {
+     "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+     "page": 3,
+     "field": "revision",
+     "value": "00",
+     "truth": null,
+     "outcome": "fp",
+     "state": "validated"
+    }
+   ],
+   "observed_errors": 2
+  },
+  "matched: AI-EV2 (default|EV2)": {
+   "denominators": {
+    "identity": 16,
+    "revision": 16,
+    "decision": 9
+   },
+   "by_field": {
+    "identity": {
+     "recovered_clean": 14,
+     "withheld_correct": 1,
+     "wrong_association": 1
+    },
+    "revision": {
+     "recovered_clean": 13,
+     "withheld_correct": 2,
+     "missed_discovery": 1
+    },
+    "decision": {
+     "recovered_clean": 6,
+     "missed_discovery": 1,
+     "withheld_correct": 2
+    }
+   },
+   "critical": [
+    {
+     "doc": "EP-30784/03- MS/03- FRC/03- TIANJIE/BBY006_1.PDF",
+     "page": 3,
+     "field": "identity",
+     "value": "EP-30627/SS/EML/ 1293",
+     "truth": null,
+     "outcome": "fp",
+     "state": "validated"
+    }
+   ],
+   "observed_errors": 2
+  }
+ },
+ "examples": [
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/09. L01-Amenities Floor/EM-109.pdf",
+     "page": 1,
+     "truth": "EM-109",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R02/01.Basement-4/EM-101.pdf",
+     "page": 1,
+     "truth": "EM-101",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/13. L23-L40(TYP1A) Floor Plan/EM-113.pdf",
+     "page": 1,
+     "truth": "EM-113",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/R00/DRAWINGS/25. Roof Floor Plan/EM-125.pdf",
+     "page": 1,
+     "truth": "EM-125",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/213400 - PRESSURE-MAINTENANCE PUMPS.pdf",
+     "page": 1,
+     "truth": "SECTION 213400",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210513 - COMMON MOTOR REQUIREMENTS FOR FIRE SUPPRESSION EQUIPMENT.pdf",
+     "page": 1,
+     "truth": "SECTION 210513",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210517 - SLEEVES AND SLEEVE SEALS FOR FIRE-SUPPRESSION PIPING.pdf",
+     "page": 1,
+     "truth": "SECTION 210517",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/01- EP-30784 Scan/EP-30784 DRF.pdf",
+     "page": 1,
+     "truth": "3728 (DRF No., handwritten)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "decision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+     "page": 2,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-ZZZ-L41-010050 Shop Drawing L41-3rd Mechanical Floor Plan Emergency Lighting Layout.pdf",
+     "page": 2,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/2.EML/Emergency Lighting Layout/BBY006-GME-SDW-EL-LI-POD-P01-010029 Shop Drawing for Podium-1 Floor Plan Emergency Lighting Layout.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-NCC-SD-MEP-ELE-FA-024-R00 - Code C.pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/06- DCD approved/PDF/785045FIREALARMANDEMERGENCYSYSTEMREVISEDPART02.pdf",
+     "page": 1,
+     "truth": "FA 119",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/FIRE ALARM LAYOUT.pdf",
+     "page": 1,
+     "truth": "FA 101",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-30088/06. MS/EML/EML SPECS.pdf",
+     "page": 1,
+     "truth": "265200",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/03. DCD/DRAWINGS/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+     "page": 1,
+     "truth": "FDR - LS 000",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-30088/03. Document/1. SAMANA PARK MEADOWS/2. AUTHORITY DOCUMENTS/4. AUTHORITY AND NOCs/DCD Authority Documents for SPM/671704XFIREANDLIFESAFETYXMMSXR01-1.pdf",
+     "page": 1,
+     "truth": "FDR - LS 000",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/03_Specifications/ICT & AV Systems/274100- AV-BGM Digital Signage System Specification 30082024.pdf",
+     "page": 1,
+     "truth": "274100",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-25091/EP-25091 Inputs/Interior_Finish Schedule.pdf",
+     "page": 1,
+     "truth": "030-200032.00 (project number)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-25091/EP-25091 Scan/PAVA Spec.pdf",
+     "page": 1,
+     "truth": "SECTION 275117",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "revision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/213400 - PRESSURE-MAINTENANCE PUMPS.pdf",
+     "page": 1,
+     "truth": "0",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210513 - COMMON MOTOR REQUIREMENTS FOR FIRE SUPPRESSION EQUIPMENT.pdf",
+     "page": 1,
+     "truth": "0",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/02- inputs from estimation/OneDrive_1_3-10-2026/Specification/Specification/210517 - SLEEVES AND SLEEVE SEALS FOR FIRE-SUPPRESSION PIPING.pdf",
+     "page": 1,
+     "truth": "0",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30784/01- EP-30784 Scan/EP-30784 DRF.pdf",
+     "page": 1,
+     "truth": "04 (form revision number)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-104 A (2ND FLOOR).pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Submitted/R01/PDF/ICC-DLRC-SPM-SD-MEPFA-104 B-01 (3RD FLOOR).pdf",
+     "page": 1,
+     "truth": "01",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-104 H (9TH FLOOR).pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "literal_misread",
+   "items": [
+    {
+     "doc": "EP-30784/01- EP-30784 Scan/EP-30784 EML Design.pdf",
+     "page": 1,
+     "truth": "EP-30784",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "TEP-30784 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-19977/EP-19977 Commercial/EP-19977 CBS Quotation.pdf",
+     "page": 1,
+     "truth": "EP-19977-R1 (Reference)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "D1902-FC-DWG-EM-B1200 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-19977/EP-19977 Commercial/EP-19977 FA Quotation R4.pdf",
+     "page": 1,
+     "truth": "EP - 19977 - R4-B0 (Our Ref.)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "D1902-FC-DWG-EF-B1200 & D1902-FC-DWG-EF [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/14 OF 96_INTERIOR DESIGN - HOTEL ROOMS/R1029-07-W&A-DWG-TYP-GRO-INT-9011-01-PDF-A.pdf",
+     "page": 1,
+     "truth": "R1029-07-W&A-DWG-TYP-GRO-INT-9011-01",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "A-DWG-TYP-GRO-INT-1102-01 [observed/wrong]",
+      "R1029-07-W&A-DWG-TYP-GRO-INT901 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/15 OF 96_INTERIOR DESIGN - SERVICED APARTMENTS/R1029-08-W&A-DWG-L14-GRO-INT-4315-01-PDF-B.pdf",
+     "page": 1,
+     "truth": "R1029-08-W&A-DWG-L14-GRO-INT-4315-01 (municipality A-00-0000)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "A-DWG-TYP-GRO-INT-1102-01 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-14119/EP-14119 Commercial/EP-14119 LPO.pdf",
+     "page": 1,
+     "truth": "LPO/1050000159 (Doc No., small; medium confidence)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "LPOD-1856000229 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "decision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/03. Document/1. SAMANA PARK MEADOWS/3. SHOP DRAWING/FIRE FIGHTING/ICC-DLRC-SPM-SD-MEP-FF-0052-03-COMMENTED-B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "held_only",
+     "readings_on_page": [
+      "ANN [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/04. Drawings/SD/recieved/TransferNow-20260908BGEp3fee/Emergency Lighting Layout/Received/ICC-DLRC-SPM-SD-MEP-0086-00-COMMENTED-C.pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "held_only",
+     "readings_on_page": [
+      "rejected [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/FA/recieved/R01/ICC-DLRC-SPM-SD-MEP-0040-00-COMMENTED-B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "held_only",
+     "readings_on_page": [
+      "ANN [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "decision",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-30088/07. PQ Samana & IVY Gardens/PQ -R1/ICC-DLRC-SIG2-PQ-MEP-0005-00 -  PQ - Al ARABIA FOR SAFETY AND SECURITY LLC.pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-26369/MS FAS/R1/MS FAS SOFTCOPY (TIM AEROSPACE) R1.pdf",
+     "page": 4,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-30088/04. Drawings/1. IFC DRAWINGS/03. IFC/Park Medows   -Final Design Revision Arch  - Approved/REQ-2387569  - BP.pdf",
+     "page": 1,
+     "truth": "REQ-2387569 (file) / permit number B2312982 (small print; medium confidence)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F01",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-13777/C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+     "page": 1,
+     "truth": "TAVC-TRANSMIT-009782 (mail number); K&A-WTRAN-017671 (reference number)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "K&A-WTRAN-017671 [observed/wrong]"
+     ],
+     "finding_group": "F07",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-13777/Approval Documents/TAV-TN-000731.pdf",
+     "page": 1,
+     "truth": "TAVC-TRANSMIT-000731 (mail number); K&A-WTRAN-000913",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "K&A-WTRAN-000913 [observed/wrong]"
+     ],
+     "finding_group": "F07",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-13777/C & E Matrix/Approved matrix/TAV-TN-011156 (1).pdf",
+     "page": 1,
+     "truth": "TAVC-TRANSMIT-011156 (mail number); K&A-WTRAN-020525",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "K&A-WTRAN-020525 [observed/wrong]"
+     ],
+     "finding_group": "F07",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 MOM/L0749-Minutes of Weekly MEP Meeting No. 020 - Final Issuance.pdf",
+     "page": 1,
+     "truth": "L0749 (from the file name)",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "10789-CSCEC-OUT-L0 [observed/wrong]"
+     ],
+     "finding_group": "F10",
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "wrong_association",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/05-Fire Alarm/LAC-653-PLN-L08-ELV-FA-115-LAC-653-PLN-L08-ELV-FA-115.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L08-ELV-FA-115",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-LO8-ELV-FA-115 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-R04-ELV-AI-164",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-RO4-ELV-Al-164 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/01-HVAC/AC/LAC-653-PLN-L02-MEC-HV-109.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L02-MEC-HV-109",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-LO2-MEC-HV-109 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/06-LPG/LAC-653-PLN-M01-PLD-LG-103B.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-M01-PLD-LG-103B",
+     "status": "missed",
+     "readings_on_page": [
+      "AC-653-PLN-M01-PLD-LG-103B [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/02-Smoke/LAC-653-PLN-ZZZ-MEC-SM-155-LAC-653-PLN-ZZZ-MEC-SM-155.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-ZZZ-MEC-SM-155",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-ZZ7-MEC-SM-155 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Mechanical/02-Smoke/LAC-653-PLN-L03-MEC-SM-110-LAC-653-PLN-L03-MEC-SM-110.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L03-MEC-SM-110",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-LO3-MEC-SM-110 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/01- EP-29076 - Scan/EP-29076 FA MS & Sam B CBS Ack 14.05.26.pdf",
+     "page": 1,
+     "truth": "TR/0127/26",
+     "status": "missed",
+     "readings_on_page": [
+      "_18/0127/26 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26369/Inputs/RDJ 183-RAQ-DWG-IFC-ARC-000018-19 FF_SF/RDJ 183-RAQ-DWG-IFC-ARC-000018 FF.pdf",
+     "page": 1,
+     "truth": "RDJ 183-RAQ-DWG-IFC-ARC-000018",
+     "status": "missed",
+     "readings_on_page": [
+      "183-RAQ-DWG-IFC-ARC [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/04- SM/01- IFT/01- PDF/LAC-653-PLN-L20-MEC-SM-126-LAC-653-PLN-L20-MEC-SM-126.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L20-MEC-SM-126",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-L20-MEC-SM-126 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/01-HVAC/CHW/LAC-653-PLN-GLF-MEC-CW-103.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-GLF-MEC-CW-103",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-GLF-MEC-CW-103 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/02-Mech/04-Water/LAC-653-PLN-L26-PLD-WS-131.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L26-PLD-WS-131",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-L26-PLD-WS-131 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/03- FF/01- IFT/01- PDF/LAC-653-PLN-L27-FPR-FF-132.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L27-FPR-FF-132",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-L27-FPR-FF-132 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/02- IFC/02- PDF/swisstransfer_69ce9fa7-17c4-4f2e-886d-fa8f29725377/LAC-653-GEN-ZZZ-ELV-FA-211.pdf",
+     "page": 1,
+     "truth": "LAC-653-GEN-ZZZ-ELV-FA-211",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-GEN-ZZZ-ELV-FA-211 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-L17-ELE-EP-123-LAC-653-PLN-L17-ELE-EP-123.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-L17-ELE-EP-123",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-L17-ELE-EP-123 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-P02-ELE-EP-105-LAC-653-PLN-P02-ELE-EP-105.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-P02-ELE-EP-105",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-P02-ELE-EP-105 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/04_Drawings/04_MEP/Electrical/03-Power/LAC-653-PLN-ZZZ-ELE-EP-154-LAC-653-PLN-ZZZ-ELE-EP-154.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-ZZZ-ELE-EP-154",
+     "status": "held_only",
+     "readings_on_page": [
+      "LAC-653-PLN-ZZZ-ELE-EP-154 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "revision",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/Fire Alarm/25H-S202-NCC-SD-MEP-ELE-FA-003-R03 - Code B.pdf",
+     "page": 3,
+     "truth": "03",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F02",
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "revision",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-29076/03- input/OneDrive_2025-12-15 (1)/4_25 Hours - NARESCO/01_MEP Works/03_Specifications/ICT & AV Systems/274100- AV-BGM Digital Signage System Specification 30082024.pdf",
+     "page": 1,
+     "truth": "TENDER (revision history: TENDER 30-08-2024 ISSUED FOR TENDER BR MS MK)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-25091/EP-25091 Inputs/Interior_Finish Schedule.pdf",
+     "page": 1,
+     "truth": "D",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/Spec received from shahul (13-11-24)/B-Particular Specs/3 of 18_V3B_03_Lighting (Part B)_Particular Specifications_Rev.0.pdf",
+     "page": 1,
+     "truth": "Rev.0 (from the file name)",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "decision",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-13777/C & E Matrix/Rev-1/Rev-0 comments/TAV-TN-009782 (1).pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F07",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-13777/Approval Documents/TAV-TN-000731.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F07",
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-13777/C & E Matrix/Approved matrix/TAV-TN-011156 (1).pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F07",
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "revision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-13777/Approval Documents/A23-EFE-MAT-E-00033  Fire Alarm System - B.pdf",
+     "page": 4,
+     "truth": "0",
+     "status": "held_only",
+     "readings_on_page": [
+      "R0 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 SCAN DOC/R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020-01_CODE C.pdf",
+     "page": 1,
+     "truth": "01",
+     "status": "held_only",
+     "readings_on_page": [
+      "R1 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, pilot (r7-det9, default)",
+   "field": "identity",
+   "category": "literal_misread (alongside a correct reading)",
+   "items": [
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 9 (BEL POOL)/78-80_BELLAGIO POOL/78 OF 96_ARCH, STRUC, LSCAPE, SIGNAGE, FLS/D. LANDSCAPE/345-LA-SS-5A-20002.pdf",
+     "page": 1,
+     "truth": "345-LA-SS-5A-20002",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "345-LA-SS-5A-20002 [observed/correct]",
+      "R1029-05-BSB-DWG-ALL-ARC-1282 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/B. INFRASTRUCTURE/R1029-18-AUR-DWG-GFL-PUA-INF-53001-PDF (D) - BELLAGIO.pdf",
+     "page": 1,
+     "truth": "R1029-18-AUR-DWG-GFL-PUA-INF-53001",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "R1029-18-AUR-DWG-GFL-PUA-INF-53000 [observed/wrong]",
+      "R1029-18-AUR-DWG-GFL-PUA-INF-53001 [observed/correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/09 OF 96_MEP - MGM 2 ELECTRICAL ELV/R1029-08-IFS-DWG-L07-ICT-1207.pdf",
+     "page": 1,
+     "truth": "R1029-08-IFS-DWG-L07-ICT-1207",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "R1029-07-IFS-DWG-ALL-GRO-ICT-8107 [observed/wrong]",
+      "R1029-08-IFS-DWG-L07-ICT-1207 [observed/correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/OneDrive_2024-08-23 4 (BEL)/34-44_BELLAGIO HOTEL/44 OF 96_LANDSCAPE-INFRASTRUCTURE/A. LANDSCAPE/345-LA-HS-5C-11000.pdf",
+     "page": 1,
+     "truth": "345-LA-HS-5C-11000",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "345-LA-HS-5C-11000 [observed/correct]",
+      "R1029-03-BSB-DWG-GFL-ARC-1224 [observed/wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-08-W&A-DWG-L05-PUA-INT-3250-PDF-B.pdf",
+     "page": 1,
+     "truth": "R1029-08-W&A-DWG-L05-PUA-INT-3250",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "A-DWG-L05-PUA-INT-3250 [observed/wrong]",
+      "R1029-08-W&A-DWG-L05-PUA-INT-3250 [observed/correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/TENDER DWGS/MGM/04-21_MGM HOTEL/16 OF 96_INTERIOR DESIGN - PUBLIC LEVELS/R1029-07-W&A-DWG-L05-PUA-INT-3114-PDF-E.pdf",
+     "page": 1,
+     "truth": "R1029-07-W&A-DWG-L05-PUA-INT-3114",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "A-DWG-L05-PUA-INT-3114 [observed/wrong]",
+      "R1029-07-W&A-DWG-L05-PUA-INT-3114 [observed/correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-26082/EP-26082 INPUTS/DCD/DCD App (CE,Aria ,Bellagio & MGM-2/DCD Approved Drawing (CE, Aria, Bellagio & MGM 2)/DCD APPROVAL FOR BELLAGIO/revised_gas_bellagio_part1xiba1741941453483 (1).pdf",
+     "page": 9,
+     "truth": "R1029-05-IBA-DWG-B01-GAS-1199",
+     "status": "recovered_mixed",
+     "readings_on_page": [
+      "R1029-02-IBA-DWG-B01-GAS-1213 [observed/wrong]",
+      "R1029-05-IBA-DWG-B01-GAS-1199 [observed/correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "identity",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/EP-28569 Scan/EP-28569 SCS MS R1 Ack 24.02.25.pdf",
+     "page": 1,
+     "truth": "TR/1995/25",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/EP-28569 MS/SCS/Leviton/Sent/R1/Consultant comments.pdf",
+     "page": 1,
+     "truth": "MTS-E-0018",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "identity",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 1,
+     "truth": "MTS-E-0018",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 2,
+     "truth": "EP-27282/MA/TEL/201",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 3,
+     "truth": "MTS-E-0018",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "revision",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 1,
+     "truth": "01",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 2,
+     "truth": "01",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 3,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "decision",
+   "category": "failed_reading",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    },
+    {
+     "doc": "EP-28569/EP-28569 ELV/Consultant approval/MTS-E-0018-R01-B.pdf",
+     "page": 3,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "bounded"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "revision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/EP-28569 MS/SCS/Leviton/Sent/R1/Consultant comments.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-8430/Shop Drawings/AGC-DF-MEP-SD-PAS-03-D.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "decision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-28569/EP-28569 ELV/EP-28569 MS/SCS/Leviton/Sent/R1/Consultant comments.pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "identity",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-8430/Approval and Comments/PAVA MS Comments.pdf",
+     "page": 1,
+     "truth": "D15015-0200S-FS-EL-MS-0022",
+     "status": "wrong_only",
+     "readings_on_page": [
+      "ICDS-DOC-01943 [observed/wrong]"
+     ],
+     "finding_group": "F12",
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "revision",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-8430/Approval and Comments/PAVA MS Comments.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F12",
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "deterministic baseline, holdout (r7-det9, default)",
+   "field": "decision",
+   "category": "disputed_label",
+   "items": [
+    {
+     "doc": "EP-8430/Approval and Comments/PAVA MS Comments.pdf",
+     "page": 1,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": "F12",
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: model-disabled (det9)",
+   "field": "decision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+     "page": 2,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: model-disabled (det9)",
+   "field": "identity",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "ICC-DLRC-SPM-SD-MEP/FA-100",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: model-disabled (det9)",
+   "field": "revision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "C1",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: model-disabled (det9)",
+   "field": "identity",
+   "category": "wrong_association",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-R04-ELV-AI-164",
+     "status": "missed",
+     "readings_on_page": [
+      "LAC-653-PLN-RO4-ELV-Al-164 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV1 (default|EV1)",
+   "field": "decision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+     "page": 2,
+     "truth": "ANN",
+     "status": "held_only",
+     "readings_on_page": [
+      "ANN [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "held_only",
+     "readings_on_page": [
+      "rejected [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV1 (default|EV1)",
+   "field": "identity",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "ICC-DLRC-SPM-SD-MEP/FA-100",
+     "status": "held_only",
+     "readings_on_page": [
+      "ICC-DLRC-SPM-SD-MEP/FA-100 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV1 (default|EV1)",
+   "field": "revision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "held_only",
+     "readings_on_page": [
+      "00 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "C1",
+     "status": "held_only",
+     "readings_on_page": [
+      "C1 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV1 (default|EV1)",
+   "field": "identity",
+   "category": "wrong_association",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-R04-ELV-AI-164",
+     "status": "missed",
+     "readings_on_page": [
+      "C-653-PLN-R04-ELV-AI-164 [held/held_wrong]",
+      "LAC-653-PLN-RO4-ELV-Al-164 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV1 (default|EV1)",
+   "field": "revision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "decision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-30784/04- Drawings/08-Shop Drawing/1.FAVE/recieved/BBY006-GME-SDW-FP-FA-ZZZ-L02-010007-01 Shop Drawing for L02 1st Mechanical Floor Plan - Fire Alarm Layout.pdf",
+     "page": 2,
+     "truth": "ANN",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "decision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Received/R01/ICC-DLRC-SPM-SD-MEP-FA-0042-01-HC FLOOR FIRE ALARM LAYOUT_ICC-DLRC-SPM-SD-MEP-FA-0042-01.pdf",
+     "page": 2,
+     "truth": "rejected",
+     "status": "held_only",
+     "readings_on_page": [
+      "rejected [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+     "page": 1,
+     "truth": "ANN",
+     "status": "held_only",
+     "readings_on_page": [
+      "ANN [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "identity",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "ICC-DLRC-SPM-SD-MEP/FA-100",
+     "status": "held_only",
+     "readings_on_page": [
+      "ICC-DLRC-SPM-SD-MEP/FA-100 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "revision",
+   "category": "withheld_correct",
+   "items": [
+    {
+     "doc": "EP-30088/10. SD/recieved/Fire alarm layout/Submitted/R00/PDF/ICC-DLRC-SPM-SD-MEPFA-100.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "held_only",
+     "readings_on_page": [
+      "00 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    },
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "C1",
+     "status": "held_only",
+     "readings_on_page": [
+      "C1 [held/held_correct]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "identity",
+   "category": "wrong_association",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/10- MEP C1 30-03-2026/MEP/26.03.16 25h385_MEP_C1/Drgs/PDF/03-Elec/04-Low Current/LAC-653-PLN-R04-ELV-AI-164-LAC-653-PLN-R04-ELV-AI-164.pdf",
+     "page": 1,
+     "truth": "LAC-653-PLN-R04-ELV-AI-164",
+     "status": "missed",
+     "readings_on_page": [
+      "AC-653-PLN-R04-ELV-AI-164 [held/held_wrong]",
+      "LAC-653-PLN-RO4-ELV-Al-164 [held/held_wrong]"
+     ],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  },
+  {
+   "run": "matched: AI-EV2 (default|EV2)",
+   "field": "revision",
+   "category": "missed_discovery",
+   "items": [
+    {
+     "doc": "EP-29076/06- Drawings/01- FA/03- SD/00- APPROVED/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B/25H-S202-NCC-SD-MEP-ELE-FA-047_Code B.pdf",
+     "page": 1,
+     "truth": "00",
+     "status": "missed",
+     "readings_on_page": [],
+     "finding_group": null,
+     "execution": "complete"
+    }
+   ]
+  }
+ ]
+}
