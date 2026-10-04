@@ -3,9 +3,12 @@ import { useJob } from '../../lib/useJob'
 import { Button, Card, ErrorBox, Spinner, Stat } from '../ifc/ui'
 import {
   interfacesApi,
+  RUN_KIND,
   SCAN_KIND,
+  type AgentReport,
   type Coverage,
   type Decision,
+  type InterfaceRun,
   type InterfaceSchedule,
   type ScheduleRow,
   type VerificationItem,
@@ -25,6 +28,7 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [tab, setTab] = useState<Tab>('schedule')
+  const [run, setRun] = useState<InterfaceRun | null>(null)
 
   const load = useCallback(
     () =>
@@ -34,9 +38,18 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
         .catch((e) => setError(`The interface schedule could not be loaded: ${(e as Error).message}`)),
     [projectId],
   )
+  const loadRun = useCallback(
+    () =>
+      interfacesApi
+        .latestRun(projectId)
+        .then((r) => setRun(r.run))
+        .catch(() => undefined),
+    [projectId],
+  )
   useEffect(() => {
     void load()
-  }, [load])
+    void loadRun()
+  }, [load, loadRun])
 
   const scan = useJob(projectId, SCAN_KIND, interfacesApi.scanPath(projectId), (job) => {
     if (job.status === 'failed') setError(job.error ?? 'The drawings could not be read')
@@ -46,6 +59,14 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
     if (job.status === 'failed') setError(job.error ?? 'The drawings could not be read')
     void load()
   })
+  // the drawing workflow: read, drawing agents, package reports, the Fable review
+  const runJob = useJob(projectId, RUN_KIND, interfacesApi.runPath(projectId), (job) => {
+    if (job.status === 'failed') setError(job.error ?? 'The drawing workflow did not finish')
+    void load()
+    void loadRun()
+  })
+  const reading = scan.active || hydrate.active || runJob.active
+  const current = runJob.active ? runJob : hydrate.active ? hydrate : scan
 
   const act = useCallback(
     async (fn: () => Promise<InterfaceSchedule>) => {
@@ -68,7 +89,7 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
   if (!data) return error ? <ErrorBox message={error} /> : <Spinner label="Loading the interface schedule…" />
 
   const t = data.totals
-  const progress = scan.job?.progress as { done?: number; total?: number; message?: string } | undefined
+  const progress = current.job?.progress as { done?: number; total?: number; message?: string } | undefined
   const tabs: { key: Tab; label: string; count?: number | string }[] = [
     { key: 'schedule', label: 'Interface Schedule', count: data.rows.length },
     { key: 'verify', label: 'Verification Required', count: data.verification.length },
@@ -94,9 +115,23 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
         </div>
         <div className="flex flex-wrap gap-2">
           {canEdit && (
-            <Button onClick={() => void scan.start()} disabled={scan.active}>
-              {scan.active ? 'Reading drawings…' : data.scanned_at ? 'Read drawings again' : 'Read drawings'}
-            </Button>
+            <>
+              <Button
+                onClick={() => void runJob.start()}
+                disabled={reading}
+                title="Reads every drawing, then a drawing agent (Opus) for each drawing that needs a look, then the Fable orchestrator reviews the reports. Nothing is published until you accept the run."
+              >
+                {runJob.active ? 'Drawing agents running…' : 'Read drawings with agents'}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => void scan.start()}
+                disabled={reading}
+                title="Reads the drawings without the drawing agents or the orchestrator's review"
+              >
+                {scan.active ? 'Reading drawings…' : 'Read only'}
+              </Button>
+            </>
           )}
           <a
             href={interfacesApi.exportUrl(projectId)}
@@ -113,7 +148,7 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
         </div>
       </div>
 
-      {scan.active && (
+      {reading && (
         <Card className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <Spinner label={progress?.message ?? 'Queued'} />
@@ -123,7 +158,7 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
               </div>
             ) : null}
             <div className="mt-1 text-xs text-slate-500">A DWG is converted first: about 20 seconds a drawing, once. Unchanged drawings are not read again.</div>
-            {scan.job?.status === 'queued' && Date.now() - new Date(scan.job.created_at + 'Z').getTime() > 60_000 && (
+            {current.job?.status === 'queued' && Date.now() - new Date(current.job.created_at + 'Z').getTime() > 60_000 && (
               <div className="mt-2 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-900">
                 Still waiting for the IFC worker. If its window was opened before this tab was added, close it and run start.bat (or
                 start the IFC worker again): the read then starts by itself.
@@ -131,18 +166,20 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
             )}
           </div>
           {canEdit && (
-            <Button variant="ghost" onClick={() => void scan.cancel()}>
+            <Button variant="ghost" onClick={() => void current.cancel()}>
               Stop
             </Button>
           )}
         </Card>
       )}
-      {(error || scan.error) && <ErrorBox message={error || scan.error || ''} onClose={() => setError('')} />}
+      {(error || scan.error || runJob.error || hydrate.error) && (
+        <ErrorBox message={error || scan.error || runJob.error || hydrate.error || ''} onClose={() => setError('')} />
+      )}
 
       <EvidenceBanner
         data={data}
         canEdit={canEdit}
-        busy={busy || scan.active || hydrate.active}
+        busy={busy || reading}
         onPublish={(reason, override) =>
           act(() =>
             interfacesApi.publishCurrent(projectId, { reason, expected_sources_digest: data.current_sources_digest, override }),
@@ -150,6 +187,38 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
         }
         onHydrate={() => void hydrate.start()}
       />
+
+      {run && (
+        <RunPanel
+          run={run}
+          canEdit={canEdit}
+          busy={busy || reading}
+          onAccept={async () => {
+            setBusy(true)
+            setError('')
+            try {
+              const out = await interfacesApi.acceptRun(projectId, run.run_id)
+              setRun(out.run)
+              setData(out.schedule)
+            } catch (e) {
+              setError((e as Error).message)
+            } finally {
+              setBusy(false)
+            }
+          }}
+          onRetry={async () => {
+            setBusy(true)
+            setError('')
+            try {
+              setRun((await interfacesApi.retryReview(projectId, run.run_id)).run)
+            } catch (e) {
+              setError((e as Error).message)
+            } finally {
+              setBusy(false)
+            }
+          }}
+        />
+      )}
 
       <CoverageStrip coverage={data.coverage} onOpen={() => setTab('drawings')} />
 
@@ -229,6 +298,180 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
         {tab === 'matrix' && <MatrixTab data={data} />}
       </fieldset>
     </div>
+  )
+}
+
+/* ------------------------------------------------------------------ the drawing workflow (FI-P1) */
+
+const AGENT_COVERAGE_STYLE: Record<string, string> = {
+  complete: 'bg-emerald-100 text-emerald-800',
+  partial: 'bg-amber-100 text-amber-800',
+  unsupported: 'bg-slate-200 text-slate-700',
+  not_attempted: 'bg-slate-100 text-slate-600',
+}
+
+function lookText(a: AgentReport): string {
+  if (!a.look) return 'no look needed'
+  const l = a.look
+  const of = l.labels_expected != null ? ` of ${l.labels_expected}` : ''
+  const unread = Object.entries(l.unread)
+    .map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`)
+    .join(', ')
+  return `${l.labels_looked}${of} damper labels looked at (${l.model_requested}, ${l.effort})${unread ? `; held: ${unread}` : ''}`
+}
+
+/** The latest run: one report per drawing agent and per package, the Fable
+ *  review, and what the run may become. A missing review is said, and keeps
+ *  the run provisional: only a complete, reviewed run can be accepted. */
+function RunPanel({
+  run,
+  canEdit,
+  busy,
+  onAccept,
+  onRetry,
+}: {
+  run: InterfaceRun
+  canEdit: boolean
+  busy: boolean
+  onAccept: () => Promise<void>
+  onRetry: () => Promise<void>
+}) {
+  const [open, setOpen] = useState(false)
+  const reviewed = run.review_state === 'completed'
+  const tone =
+    run.publication_state === 'accepted'
+      ? 'border-emerald-200 bg-emerald-50/60 text-emerald-900'
+      : run.publication_state === 'complete_candidate'
+        ? 'border-sky-200 bg-sky-50/60 text-sky-900'
+        : 'border-amber-200 bg-amber-50/60 text-amber-900'
+  const headline =
+    run.status !== 'completed'
+      ? `Run ${run.run_id} ${run.status}${run.error ? `: ${run.error}` : ''}`
+      : run.publication_state === 'accepted'
+        ? `Run ${run.run_id} accepted ${when(run.accepted_at)}: its readings are the published schedule.`
+        : run.publication_state === 'complete_candidate'
+          ? `Run ${run.run_id} is complete and reviewed: ready for you to accept.`
+          : reviewed
+            ? `Run ${run.run_id} is provisional: not every drawing is covered, or a conflict is open.`
+            : `Run ${run.run_id} is provisional: the Fable review is ${run.review_state}.`
+  const coverage = Object.entries(run.coverage)
+    .map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`)
+    .join(' · ')
+  return (
+    <Card className={`space-y-2 px-4 py-3 text-sm ${tone}`}>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="font-semibold">{headline}</div>
+          <div className="mt-0.5 text-xs opacity-80">
+            Started {when(run.started_at)} · {run.agents} drawing agent{run.agents === 1 ? '' : 's'}
+            {coverage ? ` (${coverage})` : ''} · {run.packages} package reports · Fable review {run.review_state}
+            {run.review.model_requested ? ` (${run.review.model_requested}, ${run.review.effort})` : ''} ·{' '}
+            {run.orchestrator_calls} orchestrator call{run.orchestrator_calls === 1 ? '' : 's'}
+          </div>
+          {!reviewed && run.review_reasons.length > 0 && (
+            <ul className="mt-1 list-disc pl-5 text-xs">
+              {run.review_reasons.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          )}
+          {run.review.fp2.proposal?.summary && <div className="mt-1 text-xs">Orchestrator: {run.review.fp2.proposal.summary}</div>}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {canEdit && run.status === 'completed' && !reviewed && (
+            <Button variant="secondary" disabled={busy} onClick={() => void onRetry()}>
+              Retry review
+            </Button>
+          )}
+          {canEdit && run.publication_state === 'complete_candidate' && (
+            <Button variant="success" disabled={busy} onClick={() => void onAccept()}>
+              Accept run
+            </Button>
+          )}
+          <Button variant="ghost" onClick={() => setOpen(!open)}>
+            {open ? 'Hide reports' : 'Show reports'}
+          </Button>
+        </div>
+      </div>
+      {open && (
+        <div className="space-y-3 pt-1">
+          <div className="overflow-x-auto rounded-md border border-slate-200 bg-white text-slate-800">
+            <table className="min-w-full text-xs">
+              <thead className="bg-slate-50 text-left text-slate-500">
+                <tr>
+                  <th className="px-2 py-1.5">Drawing</th>
+                  <th className="px-2 py-1.5">Package</th>
+                  <th className="px-2 py-1.5">Reading</th>
+                  <th className="px-2 py-1.5">Coverage</th>
+                  <th className="px-2 py-1.5">Look</th>
+                  <th className="px-2 py-1.5 text-right">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {run.agent_reports.map((a) => (
+                  <tr key={a.agent_id} className="border-t border-slate-100 align-top">
+                    <td className="px-2 py-1.5">
+                      <div className="font-medium">{a.filename}</div>
+                      {a.coverage_reason && <div className="text-slate-500">{a.coverage_reason}</div>}
+                    </td>
+                    <td className="px-2 py-1.5">{a.package}</td>
+                    <td className="px-2 py-1.5">
+                      {a.status}
+                      {a.stale_reason ? ` (${a.stale_reason.replace(/_/g, ' ')})` : ''}
+                    </td>
+                    <td className="px-2 py-1.5">
+                      <span className={`rounded-full px-2 py-0.5 ${AGENT_COVERAGE_STYLE[a.coverage_state] ?? ''}`}>
+                        {a.coverage_state.replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1.5">{lookText(a)}</td>
+                    <td className="px-2 py-1.5 text-right">{a.duration_s}s</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="overflow-x-auto rounded-md border border-slate-200 bg-white text-slate-800">
+            <table className="min-w-full text-xs">
+              <thead className="bg-slate-50 text-left text-slate-500">
+                <tr>
+                  <th className="px-2 py-1.5">Package</th>
+                  <th className="px-2 py-1.5">Drawings</th>
+                  <th className="px-2 py-1.5 text-right">Accepted lines</th>
+                  <th className="px-2 py-1.5 text-right">Held</th>
+                  <th className="px-2 py-1.5 text-right">Last known only</th>
+                  <th className="px-2 py-1.5">Fable review</th>
+                </tr>
+              </thead>
+              <tbody>
+                {run.package_reports.map((p) => (
+                  <tr key={p.package} className="border-t border-slate-100 align-top">
+                    <td className="px-2 py-1.5 font-medium">{p.name}</td>
+                    <td className="px-2 py-1.5">{p.sources.length}</td>
+                    <td className="px-2 py-1.5 text-right">{p.accepted_lines}</td>
+                    <td className="px-2 py-1.5 text-right">{p.held_items.length}</td>
+                    <td className="px-2 py-1.5 text-right">{p.stale.length}</td>
+                    <td className={`px-2 py-1.5 ${p.orchestrator_review === 'completed' ? '' : 'text-amber-800'}`}>
+                      {p.sources.length ? p.orchestrator_review : 'no drawings'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {(run.review.fp2.proposal?.open_questions?.length ?? 0) > 0 && (
+            <div className="text-xs">
+              <div className="font-semibold">The orchestrator's open questions (not acted on by themselves)</div>
+              <ul className="list-disc pl-5">
+                {run.review.fp2.proposal?.open_questions?.map((q) => (
+                  <li key={q}>{q}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
   )
 }
 
@@ -852,7 +1095,33 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
           {g.evidence}
         </div>
       </div>
-      {canEdit && (
+      {g.conflict && g.drawings && g.drawings.length > 0 && (
+        <div className="space-y-2 rounded-md border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900">
+          <div className="font-semibold">The drawings disagree. Nothing is counted until you say which one governs:</div>
+          <ul className="space-y-1">
+            {g.drawings.map((d) => (
+              <li key={d.relative_path} className="flex flex-wrap items-center justify-between gap-2">
+                <span>
+                  <span className="font-medium">{d.label}</span>: {d.points} point{d.points === 1 ? '' : 's'} drawn, {d.settled} settled
+                  <span className="block text-amber-800/80">{d.relative_path}</span>
+                </span>
+                {canEdit && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      const reason = window.prompt(`Why does ${d.label} govern ${g.equipment} on ${g.ref}?`)
+                      if (reason?.trim()) void onDecide({ id: g.id, action: 'govern', relative_path: d.relative_path, reason })
+                    }}
+                  >
+                    This drawing governs
+                  </Button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {canEdit && !g.conflict && (
         <div className="space-y-3 border-t border-slate-100 pt-3">
           <FloorPicker floors={data.floors} value={floors} onChange={setFloors} />
           <div className="grid gap-3 md:grid-cols-3">

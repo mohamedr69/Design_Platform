@@ -56,6 +56,9 @@ export interface VerificationItem {
   control: number
   status: 'open' | 'resolved' | 'dismissed'
   decision?: { reason?: string; floor_keys?: string[]; qty?: number; tags?: string[]; location?: string }
+  /** drawings that disagree (gate barriers): held until the engineer says which governs */
+  conflict?: boolean
+  drawings?: { relative_path: string; label: string; points: number; settled: number }[]
 }
 
 export interface CoverageFile {
@@ -187,7 +190,7 @@ export interface InterfaceSchedule {
   publish_offered: boolean
   totals_known: boolean
   published_at: string | null
-  published_basis: 'complete_scan' | 'engineer_accepted' | 'seeded' | null
+  published_basis: 'complete_scan' | 'engineer_accepted' | 'seeded' | 'run_accepted' | null
   published_by: string | null
   published_reason: string | null
   current_sources_digest: string
@@ -218,7 +221,7 @@ export interface LastKnown {
   counts_by_key: Record<string, number>
 }
 
-export type DecisionAction = 'reject' | 'restore' | 'confirm' | 'resolve' | 'dismiss' | 'reopen'
+export type DecisionAction = 'reject' | 'restore' | 'confirm' | 'resolve' | 'dismiss' | 'reopen' | 'govern'
 
 export interface Decision {
   id: string
@@ -228,7 +231,101 @@ export interface Decision {
   qty?: number
   tags?: string[]
   location?: string
+  /** govern: the drawing that counts for a conflict */
+  relative_path?: string
 }
+
+/* ---- the drawing workflow (FI-P1): drawing agents, package reports, the Fable review */
+
+export type CoverageState = 'complete' | 'partial' | 'unsupported' | 'not_attempted'
+export type ReviewState = 'completed' | 'partial' | 'missing' | 'pending'
+export type PublicationState = 'provisional' | 'complete_candidate' | 'accepted'
+
+export interface AgentReport {
+  agent_id: string
+  source_id: string
+  relative_path: string | null
+  filename: string | null
+  package: string
+  status: string
+  stale_reason: string | null
+  execution_state: 'completed' | 'failed'
+  coverage_state: CoverageState
+  coverage_reason: string | null
+  layouts: { sheets: number; plans: number }
+  labels: number
+  associations: Record<string, number>
+  gate_points: { total: number; settled: number }
+  look: {
+    model_requested: string
+    effort: string
+    windows: number | null
+    labels_expected: number | null
+    labels_looked: number
+    unread: Record<string, number>
+    status: string | null
+  } | null
+  duration_s: number
+  error: string | null
+}
+
+export interface PackageReport {
+  package: string
+  name: string
+  badge: CoverageBadge
+  received: boolean
+  sources: { source_id: string; filename: string | null; status: string; execution_state: string; coverage_state: CoverageState; coverage_reason: string | null }[]
+  accepted_lines: number
+  accepted_points: number
+  held_items: { id: string; equipment: string; labels: number | null; reason: string; conflict: boolean }[]
+  stale: { filename: string | null; reason: string | null }[]
+  unsupported_files: string[]
+  /** "completed", or "missing (<state>: <reason>)" */
+  orchestrator_review: string
+}
+
+export interface ReviewPart {
+  state: string | null
+  reason: string | null
+  proposal: {
+    summary?: string
+    publication_recommendation?: string
+    open_questions?: string[]
+    conflict_proposals?: { conflict_id: string; reason: string }[]
+    missing_or_suspect?: { detail: string }[]
+  } | null
+  notes: string[] | null
+}
+
+export interface InterfaceRun {
+  run_id: number
+  status: 'running' | 'completed' | 'failed' | 'stopped'
+  agents: number
+  coverage: Partial<Record<CoverageState, number>>
+  packages: number
+  review_state: ReviewState
+  review_reasons: string[]
+  publication_state: PublicationState
+  orchestrator_calls: number
+  started_at: string | null
+  finished_at: string | null
+  error: string | null
+  agent_reports: AgentReport[]
+  package_reports: PackageReport[]
+  review: {
+    state: ReviewState
+    reasons: string[]
+    model_requested: string | null
+    effort: string | null
+    fp1: Record<string, ReviewPart>
+    fp2: ReviewPart
+    retries: string[]
+  }
+  accepted_at: string | null
+  sources_digest: string | null
+}
+
+export const RUN_KIND = 'fa_interfaces_run'
 
 const base = (projectId: number) => `/projects/${projectId}/fa-interfaces`
 
@@ -247,6 +344,12 @@ export const interfacesApi = {
     platform.post<InterfaceSchedule>(`${base(projectId)}/publish-current`, body),
   confirmRemoved: (projectId: number, relativePaths: string[]) =>
     platform.post<InterfaceSchedule>(`${base(projectId)}/sources/confirm-removed`, { relative_paths: relativePaths }),
+  runPath: (projectId: number) => `${base(projectId)}/runs/jobs`,
+  latestRun: (projectId: number) => platform.get<{ run: InterfaceRun | null }>(`${base(projectId)}/runs/latest`),
+  acceptRun: (projectId: number, runId: number) =>
+    platform.post<{ run: InterfaceRun; schedule: InterfaceSchedule }>(`${base(projectId)}/runs/${runId}/accept`),
+  retryReview: (projectId: number, runId: number) =>
+    platform.post<{ run: InterfaceRun }>(`${base(projectId)}/runs/${runId}/retry-review`),
   exportUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.xlsx`),
   exportPdfUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.pdf`),
 }
