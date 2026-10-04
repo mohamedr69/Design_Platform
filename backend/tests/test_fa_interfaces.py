@@ -440,10 +440,7 @@ def test_a_fire_pump_room_drawn_but_not_named_gets_the_schematics_pumps_where_it
     assert (it["x"], it["y"], it["detail"], it["confidence"]) == (717.17, 158.69, "Pump Room", "medium")
 
 
-def test_a_damper_label_is_scheduled_as_the_drawing_shows_it_once_looked_at():
-    from app.interfaces import service as I
-    from app.interfaces import visual
-
+def _damper_floors():
     class Floors:
         def of_title(self, title):
             return ["B3"] if "3RD BASEMENT" in title else []
@@ -454,28 +451,60 @@ def test_a_damper_label_is_scheduled_as_the_drawing_shows_it_once_looked_at():
         def name(self, key):
             return key
 
-    def label(text, x, y):
-        return {"key": "motorized_smoke_fire_damper", "kind": "label", "confidence": "medium", "tag": None,
-                "detail": "", "text": text, "sheet": "M-07-V101", "x": x, "y": y}
+        def order(self, key):
+            return (0, key)
+    return Floors()
 
-    door, msd_1, msd_2 = label("SD", 712.85, 159.05), label("MSD", 719.25, 154.4), label("MSD", 720.07, 154.66)
+
+def _damper_label(text, x, y, symbol=None, state="settled", block="A$C0e331ec6"):
+    """A damper label as scan v4 reads it: its text point, and the drawn symbol it is settled on."""
+    it = {"key": "motorized_smoke_fire_damper", "kind": "label", "confidence": "medium", "tag": None,
+          "detail": "", "text": text, "sheet": "M-07-V101", "x": x, "y": y}
+    if symbol is not None:
+        sid, (cx, cy), half = symbol
+        it["association"] = {"state": state, "symbol": {"id": sid, "block": block,
+                                                       "bounds": [cx - half, cy - half, cx + half, cy + half],
+                                                       "centre": [cx, cy]}, "d": 0.2, "runner_up": 1.2}
+    else:
+        it["association"] = {"state": "none", "symbol": None, "d": None, "runner_up": None, "candidates": []}
+    return it
+
+
+def _damper_source(items, looks=None):
+    from app.interfaces import visual
+
     src = {"discipline": "HVAC", "relative_path": "HVAC/VENTILATION LAYOUT.dwg", "filename": "VENTILATION LAYOUT.dwg",
            "sha256": "abc", "status": "read",
            "result": {"units": "m", "sheets": [{"name": "M-07-V101", "title": "3RD BASEMENT FLOOR PLAN VENTILATION LAYOUT",
-                                                "kind": "plan", "height": 97.0}],
-                      "items": [door, msd_1, msd_2]},
-           "visual": {"version": visual.VERSION, "sha256": "abc", "items": {
-               visual.item_id(door): {"damper": False, "at": None, "what": "door tag SD 04"},
-               visual.item_id(msd_1): {"damper": True, "at": [719.6, 154.1]},
-               visual.item_id(msd_2): {"damper": True, "at": [720.2, 154.1]}}}}
-    floors = Floors()
+                                                "kind": "plan", "height": 97.0}], "items": items}}
+    if looks is not None:
+        src["visual"] = {"version": visual.VERSION, "sha256": "abc", "status": "complete",
+                         "items": {visual.item_id(it): look for it, look in looks}}
+    return src
+
+
+def test_a_damper_label_is_scheduled_as_the_drawing_shows_it_once_looked_at():
+    """EP-30880, ventilation layout, 3rd basement: two MSD labels 0.86 m apart on two
+    inserts of one damper block (5741B, 5741D), and the architect's door tag "SD"."""
+    from app.interfaces import service as I
+
+    door = _damper_label("SD", 712.85, 159.05, ("5D85E/64C64", (713.473, 159.338), 0.5),
+                         block="xref ALL FLOORS PLANS$0$Door 1900mm")
+    msd_1 = _damper_label("MSD", 719.25, 154.4, ("5741B", (719.448, 154.226), 0.12))
+    msd_2 = _damper_label("MSD", 720.07, 154.66, ("5741D", (720.532, 154.724), 0.12))
+    src = _damper_source([door, msd_1, msd_2], [(door, {"damper": False, "at": None, "what": "door tag SD 04"}),
+                                               (msd_1, {"damper": True, "at": [719.45, 154.23]}),
+                                               (msd_2, {"damper": True, "at": [720.5, 154.7]})])
+    floors = _damper_floors()
     equipment, groups, conflicts = [], [], []
     I._read_source(src, floors, equipment, groups, conflicts, [], {}, I.Schedule([], floors))
     rows = I._equipment_rows(equipment, floors, conflicts, I.Schedule([], floors))
     dampers = [r for r in rows if not r.get("visual_reject")]
-    # the two MSDs a metre apart: two dampers, each where its damper is drawn
-    assert sorted(r["anchor"] for r in dampers) == [[719.6, 154.1], [720.2, 154.1]]
-    assert all("seen on the drawing" in r["evidence"] for r in dampers)
+    # two labels on two symbols: two dampers, each where its symbol is drawn -- not where its words are
+    assert sorted(r["anchor"] for r in dampers) == [[719.448, 154.226], [720.532, 154.724]]
+    assert sorted(r["symbol_id"] for r in dampers) == ["5741B", "5741D"]
+    assert all(r["location_state"] == "symbol" and "seen on the drawing" in r["evidence"] for r in dampers)
+    assert sorted(r["label_anchor"] for r in dampers) == [[719.25, 154.4], [720.07, 154.66]]
     # the door tag: set aside, saying what it is
     (door_row,) = [r for r in rows if r.get("visual_reject")]
     assert door_row["visual_reject"] == "door tag SD 04"
@@ -484,51 +513,52 @@ def test_a_damper_label_is_scheduled_as_the_drawing_shows_it_once_looked_at():
 def test_damper_without_visual_result_is_held_and_text_is_not_equipment_location():
     from app.interfaces import service as I
 
-    class Floors:
-        def of_title(self, title): return ["B3"]
-        def note(self, key, where): pass
-        def name(self, key): return key
-
-    def label(x, y):
-        return {"key": "motorized_smoke_fire_damper", "kind": "label", "confidence": "medium",
-                "tag": None, "detail": "", "text": "MSD", "sheet": "M-07-V101", "x": x, "y": y}
-
-    src = {"discipline": "HVAC", "relative_path": "HVAC/VENTILATION LAYOUT.dwg",
-           "filename": "VENTILATION LAYOUT.dwg", "sha256": "abc", "status": "read",
-           "result": {"units": "m", "sheets": [{"name": "M-07-V101", "title": "3RD BASEMENT",
-                      "kind": "plan", "height": 97.0}], "items": [label(719.25,154.4), label(720.07,154.66)]}}
+    src = _damper_source([_damper_label("MSD", 719.25, 154.4, ("5741B", (719.448, 154.226), 0.12)),
+                          _damper_label("MSD", 720.07, 154.66, ("5741D", (720.532, 154.724), 0.12))])
+    floors = _damper_floors()
     equipment, groups, conflicts = [], [], []
-    floors = Floors()
     I._read_source(src, floors, equipment, groups, conflicts, [], {}, I.Schedule([], floors))
     assert equipment == []
     assert len(groups) == 1
     assert groups[0]["proposed_qty"] is None
     assert groups[0]["labels"] == 2
-    assert "text position is not an equipment position" in groups[0]["reason"]
+    assert "text position is not a damper position" in groups[0]["reason"]
 
 
 def test_visual_damper_keeps_label_and_physical_equipment_anchors_separate():
     from app.interfaces import service as I
-    from app.interfaces import visual
 
-    class Floors:
-        def of_title(self, title): return ["B3"]
-        def note(self, key, where): pass
-        def name(self, key): return key
-        def order(self, key): return (0, key)
-
-    it = {"key": "motorized_smoke_fire_damper", "kind": "label", "confidence": "medium", "tag": None,
-          "detail": "", "text": "MSD", "sheet": "M-07-V101", "x": 719.25, "y": 154.4}
-    src = {"discipline": "HVAC", "relative_path": "HVAC/VENTILATION LAYOUT.dwg",
-           "filename": "VENTILATION LAYOUT.dwg", "sha256": "abc", "status": "read",
-           "result": {"units": "m", "sheets": [{"name": "M-07-V101", "title": "3RD BASEMENT",
-                      "kind": "plan", "height": 97.0}], "items": [it]},
-           "visual": {"version": visual.VERSION, "sha256": "abc", "status": "complete",
-                      "items": {visual.item_id(it): {"damper": True, "at": [721.1, 153.8]}}}}
+    on = _damper_label("MSD", 719.25, 154.4, ("5741B", (719.448, 154.226), 0.12))
+    src = _damper_source([on], [(on, {"damper": True, "at": [719.5, 154.2]})])
+    floors = _damper_floors()
     equipment, groups, conflicts = [], [], []
-    floors = Floors()
     I._read_source(src, floors, equipment, groups, conflicts, [], {}, I.Schedule([], floors))
     rows = I._equipment_rows(equipment, floors, conflicts, I.Schedule([], floors))
-    assert rows[0]["anchor"] == [721.1, 153.8]
-    assert rows[0]["equipment_anchor"] == [721.1, 153.8]
-    assert rows[0]["label_anchor"] == [719.25, 154.4]
+    assert rows[0]["anchor"] == rows[0]["equipment_anchor"] == [719.448, 154.226]   # the symbol
+    assert rows[0]["label_anchor"] == [719.25, 154.4]                                # the words
+    assert rows[0]["location_state"] == "symbol"
+
+
+def test_a_damper_whose_symbol_is_unclear_or_shared_or_missed_by_the_model_is_held():
+    from app.interfaces import service as I
+
+    ambiguous = _damper_label("MSD", 719.25, 154.4, ("5741B", (719.448, 154.226), 0.12), state="ambiguous")
+    no_symbol = _damper_label("MSD", 730.0, 154.4)
+    elsewhere = _damper_label("MSD", 740.0, 154.4, ("X1", (740.2, 154.2), 0.1))
+    shared_a = _damper_label("MSD", 750.0, 154.4, ("S1", (750.2, 154.2), 0.1))
+    shared_b = _damper_label("MD", 750.3, 154.5, ("S1", (750.2, 154.2), 0.1))
+    door = _damper_label("SD", 712.85, 159.05, ("D1", (713.47, 159.34), 0.5), block="xref$0$Door 1900mm")
+    looks = [(ambiguous, {"damper": True, "at": [719.45, 154.23]}), (no_symbol, {"damper": True, "at": [730.1, 154.4]}),
+             (elsewhere, {"damper": True, "at": [745.0, 150.0]}), (shared_a, {"damper": True, "at": [750.2, 154.2]}),
+             (shared_b, {"damper": True, "at": [750.2, 154.2]}), (door, {"damper": True, "at": [713.4, 159.3]})]
+    src = _damper_source([ambiguous, no_symbol, elsewhere, shared_a, shared_b, door], looks)
+    floors = _damper_floors()
+    equipment, groups, conflicts = [], [], []
+    I._read_source(src, floors, equipment, groups, conflicts, [], {}, I.Schedule([], floors))
+    assert equipment == []                                       # nothing counted on a guess
+    held = {g["reason"].split(":")[0][:40]: g["labels"] for g in groups}
+    assert sorted(held.values()) == [1, 1, 2, 2] and sum(held.values()) == 6
+    reasons = " ".join(g["reason"] for g in groups)
+    for words in ("not settled on one drawn symbol", "not on the symbol", "Different labels name one drawn symbol",
+                  "architectural block"):
+        assert words in reasons

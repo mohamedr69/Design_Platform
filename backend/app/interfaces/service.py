@@ -39,7 +39,7 @@ from app.core.config import get_settings
 from app.core.timeutils import utc_now
 from app.ifc import storage
 from app.ifc.dxf import sheets as S
-from app.interfaces import detect, evidence, scan, visual
+from app.interfaces import detect, evidence, geometry, scan, visual
 from app.interfaces import schedules as SCH
 from app.interfaces.matrix import (ACS, ARCH, BY_KEY, DISCIPLINE_NAMES, FF, GB, HVAC, MATRIX_NAME, RULES, SM,
                                    UNCLEAR_ROWS, modules)
@@ -860,9 +860,14 @@ def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", 
         _read_source(src, floors, equipment, groups, conflicts, excluded_found, tags_on_plans, sched)
 
     conflicts.extend(_repeated_tags(tags_on_plans))
-    rows = _equipment_rows(equipment, floors, conflicts, sched)
-    groups.extend(_schedule_checks(rows, sched, floors, conflicts))
     decisions: dict = row.decisions or {}
+    held_conflicts: list[dict] = []
+    rows = _equipment_rows(equipment, floors, conflicts, sched, held_conflicts)
+    gate_rows, gate_groups = _gate_rows([e for e in equipment if e.get("gate")], floors, conflicts, decisions)
+    rows.extend(gate_rows)
+    groups.extend(gate_groups)
+    groups.extend(_conflict_groups(held_conflicts, floors))
+    groups.extend(_schedule_checks(rows, sched, floors, conflicts))
     for r in rows:
         d = decisions.get(r["id"]) or {}
         if d.get("status") == "rejected":
@@ -947,6 +952,21 @@ def _read_source(src: dict, floors: Floors, equipment: list, groups: list, confl
         ref = title if whole else f"{sheet_name} · {title}"
         radius = _radius(sheet, units)
         on_plans.add(key)
+        if key == "gate_barrier":
+            # W-5: one barrier per fire alarm connection point; the words "gate barrier" are context
+            instances = [it for it in items if it.get("kind") == "instance"]
+            for it in instances:
+                equipment.append({**_item(src, it, key, keys, label, ref, sheet_name, 1), "radius": radius,
+                                  "gate": {"role": it.get("role"), "settled": bool(it.get("settled")),
+                                           "why": it.get("why"), "margin": it.get("margin"), "role_d": it.get("role_d")}})
+            named = [it for it in items if it.get("kind") != "instance" and not geometry.NOTE_ONLY.search(it["text"])]
+            if named and not instances:
+                groups.append(_group(src, key, sheet_name, floors_obj=floors, keys=keys, qty=None, label=label, ref=ref,
+                                     items=named,
+                                     reason="The drawing names gate barriers but shows no fire alarm connection point "
+                                            "for them: say how many barriers the fire alarm controls here (none is "
+                                            "counted from a name alone)"))
+            continue
         if key in SYSTEM_KEYS:
             groups.append(_group(src, key, sheet_name, floors_obj=floors, keys=keys,
                                  qty=len(_clusters(items, _radius(sheet, units, notes=True))),
@@ -955,42 +975,62 @@ def _read_source(src: dict, floors: Floors, equipment: list, groups: list, confl
                                         "systems / panels the fire alarm serves here"))
             continue
         if key in visual.KEYS:
-            # looked at on the drawing: a label that is not a damper's set aside (with
-            # what it is); each that is, a damper of its own, where the damper is
-            seen_at, kept, pending = [], [], []
+            # W-3: a damper counts when the drawing looked at says its label is a damper's,
+            # and that label is settled on a damper symbol drawn here -- the symbol is where
+            # it is. Each symbol is one damper; two labels on one symbol with different
+            # words, and every label without a settled symbol, are held.
+            metre = _METRE.get(units, 1.0)
+            kept, held = [], {}
             for it in items:
                 v = visual.verdict(src, it)
-                if v is None:
-                    pending.append(it)
-                elif not v["damper"]:
+                assoc = it.get("association") or {}
+                symbol = assoc.get("symbol") if assoc.get("state") == "settled" else None
+                if v is not None and not v["damper"]:
                     equipment.append({**_item(src, it, key, keys, label, ref, sheet_name, 1), "radius": radius,
                                       "visual_reject": v.get("what") or "not a damper"})
+                    continue
+                if symbol is not None and "$0$" in (symbol.get("block") or ""):
+                    held.setdefault("architecture", []).append(it)        # a door, a wall: the architect's block
+                    continue
+                if v is None:
+                    held.setdefault("unseen", []).append(it)
+                    continue
+                if symbol is None:
+                    held.setdefault("no_symbol", []).append(it)
+                    continue
+                at = v.get("at")
+                if isinstance(at, list) and len(at) == 2 and all(isinstance(n, (int, float)) for n in at):
+                    x0, y0, x1, y1 = symbol["bounds"]
+                    gap = math.hypot(max(x0 - at[0], 0.0, at[0] - x1), max(y0 - at[1], 0.0, at[1] - y1))
+                    if gap > DAMPER_SNAP_M * metre:
+                        held.setdefault("elsewhere", []).append(it)
+                        continue
+                kept.append({**it, "label_anchor": [it["x"], it["y"]], "equipment_anchor": list(symbol["centre"]),
+                             "symbol": symbol, "confidence": detect.HIGH, "visual": True})
+            by_symbol: dict[str, list[dict]] = {}
+            for it in kept:
+                by_symbol.setdefault(it["symbol"]["id"], []).append(it)
+            items = []
+            for claims in by_symbol.values():
+                if len({detect.normalize(c["text"]) for c in claims}) > 1:
+                    held.setdefault("shared", []).extend(claims)
                 else:
-                    at = v.get("at")
-                    # A text insertion point is evidence of a label, never the equipment's
-                    # physical location. A positive answer without a located symbol is held.
-                    if not (isinstance(at, list) and len(at) == 2
-                            and all(isinstance(n, (int, float)) for n in at)):
-                        pending.append(it)
-                        continue
-                    collision = next((other for other in seen_at
-                                      if visual.near(at, other, _METRE.get(units, 1.0))), None)
-                    if collision is not None:
-                        # Do not silently merge two labels. The visual association is ambiguous
-                        # until a reread assigns distinct physical symbols (or confirms one).
-                        pending.append(it)
-                        continue
-                    seen_at.append(at)
-                    kept.append({**it, "label_anchor": [it["x"], it["y"]],
-                                 "x": at[0], "y": at[1], "equipment_anchor": list(at),
-                                 "confidence": detect.HIGH, "visual": True})
-            if pending:
-                groups.append(_group(src, key, sheet_name, floors_obj=floors, keys=keys, qty=None,
-                                     label=label, ref=ref, items=pending,
-                                     reason="The label was found, but its physical equipment symbol was not "
-                                            "located unambiguously. Visually confirm each symbol; the label text "
-                                            "position is not an equipment position."))
-            items = kept
+                    items.append({**claims[0], "labels_on_symbol": len(claims)})
+            reasons = {
+                "unseen": "The label was found but not looked at on the drawing yet (AI visual check): confirm "
+                          "each damper symbol; a label's text position is not a damper position.",
+                "no_symbol": "Looked at and called a damper, but the label is not settled on one drawn symbol "
+                             "(none near it, or two about as near): confirm which symbol it names.",
+                "architecture": "The label sits on an architectural block (a door or wall from the architect's "
+                                "drawing), not a damper symbol: confirm whether it is a damper at all.",
+                "elsewhere": "Looked at and called a damper, but the point the model gave is not on the symbol "
+                             "the label names: confirm the damper.",
+                "shared": "Different labels name one drawn symbol: confirm which damper each label means.",
+            }
+            for why, its in held.items():
+                groups.append(_group(src, key, f"{sheet_name}|{why}" if why != "unseen" else sheet_name,
+                                     floors_obj=floors, keys=keys, qty=None, label=label, ref=ref, items=its,
+                                     reason=reasons[why]))
         unsure = [it for it in items if it["confidence"] == detect.LOW]
         if unsure:
             groups.append(_group(src, key, sheet_name, floors_obj=floors, keys=keys,
@@ -1058,10 +1098,20 @@ def _item(src: dict, it: dict, key: str, keys: list[str], label: str, ref: str, 
     out = {"key": key, "tag": it.get("tag"), "keys": keys, "src": src, "label": label, "ref": ref,
            "sheet": sheet, "detail": it.get("detail", ""), "text": it["text"],
            "confidence": it["confidence"], "anchor": (it["x"], it["y"]), "count": count}
-    if it.get("label_anchor") is not None:
-        out["label_anchor"] = list(it["label_anchor"])
+    out["label_anchor"] = list(it["label_anchor"]) if it.get("label_anchor") is not None else [it["x"], it["y"]]
+    assoc = it.get("association") or {}
+    symbol = assoc.get("symbol") if assoc.get("state") == "settled" else None
     if it.get("equipment_anchor") is not None:
         out["equipment_anchor"] = list(it["equipment_anchor"])
+        out["location_state"] = "leader" if it.get("kind") == "instance" else "symbol"
+        if it.get("symbol"):
+            out["symbol"] = it["symbol"]
+    elif symbol is not None and "$0$" not in (symbol.get("block") or ""):
+        out["equipment_anchor"] = list(symbol["centre"])
+        out["location_state"] = "symbol"
+        out["symbol"] = symbol
+    else:
+        out["location_state"] = "held" if assoc.get("state") == "ambiguous" else "label_only"
     return out
 
 
@@ -1078,12 +1128,19 @@ def _repeated_tags(tags_on_plans: dict) -> list[str]:
             for (first, also), tags in groups.items()]
 
 
-def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str], sched: Schedule) -> list[dict]:
+def _landmarks(e: dict) -> dict:
+    return (e["src"].get("result") or {}).get("landmarks") or {}
+
+
+def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str], sched: Schedule,
+                    held_conflicts: list | None = None) -> list[dict]:
     """A line per item per floor it stands for. One piece of equipment shown
     on several drawings is counted once: per floor and kind, the untagged
     items of the drawing that shows the most are counted -- the discipline's
     own drawing before the architecture on a tie -- and the other drawings
     are its evidence, said in one note."""
+    equipment = [e for e in equipment if not e.get("gate")]   # gate barriers: _gate_rows
+    held_conflicts = held_conflicts if held_conflicts is not None else []
     shown: dict[tuple[str, str], dict[str, int]] = {}
     source: dict[str, dict] = {}
     tagged_by: dict[tuple[str, str], set[str]] = {}       # (kind, floor) -> the drawings that tag it there
@@ -1118,25 +1175,47 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
         conflicts.append(f"{BY_KEY[key].name} on {', '.join(floors.name(k) for k in sorted(keys, key=floors.order))}: "
                          f"{label} names it without a tag, another drawing tags it there -- the tagged ones are "
                          "counted, once.")
-    winner = {kf: max(by, key=lambda sid: (by[sid], -_PRIORITY.get(source[sid]["src"]["discipline"], 9)))
-              for kf, by in shown.items()}
-    notes: dict[tuple, list[str]] = {}
+    # W-4: one kind on one floor drawn untagged on several drawings. Drawings whose frames
+    # are verified the same (their landmarks coincide) give the union of their items, an
+    # item drawn on both counted once. Drawings not verified the same are held as a
+    # conflict -- never one drawing's count taken as the floor's.
+    unions: dict[tuple, list[str]] = {}
     for kf, by in shown.items():
-        if len(by) > 1:
-            win = winner[kf]
-            others = tuple(sorted(f"{source[sid]['label']} ({n})" for sid, n in by.items() if sid != win))
-            notes.setdefault((kf[0], f"{source[win]['label']} ({by[win]})", others), []).append(kf[1])
-    for e in equipment:
-        if not e["tag"]:
-            sid = f"{e['src']['discipline']}|{e['src']['relative_path']}"
-            e["skip"] |= {k for k in e["keys"] if (e["key"], k) in winner and winner[(e["key"], k)] != sid}
-    for (key, win, others), keys in notes.items():
+        if len(by) < 2:
+            continue
+        sids = sorted(by, key=lambda sid: _PRIORITY.get(source[sid]["src"]["discipline"], 9))
+        alignment = [geometry.aligned(_landmarks(source[a]), _landmarks(source[b]),
+                                      _METRE.get((source[a]["src"].get("result") or {}).get("units"), 1.0))
+                     for i, a in enumerate(sids) for b in sids[i + 1:]]
+        entries = [e for e in equipment if not e["tag"] and kf[1] in set(e["keys"]) - e["skip"] and e["key"] == kf[0]]
+        if not all(a["aligned"] for a in alignment):
+            for e in entries:
+                e["skip"] = set(e["skip"]) | {kf[1]}
+            held_conflicts.append({"key": kf[0], "floor": kf[1], "entries": entries,
+                                   "counts": {source[sid]["label"]: n for sid, n in by.items()}})
+            continue
+        kept: list[dict] = []
+        for e in sorted(entries, key=lambda e: _PRIORITY.get(e["src"]["discipline"], 9)):
+            point = e.get("equipment_anchor") or e.get("label_anchor") or list(e["anchor"])
+            metre = _METRE.get((e["src"].get("result") or {}).get("units"), 1.0)
+            twin = next((o for o in kept if o["src"] is not e["src"]
+                         and math.dist(point, o.get("equipment_anchor") or o.get("label_anchor") or list(o["anchor"]))
+                         <= UNION_TOLERANCE_M * metre), None)
+            if twin is not None:
+                e["skip"] = set(e["skip"]) | {kf[1]}
+                twin.setdefault("also_on", set()).add(e["label"])
+            else:
+                kept.append(e)
+        unions.setdefault((kf[0], tuple(sorted(f"{source[sid]['label']} ({n})" for sid, n in by.items())),
+                           len([e for e in kept])), []).append(kf[1])
+    for (key, labels, n), keys in unions.items():
         conflicts.append(f"{BY_KEY[key].name} on {', '.join(floors.name(k) for k in sorted(keys, key=floors.order))}: "
-                         f"shown on several drawings, counted once from {win}; also on {', '.join(others)}.")
+                         f"drawn on several drawings in one verified frame ({', '.join(labels)}): counted as their "
+                         f"union, an item drawn on both once.")
     rows = []
     for e in equipment:
         skipped = e["skip"]
-        x, y = e["anchor"]
+        x, y = e["anchor"]                     # the label's point: the row's identity, never its location
         anchor = (detect.tag_key(e["tag"]) if e["tag"] else
                   f"{x:.1f},{y:.1f}" if e.get("visual") or e.get("visual_reject") else f"{round(x)},{round(y)}")
         base = f"{e['src']['discipline']}|{e['src']['relative_path']}|{e['sheet']}|{e['key']}|{anchor}"
@@ -1160,13 +1239,20 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
                              evidence=f"{e['count']} label{'s' if e['count'] > 1 else ''} on {e['sheet']}"
                                       + (f", a plan for {len(e['keys'])} floors" if typical else "")
                                       + (f"; in the schedule: {hit['where']}" if hit else "")))
-            # where it is drawn: the fire alarm drawing shares the trades' coordinates,
-            # so the redesign puts its modules there
-            rows[-1]["anchor"], rows[-1]["sheet"] = [round(x, 3), round(y, 3)], e["sheet"]
-            if e.get("label_anchor") is not None:
-                rows[-1]["label_anchor"] = [round(float(n), 3) for n in e["label_anchor"]]
+            # where it stands: its drawn symbol (W-3), apart from where its label is written.
+            # No settled symbol: no location (the redesign then asks for the module by hand).
+            rows[-1]["sheet"] = e["sheet"]
+            rows[-1]["label_anchor"] = [round(float(n), 3) for n in (e.get("label_anchor") or (x, y))]
             if e.get("equipment_anchor") is not None:
                 rows[-1]["equipment_anchor"] = [round(float(n), 3) for n in e["equipment_anchor"]]
+            rows[-1]["anchor"] = rows[-1].get("equipment_anchor")
+            rows[-1]["location_state"] = e.get("location_state") or ("symbol" if e.get("equipment_anchor") else "label_only")
+            if e.get("symbol"):
+                rows[-1]["symbol_id"] = e["symbol"]["id"]
+            if e.get("also_on"):
+                rows[-1]["evidence"] += f"; also drawn on {', '.join(sorted(e['also_on']))}"
+            if e.get("labels_on_symbol", 1) > 1:
+                rows[-1]["evidence"] += f"; {e['labels_on_symbol']} labels on one symbol"
             if e.get("visual"):
                 rows[-1]["evidence"] += "; seen on the drawing (AI visual check): a damper, here"
             if e.get("visual_reject"):
@@ -1174,6 +1260,117 @@ def _equipment_rows(equipment: list[dict], floors: Floors, conflicts: list[str],
             if hit:
                 rows[-1]["schedule"] = hit["where"]
     return rows
+
+
+GATE_ACTIONS = {"exit": "To open the exit gate barrier",
+                "entry": "To close the entrance gate barrier (additional control module)"}
+
+
+def _gate_row(e: dict, k: str, floors: Floors) -> dict:
+    role = e["gate"]["role"]
+    x, y = e["anchor"]
+    r = _row("gate_barrier", floor=k, floors=floors, tag=None, location=f"{role.title()} lane" if role else "",
+             description=f"Gate Barrier, {role} (drawn: \"{e['text']}\")", discipline=e["src"]["discipline"],
+             source=e["label"], drawing_ref=e["ref"], confidence="High", basis="drawing",
+             row_id=f"{e['src']['discipline']}|{e['src']['relative_path']}|{e['sheet']}|gate_barrier|{role}@{x:.1f},{y:.1f}|{k}",
+             evidence=f"Fire alarm connection point on {e['sheet']}, lane role {role} settled "
+                      f"(assignment margin {e['gate'].get('margin')} m)")
+    r["action"] = GATE_ACTIONS.get(role, r["action"])
+    r["role"] = role
+    r["sheet"] = e["sheet"]
+    r["label_anchor"] = [round(float(n), 3) for n in e.get("label_anchor") or (x, y)]
+    if e.get("equipment_anchor"):
+        r["equipment_anchor"] = [round(float(n), 3) for n in e["equipment_anchor"]]
+    r["anchor"] = r.get("equipment_anchor")
+    r["location_state"] = "leader" if e.get("equipment_anchor") else "label_only"
+    return r
+
+
+def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decisions: dict) -> tuple[list, list]:
+    """W-5: gate barriers, floor by floor. One drawing's settled connection points
+    are one barrier each (a CR each, its action by its lane). Several drawings on a
+    floor must agree -- the same frame and every point matched -- or they are held
+    together as a conflict, until the engineer says which drawing governs."""
+    rows, groups = [], []
+    by_floor: dict[str, dict[str, list[dict]]] = {}
+    for e in gates:
+        for k in e["keys"]:
+            by_floor.setdefault(k, {}).setdefault(f"{e['src']['discipline']}|{e['src']['relative_path']}", []).append(e)
+    for k, per in sorted(by_floor.items(), key=lambda kv: floors.order(kv[0])):
+        gid = f"GATE|{k}|conflict"
+        governing = (decisions.get(gid) or {}).get("relative_path") if (decisions.get(gid) or {}).get("status") == "governed" else None
+        sids = list(per)
+        chosen = None
+        if len(sids) == 1:
+            chosen = sids[0]
+        elif governing:
+            chosen = next((sid for sid in sids if sid.split("|", 1)[1] == governing), None)
+        else:
+            first = per[sids[0]][0]
+            metre = _METRE.get((first["src"].get("result") or {}).get("units"), 1.0)
+            same_frame = all(geometry.aligned(_landmarks(per[a][0]), _landmarks(per[b][0]), metre)["aligned"]
+                             for i, a in enumerate(sids) for b in sids[i + 1:])
+
+            def matched(xs, ys):
+                return len(xs) == len(ys) and all(
+                    any(math.dist(list(p["anchor"]), list(q["anchor"])) <= GATE_MATCH_M * metre for q in ys) for p in xs)
+
+            if same_frame and all(matched(per[sids[0]], per[sid]) for sid in sids[1:]):
+                chosen = max(sids, key=lambda sid: sum(1 for e in per[sid] if e["gate"]["settled"]))
+        if chosen is None:
+            summary = "; ".join(f"{per[sid][0]['label']}: {len(per[sid])} connection point(s) at "
+                                + ", ".join(f"({e['anchor'][0]:.1f}, {e['anchor'][1]:.1f})" for e in per[sid][:6])
+                                for sid in sids)
+            rule = BY_KEY["gate_barrier"]
+            groups.append({"id": gid, "key": "gate_barrier", "equipment": rule.name, "discipline": GB,
+                           "system": DISCIPLINE_NAMES[GB], "source": ", ".join(per[sid][0]["label"] for sid in sids),
+                           "ref": floors.name(k), "proposed_floor_keys": [k], "proposed_floors": [floors.name(k)],
+                           "proposed_qty": None, "tags": [], "location": "", "labels": sum(len(v) for v in per.values()),
+                           "reason": "The drawings disagree on this floor's gate barriers (different points or counts): "
+                                     "say which drawing governs; until then none is counted.",
+                           "evidence": summary, "contacts": rule.contacts, "monitoring": rule.monitoring,
+                           "control": rule.control, "status": "open", "conflict": True,
+                           "drawings": [{"relative_path": sid.split("|", 1)[1], "label": per[sid][0]["label"],
+                                         "points": len(per[sid]),
+                                         "settled": sum(1 for e in per[sid] if e["gate"]["settled"])} for sid in sids]})
+            conflicts.append(f"Gate barriers on {floors.name(k)}: {summary} -- held until the governing drawing is chosen.")
+            continue
+        if len(sids) > 1:
+            others = [per[sid][0]["label"] for sid in sids if sid != chosen]
+            conflicts.append(f"Gate barriers on {floors.name(k)}: counted from {per[chosen][0]['label']}"
+                             + (" (the engineer's choice)" if governing else " (the drawings agree)")
+                             + f"; also shown on {', '.join(others)}.")
+        settled = [e for e in per[chosen] if e["gate"]["settled"]]
+        unsettled = [e for e in per[chosen] if not e["gate"]["settled"]]
+        for e in settled:
+            rows.append(_gate_row(e, k, floors))
+        if unsettled:
+            e0 = unsettled[0]
+            groups.append(_group(e0["src"], "gate_barrier", f"{e0['sheet']}|gate", floors_obj=floors, keys=[k],
+                                 qty=len(unsettled), label=e0["label"], ref=e0["ref"],
+                                 items=[{"text": e["text"], "detail": ""} for e in unsettled],
+                                 reason="Fire alarm connection points of gate barriers whose lane (entry / exit) the "
+                                        "drawing does not settle: " + "; ".join(sorted({e["gate"]["why"] or "" for e in unsettled}))))
+    return rows, groups
+
+
+def _conflict_groups(held: list[dict], floors: Floors) -> list[dict]:
+    """W-4: what drawings in unverified frames show of one kind on one floor, held."""
+    out = []
+    for c in held:
+        rule = BY_KEY[c["key"]]
+        counts = "; ".join(f"{label}: {n}" for label, n in sorted(c["counts"].items()))
+        out.append({"id": f"CONFLICT|{c['key']}|{c['floor']}", "key": c["key"], "equipment": rule.name,
+                    "discipline": c["entries"][0]["src"]["discipline"] if c["entries"] else "",
+                    "system": DISCIPLINE_NAMES.get(c["entries"][0]["src"]["discipline"], "") if c["entries"] else "",
+                    "source": ", ".join(sorted(c["counts"])), "ref": floors.name(c["floor"]),
+                    "reason": "Drawn on several drawings whose frames are not verified to be the same: say how many "
+                              "there are (none is counted from one drawing's count alone).",
+                    "proposed_floor_keys": [c["floor"]], "proposed_floors": [floors.name(c["floor"])],
+                    "proposed_qty": None, "tags": [], "location": "", "labels": len(c["entries"]),
+                    "evidence": counts, "contacts": rule.contacts, "monitoring": rule.monitoring,
+                    "control": rule.control, "status": "open", "conflict": True})
+    return out
 
 
 def _schedule_checks(rows: list[dict], sched: Schedule, floors: Floors, conflicts: list[str]) -> list[dict]:
@@ -1288,6 +1485,9 @@ def _group(src: dict, key: str, where: str, *, floors_obj: Floors, keys: list[st
 FIRE_PUMPS = (("electric_fire_pump", 1), ("diesel_fire_pump", 1), ("jockey_pump", 1))
 _SPRINKLER_VALVES = ("alarm_check_valve", "zone_control_valve", "gate_valve")
 _METRE = {"mm": 1000.0, "cm": 100.0, "m": 1.0, "in": 39.37, "ft": 3.281}
+DAMPER_SNAP_M = 0.15          # W-3: a model's point within this of the damper symbol's bounds (EXAMPLE)
+UNION_TOLERANCE_M = 0.5       # W-4: one item drawn on two aligned drawings (EXAMPLE)
+GATE_MATCH_M = 3.0            # W-5: one barrier's connection point on two aligned drawings (EXAMPLE)
 
 
 def _pump_room_pumps(result: dict, floors: Floors) -> list[tuple[str, list[str], dict, str, str]]:

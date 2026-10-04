@@ -133,8 +133,10 @@ def confirm_removed(project_id: int, body: ConfirmRemoved, current_user: User = 
 
 class Decision(BaseModel):
     id: str = Field(max_length=600)
-    # reject | restore | confirm (a scheduled line); resolve | dismiss | reopen (a verification item)
+    # reject | restore | confirm (a scheduled line); resolve | dismiss | reopen (a verification item);
+    # govern (a conflict between drawings: which drawing counts, `relative_path`)
     action: str
+    relative_path: str = Field(default="", max_length=1000)
     reason: str = Field(default="", max_length=500)
     floor_keys: list[str] = Field(default_factory=list, max_length=200)
     qty: int | None = Field(default=None, ge=1, le=500)
@@ -177,6 +179,17 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
             decisions[body.id] = {"status": "rejected" if body.action == "reject" else "confirmed",
                                   "reason": body.reason.strip(), **stamp}
         what = f"{line['equipment']} {line['tag']} on {line['floor']}"
+    elif body.action == "govern":
+        item = items.get(body.id)
+        if item is None or not item.get("drawings"):
+            raise HTTPException(404, "That is not a conflict between drawings (read the drawings again?)")
+        if body.relative_path not in {d["relative_path"] for d in item["drawings"]}:
+            raise HTTPException(422, "Choose one of the drawings in the conflict")
+        if not body.reason.strip():
+            raise HTTPException(422, "Say why that drawing governs")
+        decisions[body.id] = {"status": "governed", "relative_path": body.relative_path, "reason": body.reason.strip(),
+                              **stamp}
+        what = f"{item['equipment']} on {item['ref']}: {body.relative_path} governs"
     elif body.action in ("resolve", "dismiss", "reopen"):
         item = items.get(body.id)
         if item is None:
@@ -195,7 +208,7 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
                                   "location": body.location.strip(), "reason": body.reason.strip(), **stamp}
         what = f"{item['equipment']} ({item['source']})"
     else:
-        raise HTTPException(422, "action is one of reject, restore, confirm, resolve, dismiss, reopen")
+        raise HTTPException(422, "action is one of reject, restore, confirm, resolve, dismiss, reopen, govern")
     row.decisions = decisions
     db.commit()
     activity.record(db, current_user, f"fa_interfaces.{body.action}", f"FA interfaces: {body.action} {what}",

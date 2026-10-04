@@ -18,14 +18,18 @@ import ezdxf
 from app.ifc.dxf import geometry as G
 from app.ifc.dxf import sheets as S
 from app.interfaces import detect
-from app.interfaces.matrix import ARCH, FF, rules_for
+from app.interfaces import geometry
+from app.interfaces.matrix import ACS, ARCH, FF, GB, rules_for
 
 # Model space read as one drawing when no sheet has a viewport on it (a
 # drawing issued as model space only): its floor comes from the file name.
 WHOLE = "(whole drawing)"
-SCAN_VERSION = "3"     # 2: dampers by their code (MD, MSD, SD ...); 3: the fire fighting drawings' pump rooms
+SCAN_VERSION = "4"     # 2: dampers by their code (MD, MSD, SD ...); 3: the fire fighting drawings' pump rooms;
+                       # 4: each label's physical symbol, and gate barriers by their fire alarm connection points
 _MAX_DEPTH = 8
 _UNITS = {1: "in", 2: "ft", 4: "mm", 5: "cm", 6: "m"}
+_METRE = {"mm": 1000.0, "cm": 100.0, "m": 1.0, "in": 39.37, "ft": 3.281}
+GATE_CONTEXT_M = 5.0      # a connection note on an ACS / architecture drawing counts only this near a barrier
 
 
 def _texts(doc) -> list[tuple[str, float, float]]:
@@ -110,9 +114,42 @@ def read(path: str, discipline: str, check=None) -> dict:
                 machine_rooms.append({"text": detect.normalize(text), "sheet": sheet, "x": round(x, 2), "y": round(y, 2)})
         if discipline == FF and detect.is_pump_room(text):
             pump_rooms.append({"text": detect.normalize(text), "sheet": sheet, "x": round(x, 2), "y": round(y, 2)})
+    units = _UNITS.get(int(doc.header.get("$INSUNITS", 0) or 0), "unitless")
+    metre = _METRE.get(units, 1.0)
+    # the physical symbol beside each label: the label is where the words are, the symbol where it stands
+    labels = [it for it in items if it["kind"] == "label"]
+    symbols: list = []
+    if labels:
+        symbols = geometry.symbols_near(doc, [(it["x"], it["y"]) for it in labels], metre)
+        for it, a in zip(labels, geometry.associate([(it["text"], it["x"], it["y"]) for it in labels], symbols, metre)):
+            it["association"] = a
+        if check:
+            check()
+    # gate barriers: one per fire alarm connection point the drawing shows, with its lane
+    if "gate_barrier" in wanted and discipline in (GB, ACS, ARCH):
+        context = [(it["x"], it["y"]) for it in items if it["key"] == "gate_barrier"
+                   and not geometry.NOTE_ONLY.search(it["text"])]
+        for e in doc.modelspace().query("LWPOLYLINE"):
+            if "LOOP" in (e.dxf.layer or "").upper():
+                pts = [(px, py) for px, py, *_ in e.get_points("xy")]
+                if pts:
+                    context.append((sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)))
+        for pt in geometry.gate_points(texts, geometry.leaders(doc), metre):
+            if discipline != GB and not any(((cx - pt["x"]) ** 2 + (cy - pt["y"]) ** 2) ** 0.5 <= GATE_CONTEXT_M * metre
+                                            for cx, cy in context):
+                continue
+            sheet = S.sheet_for(sheets, pt["x"], pt["y"]) if sheets else WHOLE
+            anchor = pt["equipment_anchor"]
+            items.append({"key": "gate_barrier", "kind": "instance", "confidence": detect.HIGH if pt["settled"] else detect.MEDIUM,
+                          "tag": None, "detail": "", "text": detect.normalize(pt["text"])[:160], "sheet": sheet,
+                          "x": round(pt["x"], 2), "y": round(pt["y"], 2), "role": pt["role"], "settled": pt["settled"],
+                          "why": pt["why"], "role_d": pt["role_d"], "margin": pt["margin"],
+                          "equipment_anchor": [round(anchor[0], 3), round(anchor[1], 3)] if anchor else None})
     return {
         "scan_version": SCAN_VERSION,
-        "units": _UNITS.get(int(doc.header.get("$INSUNITS", 0) or 0), "unitless"),
+        "units": units,
+        "symbols": len(symbols),
+        "landmarks": geometry.landmarks(texts),
         "sheets": [{**s.to_dict(), "height": max((w.h for w in s.windows), default=0.0)} for s in sheets],
         "texts": len(texts),
         "items": items,

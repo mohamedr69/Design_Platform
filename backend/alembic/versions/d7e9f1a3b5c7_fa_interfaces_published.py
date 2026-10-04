@@ -36,13 +36,14 @@ def _digest(read: list[dict]) -> str:
 
 
 def upgrade() -> None:
-    with op.batch_alter_table("project_fa_interfaces") as batch:
-        batch.add_column(sa.Column("published", sa.JSON(), nullable=True))
-        batch.add_column(sa.Column("published_at", sa.DateTime(), nullable=True))
-        batch.add_column(sa.Column("published_basis", sa.String(24), nullable=True))
-        batch.add_column(sa.Column("published_by_id", sa.Integer(), nullable=True))
-        batch.add_column(sa.Column("published_reason", sa.Text(), nullable=True))
-        batch.add_column(sa.Column("generation", sa.Integer(), nullable=False, server_default="0"))
+    # plain ADD COLUMNs: no table rebuild (a batch rebuild on SQLite leaves a temporary
+    # table behind if the run is cut short)
+    op.add_column("project_fa_interfaces", sa.Column("published", sa.JSON(), nullable=True))
+    op.add_column("project_fa_interfaces", sa.Column("published_at", sa.DateTime(), nullable=True))
+    op.add_column("project_fa_interfaces", sa.Column("published_basis", sa.String(24), nullable=True))
+    op.add_column("project_fa_interfaces", sa.Column("published_by_id", sa.Integer(), nullable=True))
+    op.add_column("project_fa_interfaces", sa.Column("published_reason", sa.Text(), nullable=True))
+    op.add_column("project_fa_interfaces", sa.Column("generation", sa.Integer(), nullable=False, server_default="0"))
 
     bind = op.get_bind()
     table = sa.table("project_fa_interfaces", sa.column("id", sa.Integer), sa.column("sources", sa.JSON),
@@ -61,10 +62,6 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    with op.batch_alter_table("project_fa_interfaces") as batch:
-        batch.drop_column("generation")
-        batch.drop_column("published_reason")
-        batch.drop_column("published_by_id")
-        batch.drop_column("published_basis")
-        batch.drop_column("published_at")
-        batch.drop_column("published")
+    # plain DROP COLUMNs (SQLite 3.35+): no rebuild of a table other tables reference
+    for column in ("generation", "published_reason", "published_by_id", "published_basis", "published_at", "published"):
+        op.drop_column("project_fa_interfaces", column)
