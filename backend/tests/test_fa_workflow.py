@@ -158,14 +158,18 @@ def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(
     assert run["package_reports"] and all(p["orchestrator_review"].startswith("missing") or not p["sources"]
                                           for p in run["package_reports"])
     assert w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/accept").status_code == 422
-    # Retry once Fable is there: the review runs on the same evidence, the run becomes a candidate
+    # no look was paid for that Fable could not review (F10): the drawing's coverage is not complete
+    assert not [r for r in w.models.requests if r.task == visual.TASK]
+    # Retry once Fable is there: the review runs on the same evidence, nothing is re-read, and the run
+    # stays provisional -- its drawing was never looked at; a new run is what covers it
     w.models.serves = {OPUS, FABLE}
-    looks_before = len([r for r in w.models.requests if r.task == visual.TASK])
     job = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
     assert job.status_code == 202 and job.json()["kind"] == "fa_interfaces_review" and job.json()["status"] == "succeeded"
     retried = _latest(w)
-    assert retried["review_state"] == "completed" and retried["publication_state"] == "complete_candidate"
-    assert len([r for r in w.models.requests if r.task == visual.TASK]) == looks_before   # no drawing re-read
+    assert retried["review_state"] == "completed" and retried["publication_state"] == "provisional"
+    assert any("unsupported" in r for r in retried["publication_reasons"])
+    assert not [r for r in w.models.requests if r.task == visual.TASK]   # no drawing re-read
+    assert _run(w)["publication_state"] == "complete_candidate"
 
 
 def test_another_model_answering_for_fable_is_never_its_review(w):

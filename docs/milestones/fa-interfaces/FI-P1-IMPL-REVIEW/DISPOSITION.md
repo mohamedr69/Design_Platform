@@ -67,3 +67,24 @@ finding, through the API where an endpoint exists).
 
 - The EP-30880 Gate Barrier conflict stays **held**; no drawing is chosen.
 - No live database, migration, service, drawing, Desktop or `ep-platform-merged` change.
+
+## Round 2: the independent re-review of `180fd1f`
+
+The re-review did not reach a verdict (its session ended mid-way), but its probes
+(`fi-p1-work/review2/probes/test_review2_probes.py`) showed four residual defects
+on `180fd1f`, and two observations. Each was reproduced by its probe on `180fd1f`,
+fixed, and covered by a test that fails on `180fd1f` and passes now
+(`evidence/r2-tests-before.txt`, `evidence/review2-probes-after-r2fix.txt`: every
+`OK_*` probe still passes, every `DEFECT_*` probe now fails).
+
+| id | sev | finding | disposition | regression tests |
+|---|---|---|---|---|
+| A5 | HIGH | A gate conflict (and any conflict between drawings) could be settled by a count (`resolve` with a qty) or dismissed through the API with no reason and no authority, publishing gate CR rows without the authority `govern` requires. | **Fixed.** `resolve` and `dismiss` of a conflict need a reason and an authority, recorded in the decision (with its history) and in each resolved row's evidence. Gate conflicts stay govern-only in the page; ENTRY/EXIT evidence is kept. | `test_A5_*` |
+| W4 | MED (obs.) | A W-4 conflict (`CONFLICT|…`: drawings in unverified frames or different views, no drawings list) blocked acceptance and the page offered no way to settle it -- its own text asks "say how many there are". EP-30880's Sliding Doors GF is one. | **Fixed.** The page offers the count / not-an-interface for a W-4 conflict, asking the reason and the authority (A5). | `test_W4_*` (settled on an authority, the next run is a candidate and is accepted) |
+| F10-r | MED | Looks were paid for when the route could not serve the orchestrator's model exactly; the review was then missing. | **Fixed.** Before any look, the orchestrator's model must be servable exactly as well as its allowance having room; otherwise no look, said in each agent's coverage reason. A Retry later completes the review but the run stays provisional (its drawings were never looked at); a new run covers them. | `test_F10_no_look_is_paid_for_when_the_route_cannot_serve_the_orchestrator`; `test_without_fable_…` updated to this |
+| F8-r | LOW | A Retry whose job could not be queued (a read queued between its check and its enqueue) was refused with 409 but still spent one of the day's retries. | **Fixed.** The claim is given back by compare-and-set on the count it took. | `test_F8_a_retry_refused_when_its_job_cannot_be_queued_…` |
+| A3-r | MED | The prompt asks Fable to name "a package with no drawing"; any `missing_or_suspect` lowered the run (amendment A3), so a project that legitimately lacks a package could never be accepted. | **Fixed.** A `source_missing` item naming a package with no drawing of any kind (no sources, no unread files, nothing stale) restates what the package report already shows and does not lower the run; it stays in Fable's proposal on the page. Every other item still lowers, including `source_missing` on a package with files (e.g. only unread PDFs -- a coverage limitation). Amendment A3 is narrowed accordingly. | `test_A3_*` (3) |
+| F13-o | -- (obs.) | A floor-plan sheet whose floor is not identified is still looked at. | **Kept, deliberately.** Its labels become verification items the engineer places on a floor; the look decides whether each is a damper and where its symbol stands, which that answer needs. Only non-plan sheets (risers, schematics) are skipped (A6). | -- |
+
+Contract amendments added: **A3 (narrowed)** as above; **A7 (A5/W4):** settling any conflict between
+drawings -- governing, a count, or not an interface -- needs a reason and an authority.

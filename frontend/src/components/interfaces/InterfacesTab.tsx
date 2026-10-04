@@ -1191,6 +1191,15 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
   const [tags, setTags] = useState(g.tags.join(', '))
   const [location, setLocation] = useState(g.location)
   const lines = floors.length * (qty || 0)
+  // A conflict between drawings is settled with the reason and whose authority it rests on (A5).
+  const governed = Boolean(g.conflict && g.drawings && g.drawings.length > 0)
+  const basis = (question: string): { reason: string; authority?: string } | null => {
+    if (!g.conflict) return { reason: '' }
+    const reason = window.prompt(question)
+    if (!reason?.trim()) return null
+    const authority = window.prompt('The drawings disagree here. On whose authority (e.g. the consultant\'s reply or RFI number, the site)?')
+    return authority?.trim() ? { reason, authority } : null
+  }
   return (
     <Card className="space-y-3 p-4 text-sm">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -1218,7 +1227,7 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
       {g.conflict && g.drawings && g.drawings.length > 0 && (
         <ConflictDrawings g={g} canEdit={canEdit} onDecide={onDecide} />
       )}
-      {canEdit && !g.conflict && (
+      {canEdit && !governed && (
         <div className="space-y-3 border-t border-slate-100 pt-3">
           <FloorPicker floors={data.floors} value={floors} onChange={setFloors} />
           <div className="grid gap-3 md:grid-cols-3">
@@ -1246,22 +1255,30 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
             <Button
               variant="success"
               disabled={!floors.length || !qty}
-              onClick={() =>
-                void onDecide({
-                  id: g.id,
-                  action: 'resolve',
-                  floor_keys: floors,
-                  qty: Number(qty),
-                  tags: tags.split(',').map((s) => s.trim()).filter(Boolean),
-                  location,
-                })
-              }
+              onClick={() => {
+                const why = basis(`Why are there ${qty} ${g.equipment} on each floor chosen?`)
+                if (why)
+                  void onDecide({
+                    id: g.id,
+                    action: 'resolve',
+                    floor_keys: floors,
+                    qty: Number(qty),
+                    tags: tags.split(',').map((s) => s.trim()).filter(Boolean),
+                    location,
+                    ...why,
+                  })
+              }}
             >
               Schedule {lines ? `${lines} line${lines > 1 ? 's' : ''}` : 'it'}
             </Button>
             <Button
               variant="secondary"
               onClick={() => {
+                if (g.conflict) {
+                  const why = basis(`Why is ${g.equipment} not scheduled?`)
+                  if (why) void onDecide({ id: g.id, action: 'dismiss', ...why })
+                  return
+                }
                 const reason = window.prompt(`Why is ${g.equipment} not scheduled?`)
                 if (reason?.trim()) void onDecide({ id: g.id, action: 'dismiss', reason })
               }}

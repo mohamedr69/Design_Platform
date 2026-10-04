@@ -612,7 +612,7 @@ ROOMS = [("STORE ROOM NORTH", 700.0, 160.0), ("CORRIDOR WEST", 705.0, 140.0), ("
          ("STAIR CORE TWO", 740.0, 120.0)]
 
 
-def _msd_drawing(path, dampers):
+def _msd_drawing(path, dampers, centre=(733.0, 135.3)):
     """A B3 plan in the project's frame: the same rooms written at the same
     places, the same viewport, and a damper symbol 0.2 m right of and below
     each MSD label (the symbol is where the damper stands)."""
@@ -627,7 +627,7 @@ def _msd_drawing(path, dampers):
         msp.add_blockref("DAMPER", (x + 0.2, y - 0.2))
         msp.add_text("MSD", height=0.12).set_placement((x, y))
     lay = doc.layouts.new("B3")
-    lay.add_viewport(center=(420, 297), size=(800, 560), view_center_point=(733.0, 135.3), view_height=97.0)
+    lay.add_viewport(center=(420, 297), size=(800, 560), view_center_point=centre, view_height=97.0)
     lay.add_text("3RD BASEMENT FLOOR PLAN", height=5).set_placement((10, 10))
     doc.saveas(path)
 
@@ -708,3 +708,106 @@ def test_N1_the_gate_checks_the_published_drawings_by_path_as_the_scans_own_adva
     out = _run(w)
     assert out["publication_state"] == "provisional"
     assert any("of the published schedule" in r or "stale" in r for r in _latest(w)["publication_reasons"])
+
+
+# --- the independent re-review of 180fd1f (A3, A5, F8, F10, W-4) -------------------------------------------------
+
+
+def test_A5_a_gate_conflict_is_not_settled_by_a_count_or_dismissed_without_its_authority(gb):
+    _gate_layout(gb.folder / "GATEBARRIER SYSTEM LAYOUT.dxf")
+    _shop(gb)
+    view = _read(gb)
+    (conflict,) = [g for g in view["verification"] if g["id"].startswith("GATE|")]
+    count = {"id": conflict["id"], "action": "resolve", "qty": 2, "floor_keys": conflict["proposed_floor_keys"]}
+    assert _decide(gb, **count).status_code == 422                            # no reason, no authority
+    assert _decide(gb, **count, reason="two lanes").status_code == 422           # no authority
+    assert _decide(gb, id=conflict["id"], action="dismiss", reason="not ours").status_code == 422
+    body = gb.client.get(f"/projects/{gb.pid}/fa-interfaces").json()
+    assert not [r for r in body["rows"] if r["key"] == "gate_barrier"]        # still held: nothing counted
+    assert [g for g in body["verification"] if g["id"] == conflict["id"]]
+    done = _decide(gb, **count, reason="two lanes per the consultant", authority="Consultant RFI-021").json()
+    gates = [r for r in done["rows"] if r["key"] == "gate_barrier"]
+    assert len(gates) == 2 and all("Consultant RFI-021" in r["evidence"] for r in gates)
+    gb.db.expire_all()
+    d = gb.db.query(ProjectFaInterfaces).filter_by(project_id=gb.pid).one().decisions[conflict["id"]]
+    assert d["status"] == "resolved" and d["authority"] == "Consultant RFI-021"
+
+
+def test_W4_a_views_conflict_is_settled_by_a_count_on_an_authority_and_the_run_can_then_be_accepted(w, monkeypatch):
+    monkeypatch.setattr(settings, "fa_agent_parallel", 1)
+    monkeypatch.setattr(settings, "drawing_review_parallel", 1)
+    sm = w.root / "03- Drawings" / "IFC" / "Mechanical" / "SM"
+    sm.mkdir(parents=True, exist_ok=True)
+    (w.hvac / "VENTILATION LAYOUT.dxf").unlink()
+    _msd_drawing(sm / "SMOKE LAYOUT.dxf", [(719.25, 154.4)])
+    _msd_drawing(w.hvac / "VENTILATION LAYOUT.dxf", [(719.25, 154.4)], centre=(735.0, 135.3))   # another view
+    assert _run(w)["publication_state"] == "provisional"
+    view = w.client.get(f"/projects/{w.pid}/fa-interfaces").json()
+    (conflict,) = [g for g in view["verification"] if g.get("conflict")]
+    assert conflict["id"].startswith("CONFLICT|") and not conflict.get("drawings")   # the page offers the count
+    count = {"id": conflict["id"], "action": "resolve", "qty": 1, "floor_keys": conflict["proposed_floor_keys"]}
+    assert w.client.post(f"/projects/{w.pid}/fa-interfaces/decisions", json=count).status_code == 422
+    r = w.client.post(f"/projects/{w.pid}/fa-interfaces/decisions",
+                      json={**count, "reason": "one damper, both drawings", "authority": "Site survey 12"})
+    assert r.status_code == 200
+    out = _run(w)
+    assert out["publication_state"] == "complete_candidate", _latest(w)["publication_reasons"]
+    assert _accept(w, _latest(w)["run_id"]).status_code == 200
+
+
+def test_F8_a_retry_refused_when_its_job_cannot_be_queued_does_not_spend_the_days_bound(w, monkeypatch):
+    from app.routers import fa_interfaces as R
+
+    w.models.serves = {OPUS}
+    _run(w)
+    run = _latest(w)
+    w.client.post(f"/projects/{w.pid}/fa-interfaces/scan/jobs")             # queued under the shared key
+    monkeypatch.setattr(R, "_active_read", lambda db, pid: None)              # the request looked before it
+    r = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
+    assert r.status_code == 409
+    w.db.expire_all()
+    assert (w.db.get(FaInterfaceRun, run["run_id"]).review_retries or 0) == 0
+
+
+def test_F10_no_look_is_paid_for_when_the_route_cannot_serve_the_orchestrator(w):
+    w.models.serves = {OPUS}                                                 # Opus yes, Fable not exactly
+    out = _run(w)
+    run = _latest(w)
+    assert not [r for r in w.models.requests if r.task == visual.TASK]
+    (agent,) = run["agent_reports"]
+    assert agent["coverage_state"] == "unsupported" and "orchestrator" in agent["coverage_reason"]
+    assert out["review_state"] == "missing" and out["publication_state"] == "provisional"
+
+
+def _names_absent(packages_to_name):
+    def review(request):
+        a = _ok_review(request)
+        payload = json.loads(request.parts[0].text)
+        if payload.get("scope") == "run":
+            a["missing_or_suspect"] = [{"package": k, "issue": "source_missing", "detail": "no drawing"}
+                                       for k in packages_to_name(payload["packages"])]
+        return a
+    return review
+
+
+def test_A3_naming_a_package_that_has_no_drawing_at_all_as_the_prompt_asks_does_not_lower_the_run(w):
+    w.models.review = _names_absent(lambda ps: [p["package"] for p in ps if not p["sources"]])
+    out = _run(w)
+    run = _latest(w)
+    assert run["review"]["fp2"]["proposal"]["missing_or_suspect"]               # said, and shown to the engineer
+    assert out["publication_state"] == "complete_candidate", run["publication_reasons"]
+    assert _accept(w, run["run_id"]).status_code == 200
+
+
+@pytest.mark.parametrize("which", ["read", "unread_only"])
+def test_A3_a_source_missing_claim_on_a_package_with_files_still_lowers_the_run(w, which):
+    if which == "unread_only":
+        (_ff(w) / "FF SHOP DRAWING.pdf").write_bytes(b"%PDF-1.4\n%%EOF\n")      # a file it cannot read
+        name = "FF"
+    else:
+        name = "HVAC"                                                         # read and covered
+    w.models.review = _names_absent(lambda ps: [name])
+    out = _run(w)
+    run = _latest(w)
+    assert out["publication_state"] == "provisional"
+    assert "Fable (run) names 1 missing or suspect item(s)" in run["publication_reasons"]

@@ -1585,7 +1585,9 @@ def _resolved_rows(g: dict, d: dict, floors: Floors) -> list[dict]:
                              description=f"{BY_KEY[g['key']].name} (confirmed by the engineer)",
                              discipline=g["discipline"], source=g["source"], drawing_ref=g["ref"],
                              confidence="Engineer verified", basis="engineer", row_id=f"{g['id']}|{k}|{i}",
-                             evidence=g["evidence"]))
+                             evidence=g["evidence"] + (f" -- the engineer's count, on the authority of "
+                                                       f"{d['authority']}: {d.get('reason') or ''}"
+                                                       if d.get("authority") else "")))
             if g.get("anchor"):
                 rows[-1]["anchor"], rows[-1]["sheet"] = g["anchor"], g.get("sheet")
             n += 1

@@ -183,6 +183,7 @@ def retry_review(project_id: int, run_id: int, current_user: User = Depends(requ
                                 dedup_key=read_key(project.id), params={"user_id": current_user.id, "run_id": run.id},
                                 progress=_queue_note(db), message="")
     if not created:
+        workflow.release_retry(db, run)                          # refused: the day's bound is not spent on it
         raise HTTPException(409, "The drawings are being read or reviewed now: retry when that job has finished")
     activity.record(db, current_user, "fa_interfaces.retry_review", f"Retried the review of FA interfaces run {run.id}",
                     project=project, entity_type="project", entity_id=project.id)
@@ -323,19 +324,30 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
         item = items.get(body.id)
         if item is None:
             raise HTTPException(404, "That verification item is not open (read the drawings again?)")
+        # A5: settling a conflict between drawings -- by a count, or as no interface -- overrides what the
+        # drawings show, as choosing the governing one does: it needs the reason and whose authority it rests on
+        authority = {}
+        if body.action in ("resolve", "dismiss") and item.get("conflict"):
+            if not body.reason.strip():
+                raise HTTPException(422, "Say why: the drawings disagree here")
+            if not body.authority.strip():
+                raise HTTPException(422, "Say on whose authority (the consultant's confirmation, the site's): "
+                                         "the drawings disagree here")
+            authority = {"authority": body.authority.strip()}
         if body.action == "reopen":
             record({"status": "open", "reason": body.reason.strip()})
         elif body.action == "dismiss":
             if not body.reason.strip():
                 raise HTTPException(422, "Say why it is not scheduled")
-            record({"status": "dismissed", "reason": body.reason.strip()})
+            record({"status": "dismissed", "reason": body.reason.strip(), **authority})
         else:
             if body.qty is None:
                 raise HTTPException(422, "Say how many there are on each floor")
             record({"status": "resolved", "floor_keys": _known_floors(view, body.floor_keys), "qty": body.qty,
                     "tags": [t.strip() for t in body.tags if t.strip()], "location": body.location.strip(),
-                    "reason": body.reason.strip()})
-        what = f"{item['equipment']} ({item['source']})"
+                    "reason": body.reason.strip(), **authority})
+        what = f"{item['equipment']} ({item['source']})" + (f" on the authority of {authority['authority'][:80]}"
+                                                            if authority else "")
     else:
         raise HTTPException(422, "action is one of reject, restore, confirm, resolve, dismiss, reopen, govern")
     row.decisions = decisions

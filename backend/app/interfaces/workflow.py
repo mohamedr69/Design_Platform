@@ -490,7 +490,11 @@ def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
     for the run. Any one keeps it provisional; nothing it says can raise it."""
     out = []
     review_ = run.review or {}
-    parts = [(f"package {k}", r) for k, r in sorted((review_.get("fp1") or {}).items())] + [("run", review_.get("fp2") or {})]
+    # A package with no drawing at all is already known here, and the prompt asks Fable to name it:
+    # saying so again is not a signal. A package holding only unread files is (a coverage limitation).
+    empty = {p["package"] for p in run.package_reports or []
+             if not p.get("sources") and not p.get("unsupported_files") and not p.get("stale")}
+    parts =[(f"package {k}", r) for k, r in sorted((review_.get("fp1") or {}).items())] + [("run", review_.get("fp2") or {})]
     for scope, r in parts:
         proposal = r.get("proposal") or {}
         if r.get("state") != "completed":
@@ -503,8 +507,10 @@ def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
             out.append(f"Fable ({scope}) disputes the coverage of {len(disputes)} drawing(s)")
         if proposal.get("rework_requests"):
             out.append(f"Fable ({scope}) asks for {len(proposal['rework_requests'])} drawing(s) to be reworked")
-        if proposal.get("missing_or_suspect"):
-            out.append(f"Fable ({scope}) names {len(proposal['missing_or_suspect'])} missing or suspect item(s)")
+        suspect = [m for m in proposal.get("missing_or_suspect") or []
+                   if not (m.get("issue") == "source_missing" and m.get("package") in empty)]
+        if suspect:
+            out.append(f"Fable ({scope}) names {len(suspect)} missing or suspect item(s)")
     return out
 
 
@@ -606,7 +612,12 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
         # drawing agents
         model_ok, model_why = readiness(s.drawing_review_model) if s.ai_enabled else (False, "AI is not enabled")
         if model_ok:
-            # the orchestrator's review is mandatory: no look is paid for that it could not then review
+            # the orchestrator's review is mandatory: no look is paid for that it could not then review --
+            # neither when the route cannot serve its model exactly nor when its allowance has no room
+            ready, why = readiness(s.fa_orchestrator_model)
+            if not ready:
+                model_ok, model_why = False, f"the orchestrator ({s.fa_orchestrator_model}) cannot be served: {why}"
+        if model_ok:
             due = len({e.get("discipline") for e in sources if e.get("kind") != "unsupported"})
             model_ok, model_why = review_allowance(db, project, due)
         to_look = [e for e in sources if visual.wanted(e)]
@@ -750,6 +761,21 @@ def claim_retry(db: Session, project: Project, run: FaInterfaceRun) -> None:
     if claimed != 1:
         db.rollback()
         raise ValueError("Another Retry review was asked for at the same moment: look again")
+    db.commit()
+    db.refresh(run)
+
+
+def release_retry(db: Session, run: FaInterfaceRun) -> None:
+    """A claimed Retry that was then refused (its job could not be queued) gives
+    its claim back -- by compare-and-set on the count it took, so a claim made
+    since is never undone."""
+    today = utc_now().date().isoformat()
+    if run.review_retry_day != today or not run.review_retries:
+        return
+    (db.query(FaInterfaceRun)
+     .filter(FaInterfaceRun.id == run.id, FaInterfaceRun.review_retries == run.review_retries,
+             FaInterfaceRun.review_retry_day == today)
+     .update({"review_retries": run.review_retries - 1}, synchronize_session=False))
     db.commit()
     db.refresh(run)
 

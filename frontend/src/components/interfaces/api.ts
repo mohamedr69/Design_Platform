@@ -255,7 +255,8 @@ export interface Decision {
   qty?: number
   tags?: string[]
   location?: string
-  /** govern: the drawing that counts for a conflict, and whose confirmation the choice rests on */
+  /** govern: the drawing that counts for a conflict, and whose confirmation the choice rests on
+   *  (resolve / dismiss of a conflict need the authority too) */
   relative_path?: string
   authority?: string
 }
