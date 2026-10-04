@@ -310,12 +310,34 @@ def run_interfaces_run(session: Session, job: BackgroundJob, ctx: jobs.JobContex
         raise _unexpected(job.id, exc) from exc
 
 
+def run_interfaces_review(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
+    """fa_interfaces_review: a run's Fable review again, on its frozen inputs
+    (the Retry, counted against the day's bound when it was asked for)."""
+    from app.interfaces import workflow
+    from app.models import FaInterfaceRun
+
+    project = session.get(Project, job.project_id)
+    run = session.get(FaInterfaceRun, (job.params or {}).get("run_id"))
+    if run is None or run.project_id != project.id:
+        raise processing.ReadError("That run is not this project's. Nothing was changed.")
+    try:
+        ctx.progress(0, 1, "The Fable orchestrator is reviewing the run again", stage="review")
+        return workflow.run_retry(session, project, run)
+    except (jobs.Cancelled, jobs.Interrupted):
+        raise
+    except ValueError as exc:
+        raise processing.ReadError(f"{exc}. Nothing was changed.") from exc
+    except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
+        raise _unexpected(job.id, exc) from exc
+
+
 INTERFACES_SCAN = "fa_interfaces_scan"
 INTERFACES_RUN = "fa_interfaces_run"
+INTERFACES_REVIEW = "fa_interfaces_review"
 DRAWING_REVIEW = "fa_drawing_review"
 REDESIGN_PLAN, REDESIGN_APPLY = "fa_redesign_plan", "fa_redesign_apply"
 RUNNERS = {READ: run_read, READ_ZIP: run_read_zip, REPROCESS: run_reprocess, INTERFACES_SCAN: run_interfaces_scan,
-           INTERFACES_RUN: run_interfaces_run,
+           INTERFACES_RUN: run_interfaces_run, INTERFACES_REVIEW: run_interfaces_review,
            DRAWING_REVIEW: run_drawing_review, REDESIGN_PLAN: _redesign("plan"), REDESIGN_APPLY: _redesign("apply")}
 
 

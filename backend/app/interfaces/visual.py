@@ -87,11 +87,40 @@ def item_id(it: dict) -> str:
     return f"{it['sheet']}|{it['x']:.2f},{it['y']:.2f}|{it['text'][:40]}"
 
 
-def wanted(src: dict) -> list[dict]:
-    """The labels of a reading that are looked at."""
+def _on_plan(src: dict, it: dict) -> bool:
+    """Whether a label is on a floor plan -- the only place a damper is counted
+    from (`service._read_source`): a riser or schematic sheet is not."""
+    from app.interfaces import scan, service
+
+    if it["sheet"] == scan.WHOLE:
+        return True
+    sheets = {s["name"]: s for s in (src.get("result") or {}).get("sheets", [])}
+    return service._sheet_kind(sheets.get(it["sheet"])) == "plan"
+
+
+def _labels(src: dict) -> list[dict]:
     if src.get("discipline") not in DISCIPLINES or src.get("status") != "read":
         return []
     return [it for it in (src.get("result") or {}).get("items", []) if it["key"] in KEYS]
+
+
+def wanted(src: dict) -> list[dict]:
+    """The labels of a reading that are looked at: those on floor plans (F13 --
+    a look at a riser's labels is paid for and can change no count)."""
+    return [it for it in _labels(src) if _on_plan(src, it)]
+
+
+def not_looked(src: dict) -> list[dict]:
+    """The damper labels not looked at, sheet by sheet, with why: on a sheet
+    that is not a floor plan, so never counted on a floor -- reported, not lost."""
+    titles = {s["name"]: s.get("title") or "" for s in (src.get("result") or {}).get("sheets", [])}
+    by_sheet: dict[str, int] = {}
+    for it in _labels(src):
+        if not _on_plan(src, it):
+            by_sheet[it["sheet"]] = by_sheet.get(it["sheet"], 0) + 1
+    return [{"sheet": name, "title": titles.get(name, ""), "labels": n,
+             "reason": "not a floor plan (a riser, schematic or outside every sheet): no floor is counted from it"}
+            for name, n in sorted(by_sheet.items())]
 
 
 def _windows(labels: list[tuple[str, float, float]], metre: float) -> list[dict]:

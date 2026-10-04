@@ -36,6 +36,8 @@ decided here and in `service`, never by a model.
 from __future__ import annotations
 
 import copy
+import dataclasses
+import hashlib
 import json
 import logging
 import re
@@ -188,6 +190,9 @@ def _agent_report(run_id: int, entry: dict, *, looked: dict | None, model_ok: bo
                   # asked in this run; the rest were answered by an earlier run on the same file
                   "looked_this_run": looked_now}
                  if needs_look else None),
+        # F13: damper labels on sheets that are not floor plans (a riser, a schematic) are not
+        # looked at -- no floor's count can come from them -- and are said here, sheet by sheet
+        "not_looked": visual.not_looked(entry),
         "duration_s": round(time.monotonic() - started, 1),
         "error": _cut(error, REASON_MAX) if error else None,
     }
@@ -245,6 +250,7 @@ def package_reports(view: dict, reports: list[dict]) -> list[dict]:
                            for g in held],
             "stale": [{"filename": k["filename"], "reason": k["reason"]} for k in stale],
             "unsupported_files": [f["filename"] for f in c["files"] if f["status"] == "unsupported"],
+            "limitations": [x for x in view.get("limitations") or service.limitations(view) if x["package"] == code],
             "orchestrator_review": "pending",
         })
     return out
@@ -261,22 +267,71 @@ def _package_input(run_id: int, pkg: dict, view: dict) -> dict:
                                  "coverage_reason": _cut(s["coverage_reason"], REASON_MAX)} for s in pkg["sources"]],
             "accepted_lines": pkg["accepted_lines"], "held_items": pkg["held_items"], "conflicts": conflicts,
             "stale_evidence": pkg["stale"], "unsupported_files": [_cut(f, LABEL_MAX) for f in pkg["unsupported_files"]],
+            "limitations": [{"kind": x["kind"], "count": x["count"]} for x in pkg.get("limitations") or []],
             "view_state": view["view_state"]}
 
 
-def _run_input(run_id: int, packages: list[dict], fp1: dict, view: dict) -> dict:
+def _view_parts(view: dict) -> dict:
+    """What FP2 is given of the schedule beside the package reports: frozen with
+    the run, so a Retry reviews exactly what the first review was given."""
+    return {"cross_conflicts": [_cut(c, REASON_MAX) for c in view["conflicts"]][:60],
+            "view_state": view["view_state"], "view_reasons": view["view_reasons"]}
+
+
+def _run_input(run_id: int, packages: list[dict], fp1: dict, parts: dict) -> dict:
     return {"scope": "run", "run_id": run_id,
             "packages": [{"package": p["package"], "badge": p["badge"], "accepted_lines": p["accepted_lines"],
                           "held": len(p["held_items"]), "stale": len(p["stale"]),
                           "sources": p["sources"], "review": (fp1.get(p["package"]) or {}).get("state", "not_due"),
                           "proposal": (fp1.get(p["package"]) or {}).get("proposal")} for p in packages],
-            "cross_conflicts": [_cut(c, REASON_MAX) for c in view["conflicts"]][:60],
-            "view_state": view["view_state"], "view_reasons": view["view_reasons"]}
+            **parts}
+
+
+_ENUMS = {"verdict": ("agree", "dispute"), "proposal": ("select_candidate", "keep_held", "split", "merge", "rework"),
+          "issue": ("source_missing", "stale_only", "coverage_gap", "count_mismatch", "other"),
+          "publication_recommendation": ("do_not_publish", "provisional", "complete_candidate")}
+_ITEMS = {"coverage_assessment": ("source_id", "verdict", "reason"),
+          "conflict_proposals": ("conflict_id", "proposal", "reason"),
+          "rework_requests": ("source_id", "reason"),
+          "missing_or_suspect": ("package", "issue", "detail")}
+
+
+def shape_problem(answer) -> str | None:
+    """What is wrong with an orchestrator answer's shape against SCHEMA, or
+    None. A malformed answer is an invalid output: never used, never cached."""
+    if not isinstance(answer, dict):
+        return "the answer is not an object"
+    missing = [k for k in SCHEMA["required"] if k not in answer]
+    if missing:
+        return f"missing {', '.join(missing)}"
+    for field, keys in _ITEMS.items():
+        items = answer[field]
+        if not isinstance(items, list):
+            return f"{field} is not a list"
+        for i, item in enumerate(items):
+            if not isinstance(item, dict):
+                return f"{field}[{i}] is not an object"
+            for k in keys:
+                if not isinstance(item.get(k), str):
+                    return f"{field}[{i}].{k} is not text"
+                if k in _ENUMS and item[k] not in _ENUMS[k]:
+                    return f"{field}[{i}].{k} is not one of {', '.join(_ENUMS[k])}"
+    if answer["publication_recommendation"] not in _ENUMS["publication_recommendation"]:
+        return "publication_recommendation is not one of do_not_publish, provisional, complete_candidate"
+    if not isinstance(answer["summary"], str):
+        return "summary is not text"
+    if not isinstance(answer["open_questions"], list) or not all(isinstance(q, str) for q in answer["open_questions"]):
+        return "open_questions is not a list of text"
+    return None
+
+
+_MARKUP = re.compile(r"https?://|\bwww\.|\]\(|<\s*/?\s*[a-z!][^>]*>", re.I)
 
 
 def _validate(answer: dict, ids: dict) -> tuple[dict, list[str]]:
     """V-F2/V-F5/W-SEC: keep what refers to the input, drop the rest; withhold
-    text that carries instructions or secrets. Numbers it states are not used."""
+    text that carries instructions, secrets, links or markup. Numbers it
+    states are not used. `answer` has passed `shape_problem`."""
     notes: list[str] = []
     out = {"coverage_assessment": [], "conflict_proposals": [], "rework_requests": [], "missing_or_suspect": [],
            "publication_recommendation": answer.get("publication_recommendation", "provisional"),
@@ -287,6 +342,9 @@ def _validate(answer: dict, ids: dict) -> tuple[dict, list[str]]:
         if guard.instruction_flags(text) or _SECRET.search(text):
             notes.append("withheld text that carried instructions or a secret")
             return "[withheld: flagged]"
+        if _MARKUP.search(text):
+            notes.append("withheld text that carried a link or markup")
+            return "[withheld: link or markup]"
         return text
 
     for a in answer.get("coverage_assessment") or []:
@@ -305,7 +363,10 @@ def _validate(answer: dict, ids: dict) -> tuple[dict, list[str]]:
         else:
             notes.append(f"unsupported_reference rework {_cut(r.get('source_id'), 40)!r}")
     for m in answer.get("missing_or_suspect") or []:
-        out["missing_or_suspect"].append({**m, "detail": safe(m.get("detail"), REASON_MAX)})
+        if m.get("package") in ids["packages"]:
+            out["missing_or_suspect"].append({**m, "detail": safe(m.get("detail"), REASON_MAX)})
+        else:
+            notes.append(f"unsupported_reference package {_cut(m.get('package'), 40)!r}")
     out["summary"] = safe(answer.get("summary"), 3000)
     out["open_questions"] = [safe(q, REASON_MAX) for q in (answer.get("open_questions") or [])][:20]
     return out, notes
@@ -318,57 +379,86 @@ def _ask_fable(db: Session, project: Project, scope: str, payload: dict, budget:
     if not ok:
         return {"state": "unavailable", "reason": why}
     text = json.dumps(payload, sort_keys=True, default=str)
-    digest = __import__("hashlib").sha256(text.encode()).hexdigest()
+    digest = hashlib.sha256(text.encode()).hexdigest()
     session = assist.AssistSession(db=db, project_id=project.id, document_sha256=f"run-review:{digest}",
                                    budget=budget, provider=get_provider())
     attempts = []
-    for attempt in range(2):                                   # one retry, then terminal
+    for _attempt in range(2):                                   # one retry, then terminal
         result = assist.call_task(session, TASK_REVIEW, SYSTEM, [TextPart(scope, text)], SCHEMA,
                                   s.fa_orchestrator_max_output_tokens, prompt_version=PROMPT_VERSION,
                                   model=s.fa_orchestrator_model, effort=s.fa_orchestrator_effort, exact_model=True,
-                                  timeout_s=s.fa_orchestrator_timeout_s, ttl_days=1)
+                                  timeout_s=s.fa_orchestrator_timeout_s, ttl_days=1, accept=shape_problem)
         db.commit()
         if result.data is not None:
             return {"state": "completed", "proposal_raw": result.data, "model": result.model, "input_digest": digest,
                     "attempts": attempts + [{"ok": True, "cached": bool(result.from_cache)}]}
         error = result.error or "no answer"
         attempts.append({"ok": False, "error": _cut(error, REASON_MAX)})
-        if error.startswith("budget"):
-            return {"state": "unavailable", "reason": error, "attempts": attempts}
-        if error.startswith(("unsupported_model", "unavailable")):
+        if error.startswith(("budget", "unsupported_model", "unavailable")):
             return {"state": "unavailable", "reason": error, "attempts": attempts}
     error = attempts[-1]["error"]
-    state = "substituted" if error.startswith("model_substituted") else "failed"
+    state = ("substituted" if error.startswith("model_substituted") else
+             "unverified" if error.startswith("model_unverified") else "failed")
     return {"state": state, "reason": error, "attempts": attempts}
 
 
-def review(db: Session, project: Project, run: FaInterfaceRun, view: dict) -> None:
+def review_calls_today(db: Session, project_id: int) -> int:
+    """The orchestrator's own calls for this project in the last day (cache
+    hits are free): what its reserved daily allowance is counted against."""
+    from datetime import timedelta
+
+    from sqlalchemy import func
+
+    from app.models import AiUsage
+
+    since = utc_now() - timedelta(days=1)
+    return int(db.query(func.count(AiUsage.id)).filter(
+        AiUsage.project_id == project_id, AiUsage.task == TASK_REVIEW, AiUsage.at >= since,
+        AiUsage.cache_hit.is_(False)).scalar() or 0)
+
+
+def review_allowance(db: Session, project: Project, due: int) -> tuple[bool, str | None]:
+    """Whether the orchestrator's reserved allowance can still serve a full
+    review of `due` packages today (FP1 each and FP2, one retry each)."""
+    s = get_settings()
+    need, used = 2 * (due + 1), review_calls_today(db, project.id)
+    if used + need > s.fa_orchestrator_max_calls_per_day:
+        return False, (f"the orchestrator's calls today ({used}) leave no room for this run's review ({need} calls) "
+                       f"within its daily allowance ({s.fa_orchestrator_max_calls_per_day})")
+    return True, None
+
+
+def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None, *, frozen: dict | None = None) -> None:
     """FP1 for every package with drawings, then FP2 for the run. Fills
-    `run.review`, `run.review_state`, the package reports' review fields."""
+    `run.review`, `run.review_state`, the package reports' review fields.
+    `frozen`: a Retry -- the inputs the first review was given, sent again."""
     s = get_settings()
     packages = copy.deepcopy(run.package_reports or [])   # never edited in place: the JSON column would not see it
     due = [p for p in packages if p["sources"]]
     limits = Limits.from_settings()
-    import dataclasses
-
     limits = dataclasses.replace(limits, max_input_tokens_per_task=s.fa_orchestrator_max_input_tokens,
                                  max_output_tokens_per_task=s.fa_orchestrator_max_output_tokens,
                                  max_calls_per_document=2 * (len(due) + 1) + 2,
+                                 max_calls_per_project_per_day=s.fa_orchestrator_max_calls_per_day,
                                  max_elapsed_s_per_job=s.fa_orchestrator_timeout_s * (len(due) + 2))
-    budget = JobBudget(limits=limits, calls_today_before=0)                    # reserved apart from the agents'
+    # W-BUD / F10: a reserved allowance -- its own daily bound, counted on its own calls,
+    # so the drawing agents' looks can never starve it
+    budget = JobBudget(limits=limits, calls_today_before=review_calls_today(db, project.id))
     ids = {"sources": {src["source_id"] for p in packages for src in p["sources"]},
-           "conflicts": {g["id"] for p in packages for g in p["held_items"]}}
+           "conflicts": {g["id"] for p in packages for g in p["held_items"]},
+           "packages": {p["package"] for p in packages}}
+    parts = (frozen or {}).get("view") or _view_parts(view)
     fp1: dict[str, dict] = {}
-    inputs = {"packages": {}, "run": None}
+    inputs = {"packages": {}, "run": None, "view": parts}
     for p in due:
-        payload = _package_input(run.id, p, view)
+        payload = ((frozen or {}).get("packages") or {}).get(p["package"]) or _package_input(run.id, p, view)
         inputs["packages"][p["package"]] = payload
         r = _ask_fable(db, project, f"package_review:{p['package']}", payload, budget)
         if r["state"] == "completed":
             r["proposal"], r["notes"] = _validate(r.pop("proposal_raw"), ids)
         fp1[p["package"]] = r
         p["orchestrator_review"] = r["state"] if r["state"] == "completed" else f"missing ({r['state']}: {r.get('reason')})"
-    run_payload = _run_input(run.id, packages, fp1, view)
+    run_payload = _run_input(run.id, packages, fp1, parts)
     inputs["run"] = run_payload
     fp2 = _ask_fable(db, project, "run_review", run_payload, budget)
     if fp2["state"] == "completed":
@@ -392,24 +482,102 @@ def review(db: Session, project: Project, run: FaInterfaceRun, view: dict) -> No
 
 # --- 5. publication ---------------------------------------------------------------------------------------------
 
+ROOT_TEXT = {"unreachable": "not reachable", "not_configured": "not set", "ifc_root_missing": "not synced (03- Drawings/IFC)"}
 
-def decide_publication(run: FaInterfaceRun, view: dict) -> str:
-    """W-PUB-2: complete_candidate only with a completed review, every drawing
-    covered (an unsupported kind such as a PDF does not block), no open conflict,
-    and a current view; the orchestrator's recommendation can only lower it."""
+
+def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
+    """F4: what the orchestrator said that lowers the run, package by package and
+    for the run. Any one keeps it provisional; nothing it says can raise it."""
+    out = []
+    review_ = run.review or {}
+    parts = [(f"package {k}", r) for k, r in sorted((review_.get("fp1") or {}).items())] + [("run", review_.get("fp2") or {})]
+    for scope, r in parts:
+        proposal = r.get("proposal") or {}
+        if r.get("state") != "completed":
+            continue                                      # a missing review is its own reason (review_state)
+        rec = proposal.get("publication_recommendation")
+        if rec != "complete_candidate":
+            out.append(f"Fable ({scope}) recommends {rec or 'nothing'}")
+        disputes = [c for c in proposal.get("coverage_assessment") or [] if c.get("verdict") == "dispute"]
+        if disputes:
+            out.append(f"Fable ({scope}) disputes the coverage of {len(disputes)} drawing(s)")
+        if proposal.get("rework_requests"):
+            out.append(f"Fable ({scope}) asks for {len(proposal['rework_requests'])} drawing(s) to be reworked")
+        if proposal.get("missing_or_suspect"):
+            out.append(f"Fable ({scope}) names {len(proposal['missing_or_suspect'])} missing or suspect item(s)")
+    return out
+
+
+def publication_gate(db: Session, project: Project, run: FaInterfaceRun, view: dict,
+                     listing: "evidence.Listing | None" = None) -> list[str]:
+    """W-PUB-2, decided by deterministic code (F1): every reason this run cannot
+    be accepted now. Empty only when the folder is fully listed, every drawing
+    present is read and current, nothing read is failed / unread / stale, the
+    current set is not empty and is the run's, every drawing has its complete
+    agent report, no conflict is open, the review is complete and nothing the
+    orchestrator said lowers it. The orchestrator is never what prevents an
+    empty or incomplete schedule from being published."""
+    reasons: list[str] = []
+    listing = listing if listing is not None else evidence.take(project, service.DISCIPLINES)
+    fa_now = service.fa_in_force(db, project)
+    row = service.state(db, project)
+    sources = row.sources or []
+    if listing.root != "ok":
+        reasons.append(f"the project folder is {ROOT_TEXT.get(listing.root, listing.root)}: nothing is verified now")
+    folders = list(listing.folders.values()) + ([listing.mechanical] if listing.mechanical else [])
+    if any(fs.state == "listing_failed" or fs.failed_dirs for fs in folders):
+        reasons.append("part of the drawings folder could not be listed")
+    files = listing.files() if listing.root == "ok" else {}
+    current = [e for e in sources if evidence.current_now(e, listing, fa_now, files)]
+    if not current:
+        reasons.append("nothing is read and current: an empty schedule is never accepted")
+    pending = evidence.not_current_present(sources, listing, fa_now, files) if listing.root == "ok" else []
+    if pending:
+        reasons.append(f"{len(pending)} drawing(s) present but not read and current: "
+                       + ", ".join(p.rsplit('/', 1)[-1] for p in pending[:5]))
+    for status in ("failed", "unread", "stale"):
+        hit = [e for e in sources if e.get("status") == status]
+        if hit:
+            why = sorted({e.get("stale_reason") or status for e in hit})
+            reasons.append(f"{len(hit)} drawing(s) {status} ({', '.join(why)}): "
+                           + ", ".join((e.get("filename") or "") for e in hit[:5]))
+    # every drawing of the published schedule is read and current now, or retired for good (A4):
+    # accepting replaces the published readings, it never drops one of its drawings silently
+    by_key = {(e.get("kind"), e.get("discipline"), e.get("relative_path")): e for e in sources}
+    lost = []
+    for s in (row.published or {}).get("sources") or []:
+        now = by_key.get((s.get("kind"), s.get("discipline"), s.get("relative_path")))
+        if not (now is not None and evidence.current_now(now, listing, fa_now, files)) and not evidence.retired(now):
+            lost.append(s)
+    if lost:
+        reasons.append(f"{len(lost)} drawing(s) of the published schedule are not read and current now")
+    reports = {r.get("relative_path"): r for r in run.agent_reports or []}
+    for m in run.manifest or []:
+        if m.get("kind") != "unsupported" and m.get("status") not in ("removed", "superseded") \
+                and m.get("relative_path") not in reports:
+            reasons.append(f"no drawing agent report for {m.get('filename')}")
+    for r in run.agent_reports or []:
+        # failed / unread / stale drawings are said above; superseded and removed ones left the evidence
+        if r.get("status") == "read" and (r.get("execution_state") != "completed" or r.get("coverage_state") != "complete"):
+            reasons.append(f"{r.get('filename')}: {r.get('coverage_state')} ({_cut(r.get('coverage_reason'), 120)})")
+    if run.sources_digest and evidence.digest(current) != run.sources_digest:
+        reasons.append("the drawings changed since this run")
+    conflicts = [g for g in view["verification"] if g.get("conflict")]
+    if conflicts:
+        reasons.append(f"{len(conflicts)} conflict(s) between drawings open: "
+                       + ", ".join(f"{g['equipment']} on {g['ref']}" for g in conflicts[:5]))
     if run.review_state != "completed":
-        return "provisional"
-    if any(r["coverage_state"] not in ("complete", "unsupported") or r["execution_state"] != "completed"
-           for r in run.agent_reports or [] if r["status"] == "read"):
-        return "provisional"
-    if any(r["coverage_state"] == "unsupported" and r["status"] == "read" for r in run.agent_reports or []):
-        return "provisional"                       # a drawing that needed the model and did not get it
-    if any(g.get("conflict") for g in view["verification"]):
-        return "provisional"
-    if view["view_state"] not in ("current", "provisional") or view["primary"] == "published":
-        return "provisional"
-    recommendation = ((run.review.get("fp2") or {}).get("proposal") or {}).get("publication_recommendation")
-    return "complete_candidate" if recommendation == "complete_candidate" else "provisional"
+        reasons.append(f"the Fable review is {run.review_state}: "
+                       + "; ".join((run.review or {}).get("reasons") or [])[:400])
+    reasons.extend(_orchestrator_signals(run))
+    return reasons
+
+
+def decide_publication(db: Session, project: Project, run: FaInterfaceRun, view: dict) -> str:
+    """complete_candidate only when the publication gate holds; the reasons are kept."""
+    reasons = publication_gate(db, project, run, view)
+    run.publication_reasons = reasons
+    return "provisional" if reasons else "complete_candidate"
 
 
 # --- the run ---------------------------------------------------------------------------------------------------
@@ -437,6 +605,10 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
         db.commit()
         # drawing agents
         model_ok, model_why = readiness(s.drawing_review_model) if s.ai_enabled else (False, "AI is not enabled")
+        if model_ok:
+            # the orchestrator's review is mandatory: no look is paid for that it could not then review
+            due = len({e.get("discipline") for e in sources if e.get("kind") != "unsupported"})
+            model_ok, model_why = review_allowance(db, project, due)
         to_look = [e for e in sources if visual.wanted(e)]
         reports: dict[str, dict] = {}
         looked: dict[str, dict] = {}
@@ -492,7 +664,7 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
         if progress:
             progress(0, 1, "The Fable orchestrator is reviewing the drawing agents' reports", None)
         review(db, db.get(Project, project.id), run, view)
-        run.publication_state = decide_publication(run, view)
+        run.publication_state = decide_publication(db, db.get(Project, project.id), run, view)
         run.status = "completed"
         run.finished_at = utc_now()
         db.commit()
@@ -521,7 +693,7 @@ def summary(run: FaInterfaceRun) -> dict:
     return {"run_id": run.id, "status": run.status, "agents": len(agents), "coverage": by_state,
             "packages": len(run.package_reports or []), "review_state": run.review_state,
             "review_reasons": (run.review or {}).get("reasons", []), "publication_state": run.publication_state,
-            "orchestrator_calls": calls}
+            "publication_reasons": run.publication_reasons or [], "orchestrator_calls": calls}
 
 
 def view(run: FaInterfaceRun | None) -> dict | None:
@@ -539,7 +711,9 @@ def view(run: FaInterfaceRun | None) -> dict | None:
                                    "notes": r.get("notes")} for k, r in ((run.review or {}).get("fp1") or {}).items()},
                        "fp2": {"state": fp2.get("state"), "reason": fp2.get("reason"), "proposal": fp2.get("proposal"),
                                "notes": fp2.get("notes")},
-                       "retries": (run.review or {}).get("retries", [])},
+                       "retries": (run.review or {}).get("retries", []),
+                       "retries_today": run.review_retries if run.review_retry_day == utc_now().date().isoformat() else 0,
+                       "retries_per_day": get_settings().fa_orchestrator_retries_per_day},
             "accepted_at": run.accepted_at.isoformat() if run.accepted_at else None,
             "sources_digest": run.sources_digest}
 
@@ -549,29 +723,61 @@ def latest(db: Session, project: Project) -> FaInterfaceRun | None:
             .order_by(FaInterfaceRun.id.desc()).first())
 
 
-def retry_review(db: Session, project: Project, run: FaInterfaceRun) -> dict:
-    """Retry action: the orchestrator again, on the run's frozen evidence -- no
-    drawing re-read. Bounded per day."""
+def claim_retry(db: Session, project: Project, run: FaInterfaceRun) -> None:
+    """A Retry review asked for (F5/F8): refused for a run that is accepted,
+    unfinished, already fully reviewed, or whose drawings changed; counted
+    against the day's bound by a compare-and-set, so two requests cannot both
+    take the last one. The review itself runs as a job (`run_retry`)."""
     s = get_settings()
-    today = utc_now().date().isoformat()
-    retries = [r for r in (run.review or {}).get("retries", []) if r.startswith(today)]
-    if len(retries) >= s.fa_orchestrator_retries_per_day:
-        raise ValueError(f"The review was retried {len(retries)} times today: try again tomorrow")
+    if run.publication_state == "accepted":
+        raise ValueError("This run is accepted: its review is final. Start a new run to review the drawings again")
+    if run.status != "completed":
+        raise ValueError(f"This run is {run.status}: only a finished run's review can be retried")
+    if run.review_state == "completed":
+        raise ValueError("This run's review is complete: start a new run to review the drawings again")
     current = service.build(db, project)
     if current["current_sources_digest"] != run.sources_digest:
         raise ValueError("The drawings changed since this run: start a new run instead of retrying its review")
-    review(db, project, run, current)
+    today = utc_now().date().isoformat()
+    used = run.review_retries if run.review_retry_day == today else 0
+    if used >= s.fa_orchestrator_retries_per_day:
+        raise ValueError(f"The review was retried {used} times today: try again tomorrow")
+    claimed = (db.query(FaInterfaceRun)
+               .filter(FaInterfaceRun.id == run.id, FaInterfaceRun.review_retries == (run.review_retries or 0),
+                       (FaInterfaceRun.review_retry_day == run.review_retry_day) if run.review_retry_day
+                       else FaInterfaceRun.review_retry_day.is_(None))
+               .update({"review_retries": used + 1, "review_retry_day": today}, synchronize_session=False))
+    if claimed != 1:
+        db.rollback()
+        raise ValueError("Another Retry review was asked for at the same moment: look again")
+    db.commit()
+    db.refresh(run)
+
+
+def run_retry(db: Session, project: Project, run: FaInterfaceRun) -> dict:
+    """The orchestrator again, on the run's frozen inputs -- no drawing re-read,
+    the same package payloads -- then the publication gate on what is current now."""
+    if run.publication_state == "accepted":
+        raise ValueError("This run is accepted: its review is final")
+    review(db, project, run, None if (run.review_inputs or {}).get("view") else service.build(db, project),
+           frozen=run.review_inputs or {})
     run.review = {**run.review, "retries": (run.review or {}).get("retries", []) + [utc_now().isoformat()]}
-    run.publication_state = decide_publication(run, current)
+    run.publication_state = decide_publication(db, project, run, service.build(db, project))
     db.commit()
     return summary(run)
 
 
 def accept(db: Session, project: Project, run: FaInterfaceRun, user_id: int) -> dict:
     """The engineer accepts a complete, reviewed run: its readings become the
-    published schedule (basis run_accepted). A provisional run is refused."""
+    published schedule (basis run_accepted). The publication gate is decided
+    again here, on the folder as it is now: a run that was a candidate but no
+    longer holds (a drawing failed, went unsynced, a conflict reopened) is
+    refused and set back to provisional with its reasons."""
+    if run.publication_state == "accepted":
+        raise ValueError("This run is already accepted")
     if run.status != "completed" or run.publication_state != "complete_candidate":
-        why = "; ".join((run.review or {}).get("reasons") or []) or "not every drawing is covered or a conflict is open"
+        why = "; ".join(run.publication_reasons or (run.review or {}).get("reasons") or []) \
+            or "not every drawing is covered or a conflict is open"
         raise ValueError(f"This run is provisional ({run.review_state} review: {why}); it cannot be accepted")
     row = service.state(db, project)
     seen = row.generation or 0
@@ -579,8 +785,13 @@ def accept(db: Session, project: Project, run: FaInterfaceRun, user_id: int) -> 
     fa_now = service.fa_in_force(db, project)
     files = listing.files() if listing.root == "ok" else {}
     current = [e for e in row.sources or [] if evidence.current_now(e, listing, fa_now, files)]
-    if evidence.digest(current) != run.sources_digest:
-        raise service.SourcesChanged("The drawings changed since this run: run again before accepting")
+    reasons = publication_gate(db, project, run, service.build(db, project), listing=listing)
+    if reasons:
+        run.publication_state, run.publication_reasons = "provisional", reasons
+        db.commit()
+        if listing.root == "ok" and evidence.digest(current) != run.sources_digest:
+            raise service.SourcesChanged("The drawings changed since this run: run again before accepting")
+        raise ValueError("This run cannot be accepted now: " + "; ".join(reasons))
     stamp = utc_now()
     changed = (db.query(ProjectFaInterfaces)
                .filter(ProjectFaInterfaces.id == row.id, ProjectFaInterfaces.generation == seen)
@@ -597,4 +808,4 @@ def accept(db: Session, project: Project, run: FaInterfaceRun, user_id: int) -> 
     return summary(run)
 
 
-__all__ = ["run_workflow", "latest", "view", "accept", "retry_review", "DISCIPLINE_NAMES"]
+__all__ = ["run_workflow", "latest", "view", "accept", "claim_retry", "run_retry", "DISCIPLINE_NAMES"]

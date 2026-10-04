@@ -54,11 +54,33 @@ export interface VerificationItem {
   contacts: string
   monitoring: number
   control: number
-  status: 'open' | 'resolved' | 'dismissed'
-  decision?: { reason?: string; floor_keys?: string[]; qty?: number; tags?: string[]; location?: string }
-  /** drawings that disagree (gate barriers): held until the engineer says which governs */
+  status: 'open' | 'resolved' | 'dismissed' | 'governed'
+  decision?: { reason?: string; floor_keys?: string[]; qty?: number; tags?: string[]; location?: string; relative_path?: string; authority?: string }
+  /** drawings that disagree (gate barriers): held until the engineer says which governs, on whose authority */
   conflict?: boolean
-  drawings?: { relative_path: string; label: string; points: number; settled: number }[]
+  drawings?: ConflictDrawing[]
+  /** a governing choice whose drawing is no longer among them: not applied */
+  decision_not_applied?: boolean
+  /** the answers this one replaced, oldest first: never deleted */
+  history?: { status: string; reason?: string; relative_path?: string; authority?: string; by?: number; at?: string }[]
+}
+
+export interface ConflictDrawing {
+  relative_path: string
+  label: string
+  revision?: string | null
+  points: number
+  settled: number
+  /** each fire alarm connection point with its lane role (ENTRY / EXIT) */
+  connection_points?: { x: number; y: number; sheet: string; role: string | null; settled: boolean; why: string | null }[]
+}
+
+export interface Limitation {
+  package: string
+  kind: 'unsupported_files' | 'no_block_symbol'
+  count: number
+  files: string[]
+  text: string
 }
 
 export interface CoverageFile {
@@ -197,6 +219,8 @@ export interface InterfaceSchedule {
   current_summary: { totals: InterfaceSchedule['totals']; rows: number } | null
   last_known: LastKnown[]
   decisions_not_applied: Record<string, number>
+  /** what the evidence cannot show: never taken as "no equipment" */
+  limitations: Limitation[]
   evidence: {
     root: 'ok' | 'unreachable' | 'not_configured' | 'ifc_root_missing'
     read_current: number
@@ -231,8 +255,9 @@ export interface Decision {
   qty?: number
   tags?: string[]
   location?: string
-  /** govern: the drawing that counts for a conflict */
+  /** govern: the drawing that counts for a conflict, and whose confirmation the choice rests on */
   relative_path?: string
+  authority?: string
 }
 
 /* ---- the drawing workflow (FI-P1): drawing agents, package reports, the Fable review */
@@ -267,6 +292,8 @@ export interface AgentReport {
     /** asked in this run; the rest answered by an earlier run on the same file */
     looked_this_run?: number
   } | null
+  /** damper labels on sheets that are not floor plans: not looked at, never counted */
+  not_looked?: { sheet: string; title: string; labels: number; reason: string }[]
   duration_s: number
   error: string | null
 }
@@ -282,6 +309,7 @@ export interface PackageReport {
   held_items: { id: string; equipment: string; labels: number | null; reason: string; conflict: boolean }[]
   stale: { filename: string | null; reason: string | null }[]
   unsupported_files: string[]
+  limitations?: Limitation[]
   /** "completed", or "missing (<state>: <reason>)" */
   orchestrator_review: string
 }
@@ -308,6 +336,8 @@ export interface InterfaceRun {
   review_state: ReviewState
   review_reasons: string[]
   publication_state: PublicationState
+  /** why the run is not a complete candidate, decided by deterministic code */
+  publication_reasons: string[]
   orchestrator_calls: number
   started_at: string | null
   finished_at: string | null
@@ -322,12 +352,15 @@ export interface InterfaceRun {
     fp1: Record<string, ReviewPart>
     fp2: ReviewPart
     retries: string[]
+    retries_today?: number
+    retries_per_day?: number
   }
   accepted_at: string | null
   sources_digest: string | null
 }
 
 export const RUN_KIND = 'fa_interfaces_run'
+export const REVIEW_KIND = 'fa_interfaces_review'
 
 const base = (projectId: number) => `/projects/${projectId}/fa-interfaces`
 
@@ -350,8 +383,8 @@ export const interfacesApi = {
   latestRun: (projectId: number) => platform.get<{ run: InterfaceRun | null }>(`${base(projectId)}/runs/latest`),
   acceptRun: (projectId: number, runId: number) =>
     platform.post<{ run: InterfaceRun; schedule: InterfaceSchedule }>(`${base(projectId)}/runs/${runId}/accept`),
-  retryReview: (projectId: number, runId: number) =>
-    platform.post<{ run: InterfaceRun }>(`${base(projectId)}/runs/${runId}/retry-review`),
+  /** Retry review: a job (202), counted against the day's bound when asked for */
+  retryPath: (projectId: number, runId: number) => `${base(projectId)}/runs/${runId}/retry-review`,
   exportUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.xlsx`),
   exportPdfUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.pdf`),
 }

@@ -3,6 +3,7 @@ import { useJob } from '../../lib/useJob'
 import { Button, Card, ErrorBox, Spinner, Stat } from '../ifc/ui'
 import {
   interfacesApi,
+  REVIEW_KIND,
   RUN_KIND,
   SCAN_KIND,
   type AgentReport,
@@ -65,8 +66,13 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
     void load()
     void loadRun()
   })
-  const reading = scan.active || hydrate.active || runJob.active
-  const current = runJob.active ? runJob : hydrate.active ? hydrate : scan
+  const retry = useJob(projectId, REVIEW_KIND, interfacesApi.retryPath(projectId, run?.run_id ?? 0), (job) => {
+    if (job.status === 'failed') setError(job.error ?? 'The review could not be retried')
+    void load()
+    void loadRun()
+  })
+  const reading = scan.active || hydrate.active || runJob.active || retry.active
+  const current = runJob.active ? runJob : retry.active ? retry : hydrate.active ? hydrate : scan
 
   const act = useCallback(
     async (fn: () => Promise<InterfaceSchedule>) => {
@@ -172,8 +178,8 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
           )}
         </Card>
       )}
-      {(error || scan.error || runJob.error || hydrate.error) && (
-        <ErrorBox message={error || scan.error || runJob.error || hydrate.error || ''} onClose={() => setError('')} />
+      {(error || scan.error || runJob.error || hydrate.error || retry.error) && (
+        <ErrorBox message={error || scan.error || runJob.error || hydrate.error || retry.error || ''} onClose={() => setError('')} />
       )}
 
       <EvidenceBanner
@@ -207,17 +213,24 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
             }
           }}
           onRetry={async () => {
-            setBusy(true)
             setError('')
-            try {
-              setRun((await interfacesApi.retryReview(projectId, run.run_id)).run)
-            } catch (e) {
-              setError((e as Error).message)
-            } finally {
-              setBusy(false)
-            }
+            await retry.start()
           }}
         />
+      )}
+
+      {data.limitations.length > 0 && (
+        <Card className="border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800">
+          <div className="font-semibold">What these drawings cannot show (not counted, not ruled out)</div>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {data.limitations.map((x) => (
+              <li key={`${x.package}-${x.kind}`}>
+                {x.text}
+                {x.files.length > 0 && <span className="block text-xs text-slate-500">{x.files.join('; ')}</span>}
+              </li>
+            ))}
+          </ul>
+        </Card>
       )}
 
       <CoverageStrip coverage={data.coverage} onOpen={() => setTab('drawings')} />
@@ -369,6 +382,16 @@ function RunPanel({
             {run.review.model_requested ? ` (${run.review.model_requested}, ${run.review.effort})` : ''} ·{' '}
             {run.orchestrator_calls} orchestrator call{run.orchestrator_calls === 1 ? '' : 's'}
           </div>
+          {run.publication_state === 'provisional' && run.publication_reasons.length > 0 && (
+            <div className="mt-1 text-xs">
+              <div className="font-medium">Why it cannot be accepted (checked by the program, whatever the review says):</div>
+              <ul className="list-disc pl-5">
+                {run.publication_reasons.map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {!reviewed && run.review_reasons.length > 0 && (
             <ul className="mt-1 list-disc pl-5 text-xs">
               {run.review_reasons.map((r) => (
@@ -379,8 +402,13 @@ function RunPanel({
           {run.review.fp2.proposal?.summary && <div className="mt-1 text-xs">Orchestrator: {run.review.fp2.proposal.summary}</div>}
         </div>
         <div className="flex flex-wrap gap-2">
-          {canEdit && run.status === 'completed' && !reviewed && (
-            <Button variant="secondary" disabled={busy} onClick={() => void onRetry()}>
+          {canEdit && run.status === 'completed' && !reviewed && run.publication_state !== 'accepted' && (
+            <Button
+              variant="secondary"
+              disabled={busy || (run.review.retries_today ?? 0) >= (run.review.retries_per_day ?? 3)}
+              onClick={() => void onRetry()}
+              title={`Retried ${run.review.retries_today ?? 0} of ${run.review.retries_per_day ?? 3} times today`}
+            >
               Retry review
             </Button>
           )}
@@ -425,7 +453,14 @@ function RunPanel({
                         {a.coverage_state.replace(/_/g, ' ')}
                       </span>
                     </td>
-                    <td className="px-2 py-1.5">{lookText(a)}</td>
+                    <td className="px-2 py-1.5">
+                      {lookText(a)}
+                      {(a.not_looked ?? []).map((n) => (
+                        <div key={n.sheet} className="text-slate-500">
+                          {n.labels} on {n.sheet} {n.title}: not looked at, {n.reason}
+                        </div>
+                      ))}
+                    </td>
                     <td className="px-2 py-1.5 text-right">{a.duration_s}s</td>
                   </tr>
                 ))}
@@ -454,6 +489,11 @@ function RunPanel({
                     <td className="px-2 py-1.5 text-right">{p.stale.length}</td>
                     <td className={`px-2 py-1.5 ${p.orchestrator_review === 'completed' ? '' : 'text-amber-800'}`}>
                       {p.sources.length ? p.orchestrator_review : 'no drawings'}
+                      {(p.limitations ?? []).map((x) => (
+                        <div key={x.kind} className="text-slate-500">
+                          {x.text}
+                        </div>
+                      ))}
                     </td>
                   </tr>
                 ))}
@@ -1043,7 +1083,27 @@ function VerifyTab({ data, canEdit, onDecide }: { data: InterfaceSchedule; canEd
         <Card className="px-4 py-3 text-sm">
           <div className="font-medium text-slate-700">Settled</div>
           <ul className="mt-2 space-y-1">
-            {data.settled.map((g) => (
+            {data.settled.filter((g) => g.status === 'governed').map((g) => (
+              <li key={g.id} className="space-y-2 rounded-md border border-slate-200 p-2 text-slate-600">
+                <div>
+                  <span className="text-emerald-700">Governed</span> {g.equipment} on {g.ref}: {g.decision?.relative_path} — {g.decision?.reason}{' '}
+                  <span className="text-slate-500">(authority: {g.decision?.authority})</span>
+                </div>
+                <ConflictDrawings g={g} canEdit={canEdit} onDecide={onDecide} />
+                {canEdit && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      const reason = window.prompt('Why is this choice reopened?')
+                      if (reason !== null) void onDecide({ id: g.id, action: 'reopen', reason })
+                    }}
+                  >
+                    Reopen (keeps this choice in the history)
+                  </Button>
+                )}
+              </li>
+            ))}
+            {data.settled.filter((g) => g.status !== 'governed').map((g) => (
               <li key={g.id} className="flex flex-wrap items-center gap-2 text-slate-600">
                 <span className={g.status === 'resolved' ? 'text-emerald-700' : 'text-slate-500'}>{g.status === 'resolved' ? 'Scheduled' : 'Not scheduled'}</span>
                 <span>
@@ -1061,6 +1121,65 @@ function VerifyTab({ data, canEdit, onDecide }: { data: InterfaceSchedule; canEd
             ))}
           </ul>
         </Card>
+      )}
+    </div>
+  )
+}
+
+/** The drawings of a conflict, each with its connection points and their lane
+ *  roles, and the choice of the governing one -- which needs the reason and
+ *  whose authority it rests on (the consultant's confirmation, the site's). */
+function ConflictDrawings({ g, canEdit, onDecide }: { g: VerificationItem; canEdit: boolean; onDecide: (d: Decision) => Promise<boolean> }) {
+  return (
+    <div className="space-y-2 rounded-md border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900">
+      <div className="font-semibold">
+        {g.status === 'governed'
+          ? 'The drawings disagree; one governs on your choice. You can choose another:'
+          : 'The drawings disagree. Nothing is counted until you say which one governs, on whose authority:'}
+      </div>
+      <ul className="space-y-2">
+        {(g.drawings ?? []).map((d) => (
+          <li key={d.relative_path} className="flex flex-wrap items-start justify-between gap-2">
+            <span>
+              <span className="font-medium">{d.label}</span>
+              {d.revision ? ` (rev ${d.revision})` : ''}: {d.points} point{d.points === 1 ? '' : 's'} drawn, {d.settled} settled
+              <span className="block text-amber-800/80">{d.relative_path}</span>
+              {(d.connection_points ?? []).map((p, i) => (
+                <span key={i} className="block text-amber-800/80">
+                  {p.role ? p.role.toUpperCase() : 'lane not said'} at ({p.x.toFixed(2)}, {p.y.toFixed(2)}) on {p.sheet}
+                  {p.settled ? ', settled' : `, held${p.why ? `: ${p.why}` : ''}`}
+                </span>
+              ))}
+            </span>
+            {canEdit && g.decision?.relative_path !== d.relative_path && (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  const reason = window.prompt(`Why does ${d.label} govern ${g.equipment} on ${g.ref}?`)
+                  if (!reason?.trim()) return
+                  const authority = window.prompt('On whose authority (e.g. the consultant\'s reply or RFI number, the site)?')
+                  if (authority?.trim())
+                    void onDecide({ id: g.id, action: 'govern', relative_path: d.relative_path, reason, authority })
+                }}
+              >
+                This drawing governs
+              </Button>
+            )}
+          </li>
+        ))}
+      </ul>
+      {(g.history ?? []).length > 0 && (
+        <div className="text-amber-800/80">
+          Earlier answers:{' '}
+          {(g.history ?? []).map((h, i) => (
+            <span key={i}>
+              {i ? '; ' : ''}
+              {h.status}
+              {h.relative_path ? ` ${h.relative_path}` : ''}
+              {h.reason ? ` (${h.reason})` : ''}
+            </span>
+          ))}
+        </div>
       )}
     </div>
   )
@@ -1097,30 +1216,7 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
         </div>
       </div>
       {g.conflict && g.drawings && g.drawings.length > 0 && (
-        <div className="space-y-2 rounded-md border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900">
-          <div className="font-semibold">The drawings disagree. Nothing is counted until you say which one governs:</div>
-          <ul className="space-y-1">
-            {g.drawings.map((d) => (
-              <li key={d.relative_path} className="flex flex-wrap items-center justify-between gap-2">
-                <span>
-                  <span className="font-medium">{d.label}</span>: {d.points} point{d.points === 1 ? '' : 's'} drawn, {d.settled} settled
-                  <span className="block text-amber-800/80">{d.relative_path}</span>
-                </span>
-                {canEdit && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      const reason = window.prompt(`Why does ${d.label} govern ${g.equipment} on ${g.ref}?`)
-                      if (reason?.trim()) void onDecide({ id: g.id, action: 'govern', relative_path: d.relative_path, reason })
-                    }}
-                  >
-                    This drawing governs
-                  </Button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ConflictDrawings g={g} canEdit={canEdit} onDecide={onDecide} />
       )}
       {canEdit && !g.conflict && (
         <div className="space-y-3 border-t border-slate-100 pt-3">

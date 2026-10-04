@@ -76,6 +76,14 @@ def models_used(model_usage: dict | None, requested: str) -> tuple[str, dict[str
     return used, per, substitutes
 
 
+def model_confirmed(model_usage: dict | None, requested: str) -> bool:
+    """Whether the CLI's `modelUsage` shows the requested model itself
+    answering (listed, with output). An exact request is accepted only then:
+    no usage at all, or only the CLI's auxiliary Haiku, proves nothing."""
+    entry = (model_usage or {}).get(requested)
+    return isinstance(entry, dict) and int(entry.get("outputTokens") or 0) > 0
+
+
 def parse_version(text: str | None) -> tuple[int, int, int] | None:
     import re
 
@@ -134,7 +142,8 @@ class AiResponse:
     # "transport" | "rate_limit" | "quota" | "invalid_response" | "refused" | "auth"
     # | "unavailable" (no program/route to call) | "unsupported_model" (the
     # route cannot serve that model) | "model_substituted" (another model
-    # answered an exact-model request) | "invalid_request" | None
+    # answered an exact-model request) | "model_unverified" (the reply does not show
+    # the exact model asked for answering) | "invalid_request" | None
     error: str | None = None
     error_detail: str | None = None
     raw_text: str | None = None
@@ -719,6 +728,11 @@ class ClaudeCodeProvider:
         if substitutes and request.exact_model:
             return AiResponse(data=None, error="model_substituted", **common,
                               error_detail=f"asked for {model}, but {', '.join(substitutes)} also answered")
+        if request.exact_model and not model_confirmed(reply.get("modelUsage"), model):
+            # no usage, or only the CLI's own Haiku: nothing shows the model asked for answered
+            return AiResponse(data=None, error="model_unverified", **common,
+                              error_detail=f"asked for {model}, but the reply does not show it answering "
+                                           f"(models listed: {', '.join(sorted(per_model)) or 'none'})")
         data = reply.get("structured_output")
         if not isinstance(data, dict):
             return AiResponse(data=None, error="invalid_response", error_detail="the reply carried no structured output",

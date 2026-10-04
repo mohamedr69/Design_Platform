@@ -184,7 +184,8 @@ def _setup(monkeypatch, tmp_path):
     monkeypatch.setattr(review, "_budget", lambda db, project: None)
     FakeSession.drawn = []
     src = {"discipline": "SM", "status": "read", "sha256": sha, "filename": "SMOKE LAYOUT.dwg",
-           "result": {"units": "m", "items": _labels()}}
+           "result": {"units": "m", "items": _labels(),
+                      "sheets": [{"name": "SM-101", "title": "3RD BASEMENT FLOOR PLAN", "kind": "plan"}]}}
     return src, SimpleNamespace(id=1)
 
 

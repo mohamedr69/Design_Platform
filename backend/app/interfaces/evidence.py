@@ -242,11 +242,31 @@ def retired(entry: dict | None) -> bool:
 def snapshot_source_current(snap_entry: dict, sources: list[dict], listing: Listing, fa_in_force: dict,
                             files: dict | None = None) -> bool:
     """C3: a snapshot source is current now iff `sources` holds the same reading
-    (kind, discipline, path, sha256), stored as read, and that one is current."""
+    (kind, discipline, path, sha256), stored as read, and that one is current.
+    A fire alarm IFC drawing is the same when it is the same register record
+    (`_same_fa_ifc`): a reading made before Stage 0.1 kept its DXF's hash, one
+    made since keeps the register's (often none), for the very same file."""
     for entry in sources:
-        if _key(entry) == _key(snap_entry) and entry.get("status") == "read":
+        if entry.get("status") != "read":
+            continue
+        same = (_same_fa_ifc(snap_entry, entry) if snap_entry.get("kind") == "fa_ifc" == entry.get("kind")
+                else _key(entry) == _key(snap_entry))
+        if same:
             return current_now(entry, listing, fa_in_force, files)
     return False
+
+
+def _same_fa_ifc(a: dict, b: dict) -> bool:
+    """Two fire alarm IFC readings of one drawing: the same path and register
+    record, revision, DXF size and upload time; their hashes equal when both
+    have one."""
+    if (a.get("discipline"), a.get("relative_path")) != (b.get("discipline"), b.get("relative_path")):
+        return False
+    if a.get("sha256") and b.get("sha256"):
+        return a["sha256"] == b["sha256"]
+    return (a.get("fa_drawing_id") is not None and a.get("fa_drawing_id") == b.get("fa_drawing_id")
+            and a.get("revision") == b.get("revision") and a.get("size") == b.get("size")
+            and a.get("mtime") == b.get("mtime"))
 
 
 @dataclass

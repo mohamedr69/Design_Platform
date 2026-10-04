@@ -160,11 +160,18 @@ def test_case3_a_second_drawing_showing_other_barriers_holds_the_floor_until_the
     layout = next(d["relative_path"] for d in conflict["drawings"] if d["points"] == 2)
     assert gb.client.post(f"/projects/{gb.pid}/fa-interfaces/decisions",
                           json={"id": conflict["id"], "action": "govern", "relative_path": layout}).status_code == 422
+    # a reason alone is not enough: the choice publishes CR lines, so it names its authority
+    assert gb.client.post(f"/projects/{gb.pid}/fa-interfaces/decisions",
+                          json={"id": conflict["id"], "action": "govern", "relative_path": layout,
+                                "reason": "The IFC layout is the issued design"}).status_code == 422
     after = gb.client.post(f"/projects/{gb.pid}/fa-interfaces/decisions",
                            json={"id": conflict["id"], "action": "govern", "relative_path": layout,
-                                 "reason": "The IFC layout is the issued design"}).json()
+                                 "reason": "The IFC layout is the issued design",
+                                 "authority": "Consultant RFI-017 reply"}).json()
     assert sorted(r["role"] for r in after["rows"] if r["key"] == "gate_barrier") == ["entry", "exit"]
-    assert any("the engineer's choice" in c for c in after["conflicts"])
+    assert any("the engineer's choice, on the authority of Consultant RFI-017 reply" in c for c in after["conflicts"])
+    (kept,) = [g for g in after["settled"] if g["id"] == conflict["id"]]       # still listed, with its evidence
+    assert kept["status"] == "governed" and {d["points"] for d in kept["drawings"]} == {2, 4}
 
 
 def test_case3_the_same_barriers_on_two_aligned_drawings_count_once(gb):
@@ -212,8 +219,9 @@ def _union_entries(aligned: bool):
 
     shared = {f"ROOM {i}": [700.0 + i, 150.0] for i in range(5)}
     other = shared if aligned else {k: [v[0] + 30.0, v[1]] for k, v in shared.items()}
-    sm = {"discipline": "SM", "relative_path": "SM/SMOKE.dwg", "result": {"units": "m", "landmarks": shared}}
-    hv = {"discipline": "HVAC", "relative_path": "HVAC/VENT.dwg", "result": {"units": "m", "landmarks": other}}
+    view = [{"name": "S", "windows": [[733.0, 135.3, 130.0, 97.0, 0.0, 0.0, 0.0]]}]   # the floor's sheet, the same view
+    sm = {"discipline": "SM", "relative_path": "SM/SMOKE.dwg", "result": {"units": "m", "landmarks": shared, "sheets": view}}
+    hv = {"discipline": "HVAC", "relative_path": "HVAC/VENT.dwg", "result": {"units": "m", "landmarks": other, "sheets": view}}
 
     def e(src, x, y, label):
         return {"key": "motorized_smoke_fire_damper", "tag": None, "keys": ["B3"], "src": src, "label": label,

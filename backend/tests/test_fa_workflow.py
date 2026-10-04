@@ -89,7 +89,7 @@ def _damper_drawing(path, x0=719.25):
         msp.add_text("MSD", height=0.12).set_placement((x0 + dx, 154.4))
     msp.add_text("AHU-01", height=0.12).set_placement((x0 + 5, 150.0))
     lay = doc.layouts.new("M-07-V101")
-    lay.add_viewport(center=(420, 297), size=(800, 560), view_center_point=(733.0, 135.3), view_height=97.0)
+    lay.add_viewport(center=(420, 297), size=(800, 560), view_center_point=(x0 + 13.75, 135.3), view_height=97.0)
     lay.add_text("3RD BASEMENT FLOOR PLAN VENTILATION LAYOUT", height=5).set_placement((10, 10))
     doc.saveas(path)
 
@@ -146,7 +146,10 @@ def test_a_reviewed_complete_run_is_a_candidate_and_published_only_when_the_engi
     assert accepted.json()["schedule"]["view_state"] == "current"
 
 
-def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(w):
+def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(w, monkeypatch):
+    from app.routers import jobs as jobs_router
+
+    monkeypatch.setattr(jobs_router, "RUN_INLINE", True)
     w.models.serves = {OPUS}
     out = _run(w)
     assert out["review_state"] == "missing" and out["publication_state"] == "provisional"
@@ -158,7 +161,9 @@ def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(
     # Retry once Fable is there: the review runs on the same evidence, the run becomes a candidate
     w.models.serves = {OPUS, FABLE}
     looks_before = len([r for r in w.models.requests if r.task == visual.TASK])
-    retried = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review").json()["run"]
+    job = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
+    assert job.status_code == 202 and job.json()["kind"] == "fa_interfaces_review" and job.json()["status"] == "succeeded"
+    retried = _latest(w)
     assert retried["review_state"] == "completed" and retried["publication_state"] == "complete_candidate"
     assert len([r for r in w.models.requests if r.task == visual.TASK]) == looks_before   # no drawing re-read
 
@@ -213,20 +218,23 @@ def test_drawing_agents_run_side_by_side_bounded_by_fa_agent_parallel(w, monkeyp
         _damper_drawing(w.hvac / f"VENTILATION LAYOUT {i}.dxf", x0=719.25 + 300 * i)
     monkeypatch.setattr(settings, "fa_agent_parallel", 2)
     running, peak = [0], [0]
-    lock = threading.Lock()
-    real = visual.check
+    lock, one_connection = threading.Lock(), threading.Lock()
+    real = workflow._run_agent
 
-    def slow_check(db, project, sources, **kw):
+    def slow_agent(*args, **kw):
         with lock:
             running[0] += 1
             peak[0] = max(peak[0], running[0])
         try:
             time.sleep(0.4)
-            return real(db, project, sources, **kw)
+            # each agent's database work one at a time: the tests' in-memory database is one
+            # connection shared by every thread (a file database gives each its own)
+            with one_connection:
+                return real(*args, **kw)
         finally:
             with lock:
                 running[0] -= 1
-    monkeypatch.setattr(visual, "check", slow_check)
+    monkeypatch.setattr(workflow, "_run_agent", slow_agent)
     _run(w)
     assert peak[0] == 2                                                    # side by side, never more than two
     run = _latest(w)

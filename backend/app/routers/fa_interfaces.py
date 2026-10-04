@@ -37,6 +37,23 @@ from app.services import activity, jobs
 
 router = APIRouter(tags=["fa-interfaces"])
 KIND = "fa_interfaces_scan"
+RUN_KIND = "fa_interfaces_run"
+REVIEW_KIND = "fa_interfaces_review"
+
+
+def read_key(project_id: int) -> str:
+    """One key for every job that reads or reviews a project's interface
+    evidence (scan, run, Retry review): the job table's partial unique index
+    lets one of them be active at a time, atomically (F10)."""
+    return f"fa_interfaces:{project_id}"
+
+
+def _active_read(db: Session, project_id: int):
+    for key in (read_key(project_id), f"{KIND}:{project_id}", f"{RUN_KIND}:{project_id}"):   # older jobs' own keys
+        existing = jobs.active_by_key(db, key)
+        if existing is not None:
+            return existing
+    return None
 _SAFE = re.compile(r"[^\w .()-]+")
 
 
@@ -61,12 +78,10 @@ def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depe
     project = _get_project_or_404(db, project_id)
     if not project.source_folder_path:
         raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
-    key = f"{KIND}:{project.id}"
-    for active in (key, f"fa_interfaces_run:{project.id}"):
-        existing = jobs.active_by_key(db, active)
-        if existing is not None:
-            return _started(db, existing, False)
-    job, created = jobs.enqueue(db, kind=KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
+    existing = _active_read(db, project.id)
+    if existing is not None:
+        return _started(db, existing, False)
+    job, created = jobs.enqueue(db, kind=KIND, project_id=project.id, user_id=current_user.id, dedup_key=read_key(project.id),
                                 params={"user_id": current_user.id, "hydrate": bool(hydrate)},
                                 progress=_queue_note(db), message="")
     if created:
@@ -77,9 +92,6 @@ def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depe
         db.expire_all()
         job = db.get(type(job), job.id)
     return _started(db, job, created)
-
-
-RUN_KIND = "fa_interfaces_run"
 
 
 @router.post("/projects/{project_id}/fa-interfaces/runs/jobs", status_code=status.HTTP_202_ACCEPTED)
@@ -93,12 +105,11 @@ def start_run(project_id: int, current_user: User = Depends(require_role(*CREATO
     project = _get_project_or_404(db, project_id)
     if not project.source_folder_path:
         raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
-    for key in (f"{KIND}:{project.id}", f"{RUN_KIND}:{project.id}"):
-        existing = jobs.active_by_key(db, key)
-        if existing is not None:
-            return _started(db, existing, False)
-    key = f"{RUN_KIND}:{project.id}"
-    job, created = jobs.enqueue(db, kind=RUN_KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
+    existing = _active_read(db, project.id)
+    if existing is not None:
+        return _started(db, existing, False)
+    job, created = jobs.enqueue(db, kind=RUN_KIND, project_id=project.id, user_id=current_user.id,
+                                dedup_key=read_key(project.id),
                                 params={"user_id": current_user.id}, progress=_queue_note(db), message="")
     if created:
         activity.record(db, current_user, "fa_interfaces.run", "Ran the FA interfaces drawing workflow",
@@ -148,19 +159,38 @@ def accept_run(project_id: int, run_id: int, current_user: User = Depends(requir
     return {"run": workflow.view(run), "schedule": service.build(db, project)}
 
 
-@router.post("/projects/{project_id}/fa-interfaces/runs/{run_id}/retry-review")
+@router.post("/projects/{project_id}/fa-interfaces/runs/{run_id}/retry-review", status_code=status.HTTP_202_ACCEPTED)
 def retry_review(project_id: int, run_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
                  db: Session = Depends(get_db)):
-    """The Fable orchestrator's review again, on the run's own evidence."""
+    """The Fable orchestrator's review again, on the run's frozen inputs, as a
+    job (the IFC worker): refused for an accepted, unfinished or fully reviewed
+    run, one whose drawings changed, or past the day's bound -- counted here,
+    atomically, before the job is queued (F5/F8)."""
     from app.interfaces import workflow
+    from app.routers import jobs as jobs_router
+    from app.routers.ifc_boq import _queue_note, _run_inline, _started
 
     project = _get_project_or_404(db, project_id)
     run = _run_or_404(db, project, run_id)
+    existing = _active_read(db, project.id)
+    if existing is not None:
+        raise HTTPException(409, "The drawings are being read or reviewed now: retry when that job has finished")
     try:
-        workflow.retry_review(db, project, run)
+        workflow.claim_retry(db, project, run)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
-    return {"run": workflow.view(run)}
+    job, created = jobs.enqueue(db, kind=REVIEW_KIND, project_id=project.id, user_id=current_user.id,
+                                dedup_key=read_key(project.id), params={"user_id": current_user.id, "run_id": run.id},
+                                progress=_queue_note(db), message="")
+    if not created:
+        raise HTTPException(409, "The drawings are being read or reviewed now: retry when that job has finished")
+    activity.record(db, current_user, "fa_interfaces.retry_review", f"Retried the review of FA interfaces run {run.id}",
+                    project=project, entity_type="project", entity_id=project.id)
+    if jobs_router.RUN_INLINE:
+        _run_inline(job.id)
+        db.expire_all()
+        job = db.get(type(job), job.id)
+    return _started(db, job, created)
 
 
 class PublishCurrent(BaseModel):
@@ -222,6 +252,7 @@ class Decision(BaseModel):
     # govern (a conflict between drawings: which drawing counts, `relative_path`)
     action: str
     relative_path: str = Field(default="", max_length=1000)
+    authority: str = Field(default="", max_length=300)        # govern: whose confirmation the choice rests on
     reason: str = Field(default="", max_length=500)
     floor_keys: list[str] = Field(default_factory=list, max_length=200)
     qty: int | None = Field(default=None, ge=1, le=500)
@@ -242,6 +273,9 @@ def _known_floors(view: dict, keys: list[str]) -> list[str]:
 @router.post("/projects/{project_id}/fa-interfaces/decisions")
 def decide(project_id: int, body: Decision, current_user: User = Depends(require_role(*CREATOR_ROLES)),
            db: Session = Depends(get_db)):
+    """An engineer's answer. Each one is kept with the answers it replaced
+    (`history`): reopening or correcting an answer never deletes what was
+    decided before (F3)."""
     project = _get_project_or_404(db, project_id)
     view = service.build(db, project)
     row = service.state(db, project)
@@ -249,20 +283,27 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
     items = {g["id"]: g for g in view["verification"] + view["settled"]}
     decisions = dict(row.decisions or {})
     stamp = {"by": current_user.id, "at": utc_now().isoformat()}
+
+    def record(new: dict) -> None:
+        old = decisions.get(body.id)
+        history = list((old or {}).get("history") or [])
+        if old:
+            history.append({k: v for k, v in old.items() if k != "history"})
+        decisions[body.id] = {**new, **stamp, "history": history[-50:]}
+
     if body.action in ("reject", "restore", "confirm"):
         line = lines.get(body.id)
         if line is None or line["basis"] != "drawing":
             raise HTTPException(404, "That line is not in the schedule (read the drawings again?)")
         if body.action == "restore" and line.get("visual_reject"):
             # set aside by the visual check: the engineer's word puts it back
-            decisions[body.id] = {"status": "confirmed", "reason": "restored by the engineer", **stamp}
+            record({"status": "confirmed", "reason": "restored by the engineer"})
         elif body.action == "restore":
-            decisions.pop(body.id, None)
+            record({"status": "restored", "reason": body.reason.strip()})
         else:
             if body.action == "reject" and not body.reason.strip():
                 raise HTTPException(422, "Say why it is not an interface")
-            decisions[body.id] = {"status": "rejected" if body.action == "reject" else "confirmed",
-                                  "reason": body.reason.strip(), **stamp}
+            record({"status": "rejected" if body.action == "reject" else "confirmed", "reason": body.reason.strip()})
         what = f"{line['equipment']} {line['tag']} on {line['floor']}"
     elif body.action == "govern":
         item = items.get(body.id)
@@ -272,25 +313,28 @@ def decide(project_id: int, body: Decision, current_user: User = Depends(require
             raise HTTPException(422, "Choose one of the drawings in the conflict")
         if not body.reason.strip():
             raise HTTPException(422, "Say why that drawing governs")
-        decisions[body.id] = {"status": "governed", "relative_path": body.relative_path, "reason": body.reason.strip(),
-                              **stamp}
-        what = f"{item['equipment']} on {item['ref']}: {body.relative_path} governs"
+        if not body.authority.strip():
+            raise HTTPException(422, "Say on whose authority that drawing governs (the consultant's confirmation, "
+                                     "the site's): its barriers are then counted as interfaces")
+        record({"status": "governed", "relative_path": body.relative_path, "reason": body.reason.strip(),
+                "authority": body.authority.strip()})
+        what = f"{item['equipment']} on {item['ref']}: {body.relative_path} governs ({body.authority.strip()[:80]})"
     elif body.action in ("resolve", "dismiss", "reopen"):
         item = items.get(body.id)
         if item is None:
             raise HTTPException(404, "That verification item is not open (read the drawings again?)")
         if body.action == "reopen":
-            decisions.pop(body.id, None)
+            record({"status": "open", "reason": body.reason.strip()})
         elif body.action == "dismiss":
             if not body.reason.strip():
                 raise HTTPException(422, "Say why it is not scheduled")
-            decisions[body.id] = {"status": "dismissed", "reason": body.reason.strip(), **stamp}
+            record({"status": "dismissed", "reason": body.reason.strip()})
         else:
             if body.qty is None:
                 raise HTTPException(422, "Say how many there are on each floor")
-            decisions[body.id] = {"status": "resolved", "floor_keys": _known_floors(view, body.floor_keys),
-                                  "qty": body.qty, "tags": [t.strip() for t in body.tags if t.strip()],
-                                  "location": body.location.strip(), "reason": body.reason.strip(), **stamp}
+            record({"status": "resolved", "floor_keys": _known_floors(view, body.floor_keys), "qty": body.qty,
+                    "tags": [t.strip() for t in body.tags if t.strip()], "location": body.location.strip(),
+                    "reason": body.reason.strip()})
         what = f"{item['equipment']} ({item['source']})"
     else:
         raise HTTPException(422, "action is one of reject, restore, confirm, resolve, dismiss, reopen, govern")

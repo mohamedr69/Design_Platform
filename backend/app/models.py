@@ -2427,6 +2427,12 @@ class FaInterfaceRun(Base):
     accepted_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     accepted_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Why the run is not a complete candidate, decided by deterministic code
+    # (the publication gate), whatever the orchestrator recommends.
+    publication_reasons: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    # Retry review, bounded per day: counted by a compare-and-set on these.
+    review_retries: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    review_retry_day: Mapped[str | None] = mapped_column(String(10), nullable=True)
 
 
 class ProjectDrawingReview(Base):

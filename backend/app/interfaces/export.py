@@ -38,8 +38,14 @@ def evidence_note(view: dict) -> str:
     if primary == "none":
         return "NOT READ COMPLETELY: no schedule" + (f" ({reasons})" if reasons else "")
     if state != "current":
-        return "PROVISIONAL" + (f" ({reasons})" if reasons else "")
-    return "Current: every drawing verified now"
+        note = "PROVISIONAL" + (f" ({reasons})" if reasons else "")
+    else:
+        note = "Current: every drawing verified now"
+    limits = view.get("limitations") or []
+    if limits:
+        # what the evidence cannot show travels with the schedule: never read as "no equipment"
+        note += "; NOT SHOWN BY THE DRAWINGS READ: " + "; ".join(x["text"] for x in limits)
+    return note
 
 
 def workbook(view: dict) -> io.BytesIO:

@@ -386,6 +386,11 @@ class Settings(BaseSettings):
     fa_orchestrator_max_input_tokens: int = 150_000
     fa_orchestrator_max_output_tokens: int = 8_000
     fa_orchestrator_retries_per_day: int = 3
+    # The orchestrator's own calls in a day, per project (W-BUD, review F10): its
+    # allowance is reserved apart from the drawing agents' looks -- those are bounded
+    # by the drawing review's budget and never consume it -- and a run whose
+    # orchestrator could not be served within it starts no paid look at all.
+    fa_orchestrator_max_calls_per_day: int = 64
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

@@ -24,8 +24,9 @@ from app.interfaces.matrix import ACS, ARCH, FF, GB, rules_for
 # Model space read as one drawing when no sheet has a viewport on it (a
 # drawing issued as model space only): its floor comes from the file name.
 WHOLE = "(whole drawing)"
-SCAN_VERSION = "4"     # 2: dampers by their code (MD, MSD, SD ...); 3: the fire fighting drawings' pump rooms;
-                       # 4: each label's physical symbol, and gate barriers by their fire alarm connection points
+SCAN_VERSION = "5"     # 2: dampers by their code (MD, MSD, SD ...); 3: the fire fighting drawings' pump rooms;
+                       # 4: each label's physical symbol, and gate barriers by their fire alarm connection points;
+                       # 5: each sheet's viewport windows (W-4: a floor is aligned only where they are the same)
 _MAX_DEPTH = 8
 _UNITS = {1: "in", 2: "ft", 4: "mm", 5: "cm", 6: "m"}
 _METRE = {"mm": 1000.0, "cm": 100.0, "m": 1.0, "in": 39.37, "ft": 3.281}
@@ -150,7 +151,9 @@ def read(path: str, discipline: str, check=None) -> dict:
         "units": units,
         "symbols": len(symbols),
         "landmarks": geometry.landmarks(texts),
-        "sheets": [{**s.to_dict(), "height": max((w.h for w in s.windows), default=0.0)} for s in sheets],
+        "sheets": [{**s.to_dict(), "height": max((w.h for w in s.windows), default=0.0),
+                    "windows": [[round(v, 4) for v in (w.cx, w.cy, w.w, w.h, w.twist, w.tx, w.ty)] for w in s.windows]}
+                   for s in sheets],
         "texts": len(texts),
         "items": items,
         "lifts": lifts,

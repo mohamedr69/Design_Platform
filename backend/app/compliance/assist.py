@@ -246,7 +246,7 @@ def _log(session: AssistSession, *, task: str, model: str, response=None, cost: 
 def call_task(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
               prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
               effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-              exact_model: bool = False) -> CallResult:
+              exact_model: bool = False, accept=None) -> CallResult:
     """One structured call through the cache, the budget and the usage log,
     for a task defined outside this module (the single-clause review).
     `tier` "standard" asks the larger model (AI_MODEL_STANDARD); `ttl_days`
@@ -254,15 +254,19 @@ def call_task(session: AssistSession, task: str, system: str, parts: list[TextPa
     `effort` asks the API provider for more reasoning than AI_EFFORT;
     `model` names the model for this task alone (the drawing review's Opus);
     `exact_model` makes the answer count only from exactly that model (no
-    alias, no fallback, a substituted reply is an error, never cached)."""
+    alias, no fallback, a substituted reply is an error, never cached).
+    `accept(data)` returns what is wrong with an answer's shape, or None: an
+    answer it refuses is an `invalid_output` error, never cached, and a cached
+    one it refuses is not reused."""
     return _call(session, task, system, parts, schema, max_output, prompt_version=prompt_version, tier=tier,
-                 ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s, exact_model=exact_model)
+                 ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s, exact_model=exact_model,
+                 accept=accept)
 
 
 def _call(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
           prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
           effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-          exact_model: bool = False) -> CallResult:
+          exact_model: bool = False, accept=None) -> CallResult:
     settings = get_settings()
     pinned = model
     model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)
@@ -289,6 +293,8 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
     with result_cache.InFlight(key) as first:
         cached = result_cache.get(session.db, key, project_id=session.project_id,
                                   ttl_days=ttl_days or settings.ai_cache_ttl_days, document_sha256=session.document_sha256)
+        if cached is not None and accept is not None and accept(cached.get("data")):
+            cached = None                       # a stored answer of the wrong shape is not reused
         if cached is not None:
             session.cached += 1
             _log(session, task=task, model=cached.get("model", model), cache_hit=True)
@@ -310,6 +316,10 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
             detail = f"{response.error}: {response.error_detail}" if response.error_detail else (response.error or "no reply")
             session.errors.append(detail[:300])
             return CallResult(None, False, response.model or model, detail, flags=flags)
+        wrong = accept(response.data) if accept is not None else None
+        if wrong:
+            session.errors.append(f"invalid_output: {wrong}"[:300])
+            return CallResult(None, False, response.model or model, f"invalid_output: {wrong}"[:300], flags=flags)
         result_cache.put(session.db, key, {"data": response.data, "model": response.model or model},
                          project_id=session.project_id, document_sha256=session.document_sha256, task=task)
         return CallResult(response.data, False, response.model or model, flags=flags)
