@@ -207,7 +207,8 @@ def error_reason(error: str | None) -> ReviewReason:
         return ReviewReason.TIME_BUDGET_EXHAUSTED if "elapsed" in (error or "") else ReviewReason.AI_BUDGET_EXHAUSTED
     if kind == "timeout":
         return ReviewReason.AI_TIMEOUT
-    if kind in ("transport", "rate_limit", "auth", "quota", "refused"):
+    if kind in ("transport", "rate_limit", "auth", "quota", "refused", "unavailable", "unsupported_model",
+                "model_substituted", "model_unverified", "invalid_request"):
         return ReviewReason.AI_PROVIDER_ERROR
     return ReviewReason.AI_INVALID_RESPONSE
 

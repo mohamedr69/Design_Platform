@@ -15,7 +15,7 @@ rem The old processes first: a worker has no hot reload, and one left
 rem running keeps the code it started with (app.workers.runtime).
 call "%~dp0stop-backend.bat"
 
-start "EP Platform - API" cmd /k "cd /d "%~dp0backend" && venv\Scripts\python -m uvicorn app.main:app --reload --reload-dir app --timeout-graceful-shutdown 3 --port 8002"
+start "EP Platform (merged) - API" cmd /k "cd /d "%~dp0backend" && venv\Scripts\python -m uvicorn app.main:app --reload --reload-dir app --timeout-graceful-shutdown 3 --port 8002"
 start "EP Platform - Worker" /belownormal cmd /k "cd /d "%~dp0backend" && venv\Scripts\python -m app.workers.sync_worker"
 start "EP Platform - Documents" /belownormal cmd /k "cd /d "%~dp0backend" && venv\Scripts\python -m app.workers.document_worker"
 start "EP Platform - IFC Worker" /belownormal cmd /k "cd /d "%~dp0backend" && venv\Scripts\python -m app.workers.ifc_worker"

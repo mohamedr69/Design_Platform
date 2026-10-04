@@ -636,7 +636,8 @@ def call_outcome(error: str | None) -> str:
         return "budget_exhausted"
     if kind == "timeout":
         return "timeout"
-    if kind in ("transport", "rate_limit", "auth", "quota", "refused"):
+    if kind in ("transport", "rate_limit", "auth", "quota", "refused", "unavailable", "unsupported_model",
+                "model_substituted", "model_unverified", "invalid_request"):
         return "provider_error"
     return "invalid_response"
 
