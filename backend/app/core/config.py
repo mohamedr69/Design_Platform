@@ -356,6 +356,17 @@ class Settings(BaseSettings):
     drawing_review_windows_per_call: int = 2
     # Calls at once (each a Claude Code process); the provider caps it again at AI_MAX_CONCURRENCY.
     drawing_review_parallel: int = 2
+    # The interface schedule's damper pictures (app.interfaces.render): drawn in
+    # a child process with a deadline per picture and for opening the drawing;
+    # an overrun kills the child and that window is reported unread, never
+    # empty. Restarts: how many times the drawing is opened again after an
+    # overrun. ezdxf's own hatch-pattern timeout is kept short. In-process
+    # drawing (no time box; stop between pictures only) is the rollback.
+    fa_render_window_timeout_s: float = 120.0
+    fa_render_plan_timeout_s: float = 900.0
+    fa_render_restarts: int = 1
+    fa_render_hatching_timeout_s: float = 2.0
+    fa_render_in_process: bool = False
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

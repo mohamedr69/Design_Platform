@@ -19,19 +19,15 @@ a drawing read again unchanged is not looked at again.
 """
 from __future__ import annotations
 
-import io
 import logging
 import math
-from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
-
-from PIL import Image, ImageDraw, ImageFont
 
 from app.ai.provider import ImagePart, TextPart, get_provider
 from app.compliance import assist
 from app.core.config import get_settings
 from app.database import SessionLocal
+from app.interfaces import render
 
 log = logging.getLogger(__name__)
 VERSION = 3
@@ -41,8 +37,6 @@ KEYS = ("motorized_smoke_fire_damper",)
 DISCIPLINES = ("SM", "HVAC")
 WINDOW_M = 10.0          # the piece of plan one look covers
 MARGIN_M = 2.5           # and around it
-IMAGE_PX = 1400
-CELL_M = 5.0             # the drawing's lines kept in a grid of these
 _METRE = {"mm": 1000.0, "cm": 100.0, "m": 1.0, "in": 39.37, "ft": 3.281}
 
 SYSTEM = """You check the dampers of a smoke management / ventilation (HVAC) floor plan for a fire alarm contractor in
@@ -98,120 +92,6 @@ def wanted(src: dict) -> list[dict]:
     return [it for it in (src.get("result") or {}).get("items", []) if it["key"] in KEYS]
 
 
-def _quick_box(e) -> tuple[float, float, float, float] | None:
-    """An entity's extents, cheaply for the common ones; None for the rest."""
-    t = e.dxftype()
-    try:
-        if t == "LINE":
-            a, b = e.dxf.start, e.dxf.end
-            return min(a.x, b.x), min(a.y, b.y), max(a.x, b.x), max(a.y, b.y)
-        if t == "LWPOLYLINE":
-            pts = [(x, y) for x, y, *_ in e.get_points("xy")]
-            if not pts:
-                return None
-            xs, ys = [p[0] for p in pts], [p[1] for p in pts]
-            return min(xs), min(ys), max(xs), max(ys)
-        if t in ("CIRCLE", "ARC"):
-            c, r = e.dxf.center, e.dxf.radius
-            return c.x - r, c.y - r, c.x + r, c.y + r
-        if t == "TEXT":
-            p, h = e.dxf.insert, e.dxf.height or 0.0
-            width = len(e.dxf.text or "") * h
-            return p.x - width, p.y - h, p.x + width, p.y + 2 * h
-        if t == "MTEXT":
-            p, h = e.dxf.insert, e.dxf.get("char_height", 0.0) or 0.0
-            width = e.dxf.get("width", 0.0) or len(e.text or "") * h
-            return p.x - width, p.y - 4 * h, p.x + width, p.y + 4 * h
-        if t == "SPLINE":
-            pts = list(e.control_points) or list(e.fit_points)
-            if pts:
-                xs, ys = [q[0] for q in pts], [q[1] for q in pts]
-                return min(xs), min(ys), max(xs), max(ys)
-        if t == "ELLIPSE":
-            c, m = e.dxf.center, e.dxf.major_axis
-            r = (m.x ** 2 + m.y ** 2) ** 0.5
-            return c.x - r, c.y - r, c.x + r, c.y + r
-        if t == "HATCH":
-            xs, ys = [], []
-            for path in e.paths:
-                for v in getattr(path, "vertices", None) or ():
-                    xs.append(v[0])
-                    ys.append(v[1])
-                for edge in getattr(path, "edges", None) or ():
-                    for name in ("start", "end", "center"):
-                        q = getattr(edge, name, None)
-                        if q is not None:
-                            xs.append(q[0])
-                            ys.append(q[1])
-            if xs:
-                return min(xs), min(ys), max(xs), max(ys)
-    except Exception:  # noqa: BLE001
-        return None
-    return None
-
-
-class Plan:
-    """The drawing's lines, at any depth, around the pieces of plan to be
-    looked at -- in its own colours on black, as AutoCAD shows it."""
-
-    def __init__(self, dxf: Path, boxes: list[tuple[float, float, float, float]], metre: float, check=None):
-        import ezdxf
-        from ezdxf import bbox, disassemble
-
-        self.doc = ezdxf.readfile(dxf)
-        self.cell = CELL_M * metre
-        wanted: set[tuple[int, int]] = set()
-        for x0, y0, x1, y1 in boxes:
-            for i in range(int(x0 // self.cell), int(x1 // self.cell) + 1):
-                for j in range(int(y0 // self.cell), int(y1 // self.cell) + 1):
-                    wanted.add((i, j))
-        self.cells: dict[tuple[int, int], list] = defaultdict(list)
-        limit = 40 * self.cell
-        for n, e in enumerate(disassemble.recursive_decompose(self.doc.modelspace())):
-            if check and n % 20000 == 0:
-                check()
-            if e.dxftype() in ("ATTDEF", "VIEWPORT", "IMAGE", "WIPEOUT", "POINT"):
-                continue
-            box = _quick_box(e)
-            if box is None:
-                try:
-                    found = bbox.extents([e], fast=True)
-                except Exception:  # noqa: BLE001 -- what cannot be measured is not drawn
-                    continue
-                if not found.has_data:
-                    continue
-                box = (found.extmin.x, found.extmin.y, found.extmax.x, found.extmax.y)
-            if box[2] - box[0] > limit or box[3] - box[1] > limit:
-                continue                      # a sheet frame, a grid line across the plan
-            cells = [(i, j) for i in range(int(box[0] // self.cell), int(box[2] // self.cell) + 1)
-                     for j in range(int(box[1] // self.cell), int(box[3] // self.cell) + 1)]
-            for c in cells:
-                if c in wanted:
-                    self.cells[c].append((e, box))
-
-    def picture(self, x0: float, y0: float, x1: float, y1: float, px: int) -> bytes:
-        from ezdxf.addons.drawing import Frontend, RenderContext, layout
-        from ezdxf.addons.drawing.config import BackgroundPolicy, Configuration
-        from ezdxf.addons.drawing.pymupdf import PyMuPdfBackend
-        from ezdxf.math import BoundingBox2d
-
-        seen, entities = set(), []
-        for i in range(int(x0 // self.cell), int(x1 // self.cell) + 1):
-            for j in range(int(y0 // self.cell), int(y1 // self.cell) + 1):
-                for e, box in self.cells.get((i, j), ()):
-                    if id(e) in seen or box[2] < x0 or box[0] > x1 or box[3] < y0 or box[1] > y1:
-                        continue
-                    seen.add(id(e))
-                    entities.append(e)
-        backend = PyMuPdfBackend()
-        Frontend(RenderContext(self.doc), backend,
-                 config=Configuration(background_policy=BackgroundPolicy.BLACK)).draw_entities(entities)
-        side_mm = 300.0
-        return backend.get_pixmap_bytes(layout.Page(side_mm, side_mm, layout.Units.mm), fmt="png",
-                                        dpi=int(px / (side_mm / 25.4)),
-                                        render_box=BoundingBox2d([(x0, y0), (x1, y1)]))
-
-
 def _windows(labels: list[tuple[str, float, float]], metre: float) -> list[dict]:
     """The labels grouped into pieces of plan: each label joins the first
     piece it fits in (no wider than WINDOW_M either way), so labels side by
@@ -233,25 +113,6 @@ def _windows(labels: list[tuple[str, float, float]], metre: float) -> list[dict]
         half = max((max(xs) - min(xs)) / 2 + margin, (max(ys) - min(ys)) / 2 + margin, size / 2)
         out.append({"box": (cx - half, cy - half, cx + half, cy + half), "labels": members})
     return out
-
-
-def _picture(plan: Plan, window: dict) -> bytes:
-    x0, y0, x1, y1 = window["box"]
-    img = Image.open(io.BytesIO(plan.picture(x0, y0, x1, y1, IMAGE_PX))).convert("RGB")
-    w, h = img.size
-    draw = ImageDraw.Draw(img)
-    r = max(10, int(w / 90))
-    try:
-        font = ImageFont.load_default(size=max(18, int(w / 50)))
-    except TypeError:                   # an older Pillow: its one small font
-        font = ImageFont.load_default()
-    for n, (_iid, x, y) in enumerate(window["labels"], 1):
-        px, py = (x - x0) / (x1 - x0) * w, (y1 - y) / (y1 - y0) * h
-        draw.ellipse((px - r, py - r, px + r, py + r), outline=(255, 40, 40), width=3)
-        draw.text((px + r + 3, py - 2 * r - 4), str(n), fill=(255, 40, 40), font=font)
-    out = io.BytesIO()
-    img.save(out, "PNG")
-    return out.getvalue()
 
 
 def _ask(project_id: int, png: bytes, sha: str, window: dict, budget, drawing: str) -> dict:
@@ -276,16 +137,22 @@ def _ask(project_id: int, png: bytes, sha: str, window: dict, budget, drawing: s
         db.close()
 
 
-def check(db, project, sources: list[dict], *, progress=None, check=None) -> int:
+def check(db, project, sources: list[dict], *, progress=None, check=None, limits=None) -> int:
     """Look at the damper labels of every smoke management and ventilation
     drawing read, on the drawing; each source's `visual` is filled in place.
-    Returns how many labels were looked at."""
+    Returns how many labels were looked at.
+
+    The pictures are drawn one window at a time (`render.RenderSession`: a
+    child process with a deadline per picture). Stop is checked between
+    windows and while each one is drawn, and progress is reported per window.
+    A window that could not be drawn is recorded with its reason in
+    `visual.unread`: its labels are held, never taken as "no damper"."""
     from app.interfaces.service import cache_folder
     from app.review import service as review
 
     s = get_settings()
     if not s.ai_enabled:
-        return 0                        # no model to look: the labels are scheduled as read
+        return 0                        # no model to look: the labels stay held for the engineer
     looked = 0
     for src in sources:
         labels = wanted(src)
@@ -302,49 +169,76 @@ def check(db, project, sources: list[dict], *, progress=None, check=None) -> int
             continue
         metre = _METRE.get((src.get("result") or {}).get("units", "m"), 1.0)
         if progress:
-            progress(0, 1, f"Reading {src['filename']} to look at its dampers", src["filename"])
+            progress(0, 1, f"Opening {src['filename']} to look at its dampers", src["filename"])
         windows = _windows([(item_id(it), it["x"], it["y"]) for it in labels], metre)
-        plan = Plan(dxf, [w["box"] for w in windows], metre, check=check)
         items: dict[str, dict] = {}
+        unread: dict[str, str] = {}
         budget = review._budget(db, project)
         done = 0
+        futures: dict = {}
         pool = ThreadPoolExecutor(max_workers=max(1, s.drawing_review_parallel))
+
+        def take(future) -> None:
+            nonlocal done, looked
+            w = futures.pop(future)
+            try:
+                reply = future.result()
+            except Exception as exc:  # noqa: BLE001 -- one look failing is that piece, not the drawing
+                reply = {"error": f"{type(exc).__name__}: {exc}"[:300]}
+            done += 1
+            if progress:
+                progress(done, len(windows), f"Looking at the dampers of {src['filename']} ({done} of {len(windows)})",
+                         src["filename"])
+            if "answers" not in reply:
+                for iid, _px, _py in w["labels"]:
+                    unread.setdefault(iid, f"look_failed: {reply.get('error') or 'no answer'}"[:200])
+                return
+            x0, y0, x1, y1 = w["box"]
+            by_n = {a["n"]: a for a in reply["answers"]}
+            for n, (iid, _px, _py) in enumerate(w["labels"], 1):
+                a = by_n.get(n)
+                if a is None:
+                    unread.setdefault(iid, "not_answered")
+                    continue
+                at = None
+                if a["damper"] and 0 <= a["x"] <= 1 and 0 <= a["y"] <= 1:
+                    at = [round(x0 + a["x"] * (x1 - x0), 3), round(y1 - a["y"] * (y1 - y0), 3)]
+                items[iid] = {"damper": bool(a["damper"]), "at": at, "what": (a.get("what") or "")[:80],
+                              "confidence": a.get("confidence")}
+                looked += 1
+
         try:
-            # the pictures drawn here, one after another (the drawing is not shared across threads);
-            # the model asked about them side by side
-            futures = {pool.submit(_ask, project.id, _picture(plan, w), src["sha256"], w, budget, src["filename"]): w
-                       for w in windows}
-            for future in as_completed(futures):
+            with render.RenderSession(dxf, [w["box"] for w in windows], metre, check=check,
+                                      limits=limits) as pictures:
+                for index, w in enumerate(windows):
+                    if check:
+                        check()
+                    # answers already in: take them as they come, so the count moves
+                    for future in [f for f in futures if f.done()]:
+                        take(future)
+                    if progress:
+                        progress(done, len(windows), f"Drawing {src['filename']} for its dampers "
+                                 f"(window {index + 1} of {len(windows)})", src["filename"])
+                    try:
+                        png = render.annotate(pictures.picture(index), w)
+                    except (render.RenderTimeout, render.RenderUnavailable, render.RenderFailed) as exc:
+                        reason = {render.RenderTimeout: "render_timeout", render.RenderUnavailable: "render_unavailable",
+                                  render.RenderFailed: "render_failed"}[type(exc)]
+                        for iid, _px, _py in w["labels"]:
+                            unread[iid] = f"{reason}: {exc}"[:200]
+                        log.warning("Damper window %s of %s not drawn: %s", index + 1, src["filename"], exc)
+                        continue
+                    futures[pool.submit(_ask, project.id, png, src["sha256"], w, budget, src["filename"])] = w
+            for future in as_completed(list(futures)):
                 if check:
                     check()
-                w = futures[future]
-                try:
-                    reply = future.result()
-                except Exception as exc:  # noqa: BLE001 -- one look failing is that piece, not the drawing
-                    reply = {"error": f"{type(exc).__name__}: {exc}"[:300]}
-                done += 1
-                if progress:
-                    progress(done, len(windows), f"Looking at the dampers of {src['filename']} ({done} of {len(windows)})",
-                             src["filename"])
-                if "answers" not in reply:
-                    continue
-                x0, y0, x1, y1 = w["box"]
-                by_n = {a["n"]: a for a in reply["answers"]}
-                for n, (iid, _px, _py) in enumerate(w["labels"], 1):
-                    a = by_n.get(n)
-                    if a is None:
-                        continue
-                    at = None
-                    if a["damper"] and 0 <= a["x"] <= 1 and 0 <= a["y"] <= 1:
-                        at = [round(x0 + a["x"] * (x1 - x0), 3), round(y1 - a["y"] * (y1 - y0), 3)]
-                    items[iid] = {"damper": bool(a["damper"]), "at": at, "what": (a.get("what") or "")[:80],
-                                  "confidence": a.get("confidence")}
-                    looked += 1
+                take(future)
         finally:
             pool.shutdown(wait=False, cancel_futures=True)
         missing = sorted(expected - set(items))
         src["visual"] = {"version": VERSION, "sha256": src.get("sha256"), "items": items,
                          "windows": len(windows), "expected": len(expected), "missing": missing,
+                         "unread": {iid: unread.get(iid, "not_answered") for iid in missing},
                          "status": "complete" if not missing else "incomplete"}
     return looked
 
