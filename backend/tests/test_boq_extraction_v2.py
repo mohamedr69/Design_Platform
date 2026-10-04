@@ -321,6 +321,11 @@ def test_a_temporary_folder_that_cannot_be_removed_does_not_fail_the_call(monkey
     provider._models = {"small": "sonnet", "standard": "opus"}
     provider._timeout = 5.0
     provider._semaphore = threading.BoundedSemaphore(1)
+    # the merged provider (FI-P1 Stage 0.2) also knows its CLI's version: read already, so no
+    # `--version` subprocess is run here
+    provider._configured = "claude-fake"
+    provider._version, provider._version_text, provider._version_read = None, None, True
+    provider._version_lock = threading.Lock()
     reply = json.dumps({"subtype": "success", "structured_output": {"ok": 1}, "usage": {"input_tokens": 1, "output_tokens": 1}})
     monkeypatch.setattr(subprocess, "run", lambda *a, **k: subprocess.CompletedProcess(a, 0, stdout=reply, stderr=""))
     monkeypatch.setattr(provider_module.time, "sleep", lambda s: None)
@@ -356,6 +361,11 @@ def test_a_cli_timeout_is_a_timeout_not_an_answer(monkeypatch):
     provider._models = {"small": "sonnet", "standard": "opus"}
     provider._timeout = 5.0
     provider._semaphore = threading.BoundedSemaphore(1)
+    # the merged provider (FI-P1 Stage 0.2) also knows its CLI's version: read already, so no
+    # `--version` subprocess is run here
+    provider._configured = "claude-fake"
+    provider._version, provider._version_text, provider._version_read = None, None, True
+    provider._version_lock = threading.Lock()
 
     def slow(*args, **kwargs):
         raise subprocess.TimeoutExpired(cmd="claude", timeout=5)
