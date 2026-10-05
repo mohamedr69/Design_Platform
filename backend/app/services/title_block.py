@@ -17,6 +17,12 @@ reported as such (`conflict`), never settled by picking one.
 
 Nothing here guesses: no first / last / highest rule, no value borrowed from the file name or the folder.
 Where no cell is found the reading is None and the text reader stands, as before.
+
+The date the sheet was issued is read the same way (`issued`, branch g/project-log-and-drawing-scan): the
+title block's DATE cell -- one date under its label or beside it, the cell nearest the number cell (or the
+corner) -- and, where the block has none, the latest date its revision history records. The history table's
+own "DATE" column header is not that cell: its row names DESCRIPTION. It is when the drawing says it was
+issued, a fact of the sheet; when it was submitted is the register's, and is not read here.
 """
 from __future__ import annotations
 
@@ -24,7 +30,8 @@ import re
 from dataclasses import dataclass, field
 from datetime import date
 
-TITLE_BLOCK_VERSION = "titleblock-1"
+# titleblock-2: the issue date (`issued`, `issued_source`).
+TITLE_BLOCK_VERSION = "titleblock-2"
 
 # A drawing sheet: A2 and larger (the forms, letters and datasheets are A4 / A3).
 MIN_SHEET_SIDE_PT = 1300.0
@@ -39,6 +46,8 @@ _DATE = re.compile(r"^(\d{1,2})[./-](\d{1,2})[./-](\d{2}|\d{4})$")
 _REFERENCE_HEADING = re.compile(r"\bREF(?:ERENCE|\.)?\s*(?:DRAWINGS?|DWGS?|DOCUMENTS?)\b", re.I)
 _DESCRIPTION = re.compile(r"^DESCRIPTION\b", re.I)
 _DATE_LABEL = re.compile(r"^DATE\s*:?$", re.I)
+# The DATE cell's label, with its value in the same run where the CAD export wrote them as one ("DATE: 28/08/2024").
+_DATE_CELL = re.compile(r"^DATE\s*:?\s*(?P<inline>\d{1,2}[./-]\d{1,2}[./-](?:\d{2}|\d{4}))?$", re.I)
 _TITLE_LABEL = re.compile(r"^(?:DRAWING\s+|DWG\.?\s+|SHEET\s+)?TITLE\s*:?$", re.I)
 
 
@@ -77,12 +86,15 @@ class TitleBlock:
     conflict: bool = False                     # the REV cell and the history's latest row disagree
     title: str | None = None                   # the Drawing Title cell's lines, as printed
     notes: tuple = field(default=())
+    issued: date | None = None                 # the date the sheet says it was issued
+    issued_source: str | None = None           # "date cell" | "revision history"
 
     def observation(self) -> dict:
         return {"kind": "title_block", "version": TITLE_BLOCK_VERSION, "number": self.number,
                 "revision": self.revision, "number_label": self.number_label, "revision_label": self.revision_label,
                 "history": [list(row) for row in self.history], "history_latest": self.history_latest,
-                "references": list(self.references), "conflict": self.conflict, "title": self.title, "notes": list(self.notes)}
+                "references": list(self.references), "conflict": self.conflict, "title": self.title, "notes": list(self.notes),
+                "issued": self.issued.isoformat() if self.issued else None, "issued_source": self.issued_source}
 
 
 def page_lines(page) -> list[Line]:
@@ -337,8 +349,47 @@ def read(lines: list[Line], width: float, height: float, *, controlled=None) -> 
         return None
     history, latest = _history(lines)
     conflict = bool(revision and latest and revision_key(revision) != revision_key(latest))
+    issued, issued_source = _issued(lines, width, height, chosen, history)
     return TitleBlock(number, revision, number_label, revision_label, history, latest, _references(lines), conflict,
-                      title=_title(lines, width, height, chosen), notes=tuple(notes))
+                      title=_title(lines, width, height, chosen), notes=tuple(notes), issued=issued, issued_source=issued_source)
+
+
+# A date inside a run: the PDF text layer joins runs that sit close on one baseline, so the DATE cell's value can
+# come back with its neighbour's ("RAMADAN 06.08.2026": the CHECKED cell's initials, then the date).
+_DATE_TOKEN = re.compile(r"(?<![\d./-])\d{1,2}[./-]\d{1,2}[./-](?:\d{4}|\d{2})(?![\d./-])")
+
+
+def _one_date(text: str) -> date | None:
+    """The one date a run holds, or None for none or several (several say nothing about which is the cell's)."""
+    found = _DATE_TOKEN.findall(text)
+    return _parse_date(found[0]) if len(found) == 1 else None
+
+
+def _date_shaped(text: str) -> bool:
+    return _one_date(text) is not None
+
+
+def _issued(lines: list[Line], width: float, height: float, near: Line | None, history: tuple) -> tuple[date | None, str | None]:
+    """(the date the sheet was issued, where it was read): the title block's DATE cell -- one date under the
+    label or beside it on its row, the cell nearest the number cell (or the corner); a revision history's
+    "DATE" column header (its row names DESCRIPTION) and a reference table's are not it -- else the latest
+    date the revision history records. (None, None) where the sheet gives neither."""
+    labels = [l for l in lines if _DATE_CELL.match(l.text) and _in_zone(l, width, height)
+              and not any(_DESCRIPTION.match(other.text) for other in _row(lines, l))
+              and not _under_reference_heading(lines, l)]
+    if near is not None:
+        labels.sort(key=lambda l: abs(l.cx - near.cx) + abs(l.cy - near.cy))
+    else:
+        labels.sort(key=lambda l: -_corner_rank(l, width, height))
+    for label in labels:
+        value, _why = _cell_value(lines, label, _DATE_CELL.match(label.text).group("inline"), _date_shaped,
+                                  right_pad=6 * label.h)
+        if value is not None:
+            return _one_date(value), "date cell"
+    dated = [d for d in (_parse_date(printed) for _revision, printed in history if printed) if d is not None]
+    if dated:
+        return max(dated), "revision history"
+    return None, None
 
 
 def _title(lines: list[Line], width: float, height: float, near: Line | None) -> str | None:

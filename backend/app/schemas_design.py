@@ -7,7 +7,7 @@ app.services.ve_calculation), so a stored number can never disagree with
 the counts it came from.
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -1057,6 +1057,8 @@ class ProjectLogDrawingOut(BaseModel):
     name: str
     path: str
     modified: datetime
+    # The date a drawing sheet's own title block gives for its issue (document_control.ControlledDocument.issued).
+    issued: date | None = None
     # The revisions this one replaced, newest first, each a whole record: the
     # floor is one row at the revision that stands, and this is its history,
     # so the log can show each revision's own status and open its own file.

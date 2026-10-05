@@ -131,6 +131,8 @@ export interface ProjectLogDrawing {
   name: string;
   path: string;
   modified: string;
+  /** The date a drawing sheet's own title block gives for its issue ("YYYY-MM-DD"); none for a form. */
+  issued?: string | null;
   /** The revisions this drawing replaced, newest first, each a whole record:
    * a floor is one row at the revision that stands, and this is its history. */
   superseded?: ProjectLogDrawing[];

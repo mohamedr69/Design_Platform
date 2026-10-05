@@ -1,5 +1,5 @@
 import type { LogCell, Status } from "./types";
-import { STATUS_LABEL } from "./types";
+import { STATUS_LABEL, day } from "./types";
 
 /** How each status reads: an icon and a label, colour third, so it reads without colour. */
 export const STATUS: Record<Status, { help: string; chip: string; dot: string }> = {
@@ -72,7 +72,8 @@ export function Chip({ cell, blank = false, href = null }: { cell: LogCell; blan
     return <span className="text-slate-300" title="No revision">—</span>;
   }
   const s = STATUS[cell.status];
-  const title = [cell.reference, cell.remarks, cell.note, cell.confirmed ? "Confirmed by an engineer" : null,
+  const title = [cell.reference, cell.issued_on ? `Issued ${day(cell.issued_on)}` : null, cell.remarks, cell.note,
+    cell.confirmed ? "Confirmed by an engineer" : null,
     cell.source_missing ? "Its file is no longer in the project folder" : null]
     .filter(Boolean).join("\n") || s.help;
   const chip = (

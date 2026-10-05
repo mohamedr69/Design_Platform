@@ -51,6 +51,9 @@ export interface LogCell {
   source_missing?: boolean;
   submitted_at?: string | null;
   reply_at?: string | null;
+  /** The date the sheet itself says it was issued (its title block's DATE cell, else the last date of its
+   *  revision history), as "YYYY-MM-DD". Not when it was submitted: that is `submitted_at`. */
+  issued_on?: string | null;
   /** Not an official revision: a file found ("R1 available"). */
   candidate?: Candidate;
 }
@@ -206,6 +209,9 @@ export interface DrawingDetail extends LogRow {
 
 export function day(value: string | null | undefined): string {
   if (!value) return "–";
+  // A date with no time of day (a sheet's issue date) is that day wherever the page is read.
+  if (/^\d{4}-\d\d-\d\d$/.test(value))
+    return new Date(`${value}T00:00:00Z`).toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
   const date = new Date(value.endsWith("Z") || value.includes("+") ? value : value + "Z");
   return date.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
 }

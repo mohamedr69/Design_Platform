@@ -35,7 +35,7 @@ import os
 import re
 import time
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from stat import S_ISREG
 
@@ -280,6 +280,9 @@ def settle(db: Session, project: Project, dependent_type: str, dependent_id: str
 def _record_dict(record, root: Path) -> dict:
     data = asdict(record)
     data["modified"] = record.modified.isoformat()
+    # The sheet's own issue date (document_control.ControlledDocument.issued), as ISO text.
+    issued = data.get("issued")
+    data["issued"] = issued.isoformat() if hasattr(issued, "isoformat") else issued
     return data
 
 
@@ -1585,6 +1588,8 @@ def log_records(db: Session, project: Project) -> tuple[list, list[str]]:
         for data in extracted.get("records") or []:
             data = dict(data)
             data["modified"] = datetime.fromisoformat(data["modified"])
+            if isinstance(data.get("issued"), str):
+                data["issued"] = date.fromisoformat(data["issued"])
             if data.get("source") == "transmittal":
                 # Under the project's rules before they are numbered: the
                 # voice evacuation of an integrated Edwards fire alarm is the

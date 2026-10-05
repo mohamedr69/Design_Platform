@@ -31,7 +31,7 @@ from __future__ import annotations
 
 import logging
 import re
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy.orm import Session, selectinload
 
@@ -386,6 +386,9 @@ def _reconcile_system(db: Session, project: Project, system: str, records: list,
             if cell.get("path"):
                 revision.drawing_path, revision.drawing_page = cell["path"], cell.get("page") or 1
                 revision.drawing_sha256 = sha or revision.drawing_sha256
+                # The date the drawing standing for this revision says it was issued: a fact of that file, so
+                # it follows the file (None where the sheet gives none). `submitted_at` is left as it is.
+                revision.issued_on = _day(cell.get("issued"))
                 if cell.get("modified") and revision.submitted_at is None:
                     revision.submitted_at = _when(cell["modified"])
                 if revision.source_missing:
@@ -476,6 +479,16 @@ def _reconcile_system(db: Session, project: Project, system: str, records: list,
                rows, existing, floor_names, wanted_issues, in_system, aliases)
     db.flush()
     return counts
+
+
+def _day(value) -> date | None:
+    """An ISO date ("2026-09-10") as a date; None for none or for text that is not one."""
+    if isinstance(value, date):
+        return value
+    try:
+        return date.fromisoformat(str(value)) if value else None
+    except ValueError:
+        return None
 
 
 def _when(value) -> datetime | None:
@@ -723,6 +736,8 @@ def _cell(revision: ShopDrawingRevision, reference: str) -> dict:
         "source_missing": revision.source_missing,
         "submitted_at": revision.submitted_at.isoformat() if revision.submitted_at else None,
         "reply_at": revision.reply_at.isoformat() if revision.reply_at else None,
+        # The date the drawing says it was issued (its title block), "YYYY-MM-DD".
+        "issued_on": revision.issued_on.isoformat() if revision.issued_on else None,
     }
 
 

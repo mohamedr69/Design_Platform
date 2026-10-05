@@ -221,7 +221,9 @@ def _unplaced_row(record, *, floor: str | None = None, cells: dict | None = None
         state, label = STATUS.get(rec.status, STATUS["UR"])
         return {"revision": rec.revision, "status": state, "label": label, "reference": rec.reference,
                 "path": rec.path, "page": rec.page, "name": rec.name, "floor_named": rec.floor,
-                "remarks": rec.reply_text, "modified": rec.modified.isoformat() if rec.modified else None}
+                "remarks": rec.reply_text, "modified": rec.modified.isoformat() if rec.modified else None,
+                # The date the sheet says it was issued (its title block), not when it was filed.
+                "issued": rec.issued.isoformat() if getattr(rec, "issued", None) else None}
 
     if cells is not None:
         revisions = {rev: cell(rec) for rev, rec in sorted(cells.items(), key=lambda kv: _rev_number(kv[0]))}

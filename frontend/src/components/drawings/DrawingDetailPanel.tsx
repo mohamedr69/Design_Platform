@@ -135,12 +135,13 @@ export function DrawingDetailPanel({ projectId, drawingId, canEdit, summary, onC
             <>
               <Block title="Revision History">
                 <table className="w-full text-xs">
-                  <thead className="text-left text-gray-500"><tr><th className="py-1">Revision</th><th>Status</th><th>Submitted</th><th>Reply</th><th>File</th><th /></tr></thead>
+                  <thead className="text-left text-gray-500"><tr><th className="py-1">Revision</th><th>Status</th><th title="The date the sheet's own title block gives">Issued</th><th>Submitted</th><th>Reply</th><th>File</th><th /></tr></thead>
                   <tbody className="divide-y divide-gray-100">
                     {d.revision_history.map((r) => (
                       <tr key={r.revision}>
                         <td className="py-1.5 font-semibold">{r.revision}</td>
                         <td><Chip cell={r} /></td>
+                        <td>{day(r.issued_on)}</td>
                         <td>{day(r.submitted_at)}</td>
                         <td>{day(r.reply_at)}</td>
                         <td>{fileLink(r.path, r.page)}</td>
@@ -152,12 +153,12 @@ export function DrawingDetailPanel({ projectId, drawingId, canEdit, summary, onC
                     {available.map((c) => (
                       <tr key={c.id} className="text-indigo-800">
                         <td className="py-1.5 font-semibold">{c.revision}</td>
-                        <td colSpan={3}><span className="rounded border border-dashed border-indigo-300 px-2 py-0.5 text-[11px]">Candidate — not submitted</span></td>
+                        <td colSpan={4}><span className="rounded border border-dashed border-indigo-300 px-2 py-0.5 text-[11px]">Candidate — not submitted</span></td>
                         <td>{fileLink(c.path, c.page)}</td>
                         <td />
                       </tr>
                     ))}
-                    {d.revision_history.length === 0 && available.length === 0 && <tr><td colSpan={6} className="py-2 text-gray-500">No revision on record.</td></tr>}
+                    {d.revision_history.length === 0 && available.length === 0 && <tr><td colSpan={7} className="py-2 text-gray-500">No revision on record.</td></tr>}
                   </tbody>
                 </table>
                 {d.revision_history.some((r) => r.note) && (

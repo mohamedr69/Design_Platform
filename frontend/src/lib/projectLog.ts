@@ -3,6 +3,8 @@ import type { ProjectLogDrawing } from "./types";
 export interface LogRevision {
   title: string; reference: string; revision: string; status: string; groupReference?: string | null;
   path: string | null; system: string | null; updated: string; floor: string; page?: number; evidence?: string | null; source?: string;
+  /** The date the document itself says it was issued, where it says one (a drawing's title block). */
+  issued?: string | null;
 }
 export interface LogDocument { key: string; title: string; reference: string; revisions: LogRevision[] }
 
@@ -26,7 +28,8 @@ export function systemGroup(value: string | null, voiceEvacuationIntegrated = fa
 export function directoryRevision(file: ProjectLogDrawing): LogRevision {
   return { title: file.name, reference: file.reference ?? file.name, revision: file.revision ?? "R0",
     status: file.status ?? "UR", path: file.path, system: file.system_code, updated: file.modified,
-    floor: file.floor ?? "Not recorded", page: file.page, evidence: file.reply_text, source: file.source, groupReference: file.group_reference };
+    floor: file.floor ?? "Not recorded", page: file.page, evidence: file.reply_text, source: file.source, groupReference: file.group_reference,
+    issued: file.issued };
 }
 /** The Material Submittal Log as the backend sends it: one row per
  * submittal -- one per system and brand, from the register -- with its

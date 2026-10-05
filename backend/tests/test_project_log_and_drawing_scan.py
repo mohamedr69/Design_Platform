@@ -225,3 +225,103 @@ def test_another_trade_drawing_is_not_ours_to_log(tmp_path, a1):
                         "MEP SLAB OPENING LAYOUT", [("00", "06.02.2026", "ISSUED")],
                         **({"dx": 1500, "dy": 900, "size": (2384, 1684)} if a1 else {}))
     assert dc.scan_document_control(tmp_path, use_ocr=False)[0] == []
+
+
+# --- B3: the drawing's issue date, read from its own title block (rotated sheets too) -------------------------------
+
+def _sheet_on(path, runs, *, size=(3370, 2384), rotation=0):
+    """A drawing sheet whose text runs sit where the original's do -- (x, baseline y, text, font size) in display
+    coordinates -- on a page drawn with `rotation` (/Rotate), the way CAD exports a landscape sheet onto a portrait
+    page: the runs are laid down rotated, and the page's rotation turns them upright for the reader."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    width, height = size
+    with pymupdf.open() as document:
+        portrait = rotation in (90, 270)
+        page = document.new_page(width=height if portrait else width, height=width if portrait else height)
+        page.set_rotation(rotation)
+        for x, y, text, size_pt in runs:
+            page.insert_text(pymupdf.Point(x, y) * page.derotation_matrix, text, fontsize=size_pt, rotate=rotation)
+        document.save(path)
+    return path
+
+
+def _l58(drop_date_cell=False):
+    from .test_m2_review05 import L58_R01, L58_R01_BOXES
+
+    if not drop_date_cell:
+        return L58_R01
+    # The same sheet with no DATE cell: its label and the date under it taken out.
+    gone = {(3199, 2264), (3186, 2280)}
+    return [run for run, box in zip(L58_R01, L58_R01_BOXES) if (box[0], box[1]) not in gone]
+
+
+@pytest.mark.parametrize("rotation", [90, 270])
+def test_a_rotated_sheet_is_read_by_position_issue_date_included(tmp_path, rotation):
+    """BBY006 L58, the copy filed under R01 (M2 review 05's fixture), drawn on a rotated page: the title block is
+    read where the sheet shows it -- its number, its REV box, its history, its title -- and the DATE cell gives the
+    date the drawing says it was issued."""
+    path = _sheet_on(tmp_path / "04- Drawings" / "2.EML" / "R01" / "L58" / "BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf",
+                     _l58(), rotation=rotation)
+    with pymupdf.open(path) as pdf:
+        page = pdf[0]
+        assert page.rotation == rotation
+        raw = [line["dir"] for block in page.get_text("dict")["blocks"] for line in block.get("lines", [])]
+        assert raw and all(abs(dx) < 0.05 for dx, _dy in raw), "the runs really are set rotated on the page"
+    reading = _reading(path)
+    [record] = reading.records
+    assert record.reference == "BBY006-GME-SDW-EL-LI-ZZZ-L58-010042" and record.system_code == "ELS"
+    assert record.printed_revision == "00" and "revision_conflict" in record.flags
+    assert record.name == "L58 - RES 53 (TYP 3A) FLOOR PLAN EMERGENCY LIGHTING LAYOUT"
+    assert str(record.issued) == "2026-08-06", "the DATE cell, not the file's time"
+    [block] = [o for o in reading.observations if o["kind"] == "title_block"]
+    assert (block["issued"], block["issued_source"]) == ("2026-08-06", "date cell")
+
+
+def test_the_issue_date_is_the_date_cell_else_the_latest_date_of_the_revision_history(tmp_path):
+    from app.services import title_block as tb
+
+    from .test_m2_review05 import JAM_SD_FA_002, PAVA_00010
+
+    # No DATE cell: the latest date the sheet's revision history records (01, 21.08.2026).
+    [record] = _reading(_sheet_on(tmp_path / "L58.pdf", _l58(drop_date_cell=True))).records
+    assert str(record.issued) == "2026-08-21"
+    # The date under the "Date" label -- not the history's "Date" column header, whose row names Description.
+    with pymupdf.open(_sheet_on(tmp_path / "JAM.pdf", JAM_SD_FA_002, size=(2384, 1684))) as pdf:
+        block = tb.read_page(pdf[0])
+    assert (block.issued, block.issued_source) == (datetime(2024, 9, 10).date(), "date cell")
+    # "DATE : 28/08/2024": the value beside its label, on the label's row.
+    with pymupdf.open(_sheet_on(tmp_path / "PAVA.pdf", PAVA_00010, size=(2384, 1684))) as pdf:
+        block = tb.read_page(pdf[0])
+    assert (block.issued, block.issued_source) == (datetime(2024, 8, 28).date(), "date cell")
+
+
+def test_the_issue_date_is_stored_on_the_revision_beside_its_submission(client, db_session, tmp_path):
+    """The date reaches the record the Drawings page reads -- ShopDrawingRevision.issued_on -- and the page; the
+    revision's `submitted_at` (when it was filed) is not touched by it."""
+    from app.core.timeutils import utc_now
+    from app.models import Project, ShopDrawingRevision
+
+    folder = tmp_path / "EP-30860"
+    relative = "04- Drawings/2.EML/R01/L58/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf"
+    path = _sheet_on(folder / relative, _l58())
+    project_id = _project(client, folder, "30860")
+    [record] = _reading(path).records
+    stored = document_sync._record_dict(dc.replace(record, path=relative), folder)
+    assert stored["issued"] == "2026-08-06"
+    db_session.add(ProjectDocument(project_id=project_id, role="document", path=str(path), relative_path=relative,
+                                   filename=path.name, state="fresh", findings=[], acknowledged=[],
+                                   extracted={"records": [stored], "notes": []}))
+    db_session.get(Project, project_id).documents_synced_at = utc_now()
+    db_session.commit()
+
+    [row] = [r for r in client.get(f"/projects/{project_id}/drawings/log", params={"system": "ELS"}).json()["rows"]
+             if r["source"] == "shop_drawing"]
+    revisions = {r.revision: r for r in db_session.query(ShopDrawingRevision)}
+    assert str(revisions["R1"].issued_on) == "2026-08-06"
+    # R0 is proven by R1 and has no file of its own: no date is made up for it.
+    assert revisions["R0"].issued_on is None
+    # When it was filed stays the file's time: the issue date is beside it, not instead of it.
+    assert revisions["R1"].submitted_at == record.modified.replace(tzinfo=None)
+    assert row["revisions"]["R1"]["issued_on"] == "2026-08-06"
+    drawings = client.get(f"/projects/{project_id}/logs").json()["drawings"]
+    assert [d["issued"] for d in drawings] == ["2026-08-06"]

@@ -2,7 +2,7 @@
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field, replace
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 import os
@@ -421,7 +421,9 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # drawing-sized, not scanned, no title block read by position, not a form or
 # cover -- is no sheet under a report or calculation heading, or with no
 # sheet's words on it; kept as an observation ("not_a_sheet").
-PARSER_VERSION = "parse-2026-10-05.2"
+# parse-2026-10-05.3 (B3): a sheet read by position carries the date it says it
+# was issued (`issued`: its DATE cell, else its revision history's latest date).
+PARSER_VERSION = "parse-2026-10-05.3"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
@@ -755,6 +757,11 @@ class ControlledDocument:
     # hash, parser version, profile and time, None where unknown (M2 review
     # 03). Never restamped by a later envelope.
     retained: dict | None = None
+    # The date the sheet says it was issued: its title block's DATE cell, else
+    # the latest date of its revision history (title_block.TitleBlock.issued),
+    # for a sheet read by position. Not when it was submitted -- that is the
+    # register's (ShopDrawingRevision.submitted_at). Stored as ISO text.
+    issued: date | None = None
 
 
 # A submission's cover: the contractor's own form in front of the sheets
@@ -1442,7 +1449,8 @@ def parse_page(text: str, path: str, modified: datetime, page: int, sheet=None) 
     if candidate is not None and candidate.uncertain_start and not own:
         flags.append("reference_uncertain")
     return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page, category=category,
-                               printed_revision=printed, revision_source=revision_source, flags=tuple(flags))]
+                               printed_revision=printed, revision_source=revision_source, flags=tuple(flags),
+                               issued=sheet.issued if geometry else None)]
 
 
 def normalize_floor(value: str) -> str:
@@ -1618,14 +1626,15 @@ def _promote_default() -> bool:
 def observed_record(row: "ControlledDocument") -> dict:
     """A record held as an observation, as JSON stores it: the stored-record
     shape (document_sync._record_dict) with the datetime and the path as
-    text. `asdict` alone left `modified` a datetime and the row's JSON column
+    text. `asdict` alone left `modified` (and now `issued`) a date and the row's JSON column
     refused it -- 35 of 878 rows of the M2 review-01 clone repair failed on
     exactly that (every untracked-discipline cover and scanned transmittal),
     and the ordinary writer would have failed the same rows."""
     data = asdict(row)
-    modified = data.get("modified")
-    if hasattr(modified, "isoformat"):
-        data["modified"] = modified.isoformat()
+    for name in ("modified", "issued"):
+        value = data.get(name)
+        if hasattr(value, "isoformat"):
+            data[name] = value.isoformat()
     if data.get("path") is not None:
         data["path"] = str(data["path"])
     return data

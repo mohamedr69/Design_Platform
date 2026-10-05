@@ -1,10 +1,11 @@
 import enum
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from sqlalchemy import (
     JSON,
     Boolean,
+    Date,
     DateTime,
     Enum,
     ForeignKey,
@@ -2262,6 +2263,10 @@ class ShopDrawingRevision(Base):
     submitted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     submission_reference: Mapped[str | None] = mapped_column(String(160), nullable=True)
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    # The date the drawing itself says it was issued: its title block's DATE cell, else the latest date of its
+    # revision history (document_control.ControlledDocument.issued). The sheet's own fact, beside -- never
+    # instead of -- `submitted_at`, which is when the revision was submitted. None where the sheet gives none.
+    issued_on: Mapped[date | None] = mapped_column(Date(), nullable=True)
     reply_reference: Mapped[str | None] = mapped_column(String(160), nullable=True)
     reply_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
     reply_text: Mapped[str | None] = mapped_column(Text, nullable=True)
