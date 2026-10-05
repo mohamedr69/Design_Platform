@@ -414,3 +414,27 @@ def test_a_submission_whose_sheet_was_read_or_that_carries_no_sheet_says_nothing
     _pages(tmp_path / "b" / "form.pdf", [SUBMISSION])                      # a form filed on its own
     _rows, warnings = dc.scan_document_control(tmp_path, use_ocr=False)
     assert not [w for w in warnings if "logged from its form only" in w]
+
+
+def test_the_issue_date_column_migrates_up_and_down_cleanly(tmp_path):
+    """d4f6a8c0e2b4 adds ShopDrawingRevision.issued_on after the merge head and takes it away again, leaving no
+    rebuild table behind (a downgrade that fails further down the chain rolls the rebuild back with it)."""
+    from alembic import command
+    from alembic.config import Config
+    from sqlalchemy import create_engine, inspect
+
+    from app.migrations import ALEMBIC_INI
+
+    config = Config(str(ALEMBIC_INI))
+    engine = create_engine("sqlite:///" + (tmp_path / "migrate.db").as_posix())
+    with engine.begin() as connection:
+        config.attributes["connection"] = connection
+        command.upgrade(config, "head")
+        assert "issued_on" in {c["name"] for c in inspect(connection).get_columns("shop_drawing_revisions")}
+        command.downgrade(config, "b7d9f1a3c5e7")
+        tables = inspect(connection).get_table_names()
+        assert "issued_on" not in {c["name"] for c in inspect(connection).get_columns("shop_drawing_revisions")}
+        assert not [t for t in tables if t.startswith("_alembic_tmp")]
+        command.upgrade(config, "head")
+        assert "issued_on" in {c["name"] for c in inspect(connection).get_columns("shop_drawing_revisions")}
+    engine.dispose()
