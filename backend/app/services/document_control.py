@@ -113,6 +113,60 @@ def _open_pdf(path: Path):
         with open(name, "rb") as handle:
             return pymupdf.open(stream=handle.read(), filetype="pdf")
 
+
+def _walk_root(root: Path) -> str:
+    r"""The name to walk the folder by. Always the \\?\ name on Windows,
+    whatever the root's own length: `_os_path` prefixes only a path that is
+    already long, and the folders under a short root grow past the limit on
+    their own ("04- Drawings/08-Shop Drawing/1.FAVE/R1/04. Basement-1/..."),
+    where a walk from the plain name stops without a word. A UNC root takes
+    another prefix and is walked as it is."""
+    text = os.path.abspath(os.fspath(root))
+    if os.name != "nt" or text.startswith("\\\\"):
+        return text
+    return _LONG_PATH_PREFIX + text
+
+
+def walk_files(root: Path) -> tuple[list[Path], list[str]]:
+    r"""Every file under `root`, each as `root / its relative path` -- the
+    very name `root.rglob("*")` gave, so the index, which is keyed on it,
+    sees the same files under the same names -- and the folders that could
+    not be listed, relative to `root` ("." for the root itself).
+
+    `Path.rglob` walks by the plain name, and on a PC without Windows' long
+    path setting (this one: LongPathsEnabled = 0) a folder whose own path
+    passes about 248 characters cannot be opened that way: rglob swallows
+    the error and returns nothing from it -- not even a warning -- so every
+    drawing filed deep in the archive was simply missing from the scan. The
+    walk here runs from the \\?\ name (`_walk_root`), the way
+    app.interfaces.evidence._walk lists the FA interface folders, and a
+    folder it still cannot list (no permission, gone mid-walk) is named,
+    never dropped in silence. Not sorted: the callers keep their own order
+    (by path)."""
+    base = _walk_root(root)
+    unlisted: list[str] = []
+
+    def relative_parts(folder: str) -> list[str]:
+        rest = folder[len(base):] if folder.startswith(base) else ""
+        return [part for part in re.split(r"[\\/]+", rest) if part]
+
+    def onerror(exc: OSError) -> None:
+        failed = getattr(exc, "filename", None) or ""
+        parts = relative_parts(os.fspath(failed)) if failed else []
+        unlisted.append("/".join(parts) or ".")
+
+    files: list[Path] = []
+    for folder, _dirs, names in os.walk(base, onerror=onerror):
+        parts = relative_parts(folder)
+        for name in names:
+            files.append(root.joinpath(*parts, name))
+    return files, list(dict.fromkeys(unlisted))
+
+
+def unlisted_note(folder: str) -> str:
+    """The note a scan leaves for a folder it could not list."""
+    return f"Could not list the folder {folder}: the files in it were not read."
+
 def _tesseract():
     import pytesseract
 
@@ -2030,10 +2084,14 @@ def _scan_document_control(root: Path, use_ocr: bool = True, progress=None) -> t
     enabled = use_ocr and ocr_available()
     warnings = [] if enabled or not use_ocr else ["OCR is unavailable. Image-only documents or consultant stamps may need verification; no approval is assumed."]
     found = {}
-    # os.path.isfile through _os_path, not Path.is_file(), so a path over the
-    # Windows limit is still seen -- see _os_path.
+    # Listed from the long-path name (walk_files), so a folder past the
+    # Windows limit is read rather than silently missed, and one that cannot
+    # be listed at all is said; os.path.isfile through _os_path, not
+    # Path.is_file(), so a file over the limit is still seen -- see _os_path.
+    every, unlisted = walk_files(root)
+    warnings.extend(unlisted_note(folder) for folder in unlisted)
     paths = sorted(
-        path for path in root.rglob("*")
+        path for path in every
         if path.suffix.lower() == ".pdf" and os.path.isfile(_os_path(path))
     )
     for index, path in enumerate(paths):

@@ -87,16 +87,28 @@ class TooManyFilesError(SyncError):
 # --- the folder, cheaply -------------------------------------------------------------
 
 
-def listing(root: Path, progress=None) -> list[tuple[Path, str, int, float]]:
+def listing(root: Path, progress=None, unlisted: list[str] | None = None) -> list[tuple[Path, str, int, float]]:
     """(path, relative path, size, mtime) of every PDF under the folder, and
     of every Word document in a Transmittal folder -- a stat each, nothing
     opened. Word documents anywhere else are not the index's. `progress`,
     when given, is called with the count found so far every few files.
 
+    The folder is walked from its long-path name (document_control.
+    walk_files): a folder whose own path passes the Windows limit is listed
+    like any other -- `root.rglob` returned nothing from one, without a word,
+    and its drawings were reported removed. A folder that still cannot be
+    listed is added to `unlisted` (relative to the root) when the caller
+    passes one, and logged either way.
+
     More than `MAX_FILES` supported files is a `TooManyFilesError`, never a
     shortened list."""
     found = []
-    for path in root.rglob("*"):
+    every, failed = document_control.walk_files(root)
+    for folder in failed:
+        log.warning("Could not list %s under %s: its files are not in this listing", folder, root)
+    if unlisted is not None:
+        unlisted.extend(failed)
+    for path in every:
         relative = path.relative_to(root).as_posix()
         if path.suffix.lower() != ".pdf" and not transmittals.is_transmittal(relative):
             continue
@@ -1102,7 +1114,8 @@ def sync(db: Session, project: Project, *, user: User | None = None, ctx=None, p
             ctx.progress(count, 0, f"Discovering files — {count} found", phase="discovery")
 
     started = time.perf_counter()
-    files = listing(root, progress=discovered)
+    unlisted: list[str] = []
+    files = listing(root, progress=discovered, unlisted=unlisted)
     fingerprint = listing_fingerprint(files)
     telemetry.add("discovery", time.perf_counter() - started)
     if not db.query(ProjectDocument).filter(ProjectDocument.project_id == project.id,
@@ -1190,8 +1203,20 @@ def sync(db: Session, project: Project, *, user: User | None = None, ctx=None, p
             log.exception("Document classification hints could not be written for project %s", project.id)
             counts["classification_hints"] = 0
 
+    # A folder the walk could not list says nothing about the files in it:
+    # they are not marked removed on its account (and the sync says which
+    # folders those were), so a passing error never costs a drawing its
+    # history.
+    counts["unlisted_folders"] = list(unlisted)
+
+    def in_unlisted(row: ProjectDocument) -> bool:
+        relative = (row.relative_path or "").replace("\\", "/")
+        return any(folder == "." or relative.startswith(folder.rstrip("/") + "/") for folder in unlisted)
+
     for key, row in rows.items():
         if key in seen or row.role in INTAKE_ROLES or row.state == REMOVED:
+            continue
+        if in_unlisted(row):
             continue
         row.state = REMOVED
         row.last_seen_at = now
