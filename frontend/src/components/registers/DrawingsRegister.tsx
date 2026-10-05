@@ -234,6 +234,10 @@ function RegisterTableRow({ row, index, revisions, showSystem, selected, project
 }) {
   const clickable = row.drawing_id !== null;
   const cellBg = selected ? "bg-brand-50" : "bg-white";
+  // Each status opens the document it was read from: the revision's own
+  // file, at the page the reader took it off.
+  const fileHref = (path: string | null | undefined, page: number | undefined) =>
+    path ? apiUrl(`/projects/${projectId}/logs/file?path=${encodeURIComponent(path)}#page=${page ?? 1}`) : null;
   return (
     <tr className={`${selected ? "bg-brand-50" : "hover:bg-gray-50"} ${clickable ? "cursor-pointer" : ""}`} onClick={clickable ? onOpen : undefined}>
       <td className="px-3 py-2.5 text-gray-500">{index}</td>
@@ -253,14 +257,15 @@ function RegisterTableRow({ row, index, revisions, showSystem, selected, project
       {revisions.map((rev) => {
         const cell = row.cells[rev];
         const beyond = row.latest_revision === null || Number(rev.slice(1)) > Number(row.latest_revision.slice(1));
+        const blank = beyond && !cell.candidate;
         return (
           <td key={rev} className="px-2 py-2.5 text-center">
-            <Chip cell={cell} blank={beyond && !cell.candidate} />
+            <Chip cell={cell} blank={blank} href={blank || cell.candidate ? null : fileHref(cell.path, cell.page)} />
           </td>
         );
       })}
       <td className="px-3 py-2.5 text-center font-medium">{row.latest_revision ?? "–"}</td>
-      <td className="px-3 py-2.5"><Chip cell={{ status: row.latest_status, label: STATUS_LABEL[row.latest_status], path: row.latest_path }} blank={row.latest_revision === null} /></td>
+      <td className="px-3 py-2.5"><Chip cell={{ status: row.latest_status, label: STATUS_LABEL[row.latest_status], path: row.latest_path, revision: row.latest_revision ?? undefined }} blank={row.latest_revision === null} href={row.latest_revision === null ? null : fileHref(row.latest_path, row.latest_page)} /></td>
       <td className="px-3 py-2.5">
         <div className="flex flex-wrap gap-1">
           {row.hints.length === 0 ? <span className="text-gray-300">—</span> : row.hints.slice(0, 3).map((h, i) => <HintBadge key={i} hint={h} />)}

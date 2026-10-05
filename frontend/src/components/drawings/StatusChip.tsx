@@ -53,8 +53,11 @@ export function StatusIcon({ status, className = "h-4 w-4" }: { status: Status; 
 }
 
 /** One official status. A cell that is no official revision -- a file
- *  found, or nothing at all -- reads as a dash: never a status it has not got. */
-export function Chip({ cell, blank = false }: { cell: LogCell; blank?: boolean }) {
+ *  found, or nothing at all -- reads as a dash: never a status it has not got.
+ *  `href`: the document the status was read from; given one, the chip opens
+ *  it in a new tab, and the click goes no further -- a register row opens
+ *  its details panel on a click, and the chip is not asking for that. */
+export function Chip({ cell, blank = false, href = null }: { cell: LogCell; blank?: boolean; href?: string | null }) {
   if (cell.candidate) {
     return (
       <span
@@ -72,13 +75,21 @@ export function Chip({ cell, blank = false }: { cell: LogCell; blank?: boolean }
   const title = [cell.reference, cell.remarks, cell.note, cell.confirmed ? "Confirmed by an engineer" : null,
     cell.source_missing ? "Its file is no longer in the project folder" : null]
     .filter(Boolean).join("\n") || s.help;
-  return (
+  const chip = (
     <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${s.chip}`} title={title}>
       <StatusIcon status={cell.status} className="h-3.5 w-3.5" />
       {STATUS_LABEL[cell.status]}
       {cell.confirmed && <span aria-label="Confirmed by an engineer" title="Confirmed by an engineer">✎</span>}
       {cell.source_missing && <span aria-label="File missing" title="Its file is no longer in the project folder">⚠</span>}
     </span>
+  );
+  if (!href) return chip;
+  return (
+    <a href={href} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
+      aria-label={`${STATUS_LABEL[cell.status]}: open the document${cell.revision ? ` of ${cell.revision}` : ""}`}
+      className="inline-flex rounded-md hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-500">
+      {chip}
+    </a>
   );
 }
 
