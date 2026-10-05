@@ -426,7 +426,9 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # parse-2026-10-05.4 (B5): the revision a sheet's history ends at is kept
 # beside its REV box (`history_revision`), so a conflict between them reaches
 # the drawing log.
-PARSER_VERSION = "parse-2026-10-05.4"
+# parse-2026-10-05.5 (C1): a drawing submission form whose sheets could not
+# be read names itself in the reading's notes ("logged from its form only").
+PARSER_VERSION = "parse-2026-10-05.5"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
@@ -1843,6 +1845,10 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
         # What the file is, once its first submission form says so (B1:
         # "submittals" or "samples"); None until then.
         file_category: str | None = None
+        # C1: whether the file holds a drawing submission's form or cover, whether any sheet of it was read (a
+        # title block by position, a drawing record off a page that is no form, another trade's sheet), and
+        # whether a page behind the form gave nothing.
+        drawing_form_seen = sheet_read = unread_behind = False
         for index, page in enumerate(pdf):
             number = index + 1
             # A catalogue/specification is not a register: a file that has
@@ -1863,6 +1869,7 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
             try:
                 text = page_text(page, index, page_texts)
                 sheet = _sheet_of(page, text, number, observations)
+                sheet_read = sheet_read or sheet is not None
                 with timed("deterministic_extract"):
                     # Passed only where a title block was read: `parse_page` is a seam tests replace.
                     found = parse_page(text, filename, modified, number, **({"sheet": sheet} if sheet is not None else {}))
@@ -2013,6 +2020,12 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     sheet = untracked_sheet_observation(text)
                     if sheet is not None:
                         observations.append({"page": number, **sheet})
+                        sheet_read = True
+                if any(r.category == "drawings" and r.source == "document" for r in found):
+                    if SUBMISSION_FORM.search(text) or submission_cover(text) is not None:
+                        drawing_form_seen = True
+                    else:
+                        sheet_read = True
                 if found and pending is not None and all(r.category == "reply" for r in found) \
                         and _answers(records[pending], found[0]):
                     # The reply behind a submission, naming the sheets it covers:
@@ -2055,8 +2068,10 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     # datasheet, a certificate, a drawing sheet. Kept in the
                     # ledger as visited; nothing is made of it here.
                     pending = None
+                    unread_behind = unread_behind or drawing_form_seen
                 else:
                     pending = None
+                    unread_behind = unread_behind or drawing_form_seen
             except OSError:
                 raise
             except Exception as exc:  # noqa: BLE001 -- this page failed the reader: recorded; the pages before it stand
@@ -2071,6 +2086,12 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
         warnings.extend(open_failure_notes(path, exc))
         skipped.extend({"page": n, "reason": "file unavailable"} for n in range(len(visited) + 1, total + 1) if n not in visited)
         stop_reason = "unavailable"
+    # A drawing submission whose sheets could not be read is said out loud: its
+    # form is logged, and silence about the rest read as "nothing was
+    # submitted" (branch 8ff68cb). Only where something was bound in behind
+    # the form and gave nothing -- a form filed on its own has no sheet to miss.
+    if drawing_form_seen and not sheet_read and unread_behind:
+        warnings.append(f"{path.name}: {FORM_ONLY}")
     if stop_reason == "unavailable":
         outcome = "unavailable"
     elif failed or ocr_failed:
@@ -2171,6 +2192,8 @@ def _answers(submission: ControlledDocument, reply: ControlledDocument) -> bool:
 # (document_sync.file_status): what kind of trouble each is, and what to say.
 NOT_DOWNLOADED = "is not downloaded from OneDrive"
 UNREADABLE = "Could not read "
+# A drawing submission logged from its form alone (C1): "<file>: " + this.
+FORM_ONLY = "no drawing title block could be read in this submission; it is logged from its form only."
 
 
 def describe_note(note: str) -> tuple[str, str]:
@@ -2191,6 +2214,9 @@ def describe_note(note: str) -> tuple[str, str]:
         return "partial", "Only the first 12 pages were checked for consultant replies."
     if note.startswith("OCR limit reached"):
         return "partial", "Only the first 12 scanned pages were OCRed; some replies may need verification."
+    if note.endswith(FORM_ONLY):
+        return "partial", ("No drawing title block could be read behind the submission form: the submission is "
+                           "logged from its form only, and its sheets are not in the drawings log.")
     return "partial", note
 
 

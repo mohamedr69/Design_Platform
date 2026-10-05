@@ -388,3 +388,29 @@ def test_the_conflict_reaches_the_revision_note_and_an_issue_keyed_by_drawing_an
     assert issue.severity == "warning" and issue.shop_drawing_id == drawing.id
     assert any(h["kind"] == "title_block_revision_conflict" and h["label"] == "Title block revision conflict"
                for h in row["hints"])
+
+
+# --- C1: a drawing submission whose sheets could not be read says so -------------------------------------------------
+
+SUBMISSION = ("Shop Drawings Submittal Form\nSDW Reference No.: BBY006-GME-SDW-FP-FA-0007\nSDW Rev.: 00\n"
+              "Shop drawing for Fire Alarm Ground Floor\nConsultant status: Approved")
+
+
+def test_a_submission_whose_drawings_could_not_be_read_names_itself(tmp_path):
+    """A submission form with a sheet behind it that gives nothing (a scan, here, with OCR off): the form is logged,
+    and the scan says the sheets were not read -- before, the log showed the form and silence."""
+    _pages(tmp_path / "sub.pdf", [SUBMISSION, ""])
+    rows, warnings = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert [(r.category, r.reference, r.status) for r in rows] == [("drawings", "BBY006-GME-SDW-FP-FA-0007", "approved")]
+    [note] = [w for w in warnings if "logged from its form only" in w]
+    assert note == "sub.pdf: no drawing title block could be read in this submission; it is logged from its form only."
+    # File Sync shows the file as partially read, and why.
+    kind, reason = dc.describe_note(note)
+    assert kind == "partial" and "logged from its form only" in reason
+
+
+def test_a_submission_whose_sheet_was_read_or_that_carries_no_sheet_says_nothing(tmp_path):
+    _pages(tmp_path / "a" / "package.pdf", [SUBMISSION, DRAWING])          # its sheet was read
+    _pages(tmp_path / "b" / "form.pdf", [SUBMISSION])                      # a form filed on its own
+    _rows, warnings = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert not [w for w in warnings if "logged from its form only" in w]
