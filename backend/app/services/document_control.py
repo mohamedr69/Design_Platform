@@ -417,7 +417,11 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # parse-2026-10-05.1 (branch g/project-log-and-drawing-scan, B1): the first
 # submittal or sample form in a file settles what the file is; a form of the
 # other kind bound in behind it is an observation ("bound_form"), not a row.
-PARSER_VERSION = "parse-2026-10-05.1"
+# parse-2026-10-05.2 (B4): a small text page read as a drawing -- not
+# drawing-sized, not scanned, no title block read by position, not a form or
+# cover -- is no sheet under a report or calculation heading, or with no
+# sheet's words on it; kept as an observation ("not_a_sheet").
+PARSER_VERSION = "parse-2026-10-05.2"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
@@ -1646,6 +1650,61 @@ def untracked_sheet_observation(text: str) -> dict | None:
     return {"kind": "drawing_sheet", "reference": reference, "raw_system": raw_system_of(reference, text[:400])}
 
 
+# A report is not a drawing (B4). A lux or photometric report, a battery or
+# voltage-drop calculation, an A4 note quoting "Drawing No: …-SDW-EL-LI-…" is
+# filed beside the sheets and quotes their numbers and titles -- and the text
+# reader, which recognises a sheet by exactly those words, made a drawing of
+# it (EP-30784's lux reports sat in the Drawings Log as ELS drawings). A sheet
+# is drawing-sized, or scanned, or read by its title block's geometry, or it
+# is a submission's form or cover (kept on purpose, M2); a small text page
+# that is none of these is a drawing only where it carries a sheet's own
+# words and no report heading over them.
+_REPORT_HEADING = re.compile(r"\b(?:LUX|ILLUMINANCE|PHOTOMETRIC|CALCULATIONS?|CALC|REPORT|DATA\s*SHEET|DATASHEET)\b", re.I)
+# A line that names another document rather than heading this one ("Refer to the lux report").
+_NAMES_ANOTHER = re.compile(r"\b(?:refer|see|as\s+per|attached|enclosed|ref\.?)\b", re.I)
+# A sheet's own words: its title block's labels.
+_SHEET_SIGNAL = re.compile(r"drawing\s*(?:title|no\b|number)|\bdwg\.?\s*no\b|shop\s*drawing|\bscale\b|\bdrawn\b|\bchecked\b",
+                           re.I)
+REPORT_HEAD_LINES = 5        # the lines a heading is looked for in: the top of the page
+
+
+def not_a_sheet(text: str) -> str | None:
+    """Why a small text page read as a drawing is not one, or None: a report
+    or calculation heading at the top of the page (one of its first
+    `REPORT_HEAD_LINES` lines, short, a heading rather than a sentence naming
+    another document), or no sheet's word on it at all. Only asked of a page
+    that is not drawing-sized, not scanned, not read by its title block's
+    geometry and not a submission form or cover (`read_open_pdf`)."""
+    head = [line.strip() for line in text.splitlines() if line.strip()][:REPORT_HEAD_LINES]
+    for line in head:
+        if len(line.split()) <= 8 and _REPORT_HEADING.search(line) and not _SHEET_SIGNAL.search(line) \
+                and not _NAMES_ANOTHER.search(line):
+            return f"a report heading: {line}"
+    if not _SHEET_SIGNAL.search(text):
+        return "no drawing title block words on the page"
+    return None
+
+
+def _drop_reports(found: list, text: str, number: int, small_text_page: bool, observations: list) -> list:
+    """`found` without the drawing records of a page that is no sheet (`not_a_sheet`), each kept as a
+    "not_a_sheet" observation of the page (once, however often the page is parsed). Only a small text page
+    (not drawing-sized, not scanned, no title block read by position) is asked, and a submission's form or
+    cover never is: those stay drawings, as M2 has them."""
+    if not small_text_page or not found:
+        return found
+    drawings = [row for row in found if row.category == "drawings" and row.source == "document"]
+    if not drawings or SUBMISSION_FORM.search(text) or submission_cover(text) is not None:
+        return found
+    why = not_a_sheet(text)
+    if why is None:
+        return found
+    seen = {(o.get("page"), (o.get("record") or {}).get("reference")) for o in observations if o.get("kind") == "not_a_sheet"}
+    for row in drawings:
+        if (number, row.reference) not in seen:
+            observations.append({"page": number, "kind": "not_a_sheet", "reason": why, "record": observed_record(row)})
+    return [row for row in found if all(row is not d for d in drawings)]
+
+
 def _candidates_of(marks: list[dict]) -> tuple:
     return tuple((m["status"], m["label"], m["method"]) for m in marks)
 
@@ -1740,6 +1799,8 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
     of: a sheet of an untracked discipline, a scanned transmittal or a
     decision method not promoted (`promote`), the marks it held back.
     """
+    from app.services import title_block as title_block_reader
+
     records, warnings, observations = [], [], []
     path = Path(filename)
     clock = stage_clock()
@@ -1786,6 +1847,9 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                 with timed("deterministic_extract"):
                     # Passed only where a title block was read: `parse_page` is a seam tests replace.
                     found = parse_page(text, filename, modified, number, **({"sheet": sheet} if sheet is not None else {}))
+                # A report quoting a drawing's number is not the drawing (B4): asked of a small text page only.
+                small_text_page = len(text.strip()) >= 80 and sheet is None and not title_block_reader.is_drawing_sheet(page)
+                found = _drop_reports(found, text, number, small_text_page, observations)
                 # The approval block lists every option and fills the box
                 # beside the one chosen. As text that is a list of choices
                 # and settles nothing -- rightly, since a list is not an
@@ -1891,6 +1955,8 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     else:
                         warnings.append(f"OCR limit reached in {path.name}; some replies may need verification.")
                         ocr_skipped.append(number)
+                # What OCR added is a record like the page's own: a report is still not a sheet.
+                found = _drop_reports(found, text, number, small_text_page, observations)
                 # Every decision candidate the page gave -- its text, its marks,
                 # its OCR -- settled together, once (M2 review 02, B).
                 if found:

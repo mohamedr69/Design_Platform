@@ -149,3 +149,79 @@ def test_a_material_sample_tag_citing_its_submittal_is_still_one_sample(tmp_path
     _pages(tmp_path / "tag.pdf", [tag, "SAMPLE PHOTO"])
     rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
     assert [(r.category, r.reference) for r in rows] == [("samples", "R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020")]
+
+
+# --- B4: a report quoting a drawing's number is not the drawing ------------------------------------------------------
+
+LUX_REPORTS = [
+    # quoting a controlled drawing number, as the EP-30784 lux reports do
+    "LUX CALCULATION REPORT\nDrawing No: BBY006-GME-SDW-EL-LI-ZZZ-L03-010012\n"
+    "Drawing Title: L03 FLOOR PLAN EMERGENCY LIGHTING LAYOUT\nAverage illuminance 1.2 lux",
+    # quoting a plain drawing number
+    "LUX LEVEL REPORT\nDrawing No: EL-103 LEVEL 3\nTitle: EMERGENCY LIGHTING LUX LEVELS L03\nMinimum 1 lux",
+    # a calculation sheet
+    "BATTERY CALCULATION\nDrawing No: BBY006-GME-SDW-FP-FA-ZZZ-ZZZ-010099\nDrawing Title: FIRE ALARM PANEL FP-01\n"
+    "Standby 24 h, alarm 30 min",
+]
+
+
+@pytest.mark.parametrize("text", LUX_REPORTS)
+def test_a_lux_report_or_calculation_quoting_a_drawing_is_not_a_drawing(tmp_path, text):
+    """An A4 report filed with the sheets quotes their number and title, which is all the text reader looked for:
+    EP-30784's lux reports sat in the Drawings Log as emergency lighting drawings. The report heading over it says
+    what the page is; it is kept as an observation of the page, never a drawing record."""
+    path = _pages(tmp_path / "04- Drawings" / "2.EML" / "R0" / "lux.pdf", [text])
+    rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert [r for r in rows if r.category == "drawings"] == []
+    [seen] = [o for o in _reading(path).observations if o["kind"] == "not_a_sheet"]
+    assert seen["page"] == 1 and seen["record"]["category"] == "drawings" and seen["reason"].startswith("a report heading")
+
+
+def test_a_small_text_sheet_a_submission_cover_and_a_scanned_sheet_are_still_drawings(tmp_path, monkeypatch):
+    """Regression (the M2 design keeps these): an A4 text sheet carrying a title block's words, a shop drawing
+    submission cover and a scanned sheet read through OCR stay drawings -- only a report heading, or a page with no
+    sheet's word on it, is turned away."""
+    cover = ("SHOP DRAWING SUBMITTAL\nNo: ABC-XYZ-SPM-SD-MEP-FA-0054\nRev: 01\nsubmitting herewith\nDRAWING & DESIGN REF\n"
+             "ABC-XYZ-SPM-SD-MEP/FA-104\nGROUND FLOOR FIRE ALARM LAYOUT\nSubmitted By:\nReceived By:\n")
+    _pages(tmp_path / "a" / "sheet.pdf", [DRAWING])
+    _pages(tmp_path / "b" / "cover.pdf", [cover])
+    _pages(tmp_path / "c" / "Shop Drawing scan.pdf", [""])
+    monkeypatch.setattr(dc, "ocr_available", lambda: True)
+    monkeypatch.setattr(dc, "_ocr_page", lambda page, image=None: DRAWING.replace("B01-010001", "B02-010002")
+                        .replace("BASEMENT-1", "BASEMENT-2"))
+    rows, _ = dc.scan_document_control(tmp_path)
+    assert sorted(r.reference for r in rows if r.category == "drawings") == [
+        "ABC-XYZ-SPM-SD-MEP-FA-0054", "BBY006-GME-SDW-FP-FA-BSM-B01-010001", "BBY006-GME-SDW-FP-FA-BSM-B02-010002"]
+
+
+def _branch_title_block(path, number, title, layout, history, box_revision="00", dx=0, dy=0, size=(900, 900)):
+    """The branch's sheet (2e7b061 test_document_control.title_block): labels, then the values -- optionally moved
+    onto an A1 sheet, where the merged reader reads the title block by position."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with pymupdf.open() as doc:
+        page = doc.new_page(width=size[0], height=size[1])
+        put = lambda x, y, t: page.insert_text((x + dx, y + dy), t)  # noqa: E731
+        put(400, 300, "Rev  Date  Description")
+        for index, (revision, date, note) in enumerate(history):
+            put(400, 320 + index * 20, f"{revision}  {date}  {note}")
+        put(400, 600, "Purpose of Issue:")
+        put(400, 620, "DRAWING TITLE")
+        put(410, 645, title)
+        put(410, 665, layout)
+        for offset, label in enumerate(["SCALE", "DRAWN", "CHECKED", "DATE", "SIZE", "REV. NO."]):
+            put(400 + offset * 70, 700, label)
+        issued = history[-1][1] if history else "06.08.2026"
+        for offset, value in enumerate(["1:100", "IS", "RAMADAN", issued, "A0", box_revision]):
+            put(400 + offset * 70, 720, value)
+        put(400, 760, number)
+        doc.save(path)
+
+
+@pytest.mark.parametrize("a1", [False, True], ids=["branch-sheet", "a1-sheet"])
+def test_another_trade_drawing_is_not_ours_to_log(tmp_path, a1):
+    """Regression, ported from the branch: an MEP slab-opening layout filed with ours is not a drawing of a system we
+    track -- on the A1 sheet too, where the title block is read by position."""
+    _branch_title_block(tmp_path / "slab.pdf", "BBY006-GME-SDW-ME-BL-ZZZ-L03-010099", "LEVEL 03 FLOOR PLAN",
+                        "MEP SLAB OPENING LAYOUT", [("00", "06.02.2026", "ISSUED")],
+                        **({"dx": 1500, "dy": 900, "size": (2384, 1684)} if a1 else {}))
+    assert dc.scan_document_control(tmp_path, use_ocr=False)[0] == []
