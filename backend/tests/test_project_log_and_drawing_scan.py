@@ -100,3 +100,52 @@ def test_a_folder_that_cannot_be_listed_is_named_not_dropped(tmp_path, monkeypat
     assert unlisted == ["locked"]
     _rows, warnings = dc.scan_document_control(root, use_ocr=False)
     assert dc.unlisted_note("locked") in warnings
+
+
+# --- B1: the first form in a file settles what the file is ----------------------------------------------------------
+
+SAMPLE = ("Sample Approval Form\nSAF Reference No.: BBY006-GME-SAR-EL-FA-0001\nSAF Rev.: 00\n"
+          "Sample Approval Request for Fire Alarm & Voice Evacuation System")
+
+
+def _reading(path):
+    with pymupdf.open(path) as pdf:
+        return dc.read_open_pdf(pdf, str(path), NOW, False, None, full=True)
+
+
+def test_a_form_bound_into_another_submission_is_not_a_submission(tmp_path):
+    """The branch's test, on the merged reader: a sample board's submission carries the material submittal it was
+    approved under as backup, behind the board's photo. That form is part of the sample's file, not a second
+    submittal -- it is kept as an observation of the page, with the record it would have been."""
+    _pages(tmp_path / "sample.pdf", [SAMPLE, "SAMPLE BOARD PHOTO", FORM])
+    rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
+    row, = rows
+    assert (row.category, row.reference) == ("samples", "BBY006-GME-SAR-EL-FA-0001")
+    reading = _reading(tmp_path / "sample.pdf")
+    [bound] = [o for o in reading.observations if o["kind"] == "bound_form"]
+    assert (bound["page"], bound["settled_by"]) == (3, "samples")
+    assert (bound["record"]["category"], bound["record"]["reference"]) == ("submittals", "BBY006-GME-MAS-EL-FA-0001")
+
+
+def test_a_sample_form_bound_behind_a_material_submittal_is_backup_too(tmp_path):
+    _pages(tmp_path / "mas.pdf", [FORM, "DATASHEET - SMOKE DETECTOR", SAMPLE])
+    rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert [(r.category, r.reference) for r in rows] == [("submittals", "BBY006-GME-MAS-EL-FA-0001")]
+
+
+def test_two_forms_of_one_kind_in_one_file_are_both_submissions(tmp_path):
+    """Only a form of the *other* kind is backup: a file carrying two material submittals carries two."""
+    second = FORM.replace("FA-0001", "FA-0002").replace("Fire Alarm", "Fire Alarm Sounders")
+    _pages(tmp_path / "two.pdf", [FORM, second])
+    rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert sorted(r.reference for r in rows) == ["BBY006-GME-MAS-EL-FA-0001", "BBY006-GME-MAS-EL-FA-0002"]
+
+
+def test_a_material_sample_tag_citing_its_submittal_is_still_one_sample(tmp_path):
+    """Regression (merged numbering, M2 review 05): a CSCEC material sample tag prints the material submittal it
+    belongs to (MAR); the tag is a sample, and the MAR it cites is neither a second row nor what settles the file."""
+    tag = ("R1029-CSCEC-FM-MAR-001_R01 \nVersion Date \nMaterial Sample TAG\nR1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-\nZZZ-1020 \n"
+           "Material Submittal Reference\nR1029-CSM-CO-ELV-EL-MAR-PJW-ZZZ-\nZZZ-1009 \nProject\nR1029 \nEngineer's Comments:\n")
+    _pages(tmp_path / "tag.pdf", [tag, "SAMPLE PHOTO"])
+    rows, _ = dc.scan_document_control(tmp_path, use_ocr=False)
+    assert [(r.category, r.reference) for r in rows] == [("samples", "R1029-CSM-CO-ELV-EL-MTG-PJW-ZZZ-ZZZ-1020")]

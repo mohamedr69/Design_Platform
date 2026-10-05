@@ -59,5 +59,6 @@ def test_p04_mat_is_a_material_submittal_code():
 
 
 def test_parser_identity_moved_with_the_pilot_fixes():
-    # .5 carried the four pilot fixes; .6 the review-05 title-block and reference-role rules (the fixes stay in force).
-    assert dc.PARSER_VERSION == "parse-2026-09-28.6"
+    # .5 carried the four pilot fixes; .6 the review-05 title-block and reference-role rules (the fixes stay in force);
+    # parse-2026-10-05.* the rules ported from g/project-log-and-drawing-scan, on top of them.
+    assert dc.PARSER_VERSION == "parse-2026-10-05.1"

@@ -412,7 +412,12 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # covers and scanned transmittals are promoted to records only on the
 # evaluation path (EXTRACTION_PROMOTE_OBSERVATIONS), else kept as
 # observations; a reference cut at a hyphen is flagged incomplete.
-PARSER_VERSION = "parse-2026-09-28.6"
+# parse-2026-09-28.5 / .6: the pilot fixes; the review-05 title-block and
+# reference-role rules.
+# parse-2026-10-05.1 (branch g/project-log-and-drawing-scan, B1): the first
+# submittal or sample form in a file settles what the file is; a form of the
+# other kind bound in behind it is an observation ("bound_form"), not a row.
+PARSER_VERSION = "parse-2026-10-05.1"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
@@ -667,6 +672,30 @@ SUBMISSION_FORM = re.compile(
     r"|shop\s*drawing\s+(?:submittal\s+)?form|SDW\s+Reference\s+No|SDW\s+Rev|SDW\.?\s+Ref\.?\s+No",
     re.I,
 )
+
+# What a file of submittals or samples is, the first form in it says: the
+# rest of the file is what that form submits, and a form of the other kind
+# bound in behind it is backup -- the material submittal a sample board was
+# approved under, filed with the board (EP-30784's FA sample, branch
+# g/project-log-and-drawing-scan). A form is the page carrying the form's
+# own labels or heading, in any contractor's numbering the reader knows --
+# GME's "MAS Reference No" and subject line, a CSCEC material sample tag,
+# an Emaar / Voltas material approval request, a contractor's cover --
+# never a page that merely quotes a number.
+_FORM_CATEGORIES = ("submittals", "samples")
+_FORM_HEADING = re.compile(
+    r"materials?\s+submittal\s+(?:for|form)\b|sample\s+approval\s+(?:request\s+)?(?:for|form)\b"
+    r"|materials?\s+approval\s+request|material\s+sample\s+tag",
+    re.I,
+)
+
+
+def _is_form_record(row: "ControlledDocument", text: str) -> bool:
+    """Whether a record is a submittal or sample read off the form itself:
+    the page that settles, or is settled by, what its file is (B1)."""
+    if row.source != "document" or row.category not in _FORM_CATEGORIES:
+        return False
+    return bool(SUBMISSION_FORM.search(text) or _FORM_HEADING.search(text) or submission_cover(text) is not None)
 
 @dataclass(frozen=True)
 class ControlledDocument:
@@ -1731,6 +1760,9 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
             clock.set("page_count", total)
         pending = None
         ocr_count = 0
+        # What the file is, once its first submission form says so (B1:
+        # "submittals" or "samples"); None until then.
+        file_category: str | None = None
         for index, page in enumerate(pdf):
             number = index + 1
             # A catalogue/specification is not a register: a file that has
@@ -1876,6 +1908,22 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     if held:
                         observations.extend({"page": number, "kind": "cover_untracked", "record": observed_record(row)} for row in held)
                         found = [row for row in found if row not in held]
+                # The first submission form in a file settles what the file is
+                # (a material submittal or a sample); a form of the other kind
+                # further in is bound in behind it -- a sample board's own
+                # material submittal, filed as its backup -- and is kept as
+                # an observation, never a second register row.
+                bound_page = False
+                forms = [row for row in found if _is_form_record(row, text)]
+                if forms and file_category is None:
+                    file_category = forms[0].category
+                elif forms:
+                    bound = [row for row in forms if row.category != file_category]
+                    if bound:
+                        observations.extend({"page": number, "kind": "bound_form", "settled_by": file_category,
+                                             "record": observed_record(row)} for row in bound)
+                        found = [row for row in found if all(row is not b for b in bound)]
+                        bound_page = not found
                 if not found and not scan:
                     sheet = untracked_sheet_observation(text)
                     if sheet is not None:
@@ -1898,6 +1946,10 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                 elif found:
                     records.extend(found)
                     pending = len(records) - 1 if len(found) == 1 and found[0].source == "document" else None
+                elif bound_page:
+                    # A bound-in form is backup: its consultant block answers
+                    # its own submission, never the form in front of it.
+                    pending = None
                 elif pending is not None and re.search(r"consultant.*(?:comment|reply|review)|review\s*status", text, re.I):
                     # An attached reply without a different reference belongs to the preceding form.
                     references = REF.findall(text)
