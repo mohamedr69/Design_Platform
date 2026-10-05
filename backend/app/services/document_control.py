@@ -423,7 +423,10 @@ def _ocr_regions_text(page, regions, sha256: str | None, index: int, renders: di
 # sheet's words on it; kept as an observation ("not_a_sheet").
 # parse-2026-10-05.3 (B3): a sheet read by position carries the date it says it
 # was issued (`issued`: its DATE cell, else its revision history's latest date).
-PARSER_VERSION = "parse-2026-10-05.3"
+# parse-2026-10-05.4 (B5): the revision a sheet's history ends at is kept
+# beside its REV box (`history_revision`), so a conflict between them reaches
+# the drawing log.
+PARSER_VERSION = "parse-2026-10-05.4"
 
 # The codes a controlled document's reference carries. Contractors number
 # them their own way: MAS and MAR are both a material submittal (material
@@ -762,6 +765,12 @@ class ControlledDocument:
     # for a sheet read by position. Not when it was submitted -- that is the
     # register's (ShopDrawingRevision.submitted_at). Stored as ISO text.
     issued: date | None = None
+    # The revision the sheet's revision history ends at, as printed, beside the
+    # REV box's (`printed_revision`). Where the two disagree the record is
+    # flagged "revision_conflict" and neither is taken (M2 review 05, R5-01);
+    # both are kept so the log can say so (drawing_log,
+    # "title_block_revision_conflict").
+    history_revision: str | None = None
 
 
 # A submission's cover: the contractor's own form in front of the sheets
@@ -1450,7 +1459,8 @@ def parse_page(text: str, path: str, modified: datetime, page: int, sheet=None) 
         flags.append("reference_uncertain")
     return [ControlledDocument(code, title, path, modified, reference, revision, decision, floor, evidence, page, category=category,
                                printed_revision=printed, revision_source=revision_source, flags=tuple(flags),
-                               issued=sheet.issued if geometry else None)]
+                               issued=sheet.issued if geometry else None,
+                               history_revision=sheet.history_latest if geometry else None)]
 
 
 def normalize_floor(value: str) -> str:

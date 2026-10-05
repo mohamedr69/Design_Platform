@@ -25,6 +25,10 @@ KINDS = {
     "submission_missing": ("Submission evidence missing", WARNING),
     "reference_conflict": ("Drawing reference conflict", ERROR),
     "revision_conflict": ("Duplicate revision", ERROR),
+    # The sheet's title block contradicts itself: its REV box and its revision history name two revisions
+    # (document_control flag "revision_conflict"; neither is taken). One issue per drawing revision, keyed
+    # "{system}:title_block_revision_conflict:{drawing id}:{revision}" like every hint the log raises.
+    "title_block_revision_conflict": ("Title block revision conflict", WARNING),
     "system_mismatch": ("System mismatch", ERROR),
     "floor_unknown": ("Unknown floor", WARNING),
     "floor_not_in_ifc": ("Floor missing from latest IFC", WARNING),

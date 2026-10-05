@@ -325,3 +325,66 @@ def test_the_issue_date_is_stored_on_the_revision_beside_its_submission(client, 
     assert row["revisions"]["R1"]["issued_on"] == "2026-08-06"
     drawings = client.get(f"/projects/{project_id}/logs").json()["drawings"]
     assert [d["issued"] for d in drawings] == ["2026-08-06"]
+
+
+# --- B5: a REV box and a revision history that disagree are said in the log -----------------------------------------
+
+L58_RELATIVE = "04- Drawings/2.EML/R01/L58/BBY006-GME-SDW-EL-LI-ZZZ-L58-010042.pdf"
+
+
+def test_the_log_says_when_the_rev_box_and_the_revision_history_disagree(tmp_path):
+    """BBY006 L58 R01 prints REV. NO. 00 over a revision history whose latest row is 01. The reader takes neither
+    (M2 review 05, R5-01) -- the revision comes from the R01 folder -- and the log now says why, in a hint of its
+    own kind (not "revision_conflict", which is two files for one revision) and in the revision's note."""
+    from app.services import drawing_log
+
+    [record] = _reading(_sheet_on(tmp_path / L58_RELATIVE, _l58())).records
+    assert (record.printed_revision, record.history_revision, record.revision) == ("00", "01", "R1")
+    built = drawing_log.build([], [record], in_system=lambda code: code == "ELS")
+    [row] = [r for r in built["rows"] if r["source"] == "shop_drawing"]
+    [hint] = [h for h in row["hints"] if h["kind"] == "title_block_revision_conflict"]
+    assert hint["revision"] == "R1" and hint["severity"] == "warning"
+    assert "REV box prints 00" in hint["note"] and "history ends at 01" in hint["note"] and "folder" in hint["note"]
+    assert row["revisions"]["R1"]["note"] == hint["note"]
+    assert not [h for h in row["hints"] if h["kind"] == "revision_conflict"]
+
+
+def test_a_sheet_whose_rev_box_and_history_agree_raises_nothing(tmp_path):
+    from app.services import drawing_log
+
+    from .test_m2_review05 import PAVA_00010
+
+    [record] = _reading(_sheet_on(tmp_path / "PAVA" / "AKA-BKG-ELE-B1-SD-PAVA-00010.pdf", PAVA_00010,
+                                  size=(2384, 1684))).records
+    assert record.history_revision == "02" and "revision_conflict" not in record.flags
+    built = drawing_log.build([], [record], in_system=lambda code: code == "PAVA")
+    assert not [h for r in built["rows"] for h in r["hints"] if h["kind"] == "title_block_revision_conflict"]
+
+
+def test_the_conflict_reaches_the_revision_note_and_an_issue_keyed_by_drawing_and_revision(client, db_session, tmp_path):
+    from app.core.timeutils import utc_now
+    from app.models import DrawingIssue, Project, ProjectShopDrawing, ShopDrawingRevision
+
+    folder = tmp_path / "EP-30861"
+    path = _sheet_on(folder / L58_RELATIVE, _l58())
+    project_id = _project(client, folder, "30861")
+    [record] = _reading(path).records
+    db_session.add(ProjectDocument(project_id=project_id, role="document", path=str(path), relative_path=L58_RELATIVE,
+                                   filename=path.name, state="fresh", findings=[], acknowledged=[],
+                                   extracted={"records": [document_sync._record_dict(dc.replace(record, path=L58_RELATIVE),
+                                                                                     folder)], "notes": []}))
+    db_session.get(Project, project_id).documents_synced_at = utc_now()
+    db_session.commit()
+
+    [row] = [r for r in client.get(f"/projects/{project_id}/drawings/log", params={"system": "ELS"}).json()["rows"]
+             if r["source"] == "shop_drawing"]
+    [drawing] = db_session.query(ProjectShopDrawing).filter(ProjectShopDrawing.project_id == project_id).all()
+    revision = db_session.query(ShopDrawingRevision).filter(ShopDrawingRevision.shop_drawing_id == drawing.id,
+                                                            ShopDrawingRevision.revision == "R1").one()
+    assert "REV box prints 00" in revision.note and "history ends at 01" in revision.note
+    [issue] = db_session.query(DrawingIssue).filter(DrawingIssue.project_id == project_id,
+                                                    DrawingIssue.kind == "title_block_revision_conflict").all()
+    assert issue.key == f"ELS:title_block_revision_conflict:{drawing.id}:R1"
+    assert issue.severity == "warning" and issue.shop_drawing_id == drawing.id
+    assert any(h["kind"] == "title_block_revision_conflict" and h["label"] == "Title block revision conflict"
+               for h in row["hints"])

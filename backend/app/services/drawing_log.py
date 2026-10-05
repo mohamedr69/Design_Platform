@@ -202,6 +202,25 @@ def floor_label(name: str) -> str:
     return re.sub(r"(?<=\s)(To|And|Of)(?=\s)", lambda m: m.group(1).lower(), text)
 
 
+# What a revision's number was taken from, as the log says it.
+_REVISION_FROM = {"folder": "the folder it is filed in", "suffix": "its reference's -R suffix",
+                  "cover": "its submission cover", "default": "nothing on the sheet, so R0 is assumed"}
+
+
+def title_block_conflict(record) -> str | None:
+    """What the log says of a sheet whose title block contradicts itself: its REV box prints one revision and its
+    revision history ends at another. The reader takes neither (M2 review 05, R5-01: no first / last / highest
+    rule), so the revision came from elsewhere -- and without this the Logs and Drawings pages showed that
+    revision with no word of the sheet's own two. None for a sheet that does not contradict itself."""
+    if "revision_conflict" not in (getattr(record, "flags", None) or ()):
+        return None
+    box = getattr(record, "printed_revision", None) or "?"
+    history = getattr(record, "history_revision", None) or "?"
+    source = _REVISION_FROM.get(getattr(record, "revision_source", None) or "", "elsewhere")
+    return (f"The title block's REV box prints {box} while its revision history ends at {history}; neither is "
+            f"taken. {record.revision} comes from {source}.")
+
+
 def _pick(entries: list) -> object:
     """One revision's submission for a floor: a decided one over one still
     under review, then the latest filed."""
@@ -223,7 +242,9 @@ def _unplaced_row(record, *, floor: str | None = None, cells: dict | None = None
                 "path": rec.path, "page": rec.page, "name": rec.name, "floor_named": rec.floor,
                 "remarks": rec.reply_text, "modified": rec.modified.isoformat() if rec.modified else None,
                 # The date the sheet says it was issued (its title block), not when it was filed.
-                "issued": rec.issued.isoformat() if getattr(rec, "issued", None) else None}
+                "issued": rec.issued.isoformat() if getattr(rec, "issued", None) else None,
+                # A REV box and a revision history that disagree: said in the revision's own note.
+                **({"note": conflict, "title_block_note": conflict} if (conflict := title_block_conflict(rec)) else {})}
 
     if cells is not None:
         revisions = {rev: cell(rec) for rev, rec in sorted(cells.items(), key=lambda kv: _rev_number(kv[0]))}
@@ -454,7 +475,9 @@ def answered_revisions(revisions: dict[str, dict]) -> dict[str, dict]:
                     "note": (f"R{top} was submitted, so R{n} was submitted and answered; "
                              + ("the consultant's reply to it was not found in the project folder."
                                 if cell is None or not cell.get("path")
-                                else "no consultant reply was read off its file."))}
+                                else "no consultant reply was read off its file.")
+                             # what its title block says of itself is still said
+                             + (f" {cell['title_block_note']}" if cell and cell.get("title_block_note") else ""))}
         if cell is not None:
             out[f"R{n}"] = {**cell, "revision": f"R{n}"}
     return out
@@ -631,6 +654,11 @@ def build(drawings: list[dict], records: list, in_system=lambda code: (code or "
             if cell.get("status") == "reply_not_found" and rev not in gaps:
                 hints.append({"kind": "reply_missing", "revision": rev, "label": f"{rev} reply not found",
                               "severity": "warning", "note": cell.get("note")})
+        for rev, cell in history.items():
+            if cell.get("title_block_note"):
+                # Not "revision_conflict": that issue is two files for one revision (drawing_issues).
+                hints.append({"kind": "title_block_revision_conflict", "revision": rev, "label": f"{rev} REV box vs history",
+                              "severity": "warning", "note": cell["title_block_note"]})
         for rev in gaps:
             hints.append({"kind": "revision_gap", "revision": rev, "label": f"{rev} missing", "severity": "warning",
                           "note": f"{rev} is not on file, although a later revision is. Nothing is made up for it."})
