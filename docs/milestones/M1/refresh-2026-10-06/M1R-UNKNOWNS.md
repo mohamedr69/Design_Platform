@@ -4,7 +4,7 @@
 - Repository HEAD: 771001e (the snapshot the surveys describe)
 - Snapshot statement: static reading. The five surveys ran no code, no test, no endpoint and no database query, and no local database exists in the checkout. This register lists what they could not determine. I did not re-verify any item.
 
-Sources: the section 7 (or section 8) unknowns lists of S1 to S5 in docs/milestones/M1/refresh-2026-10-06/evidence/surveys/, plus UNKNOWN statements the surveys made inside their tables. The surveys' target columns say "UNKNOWN (roadmap)" or "UNKNOWN: not decided in this refresh"; those mark decisions not yet taken, not facts that cannot be found, and they are not listed here.
+Sources: the section 7 (or section 8) unknowns lists of S1 to S5 in docs/milestones/M1/refresh-2026-10-06/evidence/surveys/, plus UNKNOWN statements the surveys made inside their tables. The surveys' target columns say "UNKNOWN (roadmap)" or "UNKNOWN: not decided in this refresh"; those mark decisions not yet taken, not facts that cannot be found, and they are not listed here. After the first verification those 79 target cells were filled in the delta CSV by the ownership rule in M1R-DATA-OWNERSHIP-DELTA.md section 2.
 
 How to read the "Why" column. static reading: the answer needs a run or a test that was not done. no database: the answer is in stored rows. chain not followed: the call chain was not traced to its end, or lies in another survey's area. configuration not read: the value is in a deployed environment file or setting. outside repository: the answer is in an operational script, a document or a person. source absent: the input document is not in the repository.
 
