@@ -126,6 +126,10 @@ class AiRequest:
     # server-side fallback is allowed, and a reply that another model took
     # part in is an error (`model_substituted`), never a result.
     exact_model: bool = False
+    # Claude Code only: this request's own turn limit (`--max-turns`) and whether its pictures go inside the
+    # message; None: the server's AI_CLI_MAX_TURNS / AI_CLI_INLINE_IMAGES.
+    max_turns: int | None = None
+    inline_images: bool | None = None
 
 
 @dataclass
@@ -786,7 +790,9 @@ class ClaudeCodeProvider:
         sweep_deferred_folders()
         folder = tempfile.mkdtemp(prefix="ep-ai-")
         pictures = [p for p in request.parts if isinstance(p, ImagePart)]
-        inline = bool(pictures) and get_settings().ai_cli_inline_images
+        inline = bool(pictures) and (request.inline_images if request.inline_images is not None
+                                     else get_settings().ai_cli_inline_images)
+        max_turns = request.max_turns if request.max_turns is not None else self._max_turns
         try:
             images = []
             if not inline:
@@ -802,10 +808,15 @@ class ClaudeCodeProvider:
                 args += ["--input-format", "stream-json", "--verbose"]
             if request.effort:
                 args += ["--effort", request.effort]
-            if self._max_turns:
-                args += ["--max-turns", str(self._max_turns)]
+            if max_turns:
+                args += ["--max-turns", str(max_turns)]
             args += ["--tools", "Read", "--allowedTools", "Read"] if images else ["--tools", ""]
             env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
+            settings = get_settings()
+            if settings.ai_cli_disable_nonessential_traffic:
+                env["CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"] = "1"
+            if settings.ai_cli_max_retries is not None:
+                env["CLAUDE_CODE_MAX_RETRIES"] = str(settings.ai_cli_max_retries)
             stdin = self._message(request, pictures) if inline else self._prompt(request, images)
             try:
                 with self._semaphore:
@@ -840,7 +851,7 @@ class ClaudeCodeProvider:
         turns = reply.get("num_turns")
         meta = {k: reply.get(k) for k in ("subtype", "num_turns", "stop_reason", "terminal_reason", "duration_ms",
                                           "duration_api_ms", "total_cost_usd") if k in reply}
-        meta["max_turns_configured"] = self._max_turns
+        meta["max_turns_configured"] = max_turns
         meta["inline_images"] = inline
         common = dict(usage=usage, model=used, latency_ms=latency, models_used=per_model,
                       substituted=bool(substitutes), route_version=self._version_text,

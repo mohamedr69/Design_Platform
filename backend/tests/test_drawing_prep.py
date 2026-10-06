@@ -139,7 +139,9 @@ def test_the_agents_answers_are_kept_to_what_they_were_shown_and_their_words_che
 
 def test_a_detector_added_for_coverage_or_rejected_by_the_orchestrator_is_drawn_only_once_approved():
     base = {"action": "add", "insert": {"block": "SD"}, "remove": None}
-    assert R._drawn({**base, "status": "proposed"})
+    # a placement the agents proposed is the engineer's to approve first (6 October 2026)
+    assert not R._drawn({**base, "status": "proposed"})
+    assert R._drawn({**base, "status": "approved"})
     assert not R._drawn({**base, "status": "proposed", "source": PR.COVERAGE})
     assert R._drawn({**base, "status": "approved", "source": PR.COVERAGE})
     assert not R._drawn({**base, "status": "proposed", "check": {"verdict": "reject", "reason": ""}})

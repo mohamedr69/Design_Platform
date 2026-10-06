@@ -49,6 +49,26 @@ interface Finding {
     reason: "proposal_changed" | "not_verifiable";
     message: string;
   } | null;
+  /** The same change as proposed by other looks, merged into this one: each source, and any
+   * decision made on it, kept. */
+  sources?: {
+    id: string;
+    kind: Finding["kind"];
+    room: string;
+    proposal: string | null;
+    metres: number | null;
+    decision: "accepted" | "dismissed" | null;
+    previous_decision: Finding["previous_decision"];
+  }[];
+  /** Possibly the same change as these, not shown to be: decided one by one. */
+  possible_duplicates?: {
+    id: string;
+    kind: Finding["kind"];
+    room: string;
+    metres: number | null;
+    reasons: string[];
+    decision: "open" | "accepted" | "dismissed";
+  }[];
 }
 
 interface Ruling {
@@ -76,6 +96,9 @@ interface Review {
   state_message: string | null;
   /** The models that actually answered; `model` is only the one asked for. */
   answered_by: string[];
+  /** The last review run, when it changed nothing a model had answered (blocked, failed, stopped). */
+  last_attempt: { status: string; message: string | null; finished_at: string | null } | null;
+  merged_duplicates: number;
   model: string;
   calls: number;
   started_at: string | null;
@@ -88,7 +111,11 @@ interface Review {
     windows: number;
     windows_done: number;
     windows_failed: number;
+    windows_incomplete?: number;
     sheet_status: string;
+    fls_status?: string | null;
+    /** What a model said that it was not asked (a re-ask about some rooms only): applied to nothing. */
+    unsolicited?: { window: string; system: string; where: string; issue: string; asked_rooms: string[] }[];
     rooms: { id: string; name: string; room_type: string; status: string; checks: Record<string, { status: Status; seen: string }> | null }[];
   }[];
   findings: Finding[];
@@ -208,12 +235,13 @@ export function ProjectDrawingReviewPage({
 
   const drawing = overview?.drawings.find((d) => d.id === drawingId) ?? null;
 
-  async function start() {
+  async function start(fresh = false) {
     setError(null);
     setChoosing(false);
     try {
       const started = await api.post<Job>(`/projects/${project.id}/drawing-review/${drawingId}/jobs`, {
-        pages: pages.length && drawing && pages.length < drawing.pages.length ? pages : null,
+        pages: fresh ? null : pages.length && drawing && pages.length < drawing.pages.length ? pages : null,
+        fresh,
       });
       job.follow(started);
       onChanged?.();
@@ -222,13 +250,14 @@ export function ProjectDrawingReviewPage({
     }
   }
 
-  async function decide(finding: Finding, status: "accepted" | "dismissed" | "open", instruction = "", note = "") {
+  async function decide(finding: Finding, status: "accepted" | "dismissed" | "open", instruction = "", note = "",
+                        confirmDistinct = false) {
     setError(null);
     setNotice(null);
     try {
       const next = await api.post<Review & { applied?: { count: number; floors: string[] } }>(
         `/projects/${project.id}/drawing-review/${drawingId}/decisions`,
-        { id: finding.id, status, note, instruction },
+        { id: finding.id, status, note, instruction, confirm_distinct: confirmDistinct },
       );
       setReview(next);
       const applied = next.applied;
@@ -324,6 +353,24 @@ export function ProjectDrawingReviewPage({
               {job.active ? "Reviewing…" : review && review.counts.reviewed ? "Review again" : "Review drawing"}
             </button>
           )}
+          {canEdit && review && review.counts.reviewed > 0 && (
+            <button
+              type="button"
+              disabled={job.active}
+              title={
+                "Every floor and room asked again, no stored answer reused. What the review holds now stays on show " +
+                "until each part's new answer is complete and saved; the engineers' decisions are kept, and a decision " +
+                "whose proposal changes is asked again."
+              }
+              onClick={() => {
+                if (window.confirm("Review the whole drawing from the beginning? Every look is asked again of the model."))
+                  void start(true);
+              }}
+              className="rounded-lg border border-brand-300 bg-white px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+            >
+              Review from the beginning
+            </button>
+          )}
           {review && review.counts.accepted > 0 && (
             <a
               href={apiUrl(`/projects/${project.id}/drawing-review/${drawingId}/markup.pdf`)}
@@ -383,7 +430,7 @@ export function ProjectDrawingReviewPage({
             <button
               type="button"
               disabled={!pages.length}
-              onClick={start}
+              onClick={() => void start()}
               className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
             >
               Review {pages.length} floor{pages.length === 1 ? "" : "s"}
@@ -421,6 +468,13 @@ export function ProjectDrawingReviewPage({
           {review.state_message && !job.active && (
             <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${STATE_STYLE[review.state]}`} role="status">
               {review.state_message}
+            </p>
+          )}
+          {review.last_attempt && !job.active && (
+            <p className="mt-2 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-700" role="status">
+              Last review attempt ({review.last_attempt.status}
+              {review.last_attempt.finished_at ? `, ${review.last_attempt.finished_at.slice(0, 16).replace("T", " ")}` : ""}
+              ): {review.last_attempt.message ?? "no change was made"}. The results above are unchanged by it.
             </p>
           )}
           {review.fls && (
@@ -548,7 +602,8 @@ function Findings({
   drawingId: number;
   review: Review;
   canEdit: boolean;
-  onDecide: (f: Finding, status: "accepted" | "dismissed" | "open", instruction?: string, note?: string) => void;
+  onDecide: (f: Finding, status: "accepted" | "dismissed" | "open", instruction?: string, note?: string,
+             confirmDistinct?: boolean) => void;
   onAcceptAll: (ids: string[]) => void;
 }) {
   const [floor, setFloor] = useState("");
@@ -642,7 +697,8 @@ function FindingCard({
   projectId: number;
   drawingId: number;
   canEdit: boolean;
-  onDecide: (f: Finding, status: "accepted" | "dismissed" | "open", instruction?: string, note?: string) => void;
+  onDecide: (f: Finding, status: "accepted" | "dismissed" | "open", instruction?: string, note?: string,
+             confirmDistinct?: boolean) => void;
 }) {
   // the reason for "not needed", and the draftsman's instruction to edit, are asked on the card itself
   const [mode, setMode] = useState<"none" | "dismiss" | "edit">("none");
@@ -679,6 +735,40 @@ function FindingCard({
             <p className="mt-1 font-medium text-gray-900">{f.instruction || f.issue}</p>
             {f.instruction && f.issue && f.instruction !== f.issue && <p className="mt-0.5 text-xs text-gray-500">{f.issue}</p>}
             {f.seen && <p className="mt-0.5 text-xs text-gray-500">The AI saw: {f.seen}</p>}
+            {f.sources && f.sources.length > 0 && (
+              <div className="mt-1 rounded bg-sky-50 px-2 py-1 text-xs text-sky-900">
+                Also proposed by:
+                <ul className="ml-4 list-disc">
+                  {f.sources.map((src) => (
+                    <li key={src.id}>
+                      {KIND_TEXT[src.kind]} ({src.room}){src.metres !== null ? `, ${src.metres} m away` : ""}: “{src.proposal}”
+                      {src.decision ? ` · ${src.decision}` : ""}
+                      {src.previous_decision
+                        ? ` · ${src.previous_decision.status} earlier${src.previous_decision.at ? ` (${src.previous_decision.at.slice(0, 10)})` : ""}, not carried over`
+                        : ""}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {f.possible_duplicates && f.possible_duplicates.length > 0 && (
+              <div className="mt-1 rounded bg-orange-50 px-2 py-1 text-xs text-orange-900">
+                Possibly the same change as:{" "}
+                {f.possible_duplicates
+                  .map((d) => `${d.room} (${KIND_TEXT[d.kind]}${d.decision !== "open" ? `, ${d.decision}` : ""}) — ${d.reasons.join("; ")}`)
+                  .join(" | ")}
+                . Check on the plan; dismiss one as a duplicate, or keep both as separate changes.
+                {canEdit && f.decision !== "accepted" && f.possible_duplicates.some((d) => d.decision === "accepted") && (
+                  <button
+                    type="button"
+                    onClick={() => onDecide(f, "accepted", "", "", true)}
+                    className="ml-2 rounded border border-orange-300 bg-white px-2 py-0.5 font-semibold text-orange-900 hover:bg-orange-100"
+                  >
+                    Accept as a separate change
+                  </button>
+                )}
+              </div>
+            )}
             {f.previous_decision && f.decision === "open" && (
               <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
                 {f.previous_decision.status === "accepted" ? "Accepted" : "Dismissed"} earlier
@@ -795,8 +885,11 @@ function Rooms({ review }: { review: Review }) {
               {floor.floor} <span className="text-xs font-normal text-gray-500">{floor.sheet} · {floor.title}</span>
             </div>
             <div className="text-xs text-gray-500">
-              {floor.windows_done} of {floor.windows} parts reviewed
+              {floor.windows_done} of {floor.windows} review windows answered in full
+              {floor.windows_incomplete ? ` · ${floor.windows_incomplete} answered for some rooms` : ""}
               {floor.windows_failed ? ` · ${floor.windows_failed} could not be reviewed` : ""}
+              {` · plan pass: ${floor.sheet_status}`}
+              {floor.fls_status ? ` · FLS pass: ${floor.fls_status}` : ""}
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -841,6 +934,18 @@ function Rooms({ review }: { review: Review }) {
               </tbody>
             </table>
           </div>
+          {floor.unsolicited && floor.unsolicited.length > 0 && (
+            <div className="border-t border-gray-100 bg-gray-50 px-4 py-2 text-xs text-gray-700">
+              Said by the model without being asked (applied to no finding or decision):
+              <ul className="ml-4 list-disc">
+                {floor.unsolicited.map((u, i) => (
+                  <li key={i}>
+                    {u.where}: {u.issue} <span className="text-gray-500">(asked only about {u.asked_rooms.join(", ")})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </section>
       ))}
     </div>

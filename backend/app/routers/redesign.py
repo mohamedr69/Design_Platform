@@ -117,11 +117,22 @@ class ChangeIn(BaseModel):
     rotation: float | None = None
 
 
+def _not_while_running(db: Session, project, drawing_id: int) -> None:
+    """An engineer's change while a plan or the output is being made would be
+    written over by it: refused until it ends."""
+    from app.services import jobs
+
+    for kind in (service.KIND_PLAN, service.KIND_APPLY):
+        if jobs.active_by_key(db, f"{kind}:{project.id}:{drawing_id}") is not None:
+            raise HTTPException(409, "The plan or the drawing is being made: change it once that has finished.")
+
+
 @router.patch("/projects/{project_id}/redesign/{drawing_id}/changes/{change_id}")
 def change(project_id: int, drawing_id: int, change_id: str, body: ChangeIn,
            current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
     project = _get_project_or_404(db, project_id)
     _drawing(db, project, drawing_id)
+    _not_while_running(db, project, drawing_id)
     try:
         service.adjust(db, project, drawing_id, change_id, status=body.status, candidate=body.candidate,
                        symbol=body.symbol, point=body.point, rotation=body.rotation)
@@ -140,6 +151,7 @@ def change_many(project_id: int, drawing_id: int, body: ManyIn,
                 current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
     project = _get_project_or_404(db, project_id)
     _drawing(db, project, drawing_id)
+    _not_while_running(db, project, drawing_id)
     service.set_status(db, project, drawing_id, body.ids, body.status)
     return service.view(db, project, drawing_id)
 

@@ -523,23 +523,6 @@ def test_the_continuation_asks_only_what_is_left_and_keeps_what_was_answered(cli
         scoped.run(_scope("50021", did, sha), lambda: scoped.RehearsalProvider())
 
 
-def test_a_plan_pass_finding_the_room_review_has_is_merged_not_shown_twice():
-    from app.review import service
-
-    def f(fid, kind, room, system="manual_call_point", action="add"):
-        return {"id": fid, "page": 3, "kind": kind, "room": room, "system": system, "action": action,
-                "instruction": f"{kind} says add"}
-
-    room = f("r1", "room", "LOBBY")
-    findings = [room, f("s1", "sheet", "Lobby, beside the main entrance"),         # the same: merged
-                f("s2", "sheet", "Lobby", system="detection"),                    # another system: kept
-                f("s3", "fls", "Driveway bend"),                                  # another place: kept
-                f("s4", "sheet", "LOBBY near the door")]                           # decided on: kept
-    assert service._merge_passes(findings, {"s4": {"status": "accepted"}}) == 1
-    assert [x["id"] for x in findings] == ["r1", "s2", "s3", "s4"]
-    assert room["also_seen"] == [{"kind": "sheet", "id": "s1", "instruction": "sheet says add"}]
-
-
 def test_the_clis_own_account_of_a_call_is_kept(monkeypatch, tmp_path):
     exe = tmp_path / "claude.exe"
     exe.write_bytes(b"")

@@ -20,6 +20,10 @@ else:
 # says: the tests that need it on set the flag themselves, so on/off
 # comparisons do not depend on this PC or on test order.
 os.environ["DOCUMENT_CLASSIFICATION_V2"] = "false"
+# No test reaches a model, whatever this PC's .env switches on: every AI switch off; a test that wants
+# one on sets it, with a stand-in provider.
+for _switch in ("AI_ENABLED", "FA_AI_ENABLED", "PREP_AI_ENABLED", "DRAWING_REVIEW_AI_ENABLED"):
+    os.environ[_switch] = "false"
 os.environ["MAX_FAILED_LOGIN_ATTEMPTS"] = "3"
 os.environ["LOCKOUT_MINUTES"] = "15"
 os.environ["ACCESS_TOKEN_EXPIRE_MINUTES"] = "30"

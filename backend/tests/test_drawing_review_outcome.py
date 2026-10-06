@@ -145,8 +145,9 @@ def test_a_plot_with_no_model_to_call_is_blocked_and_keeps_the_answers_and_decis
     assert job["status"] == "failed"                           # ... the review did not
     assert NOT_COMPLETED in job["error"] and "no model can be called" in job["error"]
     # the review is still what the model answered before; the message says the last attempt was blocked
-    assert after["state"] == "done" and NOT_COMPLETED in after["state_message"]
-    assert "The last review attempt was blocked" in after["state_message"]
+    assert after["state"] == "done"
+    # the attempt, apart from what the review holds
+    assert after["last_attempt"]["status"] == "blocked" and NOT_COMPLETED in after["last_attempt"]["message"]
     # nothing was asked, nothing was logged as an answer, and what was there stays
     assert db_session.query(AiUsage).filter(AiUsage.model == "null").count() == 0
     assert after["counts"]["reviewed"] == 2
@@ -169,7 +170,7 @@ def test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there(client
     assert NOT_COMPLETED in job["error"] and "none of the 2 looks was answered" in job["error"]
     assert "the route fell over" in job["error"]
     assert after["state"] == "done" and after["counts"]["reviewed"] == 2
-    assert "The last review attempt failed" in after["state_message"]
+    assert after["last_attempt"]["status"] == "failed" and NOT_COMPLETED in after["last_attempt"]["message"]
     kept = next(f for f in after["findings"] if f["id"] == finding["id"])
     assert kept["decision"] == "accepted"
 
@@ -301,7 +302,8 @@ def test_a_blocked_attempt_on_a_partly_reviewed_drawing_leaves_it_partial(client
     assert review["state"] == "partial"
     job, after = _review(client, pid, did, NullProvider())
     assert job["status"] == "failed"
-    assert after["state"] == "partial" and "The last review attempt was blocked" in after["state_message"]
+    assert after["state"] == "partial" and after["last_attempt"]["status"] == "blocked"
+    assert "1 of 2 rooms reviewed" in after["state_message"] and "review windows" in after["state_message"]
     assert after["counts"]["reviewed"] == 1 and _badge(client, pid, did)["review_state"] == "partial"
     # with nothing a model answered, a blocked attempt is the review's state, as before
     row = db_session.query(ProjectDrawingReview).filter_by(project_id=pid, drawing_id=did).one()

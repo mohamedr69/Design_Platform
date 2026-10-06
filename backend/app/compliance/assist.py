@@ -194,6 +194,9 @@ class CallResult:
     error: str | None = None
     # Instruction-like wording in the text sent (app/ai/guard.py).
     flags: list[str] = dataclasses.field(default_factory=list)
+    # What the route said of the call (Claude Code: turns, subtype, stop reason, durations, the models that
+    # took part, its own cost estimate) -- None for a stored answer or a call never made.
+    meta: dict | None = None
 
 
 @dataclass
@@ -248,7 +251,8 @@ def _log(session: AssistSession, *, task: str, model: str, response=None, cost: 
 def call_task(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
               prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
               effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-              exact_model: bool = False, accept=None, fresh: bool = False) -> CallResult:
+              exact_model: bool = False, accept=None, fresh: bool = False, max_turns: int | None = None,
+              inline_images: bool | None = None) -> CallResult:
     """One structured call through the cache, the budget and the usage log,
     for a task defined outside this module (the single-clause review).
     `tier` "standard" asks the larger model (AI_MODEL_STANDARD); `ttl_days`
@@ -263,13 +267,14 @@ def call_task(session: AssistSession, task: str, system: str, parts: list[TextPa
     stored (a force-fresh reread): the new answer replaces the stored one."""
     return _call(session, task, system, parts, schema, max_output, prompt_version=prompt_version, tier=tier,
                  ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s, exact_model=exact_model,
-                 accept=accept, fresh=fresh)
+                 accept=accept, fresh=fresh, max_turns=max_turns, inline_images=inline_images)
 
 
 def _call(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
           prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
           effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-          exact_model: bool = False, accept=None, fresh: bool = False) -> CallResult:
+          exact_model: bool = False, accept=None, fresh: bool = False, max_turns: int | None = None,
+          inline_images: bool | None = None) -> CallResult:
     settings = get_settings()
     pinned = model
     model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)
@@ -286,7 +291,7 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
     )
     request = AiRequest(task=task, system=system, parts=parts, schema=schema, max_output_tokens=max_output,
                         idempotency_key=key, tier=tier, effort=effort, model=pinned, timeout_s=timeout_s,
-                        exact_model=exact_model)
+                        exact_model=exact_model, max_turns=max_turns, inline_images=inline_images)
     flags = guard.scan_parts(parts)
     session.injection_flags.update(flags)
     from app.ai import evaluation
@@ -301,6 +306,8 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
             cached = None                       # a stored answer of the wrong shape is not reused
         if cached is not None and exact_model and cached.get("model") == NULL_MODEL:
             cached = None                       # the disabled provider's reply, stored before this check: no answer
+        if cached is not None and cached.get("invalid"):
+            cached = None                       # marked unsuitable (kept, with why): never an answer
         if cached is not None:
             session.cached += 1
             _log(session, task=task, model=cached.get("model", model), cache_hit=True)
@@ -320,6 +327,9 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
             session.exhausted = exc.limit
             return CallResult(None, False, model, f"budget: {exc.limit}", flags=flags)
         response = session.provider.complete(request)
+        meta = {**(getattr(response, "route_meta", None) or {}), "turns": getattr(response, "turns", None),
+                "models_used": dict(getattr(response, "models_used", None) or {}),
+                "error": response.error}
         cost = session.budget.reconcile(reservation, response.usage.input_tokens, response.usage.output_tokens,
                                         response.usage.cached_input_tokens)
         session.calls += 1
@@ -328,17 +338,18 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
         if not response.ok:
             detail = f"{response.error}: {response.error_detail}" if response.error_detail else (response.error or "no reply")
             session.errors.append(detail[:300])
-            return CallResult(None, False, response.model or model, detail, flags=flags)
+            return CallResult(None, False, response.model or model, detail, flags=flags, meta=meta)
         wrong = accept(response.data) if accept is not None else None
         if wrong:
             session.errors.append(f"invalid_output: {wrong}"[:300])
-            return CallResult(None, False, response.model or model, f"invalid_output: {wrong}"[:300], flags=flags)
+            return CallResult(None, False, response.model or model, f"invalid_output: {wrong}"[:300], flags=flags,
+                              meta=meta)
         if response.model == NULL_MODEL:
             # the disabled provider's placeholder is never stored under a model's key
             return CallResult(response.data, False, response.model, flags=flags)
         result_cache.put(session.db, key, {"data": response.data, "model": response.model or model},
                          project_id=session.project_id, document_sha256=session.document_sha256, task=task)
-        return CallResult(response.data, False, response.model or model, flags=flags)
+        return CallResult(response.data, False, response.model or model, flags=flags, meta=meta)
 
 
 def output_ceiling(items: int, per_item: int) -> int:
