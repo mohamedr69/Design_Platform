@@ -144,13 +144,15 @@ def test_a_plot_with_no_model_to_call_is_blocked_and_keeps_the_answers_and_decis
     assert len(plots) == plotted + 1                           # the plot happened ...
     assert job["status"] == "failed"                           # ... the review did not
     assert NOT_COMPLETED in job["error"] and "no model can be called" in job["error"]
-    assert after["state"] == "blocked" and NOT_COMPLETED in after["state_message"]
+    # the review is still what the model answered before; the message says the last attempt was blocked
+    assert after["state"] == "done" and NOT_COMPLETED in after["state_message"]
+    assert "The last review attempt was blocked" in after["state_message"]
     # nothing was asked, nothing was logged as an answer, and what was there stays
     assert db_session.query(AiUsage).filter(AiUsage.model == "null").count() == 0
     assert after["counts"]["reviewed"] == 2
     kept = next(f for f in after["findings"] if f["id"] == finding["id"])
     assert kept["instruction"] == KNOWN and kept["decision"] == "accepted"
-    assert _badge(client, pid, did)["review_state"] == "blocked"
+    assert _badge(client, pid, did)["review_state"] == "done"
 
 
 def test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there(client, db_session, monkeypatch, tmp_path):
@@ -166,7 +168,8 @@ def test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there(client
     assert job["status"] == "failed"
     assert NOT_COMPLETED in job["error"] and "none of the 2 looks was answered" in job["error"]
     assert "the route fell over" in job["error"]
-    assert after["state"] == "failed" and after["counts"]["reviewed"] == 2
+    assert after["state"] == "done" and after["counts"]["reviewed"] == 2
+    assert "The last review attempt failed" in after["state_message"]
     kept = next(f for f in after["findings"] if f["id"] == finding["id"])
     assert kept["decision"] == "accepted"
 
@@ -284,3 +287,28 @@ def test_the_drawing_reviews_own_switch_calls_the_model_for_the_review_alone(cli
     assert len(built) == 1 and built[0].calls == 2
     assert job["status"] == "succeeded" and review["state"] == "done"
     assert any(f["instruction"] == KNOWN for f in review["findings"])
+
+
+def test_a_blocked_attempt_on_a_partly_reviewed_drawing_leaves_it_partial(client, db_session, monkeypatch, tmp_path):
+    """EP-30880, 6 October 2026: Ground Floor reviewed, the other floors not; a
+    full review started with AI off is blocked -- the drawing stays partial
+    (what the model answered), and says the last attempt was blocked."""
+    from app.models import ProjectDrawingReview
+
+    pid, did, _plots = _drawing(client, db_session, monkeypatch, tmp_path, "40967")
+    only_lobby = {"rooms": [WINDOW["rooms"][0]], "other": []}
+    _job, review = _review(client, pid, did, RecordingProvider([only_lobby, SHEET]))
+    assert review["state"] == "partial"
+    job, after = _review(client, pid, did, NullProvider())
+    assert job["status"] == "failed"
+    assert after["state"] == "partial" and "The last review attempt was blocked" in after["state_message"]
+    assert after["counts"]["reviewed"] == 1 and _badge(client, pid, did)["review_state"] == "partial"
+    # with nothing a model answered, a blocked attempt is the review's state, as before
+    row = db_session.query(ProjectDrawingReview).filter_by(project_id=pid, drawing_id=did).one()
+    db_session.refresh(row)
+    sheets = json.loads(json.dumps(row.sheets))
+    for w in sheets[0]["windows"]:
+        w.update(answers={}, model="null", status="done")
+    row.sheets = sheets
+    db_session.commit()
+    assert client.get(f"/projects/{pid}/drawing-review/{did}").json()["state"] == "blocked"

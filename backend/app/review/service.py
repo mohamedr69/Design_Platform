@@ -394,6 +394,9 @@ def _pass_done(sh: dict, prefix: str) -> bool:
     return not any(w.get("model") == assist.NULL_MODEL for w in sh.get("windows", []))
 
 
+_ENDED = {"blocked": "was blocked", "failed": "failed", "stopped": "was stopped"}
+
+
 def outcome(row: ProjectDrawingReview | None) -> tuple[str, str | None]:
     """What the review comes to, said as it is: (state, message). `done` only
     when a model answered every part of every plan reviewed; `partial` when it
@@ -423,7 +426,7 @@ def outcome(row: ProjectDrawingReview | None) -> tuple[str, str | None]:
                                 + (" -- the earlier run's replies came from the disabled AI provider, not from a "
                                    "model. Run the review again once the drawing review's AI is enabled."
                                    if placeholder else "."))
-    last = (f" The last review attempt was {row.status}" + (f": {row.error}" if row.error else ".")) if attempt else ""
+    last = (f" The last review attempt {_ENDED[row.status]}" + (f": {row.error}" if row.error else ".")) if attempt else ""
     passes = all(_pass_done(sh, "sheet") and (not sh.get("fls") or _pass_done(sh, "fls")) for sh in sheets)
     if answered < len(windows) or not passes:
         said = None if attempt else row.error
@@ -728,7 +731,7 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
         message = (f"Review completed: no changes proposed. {reviewed} of {rooms_total} rooms reviewed"
                    + (f"; {unclear} to check by eye" if unclear else "") + ".")
         if row.status in ("blocked", "failed", "stopped"):
-            message += f" The last review attempt was {row.status}" + (f": {row.error}" if row.error else ".")
+            message += f" The last review attempt {_ENDED[row.status]}" + (f": {row.error}" if row.error else ".")
     # the models that actually answered -- the configured one is only what was asked for
     answered_by = sorted({w.get("model") for sh in row.sheets or [] for w in sh.get("windows", [])
                           if _usable(w) and w.get("model")})
