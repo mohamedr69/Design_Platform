@@ -2,8 +2,8 @@
   "collected_utc": "2026-10-06T20:10:07.829740+00:00",
   "surveyed_commit": "771001e6b70939704a478d09a6740e76778cfecd",
   "head_at_collection": "457c8159c7c587a36e40f0ba2af711a55cc3f00a",
-  "note": "sha256 at 771001e of every repository file cited by the M2 refresh surveys S6/S7 (full paths and the redesign-area abbreviations), plus every file under backend/app/{redesign,review,interfaces,ifc}, the redesign/review/interfaces routers and the seven test files the M2 test run executed. backend/ and frontend/ are unchanged between 771001e and head_at_collection.",
-  "file_count": 83,
+  "note": "sha256 at 771001e of the repository files cited by the M2 refresh surveys S6/S7 (full paths and the redesign-area abbreviations), plus every file under backend/app/{redesign,review,interfaces,ifc}, the redesign/review/interfaces routers and the seven test files the M2 test run executed. backend/ and frontend/ are unchanged between 771001e and head_at_collection. After the first verification, ten further files cited in the records' current_location, evidence and tests_now cells (and in S7 prose) were added; completeness was then re-checked by the second verification.",
+  "file_count": 93,
   "files": {
     "backend/alembic/versions/c5e7a9b1d3f5_drawing_redesign.py": {
       "sha256": "9d7f175a831a4a24f20ed1c16bc750ee5d5309126d7d3bb7951e07dc00f4c13d",
@@ -12,6 +12,22 @@
     "backend/alembic/versions/e6a8c0b2d4f6_drawing_prep_run.py": {
       "sha256": "a0247dedab2d97b5fddd8783c7954db105bf47f5fde7bec0d5153638626d577d",
       "bytes": 832
+    },
+    "backend/app/ai/project_policy.py": {
+      "sha256": "6f6e28d657c3a01f6cfac2e9ad25db5fd87153339a9506c856a199d879de3e0a",
+      "bytes": 959
+    },
+    "backend/app/ai/provider.py": {
+      "sha256": "a9168f086abc72a4bc2488564ba718e380366e98da6f3ad7ab61560908c4534a",
+      "bytes": 48207
+    },
+    "backend/app/compliance/assist.py": {
+      "sha256": "96c33ec6e7110b020d943c0f856c5618699d69ab0bec36b8b8aad263ca39f2eb",
+      "bytes": 24218
+    },
+    "backend/app/core/config.py": {
+      "sha256": "086d5da0503102447333e2023e671c7d9063d75cd1de1b738840c2cb15b1234f",
+      "bytes": 32833
     },
     "backend/app/ifc/__init__.py": {
       "sha256": "e700933a86962dbad279b3eef4a605a345bffb53a548b1f62111e85b68480ce7",
@@ -177,6 +193,10 @@
       "sha256": "1728efd52215e39ae506d662275e9efbb7311718f9b86cbd904a28b1f7d2cc76",
       "bytes": 59933
     },
+    "backend/app/models.py": {
+      "sha256": "cb1cf0c0731601140d65377883e066687c738f80ee21b20e3ceb25662c896a28",
+      "bytes": 153583
+    },
     "backend/app/redesign/__init__.py": {
       "sha256": "2250f011d362ab32144ffc63b11652f7b5c4c8ef9aacf522d17ab93b1cd23674",
       "bytes": 187
@@ -277,9 +297,21 @@
       "sha256": "06f6793e7c640fc0f484f9279778c1df29aa2572fac39298df499ff6d0d9271b",
       "bytes": 10473
     },
+    "backend/app/services/jobs.py": {
+      "sha256": "038044c3762a2a9ebe0193f716d1b7ef663f6defbf83133112b0b99fc6243704",
+      "bytes": 22954
+    },
+    "backend/app/services/project_deletion.py": {
+      "sha256": "f79117ef13c5881f7f152598663c20d67866e26c138d6d7f1f7e80abded35d6e",
+      "bytes": 4926
+    },
     "backend/scripts/scoped_drawing_review.py": {
       "sha256": "c6f44d8ca7c155e82af0f9158af97eaebcf5cb3c2d1b770ee3743b2e97c857ee",
       "bytes": 4919
+    },
+    "backend/tests/conftest.py": {
+      "sha256": "49b8da4c65fa155f2b00e2bcede84168fdffa7caeac8b87c070ce82cb44540cf",
+      "bytes": 5745
     },
     "backend/tests/test_drawing_prep.py": {
       "sha256": "75759a296377a77d191d10c126bdbf16bb72568768e4b6481f04bc7f733c0b74",
@@ -312,6 +344,14 @@
     "backend/tests/test_scoped_drawing_review.py": {
       "sha256": "53fe25e1c4daaafd270f9ef6627a0be61259d49a7f7536c4bdcaafca92541b08",
       "bytes": 30350
+    },
+    "backend/tests/test_sync_worker.py": {
+      "sha256": "b691d1ca2bb5b5351438a69bcd07a68fed6955695babddde4693ec6aba887947",
+      "bytes": 17425
+    },
+    "backend/tests/test_worker_runtime.py": {
+      "sha256": "0f2c71423dd919efda62ae358bd65792a744337b8d27ea5979d47140932e8678",
+      "bytes": 10722
     },
     "frontend/src/components/prep/AgentRunPanel.tsx": {
       "sha256": "1921006f057147a0c54fbe554c81b0114c603abb20c0119d28a0ed0fbd10febb",
@@ -352,5 +392,16 @@
     "backend/app/redesign/verify.py": "RD-M2 candidate file; not in the active tree (confirms roadmap section 3 and S6 Table B)",
     "backend/tests/test_redesign_apply.py": "RD-M2 candidate test; not in the active tree",
     "frontend/src/pages/ProjectRedesignPage.tsx": "removed in commit b844adc; replaced by ProjectDrawingPrepPage.tsx and components/prep/RedesignPanel.tsx"
+  },
+  "test_output_hashes": {
+    "evidence/tests/redesign-suites.log": "034755d3283b211c790f58960f13a8e9ebcc28771bf34bcef9d730844a903e26",
+    "evidence/tests/redesign-suites.xml": "9911b0c414d1812a6ed9359ec034589de3b9b8370e8991b26bb7185c54d20fb8",
+    "evidence/tests/test_drawing_prep.txt": "d169f8470819cb4a60128d2187ed553640c4100f46b25f216468e4f25cd63423",
+    "evidence/tests/test_drawing_review.txt": "05f1183ae67c0524945c7bc9f8829d528915dda9581d51d8dc26b6ddbb36fc98",
+    "evidence/tests/test_drawing_review_outcome.txt": "dc8249b0134aef9b78f9539aec19b93ea751290c16529da9aa122c63613ddc89",
+    "evidence/tests/test_fa_interfaces.txt": "f81a47facd7422785c3b404b31c1b375aae1093c9d20cb9a823c0d548a20156b",
+    "evidence/tests/test_ifc_worker_and_ai.txt": "de285556600ecd80247a9920acaf3fce4c241d6beb080d58da63914ae92ad62b",
+    "evidence/tests/test_redesign.txt": "78e153f3fd326adabce44dae9b8d47da076a8e030b5e17205b4c733697482226",
+    "evidence/tests/test_scoped_drawing_review.txt": "42ab11085fe2ce9f1ed0244f2ca23349076d45a0009b9f2c7c6f376a8297d239"
   }
 }
