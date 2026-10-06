@@ -1,6 +1,6 @@
 # Project Memory Implementation Roadmap
 
-> **Consolidated roadmap:** use [UNIFIED_MASTER_ROADMAP.md](../../UNIFIED_MASTER_ROADMAP.md), numbered **M1–M29**, for all current execution tracking, dependencies and the shared drawing-processing/reuse contract. This earlier memory-only plan retains historical IDs for traceability; use the unified roadmap's cross-reference appendix. In the unified sequence, stabilization/PostgreSQL readiness is M11 and project RAG is M21.
+> **Consolidated roadmap:** use [UNIFIED_MASTER_ROADMAP.md](../../UNIFIED_MASTER_ROADMAP.md), numbered **M1–M31**, for all current execution tracking, dependencies and the shared drawing-processing/reuse contract. This earlier memory-only plan follows plan v1.0 (PM-M0–PM-M12); plan v1.1 (6 October 2026) renumbers the memory milestones M1–M14 and adds Active Task Context (unified M30) and Task Result Feedback (unified M31); the unified roadmap's appendix carries both mappings. In the unified sequence, stabilization/PostgreSQL readiness is M11 and project RAG is M21.
 
 Date: 6 October 2026
 Project: Engineering Project Platform

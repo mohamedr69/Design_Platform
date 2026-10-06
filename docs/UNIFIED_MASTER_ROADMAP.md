@@ -1,18 +1,19 @@
 # Unified Engineering Platform Master Roadmap
 
-Revision U3 — 6 October 2026
-Scope: one integrated delivery roadmap, M1–M29, covering the platform, drawing redesign, project memory, compliance evidence and engineering workload.  
-Status: consolidated implementation plan and evidence-based code assessment. Revision U3 brings the two workflow requirement specifications (Task One, Task Two) into the sequence as M26–M29, maps their phases, and records the decisions that make them consistent with each other and with the earlier plans. No milestone acceptance, live validation authorization or deployment is granted by publishing this document.
+Revision U4 — 6 October 2026
+Scope: one integrated delivery roadmap, M1–M31, covering the platform, drawing redesign, project memory, compliance evidence and engineering workload.  
+Status: consolidated implementation plan and evidence-based code assessment. Revision U4 incorporates the Project Memory Master Plan v1.1 (Active Task Context / Workflow State, Task Result Feedback & Memory Promotion, and the memory roadmap renumbered M1–M14) as M30 and M31 and amends M18, M22, M23, M24, M25 and section 10. Revision U3 brought the two workflow requirement specifications (Task One, Task Two) into the sequence as M26–M29, maps their phases, and records the decisions that make them consistent with each other and with the earlier plans. No milestone acceptance, live validation authorization or deployment is granted by publishing this document.
 
 ## 1. Purpose and source precedence
 
-This is one execution roadmap numbered M1–M29. Milestone numbers are stable identifiers; the default delivery order follows the prerequisite graph in section 7, which M26–M29 join by their prerequisites rather than at the end. All milestone references in the plan use this unified numbering. Original IDs appear only in the historical cross-reference appendix and unchanged source/evidence titles and paths; they are not separate execution tracks. Shared infrastructure is built once.
+This is one execution roadmap numbered M1–M31. Milestone numbers are stable identifiers; the default delivery order follows the prerequisite graph in section 7, which M26–M29 join by their prerequisites rather than at the end. All milestone references in the plan use this unified numbering. Original IDs appear only in the historical cross-reference appendix and unchanged source/evidence titles and paths; they are not separate execution tracks. Shared infrastructure is built once.
 
 Source plans, preserved byte-for-byte in this project:
 
 - [Platform-Master-Roadmap-M1-M7.pdf](roadmap-sources/Platform-Master-Roadmap-M1-M7.pdf): core data ownership, extraction, classification, central processing, backfill, consumer migration and stabilization.
 - [Redesign-Accuracy-Roadmap-RD-M1-M5.pdf](roadmap-sources/Redesign-Accuracy-Roadmap-RD-M1-M5.pdf): baseline, safe Apply, deterministic geometry, staged AI/visual review and real-project validation.
-- [Engineering_AI_Project_Memory_Master_Plan.pdf](roadmap-sources/Engineering_AI_Project_Memory_Master_Plan.pdf): persistent project facts, decisions, evidence, history, summaries, retrieval and shared agent context.
+- [Engineering_AI_Project_Memory_Master_Plan_v1.1.pdf](roadmap-sources/Engineering_AI_Project_Memory_Master_Plan_v1.1.pdf): persistent project facts, decisions, evidence, history, summaries, retrieval and shared agent context, plus (new in v1.1) an explicit, ephemeral Active Task Context for every button-driven platform action, task-result feedback into memory, and the memory roadmap renumbered M1–M14. This is the governing memory plan from Revision U4.
+- [Engineering_AI_Project_Memory_Master_Plan.pdf](roadmap-sources/Engineering_AI_Project_Memory_Master_Plan.pdf): version 1.0 of the same plan, superseded for memory scope by v1.1 and retained unchanged as the basis of the PM-M0–PM-M12 mapping that Revisions U2 and U3 used (appendix).
 
 Workflow requirement specifications, kept unchanged at the repository root and governed by this roadmap (hashes recorded in [SOURCE-MANIFEST.json](roadmap-sources/SOURCE-MANIFEST.json)):
 
@@ -127,6 +128,7 @@ Project files / uploads / OneDrive
        |-> domain APIs -> every tab, including Drawings and Interfaces
        |-> durable engineering events, evidence and project memory
        |-> dependency engine -> only affected outputs become stale
+    -> explicit Active Task Context per platform action (ephemeral; M30)
     -> after M11: project-filtered RAG + ProjectContextBuilder
     -> task-specific AI or deterministic engineering calculation
     -> proposals / review / authorized confirmation -> retained history
@@ -186,7 +188,7 @@ M8 and M12 reuse these geometry/evidence contracts. M21 indexes the stored extra
 
 | Topic | Consolidated decision |
 |---|---|
-| Milestone naming | One canonical M1–M29 sequence. Numbers are stable identifiers and are not renumbered when work is added; delivery order follows prerequisites (section 7). Historical IDs are mapped in the appendix; source PDFs and acceptance reports retain their original names. |
+| Milestone naming | One canonical M1–M31 sequence. Numbers are stable identifiers and are not renumbered when work is added; delivery order follows prerequisites (section 7). Historical IDs are mapped in the appendix; source PDFs and acceptance reports retain their original names. |
 | Task phase numbering | Task One and Task Two each number their own Phases 0–7. Those phases are stages inside M26–M29 (appendix table) and are reported under the milestone, never as “Phase 3” alone. A phase may start when its milestone's prerequisites are met; integration and release wait for the milestone gate. |
 | Workflows build on shared infrastructure | Task One's retrieval, evidence verification and “structured memory” and Task Two's facts, evidence and history are consumers of M7, M11, M16, M18, M19, M21 and M22. No compliance-only retrieval index, context builder, evidence store, event log or deliverable register is built; a workflow that needs one before its owner milestone exists waits or delivers only the parts that do not need it. |
 | Deterministic authority over AI | Both tasks and the redesign plan say the same thing; it is one platform rule. Deterministic validators (M26), the workload formula (M28) and geometry checks (M8) are authoritative. AI may split, locate, extract bounded facts, compare, explain, draft and propose; it cannot override a failed check, approve itself, write to approved records or replace a formula. |
@@ -213,9 +215,11 @@ M8 and M12 reuse these geometry/evidence contracts. M21 indexes the stored extra
 | Drawing validation | Safer candidate Apply must be reviewed, ported and retested against current preparation code. Existing coordination/coverage code receives gap tests; it is not discarded or automatically accepted. |
 | Quality evidence | Functional tests, real-model accuracy, real AutoCAD behavior, independent AI review and engineer/human sign-off remain separate claims. |
 | Budgets and sources | Reuse existing valid permissions only within their exact scope. This roadmap creates no experimental allowance, default-model selection, backfill or live cutover. |
-| Future extensions | Full knowledge graphs, fine-tuning, advanced proactive alerts and handover packages remain post-foundation extensions. Global-promotion control and basic stale-dependency propagation are required earlier. |
+| Future extensions | Full knowledge graphs, fine-tuning, advanced proactive alerts, change-impact analysis and handover packages remain post-foundation extensions. Global-promotion control and basic stale-dependency propagation are required earlier. |
+| Active task context versus memory (plan v1.1) | Every button-driven AI action starts from an explicit Active Task Context (project, task type, system, revision, floor/zone, selected entities and files, attachments, user inputs, current step, temporary outputs). It is workflow state, not memory: it is isolated to its project and selection, may expire, and never becomes a project fact by being saved. Only M31's promotion step moves confirmed facts, decisions, approvals, corrections, meaningful events and validated lessons into Project Memory. The ProjectContextBuilder (M22) takes task context as its first input. Existing per-job payloads and per-request selections (BackgroundJob rows, the scoped drawing review) are the nearest current behavior and are not an explicit task context. |
+| Memory plan renumbering (v1.0 → v1.1) | The v1.1 plan renumbers its milestones M1–M14. The unified numbers do not change: v1.1 M5 (Active Task Context & Workflow State) is M30 and v1.1 M13 (Task Result Feedback & Memory Promotion) is M31; the other twelve keep their U2 unified numbers. The appendix carries both mappings. v1.1's production acceptance gate (no broad automatic promotion until isolation, revision, evidence, task-context, correction, RAG-filter and insufficient-evidence tests pass) is adopted as an M23 and M31 exit condition. |
 
-## 7. Single delivery sequence — M1–M29
+## 7. Single delivery sequence — M1–M31
 
 Use this sequence for planning, issue titles, progress reporting and completion records. The prerequisite column names technical dependencies. Earlier work remains credited to its assessed snapshot. Adding milestones neither resets completed work nor declares an incomplete milestone accepted.
 
@@ -223,12 +227,12 @@ Default delivery order (numbers are identifiers, not positions):
 
 ```text
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10 → M11
-  → { M12 → M13 }  ∥  { M26, M28 }  ∥  { M14 → M15 → M16 → M17 }
-  → M18 → M19 → M20 → M21 → M22 → M23
+  → { M12 → M13 }  ∥  { M26, M28 }  ∥  { M14 → M15 → M16 → M17 → M30 }
+  → M18 → M19 → M20 → M21 → M22 → M23 → M31
   → { M27, M29 } → M24 → M25
 ```
 
-Braces hold work that may proceed in parallel once its own prerequisites are met. M26 and M28 start after M11 alongside the drawing and memory tracks; M27 and M29 follow the shared retrieval/context and event milestones; M24 and M25 close after every workflow consumer exists.
+Braces hold work that may proceed in parallel once its own prerequisites are met. M26 and M28 start after M11 alongside the drawing and memory tracks; M30 (active task context) follows the memory foundation and precedes the context builder; M31 (task-result promotion) follows automatic capture; M27 and M29 follow the shared retrieval/context and event milestones; M24 and M25 close after every workflow consumer exists.
 
 Design and isolated preparation may overlap where prerequisites allow, but integration and release must satisfy the stated gates. Shared event/evidence contracts start at M7; their complete memory features are delivered later. Quality instrumentation starts with the foundation and closes at M25.
 
@@ -255,18 +259,20 @@ Design and isolated preparation may overlap where prerequisites allow, but integ
 | M19 | Conflicts, Corrections & Revision Authority | Partial domain supersession. | M15, M16, M18 |
 | M20 | Versioned Project Summaries | Current-state dashboard only. | M18, M19 |
 | M21 | Project-Scoped RAG | Dedicated chunk/vector retrieval missing. | M11, M16, M19, M20 |
-| M22 | Shared Project Context Builder | Task-specific strings and budgets only. | M15, M19, M20, M21 |
-| M23 | Controlled Automatic Memory Capture | Domain proposals exist; general memory capture missing. | M18, M19, M22 |
-| M24 | Memory Integration Across Engineering Workflows | Multiple AI workflows; common memory contract missing. | M10, M13, M17, M22, M23, M27, M29 |
+| M22 | Shared Project Context Builder | Task-specific strings and budgets only. | M15, M19, M20, M21, M30 |
+| M23 | Controlled Automatic Memory Capture | Domain proposals exist; general memory capture missing. | M18, M19, M22, M30 |
+| M24 | Memory Integration Across Engineering Workflows | Multiple AI workflows; common memory contract missing. | M10, M13, M17, M22, M23, M27, M29, M30, M31 |
 | M25 | End-to-End Quality, Operations & Acceptance | AI usage metrics only. | M11, M13, M24 |
 | M26 | Compliance Evidence, Requirements & Deterministic Verification | Clause handling, autofill, approval and export exist; no assessment states, page ledger, evidence items or validators. | M3, M4, M6, M7, M11 |
 | M27 | Compliance Retrieval, Drafting, Outcomes & Release | Prompt-level guidance and cross-project learned answers only. | M18, M19, M21, M22, M23, M26 |
 | M28 | Engineering Workload Engine & Dashboard | No workload, capacity, share or snapshot code; inputs partly owned (section 3). | M1, M3, M7, M9, M11 |
 | M29 | Workload Scenarios, Strength Proposals, Calibration & Release | Missing. | M15, M16, M18, M22, M28 |
+| M30 | Active Task Context & Workflow State | Missing dedicated implementation; per-job payloads and per-request selections only. | M3, M7, M14 |
+| M31 | Task Result Feedback & Memory Promotion | Missing. | M18, M19, M22, M23, M30 |
 
-The current extraction closure belongs to **M4** and safe Apply closure to **M5**. Their historical evidence retains the source-plan identifiers; use the appendix when reading those reports. Task One is M26 and M27; Task Two is M28 and M29; their phase mapping is in the appendix. Owners and dates remain to be assigned against actual capacity and validation scope.
+The current extraction closure belongs to **M4** and safe Apply closure to **M5**. Their historical evidence retains the source-plan identifiers; use the appendix when reading those reports. Task One is M26 and M27; Task Two is M28 and M29; their phase mapping is in the appendix. Memory plan v1.1's new milestones are M30 and M31; its renumbering is in the appendix. Owners and dates remain to be assigned against actual capacity and validation scope.
 
-## 8. Milestone details — M1–M29
+## 8. Milestone details — M1–M31
 
 ### M1 — Data Requirements, Ownership & Current-State Map
 
@@ -482,7 +488,7 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 
 **Deliverable and acceptance gate:** Durable before/after events, actor, rationale, effective/recording times and source, transactional delivery and deduplication; query what/when/why across modules.
 
-Consultant decisions at submission and clause level, capacity and ownership-share changes, strength overrides and configuration version changes are durable events here, with effective and recording time. Task One's closed-loop consultant outcomes (M27) and Task Two's historical calibration (M29) read this timeline; neither keeps its own.
+Consultant decisions at submission and clause level, capacity and ownership-share changes, strength overrides, configuration version changes and task-result events (the completion of a platform action under an Active Task Context, M30/M31) are durable events here, with effective and recording time. Task One's closed-loop consultant outcomes (M27) and Task Two's historical calibration (M29) read this timeline; neither keeps its own.
 
 ### M19 — Conflicts, Corrections & Revision Authority
 
@@ -514,31 +520,31 @@ The index carries the metadata Task One's consultant-first retrieval filters on:
 
 ### M22 — Shared Project Context Builder
 
-**Prerequisites:** M15, M19, M20, M21.
+**Prerequisites:** M15, M19, M20, M21, M30.
 
 **Status:** Task-specific strings and budgets only.
 
 **Deliverable and acceptance gate:** One ProjectContextBuilder chooses minimum facts/corrections/events/summary/RAG, applies authority/temporal rules and token budgets, and returns source IDs, uncertainty and version. Project/access/dependency-aware caching.
 
-Task One's eight-tier consultant-first order and Task Two's “explanations only from stored inputs” are context policies of this builder, selected per task. The builder records provider, model, prompt version, project policy, evidence IDs, source hashes, usage and result for every attempt, which closes the AiUsage gap in section 3; failed, partial, refused, timed-out and budget-stopped attempts stay visible and never replace prior good evidence.
+The builder is task-aware (plan v1.1): its first input is the Active Task Context of the current platform action (M30), and retrieval is filtered by that context's project, system, revision, floor/zone and selections before ranking; a drawing review opened on floor L6 revision R2 must not silently pull L7 or R1 unless history is required. Task One's eight-tier consultant-first order and Task Two's “explanations only from stored inputs” are context policies of this builder, selected per task. The builder records provider, model, prompt version, project policy, evidence IDs, source hashes, usage and result for every attempt, which closes the AiUsage gap in section 3; failed, partial, refused, timed-out and budget-stopped attempts stay visible and never replace prior good evidence.
 
 ### M23 — Controlled Automatic Memory Capture
 
-**Prerequisites:** M18, M19, M22.
+**Prerequisites:** M18, M19, M22, M30.
 
 **Status:** Domain proposals exist; general memory capture missing.
 
-**Deliverable and acceptance gate:** After M19 core: useful event/conversation candidates, schema/evidence validation, scoped deduplication and risk policy; filler ignored, critical inference never auto-confirmed.
+**Deliverable and acceptance gate:** After M19 core: useful candidates from workflow results, approvals, corrections and meaningful system events (plan v1.1), schema/evidence validation, scoped deduplication and risk policy; workflow noise and temporary selections ignored, critical inference never auto-confirmed. Broad automatic promotion stays off until the v1.1 production acceptance gate passes: project isolation, revision correctness, evidence traceability, task-context isolation, correction priority, RAG filtering and the insufficient-evidence failure behavior.
 
 Task One's rejection memory (rejected wording, products and evidence patterns from consultant outcomes) and Task Two's labelled strength overrides are captured under this policy as candidates with evidence; neither becomes a confirmed fact, a rule or training data by being captured.
 
 ### M24 — Memory Integration Across Engineering Workflows
 
-**Prerequisites:** M10, M13, M17, M22, M23, M27, M29.
+**Prerequisites:** M10, M13, M17, M22, M23, M27, M29, M30, M31.
 
 **Status:** Multiple AI workflows; common memory contract missing.
 
-**Deliverable and acceptance gate:** Connect compliance, drawings/review/preparation, interfaces, BOQ/IFC, material submittals, calculations and engineering workload through one context contract; consistent corrections and versioned outcomes. The compliance adapter is M27's and the workload adapter M29's; M24 proves that the same correction (section 10: 125 → 105), the same consultant decision and the same specification revision reach every consumer consistently.
+**Deliverable and acceptance gate:** Connect compliance, drawings/review/preparation, interfaces, BOQ/IFC, material submittals, calculations and engineering workload through one task-context and memory contract (plan v1.1: every workflow creates its Active Task Context, retrieves through the one builder, and reports completion through M31); consistent corrections and versioned outcomes. The compliance adapter is M27's and the workload adapter M29's; M24 proves that the same correction (section 10: 125 → 105), the same consultant decision and the same specification revision reach every consumer consistently.
 
 ### M25 — End-to-End Quality, Operations & Acceptance
 
@@ -546,9 +552,29 @@ Task One's rejection memory (rejected wording, products and evidence patterns fr
 
 **Status:** AI usage metrics only.
 
-**Deliverable and acceptance gate:** Wrong-project/revision rates, critical evidence coverage, false-memory adjudication, retrieval precision, token use, duplicates, summary freshness, issue aging and agent consistency; labeled evaluations and recovery gates pass.
+**Deliverable and acceptance gate:** Wrong-project/revision rates, task-context leakage (zero cross-project; near-zero stale floor/revision/selection reuse), transient-to-memory error rate (near zero), task completion traceability, critical evidence coverage, false-memory adjudication, retrieval precision, token use, duplicates, summary freshness, issue aging and agent consistency; labeled evaluations and recovery gates pass.
 
 M25 also confirms the two workflow releases under the common scorer convention (section 6): M27's compliance cohort results and M29's calibration and manager-review record are re-read on the final tree, and their feature flags may be removed only here.
+
+### M30 — Active Task Context & Workflow State
+
+**Prerequisites:** M3, M7, M14.
+
+**Status:** Missing dedicated implementation. BackgroundJob rows carry per-job payloads and the scoped drawing review passes floor/revision selections per request; neither is an explicit, isolated task context.
+
+**Source:** Project Memory Master Plan v1.1, milestone M5.
+
+**Deliverable and acceptance gate:** A task_run / workflow-state model and lightweight service: project, task type, system, revision, floor/zone, selected entities and files, attachment IDs, user inputs, current step and temporary outputs, created by each button-driven platform action (`POST /projects/{id}/tasks/context`, `PATCH /tasks/{id}/context`, `POST /tasks/{id}/execute`, `POST /tasks/{id}/complete`), referenced by every AI request, isolated to its project and selection, and expirable (TTL/cleanup). It is not project memory: nothing in it becomes a fact by being saved. Exit: every AI action has explicit, isolated temporary context; a task opened in project B retrieves B only; a temporary selection (for example a detector model tried during a check) is not a confirmed fact when the task ends; the ordinary-read rule of M10 holds (creating a task context is an explicit action, not a GET side effect).
+
+### M31 — Task Result Feedback & Memory Promotion
+
+**Prerequisites:** M18, M19, M22, M23, M30.
+
+**Status:** Missing.
+
+**Source:** Project Memory Master Plan v1.1, milestone M13.
+
+**Deliverable and acceptance gate:** Standardised completion events for every platform action, and the policy that decides which outputs become structured facts, durable events, open issues, corrections or candidate memories, with evidence and the task context recorded; everything else is discarded with the task. Exit: completed tasks improve project memory without saving transient state; each promoted item is traceable to its task context and evidence; the v1.1 production acceptance gate (M23) passes before promotion is broadened beyond reviewed candidates.
 
 ### M26 — Compliance Evidence, Requirements & Deterministic Verification
 
@@ -642,11 +668,11 @@ Each row needs a consumer acceptance record: input owner, source/artifact IDs, A
 
 ## 10. Shared memory architecture and acceptance scenarios
 
-The memory capabilities in the unified sequence build on the accepted core. Its source plan's four layers remain structured, semantic, episodic and summary memory. Build a dedicated FastAPI service with the original eleven endpoint patterns, a React memory tab, worker jobs and reusable workflow adapters.
+The memory capabilities in the unified sequence build on the accepted core. The governing plan is v1.1: four persistent layers (structured, semantic, episodic and summary memory) with an ephemeral Active Task Context in front of retrieval. Build a dedicated FastAPI service with the plan's memory endpoints (list, facts, summary, events, create, patch, confirm, reject, pin, retrieve, rebuild-summary) and its task endpoints (create/patch task context, execute, complete), a React memory tab, worker jobs and reusable workflow adapters. Every workflow sends explicit task context from its button or action; the frontend never relies on an implicit session.
 
 The relational additions include project_memories, typed project_facts, decisions/corrections (or normalized subtype equivalents), project_events, project_summaries, memory_evidence and protected memory_audit_log. Extend existing document/domain identities with immutable versions and chunks; do not create competing document registries. Supporting access, conflicts, promotion, processing/outbox and retrieval traces need explicit contracts.
 
-The detailed delivery stages are M14–M25, with policy established at M3 and shared infrastructure at M7. Durable events (M18) precede summaries (M20); conflicts and authority (M19) precede automated capture (M23). Project RAG (M21) follows stabilization (M11) and supplies the shared context builder (M22). Cross-workflow integration (M24) precedes final acceptance (M25).
+The detailed delivery stages are M14–M25 with M30 and M31, with policy established at M3 and shared infrastructure at M7. Active task context (M30) follows the memory foundation and precedes the context builder (M22). Durable events (M18) precede summaries (M20); conflicts and authority (M19) precede automated capture (M23), which precedes task-result promotion (M31). Project RAG (M21) follows stabilization (M11) and supplies the shared context builder (M22). Cross-workflow integration (M24) precedes final acceptance (M25).
 
 **Required memory acceptance examples:**
 - Project A Edwards / Project B Siemens: B returns only its applicable Siemens state and permitted sources.
@@ -655,6 +681,9 @@ The detailed delivery stages are M14–M25, with policy established at M3 and sh
 - Unsupported AI approval: stays unconfirmed; no model confidence or pin can grant authority.
 - Source withdrawal/revision: affected facts, summaries, contexts and generated outputs become stale and require appropriate review.
 - Token pressure: preserve required evidence or report insufficient context; never silently drop the critical constraint.
+- Drawing review opened on floor L6, revision R2 (v1.1): the context builder does not silently pull L7 or R1 unless history is required for the task.
+- Temporary selection (v1.1): a detector model the user tries during a check is not a confirmed project fact when the task ends, unless approved or promoted through M31.
+- Insufficient evidence: the system says so rather than inventing a memory.
 
 ## 11. Verification performed for this consolidation
 
@@ -676,7 +705,7 @@ The [post-review drift check](roadmap-evidence/2026-10-06/source-drift-check.jso
 
 ## 12. Historical milestone cross-reference
 
-This appendix is for locating earlier PDFs, files and acceptance records. These historical identifiers are not additional milestones or separate roadmaps. Their status belongs to the exact snapshot named by their evidence; use M1–M29 for all new execution tracking.
+This appendix is for locating earlier PDFs, files and acceptance records. These historical identifiers are not additional milestones or separate roadmaps. Their status belongs to the exact snapshot named by their evidence; use M1–M31 for all new execution tracking.
 
 | Unified milestone | Original source reference | Scope |
 |---|---|---|
@@ -709,6 +738,31 @@ This appendix is for locating earlier PDFs, files and acceptance records. These 
 | M27 | Task One Phases 4–7 | Compliance Retrieval, Drafting, Outcomes & Release |
 | M28 | Task Two Phases 0–4 | Engineering Workload Engine & Dashboard |
 | M29 | Task Two Phases 3 (model-assisted), 5–7 | Workload Scenarios, Strength Proposals, Calibration & Release |
+| M30 | Project Memory v1.1 M5 | Active Task Context & Workflow State |
+| M31 | Project Memory v1.1 M13 | Task Result Feedback & Memory Promotion |
+
+### Project Memory Master Plan v1.1 renumbering
+
+The v1.0 identifiers (PM-M0–PM-M12) in the table above and in [milestones/project-memory/README.md](milestones/project-memory/README.md) refer to plan v1.0. Plan v1.1 renumbers to M1–M14; the unified numbers are unchanged.
+
+| v1.1 milestone | v1.1 name | v1.0 equivalent | Unified |
+|---|---|---|---|
+| M1 | Project Memory Database | PM-M1 | M14 |
+| M2 | Structured Project Facts | PM-M2 | M15 |
+| M3 | Manual Memory UI | PM-M3 | M17 |
+| M4 | Evidence & Trust | PM-M4 | M16 |
+| M5 | Active Task Context & Workflow State | new | M30 |
+| M6 | Project Summary Memory | PM-M5 | M20 |
+| M7 | Project RAG Integration | PM-M6 | M21 |
+| M8 | Task-Aware Retrieval Engine | PM-M7 | M22 |
+| M9 | Episodic Memory & Workflow Timeline | PM-M8 | M18 |
+| M10 | Automatic Memory Candidate Extraction | PM-M9 | M23 |
+| M11 | Conflict & Revision Resolution | PM-M10 | M19 |
+| M12 | Agent & Platform Workflow Integration | PM-M11 | M24 |
+| M13 | Task Result Feedback & Memory Promotion | new | M31 |
+| M14 | Analytics, Quality & Production Governance | PM-M12 | M25 |
+
+v1.1's execution waves (Foundation M1–M4, Workflow Context M5–M6, Intelligence M7–M9, Automation M10–M11, Integration M12–M13, Scale M14) are consistent with the unified delivery order in section 7.
 
 ### Task phase cross-reference
 
@@ -749,7 +803,7 @@ Use the complete [historical M2 acceptance matrix](<G:/dev (2)/dev/ep-platform-m
 3. Complete M5 safe Apply correction review and integration, preserving current drawing preparation behavior.
 4. Deliver M6–M11: classification, shared processing (including the one consultant decision vocabulary, the required-deliverable registers and the typed evidence item), deterministic geometry, backfill, tab migration and stabilization. Verify that Drawings and Interfaces reuse the same compatible stored artifacts.
 5. Complete M12 visual review and M13 real-project drawing validation; in parallel start M26 compliance evidence and M28 workload engine once M11 is accepted.
-6. Complete M14–M23: governed memory storage, facts, evidence, UI, durable history, conflict control, summaries, RAG, shared context and automatic capture.
+6. Complete M14–M23 with M30 and M31: governed memory storage, facts, evidence, UI, active task context, durable history, conflict control, summaries, RAG, task-aware shared context, automatic capture and task-result promotion.
 7. Complete M27 compliance drafting and release and M29 workload scenarios, calibration and release, then M24 workflow integration and M25 final acceptance.
 
 The next implementation task should name one unified milestone, its bounded scope, the snapshot it changes, its exact completion gate and evidence destination. Keep useful existing work and historical acceptance evidence.
