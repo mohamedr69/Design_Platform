@@ -1,6 +1,6 @@
 # Engineering Project Platform
 
-Project planning: [Unified Master Roadmap](docs/UNIFIED_MASTER_ROADMAP.md) — current implementation evidence, Platform M1–M7, Redesign RD-M1–RD-M5, Project Memory PM-M0–PM-M12, and shared processing across Drawings, Interfaces and other tabs.
+Project planning: [Unified Master Roadmap](docs/UNIFIED_MASTER_ROADMAP.md) — one delivery sequence from M1 to M25, current implementation evidence, acceptance gates, and shared processing across Drawings, Interfaces and other tabs.
 
 Phase 1: authentication, roles/permissions, and the basic app shell.
 Phase 2: Create Project / Open Project, EP-number resolution against the

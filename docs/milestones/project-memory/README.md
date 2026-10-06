@@ -1,6 +1,6 @@
 # Project Memory Implementation Roadmap
 
-> **Consolidated roadmap:** use [UNIFIED_MASTER_ROADMAP.md](../../UNIFIED_MASTER_ROADMAP.md) for current status, cross-track dependencies and the mandatory shared drawing-processing/reuse contract. This earlier memory-only plan is retained for traceability. PostgreSQL implementation belongs at Platform M7 after core stabilization; PM-M6 RAG follows M7.
+> **Consolidated roadmap:** use [UNIFIED_MASTER_ROADMAP.md](../../UNIFIED_MASTER_ROADMAP.md), numbered **M1–M25**, for all current execution tracking, dependencies and the shared drawing-processing/reuse contract. This earlier memory-only plan retains historical IDs for traceability; use the unified roadmap's cross-reference appendix. In the unified sequence, stabilization/PostgreSQL readiness is M11 and project RAG is M21.
 
 Date: 6 October 2026
 Project: Engineering Project Platform
