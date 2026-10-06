@@ -67,6 +67,10 @@ class Scope:
     max_turns: int
     # the pictures inside the message (AI_CLI_INLINE_IMAGES) rather than read with the Read tool, a turn each
     inline_images: bool = False
+    # The most turns a reply may *report* before the run stops -- apart from `max_turns`, the limit given to
+    # the CLI: Claude Code 2.1.289 answered under --max-turns 1 and reported num_turns 2 (job 220).
+    # Unset, the same as max_turns.
+    max_reported_turns: int | None = None
 
 
 def _sha_file(path: Path) -> str | None:
@@ -109,24 +113,45 @@ def preflight(db, scope: Scope) -> dict:
     if fls and scope.floor.strip().upper() not in (fls.get("title") or "").upper():
         raise Refused(f"the floor's FLS match is {fls.get('file')} page {fls.get('page')} "
                       f"({fls.get('title')!r}), not {scope.floor!r}")
-    per = max(1, s.drawing_review_windows_per_call)
+    # the looks exactly as the run will plan them: what a model already answered (windows in full, the
+    # rooms it answered of a window, plan and FLS passes) is kept and not asked again
+    from types import SimpleNamespace
+
+    from app.review import rulings as R
+
+    _extra, ruled = R.prompt(db)
+    held = row if row is not None else SimpleNamespace(sheets=[], source_sha256=None)
+    merged, tasks = service.plan_looks(held, sheets, sha, f"{A.PROMPT_VERSION}+{ruled}", [scope.page],
+                                       keep_answered=True)
+    sh = next(m for m in merged if m["index"] == scope.page)
     windows = sh["windows"]
-    calls = [{"task": "window", "windows": [w["id"] for w in windows[i:i + per]],
-              "rooms": sum(len(w["rooms"]) for w in windows[i:i + per])} for i in range(0, len(windows), per)]
-    calls.append({"task": "sheet", "rooms": sum(len(w["rooms"]) for w in windows)})
-    if fls:
-        calls.append({"task": "fls", "file": fls.get("file"), "page": fls.get("page")})
+    by_id = {w["id"]: w for w in windows}
+    calls = []
+    for kind, _index, ids in tasks:
+        if kind == "window":
+            calls.append({"task": "window", "windows": ids,
+                          "rooms": [r["name"] for i in ids for r in service.rooms_to_ask(by_id[i])]})
+        elif kind == "sheet":
+            calls.append({"task": "sheet", "rooms": sum(len(w["rooms"]) for w in windows)})
+        else:
+            calls.append({"task": "fls", "file": fls.get("file"), "page": fls.get("page")})
+    if not calls:
+        raise Refused(f"nothing is left to ask on {scope.floor}")
     if len(calls) > scope.max_calls:
-        raise Refused(f"the floor needs {len(calls)} calls (its {len(windows)} windows {per} to a call, the plan, "
-                      f"the FLS) and the limit is {scope.max_calls}: windows would be left unasked")
+        raise Refused(f"the floor needs {len(calls)} calls ({', '.join(c['task'] for c in calls)}) and the limit is "
+                      f"{scope.max_calls}: windows would be left unasked")
     return {
         "project": {"id": project.id, "ep_number": project.ep_number, "name": project.project_name},
         "drawing": {"id": drawing.id, "filename": drawing.filename, "revision": drawing.revision or "R0",
                     "source": str(src), "source_sha256": sha},
         "plot": {"pdf": str(plot), "bytes": plot.stat().st_size},
         "page": {"index": sh["index"], "sheet": sh["name"], "title": sh["title"], "floor": sh["floor"]},
-        "windows": [{"id": w["id"], "rooms": [r["name"] for r in w["rooms"]]} for w in windows],
+        "windows": [{"id": w["id"], "status": w.get("status", "pending"), "rooms": [r["name"] for r in w["rooms"]],
+                     "answered": len((w.get("answers") or {}) if service._usable(w) else {})} for w in windows],
         "rooms": sum(len(w["rooms"]) for w in windows),
+        "rooms_answered_before": sum(len(w.get("answers") or {}) for w in windows if service._usable(w)),
+        "plan_pass_before": "done" if service._pass_done(sh, "sheet") else "to ask",
+        "fls_pass_before": ("done" if service._pass_done(sh, "fls") else "to ask") if fls else None,
         "fls": {k: v for k, v in (fls or {}).items() if k != "pdf"} or None,
         "calls": calls,
         "decisions": len((row.decisions or {}) if row else {}),
@@ -154,6 +179,7 @@ class Guard:
     that shows more than it should stops the rest."""
 
     def __init__(self, inner, limit: int, max_turns: int, floor: str | None = None):
+        # max_turns here is the most turns a reply may report (Scope.max_reported_turns)
         self.inner, self.limit, self.max_turns = inner, limit, max_turns
         self.floor = floor.strip().upper() if floor else None
         self.invocations: list[dict] = []
@@ -187,12 +213,13 @@ class Guard:
         response = self.inner.complete(request)
         entry.update(model=response.model, models_used=dict(response.models_used or {}), turns=response.turns,
                      error=response.error, error_detail=(response.error_detail or "")[:300] or None,
-                     usage=dataclasses.asdict(response.usage), latency_ms=response.latency_ms)
+                     usage=dataclasses.asdict(response.usage), latency_ms=response.latency_ms,
+                     route_meta=dict(getattr(response, "route_meta", None) or {}))
         problem = None
         if response.error in STOPPING:
             problem = f"call {entry['n']}: {response.error} ({(response.error_detail or '')[:160]})"
         elif response.turns is not None and response.turns > self.max_turns:
-            problem = f"call {entry['n']} took {response.turns} turns, more than {self.max_turns}"
+            problem = f"call {entry['n']} reported {response.turns} turns, more than the {self.max_turns} allowed"
         elif any(m != model for m in response.models_used or {}):
             problem = f"call {entry['n']}: other models took part ({', '.join(response.models_used)})"
         elif response.ok and response.model != model:
@@ -254,7 +281,7 @@ def scoped_settings(scope: Scope):
     as it was afterwards, whatever happened."""
     s = get_settings()
     saved = {k: getattr(s, k) for k in ("drawing_review_ai_enabled", "drawing_review_max_calls", "ai_cli_max_turns",
-                                        "ai_cli_inline_images")}
+                                        "ai_cli_inline_images", "drawing_review_parallel")}
     saved_env = {k: os.environ.get(k) for k in CLI_ENV}
     saved_provider = prov._review_provider
     saved_call = assist.call_task
@@ -267,6 +294,8 @@ def scoped_settings(scope: Scope):
         s.drawing_review_max_calls = scope.max_calls
         s.ai_cli_max_turns = scope.max_turns
         s.ai_cli_inline_images = scope.inline_images
+        # one look at a time: the guard sees each reply before the next look is sent
+        s.drawing_review_parallel = 1
         os.environ.update(CLI_ENV)
         assist.call_task = fresh_call
         yield
@@ -309,10 +338,12 @@ def _floor_view(db, project_id: int, drawing_id: int, page: int) -> dict:
             "room_status": {st: sum(1 for r in floor["rooms"] if r["status"] == st)
                             for st in sorted({r["status"] for r in floor["rooms"]})},
             "windows": floor["windows"], "windows_done": floor["windows_done"],
-            "windows_failed": floor["windows_failed"], "sheet_status": floor["sheet_status"],
-            "fls_status": floor["fls_status"]},
+            "windows_incomplete": floor["windows_incomplete"], "windows_failed": floor["windows_failed"],
+            "rooms_not_reviewed": [r["name"] for r in floor["rooms"] if not r["checks"]],
+            "plan_pass": floor["sheet_status"], "fls_pass": floor["fls_status"]},
+        "merged_pass_findings": view.get("merged_pass_findings", 0),
         "findings": [{k: f.get(k) for k in ("id", "room", "system", "kind", "action", "device", "instruction",
-                                              "decision", "previous_decision")} for f in found],
+                                              "decision", "previous_decision", "also_seen")} for f in found],
     }
 
 
@@ -339,7 +370,8 @@ def run(scope: Scope, provider_factory: Callable[[], object], *, session_factory
     beat = None
     try:
         with scoped_settings(scope):
-            guard = Guard(provider_factory(), scope.max_calls, scope.max_turns, floor=scope.floor)
+            guard = Guard(provider_factory(), scope.max_calls, scope.max_reported_turns or scope.max_turns,
+                          floor=scope.floor)
             prov._review_provider = guard
             report["provider"] = {"name": guard.name, "ready": guard.ready, "status": guard.status}
             db = session_factory()
@@ -350,7 +382,10 @@ def run(scope: Scope, provider_factory: Callable[[], object], *, session_factory
                     started_at=now, heartbeat_at=now, attempts=jobs.MAX_ATTEMPTS,
                     dedup_key=f"{KIND}:{plan['project']['id']}:{scope.drawing_id}",
                     params={"drawing_id": scope.drawing_id, "pages": [scope.page], "user_id": None,
-                            "validation": {"max_calls": scope.max_calls, "max_turns": scope.max_turns}},
+                            "keep_answered": True,
+                            "validation": {"max_calls": scope.max_calls, "max_turns": scope.max_turns,
+                                           "max_reported_turns": scope.max_reported_turns or scope.max_turns,
+                                           "inline_images": scope.inline_images}},
                     progress={"done": 0, "total": 1, "message": f"Validation run: {scope.floor} only"})
                 db.add(job)
                 db.commit()
@@ -386,7 +421,8 @@ def run(scope: Scope, provider_factory: Callable[[], object], *, session_factory
             report["settings_after"] = {"drawing_review_ai_enabled": s.drawing_review_ai_enabled,
                                         "drawing_review_max_calls": s.drawing_review_max_calls,
                                         "ai_cli_max_turns": s.ai_cli_max_turns,
-                                        "ai_cli_inline_images": s.ai_cli_inline_images, "ai_enabled": s.ai_enabled,
+                                        "ai_cli_inline_images": s.ai_cli_inline_images,
+                                        "drawing_review_parallel": s.drawing_review_parallel, "ai_enabled": s.ai_enabled,
                                         "fa_ai_enabled": s.fa_ai_enabled,
                                         "review_provider": type(prov.get_review_provider()).__name__,
                                         "cli_env": {k: os.environ.get(k) for k in CLI_ENV}}

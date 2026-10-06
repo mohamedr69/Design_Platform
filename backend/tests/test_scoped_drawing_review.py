@@ -97,7 +97,8 @@ def _restored(saved):
     assert assist.call_task.__name__ == "call_task"          # stored answers are reused again outside the run
 
 
-SAVED = ("drawing_review_ai_enabled", "drawing_review_max_calls", "ai_cli_max_turns", "ai_cli_inline_images")
+SAVED = ("drawing_review_ai_enabled", "drawing_review_max_calls", "ai_cli_max_turns", "ai_cli_inline_images",
+         "drawing_review_parallel")
 
 
 # --- the run ---------------------------------------------------------------------------------------------------
@@ -158,14 +159,18 @@ def test_a_scoped_run_whose_calls_all_fail_keeps_the_answers_and_decisions_and_p
     assert client.post(url, json={"id": finding["id"], "status": "accepted"}).status_code == 200
     row = db_session.query(ProjectDrawingReview).filter_by(project_id=pid, drawing_id=did).one()
     db_session.refresh(row)
+    sheets = json.loads(json.dumps(row.sheets))
+    sheets[0]["sheet_status"] = "failed"                     # the floor's plan pass left to ask
+    row.sheets = sheets
+    db_session.commit()
     before = json.dumps([row.sheets, row.decisions], sort_keys=True)
     saved = {k: getattr(settings, k) for k in SAVED}
 
-    # the ruling the acceptance made is a new question: the floor is asked again, and every call fails
+    # the answered windows are kept (not asked again, the ruling notwithstanding); the plan pass fails
     report = scoped.run(_scope("50002", did, sha), lambda: scoped.RehearsalProvider(fail=True))
 
     assert report["job"]["status"] == "failed" and "review has not completed" in report["job"]["error"]
-    assert len(report["invocations"]) == 2
+    assert [i["task"] for i in report["invocations"]] == ["fa_drawing_review_sheet"]
     db_session.refresh(row)
     assert json.dumps([row.sheets, row.decisions], sort_keys=True) == before
     kept = next(f for f in client.get(f"/projects/{pid}/drawing-review/{did}").json()["findings"]
@@ -442,3 +447,110 @@ def test_the_cli_is_given_the_turn_limit_and_its_turns_are_counted(monkeypatch, 
     ClaudeCodeProvider().complete(request)
     assert "--max-turns" not in fake.calls[-1]                   # unset: the CLI's own limit, as before
     set_provider(None)
+
+
+# --- one look at a time, and the continuation ----------------------------------------------------------------
+
+
+def test_looks_go_one_at_a_time_so_a_stop_keeps_the_next_from_being_sent(client, db_session, monkeypatch, tmp_path):
+    """Job 220 sent two looks at once, so the second was on its way before the
+    first reply could be checked. The run now sends one look at a time."""
+    pid, did, sha = _two_floors(client, db_session, monkeypatch, tmp_path, "50020")
+    monkeypatch.setattr(settings, "drawing_review_parallel", 2)          # the platform's own setting
+    _review(client, pid, did, scoped.RehearsalProvider())
+    _placeholders(db_session, pid, did)
+    saved = {k: getattr(settings, k) for k in SAVED + ("drawing_review_parallel",)}
+    inner = scoped.RehearsalProvider(turns=2)                             # every reply reports 2 turns
+
+    report = scoped.run(_scope("50020", did, sha, max_turns=1), lambda: inner)
+
+    assert inner.calls == 1 and len(report["invocations"]) == 1           # the plan pass was never sent
+    assert "reported 2 turns" in report["stopped"]
+    floor = report["review"]["floor"]
+    # what the one answered look gave is kept and counted; the pass not asked says so
+    assert floor["reviewed"] == 2 and floor["rooms_not_reviewed"] == [] and floor["plan_pass"] == "failed"
+    assert report["review"]["state"] == "partial"
+    view = client.get(f"/projects/{pid}/drawing-review/{did}").json()
+    assert view["counts"]["reviewed"] == 2 and view["state"] == "partial"
+    _restored(saved)
+    assert settings.drawing_review_parallel == 2
+
+
+def test_the_continuation_asks_only_what_is_left_and_keeps_what_was_answered(client, db_session, monkeypatch,
+                                                                            tmp_path):
+    from app.models import ProjectDrawingReview
+
+    pid, did, sha = _two_floors(client, db_session, monkeypatch, tmp_path, "50021")
+    _review(client, pid, did, scoped.RehearsalProvider())
+    _placeholders(db_session, pid, did)
+    # the first run: one room left unanswered, and stopped before the plan pass
+    first = scoped.run(_scope("50021", did, sha, max_turns=1), lambda: scoped.RehearsalProvider(skip_rooms=1, turns=2))
+    assert first["review"]["floor"]["rooms_not_reviewed"] == ["ELECTRICAL ROOM"]
+    row = db_session.query(ProjectDrawingReview).filter_by(project_id=pid, drawing_id=did).one()
+    db_session.refresh(row)
+    lobby_window = next(w for w in row.sheets[0]["windows"] if any(r["name"] == "LOBBY" for r in w["rooms"]))
+    lobby_answer = json.dumps(lobby_window["answers"], sort_keys=True)
+    # the engineer decides on the finding before the continuation: a ruling, so a new prompt
+    found = client.get(f"/projects/{pid}/drawing-review/{did}").json()["findings"]
+    fid = next(f["id"] for f in found if f["page"] == 0 and f["action"] == "add")
+    assert client.post(f"/projects/{pid}/drawing-review/{did}/decisions",
+                       json={"id": fid, "status": "accepted"}).status_code == 200
+    db_session.refresh(row)
+    decisions = json.dumps(row.decisions, sort_keys=True)
+
+    second = scoped.run(_scope("50021", did, sha, max_turns=1, max_reported_turns=1),
+                        lambda: scoped.RehearsalProvider(turns=1))
+
+    # exactly what was left: the one room, then the plan pass -- nothing answered is asked again
+    assert [(c["task"], c.get("rooms")) for c in second["plan"]["calls"]] == [("window", ["ELECTRICAL ROOM"]),
+                                                                              ("sheet", 2)]
+    asked = [e["text"] for i in second["invocations"] for e in i["evidence"] if e["label"].endswith(" rooms")]
+    assert asked == ["2: ELECTRICAL ROOM"]
+    assert second["plan"]["rooms_answered_before"] == 1 and second["plan"]["plan_pass_before"] == "to ask"
+    db_session.refresh(row)
+    window = next(w for w in row.sheets[0]["windows"] if any(r["name"] == "LOBBY" for r in w["rooms"]))
+    assert json.dumps(window["answers"], sort_keys=True) == lobby_answer   # the earlier answer, as it was
+    assert json.dumps(row.decisions, sort_keys=True) == decisions
+    floor = second["review"]["floor"]
+    assert floor["reviewed"] == 2 and floor["rooms_not_reviewed"] == [] and floor["plan_pass"] == "done"
+    view = client.get(f"/projects/{pid}/drawing-review/{did}").json()
+    ids = [f["id"] for f in view["findings"]]
+    assert len(ids) == len(set(ids)) and fid in ids                       # no duplicates; the decided one kept
+    assert next(f for f in view["findings"] if f["id"] == fid)["decision"] == "accepted"
+    assert view["state"] == "partial"                                      # the first floor was never asked
+    # nothing left to ask: refused, not run again
+    with pytest.raises(scoped.Refused, match="nothing is left"):
+        scoped.run(_scope("50021", did, sha), lambda: scoped.RehearsalProvider())
+
+
+def test_a_plan_pass_finding_the_room_review_has_is_merged_not_shown_twice():
+    from app.review import service
+
+    def f(fid, kind, room, system="manual_call_point", action="add"):
+        return {"id": fid, "page": 3, "kind": kind, "room": room, "system": system, "action": action,
+                "instruction": f"{kind} says add"}
+
+    room = f("r1", "room", "LOBBY")
+    findings = [room, f("s1", "sheet", "Lobby, beside the main entrance"),         # the same: merged
+                f("s2", "sheet", "Lobby", system="detection"),                    # another system: kept
+                f("s3", "fls", "Driveway bend"),                                  # another place: kept
+                f("s4", "sheet", "LOBBY near the door")]                           # decided on: kept
+    assert service._merge_passes(findings, {"s4": {"status": "accepted"}}) == 1
+    assert [x["id"] for x in findings] == ["r1", "s2", "s3", "s4"]
+    assert room["also_seen"] == [{"kind": "sheet", "id": "s1", "instruction": "sheet says add"}]
+
+
+def test_the_clis_own_account_of_a_call_is_kept(monkeypatch, tmp_path):
+    exe = tmp_path / "claude.exe"
+    exe.write_bytes(b"")
+    monkeypatch.setattr(settings, "ai_claude_cli", str(exe))
+    monkeypatch.setattr(settings, "ai_cli_max_turns", 1)
+    reply = {**_reply({"claude-opus-5-5": {"outputTokens": 7}}), "num_turns": 2, "stop_reason": "end_turn",
+             "duration_ms": 900, "duration_api_ms": 800, "total_cost_usd": 0.1}
+    monkeypatch.setattr(subprocess, "run", FakeCli(reply=reply))
+    response = ClaudeCodeProvider().complete(AiRequest(task="t", system="s", parts=[TextPart("a", "b")],
+                                                       schema={"type": "object"}, max_output_tokens=100,
+                                                       model="claude-opus-5-5", exact_model=True))
+    assert response.ok and response.route_meta == {
+        "subtype": "success", "num_turns": 2, "stop_reason": "end_turn", "duration_ms": 900, "duration_api_ms": 800,
+        "total_cost_usd": 0.1, "max_turns_configured": 1, "inline_images": False}

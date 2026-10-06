@@ -1,5 +1,7 @@
 # Project Memory Implementation Roadmap
 
+> **Consolidated roadmap:** use [UNIFIED_MASTER_ROADMAP.md](../../UNIFIED_MASTER_ROADMAP.md) for current status, cross-track dependencies and the mandatory shared drawing-processing/reuse contract. This earlier memory-only plan is retained for traceability. PostgreSQL implementation belongs at Platform M7 after core stabilization; PM-M6 RAG follows M7.
+
 Date: 6 October 2026
 Project: Engineering Project Platform
 Status: Proposed implementation roadmap; milestone completion is not established by this document.
@@ -61,7 +63,7 @@ Implementation:
 - [ ] Add SQLAlchemy models and Alembic migrations for memories, typed facts/details, evidence, audit and conflicts.
 - [ ] Enforce non-null project scope, same-project evidence links and current-value constraints.
 - [ ] Implement repository/service operations with atomic lifecycle updates and immutable audit.
-- [ ] Rehearse migrations on a copied dataset; establish the PostgreSQL deployment path.
+- [ ] Rehearse memory-schema migrations on a copied dataset; use the PostgreSQL deployment path qualified at Platform M7.
 
 Acceptance:
 
@@ -130,7 +132,7 @@ Acceptance:
 
 ## PM-M6 — Project RAG Integration
 
-Dependencies: PM-M4.
+Dependencies: PM-M4 and accepted Platform M7.
 
 Implementation:
 
@@ -271,3 +273,7 @@ For each milestone, record the implemented files/migrations, acceptance commands
 Calendar estimates and assigned owners remain open until project access policy, backfill scope, document corpus, storage choice and team capacity are settled.
 
 
+
+## Shared drawing results across tabs — consolidated requirement
+
+A completed compatible extraction stage is reused by Drawings, Interfaces, BOQ, calculations and memory. Store source versions, physical equipment/geometry, coverage, producer/profile versions and dependency fingerprints in the central M4 processing registry. M6 verifies ordinary tab reads make zero duplicate extraction/OCR/model calls; M7 handles selective invalidation. Missing interface interpretation may run against saved artifacts without repeating completed base extraction. Explicit Fresh reread remains supported and auditable. See section 5 of the unified roadmap for the full contract.

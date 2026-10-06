@@ -1,5 +1,7 @@
 # Project Memory Master Plan — current-project gap assessment
 
+> **Earlier assessment:** see [UNIFIED_MASTER_ROADMAP.md](UNIFIED_MASTER_ROADMAP.md) for the combined Platform, Redesign and Project Memory plan, the newer code snapshot/test results and reconciled delivery sequence. Findings below retain their original assessment scope.
+
 Date: 6 October 2026
 Project reviewed: G:\dev (2)\dev\ep-platform-merged\ep-platform
 Source plan: Engineering_AI_Project_Memory_Master_Plan.pdf, version 1.0, all 19 pages.

@@ -160,6 +160,9 @@ class AiResponse:
     # The model requests the route made for this one call, when it says
     # (Claude Code's `num_turns`: a Read of each picture is a turn of its own).
     turns: int | None = None
+    # What the route says of the call besides (Claude Code's result: subtype, stop reason, durations,
+    # its own cost estimate -- an estimate, never a charge): kept for diagnosis, no content.
+    route_meta: dict[str, Any] = field(default_factory=dict)
 
     @property
     def ok(self) -> bool:
@@ -835,9 +838,13 @@ class ClaudeCodeProvider:
         )
         used, per_model, substitutes = models_used(reply.get("modelUsage"), model)
         turns = reply.get("num_turns")
+        meta = {k: reply.get(k) for k in ("subtype", "num_turns", "stop_reason", "terminal_reason", "duration_ms",
+                                          "duration_api_ms", "total_cost_usd") if k in reply}
+        meta["max_turns_configured"] = self._max_turns
+        meta["inline_images"] = inline
         common = dict(usage=usage, model=used, latency_ms=latency, models_used=per_model,
                       substituted=bool(substitutes), route_version=self._version_text,
-                      turns=turns if isinstance(turns, int) else None)
+                      turns=turns if isinstance(turns, int) else None, route_meta=meta)
         if reply.get("is_error") or reply.get("subtype") != "success":
             detail = str(reply.get("result") or reply.get("subtype") or "Claude Code reported an error")[:500]
             return AiResponse(data=None, error=self._error_kind(detail), error_detail=detail, **common)

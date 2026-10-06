@@ -257,6 +257,7 @@ def run_drawing_review(session: Session, job: BackgroundJob, ctx: jobs.JobContex
     p = job.params or {}
     try:
         return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+                          keep_answered=bool(p.get("keep_answered")),
                           progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
     except (jobs.Cancelled, jobs.Interrupted):
         raise

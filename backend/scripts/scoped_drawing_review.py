@@ -33,7 +33,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--floor", required=True, help="the floor that page must be")
     parser.add_argument("--sha", required=True, help="the drawing file's SHA-256 (12 characters at least)")
     parser.add_argument("--max-calls", type=int, required=True)
-    parser.add_argument("--max-turns", type=int, required=True)
+    parser.add_argument("--max-turns", type=int, required=True, help="the limit given to the CLI (--max-turns)")
+    parser.add_argument("--max-reported-turns", type=int,
+                        help="the most turns a reply may report before the run stops (default: --max-turns)")
     parser.add_argument("--inline-images", action="store_true",
                         help="the pictures inside the message: no Read turn a picture (one turn a call is then enough)")
     parser.add_argument("--report", type=Path, required=True)
@@ -56,11 +58,11 @@ def main(argv: list[str] | None = None) -> int:
 
     scope = scoped.Scope(ep_number=args.ep, drawing_id=args.drawing, page=args.page, floor=args.floor,
                          source_sha=args.sha, max_calls=args.max_calls, max_turns=args.max_turns,
-                         inline_images=args.inline_images)
+                         inline_images=args.inline_images, max_reported_turns=args.max_reported_turns)
     if args.live:
         factory = lambda: prov._build(get_settings())  # noqa: E731 -- built inside the run's settings
     else:
-        turns = 1 if args.inline_images else 2                  # pictures inline: one turn a call
+        turns = args.max_reported_turns or (1 if args.inline_images else 2)
         factory = lambda: scoped.RehearsalProvider(skip_rooms=args.skip_rooms, fail=args.fail, turns=turns)  # noqa: E731
     try:
         report = scoped.run(scope, factory, report_path=args.report)
