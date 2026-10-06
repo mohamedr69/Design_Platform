@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 14 items
+
+tests/test_drawing_prep.py ..............                                [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_drawing_prep.py::test_the_coordination_agent_and_the_orchestrator_run_side_by_side_through_the_call_path
+tests/test_drawing_prep.py::test_the_devices_job_with_the_agents_off_places_coordinates_and_covers_without_a_model
+tests/test_drawing_prep.py::test_the_devices_job_with_the_agents_on_runs_them_on_the_preparation_route
+tests/test_drawing_prep.py::test_a_devices_job_after_the_review_lost_its_answers_keeps_every_change_and_the_engineers_word
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_drawing_prep.py::test_a_room_is_filled_inside_its_walls_its_door_closed_and_a_pump_sets_outline_not_a_wall
+PASSED tests/test_drawing_prep.py::test_coverage_is_measured_at_the_radius_and_the_best_spots_cover_the_room
+PASSED tests/test_drawing_prep.py::test_a_detector_spot_keeps_off_the_columns
+PASSED tests/test_drawing_prep.py::test_the_coordination_moves_a_ceiling_device_off_a_column_and_a_wall_device_along_its_wall
+PASSED tests/test_drawing_prep.py::test_the_platform_proposes_the_best_spots_and_the_detectors_the_room_still_needs
+PASSED tests/test_drawing_prep.py::test_the_coordination_agents_layout_is_refused_when_it_covers_less_than_the_platforms
+PASSED tests/test_drawing_prep.py::test_the_agents_answers_are_kept_to_what_they_were_shown_and_their_words_checked
+PASSED tests/test_drawing_prep.py::test_a_detector_added_for_coverage_or_rejected_by_the_orchestrator_is_drawn_only_once_approved
+PASSED tests/test_drawing_prep.py::test_with_the_agents_off_a_change_goes_to_the_reviews_point_with_the_drawings_symbol_named_like_it
+PASSED tests/test_drawing_prep.py::test_the_gate_is_the_platforms_count
+PASSED tests/test_drawing_prep.py::test_the_coordination_agent_and_the_orchestrator_run_side_by_side_through_the_call_path
+PASSED tests/test_drawing_prep.py::test_the_devices_job_with_the_agents_off_places_coordinates_and_covers_without_a_model
+PASSED tests/test_drawing_prep.py::test_the_devices_job_with_the_agents_on_runs_them_on_the_preparation_route
+PASSED tests/test_drawing_prep.py::test_a_devices_job_after_the_review_lost_its_answers_keeps_every_change_and_the_engineers_word
+======================= 14 passed, 5 warnings in 58.71s ========================

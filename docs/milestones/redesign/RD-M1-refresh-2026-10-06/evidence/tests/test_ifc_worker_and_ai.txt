@@ -1,0 +1,111 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 41 items
+
+tests/test_ifc_worker_and_ai.py ........................................ [ 97%]
+.                                                                        [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_ifc_worker_and_ai.py: 37 warnings
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+________ test_a_broken_drawing_fails_the_job_plainly_and_leaves_nothing ________
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 1 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/processing.py", line 115, in read_drawing
+    result = extract(str(read_from), progress=progress, plan=timer.plan if timer is not None else None)
+  File "/home/user/Design_Platform/backend/app/ifc/dxf/extract.py", line 335, in extract
+    doc = ezdxf.readfile(path)
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/filemanagement.py", line 154, in readfile
+    doc = read(fp)
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/filemanagement.py", line 95, in read
+    return Drawing.read(stream)
+           ~~~~~~~~~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/document.py", line 350, in read
+    return cls.load(tag_loader)
+           ~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/document.py", line 365, in load
+    doc._load(tag_loader)
+    ~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/document.py", line 378, in _load
+    sections = loader.load_dxf_structure(tagger)
+  File "/usr/local/lib/python3.13/dist-packages/ezdxf/lldxf/loader.py", line 128, in load_dxf_structure
+    raise DXFStructureError("DXFStructureError: missing ENDSEC tag.")
+ezdxf.lldxf.const.DXFStructureError: DXFStructureError: missing ENDSEC tag.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/workers/sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 95, in run_read
+    drawing = processing.read_drawing(session, project, user, source=staged, name=name, ext=ext,
+                                      sha256=p["sha256"], plan=plan, timer=timer, check=ctx.check,
+                                      job_id=job.id)
+  File "/home/user/Design_Platform/backend/app/ifc/services/processing.py", line 121, in read_drawing
+    raise ReadError(f"Could not read this drawing: {exc}") from exc
+app.ifc.services.processing.ReadError: Could not read this drawing: DXFStructureError: missing ENDSEC tag.
+____ test_an_ifc_read_left_by_a_dead_worker_is_queued_again_with_its_upload ____
+------------------------------ Captured log call -------------------------------
+WARNING  app.services.jobs:jobs.py:414 Job 1 was left running by a worker that stopped: requeued
+WARNING  app.services.jobs:jobs.py:414 Job 1 was left running by a worker that stopped: failed
+____________________ test_an_ai_outage_never_fails_the_read ____________________
+------------------------------ Captured log call -------------------------------
+WARNING  app.ifc.services.ai_symbol_review:ai_symbol_review.py:407 IFC AI metadata review failed for 1 symbol(s): transport
+=========================== short test summary info ============================
+PASSED tests/test_ifc_worker_and_ai.py::test_an_upload_is_streamed_to_staging_and_hashed_as_it_arrives
+PASSED tests/test_ifc_worker_and_ai.py::test_the_limit_is_one_number_and_the_message_follows_it
+PASSED tests/test_ifc_worker_and_ai.py::test_what_is_not_a_drawing_is_refused_at_the_door_and_leaves_nothing
+PASSED tests/test_ifc_worker_and_ai.py::test_capabilities_give_the_page_the_same_limit
+PASSED tests/test_ifc_worker_and_ai.py::test_the_api_queues_and_answers_at_once_and_the_worker_reads
+PASSED tests/test_ifc_worker_and_ai.py::test_repeated_clicks_are_one_job
+PASSED tests/test_ifc_worker_and_ai.py::test_the_database_refuses_a_second_active_job_with_the_same_key
+PASSED tests/test_ifc_worker_and_ai.py::test_a_finished_read_does_not_block_a_later_legitimate_one
+PASSED tests/test_ifc_worker_and_ai.py::test_a_read_cancelled_while_it_waits_removes_its_upload
+PASSED tests/test_ifc_worker_and_ai.py::test_a_broken_drawing_fails_the_job_plainly_and_leaves_nothing
+PASSED tests/test_ifc_worker_and_ai.py::test_the_api_stays_responsive_while_the_worker_reads
+PASSED tests/test_ifc_worker_and_ai.py::test_the_ifc_lane_runs_its_limit_and_no_more
+PASSED tests/test_ifc_worker_and_ai.py::test_an_ifc_read_left_by_a_dead_worker_is_queued_again_with_its_upload
+PASSED tests/test_ifc_worker_and_ai.py::test_a_read_run_again_after_its_worker_died_keeps_the_drawing_it_made
+PASSED tests/test_ifc_worker_and_ai.py::test_an_api_restart_leaves_ifc_reads_to_the_worker
+PASSED tests/test_ifc_worker_and_ai.py::test_a_broken_floor_is_reported_and_the_others_are_read
+PASSED tests/test_ifc_worker_and_ai.py::test_a_member_that_unpacks_past_the_limit_is_stopped
+PASSED tests/test_ifc_worker_and_ai.py::test_two_workers_revising_r0_at_once_make_one_r1
+PASSED tests/test_ifc_worker_and_ai.py::test_the_revision_that_loses_leaves_no_row_and_no_file
+PASSED tests/test_ifc_worker_and_ai.py::test_a_file_that_may_revise_a_drawing_asks_first
+PASSED tests/test_ifc_worker_and_ai.py::test_history_is_archived_not_rewritten
+PASSED tests/test_ifc_worker_and_ai.py::test_a_drawing_is_known_by_its_reference_not_its_file_name
+PASSED tests/test_ifc_worker_and_ai.py::test_blank_codes_and_names_are_refused
+PASSED tests/test_ifc_worker_and_ai.py::test_an_answer_is_one_thing
+PASSED tests/test_ifc_worker_and_ai.py::test_the_ai_never_overwrites_an_engineer_and_an_engineer_overrides_the_ai
+PASSED tests/test_ifc_worker_and_ai.py::test_a_block_name_with_two_meanings_becomes_ambiguous_not_overwritten
+PASSED tests/test_ifc_worker_and_ai.py::test_a_thousand_occurrences_of_one_symbol_are_one_question
+PASSED tests/test_ifc_worker_and_ai.py::test_an_engineer_changes_the_ais_answer_for_good
+PASSED tests/test_ifc_worker_and_ai.py::test_a_symbol_the_rules_answer_costs_no_call
+PASSED tests/test_ifc_worker_and_ai.py::test_words_alone_are_never_an_answer_by_default
+PASSED tests/test_ifc_worker_and_ai.py::test_the_cache_answers_a_signature_asked_before
+PASSED tests/test_ifc_worker_and_ai.py::test_uncertain_words_get_one_look_at_the_picture
+PASSED tests/test_ifc_worker_and_ai.py::test_what_the_ai_is_not_sure_of_goes_to_the_engineer
+PASSED tests/test_ifc_worker_and_ai.py::test_an_ai_outage_never_fails_the_read
+PASSED tests/test_ifc_worker_and_ai.py::test_confidence_alone_is_never_enough[<lambda>-not one of the candidates]
+PASSED tests/test_ifc_worker_and_ai.py::test_confidence_alone_is_never_enough[<lambda>-below]
+PASSED tests/test_ifc_worker_and_ai.py::test_confidence_alone_is_never_enough[<lambda>-not one of device]
+PASSED tests/test_ifc_worker_and_ai.py::test_the_ai_is_not_asked_about_a_device_family_its_words_rule_out
+PASSED tests/test_ifc_worker_and_ai.py::test_a_revision_asks_only_about_its_new_symbols
+PASSED tests/test_ifc_worker_and_ai.py::test_reprocessing_uses_what_is_known
+PASSED tests/test_ifc_worker_and_ai.py::test_unverifying_forgets_the_ais_answer_too
+======================= 41 passed, 38 warnings in 54.19s =======================
