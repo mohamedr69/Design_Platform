@@ -33,7 +33,6 @@ import re
 import zlib
 import statistics
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -41,7 +40,7 @@ import pymupdf
 from PIL import Image, ImageDraw
 from sqlalchemy.orm import Session
 
-from app.ai.provider import ImagePart, TextPart, get_provider
+from app.ai.provider import ImagePart, TextPart, get_prep_provider, prep_ai_on
 from app.compliance import assist
 from app.core.config import get_settings
 from app.core.timeutils import utc_now
@@ -50,6 +49,7 @@ from app.ifc import storage
 from app.models import Project, ProjectDrawingReview, ProjectIfcDrawing, ProjectRedesign
 from app.redesign import ai as A
 from app.redesign import cad
+from app.redesign import prepare as PR
 from app.review import geometry as G
 from app.review import pages as P
 
@@ -664,7 +664,7 @@ def add_interfaces(db: Session, project: Project, drawing_id: int) -> dict:
             status = c["status"]
             _place_module(c, sheets[c["page"]], symbols, {**c["ai"], "facing": None}, walls)
             c["status"] = status
-    coordinate(changes, sheets, walls, symbols)
+    coordinate(changes, sheets, walls, symbols, PR.columns(project, drawing, row.source_sha256 or review_row.source_sha256))
     row.changes, row.symbols = [dict(c) for c in changes], symbols
     row.source_sha256 = row.source_sha256 or review_row.source_sha256
     if row.status in (None, "none"):
@@ -694,9 +694,11 @@ def set_status(db: Session, project: Project, drawing_id: int, ids: list[str], s
 
 def _drawn(c: dict) -> bool:
     """Made on the copy: an approved change, or a proposed one of the review's
-    -- the interface modules only once approved."""
-    return (c["status"] == "approved" or (c["status"] == "proposed" and c.get("source") != INTERFACE)) \
-        and bool(c.get("remove") or c.get("insert"))
+    the orchestrator did not reject -- the interface modules and the detectors
+    the coverage added only once approved."""
+    proposed = (c["status"] == "proposed" and c.get("source") not in (INTERFACE, PR.COVERAGE)
+                and (c.get("check") or {}).get("verdict") != "reject")
+    return (c["status"] == "approved" or proposed) and bool(c.get("remove") or c.get("insert"))
 
 
 # --- planning ---------------------------------------------------------------------------
@@ -740,10 +742,13 @@ def _prepare(finding: dict, sheet: dict, occurrences: list[dict], top: set[str] 
     return change
 
 
-def _picture(doc: pymupdf.Document, change: dict, width: int, *, markers: bool = True) -> bytes:
+def _picture(doc: pymupdf.Document, change: dict, width: int, *, markers: bool = True,
+             overlay: dict | None = None) -> bytes:
     """The change's piece of plan: the nearby symbols numbered in blue, the
     review's point in red, and -- once placed -- the new symbol's point in
-    green and the erased one crossed out."""
+    green and the erased one crossed out. With `overlay` (the sheet's
+    geometry and the drawing's columns), the columns filled orange and a new
+    detector's coverage circle."""
     from app.review import ai as RA
 
     box = tuple(change["box"])
@@ -764,6 +769,18 @@ def _picture(doc: pymupdf.Document, change: dict, width: int, *, markers: bool =
         x, y = to_px(change["remove"]["page"])
         draw.line((x - r, y - r, x + r, y + r), fill=(220, 38, 38), width=stroke + 1)
         draw.line((x - r, y + r, x + r, y - r), fill=(220, 38, 38), width=stroke + 1)
+    if overlay and overlay.get("g") and "a" in overlay["g"]:
+        g = overlay["g"]
+        if overlay.get("columns") is not None:
+            cx, cy = _model(g, (box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
+            for c0, c1, c2, c3 in overlay["columns"].near(cx, cy, RADIUS_M * 1.5):
+                (ax, ay), (bx, by) = to_px(_page(g, c0, c3)), to_px(_page(g, c2, c1))
+                draw.rectangle((ax, ay, bx, by), fill=(251, 146, 60), outline=(154, 52, 18), width=1)
+        reach = (change.get("coverage") or {}).get("radius")
+        if reach and change.get("insert"):
+            x, y = to_px(change["insert"]["page"])
+            rr = reach / g["a"] * scale
+            draw.ellipse((x - rr, y - rr, x + rr, y + rr), outline=(22, 163, 74), width=stroke)
     if change.get("insert"):
         x, y = to_px(change["insert"]["page"])
         draw.ellipse((x - r * 0.7, y - r * 0.7, x + r * 0.7, y + r * 0.7), outline=(22, 163, 74), width=stroke + 1)
@@ -905,7 +922,8 @@ def _overlap(a, b, gap: float) -> bool:
     return a[0] < b[2] + gap and b[0] < a[2] + gap and a[1] < b[3] + gap and b[1] < a[3] + gap
 
 
-def coordinate(changes: list[dict], sheets: dict[int, dict], walls=None, symbols: list[dict] | None = None) -> int:
+def coordinate(changes: list[dict], sheets: dict[int, dict], walls=None, symbols: list[dict] | None = None,
+               columns=None) -> int:
     """Keep every new symbol -- and a module's note -- clear of the others and
     of the devices already on the plan (platform owner, 2 October 2026:
     always): two devices added at one door side by side, the modules of a
@@ -915,8 +933,9 @@ def coordinate(changes: list[dict], sheets: dict[int, dict], walls=None, symbols
     them meet. A symbol that clashes is moved the least it takes: a wall
     device along its wall (still on it, never past its corner), any other
     step by step around its spot. A module its wall has no room for goes on
-    the next wall around its equipment, turned to it. Returns how many were
-    moved."""
+    the next wall around its equipment, turned to it. The drawing's columns
+    (app.redesign.coverage), when given, are kept clear of the same way
+    (platform owner, 6 October 2026). Returns how many were moved."""
     def placed(c):
         return (c["status"] in ("proposed", "approved", "pending") and c.get("insert") and c["insert"].get("seen")
                 and c["insert"].get("block"))
@@ -954,6 +973,8 @@ def coordinate(changes: list[dict], sheets: dict[int, dict], walls=None, symbols
                 continue
             if any(_overlap(m, o, GAP_M) for m in mine for o in _footprint(f)):
                 return False
+        if columns is not None and columns.hit(mine[0], GAP_M):
+            return False                 # never on a column (its note may run past one)
         start = c["insert"].get("placed") or c["insert"]["seen"]
         for ex, ey in existing[c["page"]].values():
             if math.dist((ex, ey), (x, y)) > NEAR_M or math.dist(start, (ex, ey)) <= 0.01:
@@ -1095,7 +1116,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, change: dict, symbols
     doc = pymupdf.open(pdf)
     try:
         session = assist.AssistSession(db=db, project_id=project_id, document_sha256=f"{sha}:{change['id']}",
-                                       budget=budget, provider=get_provider())
+                                       budget=budget, provider=get_prep_provider())
         parts: list = []
         if sheet.get("legend"):
             parts.append(ImagePart("legend", P.crop(doc, change["page"], tuple(sheet["legend"]),
@@ -1110,7 +1131,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, change: dict, symbols
         parts.append(TextPart("symbols this drawing uses (id: name)", "\n".join(
             f"{x['id']}: {x['name']}" + (f" ({x['code']})" if x["code"] else "") for x in symbols)))
         result = assist.call_task(session, A.TASK, A.SYSTEM, parts, A.SCHEMA, 800, prompt_version=A.PROMPT_VERSION,
-                                  model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
+                                  model=s.prep_model, effort=s.prep_effort, exact_model=True,
                                   timeout_s=s.drawing_review_timeout_s)
         db.commit()
         if result.data is None:
@@ -1164,6 +1185,13 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
                 changes.append(old)
                 continue
             changes.append(_prepare(finding, sheets[finding["page"]], occurrences, top))
+        # A change whose finding the review no longer has at all -- not dismissed
+        # or reopened by the engineer, gone: a review run again without its model
+        # (EP-30880, 6 October 2026) -- is kept as it is, never dropped with the
+        # engineer's approvals, skips and moves on it.
+        present = {f["id"] for f in view["findings"]}
+        changes += [old for old in row.changes or []
+                    if old.get("source") not in (INTERFACE, PR.COVERAGE) and old["id"] not in present]
         say(0, 1, "Reading the drawing's walls (once per drawing)")
         walls = _walls(project, drawing, review_row.source_sha256, build=True, check=check)
         kept: dict[str, dict] = {}
@@ -1181,48 +1209,48 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
                           "interface changes kept as they were")
         except Exception as exc:  # noqa: BLE001 -- the review's changes are placed all the same
             log.warning("The interface modules could not be placed: %s", exc)
+        # the detectors the coverage added that the engineer settled: kept as they left them
+        settled = {cid: c for cid, c in before.items() if c.get("source") == PR.COVERAGE
+                   and (c.get("status") in ("approved", "skipped") or c.get("moved") or c.get("edited"))}
+        changes = changes + [json.loads(json.dumps(c)) for c in settled.values()]
         row.changes, row.symbols, row.source_sha256 = changes, symbols, review_row.source_sha256
+        run = PR.started_run()
+        row.run = run
         db.commit()
 
-        todo = [c for c in changes if c["status"] == "pending" and c["id"] not in kept]
+        def record(agent: dict) -> None:
+            run["agents"].append(agent)
+            row.run = json.loads(json.dumps(run))
+
         budget = review._budget(db, project)
         pdf = str(storage.absolute(review_row.pdf_path))
-        done = 0
-        say(0, len(todo), f"Placing {len(todo)} change{'s' if len(todo) != 1 else ''} with {s.drawing_review_model}")
-        pool = ThreadPoolExecutor(max_workers=max(1, s.drawing_review_parallel))
-        try:
-            futures = {pool.submit(_ask, project.id, pdf, review_row.source_sha256 or "", sheets[c["page"]], c,
-                                   symbols, budget): c for c in todo}
-            for future in as_completed(futures):
-                if check:
-                    check()
-                change = futures[future]
-                try:
-                    reply = future.result()
-                except Exception as exc:  # noqa: BLE001 -- one change failing is that change, not the plan
-                    reply = {"error": f"{type(exc).__name__}: {exc}"[:300]}
-                row.calls = (row.calls or 0) + 1
-                if "answer" in reply:
-                    answer = reply["answer"]
-                    change["ai"] = answer
-                    change["confidence"], change["note"] = answer["confidence"], answer["note"]
-                    _place(change, sheets[change["page"]], symbols, answer, walls)
-                else:
-                    change.update(status="failed", error=reply.get("error"))
-                done += 1
-                row.changes = [dict(c) for c in changes]
-                db.commit()
-                say(done, len(todo), f"Placed {done} of {len(todo)} ({change['floor']})")
-        finally:
-            pool.shutdown(wait=False, cancel_futures=True)
-        coordinate(changes, sheets, walls, symbols)
+        sha = review_row.source_sha256 or ""
+        # 1. the placement agents, side by side
+        run["placement"] = PR.place(db, project, pdf, sha, sheets, changes, symbols, walls, budget, row, record, say,
+                                    check, skip=set(kept))
+        # 2. the coordination: the columns, the coverage, the coordination agents
+        run["stage"] = "coordination"
+        say(0, 1, "Reading the drawing's columns (once per drawing)")
+        cols = PR.columns(project, drawing, review_row.source_sha256, build=True, check=check)
+        changes, run["coordination"] = PR.coordinate(db, project, pdf, sha, sheets, changes, symbols, walls, cols,
+                                                     occurrences, top, budget, row, record, say, check, settled)
         if kept:
             changes = restore_kept(changes, kept)
         row.changes = [dict(c) for c in changes]
+        row.run = json.loads(json.dumps(run))
+        db.commit()
+        # 3. the orchestrator's review, floor by floor
+        run["stage"] = "review"
+        run["review"] = PR.review(db, project, sha, sheets, changes, cols, budget, row, record, say, check)
+        # 4. the platform's gate
+        run["gate"] = PR.gate(changes, run["coordination"], run["review"], cols)
+        run["stage"], run["finished_at"] = "done", utc_now().isoformat()
+        row.changes = [dict(c) for c in changes]
+        row.run = json.loads(json.dumps(run))
         row.status, row.finished_at = "planned", utc_now()
         db.commit()
         return {"changes": len(changes), "placed": sum(1 for c in changes if c["status"] == "proposed"),
-                "interfaces_kept": len(kept)}
+                "interfaces_kept": len(kept), "gate": run["gate"]["state"]}
     except Exception as exc:
         db.rollback()
         row = state(db, project, drawing_id)
@@ -1280,14 +1308,35 @@ def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, st
             _place_module(change, sheet, row.symbols or [], answer, walls)
         else:
             _place(change, sheet, row.symbols or [], answer, walls)
-        coordinate(changes, {sh["index"]: sh for sh in review_row.sheets or []}, walls, row.symbols or [])
+        coordinate(changes, {sh["index"]: sh for sh in review_row.sheets or []}, walls, row.symbols or [],
+                   PR.columns(project, drawing, row.source_sha256))
         if was == "approved" and change["status"] == "proposed":
             change["status"] = "approved"          # an approved change, adjusted, stays approved
     if status:
         change["status"] = status
+    if PR.is_detector({**change, "status": "proposed"}) or change.get("coverage"):
+        _measure_again(db, project, drawing_id, row, changes)
     row.changes = changes
     db.commit()
     return change
+
+
+def _measure_again(db: Session, project: Project, drawing_id: int, row: ProjectRedesign, changes: list[dict]) -> None:
+    """The detectors' room coverage measured again as the engineer left them."""
+    from app.ifc.resolve import resolved_drawing
+
+    drawing = db.get(ProjectIfcDrawing, drawing_id)
+    review_row = (db.query(ProjectDrawingReview)
+                  .filter(ProjectDrawingReview.project_id == project.id, ProjectDrawingReview.drawing_id == drawing_id).first())
+    walls = _walls(project, drawing, row.source_sha256)
+    if walls is None or review_row is None:
+        return
+    try:
+        occurrences = _occurrences(resolved_drawing(db, drawing, with_occurrences=True))
+        PR.measure_again(changes, {sh["index"]: sh for sh in review_row.sheets or []}, walls,
+                         PR.columns(project, drawing, row.source_sha256), occurrences)
+    except Exception as exc:  # noqa: BLE001 -- the change is saved; its coverage figure waits for the next placing
+        log.warning("The coverage could not be measured again: %s", exc)
 
 
 def image(project: Project, drawing_id: int, row: ProjectRedesign, change_id: str, width: int) -> bytes:
@@ -1297,16 +1346,44 @@ def image(project: Project, drawing_id: int, row: ProjectRedesign, change_id: st
     try:
         review_row = db.query(_R).filter(_R.project_id == project.id, _R.drawing_id == drawing_id).first()
         pdf = str(storage.absolute(review_row.pdf_path))
+        sheets = review_row.sheets
+        drawing = db.get(ProjectIfcDrawing, drawing_id)
     finally:
         db.close()
     change = next((c for c in row.changes or [] if c["id"] == change_id), None)
     if change is None or "box" not in change:
         raise RedesignError("No picture for this change")
+    overlay = None
+    sheet = next((sh for sh in (sheets or []) if sh["index"] == change["page"]), None)
+    if sheet is not None and drawing is not None:
+        overlay = {"g": sheet.get("geometry") or {}, "columns": PR.columns(project, drawing, row.source_sha256)}
     doc = pymupdf.open(pdf)
     try:
-        return _picture(doc, change, width)
+        return _picture(doc, change, width, overlay=overlay)
     finally:
         doc.close()
+
+
+def draftsman_pdf(db: Session, project: Project, drawing_id: int) -> tuple[bytes, str]:
+    """The draftsman's PDF (app.redesign.markup): each floor's plan with what
+    the copy will carry marked and numbered, then the schedule."""
+    from app.redesign import markup
+
+    drawing = db.get(ProjectIfcDrawing, drawing_id)
+    row = state(db, project, drawing_id)
+    review_row = (db.query(ProjectDrawingReview)
+                  .filter(ProjectDrawingReview.project_id == project.id, ProjectDrawingReview.drawing_id == drawing_id).first())
+    sheets = {sh["index"]: sh for sh in (review_row.sheets if review_row else None) or []}
+    pdf = str(storage.absolute(review_row.pdf_path)) if review_row and review_row.pdf_path else None
+    todo = [c for c in row.changes or [] if _drawn(c)]
+    doc = markup.build(todo, sheets, {"filename": drawing.filename, "revision": drawing.revision or "R0"}, project, pdf,
+                       interface=INTERFACE)
+    try:
+        data = doc.tobytes(garbage=3, deflate=True)
+    finally:
+        doc.close()
+    stem = re.sub(r"\.(dwg|dxf)$", "", drawing.filename, flags=re.I)
+    return data, f"{stem} {drawing.revision or 'R0'} - Drawings Preparation.pdf"
 
 
 # --- making the redesigned drawing -----------------------------------------------------
@@ -1361,7 +1438,8 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
                               ProjectDrawingReview.drawing_id == drawing.id).first())
         changes = [dict(c) for c in row.changes or []]
         if coordinate(changes, {sh["index"]: sh for sh in review_row.sheets or []},
-                      _walls(project, drawing, row.source_sha256), row.symbols or []):
+                      _walls(project, drawing, row.source_sha256), row.symbols or [],
+                      PR.columns(project, drawing, row.source_sha256)):
             row.changes = changes
             db.commit()
         return 0
@@ -1392,7 +1470,7 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
             _place(change, sheets[change["page"]], symbols, answer, walls)
         change["status"] = status
         again += 1
-    coordinate(changes, sheets, walls, symbols)
+    coordinate(changes, sheets, walls, symbols, PR.columns(project, drawing, row.source_sha256))
     row.changes, row.symbols = changes, symbols
     db.commit()
     return again
@@ -1483,6 +1561,7 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
         "finished_at": row.finished_at.isoformat() if row.finished_at else None,
         "changes": changes, "symbols": [{k: s[k] for k in ("id", "name", "code", "block", "count")} for s in row.symbols or []],
         "counts": {k: counts.get(k, 0) for k in ("pending", "proposed", "approved", "skipped", "failed")},
+        "run": row.run, "agents_on": prep_ai_on(),
         "output": {"status": row.output_status, "error": row.output_error, "relative": row.output_relative,
                    "file": Path(row.output_path).name if row.output_path else None,
                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},

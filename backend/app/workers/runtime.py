@@ -43,7 +43,11 @@ CLASSIFICATION_MODELS = ("DocumentClassification",)
 SERVICES = {
     "sync-worker": ("app.services.sync_service", "app.services.document_sync"),
     "document-worker": ("app.services.document_processing", "app.services.document_sync"),
-    "ifc-worker": ("app.ifc.services.runners",),
+    # the runners import their jobs' services lazily: Drawings Preparation's
+    # (fa_redesign_plan / _apply) at start too, so a worker started before a
+    # change to them, or to the provider they call, fails here, not on the
+    # job (2026-10-06: "cannot import name 'get_prep_provider'")
+    "ifc-worker": ("app.ifc.services.runners", "app.redesign.service"),
     "api": (),
 }
 

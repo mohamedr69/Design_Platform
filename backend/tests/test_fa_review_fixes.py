@@ -19,8 +19,8 @@ from app.interfaces import evidence, scan, service, visual, workflow
 from app.models import BackgroundJob, FaInterfaceRun, Project, ProjectFaInterfaces
 from tests.conftest import login
 from tests.test_fa_cases import LANDMARK_WORDS, _floors, _gate_layout, _read, _sheet, gb  # noqa: F401  (fixture)
-from tests.test_fa_workflow import (FABLE, OPUS, Models, _ask_with_window, _damper_drawing, _latest, _ok_review,  # noqa: F401
-                                    _run, w)
+from tests.test_fa_workflow import (OPUS, UNSERVED, Models, _ask_with_window, _damper_drawing, _latest,  # noqa: F401
+                                    _ok_review, _run, w)
 
 settings = get_settings()
 
@@ -47,7 +47,7 @@ def test_F1_a_corrupt_drawing_keeps_the_run_provisional_and_accept_is_refused(w)
     (_ff(w) / "FF LAYOUT.dxf").write_text("this is not a dxf\n")
     out = _run(w)
     run = _latest(w)
-    assert run["review_state"] == "completed"                                 # Fable agreed with everything
+    assert run["review_state"] == "completed"                                 # the reviewer agreed with everything
     assert out["publication_state"] == "provisional"
     assert any("failed" in r and "FF LAYOUT.dxf" in r for r in run["publication_reasons"])
     r = _accept(w, run["run_id"])
@@ -99,8 +99,8 @@ def test_F1_an_unreachable_folder_at_accept_refuses_with_its_reason(w):
     assert _row(w).published is None
 
 
-def test_F1_a_drawing_whose_look_was_not_possible_is_partial_coverage_and_blocks(w):
-    w.models.serves = {FABLE}                                                   # no Opus: the look cannot run
+def test_F1_a_drawing_whose_look_was_not_possible_is_partial_coverage_and_blocks(w, monkeypatch):
+    monkeypatch.setattr(settings, "drawing_review_model", UNSERVED)            # the look cannot run
     out = _run(w)
     run = _latest(w)
     assert run["review_state"] == "completed" and out["publication_state"] == "provisional"
@@ -368,7 +368,7 @@ def test_F7_a_reading_records_each_sheets_viewport_windows(tmp_path):
 def test_F8_retry_is_a_job_that_sends_exactly_the_frozen_inputs(w, monkeypatch):
     from app.routers.ifc_boq import _run_inline
 
-    w.models.serves = {OPUS}
+    w.models.review_error = "unavailable"                                   # the review could not run
     _run(w)
     run = _latest(w)
     w.db.expire_all()
@@ -378,7 +378,7 @@ def test_F8_retry_is_a_job_that_sends_exactly_the_frozen_inputs(w, monkeypatch):
     if held:
         w.client.post(f"/projects/{w.pid}/fa-interfaces/decisions",
                       json={"id": held[0]["id"], "action": "dismiss", "reason": "not ours"})
-    w.models.serves = {OPUS, FABLE}
+    w.models.review_error = None
     before = len(w.models.requests)
     queued = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
     assert queued.status_code == 202 and queued.json()["kind"] == "fa_interfaces_review"
@@ -392,7 +392,7 @@ def test_F8_retry_is_a_job_that_sends_exactly_the_frozen_inputs(w, monkeypatch):
 
 def test_F8_the_daily_retry_bound_is_claimed_by_compare_and_set(w, monkeypatch):
     monkeypatch.setattr(settings, "fa_orchestrator_retries_per_day", 3)
-    w.models.serves = {OPUS}
+    w.models.review_error = "unavailable"
     _run(w)
     w.db.expire_all()
     project = w.db.get(Project, w.pid)
@@ -409,7 +409,7 @@ def test_F8_the_daily_retry_bound_is_claimed_by_compare_and_set(w, monkeypatch):
 def test_F8_a_retry_while_a_read_runs_is_refused(w):
     _run(w)
     run = _latest(w)
-    w.models.serves = {OPUS}
+    w.models.review_error = "unavailable"
     w.client.post(f"/projects/{w.pid}/fa-interfaces/scan/jobs")             # queued, not run
     r = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
     assert r.status_code == 409
@@ -448,7 +448,7 @@ def test_F9_the_requested_model_answering_is_accepted(monkeypatch, tmp_path):
     assert out.error is None and out.data == {"answer": "ok"}
 
 
-def test_F9_an_unverified_fable_answer_is_never_its_review(w):
+def test_F9_an_unverified_reviewer_answer_is_never_its_review(w):
     w.models.review_error = "model_unverified"
     out = _run(w)
     run = _latest(w)
@@ -494,7 +494,7 @@ def test_F10_the_orchestrators_own_calls_of_the_day_bound_it_and_no_look_is_paid
 
     monkeypatch.setattr(settings, "fa_orchestrator_max_calls_per_day", 10)
     for _ in range(9):                                                      # earlier reviews today
-        w.db.add(AiUsage(project_id=w.pid, task=workflow.TASK_REVIEW, model=FABLE, at=utc_now(), cache_hit=False,
+        w.db.add(AiUsage(project_id=w.pid, task=workflow.TASK_REVIEW, model=OPUS, at=utc_now(), cache_hit=False,
                          outcome="ok"))
     w.db.commit()
     out = _run(w)
@@ -758,7 +758,7 @@ def test_W4_a_views_conflict_is_settled_by_a_count_on_an_authority_and_the_run_c
 def test_F8_a_retry_refused_when_its_job_cannot_be_queued_does_not_spend_the_days_bound(w, monkeypatch):
     from app.routers import fa_interfaces as R
 
-    w.models.serves = {OPUS}
+    w.models.review_error = "unavailable"
     _run(w)
     run = _latest(w)
     w.client.post(f"/projects/{w.pid}/fa-interfaces/scan/jobs")             # queued under the shared key
@@ -769,13 +769,13 @@ def test_F8_a_retry_refused_when_its_job_cannot_be_queued_does_not_spend_the_day
     assert (w.db.get(FaInterfaceRun, run["run_id"]).review_retries or 0) == 0
 
 
-def test_F10_no_look_is_paid_for_when_the_route_cannot_serve_the_orchestrator(w):
-    w.models.serves = {OPUS}                                                 # Opus yes, Fable not exactly
+def test_F10_no_look_is_paid_for_when_the_route_cannot_serve_the_orchestrator(w, monkeypatch):
+    monkeypatch.setattr(settings, "fa_orchestrator_model", UNSERVED)         # the drawing model yes, the reviewer not
     out = _run(w)
     run = _latest(w)
     assert not [r for r in w.models.requests if r.task == visual.TASK]
     (agent,) = run["agent_reports"]
-    assert agent["coverage_state"] == "unsupported" and "orchestrator" in agent["coverage_reason"]
+    assert agent["coverage_state"] == "unsupported" and "reviewer" in agent["coverage_reason"]
     assert out["review_state"] == "missing" and out["publication_state"] == "provisional"
 
 
@@ -810,7 +810,7 @@ def test_A3_a_source_missing_claim_on_a_package_with_files_still_lowers_the_run(
     out = _run(w)
     run = _latest(w)
     assert out["publication_state"] == "provisional"
-    assert "Fable (run) names 1 missing or suspect item(s)" in run["publication_reasons"]
+    assert "Opus (run) names 1 missing or suspect item(s)" in run["publication_reasons"]
 
 
 # --- the independent review of ac314de (R3-1, R3-2, R3-3, R3-5, R3-7, R3-8) ---------------------------------------

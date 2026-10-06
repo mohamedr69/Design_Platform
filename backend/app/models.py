@@ -692,6 +692,9 @@ class ProjectRedesign(Base):
     changes: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     symbols: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     calls: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # Drawings Preparation's last placing (app.redesign.prepare): its agents, the
+    # coordination's rooms, the orchestrator's floor reviews, and the gate.
+    run: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     # The redesigned copy: "none" | "making" | "made" | "failed"
     output_status: Mapped[str] = mapped_column(String(16), nullable=False, default="none")
     output_error: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -2488,6 +2491,12 @@ class ProjectFaInterfaces(Base):
     published_basis: Mapped[str | None] = mapped_column(String(24), nullable=True)
     published_by_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     published_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # The Opus finding review of the latest run (app.interfaces.findings): its
+    # outcome on each verification item, with the evidence it cited, bound to the
+    # readings it was made on (their digest) -- applied only to exactly those, and
+    # replaced whole by the next run's, never mixed. Apart from `decisions`: an
+    # engineer's answer always stands over it.
+    reviews: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     # Bumped by every write of the evidence (a read, a publication, a confirmed
     # removal), each of which only commits over the generation it started from.
     generation: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
@@ -2498,7 +2507,7 @@ class FaInterfaceRun(Base):
     """One run of the FA Interfaces drawing workflow (FI-P1 r2 Part C): the
     drawings it read (`manifest`), one accountable report per drawing
     (`agent_reports`, the Opus drawing agents) and per package
-    (`package_reports`), the Fable orchestrator's review of them (`review`,
+    (`package_reports`), the Opus review of them (`review`,
     with `review_inputs` frozen so a review can be retried on exactly what it
     was given), and what the run may become: provisional until the review is
     complete and an engineer accepts it."""
@@ -2529,6 +2538,10 @@ class FaInterfaceRun(Base):
     # Retry review, bounded per day: counted by a compare-and-set on these.
     review_retries: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
     review_retry_day: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    # What the run actually did, for the engineer and for comparison: whether it was
+    # a force-fresh reread, which drawings it read again and which it could not,
+    # the finding review's outcome, and the schedule's totals before and after.
+    trace: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class ProjectDrawingReview(Base):

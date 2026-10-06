@@ -34,6 +34,21 @@ interface Finding {
   decision: "open" | "accepted" | "dismissed";
   note: string;
   by_ruling: boolean;
+  /** The model's recommendation, before any engineer's wording. */
+  proposal?: string;
+  /** A decision made on an earlier proposal for this finding: it does not
+   * carry over (the proposal changed, or cannot be shown unchanged), so the
+   * finding is open again and this is its history. */
+  previous_decision?: {
+    status: "accepted" | "dismissed";
+    note: string | null;
+    instruction: string | null;
+    at: string | null;
+    changed: string[];
+    /** Why it does not carry over: the proposal changed, or nothing shows it is the same one. */
+    reason: "proposal_changed" | "not_verifiable";
+    message: string;
+  } | null;
 }
 
 interface Ruling {
@@ -49,10 +64,18 @@ interface Ruling {
   at: string | null;
 }
 
+export type ReviewState = "done" | "partial" | "not_reviewed" | "running" | "blocked" | "failed" | "stopped";
+
 interface Review {
   drawing: { id: number; filename: string; revision: string };
-  status: "idle" | "running" | "done" | "stopped" | "failed";
+  status: "idle" | "running" | "done" | "stopped" | "failed" | "blocked";
   error: string | null;
+  /** What the review comes to: "done" only when a model answered every part of
+   * every plan; a plot no model answered is "not_reviewed". */
+  state: ReviewState;
+  state_message: string | null;
+  /** The models that actually answered; `model` is only the one asked for. */
+  answered_by: string[];
   model: string;
   calls: number;
   started_at: string | null;
@@ -101,6 +124,16 @@ const ACTION_STYLE: Record<Action, string> = {
   replace: "bg-amber-500 text-white",
   none: "bg-gray-200 text-gray-600",
 };
+// How each end of a review is shown: only a completed review is green.
+const STATE_STYLE: Record<ReviewState, string> = {
+  done: "bg-emerald-50 text-emerald-900",
+  partial: "bg-amber-50 text-amber-900",
+  not_reviewed: "bg-amber-50 text-amber-900",
+  running: "bg-sky-50 text-sky-900",
+  blocked: "bg-red-50 text-red-800",
+  failed: "bg-red-50 text-red-800",
+  stopped: "bg-gray-50 text-gray-700",
+};
 const ACTION_TEXT: Record<Action, string> = { add: "ADD", remove: "REMOVE", replace: "REPLACE", none: "CHECK" };
 const STATUS_STYLE: Record<Status, string> = {
   present: "bg-emerald-50 text-emerald-700",
@@ -116,12 +149,24 @@ const STATUS_TEXT: Record<Status, string> = { present: "✓", absent: "✗", not
  * telephone jacks, call points, emergency lights and exit / directional
  * signs against the company's coverage rules. The AI reports; the engineer
  * accepts or dismisses each finding. */
-export function ProjectDrawingReviewPage() {
+export function ProjectDrawingReviewPage({
+  embedded = false,
+  drawingId: chosen = null,
+  onChanged,
+}: {
+  /** Inside Drawings Preparation: its drawing, its heading. */
+  embedded?: boolean;
+  drawingId?: number | null;
+  /** A review started or ended: the step's mark is read again. */
+  onChanged?: () => void;
+} = {}) {
   const { project } = useProject();
   const { user } = useAuth();
   const canEdit = user !== null && PROJECT_EDITOR_ROLES.includes(user.role);
   const [overview, setOverview] = useState<Overview | null>(null);
-  const [drawingId, setDrawingId] = useState<number | null>(null);
+  const [own, setDrawingId] = useState<number | null>(null);
+  // inside Drawings Preparation the drawing is the tab's
+  const drawingId = chosen ?? own;
   const [review, setReview] = useState<Review | null>(null);
   const [error, setError] = useState<string | null>(null);
   // What a decision also settled: the same comment on the other floors.
@@ -152,6 +197,7 @@ export function ProjectDrawingReviewPage() {
   const job = useJob(project.id, "fa_drawing_review", `/projects/${project.id}/drawing-review/${drawingId}/jobs`, (j: Job) => {
     if (j.status === "failed") setError(j.error ?? "The review failed");
     load();
+    onChanged?.();
   });
   // While a review runs, its findings appear floor by floor.
   useEffect(() => {
@@ -170,6 +216,7 @@ export function ProjectDrawingReviewPage() {
         pages: pages.length && drawing && pages.length < drawing.pages.length ? pages : null,
       });
       job.follow(started);
+      onChanged?.();
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "The review could not be started");
     }
@@ -220,7 +267,7 @@ export function ProjectDrawingReviewPage() {
   if (!overview.drawings.length) {
     return (
       <div className="mt-6">
-        <h1 className="text-3xl font-bold text-navy-900">Drawings Review</h1>
+        {!embedded && <h1 className="text-3xl font-bold text-navy-900">Drawings Review</h1>}
         <p className="mt-4 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-500">
           No fire alarm IFC drawing has been imported for this project. Import it on the BOQ page&apos;s As per IFC Drawings tab.
         </p>
@@ -233,16 +280,25 @@ export function ProjectDrawingReviewPage() {
     <div className="mt-2">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="max-w-3xl">
-          <h1 className="text-3xl font-bold text-navy-900">Drawings Review</h1>
-          <p className="mt-1 text-sm text-gray-600">
-            The fire alarm IFC drawing, room by room, for the draftsman: the AI (Opus 5.5) reads every room the plans name against
-            the coverage rules and proposes what to ADD, REMOVE or REPLACE -- detectors, speakers and sounder-flashers, fire
-            telephone jacks, call points, emergency lights, exit and directional signs. The engineer accepts each change; the
-            accepted ones are marked floor by floor on the Mark-up PDF for the draftsman.
-          </p>
+          {embedded ? (
+            <p className="text-sm text-gray-600">
+              The AI (Opus 5.5) reads every room the plans name against the coverage rules and proposes what to ADD, REMOVE or
+              REPLACE. Accept the changes the draftsman should make: the accepted ones go on to Devices, where the agents place them.
+            </p>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold text-navy-900">Drawings Review</h1>
+              <p className="mt-1 text-sm text-gray-600">
+                The fire alarm IFC drawing, room by room, for the draftsman: the AI (Opus 5.5) reads every room the plans name against
+                the coverage rules and proposes what to ADD, REMOVE or REPLACE -- detectors, speakers and sounder-flashers, fire
+                telephone jacks, call points, emergency lights, exit and directional signs. The engineer accepts each change; the
+                accepted ones are marked floor by floor on the Mark-up PDF for the draftsman.
+              </p>
+            </>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {overview.drawings.length > 1 && (
+          {!embedded && overview.drawings.length > 1 && (
             <select
               value={drawingId ?? ""}
               onChange={(e) => setDrawingId(Number(e.target.value))}
@@ -274,7 +330,7 @@ export function ProjectDrawingReviewPage() {
               className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
               title="The accepted changes, floor by floor: action, device, room and instruction for the draftsman"
             >
-              Draftsman schedule PDF
+              {embedded ? "Review schedule PDF" : "Draftsman schedule PDF"}
             </a>
           )}
           {review && review.counts.reviewed > 0 && (
@@ -288,7 +344,9 @@ export function ProjectDrawingReviewPage() {
         </div>
       </div>
 
-      {error && <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
+      {error && error !== review?.state_message && (
+        <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>
+      )}
       {notice && (
         <p className="sticky top-2 z-20 mt-3 flex items-start justify-between gap-3 rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900 shadow-sm">
           <span>{notice}</span>
@@ -360,8 +418,10 @@ export function ProjectDrawingReviewPage() {
 
       {review && (
         <>
-          {review.error && !job.active && (
-            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">{review.error}</p>
+          {review.state_message && !job.active && (
+            <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${STATE_STYLE[review.state]}`} role="status">
+              {review.state_message}
+            </p>
           )}
           {review.fls && (
             <p
@@ -387,7 +447,7 @@ export function ProjectDrawingReviewPage() {
               ["Changes proposed", `${review.counts.add} add · ${review.counts.remove} remove · ${review.counts.replace} replace`],
               ["To decide", String(review.counts.open)],
               ["Accepted for draftsman", String(review.counts.accepted)],
-              ["AI model", review.model],
+              ["AI model", review.answered_by.length ? review.answered_by.join(", ") : `none answered (${review.model} asked)`],
             ].map(([label, value]) => (
               <div key={label} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
                 <div className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</div>
@@ -512,7 +572,9 @@ function Findings({
   if (!review.findings.length) {
     return (
       <p className="mt-4 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-500">
-        {review.counts.reviewed ? "No findings: every room reviewed is covered under the rules." : "The drawing has not been reviewed yet."}
+        {review.state === "done"
+          ? `Review completed: no changes proposed. ${review.counts.reviewed} of ${review.counts.rooms} rooms reviewed.`
+          : review.state_message ?? "The drawing has not been reviewed yet."}
       </p>
     );
   }
@@ -617,6 +679,14 @@ function FindingCard({
             <p className="mt-1 font-medium text-gray-900">{f.instruction || f.issue}</p>
             {f.instruction && f.issue && f.instruction !== f.issue && <p className="mt-0.5 text-xs text-gray-500">{f.issue}</p>}
             {f.seen && <p className="mt-0.5 text-xs text-gray-500">The AI saw: {f.seen}</p>}
+            {f.previous_decision && f.decision === "open" && (
+              <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
+                {f.previous_decision.status === "accepted" ? "Accepted" : "Dismissed"} earlier
+                {f.previous_decision.at ? ` (${f.previous_decision.at.slice(0, 10)})` : ""}
+                {f.previous_decision.note ? `: ${f.previous_decision.note}` : ""}. Not carried over:{" "}
+                {f.previous_decision.message} Decide again.
+              </p>
+            )}
             {f.decision !== "open" && (
               <p className={`mt-1 text-xs font-medium ${f.decision === "accepted" ? "text-emerald-700" : "text-gray-500"}`}>
                 {f.decision === "accepted"
@@ -746,7 +816,12 @@ function Rooms({ review }: { review: Review }) {
                 {floor.rooms.map((room) => (
                   <tr key={room.id}>
                     <td className="px-3 py-1.5 font-medium">{room.name}</td>
-                    <td className="px-3 py-1.5 text-xs text-gray-500">{room.room_type || (room.status === "failed" ? "could not be reviewed" : "—")}</td>
+                    <td className="px-3 py-1.5 text-xs text-gray-500">{room.room_type ||
+                        (room.status === "failed"
+                          ? "could not be reviewed"
+                          : room.status === "incomplete"
+                            ? "not answered: asked again on the next review"
+                            : "—")}</td>
                     {systems.map(([key]) => {
                       const check = room.checks?.[key];
                       return (

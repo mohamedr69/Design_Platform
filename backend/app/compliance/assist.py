@@ -41,6 +41,8 @@ from .spec_text import PARSER_VERSION
 from .statements import RESPONSES
 
 SCOPE = "compliance"
+# The model name the disabled provider answers under (app.ai.provider.NullProvider).
+NULL_MODEL = "null"
 PROMPT_VERSION = "compliance-2026-09-15.1"
 SCHEMA_VERSION = "1"
 MAX_CLAUSE_CHARS = 700
@@ -246,7 +248,7 @@ def _log(session: AssistSession, *, task: str, model: str, response=None, cost: 
 def call_task(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
               prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
               effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-              exact_model: bool = False, accept=None) -> CallResult:
+              exact_model: bool = False, accept=None, fresh: bool = False) -> CallResult:
     """One structured call through the cache, the budget and the usage log,
     for a task defined outside this module (the single-clause review).
     `tier` "standard" asks the larger model (AI_MODEL_STANDARD); `ttl_days`
@@ -257,16 +259,17 @@ def call_task(session: AssistSession, task: str, system: str, parts: list[TextPa
     alias, no fallback, a substituted reply is an error, never cached).
     `accept(data)` returns what is wrong with an answer's shape, or None: an
     answer it refuses is an `invalid_output` error, never cached, and a cached
-    one it refuses is not reused."""
+    one it refuses is not reused. `fresh` asks the model again whatever is
+    stored (a force-fresh reread): the new answer replaces the stored one."""
     return _call(session, task, system, parts, schema, max_output, prompt_version=prompt_version, tier=tier,
                  ttl_days=ttl_days, effort=effort, model=model, timeout_s=timeout_s, exact_model=exact_model,
-                 accept=accept)
+                 accept=accept, fresh=fresh)
 
 
 def _call(session: AssistSession, task: str, system: str, parts: list[TextPart], schema: dict, max_output: int, *,
           prompt_version: str = PROMPT_VERSION, tier: str = "small", ttl_days: int | None = None,
           effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
-          exact_model: bool = False, accept=None) -> CallResult:
+          exact_model: bool = False, accept=None, fresh: bool = False) -> CallResult:
     settings = get_settings()
     pinned = model
     model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)
@@ -291,16 +294,26 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
     if evaluation.switched_off(task):
         return CallResult(None, False, model, f"the {task} task is switched off on this server", flags=flags)
     with result_cache.InFlight(key) as first:
-        cached = result_cache.get(session.db, key, project_id=session.project_id,
-                                  ttl_days=ttl_days or settings.ai_cache_ttl_days, document_sha256=session.document_sha256)
+        cached = None if fresh else result_cache.get(
+            session.db, key, project_id=session.project_id, ttl_days=ttl_days or settings.ai_cache_ttl_days,
+            document_sha256=session.document_sha256)
         if cached is not None and accept is not None and accept(cached.get("data")):
             cached = None                       # a stored answer of the wrong shape is not reused
+        if cached is not None and exact_model and cached.get("model") == NULL_MODEL:
+            cached = None                       # the disabled provider's reply, stored before this check: no answer
         if cached is not None:
             session.cached += 1
             _log(session, task=task, model=cached.get("model", model), cache_hit=True)
             return CallResult(cached.get("data"), True, cached.get("model", model), flags=flags)
         if not first:
             return CallResult(None, False, model, "an identical request just failed", flags=flags)
+        if exact_model and not getattr(session.provider, "ready", True):
+            # an exact-model task counts only that model's answer: with no model
+            # to call (AI off, no credential) there is none, which is said, not
+            # stood in for by the disabled provider's placeholder
+            detail = f"unavailable: {getattr(session.provider, 'status', '') or 'no model can be called'}"
+            session.errors.append(detail[:300])
+            return CallResult(None, False, model, detail, flags=flags)
         try:
             reservation = session.budget.reserve(estimate_input_tokens(request), request.max_output_tokens)
         except BudgetExceeded as exc:
@@ -320,6 +333,9 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
         if wrong:
             session.errors.append(f"invalid_output: {wrong}"[:300])
             return CallResult(None, False, response.model or model, f"invalid_output: {wrong}"[:300], flags=flags)
+        if response.model == NULL_MODEL:
+            # the disabled provider's placeholder is never stored under a model's key
+            return CallResult(response.data, False, response.model, flags=flags)
         result_cache.put(session.db, key, {"data": response.data, "model": response.model or model},
                          project_id=session.project_id, document_sha256=session.document_sha256, task=task)
         return CallResult(response.data, False, response.model or model, flags=flags)

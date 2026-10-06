@@ -157,6 +157,9 @@ class AiResponse:
     models_used: dict[str, int] = field(default_factory=dict)
     substituted: bool = False
     route_version: str | None = None
+    # The model requests the route made for this one call, when it says
+    # (Claude Code's `num_turns`: a Read of each picture is a turn of its own).
+    turns: int | None = None
 
     @property
     def ok(self) -> bool:
@@ -650,6 +653,7 @@ class ClaudeCodeProvider:
         self._cli = shutil.which(configured) or (configured if Path(configured).is_file() else None)
         self._models = {"small": settings.ai_model_small, "standard": settings.ai_model_standard}
         self._timeout = settings.ai_cli_timeout_s
+        self._max_turns = settings.ai_cli_max_turns
         self._semaphore = threading.BoundedSemaphore(max(1, settings.ai_max_concurrency))
         self._version: tuple[int, int, int] | None = None
         self._version_text: str | None = None
@@ -716,9 +720,41 @@ class ClaudeCodeProvider:
         lines.append("Answer through the structured output only.")
         return "\n\n".join(lines)
 
+    @classmethod
+    def _message(cls, request: AiRequest, pictures: list) -> str:
+        """The request as one stream-json user message, each picture inline
+        after its label (AI_CLI_INLINE_IMAGES)."""
+        content: list[dict[str, Any]] = [{"type": "text", "text": cls._prompt(request, [])}]
+        for part in pictures:
+            content.append({"type": "text", "text": f"[{part.label}]:"})
+            content.append({"type": "image", "source": {"type": "base64", "media_type": "image/png",
+                                                        "data": base64.b64encode(part.png).decode()}})
+        return json.dumps({"type": "user", "message": {"role": "user", "content": content}}) + "\n"
+
+    @staticmethod
+    def _result_of_stream(stdout: str) -> dict:
+        """The final `result` message of a stream-json reply (the same fields
+        as the json output); ValueError when there is none."""
+        result = None
+        for line in (stdout or "").splitlines():
+            line = line.strip()
+            if not line.startswith("{"):
+                continue
+            try:
+                message = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(message, dict) and message.get("type") == "result":
+                result = message
+        if result is None:
+            raise ValueError("no result message in the stream")
+        return result
+
     @staticmethod
     def _error_kind(text: str) -> str:
         lowered = text.lower()
+        if "max_turns" in lowered or "maximum number of turns" in lowered:
+            return "max_turns"
         if any(s in lowered for s in ("does not support this model", "unrecognized_model", "unrecognized model",
                                       "or newer is required")):
             return "unsupported_model"
@@ -746,23 +782,32 @@ class ClaudeCodeProvider:
         started = time.perf_counter()
         sweep_deferred_folders()
         folder = tempfile.mkdtemp(prefix="ep-ai-")
+        pictures = [p for p in request.parts if isinstance(p, ImagePart)]
+        inline = bool(pictures) and get_settings().ai_cli_inline_images
         try:
             images = []
-            for index, part in enumerate(p for p in request.parts if isinstance(p, ImagePart)):
-                filename = f"image-{index + 1}.png"
-                (Path(folder) / filename).write_bytes(part.png)
-                images.append((part.label, filename))
-            args = [self._cli, "-p", "--output-format", "json", "--model", model,
+            if not inline:
+                for index, part in enumerate(pictures):
+                    filename = f"image-{index + 1}.png"
+                    (Path(folder) / filename).write_bytes(part.png)
+                    images.append((part.label, filename))
+            args = [self._cli, "-p", "--output-format", "stream-json" if inline else "json", "--model", model,
                     "--system-prompt", request.system, "--json-schema", json.dumps(request.schema),
                     "--no-session-persistence", "--disable-slash-commands", "--strict-mcp-config"]
+            if inline:
+                # the pictures inside the message: no Read turn a picture
+                args += ["--input-format", "stream-json", "--verbose"]
             if request.effort:
                 args += ["--effort", request.effort]
+            if self._max_turns:
+                args += ["--max-turns", str(self._max_turns)]
             args += ["--tools", "Read", "--allowedTools", "Read"] if images else ["--tools", ""]
             env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
+            stdin = self._message(request, pictures) if inline else self._prompt(request, images)
             try:
                 with self._semaphore:
                     completed = subprocess.run(
-                        args, input=self._prompt(request, images), capture_output=True, text=True, encoding="utf-8",
+                        args, input=stdin, capture_output=True, text=True, encoding="utf-8",
                         errors="replace", cwd=folder, env=env, timeout=request.timeout_s or self._timeout,
                     )
             except subprocess.TimeoutExpired:
@@ -777,7 +822,7 @@ class ClaudeCodeProvider:
         latency = int((time.perf_counter() - started) * 1000)
 
         try:
-            reply = json.loads(completed.stdout)
+            reply = self._result_of_stream(completed.stdout) if inline else json.loads(completed.stdout)
         except ValueError:
             detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
             return AiResponse(data=None, error=self._error_kind(detail), error_detail=detail, model=model, latency_ms=latency)
@@ -789,8 +834,10 @@ class ClaudeCodeProvider:
             reasoning_tokens=(raw_usage.get("output_tokens_details") or {}).get("thinking_tokens"),
         )
         used, per_model, substitutes = models_used(reply.get("modelUsage"), model)
+        turns = reply.get("num_turns")
         common = dict(usage=usage, model=used, latency_ms=latency, models_used=per_model,
-                      substituted=bool(substitutes), route_version=self._version_text)
+                      substituted=bool(substitutes), route_version=self._version_text,
+                      turns=turns if isinstance(turns, int) else None)
         if reply.get("is_error") or reply.get("subtype") != "success":
             detail = str(reply.get("result") or reply.get("subtype") or "Claude Code reported an error")[:500]
             return AiResponse(data=None, error=self._error_kind(detail), error_detail=detail, **common)
@@ -810,7 +857,22 @@ class ClaudeCodeProvider:
 
 
 _provider: AiProvider | None = None
+_fa_provider: AiProvider | None = None
+_prep_provider: AiProvider | None = None
+_review_provider: AiProvider | None = None
 _provider_lock = threading.Lock()
+_BUILDERS = {"claude-code": ClaudeCodeProvider, "claude_code": ClaudeCodeProvider, "subscription": ClaudeCodeProvider,
+             "claude": ClaudeProvider, "anthropic": ClaudeProvider, "openai": OpenAiProvider, "gpt": OpenAiProvider}
+
+
+def _build(settings) -> AiProvider:
+    build = _BUILDERS.get(settings.ai_provider.lower())
+    if build is None:
+        return NullProvider()
+    try:
+        return build()
+    except Exception:  # noqa: BLE001 -- a provider that cannot be built is a disabled one
+        return NullProvider()
 
 
 def get_provider() -> AiProvider:
@@ -820,23 +882,89 @@ def get_provider() -> AiProvider:
     with _provider_lock:
         if _provider is None:
             settings = get_settings()
-            builders = {"claude-code": ClaudeCodeProvider, "claude_code": ClaudeCodeProvider,
-                        "subscription": ClaudeCodeProvider,
-                        "claude": ClaudeProvider, "anthropic": ClaudeProvider,
-                        "openai": OpenAiProvider, "gpt": OpenAiProvider}
-            build = builders.get(settings.ai_provider.lower()) if settings.ai_enabled else None
-            if build is None:
-                _provider = NullProvider()
-            else:
-                try:
-                    _provider = build()
-                except Exception:  # noqa: BLE001 -- a provider that cannot be built is a disabled one
-                    _provider = NullProvider()
+            _provider = _build(settings) if settings.ai_enabled else NullProvider()
         return _provider
+
+
+def fa_ai_on() -> bool:
+    """Whether the FA Interfaces drawing workflow's models may be called:
+    AI_ENABLED, or FA_AI_ENABLED for this workflow alone."""
+    settings = get_settings()
+    return bool(settings.ai_enabled or settings.fa_ai_enabled)
+
+
+def get_fa_provider() -> AiProvider:
+    """The FA Interfaces drawing workflow's provider (its Opus drawing agents
+    and Opus review): the platform's own when AI_ENABLED is on; when only
+    FA_AI_ENABLED is, the same route built for this workflow alone, while
+    every other caller keeps the NullProvider."""
+    global _fa_provider
+    settings = get_settings()
+    if settings.ai_enabled or not settings.fa_ai_enabled:
+        return get_provider()
+    with _provider_lock:
+        if _fa_provider is None:
+            _fa_provider = _build(settings)
+            if hasattr(_fa_provider, "_semaphore"):          # this workflow's own bound on calls at once
+                _fa_provider._semaphore = threading.BoundedSemaphore(max(1, settings.fa_max_concurrency))
+        return _fa_provider
+
+
+def prep_ai_on() -> bool:
+    """Whether Drawings Preparation's agents may be called: AI_ENABLED, or
+    PREP_AI_ENABLED for them alone."""
+    settings = get_settings()
+    return bool(settings.ai_enabled or settings.prep_ai_enabled)
+
+
+def get_prep_provider() -> AiProvider:
+    """Drawings Preparation's provider (its Opus placement and coordination
+    agents and Opus orchestrator): the platform's own when AI_ENABLED is on;
+    when only PREP_AI_ENABLED is, the same route built for it alone, with its
+    own bound on calls at once."""
+    global _prep_provider
+    settings = get_settings()
+    if settings.ai_enabled or not settings.prep_ai_enabled:
+        return get_provider()
+    with _provider_lock:
+        if _prep_provider is None:
+            _prep_provider = _build(settings)
+            if hasattr(_prep_provider, "_semaphore"):
+                _prep_provider._semaphore = threading.BoundedSemaphore(max(1, settings.prep_max_concurrency))
+        return _prep_provider
+
+
+def review_ai_on() -> bool:
+    """Whether the Drawings Review's looks may be called: AI_ENABLED, or
+    DRAWING_REVIEW_AI_ENABLED for them alone."""
+    settings = get_settings()
+    return bool(settings.ai_enabled or settings.drawing_review_ai_enabled)
+
+
+def get_review_provider() -> AiProvider:
+    """The Drawings Review's provider: the platform's own when AI_ENABLED is
+    on (or a test swapped it in); when only DRAWING_REVIEW_AI_ENABLED is, the
+    same route built for the review alone, with its own bound on calls at
+    once, while every other caller keeps the NullProvider."""
+    global _review_provider
+    settings = get_settings()
+    swapped = _provider is not None and not isinstance(_provider, NullProvider)
+    if settings.ai_enabled or not settings.drawing_review_ai_enabled or swapped:
+        return get_provider()
+    with _provider_lock:
+        if _review_provider is None:
+            _review_provider = _build(settings)
+            if hasattr(_review_provider, "_semaphore"):
+                _review_provider._semaphore = threading.BoundedSemaphore(max(1, settings.drawing_review_parallel))
+        return _review_provider
 
 
 def set_provider(provider: AiProvider | None) -> None:
     """Swap the provider (tests, or a diagnostics switch)."""
-    global _provider
+    global _provider, _fa_provider, _prep_provider, _review_provider
     with _provider_lock:
         _provider = provider
+        if provider is None:
+            _fa_provider = None
+            _prep_provider = None
+            _review_provider = None

@@ -6,18 +6,23 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   server: {
-    port: 5175,
+    port: 5173,
     host: '0.0.0.0',
 
     allowedHosts: [
-      '.trycloudflare.com'
+      '.trycloudflare.com',
+      '.devtunnels.ms'
     ],
 
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8002',
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api(?=\/|$)/, ''),
+      },
+      '/auth': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
       },
     },
   },

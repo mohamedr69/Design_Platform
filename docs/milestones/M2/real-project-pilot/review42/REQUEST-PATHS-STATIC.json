@@ -1,0 +1,2115 @@
+{
+ "base_method": "ORCH-08C change 1(a) (R39-04): a static, over-approximating call graph of each application tree, from each lane's\nentry point to every provider-call site. Read-only: parses the trees' source files (ast), imports nothing from them,\nstarts no process, calls no model. Writes one JSON file (argv[1]).\n\nResolution (deliberately over-approximating, so a site is never missed by being under-resolved):\n  * f(...)            -> a function / class of the same module, or a name imported into the module (anywhere in it)\n  * mod.f(...)        -> mod's function / class f when mod is an imported module alias\n  * self.f / cls.f    -> every method f of the classes of the same module\n  * obj.f(...)        -> every method f of a class defined in the same module or in a module it imports\n  * a function / method referenced without a call (a callback, functools.partial(f), task=f) is an edge too\n  * a class reached is reached with all its methods (dataclass / protocol dispatch)\nProvider-call sites: every `<x>.complete(` call and every `get_provider()` call outside app/ai/provider.py.\nThe result is a superset: every site it lists as reached is then read by hand (REQUEST-PATHS.md) for the setting that\nenables it and its bounds; a site it lists as not reached has no static path from the lane's entry point.",
+ "get_provider_sites": [
+  {
+   "function": "app.ai.evidence_reader:evidence_stage",
+   "guarded": true,
+   "lane": "B",
+   "line": 1593,
+   "path": "app/ai/evidence_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.sheet_reader:available",
+   "guarded": true,
+   "lane": "B",
+   "line": 236,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.sheet_reader:read_design_sheet",
+   "guarded": true,
+   "lane": "B",
+   "line": 1376,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.submittal_reader:available",
+   "guarded": true,
+   "lane": "B",
+   "line": 203,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.submittal_reader:check",
+   "guarded": true,
+   "lane": "B",
+   "line": 598,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.verification:available",
+   "guarded": true,
+   "lane": "B",
+   "line": 385,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.verification:verify_boq",
+   "guarded": true,
+   "lane": "B",
+   "line": 731,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.verification:verify_details",
+   "guarded": true,
+   "lane": "B",
+   "line": 1227,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.verification:drf_run",
+   "guarded": true,
+   "lane": "B",
+   "line": 1285,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.verification:read_drf",
+   "guarded": true,
+   "lane": "B",
+   "line": 1306,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.compliance.assist:open_session",
+   "guarded": true,
+   "lane": "B",
+   "line": 225,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.compliance.assist:available",
+   "guarded": true,
+   "lane": "B",
+   "line": 229,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.extraction.pipeline:ask",
+   "guarded": true,
+   "lane": "B",
+   "line": 199,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.extraction.pipeline:assist_project",
+   "guarded": true,
+   "lane": "B",
+   "line": 341,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:enabled",
+   "guarded": true,
+   "lane": "B",
+   "line": 153,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:_call",
+   "guarded": true,
+   "lane": "B",
+   "line": 294,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.routers.extraction:get_extraction",
+   "guarded": true,
+   "lane": "B",
+   "line": 172,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.routers.extraction:assist",
+   "guarded": true,
+   "lane": "B",
+   "line": 273,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.routers.extraction:project_ai_budget",
+   "guarded": true,
+   "lane": "B",
+   "line": 357,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.services.document_processing:run",
+   "guarded": true,
+   "lane": "B",
+   "line": 260,
+   "path": "app/services/document_processing.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.services.drawing_ai_review:enabled",
+   "guarded": true,
+   "lane": "B",
+   "line": 124,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.services.drawing_ai_review:_ask",
+   "guarded": true,
+   "lane": "B",
+   "line": 156,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "the harness chain (the gate)",
+   "tree": "baseline"
+  },
+  {
+   "function": "app.ai.evidence_reader:evidence_stage",
+   "guarded": true,
+   "lane": "C",
+   "line": 2673,
+   "path": "app/ai/evidence_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.evidence_reader:evidence_stage",
+   "guarded": true,
+   "lane": "R",
+   "line": 2673,
+   "path": "app/ai/evidence_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.evidence_reader:evidence_stage",
+   "guarded": true,
+   "lane": "P",
+   "line": 2673,
+   "path": "app/ai/evidence_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:available",
+   "guarded": true,
+   "lane": "C",
+   "line": 236,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:available",
+   "guarded": true,
+   "lane": "R",
+   "line": 236,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:available",
+   "guarded": true,
+   "lane": "P",
+   "line": 236,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:read_design_sheet",
+   "guarded": true,
+   "lane": "C",
+   "line": 1376,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:read_design_sheet",
+   "guarded": true,
+   "lane": "R",
+   "line": 1376,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.sheet_reader:read_design_sheet",
+   "guarded": true,
+   "lane": "P",
+   "line": 1376,
+   "path": "app/ai/sheet_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:available",
+   "guarded": true,
+   "lane": "C",
+   "line": 203,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:available",
+   "guarded": true,
+   "lane": "R",
+   "line": 203,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": true,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:available",
+   "guarded": true,
+   "lane": "P",
+   "line": 203,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:check",
+   "guarded": true,
+   "lane": "C",
+   "line": 598,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:check",
+   "guarded": true,
+   "lane": "R",
+   "line": 598,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.submittal_reader:check",
+   "guarded": true,
+   "lane": "P",
+   "line": 598,
+   "path": "app/ai/submittal_reader.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:available",
+   "guarded": true,
+   "lane": "C",
+   "line": 385,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:available",
+   "guarded": true,
+   "lane": "R",
+   "line": 385,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:available",
+   "guarded": true,
+   "lane": "P",
+   "line": 385,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_boq",
+   "guarded": true,
+   "lane": "C",
+   "line": 731,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_boq",
+   "guarded": true,
+   "lane": "R",
+   "line": 731,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_boq",
+   "guarded": true,
+   "lane": "P",
+   "line": 731,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_details",
+   "guarded": true,
+   "lane": "C",
+   "line": 1227,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_details",
+   "guarded": true,
+   "lane": "R",
+   "line": 1227,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:verify_details",
+   "guarded": true,
+   "lane": "P",
+   "line": 1227,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:drf_run",
+   "guarded": true,
+   "lane": "C",
+   "line": 1285,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:drf_run",
+   "guarded": true,
+   "lane": "R",
+   "line": 1285,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:drf_run",
+   "guarded": true,
+   "lane": "P",
+   "line": 1285,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:read_drf",
+   "guarded": true,
+   "lane": "C",
+   "line": 1306,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:read_drf",
+   "guarded": true,
+   "lane": "R",
+   "line": 1306,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ai.verification:read_drf",
+   "guarded": true,
+   "lane": "P",
+   "line": 1306,
+   "path": "app/ai/verification.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:open_session",
+   "guarded": true,
+   "lane": "C",
+   "line": 225,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:open_session",
+   "guarded": true,
+   "lane": "R",
+   "line": 225,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:open_session",
+   "guarded": true,
+   "lane": "P",
+   "line": 225,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:available",
+   "guarded": true,
+   "lane": "C",
+   "line": 229,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:available",
+   "guarded": true,
+   "lane": "R",
+   "line": 229,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.compliance.assist:available",
+   "guarded": true,
+   "lane": "P",
+   "line": 229,
+   "path": "app/compliance/assist.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:ask",
+   "guarded": true,
+   "lane": "C",
+   "line": 199,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:ask",
+   "guarded": true,
+   "lane": "R",
+   "line": 199,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:ask",
+   "guarded": true,
+   "lane": "P",
+   "line": 199,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:assist_project",
+   "guarded": true,
+   "lane": "C",
+   "line": 341,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:assist_project",
+   "guarded": true,
+   "lane": "R",
+   "line": 341,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.extraction.pipeline:assist_project",
+   "guarded": true,
+   "lane": "P",
+   "line": 341,
+   "path": "app/extraction/pipeline.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:enabled",
+   "guarded": true,
+   "lane": "C",
+   "line": 153,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:enabled",
+   "guarded": true,
+   "lane": "R",
+   "line": 153,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:enabled",
+   "guarded": true,
+   "lane": "P",
+   "line": 153,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:_call",
+   "guarded": true,
+   "lane": "C",
+   "line": 294,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:_call",
+   "guarded": true,
+   "lane": "R",
+   "line": 294,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.ifc.services.ai_symbol_review:_call",
+   "guarded": true,
+   "lane": "P",
+   "line": 294,
+   "path": "app/ifc/services/ai_symbol_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:get_extraction",
+   "guarded": true,
+   "lane": "C",
+   "line": 172,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:get_extraction",
+   "guarded": true,
+   "lane": "R",
+   "line": 172,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:get_extraction",
+   "guarded": true,
+   "lane": "P",
+   "line": 172,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:assist",
+   "guarded": true,
+   "lane": "C",
+   "line": 273,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:assist",
+   "guarded": true,
+   "lane": "R",
+   "line": 273,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:assist",
+   "guarded": true,
+   "lane": "P",
+   "line": 273,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:project_ai_budget",
+   "guarded": true,
+   "lane": "C",
+   "line": 357,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:project_ai_budget",
+   "guarded": true,
+   "lane": "R",
+   "line": 357,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.routers.extraction:project_ai_budget",
+   "guarded": true,
+   "lane": "P",
+   "line": 357,
+   "path": "app/routers/extraction.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.document_processing:run",
+   "guarded": true,
+   "lane": "C",
+   "line": 260,
+   "path": "app/services/document_processing.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.document_processing:run",
+   "guarded": true,
+   "lane": "R",
+   "line": 260,
+   "path": "app/services/document_processing.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.document_processing:run",
+   "guarded": true,
+   "lane": "P",
+   "line": 260,
+   "path": "app/services/document_processing.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:enabled",
+   "guarded": true,
+   "lane": "C",
+   "line": 124,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:enabled",
+   "guarded": true,
+   "lane": "R",
+   "line": 124,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:enabled",
+   "guarded": true,
+   "lane": "P",
+   "line": 124,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:_ask",
+   "guarded": true,
+   "lane": "C",
+   "line": 156,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:_ask",
+   "guarded": true,
+   "lane": "R",
+   "line": 156,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  },
+  {
+   "function": "app.services.drawing_ai_review:_ask",
+   "guarded": true,
+   "lane": "P",
+   "line": 156,
+   "path": "app/services/drawing_ai_review.py",
+   "reached_by_lane_entry": false,
+   "resolves_to": "RefusingGlobalProvider (refused, breach, INVALID)",
+   "tree": "candidate"
+  }
+ ],
+ "lane_file": {
+  "entries": {
+   "B": [
+    {
+     "call": "exercise",
+     "line": 471
+    },
+    {
+     "call": "exercise",
+     "line": 608
+    },
+    {
+     "call": "document_processing.run",
+     "line": 521
+    }
+   ],
+   "C": [
+    {
+     "call": "exercise",
+     "line": 471
+    },
+    {
+     "call": "exercise",
+     "line": 608
+    },
+    {
+     "call": "er.evidence_stage",
+     "line": 640
+    }
+   ],
+   "P": [
+    {
+     "call": "RC.probe_r38",
+     "line": 564
+    }
+   ],
+   "R": [
+    {
+     "call": "exercise",
+     "line": 471
+    },
+    {
+     "call": "exercise",
+     "line": 608
+    },
+    {
+     "call": "er.evidence_stage",
+     "line": 640
+    }
+   ]
+  },
+  "installs": [
+   {
+    "argument": "GLOBAL",
+    "conditions": [
+     "LANE in ('C', 'R', 'P')"
+    ],
+    "line": 144
+   },
+   {
+    "argument": "chain",
+    "conditions": [
+     "LANE == 'B'"
+    ],
+    "line": 434
+   }
+  ],
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32/lane_r32.py"
+ },
+ "lanes": {
+  "B": {
+   "entries": [
+    "app.services.document_processing:run"
+   ],
+   "functions_reached": 664,
+   "global": {
+    "first_application_entry_line": 471,
+    "global_provider": "harness chain (StopGuardR38 -> GateStoreProvider -> allowance -> identity guard -> dispatch guard)",
+    "installed_at_line": 434,
+    "installed_before_every_application_entry": true
+   },
+   "set_provider_sites": [],
+   "sites_not_reached": [
+    {
+     "function": "app.ai.evaluation:run_case",
+     "kind": "complete",
+     "line": 194,
+     "path": "app/ai/evaluation.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:available",
+     "kind": "get_provider",
+     "line": 236,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:read_design_sheet",
+     "kind": "get_provider",
+     "line": 1376,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.verification:available",
+     "kind": "get_provider",
+     "line": 385,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_boq",
+     "kind": "get_provider",
+     "line": 731,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_details",
+     "kind": "get_provider",
+     "line": 1227,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:drf_run",
+     "kind": "get_provider",
+     "line": 1285,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:read_drf",
+     "kind": "get_provider",
+     "line": 1306,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.compliance.assist:open_session",
+     "kind": "get_provider",
+     "line": 225,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:available",
+     "kind": "get_provider",
+     "line": 229,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "get_provider",
+     "line": 199,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 239,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 251,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:assist_project",
+     "kind": "get_provider",
+     "line": 341,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:enabled",
+     "kind": "get_provider",
+     "line": 153,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "get_provider",
+     "line": 294,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 295,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 300,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.routers.extraction:get_extraction",
+     "kind": "get_provider",
+     "line": 172,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:assist",
+     "kind": "get_provider",
+     "line": 273,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:project_ai_budget",
+     "kind": "get_provider",
+     "line": 357,
+     "path": "app/routers/extraction.py"
+    }
+   ],
+   "sites_reached": [
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.evidence_reader:EvidenceRun",
+      "app.ai.evidence_reader:EvidenceRun.call"
+     ],
+     "function": "app.ai.evidence_reader:EvidenceRun.call",
+     "kind": "complete",
+     "line": 328,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.evidence_reader:evidence_stage"
+     ],
+     "function": "app.ai.evidence_reader:evidence_stage",
+     "kind": "get_provider",
+     "line": 1593,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.submittal_reader:available",
+      "app.ai.provider:get_provider",
+      "app.ai.ledger:LedgerProvider",
+      "app.ai.ledger:LedgerProvider.complete"
+     ],
+     "function": "app.ai.ledger:LedgerProvider.complete",
+     "kind": "complete",
+     "line": 351,
+     "path": "app/ai/ledger.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.submittal_reader:available"
+     ],
+     "function": "app.ai.submittal_reader:available",
+     "kind": "get_provider",
+     "line": 203,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.submittal_reader:check"
+     ],
+     "function": "app.ai.submittal_reader:check",
+     "kind": "get_provider",
+     "line": 598,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.ai.submittal_reader:_Run",
+      "app.ai.submittal_reader:_Run.call",
+      "app.compliance.assist:call_task",
+      "app.compliance.assist:_call"
+     ],
+     "function": "app.compliance.assist:_call",
+     "kind": "complete",
+     "line": 293,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run"
+     ],
+     "function": "app.services.document_processing:run",
+     "kind": "get_provider",
+     "line": 260,
+     "path": "app/services/document_processing.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.services.shop_drawings:reconcile",
+      "app.services.shop_drawings:_ai_review",
+      "app.services.drawing_ai_review:enabled"
+     ],
+     "function": "app.services.drawing_ai_review:enabled",
+     "kind": "get_provider",
+     "line": 124,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.services.shop_drawings:reconcile",
+      "app.services.shop_drawings:_ai_review",
+      "app.services.drawing_ai_review:review_floor_duplicates",
+      "app.services.drawing_ai_review:_ask"
+     ],
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "complete",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "call_path": [
+      "app.services.document_processing:run",
+      "app.services.shop_drawings:reconcile",
+      "app.services.shop_drawings:_ai_review",
+      "app.services.drawing_ai_review:review_floor_duplicates",
+      "app.services.drawing_ai_review:_ask"
+     ],
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "get_provider",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    }
+   ],
+   "tree": "baseline"
+  },
+  "C": {
+   "entries": [
+    "app.ai.evidence_reader:evidence_stage"
+   ],
+   "functions_reached": 243,
+   "global": {
+    "first_application_entry_line": 471,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   },
+   "set_provider_sites": [],
+   "sites_not_reached": [
+    {
+     "function": "app.ai.evaluation:run_case",
+     "kind": "complete",
+     "line": 194,
+     "path": "app/ai/evaluation.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:available",
+     "kind": "get_provider",
+     "line": 236,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:read_design_sheet",
+     "kind": "get_provider",
+     "line": 1376,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:check",
+     "kind": "get_provider",
+     "line": 598,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.verification:available",
+     "kind": "get_provider",
+     "line": 385,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_boq",
+     "kind": "get_provider",
+     "line": 731,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_details",
+     "kind": "get_provider",
+     "line": 1227,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:drf_run",
+     "kind": "get_provider",
+     "line": 1285,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:read_drf",
+     "kind": "get_provider",
+     "line": 1306,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.compliance.assist:open_session",
+     "kind": "get_provider",
+     "line": 225,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:available",
+     "kind": "get_provider",
+     "line": 229,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "get_provider",
+     "line": 199,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 239,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 251,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:assist_project",
+     "kind": "get_provider",
+     "line": 341,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:enabled",
+     "kind": "get_provider",
+     "line": 153,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "get_provider",
+     "line": 294,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 295,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 300,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.routers.extraction:get_extraction",
+     "kind": "get_provider",
+     "line": 172,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:assist",
+     "kind": "get_provider",
+     "line": 273,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:project_ai_budget",
+     "kind": "get_provider",
+     "line": 357,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.services.document_processing:run",
+     "kind": "get_provider",
+     "line": 260,
+     "path": "app/services/document_processing.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:enabled",
+     "kind": "get_provider",
+     "line": 124,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "complete",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "get_provider",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    }
+   ],
+   "sites_reached": [
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.evidence_reader:EvidenceRun",
+      "app.ai.evidence_reader:EvidenceRun.call"
+     ],
+     "function": "app.ai.evidence_reader:EvidenceRun.call",
+     "kind": "complete",
+     "line": 446,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage"
+     ],
+     "function": "app.ai.evidence_reader:evidence_stage",
+     "kind": "get_provider",
+     "line": 2673,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.submittal_reader:available",
+      "app.ai.provider:get_provider",
+      "app.ai.ledger:LedgerProvider",
+      "app.ai.ledger:LedgerProvider.complete"
+     ],
+     "function": "app.ai.ledger:LedgerProvider.complete",
+     "kind": "complete",
+     "line": 351,
+     "path": "app/ai/ledger.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.submittal_reader:available"
+     ],
+     "function": "app.ai.submittal_reader:available",
+     "kind": "get_provider",
+     "line": 203,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.evidence_reader:read_document",
+      "app.ai.evidence_reader:_read_page",
+      "app.ai.submittal_reader:_Run.call",
+      "app.compliance.assist:call_task",
+      "app.compliance.assist:_call"
+     ],
+     "function": "app.compliance.assist:_call",
+     "kind": "complete",
+     "line": 293,
+     "path": "app/compliance/assist.py"
+    }
+   ],
+   "tree": "candidate"
+  },
+  "P": {
+   "entries": [
+    "run_control_r38.probe_r38"
+   ],
+   "global": {
+    "first_application_entry_line": 564,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   },
+   "note": "lane P runs no application code: it re-sends a seeded sample of C's dispatched payloads through the harness chain",
+   "tree": "candidate (harness only)"
+  },
+  "R": {
+   "entries": [
+    "app.ai.evidence_reader:evidence_stage"
+   ],
+   "functions_reached": 243,
+   "global": {
+    "first_application_entry_line": 471,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   },
+   "set_provider_sites": [],
+   "sites_not_reached": [
+    {
+     "function": "app.ai.evaluation:run_case",
+     "kind": "complete",
+     "line": 194,
+     "path": "app/ai/evaluation.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:available",
+     "kind": "get_provider",
+     "line": 236,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:read_design_sheet",
+     "kind": "get_provider",
+     "line": 1376,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:check",
+     "kind": "get_provider",
+     "line": 598,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.verification:available",
+     "kind": "get_provider",
+     "line": 385,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_boq",
+     "kind": "get_provider",
+     "line": 731,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_details",
+     "kind": "get_provider",
+     "line": 1227,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:drf_run",
+     "kind": "get_provider",
+     "line": 1285,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:read_drf",
+     "kind": "get_provider",
+     "line": 1306,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.compliance.assist:open_session",
+     "kind": "get_provider",
+     "line": 225,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:available",
+     "kind": "get_provider",
+     "line": 229,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "get_provider",
+     "line": 199,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 239,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 251,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:assist_project",
+     "kind": "get_provider",
+     "line": 341,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:enabled",
+     "kind": "get_provider",
+     "line": 153,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "get_provider",
+     "line": 294,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 295,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 300,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.routers.extraction:get_extraction",
+     "kind": "get_provider",
+     "line": 172,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:assist",
+     "kind": "get_provider",
+     "line": 273,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:project_ai_budget",
+     "kind": "get_provider",
+     "line": 357,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.services.document_processing:run",
+     "kind": "get_provider",
+     "line": 260,
+     "path": "app/services/document_processing.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:enabled",
+     "kind": "get_provider",
+     "line": 124,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "complete",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "get_provider",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    }
+   ],
+   "sites_reached": [
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.evidence_reader:EvidenceRun",
+      "app.ai.evidence_reader:EvidenceRun.call"
+     ],
+     "function": "app.ai.evidence_reader:EvidenceRun.call",
+     "kind": "complete",
+     "line": 446,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage"
+     ],
+     "function": "app.ai.evidence_reader:evidence_stage",
+     "kind": "get_provider",
+     "line": 2673,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.submittal_reader:available",
+      "app.ai.provider:get_provider",
+      "app.ai.ledger:LedgerProvider",
+      "app.ai.ledger:LedgerProvider.complete"
+     ],
+     "function": "app.ai.ledger:LedgerProvider.complete",
+     "kind": "complete",
+     "line": 351,
+     "path": "app/ai/ledger.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.submittal_reader:available"
+     ],
+     "function": "app.ai.submittal_reader:available",
+     "kind": "get_provider",
+     "line": 203,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "call_path": [
+      "app.ai.evidence_reader:evidence_stage",
+      "app.ai.evidence_reader:read_document",
+      "app.ai.evidence_reader:_read_page",
+      "app.ai.submittal_reader:_Run.call",
+      "app.compliance.assist:call_task",
+      "app.compliance.assist:_call"
+     ],
+     "function": "app.compliance.assist:_call",
+     "kind": "complete",
+     "line": 293,
+     "path": "app/compliance/assist.py"
+    }
+   ],
+   "tree": "candidate"
+  }
+ },
+ "method": "ORCH-10 (R42; R40-04 option 2, task 2.2 (a)): the static request-path analysis of review39 (request_paths_r39, unchanged\nand re-run) PLUS the global-provider resolution of every lane. Read-only: parses the trees' source files and this\nharness's lane_r32.py (ast), imports nothing from the trees, starts no process, calls no model. Writes one JSON (argv[1]).\n\nWhat it adds to review39's result:\n  * lanes: for each lane, the global provider lane_r32 installs through app.ai.provider.set_provider and WHERE (the line),\n    and the first application entry call of the lane (the line); the installation must precede every application entry\n    (C / R: the refusing provider before evidence_stage; P: before probe_r38; B: the chain before document_processing.run\n    and before B's exercise of the chain);\n  * sites: EVERY get_provider() site of each tree (reached by the lane's entry point or not) resolved to what it returns\n    in each lane that runs that tree: in C, R and P the refusing provider (any complete() refused, recorded as the contract\n    breach 'global_provider_request', the run INVALID); in B the harness chain (the gate);\n  * set_provider: every application call of set_provider() outside app/ai/provider.py (one that could replace the\n    installed global provider), with whether a lane's entry point reaches it (lane_r32 also checks at the end that its\n    refusing provider is still installed).",
+ "summary": {
+  "application_set_provider_sites_reached": [],
+  "every_lane_installs_before_its_application_entry": true,
+  "every_site_guarded": true,
+  "get_provider_sites": 88,
+  "statement": "every get_provider() site of either tree resolves, in the lane that runs that tree, to a refusing provider (C, R, P) or to the harness chain (B); none reaches a configured provider"
+ },
+ "trees": {
+  "baseline": {
+   "functions": 2379,
+   "modules": 192,
+   "root": "C:/t/iso/frozen-r12/backend",
+   "site_files": {
+    "app/ai/evaluation.py": "3e11ede2bc8d378f024f7e94275860e2e4f723b652ea40dfddb80b255969707a",
+    "app/ai/evidence_reader.py": "22999476256a415a95f45dc865fc9858f1507e9ebebb60e74040dfcb6a70abd9",
+    "app/ai/ledger.py": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+    "app/ai/sheet_reader.py": "900e159f131b293b48a36a433362e0b252b38c0538df8dce85b18fcb98a507f0",
+    "app/ai/submittal_reader.py": "7127640681241387b1fdd538180c11aa9eb0d347859ee7b806aa7503b8e0d5bd",
+    "app/ai/verification.py": "590018af8a49465a269b86a8b3bb57ed8d94da8517ef344413bf66b78b91627c",
+    "app/compliance/assist.py": "8fff1704146451d499cc71837b70204b20d60d3d108a73f144517d10d53cdb87",
+    "app/extraction/pipeline.py": "a2b8e73c4f988e82ee2be94742e6d5b22a90f51de4d01289b81832c902f95c1d",
+    "app/ifc/services/ai_symbol_review.py": "84cd07ecc5d56ea75df103111eb5885c22d545a0360422ed060d2d90e53c050b",
+    "app/routers/extraction.py": "526dbed98e2efebb95a09056827402699e6de2397210686a26c13ed02adc6483",
+    "app/services/document_processing.py": "5f5b25940ad0677f655febf14d6af8ccd6b038232bc1c800efa4496a0f31bf0f",
+    "app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d"
+   },
+   "sites": [
+    {
+     "function": "app.ai.evaluation:run_case",
+     "kind": "complete",
+     "line": 194,
+     "path": "app/ai/evaluation.py"
+    },
+    {
+     "function": "app.ai.evidence_reader:EvidenceRun.call",
+     "kind": "complete",
+     "line": 328,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "function": "app.ai.evidence_reader:evidence_stage",
+     "kind": "get_provider",
+     "line": 1593,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "function": "app.ai.ledger:LedgerProvider.complete",
+     "kind": "complete",
+     "line": 351,
+     "path": "app/ai/ledger.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:available",
+     "kind": "get_provider",
+     "line": 236,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:read_design_sheet",
+     "kind": "get_provider",
+     "line": 1376,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:available",
+     "kind": "get_provider",
+     "line": 203,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:check",
+     "kind": "get_provider",
+     "line": 598,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.verification:available",
+     "kind": "get_provider",
+     "line": 385,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_boq",
+     "kind": "get_provider",
+     "line": 731,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_details",
+     "kind": "get_provider",
+     "line": 1227,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:drf_run",
+     "kind": "get_provider",
+     "line": 1285,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:read_drf",
+     "kind": "get_provider",
+     "line": 1306,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.compliance.assist:open_session",
+     "kind": "get_provider",
+     "line": 225,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:available",
+     "kind": "get_provider",
+     "line": 229,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:_call",
+     "kind": "complete",
+     "line": 293,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "get_provider",
+     "line": 199,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 239,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 251,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:assist_project",
+     "kind": "get_provider",
+     "line": 341,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:enabled",
+     "kind": "get_provider",
+     "line": 153,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "get_provider",
+     "line": 294,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 295,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 300,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.routers.extraction:get_extraction",
+     "kind": "get_provider",
+     "line": 172,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:assist",
+     "kind": "get_provider",
+     "line": 273,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:project_ai_budget",
+     "kind": "get_provider",
+     "line": 357,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.services.document_processing:run",
+     "kind": "get_provider",
+     "line": 260,
+     "path": "app/services/document_processing.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:enabled",
+     "kind": "get_provider",
+     "line": 124,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "complete",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "get_provider",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    }
+   ]
+  },
+  "candidate": {
+   "functions": 2414,
+   "modules": 192,
+   "root": "C:/t/iso/cand-r29/backend",
+   "site_files": {
+    "app/ai/evaluation.py": "3e11ede2bc8d378f024f7e94275860e2e4f723b652ea40dfddb80b255969707a",
+    "app/ai/evidence_reader.py": "d74397b374fc91a69ed6b4d2ba4306e5fe89682144b2cf5275c7c4091c7ca07a",
+    "app/ai/ledger.py": "d9f92297f29ee9caa044705261ce8323c269918aa09ad5f704c865aa549b7dca",
+    "app/ai/sheet_reader.py": "900e159f131b293b48a36a433362e0b252b38c0538df8dce85b18fcb98a507f0",
+    "app/ai/submittal_reader.py": "7127640681241387b1fdd538180c11aa9eb0d347859ee7b806aa7503b8e0d5bd",
+    "app/ai/verification.py": "590018af8a49465a269b86a8b3bb57ed8d94da8517ef344413bf66b78b91627c",
+    "app/compliance/assist.py": "8fff1704146451d499cc71837b70204b20d60d3d108a73f144517d10d53cdb87",
+    "app/extraction/pipeline.py": "a2b8e73c4f988e82ee2be94742e6d5b22a90f51de4d01289b81832c902f95c1d",
+    "app/ifc/services/ai_symbol_review.py": "84cd07ecc5d56ea75df103111eb5885c22d545a0360422ed060d2d90e53c050b",
+    "app/routers/extraction.py": "526dbed98e2efebb95a09056827402699e6de2397210686a26c13ed02adc6483",
+    "app/services/document_processing.py": "5f5b25940ad0677f655febf14d6af8ccd6b038232bc1c800efa4496a0f31bf0f",
+    "app/services/drawing_ai_review.py": "04c6af5ef7908f23b06035e36cc6a6aedda6786301325f5c325a7c354bfb3d7d"
+   },
+   "sites": [
+    {
+     "function": "app.ai.evaluation:run_case",
+     "kind": "complete",
+     "line": 194,
+     "path": "app/ai/evaluation.py"
+    },
+    {
+     "function": "app.ai.evidence_reader:EvidenceRun.call",
+     "kind": "complete",
+     "line": 446,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "function": "app.ai.evidence_reader:evidence_stage",
+     "kind": "get_provider",
+     "line": 2673,
+     "path": "app/ai/evidence_reader.py"
+    },
+    {
+     "function": "app.ai.ledger:LedgerProvider.complete",
+     "kind": "complete",
+     "line": 351,
+     "path": "app/ai/ledger.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:available",
+     "kind": "get_provider",
+     "line": 236,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.sheet_reader:read_design_sheet",
+     "kind": "get_provider",
+     "line": 1376,
+     "path": "app/ai/sheet_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:available",
+     "kind": "get_provider",
+     "line": 203,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.submittal_reader:check",
+     "kind": "get_provider",
+     "line": 598,
+     "path": "app/ai/submittal_reader.py"
+    },
+    {
+     "function": "app.ai.verification:available",
+     "kind": "get_provider",
+     "line": 385,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_boq",
+     "kind": "get_provider",
+     "line": 731,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:verify_details",
+     "kind": "get_provider",
+     "line": 1227,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:drf_run",
+     "kind": "get_provider",
+     "line": 1285,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.ai.verification:read_drf",
+     "kind": "get_provider",
+     "line": 1306,
+     "path": "app/ai/verification.py"
+    },
+    {
+     "function": "app.compliance.assist:open_session",
+     "kind": "get_provider",
+     "line": 225,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:available",
+     "kind": "get_provider",
+     "line": 229,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.compliance.assist:_call",
+     "kind": "complete",
+     "line": 293,
+     "path": "app/compliance/assist.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "get_provider",
+     "line": 199,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 239,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:ask",
+     "kind": "complete",
+     "line": 251,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.extraction.pipeline:assist_project",
+     "kind": "get_provider",
+     "line": 341,
+     "path": "app/extraction/pipeline.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:enabled",
+     "kind": "get_provider",
+     "line": 153,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "get_provider",
+     "line": 294,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 295,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.ifc.services.ai_symbol_review:_call",
+     "kind": "complete",
+     "line": 300,
+     "path": "app/ifc/services/ai_symbol_review.py"
+    },
+    {
+     "function": "app.routers.extraction:get_extraction",
+     "kind": "get_provider",
+     "line": 172,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:assist",
+     "kind": "get_provider",
+     "line": 273,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.routers.extraction:project_ai_budget",
+     "kind": "get_provider",
+     "line": 357,
+     "path": "app/routers/extraction.py"
+    },
+    {
+     "function": "app.services.document_processing:run",
+     "kind": "get_provider",
+     "line": 260,
+     "path": "app/services/document_processing.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:enabled",
+     "kind": "get_provider",
+     "line": 124,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "complete",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    },
+    {
+     "function": "app.services.drawing_ai_review:_ask",
+     "kind": "get_provider",
+     "line": 156,
+     "path": "app/services/drawing_ai_review.py"
+    }
+   ]
+  }
+ },
+ "version": "request-paths-r42-2026-10-06.1"
+}

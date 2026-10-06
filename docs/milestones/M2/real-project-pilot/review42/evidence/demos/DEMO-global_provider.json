@@ -1,0 +1,156 @@
+{
+ "lanes": {
+  "B": {
+   "breach": null,
+   "global_provider": {
+    "at_end": "StopGuardR38",
+    "at_start": "the harness chain (installed below, lane B)",
+    "drill": [
+     {
+      "after": 1,
+      "error": "dry_refused",
+      "error_detail": "dry run: no provider, no model request",
+      "lane": "B",
+      "provider": "StopGuardR38"
+     }
+    ],
+    "lane_kind": "harness_chain",
+    "requests_refused": 0
+   },
+   "ledger_unchanged": true,
+   "model_requests": 0,
+   "resume": null,
+   "run_state": "FINISHED",
+   "step": {
+    "result": "finished"
+   }
+  },
+  "C": {
+   "breach": {
+    "kind": "global_provider_request",
+    "lane": "C",
+    "task": "discover_page"
+   },
+   "global_provider": {
+    "at_end": "RefusingGlobalProvider",
+    "at_start": "RefusingGlobalProvider",
+    "drill": [
+     {
+      "after": 1,
+      "error": "dispatch_refused",
+      "error_detail": "global_provider_request: lane C: task 'discover_page' reached the application's global provider (get_provider()), outside the harness chain; refused fail-closed (never dispatched, never charged)",
+      "lane": "C",
+      "provider": "RefusingGlobalProvider"
+     }
+    ],
+    "lane_kind": "refusing",
+    "requests_refused": 1
+   },
+   "ledger_unchanged": true,
+   "model_requests": 0,
+   "resume": {
+    "result": "refused",
+    "why": "refused: the run is INVALID (contract breach recorded in CONTRACT-BREACH.json: an undeclared request path); it is never resumed"
+   },
+   "run_state": "INVALID",
+   "step": {
+    "result": "finished"
+   }
+  },
+  "P": {
+   "breach": {
+    "kind": "global_provider_request",
+    "lane": "P",
+    "task": "discover_page"
+   },
+   "global_provider": {
+    "at_end": "RefusingGlobalProvider",
+    "at_start": "RefusingGlobalProvider",
+    "drill": [
+     {
+      "after": 0,
+      "error": "dispatch_refused",
+      "error_detail": "global_provider_request: lane P: task 'discover_page' reached the application's global provider (get_provider()), outside the harness chain; refused fail-closed (never dispatched, never charged)",
+      "lane": "P",
+      "provider": "RefusingGlobalProvider"
+     }
+    ],
+    "lane_kind": "refusing",
+    "requests_refused": 1
+   },
+   "ledger_unchanged": true,
+   "model_requests": 0,
+   "resume": {
+    "result": "refused",
+    "why": "refused: the run is INVALID (contract breach recorded in CONTRACT-BREACH.json: an undeclared request path); it is never resumed"
+   },
+   "run_state": "INVALID",
+   "step": {
+    "result": "finished"
+   }
+  },
+  "R": {
+   "breach": {
+    "kind": "global_provider_request",
+    "lane": "R",
+    "task": "discover_page"
+   },
+   "global_provider": {
+    "at_end": "RefusingGlobalProvider",
+    "at_start": "RefusingGlobalProvider",
+    "drill": [
+     {
+      "after": 1,
+      "error": "dispatch_refused",
+      "error_detail": "global_provider_request: lane R: task 'discover_page' reached the application's global provider (get_provider()), outside the harness chain; refused fail-closed (never dispatched, never charged)",
+      "lane": "R",
+      "provider": "RefusingGlobalProvider"
+     }
+    ],
+    "lane_kind": "refusing",
+    "requests_refused": 1
+   },
+   "ledger_unchanged": true,
+   "model_requests": 0,
+   "resume": {
+    "result": "refused",
+    "why": "refused: the run is INVALID (contract breach recorded in CONTRACT-BREACH.json: an undeclared request path); it is never resumed"
+   },
+   "run_state": "INVALID",
+   "step": {
+    "result": "finished"
+   }
+  }
+ },
+ "ok": true,
+ "seconds": 56.9,
+ "summary": {
+  "B": {
+   "breach": null,
+   "drill_answer": "dry_refused",
+   "global_provider": "the harness chain (installed below, lane B)",
+   "run_state": "FINISHED"
+  },
+  "C": {
+   "breach": "global_provider_request",
+   "drill_answer": "dispatch_refused",
+   "global_provider": "RefusingGlobalProvider",
+   "run_state": "INVALID"
+  },
+  "P": {
+   "breach": "global_provider_request",
+   "drill_answer": "dispatch_refused",
+   "global_provider": "RefusingGlobalProvider",
+   "run_state": "INVALID"
+  },
+  "R": {
+   "breach": "global_provider_request",
+   "drill_answer": "dispatch_refused",
+   "global_provider": "RefusingGlobalProvider",
+   "run_state": "INVALID"
+  }
+ },
+ "tests": [
+  "test_global_provider_r42.py (7 tests)"
+ ]
+}

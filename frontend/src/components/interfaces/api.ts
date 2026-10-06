@@ -25,9 +25,10 @@ export interface ScheduleRow {
   module_qty: number
   source: string
   drawing_ref: string
-  confidence: 'High' | 'Medium' | 'Engineer verified'
-  /** drawing: read off a plan; engineer: a verification item settled; manual: added */
-  basis: 'drawing' | 'engineer' | 'manual'
+  confidence: 'High' | 'Medium' | 'Engineer verified' | 'Opus reviewed'
+  /** drawing: read off a plan; engineer: a verification item settled; review: found present by the Opus
+   *  review on the drawing evidence; manual: added */
+  basis: 'drawing' | 'engineer' | 'review' | 'manual'
   evidence: string
   typical: boolean
   status: 'scheduled' | 'rejected'
@@ -54,7 +55,12 @@ export interface VerificationItem {
   contacts: string
   monitoring: number
   control: number
-  status: 'open' | 'resolved' | 'dismissed' | 'governed'
+  /** review_present / review_excluded: settled by the Opus review on the drawing evidence */
+  status: 'open' | 'resolved' | 'dismissed' | 'governed' | 'review_present' | 'review_excluded'
+  /** the Opus finding review of this item (unresolved items carry what the engineer needs to verify) */
+  review?: FindingReview
+  /** the Opus review disagrees with the engineer's answer, which stands */
+  review_conflict?: string
   decision?: { reason?: string; floor_keys?: string[]; qty?: number; tags?: string[]; location?: string; relative_path?: string; authority?: string }
   /** drawings that disagree (gate barriers): held until the engineer says which governs, on whose authority */
   conflict?: boolean
@@ -63,6 +69,37 @@ export interface VerificationItem {
   decision_not_applied?: boolean
   /** the answers this one replaced, oldest first: never deleted */
   history?: { status: string; reason?: string; relative_path?: string; authority?: string; by?: number; at?: string }[]
+}
+
+export interface FindingReview {
+  /** completed: Opus answered (its outcome checked); otherwise the review did not run on this item */
+  state: 'completed' | 'failed' | 'unavailable' | 'substituted' | 'unverified' | 'not_reviewed'
+  outcome: 'present' | 'absent' | 'not_applicable' | 'unresolved'
+  /** what Opus said, when its answer was not accepted as given (`downgraded` says why) */
+  said?: string | null
+  downgraded?: string | null
+  confidence?: string
+  floor_keys?: string[]
+  qty?: number
+  rationale?: string
+  coverage_checked?: string
+  unclear?: string
+  engineer_action?: string
+  evidence?: { id: string; what: string | null }[]
+  views_shown?: string[]
+  views_not_shown?: { id: string; why: string }[]
+  /** the pictures the review was shown, kept with its run (what the case PDF prints) */
+  pictures?: { id: string; file: string; drawing: string | null; sheets: string[] }[]
+  /** how many items were reviewed in the same call */
+  reviewed_with?: number
+  reason?: string
+  model?: string
+}
+
+export interface DecisionConflict {
+  id: string
+  decision: Record<string, unknown>
+  conflict: string
 }
 
 export interface ConflictDrawing {
@@ -219,6 +256,20 @@ export interface InterfaceSchedule {
   current_summary: { totals: InterfaceSchedule['totals']; rows: number } | null
   last_known: LastKnown[]
   decisions_not_applied: Record<string, number>
+  /** the engineer's answers the readings in force no longer bear out: kept, said */
+  decision_conflicts?: DecisionConflict[]
+  /** the Opus finding review behind this view */
+  review?: {
+    run_id: number | null
+    at: string | null
+    model: string | null
+    effort: string | null
+    fresh: boolean | null
+    state: string | null
+    applies: boolean
+    counts: Record<string, number>
+    reason: string | null
+  } | null
   /** what the evidence cannot show: never taken as "no equipment" */
   limitations: Limitation[]
   evidence: {
@@ -261,7 +312,7 @@ export interface Decision {
   authority?: string
 }
 
-/* ---- the drawing workflow (FI-P1): drawing agents, package reports, the Fable review */
+/* ---- the drawing workflow (FI-P1): drawing agents, the Opus finding review, package reports, the Opus review */
 
 export type CoverageState = 'complete' | 'partial' | 'unsupported' | 'not_attempted'
 export type ReviewState = 'completed' | 'partial' | 'missing' | 'pending'
@@ -340,6 +391,15 @@ export interface InterfaceRun {
   /** why the run is not a complete candidate, decided by deterministic code */
   publication_reasons: string[]
   orchestrator_calls: number
+  orchestrator_state?: string | null
+  findings_review?: { state: string | null; counts: Record<string, number> }
+  /** a force-fresh reread: nothing read, looked at or reviewed before was reused */
+  fresh?: boolean
+  /** whether the run did everything it set out to (for a fresh run: every drawing read again) */
+  complete?: boolean | null
+  reread?: number
+  not_reread?: number
+  trace?: RunTrace
   started_at: string | null
   finished_at: string | null
   error: string | null
@@ -355,9 +415,34 @@ export interface InterfaceRun {
     retries: string[]
     retries_today?: number
     retries_per_day?: number
+    findings?: { state: string | null; counts: Record<string, number>; reasons: string[]; model_requested: string | null; effort: string | null } | null
   }
   accepted_at: string | null
   sources_digest: string | null
+}
+
+export interface ScheduleFigures {
+  interface_lines: number | null
+  monitoring: number | null
+  control: number | null
+  interface_points: number | null
+  modules: number | null
+  verification_required: number
+  view_state?: string
+  error?: string
+}
+
+export interface RunTrace {
+  fresh?: boolean
+  before?: ScheduleFigures
+  after?: ScheduleFigures
+  reread?: string[]
+  not_reread?: { relative_path: string | null; filename: string | null; status: string | null; why: string | null; error: string | null }[]
+  looks?: { filename: string | null; coverage_state: string; looked_this_run: number | null; labels_expected: number | null; labels_looked: number | null }[]
+  findings?: { state: string | null; counts: Record<string, number> }
+  decision_conflicts?: DecisionConflict[]
+  complete?: boolean
+  incomplete?: string[]
 }
 
 export const RUN_KIND = 'fa_interfaces_run'
@@ -381,6 +466,8 @@ export const interfacesApi = {
   confirmRemoved: (projectId: number, relativePaths: string[]) =>
     platform.post<InterfaceSchedule>(`${base(projectId)}/sources/confirm-removed`, { relative_paths: relativePaths }),
   runPath: (projectId: number) => `${base(projectId)}/runs/jobs`,
+  /** force-fresh: every drawing read, looked at and reviewed again, nothing reused */
+  runFreshPath: (projectId: number) => `${base(projectId)}/runs/jobs?fresh=true`,
   latestRun: (projectId: number) => platform.get<{ run: InterfaceRun | null }>(`${base(projectId)}/runs/latest`),
   acceptRun: (projectId: number, runId: number) =>
     platform.post<{ run: InterfaceRun; schedule: InterfaceSchedule }>(`${base(projectId)}/runs/${runId}/accept`),
@@ -388,4 +475,7 @@ export const interfacesApi = {
   retryPath: (projectId: number, runId: number) => `${base(projectId)}/runs/${runId}/retry-review`,
   exportUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.xlsx`),
   exportPdfUrl: (projectId: number) => apiUrl(`${base(projectId)}/export.pdf`),
+  /** the cases the Opus review could not decide, with the drawing pictures it was shown; one item when given */
+  reviewCasesPdfUrl: (projectId: number, itemId?: string) =>
+    apiUrl(`${base(projectId)}/review-cases.pdf${itemId ? `?item=${encodeURIComponent(itemId)}` : ''}`),
 }

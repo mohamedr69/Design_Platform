@@ -288,4 +288,8 @@ def health() -> dict:
             "runtime": {key: fp[key] for key in ("process", "pid", "python", "python_version", "root", "models", "revision",
                                                   "started_at", "classification_v2", "classification_rules")},
             "flags": {"document_classification_v2": bool(settings.document_classification_v2),
-                      "ai_read_full_second_pass": bool(settings.ai_read_full_second_pass)}}
+                      "ai_read_full_second_pass": bool(settings.ai_read_full_second_pass),
+                      # which models this process may call: the platform's, and each workflow's own switch
+                      "ai_enabled": bool(settings.ai_enabled), "fa_ai_enabled": bool(settings.fa_ai_enabled),
+                      "prep_ai_enabled": bool(settings.prep_ai_enabled),
+                      "drawing_review_ai_enabled": bool(settings.drawing_review_ai_enabled)}}

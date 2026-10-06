@@ -1489,3 +1489,27 @@ Package: `real-project-pilot/fresh-cohort-r32/`, indexed by `PREPARATION-REPORT.
 4. **Permissions and budget:** eligibility only (A-06). No authorization file, token, budget, ledger scope or dispatch exists. Open owner decisions: served-model identity UNRESOLVED (probe or accept); R40-04 (accept the proof or order a harness change); the budget authorization.
 5. **M2:** **CHANGES STILL REQUIRED.**
 6. **M3:** not started.
+
+# Portability and safety correction of the fresh-validation harness (review42) and declaration v3 (ORCH-10, 2026-10-06): frozen, NOT authorized, NO dispatch
+
+- **Task:** ORCH-10 (orchestrator ledger ORCH-027), agent R42PORT-IMPL, Claude Opus 5.5 (`claude-opus-5-5`), effort High (self-reported). Authorities A-03, A-06, A-09, A-10, A-11. Work 2026-10-05 from about 20:01Z.
+- **review42:** `PILOT/review42/`, `evidence/EVIDENCE-MANIFEST.json` **`ab2bc40d6ab5a45b0f7dca710f188b1e9f2a9cb4da80118177c7b1df9658e782`** (126 files); `BINDING-MANIFEST-R42.json` **`00ae5f98a7a2b415c43980d0e56d1dc207a3cdf24ca8935f586845695ee59a3c`** (every one of the 239 bindings carried from R39 re-hashes equal at its merged path; the runnable harness bound from `review42/scripts/harness-r32` only).
+- **Declaration v3:** `PILOT/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.json` **`9a55fa7b2d52dad5c87fff72b3225cb9ce1b3f0aba002357ad53d1f33fa81b40`**, contract `r42-live-contract-5`; manifest **`a2df60dca2dfba5ebaff8bdc4b73ef76926cbecd7fd58c8916885e7e709a1a24`** (277 files). Supersedes v2 `f38fb281…25af` (A-11: not runnable as declared; never to be run). Placeholder digest exactly once; refused as written; an in-memory dummy-digest copy passes. Stamp `r32-v3`, run folder `C:/t/r2x/r42-sandbox/r32-v3` (absent), scope `m2-fresh-validation-r32-v3-2026-10-06` (absent).
+- **Every number of v2 carried** (DECLARATION-DIFF protected values unchanged: True): arms, run set, truth, reference set, parent 556 / 16.3 M / 3.26 M / 604,800 s, allowances 240/240/40/36, window 60 / 86,400 s, thresholds, "96" / "600" / "12" / "120", the gate C ≥ B only (a change from plan v2, A-10), `resume_policy` full, stop rules, concentration results, pins.
+- **Corrections:** portability (re-pointed bindings; the bound interpreter; extended-length hashing; the CLI pinned by absolute path, file sha256 and version line; isolation from the merged installation, whose bundled CLI 2.1.289 and `.env` are never used); **R40-04 closed by option 2** (a fail-closed refusing global provider in C, R and P; B unchanged); **R41-09** (every check before the run folder; the nonce consumed only after the allowance and the capture store exist; re-entry of a folder without an allowance); **R41-10** (the 2 GiB disk floor enforced by the runner and the scope command); **R41-11** (CLI file, version and disk re-checked before every resume's nonce); **A-11 §4** (one approval for up to 3 planned invocations, a separable proposal); R41-12 and R41-13 statements corrected; the four r40 work records bound by hash (R41-14).
+- **Tests:** review42 549 tests, 0 failures, 0 errors, 0 skipped, 0 audit-guard refusals; declaration package 36 tests, 0 failures.
+- **Demonstrations (dry / live-shaped, 0 CLI invocations):** 8/8 passed -- ordinary completion; refusal before dispatch; interruption at every phase and recovery without re-sending a charged request; Verification 41's dead-end cases T, A, B, C, D, E (none consumes an authorization or strands the run); durable charging; terminal-stop preservation; the window deferral and its resume at retry_at_full; complete page accounting; the global-provider boundary.
+- **Preflight:** 73/73 probes as expected; binding, bounds, four lane environments with isolation, interpreter, CLI file, disk pass; the runner and guard refuse with no folder and no `--version`.
+- **Dry exercise (stated exactly, R41-13):** ONE single 24-document dry run (FINISHED) AND six per-project dry runs; EP-27331 deferral loops [2, 3] invocations; a cross-project drill on all 24 documents (2 invocations); the CLI-version case no longer a dead-end. For the record: v2's own dry exercise was six per-project runs, and Verification 41 ran the single run.
+
+**Zero calls:** no provider or model request, no `claude` process of any kind (the installed binary read as bytes only; every process ran under an audit guard that refuses any `claude` process and any network use), no ledger scope, token, authorization file or RUN file; the AI ledger was opened read-only and reads 483 / 17 / 0 before and after.
+
+**Reference set:** reference set independently AI-reviewed (Claude agents), not human-signed.
+
+**Status, stated separately:**
+1. **Correction readiness:** delivered for Independent Verification 42 (ORCH-10V); not self-approved.
+2. **Accuracy:** none. No prediction exists.
+3. **Label truth:** `r32-labels-reviewed-2` (`89c60e9d…b9a6`) independently AI-reviewed (Claude agents), not human-signed.
+4. **Permissions and budget:** eligibility only (A-06). Nothing is authorized: no scope, token, authorization file, RUN file, budget or dispatch.
+5. **M2:** **CHANGES STILL REQUIRED.**
+6. **M3:** not started.

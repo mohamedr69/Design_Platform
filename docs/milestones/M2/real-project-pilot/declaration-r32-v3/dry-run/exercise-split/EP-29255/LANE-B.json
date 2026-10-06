@@ -1,0 +1,217 @@
+{
+ "allowance_charged_this_invocation": 2,
+ "allowance_refused": 0,
+ "allowance_used": 2,
+ "application_env_check": {
+  "application_env_verified": [
+   {
+    "key": "DRAWINGS_AI_REVIEW_ENABLED",
+    "setting": "drawings_ai_review_enabled",
+    "setting_value": false,
+    "value": "false"
+   }
+  ],
+  "drawings_ai_review_enabled": {
+   "enabled": false,
+   "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+  }
+ },
+ "application_processing_run": false,
+ "authorization": null,
+ "cli_version": "dry mode: no CLI is run",
+ "contract_breach": null,
+ "contract_breaches": 0,
+ "declared_identity": {
+  "provider": "dry-refusing",
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "deferred": {},
+ "documents": {
+  "F006": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "probe sent through the full chain (reader 'none': no document read)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  },
+  "F015": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "probe sent through the full chain (reader 'none': no document read)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  }
+ },
+ "dry_stub_calls": 2,
+ "environment_check": {
+  "provider_env_verified": [],
+  "switches": {
+   "AI_EVIDENCE_VARIANT": "off"
+  }
+ },
+ "events": [
+  {
+   "error": "dry_refused",
+   "kind": "dry_refused",
+   "lane": "B",
+   "pool_id": "F006",
+   "task": "r33_dry_probe"
+  },
+  {
+   "error": "dry_refused",
+   "kind": "dry_refused",
+   "lane": "B",
+   "pool_id": "F015",
+   "task": "r33_dry_probe"
+  }
+ ],
+ "gate": {
+  "deferred": 0,
+  "refused": 0,
+  "served": 0
+ },
+ "global_provider": {
+  "at_end": "StopGuardR38",
+  "at_start": "the harness chain (installed below, lane B)",
+  "drill": [],
+  "lane_kind": "harness_chain",
+  "records": [],
+  "requests_refused": 0,
+  "still_installed_at_end": null
+ },
+ "guard": null,
+ "identity": {
+  "checked": 0,
+  "log": "C:/t/r2x/r42-sandbox/r42d-m29255-f218b0/inv-1/IDENTITY-LOG-B.jsonl",
+  "mismatches": 0,
+  "refused": 0
+ },
+ "invocation": 1,
+ "isolation_check": {
+  "end": {
+   "allowed": [
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv",
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32"
+   ],
+   "environment_values": 89,
+   "forbidden_root": "G:/dev (2)/dev/ep-platform-merged",
+   "lane": "B",
+   "modules_checked": 906,
+   "ok": true,
+   "settings_checked": 29,
+   "sys_path_entries": 13
+  },
+  "start": {
+   "allowed": [
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv",
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32"
+   ],
+   "environment_values": 89,
+   "forbidden_root": "G:/dev (2)/dev/ep-platform-merged",
+   "lane": "B",
+   "modules_checked": 264,
+   "ok": true,
+   "settings_checked": 29,
+   "sys_path_entries": 13
+  }
+ },
+ "lane": "B",
+ "lane_stop_state": {
+  "reason": null,
+  "state": "running",
+  "streak": 0
+ },
+ "limit_events": [],
+ "live_provider_attempts_blocked": [],
+ "mode": "dry",
+ "model_requests": 0,
+ "per_document": {
+  "F006": {
+   "probe": "dry_refused"
+  },
+  "F015": {
+   "probe": "dry_refused"
+  }
+ },
+ "policy": "B:accepted-path:evidence-off",
+ "reader": "none",
+ "retries": {
+  "dispatched": 0,
+  "events": []
+ },
+ "rows": 2,
+ "run_key": "3d53683865d9831e2bbd7d917f7b4aea5799f3aca53ed398d48fa3c285d391d0",
+ "sandbox": "C:\\t\\r2x\\r42-sandbox\\r42d-m29255-f218b0\\inv-1\\B",
+ "seconds": 1.3,
+ "serves_by_mode": {},
+ "stats": {
+  "dry_refused": 2,
+  "ok": 0,
+  "stopped_by_guard": 0
+ },
+ "stop_state": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "stopped": null,
+ "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode",
+ "task_kinds": [
+  "r33_dry_probe",
+  "read_submittal_form"
+ ],
+ "tree": "C:\\t\\iso\\frozen-r12\\backend",
+ "tripwire": [
+  {
+   "pool_id": "F006",
+   "resolved": [],
+   "unresolved": [],
+   "when": "exercise_no_facts"
+  },
+  {
+   "pool_id": "F015",
+   "resolved": [],
+   "unresolved": [],
+   "when": "exercise_no_facts"
+  }
+ ],
+ "unread_pages": {}
+}

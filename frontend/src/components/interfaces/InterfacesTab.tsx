@@ -9,8 +9,10 @@ import {
   type AgentReport,
   type Coverage,
   type Decision,
+  type FindingReview,
   type InterfaceRun,
   type InterfaceSchedule,
+  type ScheduleFigures,
   type ScheduleRow,
   type VerificationItem,
 } from './api'
@@ -60,9 +62,15 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
     if (job.status === 'failed') setError(job.error ?? 'The drawings could not be read')
     void load()
   })
-  // the drawing workflow: read, drawing agents, package reports, the Fable review
+  // the drawing workflow: read, drawing agents, the Opus finding review, package reports, the Opus review
   const runJob = useJob(projectId, RUN_KIND, interfacesApi.runPath(projectId), (job) => {
     if (job.status === 'failed') setError(job.error ?? 'The drawing workflow did not finish')
+    void load()
+    void loadRun()
+  })
+  // ... force-fresh: every drawing read, looked at and reviewed again, nothing reused
+  const freshJob = useJob(projectId, RUN_KIND, interfacesApi.runFreshPath(projectId), (job) => {
+    if (job.status === 'failed') setError(job.error ?? 'The fresh reread did not finish')
     void load()
     void loadRun()
   })
@@ -71,8 +79,8 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
     void load()
     void loadRun()
   })
-  const reading = scan.active || hydrate.active || runJob.active || retry.active
-  const current = runJob.active ? runJob : retry.active ? retry : hydrate.active ? hydrate : scan
+  const reading = scan.active || hydrate.active || runJob.active || freshJob.active || retry.active
+  const current = freshJob.active ? freshJob : runJob.active ? runJob : retry.active ? retry : hydrate.active ? hydrate : scan
 
   const act = useCallback(
     async (fn: () => Promise<InterfaceSchedule>) => {
@@ -125,9 +133,24 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
               <Button
                 onClick={() => void runJob.start()}
                 disabled={reading}
-                title="Reads every drawing, then a drawing agent (Opus) for each drawing that needs a look, then the Fable orchestrator reviews the reports. Nothing is published until you accept the run."
+                title="Reads every drawing (unchanged ones are carried forward), then a drawing agent (Opus) for each drawing that needs a look, then Opus reviews every open item on the original drawings and the reports. Nothing is published until you accept the run."
               >
                 {runJob.active ? 'Drawing agents running…' : 'Read drawings with agents'}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Read every drawing again from scratch? Every drawing is opened, converted and read again, every damper looked at again and every open item reviewed again by Opus — nothing earlier is reused. Your drawings, your answers and added items are kept. This takes a while and uses model calls.',
+                    )
+                  )
+                    void freshJob.start()
+                }}
+                disabled={reading}
+                title="Force-fresh: reads, looks and reviews everything again even if it was read before, and rebuilds the schedule, the verification list and the totals from that run alone."
+              >
+                {freshJob.active ? 'Fresh reread running…' : 'Fresh reread (all drawings)'}
               </Button>
               <Button
                 variant="secondary"
@@ -163,7 +186,11 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
                 <div className="h-full bg-brand-600 transition-all" style={{ width: `${Math.round(((progress.done ?? 0) / progress.total) * 100)}%` }} />
               </div>
             ) : null}
-            <div className="mt-1 text-xs text-slate-500">A DWG is converted first: about 20 seconds a drawing, once. Unchanged drawings are not read again.</div>
+            <div className="mt-1 text-xs text-slate-500">
+              {freshJob.active
+                ? 'Force-fresh: every drawing is converted and read again, and every look and review asked again.'
+                : 'A DWG is converted first: about 20 seconds a drawing, once. Unchanged drawings are not read again.'}
+            </div>
             {current.job?.status === 'queued' && Date.now() - new Date(current.job.created_at + 'Z').getTime() > 60_000 && (
               <div className="mt-2 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-900">
                 Still waiting for the IFC worker. If its window was opened before this tab was added, close it and run start.bat (or
@@ -178,8 +205,11 @@ export default function InterfacesTab({ projectId, canEdit }: { projectId: numbe
           )}
         </Card>
       )}
-      {(error || scan.error || runJob.error || hydrate.error || retry.error) && (
-        <ErrorBox message={error || scan.error || runJob.error || hydrate.error || retry.error || ''} onClose={() => setError('')} />
+      {(error || scan.error || runJob.error || freshJob.error || hydrate.error || retry.error) && (
+        <ErrorBox
+          message={error || scan.error || runJob.error || freshJob.error || hydrate.error || retry.error || ''}
+          onClose={() => setError('')}
+        />
       )}
 
       <EvidenceBanner
@@ -334,9 +364,10 @@ function lookText(a: AgentReport): string {
   return `${l.labels_looked}${of} damper labels looked at (${l.model_requested}, ${l.effort}${reused})${unread ? `; held: ${unread}` : ''}`
 }
 
-/** The latest run: one report per drawing agent and per package, the Fable
- *  review, and what the run may become. A missing review is said, and keeps
- *  the run provisional: only a complete, reviewed run can be accepted. */
+/** The latest run: one report per drawing agent and per package, the Opus
+ *  reviews (the finding review and the orchestrator), what a fresh run read
+ *  again, and what the run may become. A missing review is said, and keeps the
+ *  run provisional: only a complete, reviewed run can be accepted. */
 function RunPanel({
   run,
   canEdit,
@@ -367,7 +398,7 @@ function RunPanel({
           ? `Run ${run.run_id} is complete and reviewed: ready for you to accept.`
           : reviewed
             ? `Run ${run.run_id} is provisional: not every drawing is covered, or a conflict is open.`
-            : `Run ${run.run_id} is provisional: the Fable review is ${run.review_state}.`
+            : `Run ${run.run_id} is provisional: the Opus review is ${run.review_state}.`
   const coverage = Object.entries(run.coverage)
     .map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`)
     .join(' · ')
@@ -378,10 +409,30 @@ function RunPanel({
           <div className="font-semibold">{headline}</div>
           <div className="mt-0.5 text-xs opacity-80">
             Started {when(run.started_at)} · {run.agents} drawing agent{run.agents === 1 ? '' : 's'}
-            {coverage ? ` (${coverage})` : ''} · {run.packages} package reports · Fable review {run.review_state}
+            {coverage ? ` (${coverage})` : ''} · {run.packages} package reports · Opus review {run.review_state}
             {run.review.model_requested ? ` (${run.review.model_requested}, ${run.review.effort})` : ''} ·{' '}
             {run.orchestrator_calls} orchestrator call{run.orchestrator_calls === 1 ? '' : 's'}
+            {run.fresh ? ` · force-fresh: ${run.reread ?? 0} file(s) read again${run.not_reread ? `, ${run.not_reread} not` : ''}` : ''}
           </div>
+          {run.findings_review?.state && (
+            <div className="mt-0.5 text-xs">
+              Opus finding review {run.findings_review.state}:{' '}
+              {Object.entries(run.findings_review.counts)
+                .map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`)
+                .join(' · ') || 'nothing was open'}
+            </div>
+          )}
+          {run.fresh && run.complete === false && (run.trace?.incomplete ?? []).length > 0 && (
+            <div className="mt-1 text-xs">
+              <div className="font-medium">The fresh run is not complete:</div>
+              <ul className="list-disc pl-5">
+                {(run.trace?.incomplete ?? []).map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {run.trace?.before && run.trace?.after && !run.trace.before.error && <RunComparison before={run.trace.before} after={run.trace.after} />}
           {run.publication_state === 'provisional' && run.publication_reasons.length > 0 && (
             <div className="mt-1 text-xs">
               <div className="font-medium">Why it cannot be accepted (checked by the program, whatever the review says):</div>
@@ -476,7 +527,7 @@ function RunPanel({
                   <th className="px-2 py-1.5 text-right">Accepted lines</th>
                   <th className="px-2 py-1.5 text-right">Held</th>
                   <th className="px-2 py-1.5 text-right">Last known only</th>
-                  <th className="px-2 py-1.5">Fable review</th>
+                  <th className="px-2 py-1.5">Opus review</th>
                 </tr>
               </thead>
               <tbody>
@@ -513,6 +564,40 @@ function RunPanel({
         </div>
       )}
     </Card>
+  )
+}
+
+/** The schedule's figures before and after the run, side by side. */
+function RunComparison({ before, after }: { before: ScheduleFigures; after: ScheduleFigures }) {
+  const lines: [string, number | null, number | null][] = [
+    ['Interface lines', before.interface_lines, after.interface_lines],
+    ['Monitoring signals', before.monitoring, after.monitoring],
+    ['Control signals', before.control, after.control],
+    ['Fire alarm modules', before.modules, after.modules],
+    ['Verification Required', before.verification_required, after.verification_required],
+  ]
+  return (
+    <table className="mt-1 text-xs">
+      <thead>
+        <tr className="text-left opacity-70">
+          <th className="pr-4 font-normal" />
+          <th className="pr-4 font-normal">Before the run</th>
+          <th className="pr-4 font-normal">After</th>
+        </tr>
+      </thead>
+      <tbody>
+        {lines.map(([label, b, a]) => (
+          <tr key={label}>
+            <td className="pr-4">{label}</td>
+            <td className="pr-4">{b ?? '—'}</td>
+            <td className={`pr-4 ${a !== b ? 'font-semibold' : ''}`}>
+              {a ?? '—'}
+              {a !== null && b !== null && a !== b ? ` (${a > b ? '+' : ''}${a - b})` : ''}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   )
 }
 
@@ -717,6 +802,7 @@ const CONFIDENCE_STYLE: Record<ScheduleRow['confidence'], string> = {
   High: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
   Medium: 'bg-sky-50 text-sky-700 ring-sky-600/20',
   'Engineer verified': 'bg-indigo-50 text-indigo-700 ring-indigo-600/20',
+  'Opus reviewed': 'bg-violet-50 text-violet-700 ring-violet-600/20',
 }
 
 function ScheduleTab({
@@ -1072,12 +1158,39 @@ function VerifyTab({ data, canEdit, onDecide }: { data: InterfaceSchedule; canEd
         <>
           <p className="text-sm text-slate-600">
             What the drawings do not settle: an item shown only on a riser or schematic, outside every sheet, a system shown only by a note,
-            a door the drawing does not say is automatic, the lifts. None of it is counted until you say where and how many.
+            a door the drawing does not say is automatic, the lifts. Each was first reviewed by Opus on the original drawings; what is
+            here is what that review could not settle (or could not run on), with what it checked and what to verify. None of it is
+            counted until you say where and how many.
           </p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs text-slate-500">
+              {data.verification.length} case{data.verification.length === 1 ? '' : 's'} for you to verify
+            </span>
+            <a
+              href={interfacesApi.reviewCasesPdfUrl(data.project.id)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              title="Every case below: what Opus could not decide, what to verify, and the drawing pictures it was shown"
+            >
+              Download all cases (PDF)
+            </a>
+          </div>
           {data.verification.map((g) => (
             <VerifyCard key={g.id} g={g} data={data} canEdit={canEdit} onDecide={onDecide} />
           ))}
         </>
+      )}
+      {(data.decision_conflicts ?? []).length > 0 && (
+        <Card className="border-rose-200 bg-rose-50/60 px-4 py-3 text-sm text-rose-900">
+          <div className="font-semibold">Your answers the drawings as read now no longer bear out (kept, not changed)</div>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs">
+            {(data.decision_conflicts ?? []).map((c) => (
+              <li key={c.id}>
+                {c.conflict}
+                <span className="block text-rose-800/70">{c.id}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
       )}
       {data.settled.length > 0 && (
         <Card className="px-4 py-3 text-sm">
@@ -1103,24 +1216,90 @@ function VerifyTab({ data, canEdit, onDecide }: { data: InterfaceSchedule; canEd
                 )}
               </li>
             ))}
-            {data.settled.filter((g) => g.status !== 'governed').map((g) => (
-              <li key={g.id} className="flex flex-wrap items-center gap-2 text-slate-600">
-                <span className={g.status === 'resolved' ? 'text-emerald-700' : 'text-slate-500'}>{g.status === 'resolved' ? 'Scheduled' : 'Not scheduled'}</span>
-                <span>
-                  {g.equipment} ({g.source})
-                  {g.status === 'resolved'
-                    ? `: ${g.decision?.qty} on each of ${(g.decision?.floor_keys ?? []).map((k) => data.floors.find((f) => f.key === k)?.name ?? k).join(', ')}`
-                    : ` — ${g.decision?.reason ?? ''}`}
-                </span>
+            {data.settled.filter((g) => g.status === 'review_present' || g.status === 'review_excluded').map((g) => (
+              <li key={g.id} className="space-y-1 rounded-md border border-slate-200 p-2 text-slate-600">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={g.status === 'review_present' ? 'text-emerald-700' : 'text-slate-500'}>
+                    {g.status === 'review_present' ? 'Scheduled by the Opus review' : 'Excluded by the Opus review'}
+                  </span>
+                  <span>
+                    {g.equipment} ({g.source}, {g.ref})
+                    {g.status === 'review_present'
+                      ? `: ${g.review?.qty} on each of ${(g.review?.floor_keys ?? []).map((k) => data.floors.find((f) => f.key === k)?.name ?? k).join(', ')}`
+                      : ` — ${(g.review?.outcome ?? '').replace(/_/g, ' ')}`}
+                  </span>
+                </div>
+                <ReviewNote review={g.review} />
                 {canEdit && (
-                  <Button variant="ghost" onClick={() => void onDecide({ id: g.id, action: 'reopen' })}>
-                    Reopen
-                  </Button>
+                  <div className="text-xs text-slate-500">
+                    Not right? Answer it yourself — your answer stands over the review:{' '}
+                    <Button variant="ghost" onClick={() => void onDecide({ id: g.id, action: 'reopen', reason: 'reopened over the Opus review' })}>
+                      Send to Verification Required
+                    </Button>
+                  </div>
+                )}
+              </li>
+            ))}
+            {data.settled.filter((g) => !['governed', 'review_present', 'review_excluded'].includes(g.status)).map((g) => (
+              <li key={g.id} className="space-y-1 text-slate-600">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={g.status === 'resolved' ? 'text-emerald-700' : 'text-slate-500'}>{g.status === 'resolved' ? 'Scheduled' : 'Not scheduled'}</span>
+                  <span>
+                    {g.equipment} ({g.source})
+                    {g.status === 'resolved'
+                      ? `: ${g.decision?.qty} on each of ${(g.decision?.floor_keys ?? []).map((k) => data.floors.find((f) => f.key === k)?.name ?? k).join(', ')}`
+                      : ` — ${g.decision?.reason ?? ''}`}
+                  </span>
+                  {canEdit && (
+                    <Button variant="ghost" onClick={() => void onDecide({ id: g.id, action: 'reopen' })}>
+                      Reopen
+                    </Button>
+                  )}
+                </div>
+                {g.review_conflict && (
+                  <div className="rounded-md border border-rose-200 bg-rose-50 px-2 py-1 text-xs text-rose-900">{g.review_conflict}</div>
                 )}
               </li>
             ))}
           </ul>
         </Card>
+      )}
+    </div>
+  )
+}
+
+/** What the Opus review said of an item: for an item still open, what remains
+ *  unclear, what it checked and what the engineer needs to verify -- or that the
+ *  review did not run on it, and why; for one it settled, its evidence. */
+function ReviewNote({ review }: { review?: FindingReview }) {
+  if (!review) return null
+  if (review.state !== 'completed') {
+    return (
+      <div className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-900">
+        <span className="font-semibold">Not reviewed by Opus</span> ({review.state.replace(/_/g, ' ')}
+        {review.reason ? `: ${review.reason}` : ''}). Verify it on the drawings.
+      </div>
+    )
+  }
+  const open = review.outcome === 'unresolved'
+  const cited = (review.evidence ?? []).map((e) => `${e.id}${e.what ? ` (${e.what})` : ''}`).join('; ')
+  return (
+    <div className={`space-y-1 rounded-md border px-3 py-2 text-xs ${open ? 'border-sky-200 bg-sky-50 text-sky-950' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+      <div className="font-semibold">
+        Opus review: {review.outcome.replace(/_/g, ' ')}
+        {review.confidence ? ` (${review.confidence} confidence)` : ''}
+        {review.views_shown?.length ? ` · ${review.views_shown.length} drawing view${review.views_shown.length === 1 ? '' : 's'} checked` : ' · no drawing view could be shown'}
+      </div>
+      {review.downgraded && <div className="text-amber-800">Its answer ({(review.said ?? '').replace(/_/g, ' ')}) was not accepted: {review.downgraded}</div>}
+      {open && review.unclear && <div><span className="font-medium">What remains unclear: </span>{review.unclear}</div>}
+      {open && review.engineer_action && <div><span className="font-medium">What to verify: </span>{review.engineer_action}</div>}
+      {review.rationale && <div><span className="font-medium">Why: </span>{review.rationale}</div>}
+      {review.coverage_checked && <div><span className="font-medium">Evidence checked: </span>{review.coverage_checked}</div>}
+      {cited && <div className="text-slate-500">Cited: {cited}</div>}
+      {(review.views_not_shown ?? []).length > 0 && (
+        <div className="text-amber-800">
+          Views that could not be drawn: {(review.views_not_shown ?? []).map((v) => `${v.id} (${v.why})`).join('; ')}
+        </div>
       )}
     </div>
   )
@@ -1209,8 +1388,17 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
           </div>
           <div className="mt-0.5 text-amber-800">{g.reason}</div>
         </div>
-        <div className="text-right text-xs text-slate-500">
-          <span className="font-mono">{g.contacts}</span> · {g.monitoring} monitoring / {g.control} control each
+        <div className="flex flex-col items-end gap-1 text-right text-xs text-slate-500">
+          <span>
+            <span className="font-mono">{g.contacts}</span> · {g.monitoring} monitoring / {g.control} control each
+          </span>
+          <a
+            href={interfacesApi.reviewCasesPdfUrl(data.project.id, g.id)}
+            className="inline-flex items-center rounded-md border border-slate-300 bg-white px-2 py-1 font-medium text-slate-700 hover:bg-slate-50"
+            title="This case as a PDF: what Opus could not decide, what to verify, and the drawing pictures it was shown"
+          >
+            Download PDF{g.review?.pictures?.length ? ` (${g.review.pictures.length} picture${g.review.pictures.length === 1 ? '' : 's'})` : ''}
+          </a>
         </div>
       </div>
       <div className="grid gap-1 text-xs text-slate-600 md:grid-cols-2">
@@ -1224,6 +1412,7 @@ function VerifyCard({ g, data, canEdit, onDecide }: { g: VerificationItem; data:
           {g.evidence}
         </div>
       </div>
+      <ReviewNote review={g.review} />
       {g.conflict && g.drawings && g.drawings.length > 0 && (
         <ConflictDrawings g={g} canEdit={canEdit} onDecide={onDecide} />
       )}

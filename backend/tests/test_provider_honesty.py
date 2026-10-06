@@ -298,6 +298,7 @@ def test_the_damper_look_asks_for_the_configured_model_exactly_at_high_effort(mo
 
     monkeypatch.setattr(visual.assist, "call_task", fake_call_task)
     monkeypatch.setattr(visual.assist, "AssistSession", lambda **kw: SimpleNamespace(**kw))
-    visual._ask(1, b"png", "f" * 64, {"box": (0, 0, 10, 10), "labels": [("SM-1|1.00,1.00|MSD", 1, 1)]}, None, "X.dwg")
+    visual._ask(1, [{"png": b"png", "window": {"box": (0, 0, 10, 10), "labels": [("SM-1|1.00,1.00|MSD", 1, 1)]},
+                     "start": 1}], "f" * 64, None, "X.dwg")
     assert seen["model"] == settings.drawing_review_model == "claude-opus-5-5"
     assert seen["effort"] == settings.drawing_review_effort == "high" and seen["exact_model"] is True

@@ -1,0 +1,130 @@
+{
+ "binding_sha256": "00ae5f98a7a2b415c43980d0e56d1dc207a3cdf24ca8935f586845695ee59a3c",
+ "caps": {
+  "B": 240,
+  "C": 240,
+  "P": 36,
+  "R": 40
+ },
+ "created_utc": "2026-10-05T21:40:06+00:00",
+ "declaration_sha256": null,
+ "invocations": [
+  {
+   "allowance_existed_at_end": true,
+   "authorization_consumed": false,
+   "cli_version": "dry mode: no CLI is run",
+   "comparison_state": "INCOMPLETE",
+   "deferred": {
+    "C": {
+     "F009": "2026-10-05T21:40:34+00:00",
+     "F020": "2026-10-05T21:40:34+00:00",
+     "F021": "2026-10-05T21:40:34+00:00",
+     "F030": "2026-10-05T21:40:34+00:00",
+     "F032": "2026-10-05T21:40:34+00:00",
+     "F037": "2026-10-05T21:40:34+00:00"
+    },
+    "R": {
+     "F009": "2026-10-05T21:40:34+00:00",
+     "F020": "2026-10-05T21:40:34+00:00",
+     "F021": "2026-10-05T21:40:34+00:00",
+     "F030": "2026-10-05T21:40:34+00:00",
+     "F032": "2026-10-05T21:40:34+00:00",
+     "F037": "2026-10-05T21:40:34+00:00"
+    }
+   },
+   "earliest_retry": 1791236434.0350468,
+   "earliest_retry_utc": "2026-10-05T21:40:34+00:00",
+   "finished_utc": "2026-10-05T21:40:17+00:00",
+   "kind": "fresh",
+   "n": 1,
+   "out": "C:/t/r2x/r42-sandbox/r42d-s6-f218b0/inv-1/out",
+   "outcome": "INCOMPLETE",
+   "resume_not_before": 1791236434.2419767,
+   "resume_not_before_utc": "2026-10-05T21:40:34+00:00",
+   "resume_policy": "full",
+   "retry_at_full": {
+    "planning": 1791236434.2419767,
+    "structural": 1791236434.2419767
+   },
+   "retry_at_full_utc": {
+    "planning": "2026-10-05T21:40:34+00:00",
+    "structural": "2026-10-05T21:40:34+00:00"
+   },
+   "run_state": "DEFERRED",
+   "started_utc": "2026-10-05T21:40:06+00:00",
+   "status": "finished"
+  },
+  {
+   "allowance_existed_at_end": true,
+   "authorization_consumed": false,
+   "cli_version": "dry mode: no CLI is run",
+   "comparison_state": "PENDING",
+   "deferred": {
+    "R": {
+     "_reference_only": "2026-10-05T21:41:05+00:00"
+    }
+   },
+   "earliest_retry": 1791236465.9202454,
+   "earliest_retry_utc": "2026-10-05T21:41:05+00:00",
+   "finished_utc": "2026-10-05T21:40:50+00:00",
+   "kind": "resume",
+   "n": 2,
+   "out": "C:/t/r2x/r42-sandbox/r42d-s6-f218b0/inv-2/out",
+   "outcome": "NOT ELIGIBLE",
+   "resume_not_before": 1791236466.1251235,
+   "resume_not_before_utc": "2026-10-05T21:41:06+00:00",
+   "resume_policy": "full",
+   "retry_at_full": {
+    "planning": 1791236466.1251235,
+    "structural": 1791236466.1251235
+   },
+   "retry_at_full_utc": {
+    "planning": "2026-10-05T21:41:06+00:00",
+    "structural": "2026-10-05T21:41:06+00:00"
+   },
+   "run_state": "DEFERRED",
+   "started_utc": "2026-10-05T21:40:35+00:00",
+   "status": "finished"
+  },
+  {
+   "allowance_existed_at_end": true,
+   "authorization_consumed": false,
+   "cli_version": "dry mode: no CLI is run",
+   "comparison_state": "PENDING",
+   "deferred": {},
+   "earliest_retry": null,
+   "earliest_retry_utc": null,
+   "finished_utc": "2026-10-05T21:41:23+00:00",
+   "kind": "resume",
+   "n": 3,
+   "out": "C:/t/r2x/r42-sandbox/r42d-s6-f218b0/inv-3/out",
+   "outcome": "NOT ELIGIBLE",
+   "resume_not_before": null,
+   "resume_not_before_utc": null,
+   "resume_policy": null,
+   "retry_at_full": null,
+   "retry_at_full_utc": null,
+   "run_state": "FINISHED",
+   "started_utc": "2026-10-05T21:41:07+00:00",
+   "status": "finished"
+  }
+ ],
+ "mode": "dry",
+ "parent": {
+  "elapsed_s": 604800,
+  "input_tokens": 16300000,
+  "output_tokens": 3260000,
+  "total": 556
+ },
+ "project_window": {
+  "limit": 6,
+  "window_s": 20
+ },
+ "rule": "one run folder, allowance and capture store per run key; 'run' once (re-entered only while no allowance exists), then only 'resume'",
+ "run_folder": "C:/t/r2x/r42-sandbox/r42d-s6-f218b0",
+ "run_key": "f1c208df051683d5cb34979cf849e3a71f5a6186fe82234c2794a950bdbc4356",
+ "run_set_sha256": "c74db5c3e288638507b007ebb8c422d3dfc0d545aaaf42699368cbbbf6da69f0",
+ "sandbox_base": "C:/t/r2x/r42-sandbox",
+ "schema": "r38-run-state-1",
+ "stamp": "r42d-s6-f218b0"
+}

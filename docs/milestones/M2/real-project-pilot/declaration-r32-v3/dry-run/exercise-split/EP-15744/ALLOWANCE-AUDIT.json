@@ -1,0 +1,125 @@
+{
+ "bound_at_utc": "2026-10-05T21:37:54+00:00",
+ "charges": [
+  {
+   "bound_key": "91d415fc09b777a5568049168a1dfd271f70b378adf5e29533c66687f00b3160",
+   "charged_at_utc": "2026-10-05T21:38:01+00:00",
+   "document": "F043",
+   "id": 1,
+   "invocation": 1,
+   "lane": "B",
+   "ledger_entry": null,
+   "model": "dry",
+   "note": "",
+   "outcome": "dry_refused",
+   "page": "1",
+   "project": "EP-15744",
+   "settled_at_utc": "2026-10-05T21:38:01+00:00",
+   "task": "r33_dry_probe"
+  },
+  {
+   "bound_key": "c8d2a3bb2f2fb4e746aa60d90b3bbcf1d196424bfd67c7f9205cde794fde1ff0",
+   "charged_at_utc": "2026-10-05T21:38:03+00:00",
+   "document": "F043",
+   "id": 2,
+   "invocation": 1,
+   "lane": "C",
+   "ledger_entry": null,
+   "model": "dry",
+   "note": "",
+   "outcome": "dry_refused",
+   "page": "1",
+   "project": "EP-15744",
+   "settled_at_utc": "2026-10-05T21:38:03+00:00",
+   "task": "r33_dry_probe"
+  },
+  {
+   "bound_key": "dcd30bb87a7a63a7beed8ccb795b2bbf8fd0a8fde9c7f8da6bdbe57f4fd1c70a",
+   "charged_at_utc": "2026-10-05T21:38:07+00:00",
+   "document": "_reference_only",
+   "id": 3,
+   "invocation": 1,
+   "lane": "R",
+   "ledger_entry": null,
+   "model": "dry",
+   "note": "",
+   "outcome": "dry_refused",
+   "page": "1",
+   "project": "EP-15744",
+   "settled_at_utc": "2026-10-05T21:38:07+00:00",
+   "task": "r33_dry_probe"
+  }
+ ],
+ "elapsed_bound_ends_utc": "2026-10-12T21:37:54+00:00",
+ "lanes": {
+  "B": {
+   "allowance": 240,
+   "by_outcome": {
+    "dry_refused": 1
+   },
+   "charged": 1,
+   "dispatched_never_settled": 0,
+   "refusals": 0,
+   "remaining": 239
+  },
+  "C": {
+   "allowance": 240,
+   "by_outcome": {
+    "dry_refused": 1
+   },
+   "charged": 1,
+   "dispatched_never_settled": 0,
+   "refusals": 0,
+   "remaining": 239
+  },
+  "P": {
+   "allowance": 36,
+   "by_outcome": {},
+   "charged": 0,
+   "dispatched_never_settled": 0,
+   "refusals": 0,
+   "remaining": 36
+  },
+  "R": {
+   "allowance": 40,
+   "by_outcome": {
+    "dry_refused": 1
+   },
+   "charged": 1,
+   "dispatched_never_settled": 0,
+   "refusals": 0,
+   "remaining": 39
+  }
+ },
+ "parent": {
+  "elapsed_s": 604800,
+  "input_tokens": 16300000,
+  "output_tokens": 3260000,
+  "total": 556
+ },
+ "parent_remaining": 553,
+ "project_window": {
+  "limit": 60,
+  "window_s": 86400
+ },
+ "reconciliation": {
+  "ledger": null,
+  "note": "no ledger in this run (dry): ledger_entry is null for every charge"
+ },
+ "refusals": [],
+ "retries": [],
+ "rules": {
+  "never_refunded": "failed, timed-out, interrupted and dispatched-but-unsaved requests stay charged",
+  "no_borrowing": "a lane's charge is refused once its OWN allowance is used, whatever other lanes have left",
+  "resume": "a resume re-opens this file: no allowance, charge, refusal or stop is reset",
+  "retries": "a failed request dispatched again on the application's retry path is a new charge (note 'retry N of ...'), never refunded"
+ },
+ "run_key": "0e1be2203431cf008600a381b11c5548959250356219accceed034f3ffd488e8",
+ "schema": "r38-allowance-audit-1",
+ "stops": {},
+ "tokens_charged": {
+  "input": 0,
+  "output": 0
+ },
+ "total_charged": 3
+}

@@ -263,7 +263,8 @@ def run_drawing_review(session: Session, job: BackgroundJob, ctx: jobs.JobContex
     except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
         from app.review.render import RenderError
 
-        if isinstance(exc, RenderError):
+        if isinstance(exc, (RenderError, review.ReviewIncomplete)):
+            # said as it is: a plot is not a review
             raise processing.ReadError(str(exc)) from exc
         raise _unexpected(job.id, exc) from exc
 
@@ -293,14 +294,18 @@ def _redesign(kind: str):
 
 def run_interfaces_run(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
     """fa_interfaces_run: the FA Interfaces drawing workflow -- read, drawing
-    agents, package reports, the Fable orchestrator's review, a provisional
-    or complete-candidate run (app.interfaces.workflow)."""
+    agents, the Opus finding review, package reports, the Opus orchestrator's
+    review, a provisional or complete-candidate run (app.interfaces.workflow).
+    `fresh` in the job's params: a force-fresh reread -- nothing read, looked at
+    or reviewed before is reused."""
     from app.interfaces import service, workflow
 
     project = session.get(Project, job.project_id)
+    params = job.params or {}
     try:
         return workflow.run_workflow(
-            session, project, user_id=(job.params or {}).get("user_id"), job_id=job.id, check=ctx.check,
+            session, project, user_id=params.get("user_id"), job_id=job.id, check=ctx.check,
+            fresh=bool(params.get("fresh")),
             progress=lambda done, total, message, file: ctx.progress(done, max(total, 1), message, stage="run", file=file))
     except (jobs.Cancelled, jobs.Interrupted):
         raise
@@ -311,8 +316,9 @@ def run_interfaces_run(session: Session, job: BackgroundJob, ctx: jobs.JobContex
 
 
 def run_interfaces_review(session: Session, job: BackgroundJob, ctx: jobs.JobContext) -> dict:
-    """fa_interfaces_review: a run's Fable review again, on its frozen inputs
-    (the Retry, counted against the day's bound when it was asked for)."""
+    """fa_interfaces_review: a run's Opus review again -- the finding review on
+    the items it could not review, the orchestrator on its frozen inputs (the
+    Retry, counted against the day's bound when it was asked for)."""
     from app.interfaces import workflow
     from app.models import FaInterfaceRun
 
@@ -321,7 +327,7 @@ def run_interfaces_review(session: Session, job: BackgroundJob, ctx: jobs.JobCon
     if run is None or run.project_id != project.id:
         raise processing.ReadError("That run is not this project's. Nothing was changed.")
     try:
-        ctx.progress(0, 1, "The Fable orchestrator is reviewing the run again", stage="review")
+        ctx.progress(0, 1, "The Opus review is running again", stage="review")
         return workflow.run_retry(session, project, run)
     except (jobs.Cancelled, jobs.Interrupted):
         raise

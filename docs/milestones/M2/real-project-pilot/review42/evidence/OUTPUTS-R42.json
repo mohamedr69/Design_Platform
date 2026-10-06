@@ -1,0 +1,69 @@
+{
+ "bounds": {
+  "differing_top_level_keys": [
+   "run_set"
+  ],
+  "differs_only_in_run_set_path": true,
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/PROJECT-REQUEST-BOUNDS.json",
+  "review39_sha256": "99be01fbf25ed6e6219cc6b09b56aa9cd728ad9b30379e6b4b157aa394131721",
+  "sha256": "ad059bfa314b89d1fe5e3c60ba182ce742173d58a5166967b04fd8828d88a072",
+  "verify_bounds_keys": [
+   "projects",
+   "lanes",
+   "compatible_limits",
+   "per_document",
+   "per_page_maximum",
+   "version"
+  ],
+  "verify_bounds_keys_equal": true
+ },
+ "ok": true,
+ "request_paths": {
+  "global": {
+   "B": {
+    "first_application_entry_line": 471,
+    "global_provider": "harness chain (StopGuardR38 -> GateStoreProvider -> allowance -> identity guard -> dispatch guard)",
+    "installed_at_line": 434,
+    "installed_before_every_application_entry": true
+   },
+   "C": {
+    "first_application_entry_line": 471,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   },
+   "P": {
+    "first_application_entry_line": 564,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   },
+   "R": {
+    "first_application_entry_line": 471,
+    "global_provider": "run_control_r38.RefusingGlobalProvider (fail-closed; contract breach 'global_provider_request'; run INVALID)",
+    "installed_at_line": 144,
+    "installed_before_every_application_entry": true
+   }
+  },
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/REQUEST-PATHS-STATIC.json",
+  "reached_sites_equal_to_review39": {
+   "B": true,
+   "C": true,
+   "R": true
+  },
+  "sha256": "8b6488cfeb3acf82b30e19e1505245d0d4fe3b2f730414d0133ee1a60de9621f",
+  "summary": {
+   "application_set_provider_sites_reached": [],
+   "every_lane_installs_before_its_application_entry": true,
+   "every_site_guarded": true,
+   "get_provider_sites": 88,
+   "statement": "every get_provider() site of either tree resolves, in the lane that runs that tree, to a refusing provider (C, R, P) or to the harness chain (B); none reaches a configured provider"
+  }
+ },
+ "resume_invocations": {
+  "byte_identical_to_review39": true,
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/RESUME-INVOCATIONS-R42.json",
+  "review39_sha256": "9791fa897587fd83e1a087e302487ce245470a41c32f9aa10b48c1211e7dcf6b",
+  "sha256": "9791fa897587fd83e1a087e302487ce245470a41c32f9aa10b48c1211e7dcf6b"
+ }
+}

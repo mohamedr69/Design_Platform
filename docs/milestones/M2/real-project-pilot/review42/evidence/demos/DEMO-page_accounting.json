@@ -1,0 +1,128 @@
+{
+ "ok": true,
+ "rule": "every in-scope page of every document is read, unread under the application's own per-document limits (listed, the document COMPLETE), refused by a harness limit or failure (the document INCOMPLETE), or not triggered by the reader's rule; the counts sum to the document's pages",
+ "scenarios": {
+  "application_path": {
+   "lane_C": {
+    "SYN001": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 0,
+      "refused": 1,
+      "unread_under_limit": 0
+     },
+     "in_scope_pages": 1,
+     "pages": {
+      "1": "refused"
+     },
+     "status": "INCOMPLETE",
+     "sums_to_pages": true
+    },
+    "SYN002": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 0,
+      "refused": 1,
+      "unread_under_limit": 0
+     },
+     "in_scope_pages": 1,
+     "pages": {
+      "1": "refused"
+     },
+     "status": "INCOMPLETE",
+     "sums_to_pages": true
+    },
+    "SYN003": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 0,
+      "refused": 0,
+      "unread_under_limit": 1
+     },
+     "in_scope_pages": 1,
+     "pages": {
+      "1": "unread_under_limit"
+     },
+     "status": "INCOMPLETE",
+     "sums_to_pages": true
+    }
+   },
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ]
+  },
+  "unread_pages": {
+   "lane_C": {
+    "SYN001": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 2,
+      "refused": 0,
+      "unread_under_limit": 2
+     },
+     "in_scope_pages": 4,
+     "pages": {
+      "1": "read",
+      "2": "read",
+      "3": "unread_under_limit",
+      "4": "unread_under_limit"
+     },
+     "status": "COMPLETE",
+     "sums_to_pages": true
+    },
+    "SYN002": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 0,
+      "refused": 1,
+      "unread_under_limit": 0
+     },
+     "in_scope_pages": 1,
+     "pages": {
+      "1": "refused"
+     },
+     "status": "INCOMPLETE",
+     "sums_to_pages": true
+    },
+    "SYN003": {
+     "counts": {
+      "no_attempt_page": 0,
+      "not_triggered": 0,
+      "read": 0,
+      "refused": 0,
+      "unread_under_limit": 4
+     },
+     "in_scope_pages": 4,
+     "pages": {
+      "1": "unread_under_limit",
+      "2": "unread_under_limit",
+      "3": "unread_under_limit",
+      "4": "unread_under_limit"
+     },
+     "status": "COMPLETE",
+     "sums_to_pages": true
+    }
+   },
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    }
+   ]
+  }
+ },
+ "seconds": 45.2,
+ "tests": [
+  "test_visibility_r38.py::test_pages_left_unread_by_the_application_are_listed_and_the_document_stays_complete",
+  "test_visibility_r38.py::test_the_application_path_on_synthetic_documents_records_pages",
+  "test_unread_pages_r39.py (17 tests)"
+ ]
+}

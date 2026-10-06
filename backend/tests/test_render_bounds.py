@@ -178,7 +178,7 @@ def _setup(monkeypatch, tmp_path):
     sha = "a" * 64
     (tmp_path / f"{sha[:24]}.dxf").write_text("x")
     monkeypatch.setattr(render, "RenderSession", FakeSession)
-    monkeypatch.setattr(render, "annotate", lambda png, w: png)
+    monkeypatch.setattr(render, "annotate", lambda png, w, start=1: png)
     from app.review import service as review
 
     monkeypatch.setattr(review, "_budget", lambda db, project: None)
@@ -193,9 +193,10 @@ def test_an_overrun_window_is_recorded_unread_and_the_other_windows_still_get_lo
     src, project = _setup(monkeypatch, tmp_path)
     asked = []
 
-    def fake_ask(project_id, png, sha, window, budget, drawing):
-        asked.append(window["labels"][0][0])
-        return {"answers": [{"n": 1, "damper": True, "x": 0.5, "y": 0.5, "what": "damper", "confidence": "high"}]}
+    def fake_ask(project_id, batch, sha, budget, drawing, fresh=False):
+        asked.extend(b["window"]["labels"][0][0] for b in batch)
+        return {"answers": [{"n": b["start"], "damper": True, "x": 0.5, "y": 0.5, "what": "damper", "confidence": "high"}
+                            for b in batch]}
 
     monkeypatch.setattr(visual, "_ask", fake_ask)
     looked = visual.check(None, project, [src])

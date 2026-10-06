@@ -1,0 +1,213 @@
+{
+ "ok": true,
+ "scenarios": {
+  "interrupted": {
+   "audits": {
+    "2": {
+     "charges_by_lane_outcome": [
+      [
+       "B",
+       "dry_refused"
+      ],
+      [
+       "C",
+       "dispatched"
+      ],
+      [
+       "C",
+       "dry_refused"
+      ],
+      [
+       "R",
+       "dry_refused"
+      ]
+     ],
+     "lanes": {
+      "B": 4,
+      "C": 4,
+      "P": 0,
+      "R": 1
+     },
+     "stops": {},
+     "total_charged": 9
+    }
+   },
+   "charges_never_decrease": true,
+   "duplicates_in_capture": 0,
+   "invocations": [
+    [
+     1,
+     "interrupted"
+    ],
+    [
+     2,
+     "finished"
+    ]
+   ],
+   "steps": [
+    {
+     "command": "run",
+     "result": "error",
+     "why": "lane C failed (75); see C:\\t\\r2x\\r42-sandbox\\vis-interrupted-b4ea1e\\inv-1\\out\\lane-C.log"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ]
+  },
+  "provider_timeout": {
+   "audits": {
+    "1": {
+     "charges_by_lane_outcome": [
+      [
+       "B",
+       "dry_refused"
+      ],
+      [
+       "C",
+       "timeout"
+      ]
+     ],
+     "lanes": {
+      "B": 4,
+      "C": 3,
+      "P": 0,
+      "R": 0
+     },
+     "stops": {
+      "C": {
+       "at_utc": "2026-10-05T21:27:06+00:00",
+       "invocation": 1,
+       "kind": "provider_timeout",
+       "reason": "three consecutive provider failures"
+      },
+      "R": {
+       "at_utc": "2026-10-05T21:27:09+00:00",
+       "invocation": 1,
+       "kind": "provider_timeout",
+       "reason": "three consecutive provider failures"
+      }
+     },
+     "total_charged": 7
+    },
+    "2": {
+     "charges_by_lane_outcome": [
+      [
+       "B",
+       "dry_refused"
+      ],
+      [
+       "C",
+       "timeout"
+      ]
+     ],
+     "lanes": {
+      "B": 4,
+      "C": 3,
+      "P": 0,
+      "R": 0
+     },
+     "stops": {
+      "C": {
+       "at_utc": "2026-10-05T21:27:06+00:00",
+       "invocation": 1,
+       "kind": "provider_timeout",
+       "reason": "three consecutive provider failures"
+      },
+      "R": {
+       "at_utc": "2026-10-05T21:27:09+00:00",
+       "invocation": 1,
+       "kind": "provider_timeout",
+       "reason": "three consecutive provider failures"
+      }
+     },
+     "total_charged": 7
+    }
+   },
+   "charges_never_decrease": true,
+   "duplicates_in_capture": 0,
+   "invocations": [
+    [
+     1,
+     "finished"
+    ],
+    [
+     2,
+     "finished"
+    ]
+   ],
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ]
+  },
+  "unsaved": {
+   "audits": {
+    "2": {
+     "charges_by_lane_outcome": [
+      [
+       "B",
+       "dry_refused"
+      ],
+      [
+       "C",
+       "dispatched"
+      ],
+      [
+       "C",
+       "dry_refused"
+      ],
+      [
+       "R",
+       "dry_refused"
+      ]
+     ],
+     "lanes": {
+      "B": 4,
+      "C": 4,
+      "P": 0,
+      "R": 1
+     },
+     "stops": {},
+     "total_charged": 9
+    }
+   },
+   "charges_never_decrease": true,
+   "duplicates_in_capture": 0,
+   "invocations": [
+    [
+     1,
+     "interrupted"
+    ],
+    [
+     2,
+     "finished"
+    ]
+   ],
+   "steps": [
+    {
+     "command": "run",
+     "result": "error",
+     "why": "lane C failed (76); see C:\\t\\r2x\\r42-sandbox\\vis-unsaved-f7a08a\\inv-1\\out\\lane-C.log"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ]
+  }
+ },
+ "seconds": 80.7,
+ "tests": [
+  "test_visibility_r38.py::test_provider_timeouts_are_visible_per_page_and_the_terminal_stop_survives_the_resume",
+  "test_visibility_r38.py::test_an_interrupted_or_unsaved_dispatch_stays_charged_and_is_visible_on_the_resume",
+  "test_allowance_r32.py::test_charges_are_never_refunded_whatever_the_outcome"
+ ]
+}

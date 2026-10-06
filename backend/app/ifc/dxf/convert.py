@@ -27,7 +27,20 @@ from pathlib import Path
 
 TIMEOUT_S = 300
 DXF_VERSION = "2018"
-_lock = threading.Lock()  # one conversion at a time: each Core Console is ~250 MB
+_slots: threading.BoundedSemaphore | None = None   # conversions at once: each Core Console is ~250 MB
+_slots_guard = threading.Lock()
+
+
+def _conversion_slot() -> threading.BoundedSemaphore:
+    """DWG_CONVERT_PARALLEL conversions at once in this process (each in a temp
+    folder of its own)."""
+    global _slots
+    with _slots_guard:
+        if _slots is None:
+            from app.core.config import get_settings
+
+            _slots = threading.BoundedSemaphore(max(1, get_settings().dwg_convert_parallel))
+        return _slots
 
 
 class ConversionError(Exception):
@@ -134,7 +147,7 @@ def convert_dwg_to_dxf(dwg_path: str | Path, dxf_path: str | Path, converter: Co
         )
     dwg_path, dxf_path = Path(dwg_path), Path(dxf_path)
     t0 = time.time()
-    with _lock, tempfile.TemporaryDirectory(prefix="boq-dwg-") as tmp:
+    with _conversion_slot(), tempfile.TemporaryDirectory(prefix="boq-dwg-") as tmp:
         work = Path(tmp)
         src = work / "drawing.dwg"
         out = work / "drawing.dxf"

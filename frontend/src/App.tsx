@@ -19,8 +19,7 @@ import { ProjectBatteryPage } from "./pages/ProjectBatteryPage";
 import { ProjectAmplifierPage } from "./pages/ProjectAmplifierPage";
 import { ProjectPowerPage } from "./pages/ProjectPowerPage";
 import { ProjectBoqPage } from "./pages/ProjectBoqPage";
-import { ProjectDrawingReviewPage } from "./pages/ProjectDrawingReviewPage";
-import { ProjectRedesignPage } from "./pages/ProjectRedesignPage";
+import { ProjectDrawingPrepPage } from "./pages/ProjectDrawingPrepPage";
 import { ProjectProposedMaterialsPage } from "./pages/ProjectProposedMaterialsPage";
 import { ProjectCalculationsPage } from "./pages/ProjectCalculationsPage";
 import { ProjectCompliancePage } from "./pages/ProjectCompliancePage";
@@ -135,8 +134,10 @@ export default function App() {
             <Route path="submittal" element={<ProjectMaterialSubmittalPage />} />
             <Route path="documents" element={<ProjectDocumentsPage />} />
             {/* Sections of the design still being built: each says so. */}
-            <Route path="drawings-review" element={<ProjectDrawingReviewPage />} />
-            <Route path="drawings-redesign" element={<ProjectRedesignPage />} />
+            <Route path="drawings-prep" element={<ProjectDrawingPrepPage />} />
+            {/* Review and Redesign are one tab now: their old links open it. */}
+            <Route path="drawings-review" element={<Navigate to="../drawings-prep?step=review" replace />} />
+            <Route path="drawings-redesign" element={<Navigate to="../drawings-prep?step=devices" replace />} />
             <Route path="logs" element={<ProjectLogsPage />} />
             <Route path="om-manual" element={<UnderMaintenance title="O&M Manual" />} />
             <Route path="reports" element={<UnderMaintenance title="Reports" />} />

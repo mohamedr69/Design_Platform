@@ -74,7 +74,8 @@ def _location(page, rect: pymupdf.Rect, plot, f: dict) -> None:
             page.draw_circle((x, y), max(7.0, rect.width / 10), color=_RING, width=1.6)
 
 
-def build(view: dict, project, pdf_path: str | None = None) -> pymupdf.Document:
+def build(view: dict, project, pdf_path: str | None = None, *,
+          footer: str = "Drawings Review - accepted changes") -> pymupdf.Document:
     doc = pymupdf.open()
     plot = None
     if pdf_path:
@@ -150,7 +151,7 @@ def build(view: dict, project, pdf_path: str | None = None) -> pymupdf.Document:
         plot.close()
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     for n, page in enumerate(doc, 1):
-        page.insert_text((LEFT, HEIGHT - 18), f"{title} - Drawings Review - accepted changes - issued {stamp}",
+        page.insert_text((LEFT, HEIGHT - 18), f"{title} - {footer} - issued {stamp}",
                          fontname="helv", fontsize=7, color=_GREY)
         page.insert_text((RIGHT - 60, HEIGHT - 18), f"Page {n} of {doc.page_count}", fontname="helv", fontsize=7,
                          color=_GREY)

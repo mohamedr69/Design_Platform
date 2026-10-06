@@ -27,7 +27,7 @@ import pymupdf
 from sqlalchemy.orm import Session
 
 from app.ai.budget import JobBudget, Limits, calls_today
-from app.ai.provider import ImagePart, TextPart, get_provider
+from app.ai.provider import ImagePart, TextPart, get_review_provider
 from app.compliance import assist
 from app.core.config import get_settings
 from app.core.timeutils import utc_now
@@ -144,14 +144,23 @@ def _match_fls(project: Project, sheets: list[dict]) -> None:
 
 def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[int] | None = None, progress=None,
         check=None) -> dict:
-    """The review, saved as it goes."""
+    """The review, saved as it goes: Plotting -> Preparing the review inputs ->
+    Reviewing -> Saving the results -> Completed. A review no model answered
+    is never "done": with no model to call it is `blocked` before anything is
+    asked, and when every look fails it is `failed` -- each raising
+    `ReviewIncomplete`, with what the review held before (its answers, the
+    engineers' decisions) kept as it was."""
     s = get_settings()
     drawing = db.get(ProjectIfcDrawing, drawing_id)
     if drawing is None or drawing.project_id != project.id:
         raise ValueError("That drawing is not this project's")
     row = state(db, project, drawing_id)
+    _keep_bases(db, project, drawing, row)
     row.status, row.error, row.started_at, row.finished_at = "running", None, utc_now(), None
     db.commit()
+    previous = None              # what the review held before this run: put back when nothing is answered
+    answered = 0
+    plotted = False
 
     def say(done: int, total: int, message: str) -> None:
         if progress:
@@ -160,6 +169,8 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
     try:
         say(0, 1, "Plotting the drawing with AutoCAD (about 6 minutes, once per revision)")
         pdf, sha, planned = plan_job(db, project, drawing, pages_wanted)
+        plotted = True
+        say(0, 1, "Plotting completed. Preparing the review inputs: the rooms and windows of each floor plan")
         # the engineers' rulings go with the rules; a new ruling is a new question
         extra, ruled = R.prompt(db)
         version = f"{A.PROMPT_VERSION}+{ruled}"
@@ -168,44 +179,60 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
         for sh in planned:
             old = before.get(sh["index"])
             if old and old.get("prompt_version") == version:
-                # read before with the same drawing and prompt: keep its answers
-                done_ids = {w["id"] for w in old.get("windows", []) if w.get("status") == "done"}
+                # read before with the same drawing and prompt: keep its answers (a model's, never the
+                # disabled provider's placeholder)
+                done_ids = {w["id"] for w in old.get("windows", []) if _answered(w)}
                 sh["windows"] = [next((o for o in old["windows"] if o["id"] == w["id"]), w) if w["id"] in done_ids
                                  else w for w in sh["windows"]]
-                sh["sheet_findings"] = old.get("sheet_findings")
-                sh["sheet_status"] = old.get("sheet_status")
+                if _pass_done(old, "sheet"):
+                    for k in ("sheet_findings", "sheet_status", "sheet_model"):
+                        sh[k] = old.get(k)
                 same = (old.get("fls") or {}).get("file"), (old.get("fls") or {}).get("page")
-                if sh.get("fls") and same == (sh["fls"]["file"], sh["fls"]["page"]):
-                    sh["fls_findings"] = old.get("fls_findings")
-                    sh["fls_status"] = old.get("fls_status")
+                if sh.get("fls") and same == (sh["fls"]["file"], sh["fls"]["page"]) and _pass_done(old, "fls"):
+                    for k in ("fls_findings", "fls_status", "fls_model"):
+                        sh[k] = old.get(k)
             sh["prompt_version"] = version
             sheets.append(sh)
         # sheets the engineer did not ask for this time keep what they had
         sheets += [old for idx, old in before.items() if idx not in {sh["index"] for sh in sheets}]
         sheets.sort(key=lambda sh: sh["index"])
-        row.sheets, row.source_sha256, row.model = sheets, sha, s.drawing_review_model
-        row.pdf_path = storage.relative(pdf)
-        _fit(project, drawing, row, pdf)
-        db.commit()
 
         tasks = []
         per = max(1, s.drawing_review_windows_per_call)
         for sh in sheets:
             if pages_wanted is not None and sh["index"] not in pages_wanted:
                 continue
-            todo = [w for w in sh["windows"] if w.get("status") != "done"]
+            todo = [w for w in sh["windows"] if not _answered(w)]
             for i in range(0, len(todo), per):
                 tasks.append(("window", sh["index"], [w["id"] for w in todo[i:i + per]]))
-            if sh.get("sheet_status") != "done":
+            if not _pass_done(sh, "sheet"):
                 tasks.append(("sheet", sh["index"], []))
-            if sh.get("fls") and sh.get("fls_status") != "done":
+            if sh.get("fls") and not _pass_done(sh, "fls"):
                 tasks.append(("fls", sh["index"], []))
         total = len(tasks)
-        say(0, max(total, 1), f"Reviewing {sum(len(w['rooms']) for sh in sheets for w in sh['windows'])} rooms "
-                              f"in {total} looks")
+        rooms = sum(len(w["rooms"]) for sh in sheets for w in sh["windows"])
+        provider = get_review_provider()
+        if tasks and not getattr(provider, "ready", True):
+            # no model to call: nothing is asked, and nothing the review held is touched
+            row.status, row.finished_at = "blocked", utc_now()
+            row.error = (f"{NOT_COMPLETED}: no model can be called ({getattr(provider, 'status', '') or 'AI is off'}; "
+                         "the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). "
+                         f"Nothing was asked of the {rooms} rooms; the previous answers and the engineers' decisions "
+                         "are kept.")
+            db.commit()
+            raise ReviewIncomplete(row.error)
+        previous = (json.loads(json.dumps(row.sheets)), row.source_sha256, row.pdf_path, row.model)
+        row.sheets, row.source_sha256, row.model = sheets, sha, s.drawing_review_model
+        row.pdf_path = storage.relative(pdf)
+        _fit(project, drawing, row, pdf)
+        db.commit()
+
+        say(0, max(total, 1), f"Reviewing {rooms} rooms in {total} looks" if total else
+            "Nothing new to ask: every room was reviewed before, with the same drawing and rules")
         budget = _budget(db, project)
         by_index = {sh["index"]: sh for sh in sheets}
         done = 0
+        errors: list[str] = []
         pool = ThreadPoolExecutor(max_workers=max(1, s.drawing_review_parallel))
         try:
             futures = {pool.submit(_ask, project.id, str(pdf), sha, by_index[t[1]], t, budget, extra, version): t
@@ -222,12 +249,25 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
                 if kind == "window":
                     for w in sh["windows"]:
                         if w["id"] in ids:
-                            w.update(answer.get(w["id"]) or {"status": "failed", "error": answer.get("error")})
+                            new = answer.get(w["id"]) or {"status": "failed", "error": answer.get("error")}
+                            if new.get("status") == "failed" and _usable(w):
+                                w["last_error"] = new.get("error")      # what it was answered before stays
+                            else:
+                                w.update(new)
+                    mine = [w for w in sh["windows"] if w["id"] in ids]
+                    ok = any(_usable(w) for w in mine)
+                    error = next((w.get("error") for w in mine if w.get("error")), None)
                 else:
                     prefix = "fls" if kind == "fls" else "sheet"
+                    ok = "findings" in answer
+                    error = answer.get("error")
                     sh[f"{prefix}_findings"] = answer.get("findings")
-                    sh[f"{prefix}_status"] = "done" if "findings" in answer else "failed"
-                    sh[f"{prefix}_error"] = answer.get("error")
+                    sh[f"{prefix}_status"] = "done" if ok else "failed"
+                    sh[f"{prefix}_error"] = error
+                    sh[f"{prefix}_model"] = answer.get("model")
+                answered += 1 if ok else 0
+                if error and not ok:
+                    errors.append(str(error))
                 done += 1
                 row.calls = (row.calls or 0) + 1
                 row.sheets = json.loads(json.dumps(sheets))       # a fresh value: written
@@ -238,21 +278,107 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
         finally:
             # a stop stops: the looks still waiting are dropped, only the ones under way finish
             pool.shutdown(wait=False, cancel_futures=True)
+        say(total, max(total, 1), "Saving the results")
+        if tasks and not answered:
+            # not one look answered: the review keeps what it held before, and says so
+            row.sheets, row.source_sha256, row.pdf_path, row.model = previous
+            row.status, row.finished_at = "failed", utc_now()
+            row.error = (f"{NOT_COMPLETED}: none of the {total} looks was answered"
+                         + (f" ({errors[0][:200]})" if errors else "")
+                         + ". The previous answers and the engineers' decisions are kept.")
+            db.commit()
+            raise ReviewIncomplete(row.error)
         failed = sum(1 for sh in sheets for w in sh["windows"] if w.get("status") == "failed")
+        incomplete = sum(1 for sh in sheets for w in sh["windows"] if w.get("status") == "incomplete")
         row.status, row.finished_at = "done", utc_now()
-        row.error = f"{failed} window(s) could not be reviewed: run the review again to retry them." if failed else None
+        row.error = " ".join(
+            ([f"{failed} window(s) could not be reviewed."] if failed else [])
+            + ([f"{incomplete} window(s) were answered for only some of their rooms."] if incomplete else [])
+            + (["Run the review again to retry them."] if failed or incomplete else [])) or None
         db.commit()
-        return {"sheets": len(sheets), "calls": total, "failed_windows": failed}
+        reviewed = sum(1 for sh in sheets for w in sh["windows"] if _usable(w) for r in w["rooms"]
+                       if str(r["n"]) in (w.get("answers") or {}))
+        say(total, max(total, 1), "Completed")
+        return {"sheets": len(sheets), "calls": total, "answered": answered, "failed_windows": failed,
+                "incomplete_windows": incomplete, "rooms": rooms, "rooms_reviewed": reviewed}
+    except ReviewIncomplete:
+        raise
     except Exception as exc:
         from app.services import jobs
 
         db.rollback()
         row = state(db, project, drawing_id)
+        if previous is not None and not answered:
+            # stopped or broken before any answer came back: what was there before stays
+            row.sheets, row.source_sha256, row.pdf_path, row.model = previous
         row.status = "stopped" if isinstance(exc, (jobs.Cancelled, jobs.Interrupted)) else "failed"
-        row.error = None if row.status == "stopped" else str(exc)
+        row.error = None if row.status == "stopped" else (f"{NOT_COMPLETED}: {exc}" if plotted else str(exc))
         row.finished_at = utc_now()
         db.commit()
         raise
+
+
+NOT_COMPLETED = "Plotting completed; review has not completed"
+
+
+class ReviewIncomplete(Exception):
+    """The review did not complete -- no model to call, or no look answered:
+    its message is for the engineer; the review row already says it."""
+
+
+def _answered(w: dict) -> bool:
+    """A window a model answered in full: done (every room of it answered),
+    and not the disabled provider's placeholder (saved as done before the
+    placeholder was refused)."""
+    return w.get("status") == "done" and w.get("model") != assist.NULL_MODEL
+
+
+def _usable(w: dict) -> bool:
+    """A window with a model's answers to show: in full, or for some of its
+    rooms (`incomplete` -- asked again on the next run)."""
+    return w.get("status") in ("done", "incomplete") and w.get("model") != assist.NULL_MODEL
+
+
+def _pass_done(sh: dict, prefix: str) -> bool:
+    """The floor's sheet or FLS pass answered by a model. One saved before the
+    pass kept its model counts when no window of the floor holds the
+    placeholder: the same run asked both."""
+    if sh.get(f"{prefix}_status") != "done":
+        return False
+    model = sh.get(f"{prefix}_model")
+    if model is not None:
+        return model != assist.NULL_MODEL
+    return not any(w.get("model") == assist.NULL_MODEL for w in sh.get("windows", []))
+
+
+def outcome(row: ProjectDrawingReview | None) -> tuple[str, str | None]:
+    """What the review comes to, said as it is: (state, message). `done` only
+    when a model answered every part of every plan reviewed; `partial` when it
+    answered some; `not_reviewed` when it answered none -- a plot alone is not
+    a review. Otherwise the run's own state: running, blocked, failed, stopped."""
+    if row is None or row.status is None:
+        return "not_reviewed", None
+    if row.status in ("running", "blocked", "failed", "stopped"):
+        return row.status, row.error
+    sheets = row.sheets or []
+    windows = [w for sh in sheets for w in sh.get("windows", [])]
+    answered = sum(1 for w in windows if _answered(w))
+    if not windows:
+        return "not_reviewed", (f"{NOT_COMPLETED}: no floor plan of the drawing names a room to review."
+                                if row.pdf_path else None)
+    if not answered:
+        placeholder = any(w.get("model") == assist.NULL_MODEL for w in windows)
+        return "not_reviewed", (f"{NOT_COMPLETED}: no room was answered by a model"
+                                + (" -- the earlier run's replies came from the disabled AI provider, not from a "
+                                   "model. Run the review again once the drawing review's AI is enabled."
+                                   if placeholder else "."))
+    passes = all(_pass_done(sh, "sheet") and (not sh.get("fls") or _pass_done(sh, "fls")) for sh in sheets)
+    if not answered and any(_usable(w) for w in windows):
+        return "partial", row.error or "Some rooms were answered; run the review again to finish the rest."
+    if answered < len(windows) or not passes:
+        return "partial", row.error or (f"{answered} of {len(windows)} parts of the plans reviewed: run the review "
+                                        "again to finish the rest.")
+    return "done", row.error
 
 
 def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: JobBudget, extra: str = "",
@@ -264,7 +390,7 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
     doc = pymupdf.open(pdf)
     try:
         session = assist.AssistSession(db=db, project_id=project_id, document_sha256=f"{sha}:{index}", budget=budget,
-                                       provider=get_provider())
+                                       provider=get_review_provider())
         parts: list = []
         if sheet.get("legend"):
             parts.append(ImagePart("legend", P.crop(doc, index, tuple(sheet["legend"]),
@@ -285,9 +411,9 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
                                       prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                       timeout_s=s.drawing_review_timeout_s)
             db.commit()
-            if result.data is None:
-                return {"error": result.error or "no answer"}
-            return {"findings": A.read_sheet_answer(result.data)}
+            if result.data is None or result.model == assist.NULL_MODEL:
+                return {"error": result.error or "no answer from a model"}
+            return {"findings": A.read_sheet_answer(result.data), "model": result.model}
         if kind == "sheet":
             plan = tuple(sheet["plan"])
             parts.append(TextPart("floor", f"{sheet['floor']} -- {sheet['title']}"))
@@ -298,9 +424,9 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
                                       prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                       timeout_s=s.drawing_review_timeout_s)
             db.commit()
-            if result.data is None:
-                return {"error": result.error or "no answer"}
-            return {"findings": A.read_sheet_answer(result.data)}
+            if result.data is None or result.model == assist.NULL_MODEL:
+                return {"error": result.error or "no answer from a model"}
+            return {"findings": A.read_sheet_answer(result.data), "model": result.model}
         wins = [w for w in sheet["windows"] if w["id"] in ids]
         parts.append(TextPart("floor", f"{sheet['floor']} -- {sheet['title']}"))
         for k, w in enumerate(wins, 1):
@@ -314,14 +440,20 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
                                   prompt_version=version, model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
                                   timeout_s=s.drawing_review_timeout_s)
         db.commit()
-        if result.data is None:
-            return {w["id"]: {"status": "failed", "error": result.error or "no answer"} for w in wins}
+        if result.data is None or result.model == assist.NULL_MODEL:
+            return {w["id"]: {"status": "failed", "error": result.error or "no answer from a model"} for w in wins}
         numbers = {r["n"] for w in wins for r in w["rooms"]}
         answers, other = A.read_window_answer(result.data, numbers)
         out = {}
         for k, w in enumerate(wins, 1):
+            # every room of the window answered, or the window is not done: the rooms skipped are named
+            # and the window is asked again, never kept as reviewed
+            missing = [r["name"] for r in w["rooms"] if r["n"] not in answers]
             out[w["id"]] = {
-                "status": "done", "error": None, "model": result.model,
+                "status": "incomplete" if missing else "done",
+                "error": (f"the model did not answer {len(missing)} of {len(w['rooms'])} rooms: "
+                          + ", ".join(missing))[:300] if missing else None,
+                "model": result.model,
                 "answers": {str(r["n"]): dataclasses.asdict(answers[r["n"]]) for r in w["rooms"] if r["n"] in answers},
                 "other": [o for o in other if o.get("image") == k or (o.get("image") not in range(1, len(wins) + 1)
                                                                        and k == 1)],
@@ -408,11 +540,17 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
         rooms = []
         for w in sh.get("windows", []):
             wbox = w["box"]
+            answered = _usable(w)
+            # the disabled provider's placeholder is not an answer: the room is still to review
+            wstatus = w.get("status", "pending") if answered or w.get("status") != "done" else "pending"
             for r in w["rooms"]:
-                answer = (w.get("answers") or {}).get(str(r["n"]))
+                answer = (w.get("answers") or {}).get(str(r["n"])) if answered else None
                 checks = (answer or {}).get("checks") or {}
+                # a room the model skipped in a window it answered is not reviewed, whatever the window says
+                rstatus = "done" if answer else ("incomplete" if wstatus in ("done", "incomplete") and answered
+                                                 else wstatus)
                 room = {"id": r["id"], "name": r["name"], "room_type": (answer or {}).get("room_type", ""),
-                        "checks": checks or None, "status": w.get("status", "pending"), "error": w.get("error"),
+                        "checks": checks or None, "status": rstatus, "error": w.get("error"),
                         "mark": [r["x"], r["y"]]}
                 rooms.append(room)
                 is_spaced = bool(A.SPACED.search(r["name"]))
@@ -471,17 +609,37 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
         windows = sh.get("windows", [])
         floors.append({"page": sh["index"], "sheet": sh["name"], "title": sh["title"], "floor": sh["floor"],
                        "fls": {k: v for k, v in (sh.get("fls") or {}).items() if k != "pdf"} or None,
-                       "fls_status": sh.get("fls_status"),
+                       "fls_status": "done" if _pass_done(sh, "fls") else (
+                           sh.get("fls_status") if sh.get("fls_status") not in (None, "done") else
+                           ("pending" if sh.get("fls") else None)),
                        "multiplier": sh.get("multiplier", 1), "rooms": rooms, "windows": len(windows),
-                       "windows_done": sum(1 for w in windows if w.get("status") == "done"),
+                       "windows_done": sum(1 for w in windows if _answered(w)),
                        "windows_failed": sum(1 for w in windows if w.get("status") == "failed"),
-                       "sheet_status": sh.get("sheet_status") or "pending"})
+                       "sheet_status": "done" if _pass_done(sh, "sheet") else (
+                           sh.get("sheet_status") if sh.get("sheet_status") not in (None, "done") else "pending")})
     findings += _spacing(spaced)
     findings += _alternate(stair_speakers)
     _sounder_spacing(db, drawing, row, findings)
     ruled = R.not_needed(db)
     for f in findings:
+        f["proposal"] = f["instruction"]                 # the model's, before any engineer's wording
         d = decisions.get(f["id"]) or {}
+        f["previous_decision"] = None
+        if d.get("status") in ("accepted", "dismissed"):
+            changed = _changed(d, f, row)
+            if changed is not None:
+                # the engineer decided on another proposal (or one not shown to be this one): decided
+                # again, the earlier decision kept and shown
+                f["previous_decision"] = {k: d.get(k) for k in ("status", "note", "instruction", "by", "at")}
+                if d.get("basis") is None:
+                    # nothing kept of what it was made on, and a review has run since
+                    f["previous_decision"].update(changed=[], reason="not_verifiable", message=(
+                        "Made before decisions kept their proposal, and the drawing has been reviewed since: "
+                        "it cannot be shown to be this proposal."))
+                else:
+                    f["previous_decision"].update(changed=changed, reason="proposal_changed", message=(
+                        "The proposal changed: " + ", ".join(changed) + "."))
+                d = {}
         status = d.get("status", "open")
         f["decision"] = "open" if status == "reopened" else status
         f["note"] = d.get("note", "")
@@ -499,9 +657,21 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
                 f["decision"], f["by_ruling"] = "dismissed", True
                 f["note"] = f"By ruling ({rule.room}): {rule.note}" if rule.note else f"By ruling ({rule.room})"
     actionable = [f for f in findings if f["action"] != "none"]
+    rooms_total = sum(len(f["rooms"]) for f in floors)
+    reviewed = sum(1 for f in floors for r in f["rooms"] if r["checks"])
+    review_state, message = outcome(row)
+    if review_state == "done" and not actionable:
+        # a review that found nothing to change says so, with how much it read
+        unclear = len(findings) - len(actionable)
+        message = (f"Review completed: no changes proposed. {reviewed} of {rooms_total} rooms reviewed"
+                   + (f"; {unclear} to check by eye" if unclear else "") + ".")
+    # the models that actually answered -- the configured one is only what was asked for
+    answered_by = sorted({w.get("model") for sh in row.sheets or [] for w in sh.get("windows", [])
+                          if _usable(w) and w.get("model")})
     return {
         "drawing": {"id": drawing.id, "filename": drawing.filename, "revision": drawing.revision or "R0"},
         "status": row.status, "error": row.error, "model": row.model or get_settings().drawing_review_model,
+        "state": review_state, "state_message": message, "answered_by": answered_by,
         "calls": row.calls or 0,
         "started_at": row.started_at.isoformat() if row.started_at else None,
         "finished_at": row.finished_at.isoformat() if row.finished_at else None,
@@ -514,8 +684,7 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
                      "system_name": A.SYSTEMS.get(r.system, r.system), "action": r.action, "device": r.device,
                      "instruction": r.instruction, "note": r.note, "project_id": r.project_id,
                      "at": r.created_at.isoformat() if r.created_at else None} for r in R.listed(db)],
-        "counts": {"rooms": sum(len(f["rooms"]) for f in floors),
-                   "reviewed": sum(1 for f in floors for r in f["rooms"] if r["checks"]),
+        "counts": {"rooms": rooms_total, "reviewed": reviewed,
                    "open": sum(1 for f in actionable if f["decision"] == "open"),
                    "accepted": sum(1 for f in actionable if f["decision"] == "accepted"),
                    "dismissed": sum(1 for f in actionable if f["decision"] == "dismissed"),
@@ -524,6 +693,76 @@ def build(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
                    "remove": sum(1 for f in actionable if f["action"] == "remove"),
                    "replace": sum(1 for f in actionable if f["action"] == "replace")},
     }
+
+
+# --- the engineer's decisions, kept to the proposal they were made on ----------------------------
+
+# A device point the model gives moves a little from one review to the next; further than this
+# (PDF points on the plotted sheet: half an inch) it is another location.
+LOCATION_TOLERANCE_PT = 36.0
+_SUBSTANCE = ("action", "kind", "system", "device", "room", "recommendation", "location")
+
+
+def _norm(text) -> str:
+    return " ".join(str(text or "").lower().split()).strip(" .;:,")
+
+
+def substance(f: dict) -> dict:
+    """What a finding proposes, as a decision on it is kept against: the
+    action, what kind and which system, the device, the room, the model's
+    recommendation (its wording, which carries any quantity) and where."""
+    at = f.get("at")
+    return {"action": f.get("action"), "kind": f.get("kind"), "system": f.get("system"),
+            "device": _norm(f.get("device")), "room": _norm(f.get("room")),
+            "recommendation": _norm(f.get("proposal", f.get("instruction"))),
+            "location": [round(float(v), 1) for v in at] if at else None}
+
+
+def _changed(d: dict, f: dict, row: ProjectDrawingReview) -> list[str] | None:
+    """None when decision `d` stands for finding `f` as it is now; otherwise
+    what is not shown to be the same. A decision without its proposal (made
+    before they were kept) stands only while no review has run since it."""
+    basis = d.get("basis")
+    if basis is None:
+        at = d.get("at") or ""
+        finished = row.finished_at.isoformat() if row.finished_at else ""
+        return None if finished and at >= finished else ["decided before the proposal was recorded with it"]
+    now = substance(f)
+    changed = [k for k in _SUBSTANCE if k != "location" and basis.get(k) != now[k]]
+    before, after = basis.get("location"), now["location"]
+    if (before is None) != (after is None) or (before and after and (
+            (before[0] - after[0]) ** 2 + (before[1] - after[1]) ** 2) ** 0.5 > LOCATION_TOLERANCE_PT):
+        changed.append("location")
+    return changed or None
+
+
+def record_decision(decisions: dict, fid: str, record: dict, finding: dict | None = None) -> None:
+    """Put the engineer's decision on a finding, with the proposal it was made
+    on; the decision it replaces goes into its history, never lost."""
+    if finding is not None and record.get("status") in ("accepted", "dismissed"):
+        record["basis"] = substance(finding)
+    previous = decisions.get(fid)
+    if previous:
+        record["history"] = (previous.get("history") or []) + [{k: v for k, v in previous.items() if k != "history"}]
+    decisions[fid] = record
+
+
+def _keep_bases(db: Session, project: Project, drawing: ProjectIfcDrawing, row: ProjectDrawingReview) -> None:
+    """Before a review replaces its answers: each decision made on the
+    answers now shown, but without its proposal (made before they were kept),
+    gets that proposal -- so it can still be told apart afterwards."""
+    decisions = dict(row.decisions or {})
+    missing = {fid for fid, d in decisions.items() if d.get("status") in ("accepted", "dismissed") and not d.get("basis")}
+    if not missing:
+        return
+    kept = 0
+    for f in build(db, project, drawing)["findings"]:
+        if f["id"] in missing and f["previous_decision"] is None:
+            decisions[f["id"]] = {**decisions[f["id"]], "basis": substance(f)}
+            kept += 1
+    if kept:
+        row.decisions = decisions
+        db.commit()
 
 
 _ACTION_WORD = {"add": "Add", "remove": "Remove", "replace": "Replace"}

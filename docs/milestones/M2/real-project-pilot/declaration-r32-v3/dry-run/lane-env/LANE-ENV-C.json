@@ -1,0 +1,127 @@
+{
+ "app_module_file": "C:\\t\\iso\\cand-r29\\backend\\app\\__init__.py",
+ "checks": {
+  "drawing_ai_review_enabled": {
+   "enabled": false,
+   "result": "PASSED",
+   "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+  },
+  "verify_application_env": {
+   "application_env_verified": [
+    {
+     "key": "DRAWINGS_AI_REVIEW_ENABLED",
+     "setting": "drawings_ai_review_enabled",
+     "setting_value": false,
+     "value": "false"
+    }
+   ],
+   "result": "PASSED"
+  },
+  "verify_interpreter": {
+   "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe",
+   "result": "PASSED",
+   "sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+   "verified": true,
+   "version": "3.12.10"
+  },
+  "verify_isolation": {
+   "allowed": [
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv",
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32"
+   ],
+   "environment_values": 151,
+   "forbidden_root": "G:/dev (2)/dev/ep-platform-merged",
+   "lane": "C",
+   "modules_checked": 468,
+   "ok": true,
+   "result": "PASSED",
+   "settings_checked": 30,
+   "sys_path_entries": 13
+  },
+  "verify_lane_environment": {
+   "provider_env_verified": [
+    "AI_CACHE_TTL_DAYS",
+    "AI_CLAUDE_CLI",
+    "AI_CLI_TIMEOUT_S",
+    "AI_EFFORT",
+    "AI_LEDGER_LIMITS",
+    "AI_LEDGER_PATH",
+    "AI_LEDGER_SCOPE",
+    "AI_MAX_CALLS_PER_DOCUMENT",
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_MAX_CONCURRENCY",
+    "AI_MAX_COST_PER_JOB",
+    "AI_MAX_ELAPSED_S_PER_JOB",
+    "AI_MAX_ESCALATIONS_PER_DOCUMENT",
+    "AI_MAX_INPUT_TOKENS_PER_TASK",
+    "AI_MAX_OUTPUT_TOKENS_PER_TASK",
+    "AI_MAX_RETRIES",
+    "AI_MODEL_SMALL",
+    "AI_MODEL_STANDARD",
+    "AI_PRICE_CACHED_INPUT_PER_MILLION",
+    "AI_PRICE_INPUT_PER_MILLION",
+    "AI_PRICE_OUTPUT_PER_MILLION",
+    "AI_PROVIDER",
+    "AI_READ_EFFORT",
+    "AI_READ_MAX_CALLS_PER_DOCUMENT",
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_READ_MAX_ELAPSED_S",
+    "AI_TIMEOUT_S"
+   ],
+   "result": "PASSED",
+   "switches": {
+    "AI_EVIDENCE_ADJUDICATE": "1",
+    "AI_EVIDENCE_ASSOC": "1",
+    "AI_EVIDENCE_DEADLINE": "1",
+    "AI_EVIDENCE_DECISION_REGION": "1",
+    "AI_EVIDENCE_GUARD": "1",
+    "AI_EVIDENCE_IDGUARD": "1",
+    "AI_EVIDENCE_SCHEDULING": "required_first",
+    "AI_EVIDENCE_SUPPORT": "v2",
+    "AI_EVIDENCE_TARGETED": "1",
+    "AI_EVIDENCE_VARIANT": "EV1"
+   }
+  }
+ },
+ "harness": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32",
+ "lane": "C",
+ "ok": true,
+ "settings_env_file": "C:\\t\\iso\\cand-r29\\backend\\.env",
+ "settings_parsed": {
+  "ai_cache_ttl_days": 90,
+  "ai_claude_cli": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+  "ai_cli_timeout_s": 300.0,
+  "ai_effort": "low",
+  "ai_enabled": true,
+  "ai_evidence_variant": "EV1",
+  "ai_ledger_scope": "m2-fresh-validation-r32-v3-2026-10-06",
+  "ai_max_calls_per_document": 12,
+  "ai_max_calls_per_project_per_day": 96,
+  "ai_max_concurrency": 2,
+  "ai_max_cost_per_job": 0.5,
+  "ai_max_elapsed_s_per_job": 120.0,
+  "ai_max_escalations_per_document": 2,
+  "ai_max_input_tokens_per_task": 6000,
+  "ai_max_output_tokens_per_task": 800,
+  "ai_max_retries": 3,
+  "ai_model_small": "claude-sonnet-5",
+  "ai_model_standard": "claude-opus-5",
+  "ai_price_cached_input_per_million": 0.0,
+  "ai_price_input_per_million": 0.0,
+  "ai_price_output_per_million": 0.0,
+  "ai_provider": "claude-code",
+  "ai_read_effort": "high",
+  "ai_read_max_calls_per_document": 60,
+  "ai_read_max_calls_per_project_per_day": 600,
+  "ai_read_max_elapsed_s": 1800.0,
+  "ai_timeout_s": 60.0,
+  "cache_root": "C:\\t\\r2x\\r42-sandbox\\r42d-env-C\\cache",
+  "data_root": null,
+  "database_url": "sqlite:///C:/t/r2x/r42-sandbox/r42d-env-C/db/default.db",
+  "drawings_ai_review_enabled": false,
+  "library_root": "C:\\t\\r2x\\r42-sandbox\\r42d-env-C\\lib",
+  "projects_root": null,
+  "uploads_root": "C:\\t\\r2x\\r42-sandbox\\r42d-env-C\\up"
+ },
+ "tree": "C:/t/iso/cand-r29/backend"
+}

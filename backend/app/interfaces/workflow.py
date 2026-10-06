@@ -13,25 +13,41 @@ One run:
    semaphore bounds the model calls under them. Every other drawing's agent
    reports what the deterministic reading found. Each returns a
    **DrawingAgentReport**.
-3. **Package reports.** Deterministic, always written, one per package:
+3. **The Opus finding review** (`app.interfaces.findings`): every item
+   that would go to Verification Required is reviewed by Opus on the
+   original drawing views and the supporting evidence, and comes back
+   present (scheduled), absent / not an interface (excluded, kept with its
+   evidence) or unresolved (left for the engineer, with what to verify).
+   Its outcomes are written beside the evidence (`reviews`), bound to the
+   readings they were made on, and the schedule is built again with them.
+4. **Package reports.** Deterministic, always written, one per package:
    what it holds now, what is accepted, held, stale, unsupported.
-4. **The Fable orchestrator** (`fa_orchestrator_model`, exact, at
-   `fa_orchestrator_effort`) is mandatory. It reviews each package (FP1)
-   and then the run (FP2), and returns proposals: coverage disputes,
-   conflict proposals, suspected gaps, rework requests, a publication
-   recommendation. Deterministic code validates the proposals and keeps
-   every authority: it checks references, recomputes the numbers, and may
-   only lower the recommendation. When Fable cannot be reached, answers as
-   another model, or fails, the review is **missing**, said so with the
-   reason, and the run stays provisional. A Retry runs the review again on
-   the frozen inputs.
-5. **Publication.** A run is a `complete_candidate` only when the review is
+5. **The Opus orchestrator** (`fa_orchestrator_model`, exact, at
+   `fa_orchestrator_effort`; Fable held this role until 2026-10-05) is
+   mandatory. It reviews each package (FP1) and then the run (FP2), and
+   returns proposals: coverage disputes, conflict proposals, suspected gaps,
+   rework requests, a publication recommendation. Deterministic code
+   validates the proposals and keeps every authority: it checks references,
+   recomputes the numbers, and may only lower the recommendation. When Opus
+   cannot be reached, answers as another model, or fails, the review is
+   **missing** (or **partial**), said so with the reason, and the run stays
+   provisional. A Retry runs the review again on the frozen inputs.
+6. **Publication.** A run is a `complete_candidate` only when the reviews are
    complete, every drawing is fully covered, and no conflict is open. It
    is published only when an engineer accepts it. Otherwise it is
    `provisional`.
 
-What the model says is a proposal. Counts, states and publication are
-decided here and in `service`, never by a model.
+**Force-fresh** (`fresh=True`, the page's "Fresh reread"): nothing earlier is
+reused -- every drawing is opened, converted and read again whatever was read
+before, every damper look and every review asked of the model again (no stored
+answer), and the finding review's outcomes replaced whole. The drawings, the
+engineer's decisions and added items are never touched; the schedule before
+the run is kept in the run's `trace` for comparison, with which drawings were
+read again and which could not be. A fresh run that could not read every
+drawing again is never said to be complete.
+
+What the model says is a proposal checked here. Counts, states and
+publication are decided here and in `service`, never by a model.
 """
 from __future__ import annotations
 
@@ -49,11 +65,11 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from app.ai import guard
 from app.ai.budget import JobBudget, Limits
-from app.ai.provider import TextPart, get_provider
+from app.ai.provider import TextPart, fa_ai_on, get_fa_provider
 from app.compliance import assist
 from app.core.config import get_settings
 from app.core.timeutils import utc_now
-from app.interfaces import evidence, service, visual
+from app.interfaces import evidence, findings, service, visual
 from app.interfaces.matrix import DISCIPLINE_NAMES
 from app.models import FaInterfaceRun, Project, ProjectFaInterfaces
 
@@ -126,7 +142,9 @@ def _cut(text, n: int) -> str:
 
 def readiness(model: str) -> tuple[bool, str | None]:
     """Whether the configured route can serve `model` exactly, before any call."""
-    provider = get_provider()
+    if not fa_ai_on():
+        return False, "AI is not enabled (AI_ENABLED / FA_AI_ENABLED)"
+    provider = get_fa_provider()
     if not getattr(provider, "ready", False):
         return False, getattr(provider, "status", "AI is not enabled")
     supports = getattr(provider, "supports", None)
@@ -198,7 +216,8 @@ def _agent_report(run_id: int, entry: dict, *, looked: dict | None, model_ok: bo
     }
 
 
-def _run_agent(run_id: int, project_id: int, entry: dict, model_ok: bool, model_why: str | None, check) -> tuple[dict, dict | None]:
+def _run_agent(run_id: int, project_id: int, entry: dict, model_ok: bool, model_why: str | None, check,
+               fresh: bool = False) -> tuple[dict, dict | None]:
     """One drawing agent: the Opus damper look for a drawing that needs it, on its
     own database session and its own drawing process."""
     from app.database import SessionLocal
@@ -209,7 +228,7 @@ def _run_agent(run_id: int, project_id: int, entry: dict, model_ok: bool, model_
     db = SessionLocal()
     try:
         src = copy.deepcopy(entry)
-        n = visual.check(db, db.get(Project, project_id), [src], check=check)
+        n = visual.check(db, db.get(Project, project_id), [src], check=check, fresh=fresh)
         return _agent_report(run_id, entry, looked=src.get("visual"), model_ok=True, model_why=None,
                              started=started, looked_now=n), src.get("visual")
     except Exception as exc:  # noqa: BLE001 -- one agent failing is that drawing, said in its report
@@ -378,8 +397,9 @@ def _validate(answer: dict, ids: dict) -> tuple[dict, list[str]]:
     return out, notes
 
 
-def _ask_fable(db: Session, project: Project, scope: str, payload: dict, budget: JobBudget) -> dict:
-    """One orchestrator call, recorded with its state (r1 §1.6 / W-FST)."""
+def _ask_orchestrator(db: Session, project: Project, scope: str, payload: dict, budget: JobBudget,
+                      fresh: bool = False) -> dict:
+    """One orchestrator call (Opus), recorded with its state (r1 §1.6 / W-FST)."""
     s = get_settings()
     ok, why = readiness(s.fa_orchestrator_model)
     if not ok:
@@ -387,13 +407,14 @@ def _ask_fable(db: Session, project: Project, scope: str, payload: dict, budget:
     text = json.dumps(payload, sort_keys=True, default=str)
     digest = hashlib.sha256(text.encode()).hexdigest()
     session = assist.AssistSession(db=db, project_id=project.id, document_sha256=f"run-review:{digest}",
-                                   budget=budget, provider=get_provider())
+                                   budget=budget, provider=get_fa_provider())
     attempts = []
     for _attempt in range(2):                                   # one retry, then terminal
         result = assist.call_task(session, TASK_REVIEW, SYSTEM, [TextPart(scope, text)], SCHEMA,
                                   s.fa_orchestrator_max_output_tokens, prompt_version=PROMPT_VERSION,
                                   model=s.fa_orchestrator_model, effort=s.fa_orchestrator_effort, exact_model=True,
-                                  timeout_s=s.fa_orchestrator_timeout_s, ttl_days=1, accept=shape_problem)
+                                  timeout_s=s.fa_orchestrator_timeout_s, ttl_days=1, accept=shape_problem,
+                                  fresh=fresh)
         db.commit()
         if result.data is not None:
             return {"state": "completed", "proposal_raw": result.data, "model": result.model, "input_digest": digest,
@@ -406,6 +427,17 @@ def _ask_fable(db: Session, project: Project, scope: str, payload: dict, budget:
     state = ("substituted" if error.startswith("model_substituted") else
              "unverified" if error.startswith("model_unverified") else "failed")
     return {"state": state, "reason": error, "attempts": attempts}
+
+
+def _ask_on_own_session(project_id: int, scope: str, payload: dict, budget: JobBudget, fresh: bool) -> dict:
+    """One orchestrator call on a database session of its own (calls side by side)."""
+    from app.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        return _ask_orchestrator(db, db.get(Project, project_id), scope, payload, budget, fresh)
+    finally:
+        db.close()
 
 
 def review_calls_today(db: Session, project_id: int) -> int:
@@ -434,7 +466,8 @@ def review_allowance(db: Session, project: Project, due: int) -> tuple[bool, str
     return True, None
 
 
-def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None, *, frozen: dict | None = None) -> None:
+def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None, *, frozen: dict | None = None,
+           fresh: bool = False) -> None:
     """FP1 for every package with drawings, then FP2 for the run. Fills
     `run.review`, `run.review_state`, the package reports' review fields.
     `frozen`: a Retry -- the inputs the first review was given, sent again."""
@@ -459,14 +492,22 @@ def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None
     for p in due:
         payload = ((frozen or {}).get("packages") or {}).get(p["package"]) or _package_input(run.id, p, view)
         inputs["packages"][p["package"]] = payload
-        r = _ask_fable(db, project, f"package_review:{p['package']}", payload, budget)
-        if r["state"] == "completed":
-            r["proposal"], r["notes"] = _validate(r.pop("proposal_raw"), ids)
-        fp1[p["package"]] = r
-        p["orchestrator_review"] = r["state"] if r["state"] == "completed" else f"missing ({r['state']}: {r.get('reason')})"
+    # the package reviews are independent of one another: side by side, each on its own session
+    pool = ThreadPoolExecutor(max_workers=max(1, min(len(due) or 1, s.fa_max_concurrency)))
+    try:
+        futures = {p["package"]: pool.submit(_ask_on_own_session, project.id, f"package_review:{p['package']}",
+                                             inputs["packages"][p["package"]], budget, fresh) for p in due}
+        for p in due:
+            r = futures[p["package"]].result()
+            if r["state"] == "completed":
+                r["proposal"], r["notes"] = _validate(r.pop("proposal_raw"), ids)
+            fp1[p["package"]] = r
+            p["orchestrator_review"] = r["state"] if r["state"] == "completed" else f"missing ({r['state']}: {r.get('reason')})"
+    finally:
+        pool.shutdown(wait=True, cancel_futures=True)
     run_payload = _run_input(run.id, packages, fp1, parts)
     inputs["run"] = run_payload
-    fp2 = _ask_fable(db, project, "run_review", run_payload, budget)
+    fp2 = _ask_orchestrator(db, project, "run_review", run_payload, budget, fresh)
     if fp2["state"] == "completed":
         fp2["proposal"], fp2["notes"] = _validate(fp2.pop("proposal_raw"), ids)
     if fp2["state"] == "completed" and all(r["state"] == "completed" for r in fp1.values()):
@@ -477,13 +518,72 @@ def review(db: Session, project: Project, run: FaInterfaceRun, view: dict | None
         state = "missing"
     reasons = sorted({f"{k}: {r['state']} ({r.get('reason')})" for k, r in fp1.items() if r["state"] != "completed"}
                      | ({f"run: {fp2['state']} ({fp2.get('reason')})"} if fp2["state"] != "completed" else set()))
+    found = (run.review or {}).get("findings")
     run.review = {"fp1": fp1, "fp2": fp2, "reasons": reasons, "model_requested": s.fa_orchestrator_model,
                   "effort": s.fa_orchestrator_effort, "at": utc_now().isoformat(),
-                  "retries": (run.review or {}).get("retries", [])}
+                  "retries": (run.review or {}).get("retries", []), "orchestrator_state": state,
+                  **({"findings": found} if found else {})}
     run.review_inputs = inputs
-    run.review_state = state
+    run.review_state = combined_state(state, found)
     run.package_reports = packages
     flag_modified(run, "package_reports")
+
+
+def combined_state(orchestrator: str, found: dict | None) -> str:
+    """The run's review state: the orchestrator's and the finding review's
+    together. Complete only when both are; missing when the orchestrator's is."""
+    findings_state = (found or {}).get("state", "completed")
+    if orchestrator == "missing":
+        return "missing"
+    if orchestrator == "completed" and findings_state == "completed":
+        return "completed"
+    return "partial"
+
+
+def _findings_summary(record: dict) -> dict:
+    """What the run keeps of its finding review (the outcomes themselves are on
+    the evidence, `ProjectFaInterfaces.reviews`)."""
+    return {"state": record.get("state"), "counts": record.get("counts") or {}, "reasons": record.get("reasons") or [],
+            "model_requested": record.get("model"), "effort": record.get("effort"), "fresh": record.get("fresh"),
+            "items": {gid: {k: i.get(k) for k in ("state", "outcome", "said", "downgraded", "confidence", "equipment",
+                                                   "ref", "floor_keys", "qty", "reason", "evidence", "rationale",
+                                                   "unclear", "engineer_action", "views_shown", "cached")}
+                      for gid, i in (record.get("items") or {}).items()},
+            "at": record.get("at")}
+
+
+def findings_stage(db: Session, project: Project, run: FaInterfaceRun, *, fresh: bool = False, progress=None,
+                   check=None, retry: bool = False) -> dict:
+    """The Opus finding review of every open item of the schedule as it is now,
+    its outcomes written beside the evidence -- replacing the last run's whole
+    (a Retry keeps this run's completed outcomes and asks again only about the
+    items it could not review) -- and the schedule built again with them."""
+    project = db.get(Project, project.id)
+    view = service.build(db, project, apply_reviews=False)    # every item the readings and the engineer leave open
+    row = service.state(db, project)
+    readings = [e for e in row.sources or [] if e.get("status") == "read"]
+    digest = view["current_sources_digest"]
+    kept = {}
+    if retry:
+        old = row.reviews or {}
+        if old.get("sources_digest") == digest and old.get("run_id") == run.id:
+            kept = {gid: i for gid, i in (old.get("items") or {}).items() if i.get("state") == "completed"}
+    open_view = {**view, "verification": [g for g in view["verification"] if g["id"] not in kept]}
+    if progress:
+        progress(0, max(1, len(open_view["verification"])),
+                 f"Opus review of {len(open_view['verification'])} open item(s) before they go to the engineer", None)
+    record = findings.review_all(db, project, open_view, readings, run.agent_reports or [], sources_digest=digest,
+                                 run_id=run.id, fresh=fresh, progress=progress, check=check)
+    if kept:
+        record["items"] = {**kept, **record["items"]}
+        record = findings._finish(record)
+    row = service.state(db, project)
+    row.reviews = record
+    flag_modified(row, "reviews")
+    run.review = {**(run.review or {}), "findings": _findings_summary(record)}
+    db.commit()
+    db.expire_all()
+    return record
 
 
 # --- 5. publication ---------------------------------------------------------------------------------------------
@@ -496,7 +596,7 @@ def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
     for the run. Any one keeps it provisional; nothing it says can raise it."""
     out = []
     review_ = run.review or {}
-    # A package with no drawing at all is already known here, and the prompt asks Fable to name it:
+    # A package with no drawing at all is already known here, and the prompt asks the orchestrator to name it:
     # saying so again is not a signal. A package holding only unread files is (a coverage limitation).
     empty = {p["package"] for p in run.package_reports or []
              if not live_sources(p) and not p.get("unsupported_files") and not p.get("stale")}
@@ -507,16 +607,16 @@ def _orchestrator_signals(run: FaInterfaceRun) -> list[str]:
             continue                                      # a missing review is its own reason (review_state)
         rec = proposal.get("publication_recommendation")
         if rec != "complete_candidate":
-            out.append(f"Fable ({scope}) recommends {rec or 'nothing'}")
+            out.append(f"Opus ({scope}) recommends {rec or 'nothing'}")
         disputes = [c for c in proposal.get("coverage_assessment") or [] if c.get("verdict") == "dispute"]
         if disputes:
-            out.append(f"Fable ({scope}) disputes the coverage of {len(disputes)} drawing(s)")
+            out.append(f"Opus ({scope}) disputes the coverage of {len(disputes)} drawing(s)")
         if proposal.get("rework_requests"):
-            out.append(f"Fable ({scope}) asks for {len(proposal['rework_requests'])} drawing(s) to be reworked")
+            out.append(f"Opus ({scope}) asks for {len(proposal['rework_requests'])} drawing(s) to be reworked")
         suspect = [m for m in proposal.get("missing_or_suspect") or []
                    if not (m.get("issue") == "source_missing" and m.get("package") in empty)]
         if suspect:
-            out.append(f"Fable ({scope}) names {len(suspect)} missing or suspect item(s)")
+            out.append(f"Opus ({scope}) names {len(suspect)} missing or suspect item(s)")
     return out
 
 
@@ -579,8 +679,13 @@ def publication_gate(db: Session, project: Project, run: FaInterfaceRun, view: d
         reasons.append(f"{len(conflicts)} conflict(s) between drawings open: "
                        + ", ".join(f"{g['equipment']} on {g['ref']}" for g in conflicts[:5]))
     if run.review_state != "completed":
-        reasons.append(f"the Fable review is {run.review_state}: "
-                       + "; ".join((run.review or {}).get("reasons") or [])[:400])
+        found = (run.review or {}).get("findings") or {}
+        reasons.append(f"the Opus review is {run.review_state}: "
+                       + "; ".join(((run.review or {}).get("reasons") or []) + (found.get("reasons") or []))[:400])
+    trace = run.trace or {}
+    if trace.get("fresh") and trace.get("not_reread"):
+        reasons.append(f"the fresh reread is incomplete: {len(trace['not_reread'])} drawing(s) not read again ("
+                       + ", ".join(f"{x.get('filename')}: {x.get('why')}" for x in trace["not_reread"][:5]) + ")")
     reasons.extend(_orchestrator_signals(run))
     return reasons
 
@@ -595,18 +700,43 @@ def decide_publication(db: Session, project: Project, run: FaInterfaceRun, view:
 # --- the run ---------------------------------------------------------------------------------------------------
 
 
+def _schedule_summary(view: dict) -> dict:
+    """The schedule's figures, kept with a run so a fresh one can be compared."""
+    t = view.get("totals") or {}
+    return {"interface_lines": t.get("items"), "monitoring": t.get("monitoring"), "control": t.get("control"),
+            "interface_points": t.get("interface_points"), "modules": t.get("module_qty"),
+            "modules_by_type": t.get("modules"), "verification_required": len(view.get("verification") or []),
+            "rejected": len(view.get("rejected") or []), "settled": len(view.get("settled") or []),
+            "view_state": view.get("view_state"), "primary": view.get("primary"),
+            "sources_digest": view.get("current_sources_digest"),
+            "rows": sorted(r["id"] for r in view.get("rows") or []),
+            "verification": sorted(g["id"] for g in view.get("verification") or [])}
+
+
 def run_workflow(db: Session, project: Project, *, user_id: int | None = None, job_id: int | None = None,
-                 progress=None, check=None) -> dict:
+                 progress=None, check=None, fresh: bool = False) -> dict:
     s = get_settings()
     run = FaInterfaceRun(project_id=project.id, job_id=job_id, status="running", created_by_id=user_id,
-                         manifest=[], agent_reports=[], package_reports=[], review={}, review_inputs={})
+                         manifest=[], agent_reports=[], package_reports=[], review={}, review_inputs={},
+                         trace={"fresh": fresh})
     db.add(run)
     db.commit()
     try:
+        # the schedule as it stands before this run, kept for comparison
+        try:
+            before = _schedule_summary(service.build(db, project))
+        except Exception as exc:  # noqa: BLE001 -- a comparison that cannot be made is said, the run goes on
+            before = {"error": f"{type(exc).__name__}: {exc}"[:300]}
+        run.trace = {"fresh": fresh, "before": before}
+        db.commit()
         if progress:
-            progress(0, 1, "Reading the drawings", None)
-        service.scan_project(db, project, user_id=user_id, progress=progress, check=check, job_id=job_id,
-                             look=False, advance=False)
+            progress(0, 1, "Reading every drawing again (force-fresh)" if fresh else "Reading the drawings", None)
+        read = service.scan_project(db, project, user_id=user_id, progress=progress, check=check, job_id=job_id,
+                                    look=False, advance=False, fresh=fresh)
+        run.trace = {**run.trace, "read": {k: read.get(k) for k in ("drawings", "read", "reread", "not_reread",
+                                                                     "superseded", "failed")},
+                     "reread": read.get("reread") or [], "not_reread": read.get("not_reread") or []}
+        db.commit()
         row = db.query(ProjectFaInterfaces).filter(ProjectFaInterfaces.project_id == project.id).one()
         db.refresh(row)
         sources = [dict(e) for e in row.sources or []]
@@ -616,13 +746,13 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
                          "agent_id": f"DA-{run.id}-{source_id(e)[:12]}"} for e in sources]
         db.commit()
         # drawing agents
-        model_ok, model_why = readiness(s.drawing_review_model) if s.ai_enabled else (False, "AI is not enabled")
+        model_ok, model_why = readiness(s.drawing_review_model)
         if model_ok:
-            # the orchestrator's review is mandatory: no look is paid for that it could not then review --
+            # the review is mandatory: no look is paid for that it could not then review --
             # neither when the route cannot serve its model exactly nor when its allowance has no room
             ready, why = readiness(s.fa_orchestrator_model)
             if not ready:
-                model_ok, model_why = False, f"the orchestrator ({s.fa_orchestrator_model}) cannot be served: {why}"
+                model_ok, model_why = False, f"the reviewer ({s.fa_orchestrator_model}) cannot be served: {why}"
         if model_ok:
             due = len({e.get("discipline") for e in sources if e.get("kind") != "unsupported"})
             model_ok, model_why = review_allowance(db, project, due)
@@ -635,7 +765,8 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
                                           f"{max(1, s.fa_agent_parallel)} at a time", None)
             pool = ThreadPoolExecutor(max_workers=max(1, s.fa_agent_parallel))
             try:
-                futures = {pool.submit(_run_agent, run.id, project.id, e, model_ok, model_why, check): e for e in to_look}
+                futures = {pool.submit(_run_agent, run.id, project.id, e, model_ok, model_why, check, fresh): e
+                           for e in to_look}
                 for done, future in enumerate(as_completed(futures), 1):
                     e = futures[future]
                     report, v = future.result()
@@ -673,14 +804,17 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
         run.agent_reports = list(reports.values())
         db.commit()                                   # before re-reading the evidence below
         db.expire_all()
+        # the Opus finding review: every open item before it goes to the engineer
+        found = findings_stage(db, project, run, fresh=fresh, progress=progress, check=check)
         view = service.build(db, db.get(Project, project.id))
         run.sources_digest = view["current_sources_digest"]
         run.package_reports = package_reports(view, run.agent_reports)
         db.commit()
         # the orchestrator: mandatory
         if progress:
-            progress(0, 1, "The Fable orchestrator is reviewing the drawing agents' reports", None)
-        review(db, db.get(Project, project.id), run, view)
+            progress(0, 1, "The Opus orchestrator is reviewing the drawing agents' reports", None)
+        review(db, db.get(Project, project.id), run, view, fresh=fresh)
+        run.trace = {**(run.trace or {}), **_trace_after(run, view, found, fresh)}
         run.publication_state = decide_publication(db, db.get(Project, project.id), run, view)
         run.status = "completed"
         run.finished_at = utc_now()
@@ -699,6 +833,36 @@ def run_workflow(db: Session, project: Project, *, user_id: int | None = None, j
         raise
 
 
+def _trace_after(run: FaInterfaceRun, view: dict, found: dict, fresh: bool) -> dict:
+    """What the run did, said whole: the schedule after it, each drawing's look,
+    the finding review, the engineer's answers the readings no longer bear out,
+    and -- for a fresh run -- whether it was complete, and if not, why not."""
+    looks = [{"filename": a.get("filename"), "coverage_state": a.get("coverage_state"),
+              "looked_this_run": (a.get("look") or {}).get("looked_this_run"),
+              "labels_expected": (a.get("look") or {}).get("labels_expected"),
+              "labels_looked": (a.get("look") or {}).get("labels_looked")}
+             for a in run.agent_reports or [] if a.get("look")]
+    incomplete = []
+    trace = run.trace or {}
+    for x in trace.get("not_reread") or []:
+        if fresh or x.get("status") != "read":      # carried forward unchanged is what a normal run does
+            incomplete.append(f"{x.get('filename')} not read again ({x.get('why')})")
+    for a in run.agent_reports or []:
+        if a.get("status") == "read" and a.get("coverage_state") != "complete":
+            incomplete.append(f"{a.get('filename')}: drawing agent {a.get('coverage_state')} ({a.get('coverage_reason')})")
+        look = a.get("look") or {}
+        if fresh and look and (look.get("looked_this_run") or 0) < (look.get("labels_expected") or 0):
+            incomplete.append(f"{a.get('filename')}: {look.get('looked_this_run') or 0} of {look.get('labels_expected')} "
+                              "damper labels looked at again")
+    if found.get("state") != "completed":
+        incomplete.append(f"Opus finding review {found.get('state')}: " + "; ".join((found.get("reasons") or [])[:3]))
+    if run.review_state != "completed" and (run.review or {}).get("orchestrator_state") != "completed":
+        incomplete.append(f"Opus orchestrator review {(run.review or {}).get('orchestrator_state')}")
+    return {"after": _schedule_summary(view), "looks": looks, "decision_conflicts": view.get("decision_conflicts") or [],
+            "findings": {"state": found.get("state"), "counts": found.get("counts") or {}},
+            "complete": not incomplete, "incomplete": incomplete[:40]}
+
+
 def summary(run: FaInterfaceRun) -> dict:
     agents = run.agent_reports or []
     by_state: dict[str, int] = {}
@@ -707,10 +871,17 @@ def summary(run: FaInterfaceRun) -> dict:
     fp1 = (run.review or {}).get("fp1") or {}
     fp2 = (run.review or {}).get("fp2") or {}
     calls = sum(len(r.get("attempts") or []) for r in list(fp1.values()) + [fp2])
+    found = (run.review or {}).get("findings") or {}
+    trace = run.trace or {}
     return {"run_id": run.id, "status": run.status, "agents": len(agents), "coverage": by_state,
             "packages": len(run.package_reports or []), "review_state": run.review_state,
-            "review_reasons": (run.review or {}).get("reasons", []), "publication_state": run.publication_state,
-            "publication_reasons": run.publication_reasons or [], "orchestrator_calls": calls}
+            "review_reasons": ((run.review or {}).get("reasons") or []) + (found.get("reasons") or []),
+            "publication_state": run.publication_state,
+            "publication_reasons": run.publication_reasons or [], "orchestrator_calls": calls,
+            "orchestrator_state": (run.review or {}).get("orchestrator_state"),
+            "findings_review": {"state": found.get("state"), "counts": found.get("counts") or {}},
+            "fresh": bool(trace.get("fresh")), "complete": trace.get("complete"),
+            "reread": len(trace.get("reread") or []), "not_reread": len(trace.get("not_reread") or [])}
 
 
 def view(run: FaInterfaceRun | None) -> dict | None:
@@ -730,7 +901,9 @@ def view(run: FaInterfaceRun | None) -> dict | None:
                                "notes": fp2.get("notes")},
                        "retries": (run.review or {}).get("retries", []),
                        "retries_today": run.review_retries if run.review_retry_day == utc_now().date().isoformat() else 0,
-                       "retries_per_day": get_settings().fa_orchestrator_retries_per_day},
+                       "retries_per_day": get_settings().fa_orchestrator_retries_per_day,
+                       "findings": (run.review or {}).get("findings")},
+            "trace": run.trace or {},
             "accepted_at": run.accepted_at.isoformat() if run.accepted_at else None,
             "sources_digest": run.sources_digest}
 
@@ -787,10 +960,15 @@ def release_retry(db: Session, run: FaInterfaceRun) -> None:
 
 
 def run_retry(db: Session, project: Project, run: FaInterfaceRun) -> dict:
-    """The orchestrator again, on the run's frozen inputs -- no drawing re-read,
-    the same package payloads -- then the publication gate on what is current now."""
+    """The reviews again -- the finding review on the items it could not review,
+    then the orchestrator on the run's frozen inputs; no drawing re-read, the
+    same package payloads -- then the publication gate on what is current now."""
     if run.publication_state == "accepted":
         raise ValueError("This run is accepted: its review is final")
+    if ((run.review or {}).get("findings") or {}).get("state") not in (None, "completed"):
+        findings_stage(db, project, run, fresh=bool((run.trace or {}).get("fresh")), retry=True)
+        run = db.get(FaInterfaceRun, run.id)
+        project = db.get(Project, project.id)
     review(db, project, run, None if (run.review_inputs or {}).get("view") else service.build(db, project),
            frozen=run.review_inputs or {})
     run.review = {**run.review, "retries": (run.review or {}).get("retries", []) + [utc_now().isoformat()]}

@@ -240,13 +240,16 @@ def _gone_reason(old: dict, listing: "evidence.Listing", folder_of: dict[str, "e
     return "missing"
 
 
-def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: bool, check, converter_box: list) -> dict:
+def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: bool, check, converter_box: list,
+                      fresh: bool = False) -> dict:
     """One listed drawing (S4.2 E1/E2/E3): carried forward unchanged without
-    opening it (C6), or hashed (a cloud-only file is downloaded by that) and read."""
+    opening it (C6), or hashed (a cloud-only file is downloaded by that) and read.
+    `fresh`: never carried forward -- hashed, converted again and read again."""
     from app.ifc.dxf import convert
 
     pub = _pub(src)
-    if (old and old.get("status") == "read" and old.get("size") == src.get("size") and old.get("mtime") == src.get("mtime")
+    if (not fresh and old and old.get("status") == "read" and old.get("size") == src.get("size")
+            and old.get("mtime") == src.get("mtime")
             and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
         return {**old, **pub}
     if src.get("cloud_only") and not open_cloud:
@@ -258,7 +261,7 @@ def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: b
         if src.get("cloud_only"):
             return _not_current(pub, old, "not_synced", f"OneDrive could not bring the file down: {exc}", never_read="unread")
         return _not_current(pub, old, "read_failed", f"The file could not be opened: {exc}", never_read="failed")
-    if (old and old.get("status") == "read" and old.get("sha256") == sha
+    if (not fresh and old and old.get("status") == "read" and old.get("sha256") == sha
             and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
         return {**old, **pub, "sha256": sha}          # touched, not changed
     entry = {**_bare(pub), "sha256": sha}
@@ -266,14 +269,18 @@ def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: b
         dxf = path
         if path.suffix.lower() == ".dwg":
             dxf = cache_folder(project) / f"{sha[:24]}.dxf"
-            if not dxf.is_file():
+            if fresh or not dxf.is_file():
                 converter_box[0] = converter_box[0] or convert.find_converter()
                 if converter_box[0] is None:
                     raise RuntimeError("No DWG converter on the PC the IFC worker runs on: install AutoCAD or the "
                                        "free ODA File Converter, or file the drawing as DXF too.")
                 dxf.parent.mkdir(parents=True, exist_ok=True)
                 started = datetime.now()
-                convert.convert_dwg_to_dxf(path, dxf, converter_box[0])
+                # fresh: converted again beside the copy, which is replaced only by a good conversion
+                target = dxf.with_name(f"{dxf.stem}.fresh.dxf") if dxf.is_file() else dxf
+                convert.convert_dwg_to_dxf(path, target, converter_box[0])
+                if target != dxf:
+                    os.replace(target, dxf)
                 entry["converted_in"] = round((datetime.now() - started).total_seconds(), 1)
         result = scan.read(str(dxf), src["discipline"], check=check)
         return {**entry, "status": "read", "result": result, "read_at": utc_now().isoformat()}
@@ -285,14 +292,14 @@ def _read_folder_file(db, project, src: dict, old: dict | None, *, open_cloud: b
         return _not_current(entry, old, "read_failed", str(exc) or type(exc).__name__, never_read="failed")
 
 
-def _read_fa_ifc(src: dict, old: dict | None, *, check) -> dict:
-    """A fire alarm IFC drawing in force (S4.2 F1-F3)."""
+def _read_fa_ifc(src: dict, old: dict | None, *, check, fresh: bool = False) -> dict:
+    """A fire alarm IFC drawing in force (S4.2 F1-F3); `fresh`: read again."""
     pub = _pub(src)
     if not src.get("dxf_exists"):
         return _not_current(pub, old, "read_failed",
                             "The drawing's DXF is not on this PC: import the fire alarm IFC drawing again.",
                             never_read="failed")
-    if (old and old.get("status") == "read" and old.get("sha256") == src.get("sha256")
+    if (not fresh and old and old.get("status") == "read" and old.get("sha256") == src.get("sha256")
             and (old.get("result") or {}).get("scan_version") == scan.SCAN_VERSION):
         return {**old, **pub}
     try:
@@ -308,7 +315,7 @@ def _read_fa_ifc(src: dict, old: dict | None, *, check) -> dict:
 
 def scan_project(db: Session, project: Project, user_id: int | None = None, progress=None, check=None,
                  hydrate: bool | None = None, job_id: int | None = None, look: bool = True,
-                 advance: bool = True) -> dict:
+                 advance: bool = True, fresh: bool = False) -> dict:
     """Read the project's drawings into the schedule's evidence (FI-P1 r3 Stage 0.1).
 
     The folder is listed first (stat only). An unreachable folder fails the job
@@ -318,7 +325,13 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
     C1/C3/C6. A missing file is not "removed" unless the engineer confirms it or
     a newer revision of it is read. The whole result is written in one commit,
     only if no one else wrote the evidence meanwhile. The published schedule
-    moves to this reading only when every rule of S7/C2 holds."""
+    moves to this reading only when every rule of S7/C2 holds.
+
+    `fresh` (a force-fresh reread): nothing is carried forward -- every drawing
+    and workbook listed is opened, a DWG converted again, and read again, and
+    the reading's damper look is dropped with the old reading. The drawings
+    themselves, the engineer's decisions and added items are never touched.
+    The result says which files were read now (`reread`) and which were not."""
     row = state(db, project)
     # A first read makes the project's row: committed now, not held open through
     # minutes of reading while the job's progress is written beside it.
@@ -335,22 +348,39 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
     todo = [s for s in found if not s["superseded"]]
     done: dict[tuple, dict] = {}
     converter_box: list = [None]
-    for src in found:
-        if check:
-            check()
-        key = (src["discipline"], src["relative_path"])
-        old = before.get(key)
-        if src["superseded"]:
-            done[key] = {**_bare(_pub(src)), "status": "superseded", "last_known": _last_known(old)}
-            continue
-        n = todo.index(src) + 1
-        if progress:
-            progress(n - 1, len(todo), f"Reading {src['filename']} ({DISCIPLINE_NAMES[src['discipline']]})", src["filename"])
+
+    def read_one(src: dict) -> dict:
+        old = before.get((src["discipline"], src["relative_path"]))
         if src["kind"] == "fa_ifc":
-            done[key] = _read_fa_ifc(src, old, check=check)
+            return _read_fa_ifc(src, old, check=check, fresh=fresh)
+        return _read_folder_file(db, project, src, old, open_cloud=open_cloud, check=check,
+                                 converter_box=converter_box, fresh=fresh)
+
+    # FA_READ_PARALLEL drawings at once: each DWG's conversion is a process of its own; the
+    # results are kept in the folder's order whatever order they finish in
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    results: dict[tuple, dict] = {}
+    if progress and todo:
+        progress(0, len(todo), f"Reading {len(todo)} drawing(s), {max(1, settings.fa_read_parallel)} at a time", None)
+    pool = ThreadPoolExecutor(max_workers=max(1, settings.fa_read_parallel))
+    try:
+        futures = {pool.submit(read_one, src): src for src in todo}
+        for n, future in enumerate(as_completed(futures), 1):
+            src = futures[future]
+            results[(src["discipline"], src["relative_path"])] = future.result()
+            if check:
+                check()
+            if progress:
+                progress(n, len(todo), f"Read {src['filename']} ({DISCIPLINE_NAMES[src['discipline']]})", src["filename"])
+    finally:
+        pool.shutdown(wait=True, cancel_futures=True)
+    for src in found:
+        key = (src["discipline"], src["relative_path"])
+        if src["superseded"]:
+            done[key] = {**_bare(_pub(src)), "status": "superseded", "last_known": _last_known(before.get(key))}
         else:
-            done[key] = _read_folder_file(db, project, src, old, open_cloud=open_cloud, check=check,
-                                          converter_box=converter_box)
+            done[key] = results[key]
     # C3: an older revision is retired only by a newer one that was read
     read_stems: dict[tuple, tuple[str, int]] = {}
     for e in done.values():
@@ -375,7 +405,7 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
                 "discipline": code, "kind": "unsupported", "relative_path": item.relative_path,
                 "filename": item.filename, "size": item.size, "mtime": item.mtime, "cloud_only": item.cloud_only,
                 "status": "unsupported"}
-    done.update(_read_schedules(project, listing, before))
+    done.update(_read_schedules(project, listing, before, fresh=fresh))
     # entries not listed now (S4.2 E4-E6, EL; F4/F5; C1)
     now = utc_now().isoformat()
     in_force = {e["relative_path"] for e in done.values() if e.get("kind") == "fa_ifc"}
@@ -420,9 +450,10 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
                 e["duplicate_of"] = first_of[e["sha256"]]
             else:
                 first_of[e["sha256"]] = e["relative_path"]
-    if look and any(visual.wanted(s) for s in read_now):
+    # the legacy read looks only when the platform's AI is on (the drawing workflow looks with its own agents)
+    if look and settings.ai_enabled and any(visual.wanted(s) for s in read_now):
         try:
-            visual.check(db, project, read_now, check=check,
+            visual.check(db, project, read_now, check=check, fresh=fresh,
                          progress=(lambda d, t, m, f=None: progress(d, t, m, f)) if progress else None)
         except Exception as exc:  # noqa: BLE001 -- the reading stands; the dampers stay held, said so
             from app.services import jobs
@@ -449,7 +480,23 @@ def scan_project(db: Session, project: Project, user_id: int | None = None, prog
     db.expire(row)
     if progress:
         progress(len(todo), len(todo), "Read", None)
-    return {"drawings": len(todo), "read": len(read_now), "published": publish is not None,
+    # what this read opened and read now, and what it did not (carried forward, failed, not synced)
+    reread, not_reread = [], []
+    for key, e in done.items():
+        if e.get("kind") not in ("folder", "fa_ifc", "schedule") or e.get("status") in ("superseded", "removed"):
+            continue
+        old = before.get(key) or {}
+        if e.get("status") == "read" and e.get("read_at") and e.get("read_at") != old.get("read_at"):
+            reread.append(e["relative_path"])
+        else:
+            not_reread.append({"relative_path": e.get("relative_path"), "filename": e.get("filename"),
+                               "status": e.get("status"),
+                               "why": ("carried forward unchanged" if e.get("status") == "read" else
+                                       e.get("stale_reason") or e.get("status")),
+                               "error": (e.get("error") or "")[:300] or None})
+    return {"drawings": len(todo), "read": len(read_now), "published": publish is not None, "fresh": fresh,
+            "reread": sorted(reread), "not_reread": not_reread,
+            "superseded": sorted(e["relative_path"] for e in done.values() if e.get("status") == "superseded"),
             "failed": [{"filename": s["filename"], "error": s.get("error")} for s in sources
                        if s.get("status") == "failed" or (s.get("status") == "stale" and s.get("error"))]}
 
@@ -553,11 +600,12 @@ def confirm_removed(db: Session, project: Project, user_id: int, relative_paths:
 SCHEDULE = "SCHED"
 
 
-def _read_schedules(project: Project, listing: "evidence.Listing", before: dict) -> dict[tuple, dict]:
+def _read_schedules(project: Project, listing: "evidence.Listing", before: dict, *,
+                    fresh: bool = False) -> dict[tuple, dict]:
     """The mechanical equipment schedules (Excel) in the project's mechanical
-    IFC folders: read again unless unchanged, hashed so the published
-    reading's identity changes with them (C8). A workbook not listed now
-    moves by the folder rules (S4.2), never silently out."""
+    IFC folders: read again unless unchanged (always, when `fresh`), hashed so
+    the published reading's identity changes with them (C8). A workbook not
+    listed now moves by the folder rules (S4.2), never silently out."""
     out: dict[tuple, dict] = {}
     if listing.root == "ok" and listing.mechanical is not None:
         for item in listing.mechanical.workbooks:
@@ -566,7 +614,8 @@ def _read_schedules(project: Project, listing: "evidence.Listing", before: dict)
             pub = {"discipline": SCHEDULE, "kind": "schedule", "relative_path": item.relative_path,
                    "filename": item.filename, "size": item.size, "mtime": item.mtime, "cloud_only": item.cloud_only,
                    "superseded": False}
-            if (old and old.get("status") == "read" and old.get("size") == item.size and old.get("mtime") == item.mtime
+            if (not fresh and old and old.get("status") == "read" and old.get("size") == item.size
+                    and old.get("mtime") == item.mtime
                     and (old.get("result") or {}).get("schedule_version") == SCH.SCHEDULE_VERSION and old.get("sha256")):
                 out[key] = {**old, **pub}
                 continue
@@ -745,22 +794,24 @@ def _row(rule_key: str, *, floor: str, floors: Floors, tag: str | None, location
             "typical": typical, "status": "scheduled"}
 
 
-def build(db: Session, project: Project) -> dict:
+def build(db: Session, project: Project, *, apply_reviews: bool = True) -> dict:
     """The schedule, its summaries and what is left to verify, from the
     drawings read and the engineer's answers -- the **primary** view (S8):
     built from the readings current now, or, when the evidence behind the
     published schedule is not verified now, from the published readings,
     said so. Decisions and manual items always apply live to either view.
-    Stale readings are listed apart and never counted."""
+    Stale readings are listed apart and never counted. `apply_reviews` off: the
+    schedule as the readings and the engineer leave it, before any Opus finding
+    review -- what the next review is asked about."""
     row = state(db, project)
     floors = Floors(db, project)
     listing = evidence.take(project, DISCIPLINES)
     fa_now = fa_in_force(db, project)
     sources = row.sources or []
     view = evidence.choose(sources, row.published, listing, fa_now)
-    current = _assemble(row, view.current, floors)
+    current = _assemble(row, view.current, floors, reviews=apply_reviews)
     if view.primary == "published":
-        primary = _assemble(row, (row.published or {}).get("sources") or [], Floors(db, project))
+        primary = _assemble(row, (row.published or {}).get("sources") or [], Floors(db, project), reviews=apply_reviews)
     elif view.primary == "none":
         primary = _assemble(row, [], Floors(db, project), manual=False)
     else:
@@ -785,9 +836,29 @@ def build(db: Session, project: Project) -> dict:
         "last_known": _last_known_list(sources, current_keys, listing.root),
         "decisions_not_applied": _decisions_not_applied(row, sources, current_keys),
         "evidence": _evidence_counts(sources, listing, current_keys, files),
+        "review": _review_summary(row, primary, view.current if view.primary == "current" else None),
     }
+    out["decision_conflicts"] = decision_conflicts(row, primary, sources, current_keys) if view.primary == "current" else []
     out["limitations"] = limitations(out)
     return out
+
+
+def _review_summary(row: ProjectFaInterfaces, primary: dict, readings: list[dict] | None) -> dict | None:
+    """The Opus finding review behind this view: which run, whether it applies to
+    the readings shown, and what it decided."""
+    rv = getattr(row, "reviews", None) or {}
+    if not rv:
+        return None
+    applies = readings is not None and bool(reviews_in_force(row, readings))
+    counts: dict[str, int] = {}
+    for g in primary["verification"] + primary["settled"]:
+        r = g.get("review")
+        if r:
+            key = r.get("outcome") if r.get("state") == "completed" else f"not_reviewed:{r.get('state')}"
+            counts[key] = counts.get(key, 0) + 1
+    return {"run_id": rv.get("run_id"), "at": rv.get("at"), "model": rv.get("model"), "effort": rv.get("effort"),
+            "fresh": rv.get("fresh"), "state": rv.get("state"), "applies": applies, "counts": counts,
+            "reason": None if applies else "made on other readings than the ones shown: not applied"}
 
 
 def limitations(view: dict) -> list[dict]:
@@ -873,7 +944,8 @@ def _evidence_counts(sources: list[dict], listing: "evidence.Listing", current_k
     return counts
 
 
-def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", *, manual: bool = True) -> dict:
+def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", *, manual: bool = True,
+              reviews: bool = True) -> dict:
     """The schedule from a set of readings and the engineer's live answers."""
     groups: list[dict] = []
     conflicts: list[str] = []
@@ -915,6 +987,8 @@ def _assemble(row: ProjectFaInterfaces, readings: list[dict], floors: "Floors", 
             g["history"] = d["history"][-20:]
         if g["status"] == "resolved":
             rows.extend(_resolved_rows(g, d, floors))
+    if reviews:
+        _apply_reviews(row, readings, groups, decisions, rows, conflicts, floors)
     if manual:
         for m in row.manual or []:
             rows.extend(_manual_rows(m, floors))
@@ -1495,7 +1569,10 @@ def _gate_rows(gates: list[dict], floors: Floors, conflicts: list[str], decision
                                    "revision": per[sid][0]["src"].get("revision"),
                                    "points": len(per[sid]),
                                    "settled": sum(1 for e in per[sid] if e["gate"]["settled"]),
-                                   "connection_points": _gate_points(per[sid])} for sid in sids]}
+                                   "connection_points": _gate_points(per[sid])} for sid in sids],
+                     "points": [p for sid in sids for e in per[sid]
+                                for p in _points(e["src"], [{"sheet": e["sheet"], "x": e["anchor"][0],
+                                                             "y": e["anchor"][1], "text": e["text"]}])][:MAX_POINTS]}
             if governing and chosen is None:
                 group["decision_not_applied"] = True
                 group["reason"] = (f"The engineer chose {governing} to govern, but "
@@ -1552,7 +1629,10 @@ def _conflict_groups(held: list[dict], floors: Floors) -> list[dict]:
                     "proposed_floor_keys": [c["floor"]], "proposed_floors": [floors.name(c["floor"])],
                     "proposed_qty": None, "tags": [], "location": "", "labels": len(c["entries"]),
                     "evidence": counts, "contacts": rule.contacts, "monitoring": rule.monitoring,
-                    "control": rule.control, "status": "open", "conflict": True})
+                    "control": rule.control, "status": "open", "conflict": True,
+                    "points": [p for e in c["entries"]
+                               for p in _points(e["src"], [{"sheet": e["sheet"], "x": e["anchor"][0], "y": e["anchor"][1],
+                                                            "text": e["text"]}])][:MAX_POINTS]})
     return out
 
 
@@ -1596,7 +1676,7 @@ def _once(rows: list[dict], conflicts: list[str]) -> list[dict]:
     drawing places, an engineer confirmed from a schedule and added again is
     the one item. The drawing's line stands, then the engineer's, then an
     added one; the other is dropped and said."""
-    order = {"drawing": 0, "engineer": 1, "manual": 2}
+    order = {"drawing": 0, "engineer": 1, "review": 2, "manual": 3}
     kept: dict[tuple[str, str], dict] = {}
     out = []
     for r in sorted(rows, key=lambda r: order.get(r["basis"], 9)):
@@ -1635,6 +1715,130 @@ def _resolved_rows(g: dict, d: dict, floors: Floors) -> list[dict]:
     return rows
 
 
+REVIEW_PRESENT, REVIEW_EXCLUDED = "review_present", "review_excluded"
+_DIGESTED = ("id", "key", "labels", "proposed_floor_keys", "proposed_qty", "tags", "evidence", "source", "ref")
+
+
+def group_digest(g: dict) -> str:
+    """What a verification item is, apart from any answer on it: a review is
+    applied only to the item exactly as it was reviewed."""
+    import json
+
+    return hashlib.sha256(json.dumps([g.get(k) for k in _DIGESTED], sort_keys=True, default=str).encode()).hexdigest()
+
+
+def reviews_in_force(row: ProjectFaInterfaces, readings: list[dict]) -> dict[str, dict]:
+    """The Opus finding review's outcomes, by item -- only when they were made
+    on exactly these readings (the run's sources digest): a review of other
+    readings is never applied, nor mixed with a newer one."""
+    rv = getattr(row, "reviews", None) or {}
+    if not rv.get("items") or rv.get("sources_digest") != evidence.digest(readings):
+        return {}
+    return rv["items"]
+
+
+def _apply_reviews(row: ProjectFaInterfaces, readings: list[dict], groups: list[dict], decisions: dict,
+                   rows: list[dict], conflicts: list[str], floors: Floors) -> None:
+    """The Opus finding review on each item still open: present -- scheduled on
+    its evidence by the interface rules; absent or not an interface -- set aside,
+    not counted, kept with its evidence; unresolved -- left for the engineer
+    with what remains unclear. An engineer's answer is never overridden: where
+    the review disagrees with it, the disagreement is said."""
+    reviews = reviews_in_force(row, readings)
+    if not reviews:
+        return
+    for g in groups:
+        rv = reviews.get(g["id"])
+        if rv is None or rv.get("group_digest") != group_digest(g):
+            continue
+        g["review"] = {k: v for k, v in rv.items() if k != "group_digest"}
+        d = decisions.get(g["id"])
+        if d:
+            clash = _review_clash(d, rv, floors)
+            if clash:
+                g["review_conflict"] = clash
+                conflicts.append(f"{g['equipment']} ({g['ref']}): {clash}")
+            continue
+        if g["status"] != "open" or rv.get("state") != "completed":
+            continue
+        if rv.get("outcome") == "present":
+            g["status"] = REVIEW_PRESENT
+            rows.extend(_review_rows(g, rv, floors))
+        elif rv.get("outcome") in ("absent", "not_applicable"):
+            g["status"] = REVIEW_EXCLUDED
+
+
+def _review_clash(d: dict, rv: dict, floors: Floors) -> str | None:
+    """Where the Opus review of the drawings disagrees with the engineer's answer."""
+    status, outcome = d.get("status"), rv.get("outcome")
+    if rv.get("state") != "completed" or outcome == "unresolved" or status in (None, "open", "governed"):
+        return None
+    said = f"{(rv.get('rationale') or '')[:200]}"
+    if status == "resolved":
+        mine = f"{d.get('qty')} on {', '.join(floors.name(k) for k in d.get('floor_keys') or [])}"
+        if outcome in ("absent", "not_applicable"):
+            return (f"the engineer counted {mine}; the Opus review found it {outcome.replace('_', ' ')} -- {said}. "
+                    "The engineer's answer stands: check it.")
+        if outcome == "present" and (sorted(d.get("floor_keys") or []) != sorted(rv.get("floor_keys") or [])
+                                     or int(d.get("qty") or 0) != int(rv.get("qty") or 0)):
+            theirs = f"{rv.get('qty')} on {', '.join(floors.name(k) for k in rv.get('floor_keys') or [])}"
+            return f"the engineer counted {mine}; the Opus review {theirs} -- {said}. The engineer's answer stands: check it."
+    if status == "dismissed" and outcome == "present":
+        return f"the engineer dismissed it; the Opus review found it present -- {said}. The engineer's answer stands: check it."
+    return None
+
+
+def _review_rows(g: dict, rv: dict, floors: Floors) -> list[dict]:
+    """An item the Opus review found present: its quantity on each floor it
+    named, by the interface matrix's rule, traceable to the evidence it cited."""
+    tags = [t for t in (rv.get("tags") or []) if t] or g.get("tags") or []
+    refs = ", ".join(f"{r.get('id')} {r.get('what', '')}".strip() for r in rv.get("evidence") or [])
+    rows, n = [], 0
+    for k in rv.get("floor_keys") or []:
+        for i in range(int(rv.get("qty") or 0)):
+            rows.append(_row(g["key"], floor=k, floors=floors, tag=tags[n] if n < len(tags) else None,
+                             location=rv.get("location") or g.get("location", ""),
+                             description=f"{BY_KEY[g['key']].name} (found present by the Opus review)",
+                             discipline=g["discipline"], source=g["source"], drawing_ref=g["ref"],
+                             confidence="Opus reviewed", basis="review", row_id=f"{g['id']}|{k}|{i}",
+                             evidence=f"{g['evidence']} -- Opus review ({rv.get('confidence')}): "
+                                      f"{(rv.get('rationale') or '')[:300]}" + (f" [evidence: {refs}]" if refs else "")))
+            n += 1
+    return rows
+
+
+def decision_conflicts(row: ProjectFaInterfaces, out: dict, sources: list[dict], current_keys: set) -> list[dict]:
+    """The engineer's answers the readings in force no longer bear out, said and
+    never dropped: an answer on a line or item the readings do not give any
+    more, and an answer that differs from what the readings now propose."""
+    known = ({r["id"] for r in out["rows"] + out["rejected"]} | {g["id"] for g in out["verification"] + out["settled"]})
+    not_current = {(e.get("discipline"), e.get("relative_path")) for e in sources
+                   if (e.get("discipline"), e.get("relative_path")) not in current_keys}
+    items = {g["id"]: g for g in out["verification"] + out["settled"]}
+    found = []
+    for decision_id, d in (row.decisions or {}).items():
+        parts = decision_id.split("|")
+        if decision_id.startswith("manual|") or (len(parts) >= 2 and (parts[0], parts[1]) in not_current):
+            continue                                  # said in decisions_not_applied
+        what = {k: d.get(k) for k in ("status", "qty", "floor_keys", "reason", "by", "at") if d.get(k) not in (None, "", [])}
+        if decision_id not in known and not any(r["id"].startswith(decision_id) for r in out["rows"]):
+            found.append({"id": decision_id, "decision": what,
+                          "conflict": "the readings in force no longer give this line or item: the answer is kept, "
+                                      "not applied -- check whether it still holds"})
+            continue
+        g = items.get(decision_id)
+        if g is not None and d.get("status") == "resolved" and g.get("proposed_qty") is not None \
+                and (int(g["proposed_qty"]) != int(d.get("qty") or 0)
+                     or (g.get("proposed_floor_keys") and sorted(g["proposed_floor_keys"]) != sorted(d.get("floor_keys") or []))):
+            found.append({"id": decision_id, "decision": what,
+                          "conflict": f"the reading now proposes {g['proposed_qty']} on "
+                                      f"{', '.join(g.get('proposed_floors') or []) or 'no floor'}; the engineer's "
+                                      f"{d.get('qty')} stands -- check it"})
+        if g is not None and g.get("review_conflict"):
+            found.append({"id": decision_id, "decision": what, "conflict": g["review_conflict"]})
+    return found
+
+
 def _manual_rows(m: dict, floors: Floors) -> list[dict]:
     """An item the engineer added, with the drawing they saw it on."""
     rule = BY_KEY[m["key"]]
@@ -1654,6 +1858,17 @@ def _manual_rows(m: dict, floors: Floors) -> list[dict]:
     return rows
 
 
+def _points(src: dict, items: list[dict], sheet: str | None = None) -> list[dict]:
+    """Where on its drawing an item was read (model space): what the Opus
+    finding review is shown, drawn from the original drawing."""
+    return [{"relative_path": src.get("relative_path"), "sheet": it.get("sheet") or sheet, "x": round(float(it["x"]), 3),
+             "y": round(float(it["y"]), 3), "text": str(it.get("text") or it.get("label") or "")[:80]}
+            for it in items if isinstance(it.get("x"), (int, float)) and isinstance(it.get("y"), (int, float))][:MAX_POINTS]
+
+
+MAX_POINTS = 60
+
+
 def _group(src: dict, key: str, where: str, *, floors_obj: Floors, keys: list[str], qty: int | None, label: str,
            ref: str, reason: str, items: list[dict], tags: list[str] | None = None) -> dict:
     rule = BY_KEY[key]
@@ -1664,7 +1879,8 @@ def _group(src: dict, key: str, where: str, *, floors_obj: Floors, keys: list[st
             "reason": reason, "proposed_floor_keys": keys, "proposed_floors": [floors_obj.name(k) for k in keys],
             "proposed_qty": qty, "tags": tags or [], "location": location, "labels": len(items),
             "evidence": f"{len(items)} label{'s' if len(items) != 1 else ''}: " + "; ".join(t[:80] for t in texts[:4]),
-            "contacts": rule.contacts, "monitoring": rule.monitoring, "control": rule.control, "status": "open"}
+            "contacts": rule.contacts, "monitoring": rule.monitoring, "control": rule.control, "status": "open",
+            "points": _points(src, items, where.split("|")[0])}
 
 
 FIRE_PUMPS = (("electric_fire_pump", 1), ("diesel_fire_pump", 1), ("jockey_pump", 1))
@@ -1761,7 +1977,9 @@ def _lift_group(src: dict, result: dict, floors: Floors, label: str) -> dict | N
             "proposed_qty": len(numbered) or len(named) or None, "tags": numbered or named,
             "location": "Lift Machine Room" if room_keys else "", "labels": len(lifts),
             "evidence": "; ".join(notes), "contacts": rule.contacts, "monitoring": rule.monitoring,
-            "control": rule.control, "status": "open"}
+            "control": rule.control, "status": "open",
+            "points": _points(src, [{**l, "text": l["label"]} for l in lifts]
+                              + [{**m, "text": m["text"]} for m in result.get("machine_rooms") or []])}
 
 
 # --- summaries --------------------------------------------------------------------------------------

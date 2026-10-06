@@ -9,6 +9,7 @@
   GET   /projects/{id}/redesign/{did}/changes/{cid}/image     the change on its piece of plan (PNG)
   POST  /projects/{id}/redesign/{did}/apply/jobs              make the redesigned copy (AutoCAD; IFC worker)
   GET   /projects/{id}/redesign/{did}/output.dwg              the redesigned drawing
+  GET   /projects/{id}/redesign/{did}/markup.pdf              the draftsman's PDF: each floor marked, and the schedule
 """
 from __future__ import annotations
 
@@ -44,6 +45,7 @@ def drawings(project_id: int, _current_user: User = Depends(get_current_user), d
     and redesign have got."""
     from app.ifc.services import revisions
     from app.models import ProjectRedesign
+    from app.review import service as review_service
 
     project = _get_project_or_404(db, project_id)
     out = []
@@ -54,6 +56,8 @@ def drawings(project_id: int, _current_user: User = Depends(get_current_user), d
                .filter(ProjectRedesign.project_id == project.id, ProjectRedesign.drawing_id == drawing.id).first())
         out.append({"id": drawing.id, "filename": drawing.filename, "revision": drawing.revision or "R0",
                     "review_status": review.status if review else None,
+                    # what the review comes to (the Review step's mark): a plot no model answered is not reviewed
+                    "review_state": review_service.outcome(review)[0] if review else "not_reviewed",
                     "redesign_status": row.status if row else "none",
                     "output_status": row.output_status if row else "none"})
     return {"drawings": out}
@@ -181,3 +185,14 @@ def output(project_id: int, drawing_id: int, _current_user: User = Depends(get_c
     return FileResponse(row.output_path, media_type="application/acad",
                         headers={"Content-Disposition": f"attachment; filename=\"{plain}\"; "
                                                         f"filename*=UTF-8''{quote(name)}"})
+
+
+@router.get("/projects/{project_id}/redesign/{drawing_id}/markup.pdf")
+def draftsman_pdf(project_id: int, drawing_id: int, _current_user: User = Depends(get_current_user),
+                  db: Session = Depends(get_db)):
+    project = _get_project_or_404(db, project_id)
+    _drawing(db, project, drawing_id)
+    data, name = service.draftsman_pdf(db, project, drawing_id)
+    plain = re.sub(r"[^A-Za-z0-9 ._()-]", "_", name)
+    return Response(data, media_type="application/pdf",
+                    headers={"Content-Disposition": f"attachment; filename=\"{plain}\"; filename*=UTF-8''{quote(name)}"})

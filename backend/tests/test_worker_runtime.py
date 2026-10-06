@@ -78,6 +78,27 @@ def test_a_worker_whose_loaded_models_lack_a_required_class_fails_at_start(monke
         runtime.validate("sync-worker", models=_stale_models("ProjectDocument"), import_services=False)
 
 
+def test_an_ifc_worker_whose_loaded_provider_predates_drawings_preparation_fails_at_start(monkeypatch):
+    """2026-10-06: an IFC worker started before get_prep_provider was added ran
+    the Devices job on the new app.redesign code and failed on the job. Its
+    start check imports the redesign service, so such a worker stops at start."""
+    import types
+
+    import app.ai.provider as provider
+
+    stale = types.ModuleType("app.ai.provider")
+    stale.__dict__.update({k: v for k, v in vars(provider).items()
+                           if k not in ("get_prep_provider", "prep_ai_on") and not k.startswith("__")})
+    stale.__file__ = provider.__file__
+    monkeypatch.setitem(sys.modules, "app.ai.provider", stale)
+    for name in ("app.redesign.service", "app.redesign.prepare"):
+        monkeypatch.delitem(sys.modules, name, raising=False)
+    with pytest.raises(runtime.RuntimeMismatch) as failure:
+        runtime.validate("ifc-worker")
+    assert "app.redesign.service cannot be imported" in str(failure.value)
+    assert "get_prep_provider" in str(failure.value) and "Restart the process" in str(failure.value)
+
+
 def test_models_loaded_from_another_folder_are_a_mismatch(monkeypatch, tmp_path):
     elsewhere = _stale_models()
     elsewhere.__file__ = str(tmp_path / "other-checkout" / "backend" / "app" / "models.py")
@@ -189,4 +210,6 @@ def test_health_carries_the_api_runtime_fingerprint(client):
     assert body["status"] == "ok"
     assert body["runtime"]["process"] == "api" and body["runtime"]["python"] == sys.executable
     assert body["runtime"]["models"].lower().endswith("models.py") and body["runtime"]["root"] == str(runtime.root())
-    assert set(body["flags"]) == {"document_classification_v2", "ai_read_full_second_pass"}
+    assert set(body["flags"]) == {"document_classification_v2", "ai_read_full_second_pass", "ai_enabled",
+                                  "fa_ai_enabled", "prep_ai_enabled", "drawing_review_ai_enabled"}
+    assert all(isinstance(v, bool) for v in body["flags"].values())

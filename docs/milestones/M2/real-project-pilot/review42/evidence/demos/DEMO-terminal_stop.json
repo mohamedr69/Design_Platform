@@ -1,0 +1,84 @@
+{
+ "ok": true,
+ "scenarios": {
+  "lane_allowance": {
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "stop_preserved": true,
+   "stops_per_invocation": [
+    {
+     "C": {
+      "at_utc": "2026-10-05T21:28:56+00:00",
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "reason": "budget refusal (lane_allowance; never raised)"
+     }
+    },
+    {
+     "C": {
+      "at_utc": "2026-10-05T21:28:56+00:00",
+      "invocation": 1,
+      "kind": "lane_allowance",
+      "reason": "budget refusal (lane_allowance; never raised)"
+     }
+    }
+   ]
+  },
+  "provider_timeout": {
+   "steps": [
+    {
+     "command": "run",
+     "result": "finished"
+    },
+    {
+     "command": "resume",
+     "result": "finished"
+    }
+   ],
+   "stop_preserved": true,
+   "stops_per_invocation": [
+    {
+     "C": {
+      "at_utc": "2026-10-05T21:28:27+00:00",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "reason": "three consecutive provider failures"
+     },
+     "R": {
+      "at_utc": "2026-10-05T21:28:29+00:00",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "reason": "three consecutive provider failures"
+     }
+    },
+    {
+     "C": {
+      "at_utc": "2026-10-05T21:28:27+00:00",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "reason": "three consecutive provider failures"
+     },
+     "R": {
+      "at_utc": "2026-10-05T21:28:29+00:00",
+      "invocation": 1,
+      "kind": "provider_timeout",
+      "reason": "three consecutive provider failures"
+     }
+    }
+   ]
+  }
+ },
+ "seconds": 60.0,
+ "tests": [
+  "test_visibility_r38.py::test_lane_allowance_refusal_is_visible_everywhere_and_the_resume_keeps_the_stop",
+  "test_allowance_r32.py::test_refusals_and_terminal_stops_are_durable_and_a_resume_never_resets_them"
+ ]
+}

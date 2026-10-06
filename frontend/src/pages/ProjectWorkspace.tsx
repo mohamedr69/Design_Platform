@@ -28,10 +28,10 @@ const SECTIONS = [
   { to: "calculations", label: "Calculations", end: false },
   { to: "compliance", label: "Compliance Statement", end: false },
   { to: "submittal", label: "Material Submittals", end: false },
-  // The FA IFC drawing reviewed room by room by the AI against the coverage rules.
-  { to: "drawings-review", label: "Drawings Review", end: false },
-  // The reviewed drawing copied with the accepted changes made on it (app.redesign).
-  { to: "drawings-redesign", label: "Drawings Redesign", end: false },
+  // The FA IFC drawing prepared for the draftsman in one place: reviewed room by
+  // room against the coverage rules, its devices placed and coordinated by the
+  // agents, the interface modules, then the PDF and the drawing copy (app.redesign).
+  { to: "drawings-prep", label: "Drawings Preparation", end: false },
   // Locked when the DRF says the shop drawings are not ours: the tab is
   // shown and says so, rather than being hidden or opening an empty page.
   { to: "drawings", label: "Drawings", end: false, needsDrawings: true },

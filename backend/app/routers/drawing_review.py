@@ -122,27 +122,29 @@ def decide(project_id: int, drawing_id: int, body: DecisionIn,
     # 2 October 2026).
     def carried(f: dict) -> bool:
         own = decisions.get(f["id"])
-        if own is not None:
+        if own is not None and f["previous_decision"] is None:
             return bool(own.get("via"))
         return f["decision"] == "open" or f["by_ruling"]
 
     same = [f for f in service.same_elsewhere(view["findings"], finding) if carried(f)]
     if body.status == "open":
         # reopened: open again, and no ruling settles it until the engineer says
-        decisions[body.id] = {"status": "reopened", "by": current_user.id, "at": utc_now().isoformat()}
+        service.record_decision(decisions, body.id, {"status": "reopened", "by": current_user.id,
+                                                    "at": utc_now().isoformat()})
         R.forget(db, project.id, drawing.id, body.id)
         same = [f for f in same if (decisions.get(f["id"]) or {}).get("via") == body.id]
         for f in same:
             decisions.pop(f["id"])
     else:
         now = utc_now().isoformat()
-        decisions[body.id] = {"status": body.status, "note": body.note.strip(),
-                              "instruction": body.instruction.strip(), "by": current_user.id, "at": now}
+        service.record_decision(decisions, body.id, {"status": body.status, "note": body.note.strip(),
+                                                    "instruction": body.instruction.strip(), "by": current_user.id,
+                                                    "at": now}, finding)
         for f in same:
-            decisions[f["id"]] = {"status": body.status, "via": body.id,
-                                  "note": f"As on {finding['floor']}: {body.note.strip()}" if body.note.strip()
-                                  else f"As on {finding['floor']}",
-                                  "instruction": body.instruction.strip(), "by": current_user.id, "at": now}
+            service.record_decision(decisions, f["id"], {
+                "status": body.status, "via": body.id,
+                "note": f"As on {finding['floor']}: {body.note.strip()}" if body.note.strip() else f"As on {finding['floor']}",
+                "instruction": body.instruction.strip(), "by": current_user.id, "at": now}, f)
         # the engineer's word goes to the rules the next review is given
         if finding["action"] != "none":
             R.record(db, project.id, drawing.id, finding, body.status, note=body.note.strip(),
@@ -271,10 +273,12 @@ def decide_many(project_id: int, drawing_id: int, body: BulkIn,
         if f is None or f["action"] == "none":
             continue
         if body.status == "open":
-            decisions[fid] = {"status": "reopened", "by": current_user.id, "at": stamp}
+            service.record_decision(decisions, fid, {"status": "reopened", "by": current_user.id, "at": stamp})
             R.forget(db, project.id, drawing.id, fid)
-        elif (decisions.get(fid) or {}).get("status") != "accepted":
-            decisions[fid] = {"status": "accepted", "note": "", "instruction": "", "by": current_user.id, "at": stamp}
+        elif f["decision"] != "accepted":
+            # not accepted as it stands now -- never decided, or decided on another proposal
+            service.record_decision(decisions, fid, {"status": "accepted", "note": "", "instruction": "",
+                                                     "by": current_user.id, "at": stamp}, f)
             R.record(db, project.id, drawing.id, f, "accepted", user_id=current_user.id)
     row.decisions = decisions
     db.commit()

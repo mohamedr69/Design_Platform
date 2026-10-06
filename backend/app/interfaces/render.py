@@ -212,8 +212,8 @@ class Plan:
                                         render_box=BoundingBox2d([(x0, y0), (x1, y1)]))
 
 
-def annotate(png: bytes, window: dict) -> bytes:
-    """The picture with the window's labels ringed and numbered in red."""
+def annotate(png: bytes, window: dict, start: int = 1) -> bytes:
+    """The picture with the window's labels ringed and numbered in red, from `start`."""
     from PIL import Image, ImageDraw, ImageFont
 
     x0, y0, x1, y1 = window["box"]
@@ -225,7 +225,7 @@ def annotate(png: bytes, window: dict) -> bytes:
         font = ImageFont.load_default(size=max(18, int(w / 50)))
     except TypeError:                   # an older Pillow: its one small font
         font = ImageFont.load_default()
-    for n, (_iid, x, y) in enumerate(window["labels"], 1):
+    for n, (_iid, x, y) in enumerate(window["labels"], start):
         px, py = (x - x0) / (x1 - x0) * w, (y1 - y) / (y1 - y0) * h
         draw.ellipse((px - r, py - r, px + r, py + r), outline=(255, 40, 40), width=3)
         draw.text((px + r + 3, py - 2 * r - 4), str(n), fill=(255, 40, 40), font=font)

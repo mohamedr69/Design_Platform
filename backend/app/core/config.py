@@ -387,9 +387,22 @@ class Settings(BaseSettings):
     ai_claude_cli: str = "claude"
     # One Claude Code call, start to finish (it starts a process and may read an image).
     ai_cli_timeout_s: float = 300.0
+    # At most this many model turns in one Claude Code call (`--max-turns`;
+    # reading a picture with the Read tool is a turn): unset, the CLI's own
+    # limit. A call that needs more ends as `max_turns`, with no answer.
+    ai_cli_max_turns: int | None = None
+    # Pictures sent inside the prompt (Claude Code's stream-json input) rather than as
+    # files the model opens with its Read tool -- one turn a picture fewer, each turn
+    # re-sending the conversation. Off until one live call on this CLI has shown it
+    # answers from the picture at full size (2026-10-05: not yet probed).
+    ai_cli_inline_images: bool = False
     # Drawings Review (app.review): the FA IFC drawing's rooms looked at by
     # the model, a few rooms a call. Its own model and limits -- a review is
     # ~80 vision calls, far past the per-document budget above.
+    # Switched on by itself (DRAWING_REVIEW_AI_ENABLED) like the FA Interfaces
+    # workflow and Drawings Preparation, AI_ENABLED staying off for the rest of
+    # the platform; off, a review plots the drawing and stops "blocked".
+    drawing_review_ai_enabled: bool = False
     drawing_review_model: str = "claude-opus-5-5"
     # Reasoning depth for those drawing looks (the review, the redesign's
     # placements, the interface schedule's damper look). Sent to the CLI as
@@ -403,6 +416,24 @@ class Settings(BaseSettings):
     drawing_review_windows_per_call: int = 2
     # Calls at once (each a Claude Code process); the provider caps it again at AI_MAX_CONCURRENCY.
     drawing_review_parallel: int = 2
+    # Drawings Preparation (app.redesign: the review's devices placed on the plan): the
+    # Opus placement agents, side by side; the Opus coordination agent on each room the
+    # platform found a clash or a coverage gap in; the Opus orchestrator reviewing every
+    # floor's placed devices. Switched on by itself (PREP_AI_ENABLED) like the FA
+    # Interfaces workflow, AI_ENABLED staying off for the rest of the platform; off,
+    # the devices are placed at the review's point and coordinated by the platform alone.
+    prep_ai_enabled: bool = False
+    prep_model: str = "claude-opus-5-5"
+    prep_orchestrator_model: str = "claude-opus-5-5"
+    prep_effort: str = "high"
+    prep_agent_parallel: int = 4
+    prep_max_concurrency: int = 4
+    # The detection's coverage on plan (the engineers, 6 October 2026): no point of a
+    # room further than this from a detector -- NFPA 72's 0.7 x 9.1 m spacing.
+    prep_smoke_radius_m: float = 6.3
+    prep_heat_radius_m: float = 6.3
+    # The drawing's columns: what is drawn on a layer like these, column-sized.
+    prep_column_layers: str = r"COLUMN|\bCOLS?\b|S-COL|A-COL|STR.*COL|PILLAR|\bCOL[-_ ]"
     # The interface schedule's damper pictures (app.interfaces.render): drawn in
     # a child process with a deadline per picture and for opening the drawing;
     # an overrun kills the child and that window is reported unread, never
@@ -422,12 +453,18 @@ class Settings(BaseSettings):
     # The FA Interfaces drawing workflow (fa_interfaces_run): drawing agents (one
     # per drawing, the damper look on drawing_review_model at drawing_review_effort)
     # running FA_AGENT_PARALLEL drawings at once -- each opens its drawing in a child
-    # process, about 2 GB for EP-30880's, so this is a memory bound too; and the Fable
-    # orchestrator reviewing their reports, its own model, effort, time, input size,
-    # and a budget reserved apart from the agents'. A review that cannot run leaves the
-    # run provisional and says so; it is retried at most FA_ORCHESTRATOR_RETRIES_PER_DAY.
+    # process, about 2 GB for EP-30880's, so this is a memory bound too; and the Opus
+    # review: the orchestrator reviewing their reports (coverage, conflicts), its own
+    # model, effort, time, input size, and a budget reserved apart from the agents'.
+    # (Fable held this role until 2026-10-05; it is Opus now, an exact-model request.)
+    # A review that cannot run leaves the run provisional and says so; it is retried
+    # at most FA_ORCHESTRATOR_RETRIES_PER_DAY.
     fa_agent_parallel: int = 2
-    fa_orchestrator_model: str = "claude-fable-5-1"
+    # The workflow's models -- the Opus drawing agents and the Opus review -- switched
+    # on by themselves while AI_ENABLED stays off for the rest of the platform (no
+    # background AI work anywhere else). AI_ENABLED on switches them on as well.
+    fa_ai_enabled: bool = False
+    fa_orchestrator_model: str = "claude-opus-5-5"
     fa_orchestrator_effort: str = "high"
     fa_orchestrator_timeout_s: float = 900.0
     fa_orchestrator_max_input_tokens: int = 150_000
@@ -438,6 +475,34 @@ class Settings(BaseSettings):
     # by the drawing review's budget and never consume it -- and a run whose
     # orchestrator could not be served within it starts no paid look at all.
     fa_orchestrator_max_calls_per_day: int = 64
+    # The Opus finding review (app.interfaces.findings): every item that would go to
+    # Verification Required is first looked at by Opus on the original drawing views
+    # and the supporting evidence, and comes back present (scheduled), absent or not
+    # an interface (excluded, kept for traceability) or unresolved (to the engineer).
+    # Items one run may review, at once, per call, a day per project; drawing views
+    # shown per item. An item past the bound stays for the engineer, said "not
+    # reviewed", and the run stays provisional.
+    fa_findings_model: str = "claude-opus-5-5"
+    fa_findings_effort: str = "high"
+    fa_findings_max_per_run: int = 80
+    fa_findings_parallel: int = 4
+    fa_findings_timeout_s: float = 600.0
+    fa_findings_max_output_tokens: int = 4_000
+    fa_findings_max_calls_per_day: int = 240
+    fa_findings_views: int = 3
+    # Time and calls (2026-10-05, measured on EP-30880's fresh run: 40 min, 112 calls).
+    # Items of one sheet and one kind reviewed together, up to this many a call
+    # (1: one call an item, as before); damper windows shown in one look call (1: one
+    # a call, as before); the workflow's model calls at once (its own route; the
+    # platform's shared route keeps AI_MAX_CONCURRENCY); drawings read side by side
+    # (each DWG converted by its own Core Console, ~250 MB, DWG_CONVERT_PARALLEL at once
+    # across the process); drawings drawn side by side for the finding review.
+    fa_findings_per_call: int = 3
+    fa_look_windows_per_call: int = 2
+    fa_max_concurrency: int = 4
+    fa_read_parallel: int = 2
+    fa_render_parallel: int = 2
+    dwg_convert_parallel: int = 2
     # The key, for the API providers only. Put it here (backend/.env is
     # gitignored) or let the vendor SDK read OPENAI_API_KEY or ANTHROPIC_API_KEY.
     ai_api_key: str | None = None

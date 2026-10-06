@@ -15,7 +15,8 @@ damper's is set aside, with what it is; each one that is, is a damper of its
 own, at the damper -- where the redesign puts its module.
 
 What the model said is kept with the drawing's reading, by the file's hash:
-a drawing read again unchanged is not looked at again.
+a drawing read again unchanged is not looked at again -- unless the read is a
+force-fresh one, which looks again and asks the model again (no stored answer).
 """
 from __future__ import annotations
 
@@ -25,7 +26,7 @@ import math
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from app.ai.provider import ImagePart, TextPart, get_provider
+from app.ai.provider import ImagePart, TextPart, fa_ai_on, get_fa_provider
 from app.compliance import assist
 from app.core.config import get_settings
 from app.database import SessionLocal
@@ -33,7 +34,7 @@ from app.interfaces import render
 
 log = logging.getLogger(__name__)
 VERSION = 3
-PROMPT_VERSION = "interface-dampers-visual-2026-10-04.3"
+PROMPT_VERSION = "interface-dampers-visual-2026-10-05.4"
 TASK = "fa_interfaces_visual"
 KEYS = ("motorized_smoke_fire_damper",)
 DISCIPLINES = ("SM", "HVAC")
@@ -45,17 +46,19 @@ SYSTEM = """You check the dampers of a smoke management / ventilation (HVAC) flo
 the UAE: every motorized, smoke or fire/smoke damper is interfaced to the fire alarm system (a relay module each), so
 each one must be found -- and nothing that is not a damper may be counted.
 
-The plan was read for its words. Each red ring with a red number marks a text the reading took for a damper's label
-(MSD, MFSD, MD, SD, SMD and the like). Look at the drawing around each one:
+The plan was read for its words. You are shown one or more pictures of pieces of it. Each red ring with a red number
+marks a text the reading took for a damper's label (MSD, MFSD, MD, SD, SMD and the like); the numbers run on from one
+picture to the next, and the list beside the pictures says which picture each number is in. Look at the drawing around
+each one:
 - A damper's label names a damper symbol drawn on a duct close to it: a small box or rectangle across the duct, often
   crossed by a diagonal or with an actuator, sometimes joined to the label by a leader.
 - Not a damper: a door tag (a code with a number, at a door: "SD 04"), a room or area tag, a smoke detector, a duct
   size or air flow, a note, a legend entry, a schedule.
 - Two labels side by side may name two dampers side by side: each label its own damper.
 
-For each number: damper true or false; for a damper the point of ITS damper symbol (x, y as fractions 0..1 of this
-image's width and height), else -1, -1; what it is in at most 8 words; your confidence (low whenever unsure).
-Answer every number you are given, and only those."""
+For each number: damper true or false; for a damper the point of ITS damper symbol (x, y as fractions 0..1 of the width
+and height of the picture that number is in), else -1, -1; what it is in at most 8 words; your confidence (low whenever
+unsure). Answer every number you are given, and only those."""
 
 SCHEMA = {
     "type": "object",
@@ -146,26 +149,55 @@ def _windows(labels: list[tuple[str, float, float]], metre: float) -> list[dict]
     return out
 
 
-def _ask(project_id: int, png: bytes, sha: str, window: dict, budget, drawing: str) -> dict:
+def batch_parts(batch: list[dict], drawing: str) -> list:
+    """The pictures of one look call and the list of their numbers: each
+    picture's labels numbered on from the last picture's."""
+    parts, lines = [], [f"Drawing: {drawing}"]
+    for i, b in enumerate(batch, 1):
+        first, last = b["start"], b["start"] + len(b["window"]["labels"]) - 1
+        parts.append(ImagePart(f"picture {i}: the plan, labels {first} to {last} ringed and numbered", b["png"]))
+        lines += [f"{n}: {iid.split('|')[-1]} (picture {i})"
+                  for n, (iid, _x, _y) in enumerate(b["window"]["labels"], b["start"])]
+    return parts + [TextPart("labels", "\n".join(lines))]
+
+
+def _ask(project_id: int, batch: list[dict], sha: str, budget, drawing: str, fresh: bool = False) -> dict:
+    """One look call for `batch` -- one or more windows ({png, window, start})."""
     s = get_settings()
     db = SessionLocal()
     try:
-        x0, y0, _x1, _y1 = window["box"]
+        corners = ";".join(f"{b['window']['box'][0]:.1f},{b['window']['box'][1]:.1f}" for b in batch)
         session = assist.AssistSession(db=db, project_id=project_id,
-                                       document_sha256=f"{sha}:visual:{x0:.1f},{y0:.1f}",
-                                       budget=budget, provider=get_provider())
-        parts = [ImagePart("the plan, the labels ringed and numbered", png),
-                 TextPart("labels", f"Drawing: {drawing}\n" + "\n".join(
-                     f"{n}: {iid.split('|')[-1]}" for n, (iid, _x, _y) in enumerate(window["labels"], 1)))]
-        result = assist.call_task(session, TASK, SYSTEM, parts, SCHEMA, 1500, prompt_version=PROMPT_VERSION,
+                                       document_sha256=f"{sha}:visual:{corners}",
+                                       budget=budget, provider=get_fa_provider())
+        parts = batch_parts(batch, drawing)
+        result = assist.call_task(session, TASK, SYSTEM, parts, SCHEMA, 1500 * len(batch), prompt_version=PROMPT_VERSION,
                                   model=s.drawing_review_model, effort=s.drawing_review_effort, exact_model=True,
-                                  timeout_s=s.drawing_review_timeout_s)
+                                  timeout_s=s.drawing_review_timeout_s, fresh=fresh)
         db.commit()
         if result.data is None:
             return {"error": result.error or "no answer"}
         return {"answers": result.data.get("labels") or []}
     finally:
         db.close()
+
+
+def picture_folder(project, sha: str) -> Path:
+    """Where a drawing's pictures are kept, raw (before the rings), by the
+    drawing's hash and how they are drawn: the finding review shows the same
+    pieces of plan again without opening the drawing a second time."""
+    from app.interfaces.service import cache_folder
+
+    return cache_folder(project) / "pictures" / f"{sha[:24]}-v{VERSION}-{render.IMAGE_PX}"
+
+
+def stored_box(box) -> list[float]:
+    """A window's box as it is kept with the reading (and names its picture)."""
+    return [round(float(v), 3) for v in box]
+
+
+def picture_name(box) -> str:
+    return "_".join(f"{float(v):.3f}" for v in box) + ".png"
 
 
 def _drawing(project, src: dict, cache_folder) -> Path | None:
@@ -189,7 +221,7 @@ def _drawing(project, src: dict, cache_folder) -> Path | None:
     return path if digest.hexdigest() == sha else None
 
 
-def check(db, project, sources: list[dict], *, progress=None, check=None, limits=None) -> int:
+def check(db, project, sources: list[dict], *, progress=None, check=None, limits=None, fresh: bool = False) -> int:
     """Look at the damper labels of every smoke management and ventilation
     drawing read, on the drawing; each source's `visual` is filled in place.
     Returns how many labels were looked at.
@@ -198,12 +230,14 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
     child process with a deadline per picture). Stop is checked between
     windows and while each one is drawn, and progress is reported per window.
     A window that could not be drawn is recorded with its reason in
-    `visual.unread`: its labels are held, never taken as "no damper"."""
+    `visual.unread`: its labels are held, never taken as "no damper".
+    `fresh`: a drawing looked at before is looked at again, every window asked
+    again (no stored answer reused)."""
     from app.interfaces.service import cache_folder
     from app.review import service as review
 
     s = get_settings()
-    if not s.ai_enabled:
+    if not fa_ai_on():
         return 0                        # no model to look: the labels stay held for the engineer
     looked = 0
     for src in sources:
@@ -213,7 +247,7 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
         old = src.get("visual") or {}
         expected = {item_id(it) for it in labels}
         answered = set((old.get("items") or {}).keys())
-        if (old.get("version") == VERSION and old.get("sha256") == src.get("sha256")
+        if (not fresh and old.get("version") == VERSION and old.get("sha256") == src.get("sha256")
                 and old.get("status") == "complete" and expected <= answered):
             continue
         dxf = _drawing(project, src, cache_folder)
@@ -229,6 +263,13 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
         if progress:
             progress(0, 1, f"Opening {src['filename']} to look at its dampers", src["filename"])
         windows = _windows([(item_id(it), it["x"], it["y"]) for it in labels], metre)
+        pictures_at = picture_folder(project, src.get("sha256") or "")
+        if fresh and pictures_at.is_dir():
+            import shutil
+
+            shutil.rmtree(pictures_at, ignore_errors=True)        # a fresh run draws every picture again
+        pictures_at.mkdir(parents=True, exist_ok=True)
+        per_call = max(1, s.fa_look_windows_per_call)
         items: dict[str, dict] = {}
         unread: dict[str, str] = {}
         budget = review._budget(db, project)
@@ -238,32 +279,42 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
 
         def take(future) -> None:
             nonlocal done, looked
-            w = futures.pop(future)
+            batch = futures.pop(future)
             try:
                 reply = future.result()
-            except Exception as exc:  # noqa: BLE001 -- one look failing is that piece, not the drawing
+            except Exception as exc:  # noqa: BLE001 -- one look failing is those pieces, not the drawing
                 reply = {"error": f"{type(exc).__name__}: {exc}"[:300]}
-            done += 1
+            done += len(batch)
             if progress:
                 progress(done, len(windows), f"Looking at the dampers of {src['filename']} ({done} of {len(windows)})",
                          src["filename"])
             if "answers" not in reply:
-                for iid, _px, _py in w["labels"]:
-                    unread.setdefault(iid, f"look_failed: {reply.get('error') or 'no answer'}"[:200])
+                for b in batch:
+                    for iid, _px, _py in b["window"]["labels"]:
+                        unread.setdefault(iid, f"look_failed: {reply.get('error') or 'no answer'}"[:200])
                 return
-            x0, y0, x1, y1 = w["box"]
             by_n = {a["n"]: a for a in reply["answers"]}
-            for n, (iid, _px, _py) in enumerate(w["labels"], 1):
-                a = by_n.get(n)
-                if a is None:
-                    unread.setdefault(iid, "not_answered")
-                    continue
-                at = None
-                if a["damper"] and 0 <= a["x"] <= 1 and 0 <= a["y"] <= 1:
-                    at = [round(x0 + a["x"] * (x1 - x0), 3), round(y1 - a["y"] * (y1 - y0), 3)]
-                items[iid] = {"damper": bool(a["damper"]), "at": at, "what": (a.get("what") or "")[:80],
-                              "confidence": a.get("confidence")}
-                looked += 1
+            for b in batch:
+                x0, y0, x1, y1 = b["window"]["box"]
+                for n, (iid, _px, _py) in enumerate(b["window"]["labels"], b["start"]):
+                    a = by_n.get(n)
+                    if a is None:
+                        unread.setdefault(iid, "not_answered")
+                        continue
+                    at = None
+                    if a["damper"] and 0 <= a["x"] <= 1 and 0 <= a["y"] <= 1:
+                        at = [round(x0 + a["x"] * (x1 - x0), 3), round(y1 - a["y"] * (y1 - y0), 3)]
+                    items[iid] = {"damper": bool(a["damper"]), "at": at, "what": (a.get("what") or "")[:80],
+                                  "confidence": a.get("confidence")}
+                    looked += 1
+
+        pending: list[dict] = []
+
+        def send() -> None:
+            if pending:
+                futures[pool.submit(_ask, project.id, list(pending), src["sha256"], budget, src["filename"], fresh)] = \
+                    list(pending)
+                pending.clear()
 
         try:
             with render.RenderSession(dxf, [w["box"] for w in windows], metre, check=check,
@@ -278,7 +329,7 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
                         progress(done, len(windows), f"Drawing {src['filename']} for its dampers "
                                  f"(window {index + 1} of {len(windows)})", src["filename"])
                     try:
-                        png = render.annotate(pictures.picture(index), w)
+                        raw = pictures.picture(index)
                     except (render.RenderTimeout, render.RenderUnavailable, render.RenderFailed) as exc:
                         reason = {render.RenderTimeout: "render_timeout", render.RenderUnavailable: "render_unavailable",
                                   render.RenderFailed: "render_failed"}[type(exc)]
@@ -286,7 +337,15 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
                             unread[iid] = f"{reason}: {exc}"[:200]
                         log.warning("Damper window %s of %s not drawn: %s", index + 1, src["filename"], exc)
                         continue
-                    futures[pool.submit(_ask, project.id, png, src["sha256"], w, budget, src["filename"])] = w
+                    try:
+                        (pictures_at / picture_name(stored_box(w["box"]))).write_bytes(raw)
+                    except OSError:
+                        pass                            # kept for reuse only: the look goes on without it
+                    start = sum(len(b["window"]["labels"]) for b in pending) + 1
+                    pending.append({"png": render.annotate(raw, w, start=start), "window": w, "start": start})
+                    if len(pending) >= per_call:
+                        send()
+                send()
             for future in as_completed(list(futures)):
                 if check:
                     check()
@@ -296,6 +355,7 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
         missing = sorted(expected - set(items))
         src["visual"] = {"version": VERSION, "sha256": src.get("sha256"), "items": items,
                          "windows": len(windows), "expected": len(expected), "missing": missing,
+                         "boxes": [stored_box(w["box"]) for w in windows],
                          "unread": {iid: unread.get(iid, "not_answered") for iid in missing},
                          "status": "complete" if not missing else "incomplete"}
     return looked

@@ -1,8 +1,9 @@
 """The FA Interfaces drawing workflow (FI-P1 r2 Part C; r1 CONTRACTS §1): drawing
-agents with an accountable report each, package reports, the mandatory Fable
-orchestrator with deterministic validation, and a run that stays provisional
-unless its review is complete and an engineer accepts it. A scripted provider
-stands in for the models: no model is called."""
+agents with an accountable report each, package reports, the mandatory Opus
+review (the orchestrator -- Fable until 2026-10-05 -- and the finding review)
+with deterministic validation, and a run that stays provisional unless its
+review is complete and an engineer accepts it. A scripted provider stands in
+for the models: no model is called."""
 from __future__ import annotations
 
 import threading
@@ -14,25 +15,44 @@ import pytest
 
 from app.ai import provider as P
 from app.core.config import get_settings
-from app.interfaces import service, visual, workflow
+from app.interfaces import findings, service, visual, workflow
 from app.models import FaInterfaceRun, Project
 from tests.conftest import login
 
 settings = get_settings()
-FABLE, OPUS = "claude-fable-5-1", "claude-opus-5-5"
+OPUS = "claude-opus-5-5"
+UNSERVED = "claude-unserved-0"          # a configured model the route cannot serve exactly
+
+
+def unresolved_item(letter="A"):
+    return {"item": letter, "outcome": "unresolved", "floor_keys": [], "qty_per_floor": 0, "tags": [], "location": "",
+            "evidence_refs": [f"E-{letter}"], "rationale": "scripted", "coverage_checked": "scripted",
+            "unclear": "scripted: not settled", "engineer_action": "check it on the drawing", "confidence": "low"}
+
+
+def unresolved_finding(request):
+    """The finding review's scripted default: nothing settled, said why, for every item asked about."""
+    import json
+
+    payload = json.loads(request.parts[0].text)
+    return {"items": [unresolved_item(f["item"]) for f in payload["findings"]]}
 
 
 class Models:
-    """A provider that answers the damper look and the orchestrator, and records
-    what it was asked. `serves` decides which models it can serve exactly."""
+    """A provider that answers the damper look, the finding review and the
+    orchestrator, and records what it was asked. `serves` decides which models
+    it can serve exactly."""
 
     name, status = "scripted", "scripted"
 
-    def __init__(self, review=None, serves=(FABLE, OPUS), review_error=None):
+    def __init__(self, review=None, serves=(OPUS,), review_error=None, finding=unresolved_finding,
+                 finding_error=None):
         self.ready = True
         self.serves = set(serves)
         self.review = review
         self.review_error = review_error
+        self.finding = finding
+        self.finding_error = finding_error
         self.requests: list = []
         self._lock = threading.Lock()
 
@@ -44,11 +64,19 @@ class Models:
             self.requests.append(request)
         if request.task == visual.TASK:
             # each label's damper is drawn 0.2 m right of and below it (`_damper_drawing`)
-            x0, y0, x1, y1 = WINDOW.box
-            answers = [{"n": n, "damper": True, "x": (lx + 0.2 - x0) / (x1 - x0), "y": (y1 - (ly - 0.2)) / (y1 - y0),
-                        "what": "damper", "confidence": "high"} for n, (_iid, lx, ly) in enumerate(WINDOW.labels, 1)]
+            answers = []
+            for b in WINDOW.batch:
+                x0, y0, x1, y1 = b["window"]["box"]
+                answers += [{"n": n, "damper": True, "x": (lx + 0.2 - x0) / (x1 - x0),
+                             "y": (y1 - (ly - 0.2)) / (y1 - y0), "what": "damper", "confidence": "high"}
+                            for n, (_iid, lx, ly) in enumerate(b["window"]["labels"], b["start"])]
             return P.AiResponse(data={"labels": answers}, model=request.model,
                                 usage=P.Usage(input_tokens=900, output_tokens=60))
+        if request.task == findings.TASK:
+            if self.finding_error:
+                return P.AiResponse(data=None, error=self.finding_error, model=request.model)
+            answer = self.finding(request) if callable(self.finding) else self.finding
+            return P.AiResponse(data=answer, model=request.model, usage=P.Usage(input_tokens=3000, output_tokens=200))
         if request.task == workflow.TASK_REVIEW:
             if self.review_error:
                 return P.AiResponse(data=None, error=self.review_error, model=request.model)
@@ -61,9 +89,9 @@ WINDOW = threading.local()          # the piece of plan the damper look in this 
 _real_ask = visual._ask
 
 
-def _ask_with_window(project_id, png, sha, window, budget, drawing):
-    WINDOW.box, WINDOW.labels = window["box"], window["labels"]
-    return _real_ask(project_id, png, sha, window, budget, drawing)
+def _ask_with_window(project_id, batch, sha, budget, drawing, fresh=False):
+    WINDOW.batch = batch
+    return _real_ask(project_id, batch, sha, budget, drawing, fresh)
 
 
 def _ok_review(request):
@@ -131,12 +159,12 @@ def test_a_reviewed_complete_run_is_a_candidate_and_published_only_when_the_engi
     assert agent["look"]["looked_this_run"] == 2
     assert agent["look"]["model_requested"] == OPUS and agent["look"]["effort"] == "high"
     assert {p["package"] for p in run["package_reports"]} >= {"HVAC"}
-    # the drawing agent asked Opus exactly at high effort; Fable reviewed the package (FP1) and the run (FP2)
+    # the drawing agent asked Opus exactly at high effort; Opus reviewed the package (FP1) and the run (FP2)
     looks = [r for r in w.models.requests if r.task == visual.TASK]
     reviews = [r for r in w.models.requests if r.task == workflow.TASK_REVIEW]
     assert looks and all((r.model, r.effort, r.exact_model) == (OPUS, "high", True) for r in looks)
     assert [r.parts[0].label for r in reviews] == ["package_review:HVAC", "run_review"]
-    assert all((r.model, r.effort, r.exact_model) == (FABLE, "high", True) for r in reviews)
+    assert all((r.model, r.effort, r.exact_model) == (OPUS, "high", True) for r in reviews)
     # nothing is published until the engineer accepts
     view = w.client.get(f"/projects/{w.pid}/fa-interfaces").json()
     assert view["published_basis"] is None and len([r for r in view["rows"] if r["key"] == "motorized_smoke_fire_damper"]) == 2
@@ -146,11 +174,11 @@ def test_a_reviewed_complete_run_is_a_candidate_and_published_only_when_the_engi
     assert accepted.json()["schedule"]["view_state"] == "current"
 
 
-def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(w, monkeypatch):
+def test_without_the_reviewer_the_review_is_missing_said_and_the_run_stays_provisional(w, monkeypatch):
     from app.routers import jobs as jobs_router
 
     monkeypatch.setattr(jobs_router, "RUN_INLINE", True)
-    w.models.serves = {OPUS}
+    monkeypatch.setattr(settings, "fa_orchestrator_model", UNSERVED)       # a reviewer the route cannot serve
     out = _run(w)
     assert out["review_state"] == "missing" and out["publication_state"] == "provisional"
     run = _latest(w)
@@ -158,11 +186,11 @@ def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(
     assert run["package_reports"] and all(p["orchestrator_review"].startswith("missing") or not p["sources"]
                                           for p in run["package_reports"])
     assert w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/accept").status_code == 422
-    # no look was paid for that Fable could not review (F10): the drawing's coverage is not complete
+    # no look was paid for that the reviewer could not review (F10): the drawing's coverage is not complete
     assert not [r for r in w.models.requests if r.task == visual.TASK]
-    # Retry once Fable is there: the review runs on the same evidence, nothing is re-read, and the run
+    # Retry once the reviewer is there: the review runs on the same evidence, nothing is re-read, and the run
     # stays provisional -- its drawing was never looked at; a new run is what covers it
-    w.models.serves = {OPUS, FABLE}
+    monkeypatch.setattr(settings, "fa_orchestrator_model", OPUS)
     job = w.client.post(f"/projects/{w.pid}/fa-interfaces/runs/{run['run_id']}/retry-review")
     assert job.status_code == 202 and job.json()["kind"] == "fa_interfaces_review" and job.json()["status"] == "succeeded"
     retried = _latest(w)
@@ -172,7 +200,7 @@ def test_without_fable_the_review_is_missing_said_and_the_run_stays_provisional(
     assert _run(w)["publication_state"] == "complete_candidate"
 
 
-def test_another_model_answering_for_fable_is_never_its_review(w):
+def test_another_model_answering_for_the_reviewer_is_never_its_review(w):
     w.models.review_error = "model_substituted"
     out = _run(w)
     run = _latest(w)
@@ -198,15 +226,15 @@ def test_the_review_is_validated_unknown_references_dropped_instructions_withhel
     assert view["totals"]["interface_points"] != 999                       # numbers from a model are never used
 
 
-def test_fable_can_only_lower_the_publication(w):
+def test_the_reviewer_can_only_lower_the_publication(w):
     def cautious(request):
         return {**_ok_review(request), "publication_recommendation": "provisional"}
     w.models.review = cautious
     assert _run(w)["publication_state"] == "provisional"
 
 
-def test_without_the_drawing_model_the_drawing_is_unsupported_and_its_dampers_held(w):
-    w.models.serves = {FABLE}
+def test_without_the_drawing_model_the_drawing_is_unsupported_and_its_dampers_held(w, monkeypatch):
+    monkeypatch.setattr(settings, "drawing_review_model", UNSERVED)
     out = _run(w)
     (agent,) = _latest(w)["agent_reports"]
     assert agent["coverage_state"] == "unsupported" and "model unavailable" in agent["coverage_reason"]

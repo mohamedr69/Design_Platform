@@ -12,6 +12,8 @@ floor by floor, from their IFC drawings (app.interfaces).
   DELETE /projects/{id}/fa-interfaces/manual/{mid}     ... taken out again
   GET    /projects/{id}/fa-interfaces/export.xlsx      the schedule as a workbook, floor-wise
   GET    /projects/{id}/fa-interfaces/export.pdf       ... as a document, laid out to be issued
+  GET    /projects/{id}/fa-interfaces/review-cases.pdf the cases the Opus review could not decide, with the
+                                                        drawing pictures it was shown (?item=<id>: that one)
 
 The router checks and answers; the reading runs in the IFC worker, and the
 schedule is built from the readings and the answers on every read.
@@ -95,10 +97,14 @@ def start_scan(project_id: int, hydrate: bool = False, current_user: User = Depe
 
 
 @router.post("/projects/{project_id}/fa-interfaces/runs/jobs", status_code=status.HTTP_202_ACCEPTED)
-def start_run(project_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
-    """Queue the drawing workflow (the IFC worker): read, drawing agents, package
-    reports, the Fable orchestrator's review. One read of a project at a time:
-    a read or a run already queued or running is returned instead."""
+def start_run(project_id: int, fresh: bool = False, current_user: User = Depends(require_role(*CREATOR_ROLES)),
+              db: Session = Depends(get_db)):
+    """Queue the drawing workflow (the IFC worker): read, drawing agents, the
+    Opus finding review, package reports, the Opus orchestrator's review. One
+    read of a project at a time: a read or a run already queued or running is
+    returned instead -- except that a force-fresh run (`?fresh=true`: every
+    drawing read, looked at and reviewed again, nothing reused) is never
+    answered with an ordinary one: that is refused, to be asked again after it."""
     from app.routers import jobs as jobs_router
     from app.routers.ifc_boq import _queue_note, _run_inline, _started
 
@@ -107,13 +113,20 @@ def start_run(project_id: int, current_user: User = Depends(require_role(*CREATO
         raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
     existing = _active_read(db, project.id)
     if existing is not None:
+        if fresh and not (existing.kind == RUN_KIND and (existing.params or {}).get("fresh")):
+            raise HTTPException(409, "The drawings are being read now: start the fresh reread when that job has "
+                                     "finished (it would not read them afresh)")
         return _started(db, existing, False)
     job, created = jobs.enqueue(db, kind=RUN_KIND, project_id=project.id, user_id=current_user.id,
                                 dedup_key=read_key(project.id),
-                                params={"user_id": current_user.id}, progress=_queue_note(db), message="")
+                                params={"user_id": current_user.id, "fresh": bool(fresh)}, progress=_queue_note(db),
+                                message="")
     if created:
-        activity.record(db, current_user, "fa_interfaces.run", "Ran the FA interfaces drawing workflow",
+        activity.record(db, current_user, "fa_interfaces.run",
+                        "Ran the FA interfaces drawing workflow" + (" (force-fresh reread)" if fresh else ""),
                         project=project, entity_type="project", entity_id=project.id)
+    elif fresh and not (job.params or {}).get("fresh"):
+        raise HTTPException(409, "The drawings are being read now: start the fresh reread when that job has finished")
     if created and jobs_router.RUN_INLINE:
         _run_inline(job.id)
         db.expire_all()
@@ -162,8 +175,8 @@ def accept_run(project_id: int, run_id: int, current_user: User = Depends(requir
 @router.post("/projects/{project_id}/fa-interfaces/runs/{run_id}/retry-review", status_code=status.HTTP_202_ACCEPTED)
 def retry_review(project_id: int, run_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
                  db: Session = Depends(get_db)):
-    """The Fable orchestrator's review again, on the run's frozen inputs, as a
-    job (the IFC worker): refused for an accepted, unfinished or fully reviewed
+    """The Opus review again (the finding review on the items it could not
+    review, the orchestrator on the run's frozen inputs), as a job (the IFC worker): refused for an accepted, unfinished or fully reviewed
     run, one whose drawings changed, or past the day's bound -- counted here,
     atomically, before the job is queued (F5/F8)."""
     from app.interfaces import workflow
@@ -422,6 +435,34 @@ def export(project_id: int, _current_user: User = Depends(get_current_user), db:
     name = _SAFE.sub("_", f"EP-{project.ep_number} FA Interface Schedule.xlsx")
     return StreamingResponse(buf, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                              headers={"Content-Disposition": f'attachment; filename="{name}"'})
+
+
+@router.get("/projects/{project_id}/fa-interfaces/review-cases.pdf")
+def review_cases_pdf(project_id: int, item: str | None = None, _current_user: User = Depends(get_current_user),
+                     db: Session = Depends(get_db)):
+    """The cases the Opus review could not decide, for the engineer: each item
+    still in Verification Required with what remains unclear, what to verify and
+    the pictures of the drawing the review was shown. `item`: that one only."""
+    from fastapi.responses import Response
+
+    from app.interfaces import cases_pdf, findings
+
+    project = _get_project_or_404(db, project_id)
+    view = service.build(db, project)
+    db.commit()
+    if item is not None and not any(g["id"] == item for g in view["verification"]):
+        raise HTTPException(404, "That item is not in Verification Required (read the drawings again?)")
+    run_id = (view.get("review") or {}).get("run_id")
+    doc = cases_pdf.build(view, findings.case_folder(project, run_id) if run_id else None, item_id=item)
+    pdf = doc.tobytes(deflate=True)
+    doc.close()
+    if item is not None:
+        g = next(g for g in view["verification"] if g["id"] == item)
+        stem = f"EP-{project.ep_number} FA case - {g['equipment']} {g['ref']}"
+    else:
+        stem = f"EP-{project.ep_number} FA Interfaces - cases to verify"
+    name = _SAFE.sub("_", stem)[:140].strip() + ".pdf"
+    return Response(pdf, media_type="application/pdf", headers={"Content-Disposition": f'attachment; filename="{name}"'})
 
 
 @router.get("/projects/{project_id}/fa-interfaces/export.pdf")
