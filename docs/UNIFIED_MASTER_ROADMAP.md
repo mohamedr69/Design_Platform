@@ -1,18 +1,25 @@
 # Unified Engineering Platform Master Roadmap
 
-Revision U2 — 6 October 2026
-Scope: one integrated delivery roadmap, M1–M25, covering the platform, drawing redesign and project memory.  
-Status: consolidated implementation plan and evidence-based code assessment. No milestone acceptance, live validation authorization or deployment is granted by publishing this document.
+Revision U3 — 6 October 2026
+Scope: one integrated delivery roadmap, M1–M29, covering the platform, drawing redesign, project memory, compliance evidence and engineering workload.  
+Status: consolidated implementation plan and evidence-based code assessment. Revision U3 brings the two workflow requirement specifications (Task One, Task Two) into the sequence as M26–M29, maps their phases, and records the decisions that make them consistent with each other and with the earlier plans. No milestone acceptance, live validation authorization or deployment is granted by publishing this document.
 
 ## 1. Purpose and source precedence
 
-This is one execution roadmap numbered M1–M25 in delivery order. All milestone references in the plan use this unified numbering. Original IDs appear only in the historical cross-reference appendix and unchanged source/evidence titles and paths; they are not separate execution tracks. Shared infrastructure is built once.
+This is one execution roadmap numbered M1–M29. Milestone numbers are stable identifiers; the default delivery order follows the prerequisite graph in section 7, which M26–M29 join by their prerequisites rather than at the end. All milestone references in the plan use this unified numbering. Original IDs appear only in the historical cross-reference appendix and unchanged source/evidence titles and paths; they are not separate execution tracks. Shared infrastructure is built once.
 
 Source plans, preserved byte-for-byte in this project:
 
 - [Platform-Master-Roadmap-M1-M7.pdf](roadmap-sources/Platform-Master-Roadmap-M1-M7.pdf): core data ownership, extraction, classification, central processing, backfill, consumer migration and stabilization.
 - [Redesign-Accuracy-Roadmap-RD-M1-M5.pdf](roadmap-sources/Redesign-Accuracy-Roadmap-RD-M1-M5.pdf): baseline, safe Apply, deterministic geometry, staged AI/visual review and real-project validation.
 - [Engineering_AI_Project_Memory_Master_Plan.pdf](roadmap-sources/Engineering_AI_Project_Memory_Master_Plan.pdf): persistent project facts, decisions, evidence, history, summaries, retrieval and shared agent context.
+
+Workflow requirement specifications, kept unchanged at the repository root and governed by this roadmap (hashes recorded in [SOURCE-MANIFEST.json](roadmap-sources/SOURCE-MANIFEST.json)):
+
+- [Task One — Compliance Statement Improvement Requirements](../Task%20One.md) (sha256 `6d02bcc97b57280f4ff1348ea82188db4dd921abddbf8aae7b41613bcacc0438`): a nine-state, evidence-grounded compliance assessment with a page ledger, atomic requirements, exact-model evidence, deterministic verification, consultant-first retrieval, citations, a consultant outcome loop and a frozen evaluation cohort.
+- [Task Two — Explainable Engineering Team Workload and Overload](../Task%20Two.md) (sha256 `fe92c18307f8509c8fa778d5b2bfb3bb098b28a3613917f0d23a0a781ccc8879`): a deterministic, versioned workload calculation per employee from required Shop Drawing and Material Submittal approval progress, cost band, strength score and ownership share, with a manager dashboard, redistribution scenarios and calibration.
+
+Both tasks are delivered through the unified sequence as M26–M29 (section 8). Their internal “Phase 0–7” numbering is a sub-structure of those milestones, mapped in the appendix; it is not a separate execution track. Each task's requirements stand, but where a task's text and a milestone gate or another task differ, section 6 records the governing decision and the task is read with it.
 
 The original maintained [MASTER-ROADMAP.md](<C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/MASTER-ROADMAP.md>) and [AI-ACCURACY-POLICY.md](<C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/AI-ACCURACY-POLICY.md>) were located through the M4 closure package and consulted. They contain additional scope that the short planning PDFs summarize.
 
@@ -80,6 +87,34 @@ Additional gaps:
 | Read requests still perform work | Drawings GET can reconcile; Interfaces GET creates its row; floor schedule and IFC comparison GETs call folder synchronization; drawing review/preparation GET paths build state. | M10: background production and stored read models; no ordinary-read extraction or business mutation. |
 | Shared content cache is not memory isolation | [cache reuse](<G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/app/ai/cache.py:62>) and DocumentReading intentionally reuse content readings. | M7 artifact contract / M22: contextual outputs keyed by project and dependency versions. |
 
+### Compliance statements and engineering workload
+
+These findings were taken on the branch tree at Revision U3 (section 11). They establish the regression baseline that Task One's “verified current behavior” and Task Two's Phase 0 ask for, and they are why the two tasks cannot be built as stand-alone features without contradicting the earlier plans.
+
+**Compliance (Task One).** The existing workflow matches Task One's baseline list: clause-by-clause handling, deterministic autofill from the knowledge base, AI drafts, engineer approval before export, and approved answers becoming learned examples. What is missing is the evidence layer:
+
+- The response vocabulary in [statements.py](../backend/app/compliance/statements.py) is the consultant-facing wording (Comply, Noted, Complied with remark, Not applicable, By others, Deviation, Clarification required). There is no internal assessment state, so `INSUFFICIENT_EVIDENCE` and `CONFLICTING_EVIDENCE` have no place to live and a missing proof cannot fail closed.
+- [spec_text.py](../backend/app/compliance/spec_text.py) reads a page range and reports a `pages_read` count; there is no per-page ledger with skipped, unsupported, failed and unattempted pages, so coverage denominators cannot be stated.
+- The AI assist prompts in [assist.py](../backend/app/compliance/assist.py) instruct the model not to invent products, values, approvals or certificates. That is an instruction, not a deterministic validator; no numeric, unit, standard, certificate, approval or revision check runs before a positive answer.
+- The datasheet library exists (DatasheetDocument, PartDatasheetLink, BrandSupplier, the Datasheet Engine page) but is not supplied to compliance drafting, confirming Task One's baseline item 8.
+- AiUsage records task, model, tokens, cost, latency and outcome, not prompt version, evidence IDs or source hashes. ComplianceStatement carries `version` and `approved_fingerprint`, which is the start of the immutable approved version Task One requires.
+- Learned answers are indexed by system across projects ([learning.index_for](../backend/app/compliance/learning.py), table above). Task One's retrieval order permits historical answers only as wording guidance; the roadmap's project-local default and governed promotion (M3) apply to that namespace.
+- The knowledge base (KnowledgeResponse, KnowledgeMapping, KnowledgeMappingReview with verified/rejected review states) is the reusable foundation for Task One's “verified organizational knowledge” tier.
+
+**Workload (Task Two).** No workload, capacity, assignment-share or scenario code exists, and the Project Team navigation entry is marked not available yet. The inputs Task Two depends on are only partly owned:
+
+| Task Two input | Current evidence | Owner milestone |
+|---|---|---|
+| Employees and roles | Users with discipline roles and `design_manager`; no department, capacity or effective periods. | M1 refresh (facts), M3 (who may set capacity), M28 |
+| Project assignment and ownership share | One `design_engineer_id` per project; draftsman assignment by name and e-mail, not by user. No shares or effective dates. | M1 refresh, M7 domain record, M28 |
+| Contract value and currency | No field on Project. EstimationProject is a separate register that design accounts cannot read. | M1 refresh, M3 ownership decision, M28 |
+| Required Shop Drawings | `required_drawings` service and DrawingRequirementState exist (what was asked of the contractor); revisions carry `under_review`, `approved`, `approved_as_noted`, `not_approved`, `reply_not_found`. | M7 required-deliverable register |
+| Required Material Submittals | No required-submittal register found. Submittals carry SubmittalStatus (`not_submitted`, `under_review`, `approved`, `rejected`) and a reply code A/B/C; “approved as noted” is a reply code here but a status on shop drawings. | M7 required-deliverable register and one consultant decision vocabulary |
+| Approval history for calibration | ProjectSubmittalStatusChange, ShopDrawingEvent and ProjectSubmittalEvent keep histories; ProjectChange is pruned after 30 days. | M18 durable events |
+| Project archive and cancellation | ProjectStatus exists; deletion removes history (table above). | M3 / M7 archive retention |
+
+These are code findings. Neither task's feature was built or evaluated during this revision.
+
 ## 4. One target architecture
 
 ```text
@@ -131,6 +166,8 @@ Default semantic/context outputs are project-scoped. Pure byte-derived artifacts
 | Open BOQ/IFC | Consume the applicable stored quantities and approved mappings, keeping IFC and Design Sheet BOQ lineage separate. |
 | Open calculations | Read stored inputs/results; source or parameter mutations queue only affected recalculations. |
 | Open memory or ask an agent | Retrieve applicable facts/corrections/evidence, not the entire drawing again. |
+| Open Compliance | Read the stored page ledger, atomic requirements, evidence bundles and assessment states for the current specification version; a missing stage is shown as missing, not re-extracted on read. |
+| Open Engineering Workload | Read the stored calculation snapshot built from the canonical deliverable registers; a changed approval queues one recalculation, the page does not recompute. |
 | User requests Fresh reread | Explicitly invalidate/re-run the selected stages, with reason, budget and retained prior history. |
 
 Reprocessing is justified by changed content, a missing/incomplete artifact, an incompatible processing/profile change, changed relevant dependencies, or an explicit fresh-read request. A renamed/moved identical file changes its location/context; reuse its pure extraction when compatible while reevaluating contextual classification/relationships. A parser change requires an explicit compatibility decision, not automatic reprocessing of every project.
@@ -141,15 +178,29 @@ Viewing/downloading source evidence may serve the original bytes or precomputed 
 
 At M10–M11, exercise every implemented consumer using M7 artifacts. Repeat the same proof with Project Memory at M24–M25 when that consumer exists; its later delivery does not block earlier consumer acceptance.
 
-Process a synthetic drawing once, reset extraction/OCR/model counters, then open Drawings → Interfaces → BOQ → Calculations → Logs → Home → Project Memory. For the completed compatible stages, require **zero additional extraction/OCR/model calls**, unchanged artifact IDs, unchanged business records and consistent quantities/locations. Repeat with concurrent tabs, worker restart, renamed identical content, one changed revision and one incomplete stage. Only the affected/missing stage may run when an authorized processing action/event schedules it.
+Process a synthetic drawing once, reset extraction/OCR/model counters, then open Drawings → Interfaces → BOQ → Calculations → Logs → Home → Project Memory, and, once M26–M29 exist, Compliance → Engineering Workload. For the completed compatible stages, require **zero additional extraction/OCR/model calls**, unchanged artifact IDs, unchanged business records and consistent quantities/locations. Repeat with concurrent tabs, worker restart, renamed identical content, one changed revision and one incomplete stage. Only the affected/missing stage may run when an authorized processing action/event schedules it.
 
-M8 and M12 reuse these geometry/evidence contracts. M21 indexes the stored extraction; it does not introduce a second PDF-reading pipeline.
+M8 and M12 reuse these geometry/evidence contracts. M21 indexes the stored extraction; it does not introduce a second PDF-reading pipeline. M26's page ledger and atomic-requirement extraction run as M7 stages over the same registry, and M28 reads the M7 deliverable registers; neither introduces its own reader or its own register.
 
-## 6. Consistency decisions across the three plans
+## 6. Consistency decisions across the plans and tasks
 
 | Topic | Consolidated decision |
 |---|---|
-| Milestone naming | One canonical M1–M25 sequence. Historical IDs are mapped in the appendix; source PDFs and acceptance reports retain their original names. |
+| Milestone naming | One canonical M1–M29 sequence. Numbers are stable identifiers and are not renumbered when work is added; delivery order follows prerequisites (section 7). Historical IDs are mapped in the appendix; source PDFs and acceptance reports retain their original names. |
+| Task phase numbering | Task One and Task Two each number their own Phases 0–7. Those phases are stages inside M26–M29 (appendix table) and are reported under the milestone, never as “Phase 3” alone. A phase may start when its milestone's prerequisites are met; integration and release wait for the milestone gate. |
+| Workflows build on shared infrastructure | Task One's retrieval, evidence verification and “structured memory” and Task Two's facts, evidence and history are consumers of M7, M11, M16, M18, M19, M21 and M22. No compliance-only retrieval index, context builder, evidence store, event log or deliverable register is built; a workflow that needs one before its owner milestone exists waits or delivers only the parts that do not need it. |
+| Deterministic authority over AI | Both tasks and the redesign plan say the same thing; it is one platform rule. Deterministic validators (M26), the workload formula (M28) and geometry checks (M8) are authoritative. AI may split, locate, extract bounded facts, compare, explain, draft and propose; it cannot override a failed check, approve itself, write to approved records or replace a formula. |
+| Unknown is never complete | Task One's fail-closed states and Task Two's `UNKNOWN`/provisional rule are one principle, also used by M6 UNKNOWN, M10 honest states and M12 held proposals: an unread page, missing proof, undiscovered scope or missing input is reported as such, never as compliant, approved, complete or zero load. |
+| One consultant decision vocabulary | Shop drawing revisions (`approved_as_noted` status) and material submittals (reply code B) record the same consultant decision differently. M7 defines one canonical decision set (approved, approved as noted, revise and resubmit / not approved, rejected, clarification requested, superseded, reply not on file) at submission and, for compliance statements, clause level. Task One's closed-loop outcomes and Task Two's approval percentages read this one model. |
+| “Approved as noted” and finality | Whether “approved as noted” counts as final approval for workload is a company policy, not a code default. M3 records the decision; M7 stores it as versioned, auditable configuration; M28 applies it and shows the mapping in every drill-down. Until recorded, it does not count as final. |
+| Assessment state versus exported response | Task One's nine assessment states are internal and authoritative. The company's response wording exported to the consultant (Comply, Noted, Complied with remark, Not applicable, By others, Deviation, Clarification required) is derived from them through a recorded mapping; a response cannot read Comply unless the state is `COMPLIES_EVIDENCED` with eligible citations. Existing exports and approval gates remain the regression baseline. |
+| Historical answers and global knowledge | Approved answers from other projects are wording guidance only (Task One tier 8) and never evidence. They live in the governed global namespace of section 4 under M3's promotion rule: statement approval promotes wording, not facts, and the retrieval result carries the originating project, reviewer and date. The knowledge base's verified responses are tier 7, project-local decisions stay project-local. |
+| Accuracy gate rule | Task One's acceptance (98% accepted-compliance precision, 90% recovery, zero unresolved critical false positives) uses the same frozen-cohort rules as M4: declared denominators, at least 12 independently reviewed matched cases per evaluated field or population, otherwise `NOT ESTABLISHED`; AI-drafted labels are provisional. One scorer convention serves M4, M13, M27 and M25. |
+| Evidence contract once | Task One's evidence item (source hash, page/region, original and normalized value, method/version, freshness, confidence, reviewer decision) is the M7 typed evidence primitive that M16 also consumes. Task Two's strength reasons and contract-value sources cite the same primitive. |
+| Workload facts have owners | Contract value and currency, employee capacity with effective periods, assignment ownership shares, required-deliverable scope and stream applicability are new facts added to the M1 ownership matrix; M3 names who may record and override each (the engineering manager for capacity, shares, strength overrides and applicability). They are domain records under M7, not spreadsheet inputs of the workload page. |
+| No continuous retraining | Task One (compliance labels) and Task Two (strength overrides) both forbid continuous retraining. Overrides and reviews become labeled examples held by M19/M23 governance; any later model improvement needs a separately curated, evaluated dataset and the M25 acceptance route. Fine-tuning stays a post-foundation extension. |
+| Staged rollout and flags | Both tasks release behind a feature flag with rollback. The platform has no flag mechanism today; M26 introduces one per-project, server-enforced flag convention that M27, M28 and M29 reuse. While a flag is off, the existing approved workflow stays authoritative, exactly as Task One's definition of done states. |
+| Project Team tab | Section 9 previously placed Team outside milestone scope. Task Two makes the engineering workload view the first delivered content of that tab (M28/M29). O&M, Reports and Settings remain outside scope. |
 | Memory versus domain truth | Existing domain owners stay canonical. Add typed facts/projections and event/evidence links; avoid independently editable duplicate BOQ, drawing or approval stores. |
 | “Read once” responsibility | Central artifact production belongs to M7; consumer conversion to M10; reliability and invalidation to M11. Memory consumes the results. |
 | AI sequencing | AI extraction/verification belongs to M4 and classification assistance to M6. Project RAG and new optional agent expansion follow M11. Existing drawing-agent code still needs drawing-workflow acceptance. |
@@ -164,9 +215,20 @@ M8 and M12 reuse these geometry/evidence contracts. M21 indexes the stored extra
 | Budgets and sources | Reuse existing valid permissions only within their exact scope. This roadmap creates no experimental allowance, default-model selection, backfill or live cutover. |
 | Future extensions | Full knowledge graphs, fine-tuning, advanced proactive alerts and handover packages remain post-foundation extensions. Global-promotion control and basic stale-dependency propagation are required earlier. |
 
-## 7. Single delivery sequence — M1–M25
+## 7. Single delivery sequence — M1–M29
 
-Use this sequence for planning, issue titles, progress reporting and completion records. The prerequisite column names technical dependencies; the ordered list is the default delivery order. Earlier work remains credited to its assessed snapshot. Renumbering neither resets completed work nor declares an incomplete milestone accepted.
+Use this sequence for planning, issue titles, progress reporting and completion records. The prerequisite column names technical dependencies. Earlier work remains credited to its assessed snapshot. Adding milestones neither resets completed work nor declares an incomplete milestone accepted.
+
+Default delivery order (numbers are identifiers, not positions):
+
+```text
+M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10 → M11
+  → { M12 → M13 }  ∥  { M26, M28 }  ∥  { M14 → M15 → M16 → M17 }
+  → M18 → M19 → M20 → M21 → M22 → M23
+  → { M27, M29 } → M24 → M25
+```
+
+Braces hold work that may proceed in parallel once its own prerequisites are met. M26 and M28 start after M11 alongside the drawing and memory tracks; M27 and M29 follow the shared retrieval/context and event milestones; M24 and M25 close after every workflow consumer exists.
 
 Design and isolated preparation may overlap where prerequisites allow, but integration and release must satisfy the stated gates. Shared event/evidence contracts start at M7; their complete memory features are delivered later. Quality instrumentation starts with the foundation and closes at M25.
 
@@ -195,12 +257,16 @@ Design and isolated preparation may overlap where prerequisites allow, but integ
 | M21 | Project-Scoped RAG | Dedicated chunk/vector retrieval missing. | M11, M16, M19, M20 |
 | M22 | Shared Project Context Builder | Task-specific strings and budgets only. | M15, M19, M20, M21 |
 | M23 | Controlled Automatic Memory Capture | Domain proposals exist; general memory capture missing. | M18, M19, M22 |
-| M24 | Memory Integration Across Engineering Workflows | Multiple AI workflows; common memory contract missing. | M10, M13, M17, M22, M23 |
+| M24 | Memory Integration Across Engineering Workflows | Multiple AI workflows; common memory contract missing. | M10, M13, M17, M22, M23, M27, M29 |
 | M25 | End-to-End Quality, Operations & Acceptance | AI usage metrics only. | M11, M13, M24 |
+| M26 | Compliance Evidence, Requirements & Deterministic Verification | Clause handling, autofill, approval and export exist; no assessment states, page ledger, evidence items or validators. | M3, M4, M6, M7, M11 |
+| M27 | Compliance Retrieval, Drafting, Outcomes & Release | Prompt-level guidance and cross-project learned answers only. | M18, M19, M21, M22, M23, M26 |
+| M28 | Engineering Workload Engine & Dashboard | No workload, capacity, share or snapshot code; inputs partly owned (section 3). | M1, M3, M7, M9, M11 |
+| M29 | Workload Scenarios, Strength Proposals, Calibration & Release | Missing. | M15, M16, M18, M22, M28 |
 
-The current extraction closure belongs to **M4** and safe Apply closure to **M5**. Their historical evidence retains the source-plan identifiers; use the appendix when reading those reports. Owners and dates remain to be assigned against actual capacity and validation scope.
+The current extraction closure belongs to **M4** and safe Apply closure to **M5**. Their historical evidence retains the source-plan identifiers; use the appendix when reading those reports. Task One is M26 and M27; Task Two is M28 and M29; their phase mapping is in the appendix. Owners and dates remain to be assigned against actual capacity and validation scope.
 
-## 8. Milestone details — M1–M25
+## 8. Milestone details — M1–M29
 
 ### M1 — Data Requirements, Ownership & Current-State Map
 
@@ -209,6 +275,8 @@ The current extraction closure belongs to **M4** and safe Apply closure to **M5*
 **Status:** accepted historical snapshot; update required for current code.
 
 Reuse the existing 155-field ownership inventory and consumer map. Add current interface scans/reviews, drawing preparation/coverage, source artifacts, project memory and every new producer introduced since that snapshot. Identify all GET-side work and manual-override writers.
+
+Add the facts Task One and Task Two introduce, each with an owner, producer and override writer: compliance assessment state, atomic requirement, evidence item and consultant decision; contract value and currency; employee capacity and effective period; assignment ownership share; required Shop Drawing and Material Submittal scope and stream applicability. Record where each is held today (section 3) and that the estimation register is not the design projects' contract-value owner.
 
 **Deliver:** refreshed field/producer/persistence/consumer/freshness/override matrix; shared artifact capability map; protected behavior list; traceable changes from the accepted M1 snapshot.
 
@@ -232,6 +300,8 @@ Retain the 35-finding inventory and frozen Golden evidence. Add a delta inventor
 
 **Deliverable and acceptance gate:** Align with refreshed M1: fact ownership, project access, critical confirmer, archive retention, global promotion, scoped revisions and artifact reuse. Recorded contract accepted before authoritative memory writes.
 
+Also record, as owner decisions this roadmap cannot take: whether “approved as noted” is final approval for workload (section 6); that approved compliance answers from other projects are wording guidance in the global namespace and never evidence; the project AI/provider policy that bounds what compliance evidence may be transmitted; who may record and override contract value, capacity, ownership shares, stream applicability and strength scores (Task Two names the engineering manager); and that an archived or cancelled project keeps its engineering history and drops out of active workload without deletion.
+
 ### M4 — Extraction Reliability
 
 **Prerequisites:** M1, M2, M3.
@@ -253,6 +323,8 @@ Required closure work:
 The frozen R32 field gates include at least 98% accepted precision, at least 90% correct recovery and at least 12 matched cases per evaluated field. Preserve its negative-control and association gates as well. The broader policy targets zero observed adjudicated critical false accepts and requires no unresolved critical false acceptance; passing a percentage alone does not override that requirement. R32 scores identity, revision and decision, so its success would not close dates/sections or BOQ evidence.
 
 **Evidence:** [current closure](<G:/dev (2)/dev/ep-platform-merged/m2-closure/M2-CLOSURE-DECISION-2026-10-06.md>) and the linked acceptance matrix. Verification 42's zero-request rehearsal establishes preparation behavior only.
+
+M4 closes extraction of project documents, Design Sheets and BOQ. It does not close specification-clause extraction for compliance; that cohort, with the same gate rules, is M27's. M26 reuses M4's accepted readers and page accounting rather than adding a reader.
 
 ### M5 — Safe Apply & AutoCAD Block Library
 
@@ -292,6 +364,8 @@ Implement the shared registry/artifact contract in section 5. Add central orches
 
 Keep raw observations and proposed values separate from effective engineer-confirmed values. Write audit/event/outbox records in the same transaction. Define typed facts and source adapters for future memory. Add project access, archive retention and controlled global promotion at the domain boundary.
 
+For the workflow milestones, M7 also owns: the typed evidence item (section 6) that M16, M26 and M29 consume; the one consultant decision vocabulary applied to shop drawing revisions, material submittal revisions and, later, compliance clauses, with a reviewed migration of today's two vocabularies; the required-deliverable registers for Shop Drawings and Material Submittals (distinct required items under the approved scope, duplicates and revisions folded into one identity, applicability recorded, unknown kept distinct from zero), extending the existing required-drawings service rather than adding a second register; and page-level stage coverage in the processing registry, which is the page ledger M26 reads.
+
 **Exit:** rerunnable/recoverable processors produce stored domain records and relationships once; APIs can serve them without opening originals; engineer decisions survive reassessment. Shared physical equipment IDs and coordinate systems support Interfaces, BOQ and Drawings consistently.
 
 ### M8 — Deterministic Geometry, Placement & Coordination
@@ -318,6 +392,8 @@ Replace the explicit 2,000-file refusal with bounded, checkpointed discovery tha
 
 **Exit:** 2,000/5,000/10,000-file tests account for eligible = processed + skipped + failed + unresolved; no unexplained loss or business change. Apply no historical repair merely because this roadmap exists.
 
+Backfill also populates the M7 required-deliverable registers and consultant decisions for existing projects from their folders and reply records, with per-record disposition; unknown scope stays unknown. M28's calibration (M29) depends on this history being complete and honestly labelled.
+
 ### M10 — Database-Driven Tab Migration
 
 **Prerequisites:** M7, M8, M9.
@@ -327,6 +403,8 @@ Replace the explicit 2,000-file refusal with bounded, checkpointed discovery tha
 Migrate each consumer using the matrix in section 9: compare old/new outputs, preserve controls, switch incrementally and observe. Move synchronization, extraction, status reconstruction and state mutation from ordinary GETs into background processors or explicit commands.
 
 **Exit:** ordinary tab reads perform no source parsing/OCR/model calls/folder scans or business writes; completed compatible artifacts are reused across tabs. Evidence download/view may serve bytes. Show pending, stale, missing, partial and conflict states honestly. Home migrates after its inputs.
+
+The Compliance tab's specification finding, verification and stale checks move off ordinary reads here. Task One's “read endpoints must not process or mutate” and Task Two's “read endpoints are side-effect free” are this gate; M26 and M28 are built to it from the start and need no later migration.
 
 ### M11 — Stabilization, Dependency Engine & Legacy Cleanup
 
@@ -340,7 +418,9 @@ Test concurrent tabs, worker restarts, retries, partial failures, cache/version 
 
 Rehearse PostgreSQL migrations, driver/configuration, transactions, locking, constraints, connection pooling and backup/restore once the architecture is stable; record execution and rollback separately.
 
-**Exit:** no material duplicate processing; reliable recovery and accurate invalidation; accepted database path for production scale. This is the gate before project RAG and new optional agent expansion.
+**Exit:** no material duplicate processing; reliable recovery and accurate invalidation; accepted database path for production scale. This is the gate before project RAG, new optional agent expansion, and the workflow milestones M26 and M28.
+
+The dependency graph carries two workflow edges: specification version, product selection, evidence association or rule version → compliance assessment (M26 marks the approved version stale, never overwrites it); consultant decision, required scope, assignment, capacity or configuration version → workload snapshot (M28 queues one recalculation for the affected project and employees only).
 
 ### M12 — Multi-Stage AI & Visual Review
 
@@ -402,6 +482,8 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 
 **Deliverable and acceptance gate:** Durable before/after events, actor, rationale, effective/recording times and source, transactional delivery and deduplication; query what/when/why across modules.
 
+Consultant decisions at submission and clause level, capacity and ownership-share changes, strength overrides and configuration version changes are durable events here, with effective and recording time. Task One's closed-loop consultant outcomes (M27) and Task Two's historical calibration (M29) read this timeline; neither keeps its own.
+
 ### M19 — Conflicts, Corrections & Revision Authority
 
 **Prerequisites:** M15, M16, M18.
@@ -409,6 +491,8 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 **Status:** Partial domain supersession.
 
 **Deliverable and acceptance gate:** Scoped fact identity, authority precedence, confirmed corrections, effective periods, historical queries and atomic supersession. One applicable truth or explicit unresolved conflict; approved-source conflicts are reviewed.
+
+Authority precedence covers the workflow cases: a consultant's recorded decision outranks an inferred status; an engineer's approved assessment outranks an AI draft; the engineering manager's recorded override outranks a proposed strength score, with the previous value retained; a superseded specification revision or datasheet makes evidence ineligible without deleting it. Rejected wording, products and evidence patterns are retained as warning memory for retrieval, never as an automatic rejection rule.
 
 ### M20 — Versioned Project Summaries
 
@@ -426,6 +510,8 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 
 **Deliverable and acceptance gate:** After M11: index shared stored extraction with project/system/revision/status/location/model metadata, filter before ranking, keep global/project namespaces separate. No duplicate PDF reader.
 
+The index carries the metadata Task One's consultant-first retrieval filters on: source class (consultant specification, approved product, exact-model datasheet, certificate or listing, approved submittal and reply, calculation/schedule/drawing/BOQ/design fact, verified knowledge, historical approved answer), eligibility, freshness and exact manufacturer/model. Compliance retrieval is a query against this index; it is not a second index.
+
 ### M22 — Shared Project Context Builder
 
 **Prerequisites:** M15, M19, M20, M21.
@@ -433,6 +519,8 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 **Status:** Task-specific strings and budgets only.
 
 **Deliverable and acceptance gate:** One ProjectContextBuilder chooses minimum facts/corrections/events/summary/RAG, applies authority/temporal rules and token budgets, and returns source IDs, uncertainty and version. Project/access/dependency-aware caching.
+
+Task One's eight-tier consultant-first order and Task Two's “explanations only from stored inputs” are context policies of this builder, selected per task. The builder records provider, model, prompt version, project policy, evidence IDs, source hashes, usage and result for every attempt, which closes the AiUsage gap in section 3; failed, partial, refused, timed-out and budget-stopped attempts stay visible and never replace prior good evidence.
 
 ### M23 — Controlled Automatic Memory Capture
 
@@ -442,13 +530,15 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 
 **Deliverable and acceptance gate:** After M19 core: useful event/conversation candidates, schema/evidence validation, scoped deduplication and risk policy; filler ignored, critical inference never auto-confirmed.
 
+Task One's rejection memory (rejected wording, products and evidence patterns from consultant outcomes) and Task Two's labelled strength overrides are captured under this policy as candidates with evidence; neither becomes a confirmed fact, a rule or training data by being captured.
+
 ### M24 — Memory Integration Across Engineering Workflows
 
-**Prerequisites:** M10, M13, M17, M22, M23.
+**Prerequisites:** M10, M13, M17, M22, M23, M27, M29.
 
 **Status:** Multiple AI workflows; common memory contract missing.
 
-**Deliverable and acceptance gate:** Connect compliance, drawings/review/preparation, interfaces, BOQ/IFC, material submittals and calculations through one context contract; consistent corrections and versioned outcomes.
+**Deliverable and acceptance gate:** Connect compliance, drawings/review/preparation, interfaces, BOQ/IFC, material submittals, calculations and engineering workload through one context contract; consistent corrections and versioned outcomes. The compliance adapter is M27's and the workload adapter M29's; M24 proves that the same correction (section 10: 125 → 105), the same consultant decision and the same specification revision reach every consumer consistently.
 
 ### M25 — End-to-End Quality, Operations & Acceptance
 
@@ -457,6 +547,71 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 **Status:** AI usage metrics only.
 
 **Deliverable and acceptance gate:** Wrong-project/revision rates, critical evidence coverage, false-memory adjudication, retrieval precision, token use, duplicates, summary freshness, issue aging and agent consistency; labeled evaluations and recovery gates pass.
+
+M25 also confirms the two workflow releases under the common scorer convention (section 6): M27's compliance cohort results and M29's calibration and manager-review record are re-read on the final tree, and their feature flags may be removed only here.
+
+### M26 — Compliance Evidence, Requirements & Deterministic Verification
+
+**Prerequisites:** M3, M4, M6, M7, M11.
+
+**Status:** Clause handling, deterministic autofill, AI drafts, approval and export exist (Task One baseline items 1–8); no assessment states, page ledger, atomic requirements, evidence items, product/model identity or validators.
+
+**Source:** Task One Phases 0–3.
+
+Freeze the baseline behavior as regression tests (Phase 0), then build on M7's registry and evidence primitives:
+
+- Page ledger over the specification's stored extraction: every page visited, skipped, unsupported, failed or unattempted with a reason; all in-scope pages stay in the denominator; an unread page blocks any claim of complete assessment.
+- Atomic requirements split from compound clauses, keeping the original clause and its AND/OR/condition/exception/alternative relationships, with source hash, page, region, clause reference, exact text, requirement type, expected value/model/unit/standard/approval, extraction version, confidence and review provenance. Uncertain splitting goes to engineer review.
+- Exact manufacturer and model identity with proposed, submitted, approved, rejected, superseded and installed states; evidence items as M7 typed evidence; controlled ingestion of datasheets, certificates, listings, approvals and test reports from the existing datasheet library, with hash, validity and exact-model verification and engineer review before a source becomes trusted. Automatic retrieval, if introduced, follows Task One's source, hash, URL/time and review rules.
+- A deterministic verification library: exact model association, numeric comparison, unit conversion, standards and editions, certificate identity/validity/scope, approvals, revision currency, applicability, cross-source conflict and completeness of mandatory proof. Every requirement resolves to exactly one of the nine assessment states; missing or conflicting mandatory proof fails closed.
+- Invalidation through the M11 dependency graph; the prior approved version is kept immutable and marked stale.
+- The per-project feature flag convention (section 6); the existing response wording is derived from the assessment state through the recorded mapping while the flag is on, and the existing workflow is untouched while it is off.
+
+**Exit:** on frozen fixtures, 100% of declared pages are accounted for; every extracted requirement links to its page and region; every positive state has an eligible evidence item for the correct project and exact model; every missing mandatory proof fails closed; no read endpoint processes or mutates; the Task One baseline regression suite passes. No model call is needed to pass this gate; AI drafting is M27.
+
+### M27 — Compliance Retrieval, Drafting, Outcomes & Release
+
+**Prerequisites:** M18, M19, M21, M22, M23, M26.
+
+**Status:** Prompt-level guidance and cross-project learned answers only.
+
+**Source:** Task One Phases 4–7.
+
+Consultant-first retrieval as an M22 context policy over the M21 index; bounded AI tasks (split, locate, extract bounded facts, compare against verified evidence, explain conflicts, draft wording, propose citations, prioritise review) producing structured outputs that remain drafts; citations that show source name, revision, page and clause/region and open the cited page; `ALTERNATIVE_FOR_APPROVAL` with the unmet requirement, alternative, differences, evidence, risks and the explicit consultant approval still required.
+
+Engineer review of every non-informative requirement; immutable approved statement versions; Excel/PDF export of the approved version with citations; consultant outcomes (approval, approved as noted, rejection, clarification, supersession) at clause and submission level recorded as M18 events under the M7 decision vocabulary and linked to the submitted version, evidence bundle and product; rejection memory captured under M23.
+
+**Exit:** on a fresh, frozen, independently engineer-reviewed cohort spanning consultants, contractors, layouts, systems, products, scans, tables, compound clauses, units, standards, approvals, missing evidence, conflicts, deviations and alternatives: accepted-compliance precision ≥ 98%, recovery ≥ 90% per declared field/population, zero unresolved critical false-positive compliance claims, 100% of positive claims with current eligible citations, 100% of exports from an approved immutable version, reconciliation finds no lost, duplicated or silently overwritten approved record, every assessment change explainable from source, rule/model or reviewer history. Fields below the 12-case minimum report `NOT ESTABLISHED`. Baseline and candidate are compared under declared conditions and the limitations published. Release is per project behind the flag, with false positives, review load, latency and cost monitored and rollback verified.
+
+### M28 — Engineering Workload Engine & Dashboard
+
+**Prerequisites:** M1, M3, M7, M9, M11.
+
+**Status:** No workload, capacity, share or snapshot code; the Project Team tab is a placeholder; inputs partly owned (section 3).
+
+**Source:** Task Two Phases 0–4.
+
+Confirm the authoritative sources from the refreshed M1 matrix and measure their completeness (Phase 0). Read required Shop Drawing and Material Submittal scope and final approval from the M7 registers and decision vocabulary (Phase 1); only the canonical final approved decision counts, “approved as noted” per the M3 policy, duplicates and revisions never raise the denominator, an undiscovered scope is `UNKNOWN` and an explicitly not-required stream has its weight removed and the rest normalised to 1.00.
+
+Deterministic engine (Phase 2): versioned configuration for BasePoints, stream weights, cost bands and factors, strength factors, ownership factor ranges, capacity and status thresholds, all recorded as proposals until the manager approves a version; EngineeringRemainingFactor, CostFactor from banded, currency-normalised contract value, StrengthFactor, OwnershipFactor, ProjectLoad, employee totals, load and overload percentages and status bands; immutable snapshots reproducible from recorded inputs, with missing-data flags and documented fallbacks. Handover and Testing and Commissioning status are not inputs. Ownership shares in one responsibility pool must total 1.00 unless an additive support exception is recorded and reported separately.
+
+Strength review (Phase 3, deterministic part): the 1–5 level with manager accept/override, previous value, reason, actor, time, evidence and effective version; proposals at this milestone come from recorded rules over stored facts only and cite their sources; cost is never an input.
+
+Dashboard and drill-down (Phase 4) under the Project Team tab behind the flag: employee summaries, ranked contributions, the complete calculation, effective weights, counts and percentages per stream, cost and strength provenance, share validation, assumptions, override and audit history, filters, last calculation time and configuration version. Plain-language driver explanations are generated from the snapshot's inputs and agree with them exactly.
+
+**Exit:** Task Two acceptance criteria 1–13, 15 and 16 pass on fixtures and on at least one real project set under review by the engineering manager: every assigned project under the right employee; zero load only when both applicable streams are finally approved or explicitly not required; non-final statuses and unknown scope never count; the displayed calculation reproduces the stored load exactly; no double counting across shares; cost banded and not reused in strength; read endpoints side-effect free; snapshots reproducible; regression tests for zero-required streams, unknown data, duplicates, revisions, multi-currency, splits, reopened approvals and configuration change.
+
+### M29 — Workload Scenarios, Strength Proposals, Calibration & Release
+
+**Prerequisites:** M15, M16, M18, M22, M28.
+
+**Status:** Missing.
+
+**Source:** Task Two Phases 3 (model-assisted part), 5, 6 and 7.
+
+Non-destructive redistribution scenarios with before/after load, share validation and an explicit authorised apply action; model-assisted strength proposals through M22 from M15 facts with M16 evidence, confidence and cited reasons, held when evidence is insufficient; calibration of weights, bands, factors and thresholds on completed historical periods from the M18 timeline, comparing predicted load with actual effort and delivery outcomes, publishing sample sizes and uncertainty, preserving the prior configuration and requiring manager approval for a new effective version; dated snapshot export.
+
+**Exit:** Task Two acceptance criteria 9, 10, 14, 17 and 18 pass: proposals show documented reasons and sources; overrides are fully audited; scenarios change nothing until applied; the manager confirms the explanations name the true stored drivers with no invented facts; a calibrated configuration version is approved, or the proposed values stay labelled as proposals. Release per project behind the flag, compared with manager assessment and monitored for data quality and override rate.
 
 ## 9. Explicit tab coverage and migration contracts
 
@@ -471,15 +626,17 @@ Use reviewed fresh cases across project types, layouts, rotations and discipline
 | BOQ — IFC | Drawing records, device extraction, comparisons | Reuse physical equipment/quantity artifacts; preserve IFC lineage separately from shop/Design Sheet records. |
 | Floor Schedule | Persisted schedule and mappings | Move folder synchronization off GET; preserve ambiguous-row manual material choices on updates. |
 | Battery / CBS, amplifier, 24V calculations | Deterministic calculation services and persisted inputs/results | Consume typed approved equipment/current/load constraints; recalculate only affected dependencies. Existing panel-battery support does not alone establish every CBS workflow. |
-| Material Submittals | Register, revisions, replies, history, package services | Persist review-cycle/comment/reply/decision relationships; protect overrides and approved revision state. |
+| Material Submittals | Register, revisions, replies, history, package services | Persist review-cycle/comment/reply/decision relationships under the one consultant decision vocabulary; a required-submittal register distinct from filed documents; protect overrides and approved revision state. Feeds M28. |
 | Proposed Materials | BOQ/calculation-derived lists | Stored, versioned projection with source and engineer overrides. |
-| Compliance / Knowledge | Statements, audit, lexical knowledge, learned answers | Project-local decisions, controlled global promotion, source indexing and stale checks off ordinary reads. |
+| Compliance / Knowledge | Statements, approval fingerprint and version, audit, lexical knowledge, learned answers, deterministic autofill | Project-local decisions, controlled global promotion, source indexing and stale checks off ordinary reads (M10); then M26 assessment states, page ledger, atomic requirements, evidence items and validators, and M27 retrieval, cited drafting, immutable versions, cited exports and consultant outcomes. The existing approval and export gates are the regression baseline throughout. |
+| Datasheet library / Datasheet Engine | DatasheetDocument, PartDatasheetLink, BrandSupplier, company library | Controlled ingestion as evidence with hash, exact-model verification, validity and review (M26); served to compliance and to workload strength reasons through the shared evidence item, never as unverified attachments to a prompt. |
 | Samples | Existing sample workflow | Dedicated domain contract and evidence; classification aids discovery only. |
-| Logs | Existing register/report views | Pure reports over canonical revisions and domain records. |
+| Logs | Existing register/report views | Pure reports over canonical revisions and domain records, using the one consultant decision vocabulary. |
+| Engineering Workload (Project Team) | Placeholder navigation entry; users with roles; single design engineer per project | M28 engine, snapshots and dashboard over M7 registers and decisions; M29 scenarios, model-assisted strength and calibration. No separate copy of deliverable status. |
 | Home | ProjectStateService and actions | Aggregate stored upstream truth after those consumers migrate. |
 | Project Memory | Dedicated UI/service missing | Manual review, facts, evidence, timeline, summary and later retrieval through shared domain owners. |
 | Cause & Effect / Estimation where applicable | Within original M1 inventory scope | Inventory and preserve supported behavior; defer new features explicitly rather than imply completion. |
-| O&M / general Reports / Team / Settings | Some navigation entries marked soon | Outside the named milestone scope unless separately added; their placeholders do not count as implemented deliverables. |
+| O&M / general Reports / Settings | Navigation entries marked soon | Outside the named milestone scope unless separately added; their placeholders do not count as implemented deliverables. The Project Team entry is now in scope through M28/M29. |
 
 Each row needs a consumer acceptance record: input owner, source/artifact IDs, API contract, freshness, override behavior, legacy/new comparison, no-read-work check and rollback switch.
 
@@ -515,9 +672,11 @@ The [candidate integration comparison](roadmap-evidence/2026-10-06/candidate-int
 
 The [post-review drift check](roadmap-evidence/2026-10-06/source-drift-check.json) found one externally changed file: backend/tests/test_scoped_drawing_review.py, which is not in the focused test selection. Application files and the selected test sources still matched the captured hashes at that check; HEAD remained 831c198. The reported tests apply to the captured snapshot.
 
+**Revision U3 check (branch tree, Linux container, Python 3.13, no Tesseract).** The 551 snapshot files were rehashed against the branch: 548 match (after line-ending normalisation), and the three that differ are `backend/app/review/service.py`, `backend/tests/test_drawing_review_outcome.py` and `backend/tests/test_scoped_drawing_review.py`, all changed by the later commit “Clarify incomplete drawing review outcomes”. The seven focused suites plus those two review test files were rerun: **106 passed, 3 skipped, 1 failed**. The one failure, `test_an_ocr_failure_on_one_page_is_noted_and_the_batch_continues`, needs Tesseract on the PATH and did not reach the OCR seam in this container; it is an environment gap, not a regression. The section 3 findings on compliance and workload were taken on the same tree by reading the source; no feature was built or evaluated.
+
 ## 12. Historical milestone cross-reference
 
-This appendix is for locating earlier PDFs, files and acceptance records. These historical identifiers are not additional milestones or separate roadmaps. Their status belongs to the exact snapshot named by their evidence; use M1–M25 for all new execution tracking.
+This appendix is for locating earlier PDFs, files and acceptance records. These historical identifiers are not additional milestones or separate roadmaps. Their status belongs to the exact snapshot named by their evidence; use M1–M29 for all new execution tracking.
 
 | Unified milestone | Original source reference | Scope |
 |---|---|---|
@@ -546,6 +705,31 @@ This appendix is for locating earlier PDFs, files and acceptance records. These 
 | M23 | Project Memory PM-M9 | Controlled Automatic Memory Capture |
 | M24 | Project Memory PM-M11 | Memory Integration Across Engineering Workflows |
 | M25 | Project Memory PM-M12 | End-to-End Quality, Operations & Acceptance |
+| M26 | Task One Phases 0–3 | Compliance Evidence, Requirements & Deterministic Verification |
+| M27 | Task One Phases 4–7 | Compliance Retrieval, Drafting, Outcomes & Release |
+| M28 | Task Two Phases 0–4 | Engineering Workload Engine & Dashboard |
+| M29 | Task Two Phases 3 (model-assisted), 5–7 | Workload Scenarios, Strength Proposals, Calibration & Release |
+
+### Task phase cross-reference
+
+| Task phase | Where it is delivered | Shared milestones it depends on |
+|---|---|---|
+| Task One P0 Baseline and contracts | M2 delta inventory (compliance baseline), M3 decisions, M26 schema/metric freeze | M1, M2, M3 |
+| Task One P1 Requirements and traceability | M26 | M4 readers, M7 registry page coverage |
+| Task One P2 Evidence and product identity | M26 | M7 evidence item, M11 invalidation |
+| Task One P3 Deterministic verification | M26 | — |
+| Task One P4 Retrieval and AI drafting | M27 | M21 index, M22 context builder |
+| Task One P5 Review, export and outcome memory | M27 | M18 events, M19 authority, M23 capture |
+| Task One P6 Independent evaluation | M27 exit gate | M4 scorer convention |
+| Task One P7 Controlled rollout | M27 release; flags removed at M25 | M24, M25 |
+| Task Two P0 Ownership and baseline | M1 refresh, M3 decisions, M28 completeness measure | M1, M3 |
+| Task Two P1 Canonical progress | M7 registers and decision vocabulary; M9 backfill | M7, M9 |
+| Task Two P2 Deterministic engine | M28 | M11 dependency edges |
+| Task Two P3 Strength proposal and review | M28 (manual and rule-based), M29 (model-assisted) | M15, M16, M22 |
+| Task Two P4 Dashboard and drill-down | M28 | M10 read gate |
+| Task Two P5 Redistribution scenarios | M29 | — |
+| Task Two P6 Historical calibration | M29 | M18 timeline |
+| Task Two P7 Controlled rollout | M29 release; flags removed at M25 | M24, M25 |
 
 ## 13. Delivery and acceptance records
 
@@ -560,11 +744,12 @@ Use the complete [historical M2 acceptance matrix](<G:/dev (2)/dev/ep-platform-m
 
 ## 14. Immediate next work
 
-1. Refresh M1 ownership and M2 drawing baseline for the current code, then close the M3 access, retention, authority and reuse contracts.
+1. Refresh M1 ownership and M2 drawing baseline for the current code, adding the compliance and workload facts of section 3, then close the M3 access, retention, authority and reuse contracts together with the owner decisions section 6 leaves to M3 (“approved as noted” finality, historical-answer namespace, who records capacity, shares, value and strength).
 2. Close M4 extraction reliability using the complete existing acceptance matrix and exact frozen validation rules.
 3. Complete M5 safe Apply correction review and integration, preserving current drawing preparation behavior.
-4. Deliver M6–M11: classification, shared processing, deterministic geometry, backfill, tab migration and stabilization. Verify that Drawings and Interfaces reuse the same compatible stored artifacts.
-5. Complete M12 visual review and M13 real-project drawing validation.
-6. Complete M14–M25: governed memory storage, facts, evidence, UI, durable history, conflict control, summaries, RAG, shared context, automatic capture, workflow integration and final acceptance.
+4. Deliver M6–M11: classification, shared processing (including the one consultant decision vocabulary, the required-deliverable registers and the typed evidence item), deterministic geometry, backfill, tab migration and stabilization. Verify that Drawings and Interfaces reuse the same compatible stored artifacts.
+5. Complete M12 visual review and M13 real-project drawing validation; in parallel start M26 compliance evidence and M28 workload engine once M11 is accepted.
+6. Complete M14–M23: governed memory storage, facts, evidence, UI, durable history, conflict control, summaries, RAG, shared context and automatic capture.
+7. Complete M27 compliance drafting and release and M29 workload scenarios, calibration and release, then M24 workflow integration and M25 final acceptance.
 
 The next implementation task should name one unified milestone, its bounded scope, the snapshot it changes, its exact completion gate and evidence destination. Keep useful existing work and historical acceptance evidence.
