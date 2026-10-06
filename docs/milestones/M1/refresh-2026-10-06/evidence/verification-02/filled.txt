@@ -1,0 +1,79 @@
+INH	SD.revision_file	Drawing Processor (D-04, inherited)	||	ShopDrawingRevision.drawing_path / drawing_page / drawing_sha256 (existing; D-04, inherited)
+INH	SD.revision_source_missing	Drawing Processor (D-04, inherited)	||	ShopDrawingRevision.source_missing (existing; D-04, inherited)
+INH	SD.revision_issued_on	Drawing Processor (D-04, inherited)	||	ShopDrawingRevision.issued_on (existing; D-04, inherited)
+INH	SD.confirmation	Drawing Processor (D-04, inherited); override kept per D-15	||	ProjectShopDrawing / ShopDrawingRevision confirmed_by_id, confirmed_at (existing; D-04 and D-15, inherited)
+INH	SD.drawing_title	Drawing Processor (D-04, inherited)	||	ProjectShopDrawing.title (existing; D-04, inherited)
+INH	SD.drawing_active	Drawing Processor (D-04, inherited)	||	ProjectShopDrawing.active (existing column; D-04, inherited)
+INH	SD.drawing_remarks	Drawing Processor (D-04, inherited)	||	ProjectShopDrawing.remarks (existing; D-04, inherited)
+INH	SD.issue_resolution	Drawing Processor (D-04, inherited)	||	DrawingIssue resolved_at / resolved_by_id / resolution / key (existing; D-04, inherited)
+INH	SD.required_catalogue	Requirements service (D-08(a), inherited: owner of the accepted SD.required_items); the M7 required-deliverable register is a separate scope register (RC-30)	||	required_drawings.ITEMS code constant under the Requirements service (D-08(a), inherited)
+INH	SD.requirement_state	Requirements service (D-08(a), inherited)	||	DrawingRequirementState (existing; D-08(a), inherited)
+INH	SD.floor_alias_auto	Drawing Processor (D-04, inherited) (floor identity)	||	ProjectFloorAlias (existing; D-04, inherited)
+INH	SD.floors_changed_trigger	Drawing Processor (D-04, inherited) (floor identity)	||	ProjectBuildingFloor and DrawingIssue (existing; D-04, inherited)
+INH	DOC.drawing_title_block	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.observations in ProjectDocument (observation; D-02, inherited); the effective drawing identity is the Drawing Processor's (D-04)
+INH	DOC.drawing_revision_provenance	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.records in ProjectDocument (observation; D-02, inherited); the effective revision is the Drawing Processor's (D-04)
+INH	DOC.drawing_issued_date	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.records[].issued in ProjectDocument (observation; D-02, inherited); ShopDrawingRevision.issued_on is the effective value (D-04)
+INH	DOC.drawing_status_code	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.records[].status in ProjectDocument (observation; D-02, inherited); ShopDrawingRevision.status is the effective value (D-04); one decision vocabulary is M7's (roadmap section 6)
+INH	DOC.drawing_scope_by_folder	Drawing Processor scope attribute (D-04, inherited; attribute shape is an M4 implementation choice)	||	PROPOSED persisted scope attribution on the drawing record (D-04); today DERIVED from the folder path
+INH	DOC.submission_cover	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.records in ProjectDocument (observation; D-02, inherited); submission identity is the Drawing Processor's or the Material Submittal Processor's (D-04, D-06)
+INH	LOG.scan_state	Drawing Processor (D-04, inherited); the in-memory folder scan is a legacy derivation to retire (D-04 competing derivations)	||	None: process memory; the register is ProjectShopDrawing / ShopDrawingRevision (D-04, inherited)
+INH	LOG.register_search	Drawing Processor (D-04, inherited); register projection	||	DERIVED projection over ProjectShopDrawing / ShopDrawingRevision (D-04, inherited)
+INH	DRV.review_run	Drawing Processor (D-04, inherited)	||	ProjectDrawingReview (existing; D-04, inherited)
+INH	DRV.sheets	Drawing Processor (D-04, inherited)	||	ProjectDrawingReview.sheets (existing; D-04, inherited)
+INH	DRV.floor_geometry	Drawing Processor (D-04, inherited); geometry artifact to be a stage of the M7 shared processing registry	||	ProjectDrawingReview.sheets[].geometry (existing; D-04, inherited)
+INH	DRV.finding	Drawing Processor (D-04, inherited)	||	DERIVED from ProjectDrawingReview (D-04, inherited); PROPOSED stored findings so reads stop recomputing
+INH	DRV.decision	Drawing Processor (D-04, inherited); override kept per D-15	||	ProjectDrawingReview.decisions (existing; D-04 and D-15, inherited)
+M3	DRV.ruling	Drawing Processor (D-04, inherited); company-wide scope is an M3-OWNER-DECISION (delta section 7, S-1)	||	ReviewRuling (existing; D-04, inherited); project or company scope decided by M3
+INH	DRV.rules	Drawing Processor (D-04, inherited) (review rule set; versioning PROPOSED)	||	review.ai RULES code constant (D-04, inherited); PROPOSED versioned rule set
+INH	DRV.fls_files	File Sync registry (D-02, inherited) for discovery of the consultant FLS drawings; consumed by the Drawing Processor (D-04)	||	PROPOSED registry rows for the FLS folder (D-02); today an os.walk on read
+INH	PREP.plan_run	Drawing Processor (D-04, inherited); correctness owned by M5/M8	||	ProjectRedesign (existing; D-04, inherited)
+INH	PREP.change	Drawing Processor (D-04, inherited); correctness owned by M5/M8	||	ProjectRedesign.changes (existing; D-04, inherited)
+INH	PREP.symbols	Drawing Processor (D-04, inherited); correctness owned by M5/M8	||	ProjectRedesign.symbols (existing; D-04, inherited)
+INH	PREP.run	Drawing Processor (D-04, inherited); correctness owned by M5/M8	||	ProjectRedesign.run (existing; D-04, inherited)
+INH	PREP.output	Drawing Processor (D-04, inherited); correctness owned by M5/M8	||	ProjectRedesign.output_* and the output DWG (existing; D-04, inherited)
+INH	PREP.walls_index	Drawing Processor (D-04, inherited); correctness owned by M5/M8; index file to be a geometry stage of the M7 shared processing registry	||	walls-<id>-<sha16>-v<VERSION>.pkl file (existing; D-04, inherited)
+INH	PREP.columns_index	Drawing Processor (D-04, inherited); correctness owned by M5/M8; index file to be a geometry stage of the M7 shared processing registry	||	columns-<id>-<sha16>-v<VERSION>.pkl file (existing; D-04, inherited)
+INH	DFT.items	Drawing Processor (D-04, inherited) (draftsman hand-over)	||	DERIVED item state; keys in ProjectDraftsmanAssignment (D-04, inherited)
+INH	DFT.skipped_ready	Drawing Processor (D-04, inherited) (draftsman hand-over); override kept per D-15	||	ProjectDraftsmanAssignment.skipped / ready (existing; D-04, inherited)
+INH	DFT.draftsman	Drawing Processor (D-04, inherited) (draftsman hand-over)	||	ProjectDraftsmanAssignment.draftsman_name / draftsman_email (existing; D-04, inherited)
+INH	DFT.log	Drawing Processor (D-04, inherited) (draftsman hand-over)	||	ProjectDraftsmanAssignment.log (existing; D-04, inherited)
+PROP	SBQ.result	PROPOSED: BOQ Processor (D-09) with shop-drawing lineage kept separate from Design Sheet BOQ; M7 to confirm	||	ProjectShopBoq.result (existing); PROPOSED engineer-edit layer like FWS.edits
+PROP	SBQ.source	PROPOSED: BOQ Processor (D-09) with shop-drawing lineage kept separate from Design Sheet BOQ; M7 to confirm	||	ProjectShopBoq.source (existing); PROPOSED separate last-editor field so created_by_id is not overwritten
+INH	DOC.row_projection	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	ProjectDocument.reference / revision / status / system_code (existing; D-02, inherited); a projection, per-record truth stays in extracted.records
+INH	DOC.read_identity	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.read_sha256 / read_at / profile / stale and source_identity (existing; D-02, inherited)
+INH	DOC.coverage	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.coverage (existing; D-02, inherited); PROPOSED page-level stage coverage in the M7 registry
+INH	DOC.observations	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.observations (existing; observation, D-02, inherited)
+INH	DOC.attempt	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.attempt (existing; D-02, inherited)
+INH	DOC.retained_records	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.records[].retained and extracted.retained (existing; D-02, inherited)
+INH	DOC.extraction_profile	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted.profile (existing; D-02, inherited)
+INH	DOC.unchanged_skip	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	DERIVED reuse decision (D-02, inherited); PROPOSED M7 idempotency key
+INH	DOC.duplicate_reuse	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	extracted copy and reading_id (existing; D-02, inherited)
+INH	DOC.processing_priority	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	DERIVED (D-02, inherited)
+INH	DOC.listing_fingerprint	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	Project.documents_synced_at / documents_listing_sha256 (existing, legacy; D-02, inherited)
+INH	DOC.max_files	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	Code constant (D-02, inherited); the 2,000-file refusal is replaced by M9
+INH	DOC.old_rules_catchup	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	BackgroundJob rows (existing; D-02, inherited); PROPOSED explicit compatibility decision per roadmap section 5
+INH	DOC.platform_filed_rows	File Sync registry / M7 shared processing registry (D-02, inherited; registry stages PROPOSED for M7)	||	ProjectDocument, DocumentReading, DocumentDependency rows (existing; D-02, inherited); submittal status stays with D-06
+PROP	JOB.row	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	BackgroundJob (existing); PROPOSED as the job record of the M7 registry
+PROP	JOB.queue_claim	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	BackgroundJob claim columns and unique indexes (existing); PROPOSED M7 idempotency key per stage and input fingerprint
+PROP	JOB.worker	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	BackgroundWorker (existing); PROPOSED under the M7 registry
+PROP	JOB.process_split	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	BackgroundJob rows sync_documents / process_documents (existing); PROPOSED M7 stage records
+PROP	CACHE.page_ocr	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	page-cache.sqlite table ocr (existing); PROPOSED registered text/OCR stage artifact (M7)
+PROP	CACHE.page_box	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	page-cache.sqlite table box (existing); PROPOSED registered stage artifact (M7)
+PROP	CACHE.pdf_memo	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22); legacy memo to retire with the whole-folder scan	||	None: process memory (legacy)
+PROP	CACHE.result_cache	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	ResultCache (existing); PROPOSED under the M7 content-reuse contract (roadmap section 5)
+PROP	AI.usage	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	AiUsage (existing); PROPOSED AI platform usage record (M7, M22)
+PROP	AI.budget_limits	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	ai_max_* settings (existing); PROPOSED AI platform budget configuration (M7, M22)
+PROP	AI.reading_store	PROPOSED: M7 shared processing registry (jobs, idempotency, caches) / AI platform service for usage and budgets (M7, M22)	||	DocumentReading (existing); PROPOSED registered model-reading artifact under the M7 content-reuse contract
+INH	ARC.root	Platform registry (D-01, inherited) with File Sync (D-02) for folder discovery	||	EpArchiveRoot (existing; D-01 and D-02, inherited)
+INH	ARC.folder	Platform registry (D-01, inherited) with File Sync (D-02) for folder discovery	||	EpArchiveFolder (existing; D-01 and D-02, inherited); an archive folder is not a Project
+INH	ARC.project_path_rebind	Platform registry (D-01, inherited) with File Sync (D-02) for folder discovery; the automatic rewrite needs an event (M7)	||	Project.source_folder_path (existing; accepted PRJ.source_folder_path: a mutable locator)
+M3	USR.account	PROPOSED: platform registry / auth service; access policy is an M3-OWNER-DECISION	||	User (existing)
+M3	USR.role_access	PROPOSED: platform registry / auth service; access policy is an M3-OWNER-DECISION	||	User.role and the role tuples in models.py (existing)
+M3	USR.login_state	PROPOSED: platform registry / auth service; access policy is an M3-OWNER-DECISION	||	User.failed_login_attempts / locked_until / last_login_at (existing)
+M3	USR.session	PROPOSED: platform registry / auth service; access policy is an M3-OWNER-DECISION	||	None: stateless signed cookie (no session table)
+M3	USR.activity_event	PROPOSED: platform registry / auth service; access policy is an M3-OWNER-DECISION (its use as the source of the "mine" project list falls under project access)	||	ActivityEvent (existing)
+INH	PST.change_feed	ProjectStateService (D-14, inherited)	||	ProjectChange (existing; D-14, inherited)
+M3	PRJL.deletion	Platform registry (D-01, inherited); retention is an M3-OWNER-DECISION	||	Project and every project-scoped table (existing); what deletion keeps or drops decided by M3
+M3	PRJL.upload_files	Platform registry (D-01, inherited); retention is an M3-OWNER-DECISION	||	Upload store under EP-<number> (existing); PROPOSED keyed by project id
+M3	PRJL.archive_writes	Platform registry (D-01, inherited); retention is an M3-OWNER-DECISION; folder creation moves off GET (M10)	||	Project archive folder on OneDrive (external)
+M3	PRJL.backups	Platform registry (D-01, inherited); retention is an M3-OWNER-DECISION	||	Backup files under BACKUPS_ROOT (existing); backup retention decided with M3 retention
