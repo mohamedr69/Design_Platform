@@ -20,7 +20,7 @@ Sources: survey S7 Table D (`evidence/surveys/S7-new-surface.md`, s5: D1 per tes
 | backend/tests/test_drawing_review_outcome.py | not run | 8 | +8 | New suite (review outcome and model route). |
 | **All seven files** | **78** | **116** | **+38** | 81 + 35 = 116. The five files of S7 Table D hold 62 of these (16 + 14 + 11 + 13 + 8); `test_fa_interfaces.py` and `test_ifc_worker_and_ai.py` hold the other 54. |
 
-The warning count for the four RD-M1 files is 50 then and 50 now (1 + 6 + 5 + 38); all are the starlette `anyio.abc.BlockingPortal` deprecation and `datetime.utcnow()` in `alembic/versions/e1f2a3b4c5d7_ifc_worker_and_ai_review.py:91`.
+The warning count for the four RD-M1 files is 50 then and 50 now (1 + 6 + 5 + 38); all are the starlette `anyio.abc.BlockingPortal` deprecation and `datetime.utcnow()` in `alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91`.
 
 ## 2. Per test (S7 D1)
 
