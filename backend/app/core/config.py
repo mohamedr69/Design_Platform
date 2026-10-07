@@ -391,6 +391,12 @@ class Settings(BaseSettings):
     # reading a picture with the Read tool is a turn): unset, the CLI's own
     # limit. A call that needs more ends as `max_turns`, with no answer.
     ai_cli_max_turns: int | None = None
+    # The Claude Code program's own requests besides the one asked for: none of its non-essential traffic
+    # (CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC -- without it, job 223's looks carried a Haiku request of the
+    # CLI's own), and how many times it retries a failed request by itself (CLAUDE_CODE_MAX_RETRIES; 0: none,
+    # a failed look is the review's to report; unset: the CLI's default of 10).
+    ai_cli_disable_nonessential_traffic: bool = True
+    ai_cli_max_retries: int | None = 0
     # Pictures sent inside the prompt (Claude Code's stream-json input) rather than as
     # files the model opens with its Read tool -- one turn a picture fewer, each turn
     # re-sending the conversation. Off until one live call on this CLI has shown it
@@ -414,6 +420,13 @@ class Settings(BaseSettings):
     drawing_review_max_cost: float = 50.0
     drawing_review_timeout_s: float = 600.0
     drawing_review_windows_per_call: int = 2
+    # Each look through Claude Code: its pictures inside the message (no Read turn a picture), the turn
+    # limit given to the CLI, and the most turns a reply may *report* before the review stops sending looks
+    # (Claude Code 2.1.289 answers a one-turn structured look as num_turns 2: jobs 220-221). A reported
+    # turn is not a model request; the CLI does not say how many requests it made.
+    drawing_review_inline_images: bool = True
+    drawing_review_cli_max_turns: int | None = 1
+    drawing_review_max_reported_turns: int = 2
     # Calls at once (each a Claude Code process); the provider caps it again at AI_MAX_CONCURRENCY.
     drawing_review_parallel: int = 2
     # Drawings Preparation (app.redesign: the review's devices placed on the plan): the

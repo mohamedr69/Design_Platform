@@ -63,6 +63,9 @@ def get_review(project_id: int, drawing_id: int, _current_user: User = Depends(g
 class StartIn(BaseModel):
     # The pages (sheets) to review; none for every floor plan.
     pages: list[int] | None = Field(default=None, max_length=200)
+    # Review from the beginning: every look asked anew, no stored answer reused -- what the review holds stays
+    # on show until each look's new answer is complete and saved.
+    fresh: bool = False
 
 
 @router.post("/projects/{project_id}/drawing-review/{drawing_id}/jobs", status_code=status.HTTP_202_ACCEPTED)
@@ -74,17 +77,21 @@ def start(project_id: int, drawing_id: int, body: StartIn | None = None,
     project = _get_project_or_404(db, project_id)
     drawing = _drawing(db, project, drawing_id)
     pages = sorted(set(body.pages)) if body and body.pages else None
+    fresh = bool(body and body.fresh)
     key = f"{KIND}:{project.id}:{drawing.id}"
     existing = jobs.active_by_key(db, key)
     if existing is not None:
         return _started(db, existing, False)
     job, created = jobs.enqueue(db, kind=KIND, project_id=project.id, user_id=current_user.id, dedup_key=key,
-                                params={"drawing_id": drawing.id, "pages": pages, "user_id": current_user.id},
+                                params={"drawing_id": drawing.id, "pages": pages, "user_id": current_user.id,
+                                        "fresh": fresh},
                                 progress=_queue_note(db), message="")
     if created:
         activity.record(db, current_user, "drawing_review.started",
-                        f"Started the drawings review of {drawing.filename} {drawing.revision or ''}".strip(),
-                        project=project, entity_type="ifc_drawing", entity_id=drawing.id, detail={"pages": pages})
+                        f"Started the drawings review of {drawing.filename} {drawing.revision or ''}".strip()
+                        + (" from the beginning" if fresh else ""),
+                        project=project, entity_type="ifc_drawing", entity_id=drawing.id,
+                        detail={"pages": pages, "fresh": fresh})
     if created and jobs_router.RUN_INLINE:
         _run_inline(job.id)
         db.expire_all()
@@ -99,6 +106,8 @@ class DecisionIn(BaseModel):
     note: str = Field(default="", max_length=500)
     # The draftsman's instruction as the engineer words it, over the model's.
     instruction: str = Field(default="", max_length=300)
+    # Accepted as a change of its own, though it may be the same as one already accepted (possible_duplicates).
+    confirm_distinct: bool = False
 
 
 @router.post("/projects/{project_id}/drawing-review/{drawing_id}/decisions")
@@ -114,6 +123,14 @@ def decide(project_id: int, drawing_id: int, body: DecisionIn,
         raise HTTPException(422, "status is accepted, dismissed or open")
     if body.status == "dismissed" and not body.note.strip():
         raise HTTPException(422, "Say why it is not an issue")
+    known = {f["id"]: f for f in view["findings"]}
+    twins = [p for p in finding.get("possible_duplicates") or []
+             if (known.get(p["id"]) or {}).get("decision") == "accepted"]
+    if body.status == "accepted" and twins and not body.confirm_distinct:
+        twin = twins[0]
+        raise HTTPException(409, f"Possibly the same change as the accepted one in {twin['room'] or 'the plan'} "
+                                 f"({'; '.join(twin['reasons'])}): dismiss one as a duplicate, or accept this as a "
+                                 "separate change.")
     row = service.state(db, project, drawing.id)
     decisions = dict(row.decisions or {})
     # The same comment on the other floors goes with it: those still open,
@@ -137,9 +154,11 @@ def decide(project_id: int, drawing_id: int, body: DecisionIn,
             decisions.pop(f["id"])
     else:
         now = utc_now().isoformat()
-        service.record_decision(decisions, body.id, {"status": body.status, "note": body.note.strip(),
-                                                    "instruction": body.instruction.strip(), "by": current_user.id,
-                                                    "at": now}, finding)
+        record = {"status": body.status, "note": body.note.strip(), "instruction": body.instruction.strip(),
+                  "by": current_user.id, "at": now}
+        if body.status == "accepted" and twins:
+            record["distinct_from"] = [p["id"] for p in twins]       # the engineer's word: two changes
+        service.record_decision(decisions, body.id, record, finding)
         for f in same:
             service.record_decision(decisions, f["id"], {
                 "status": body.status, "via": body.id,
@@ -268,9 +287,13 @@ def decide_many(project_id: int, drawing_id: int, body: BulkIn,
     row = service.state(db, project, drawing.id)
     decisions = dict(row.decisions or {})
     stamp = utc_now().isoformat()
+    skipped = []
     for fid in body.ids:
         f = known.get(fid)
         if f is None or f["action"] == "none":
+            continue
+        if body.status == "accepted" and f.get("possible_duplicates"):
+            skipped.append(fid)                 # a possible duplicate is decided one by one
             continue
         if body.status == "open":
             service.record_decision(decisions, fid, {"status": "reopened", "by": current_user.id, "at": stamp})
@@ -284,7 +307,9 @@ def decide_many(project_id: int, drawing_id: int, body: BulkIn,
     db.commit()
     activity.record(db, current_user, "drawing_review.bulk", f"{body.status.title()} {len(body.ids)} drawings-review findings",
                     project=project, entity_type="ifc_drawing", entity_id=drawing.id)
-    return service.build(db, project, drawing)
+    out = service.build(db, project, drawing)
+    out["skipped_possible_duplicates"] = skipped
+    return out
 
 
 @router.delete("/drawing-review/rulings/{ruling_id}")

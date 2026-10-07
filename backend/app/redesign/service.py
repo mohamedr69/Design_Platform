@@ -693,12 +693,83 @@ def set_status(db: Session, project: Project, drawing_id: int, ids: list[str], s
 
 
 def _drawn(c: dict) -> bool:
-    """Made on the copy: an approved change, or a proposed one of the review's
-    the orchestrator did not reject -- the interface modules and the detectors
-    the coverage added only once approved."""
-    proposed = (c["status"] == "proposed" and c.get("source") not in (INTERFACE, PR.COVERAGE)
-                and (c.get("check") or {}).get("verdict") != "reject")
-    return (c["status"] == "approved" or proposed) and bool(c.get("remove") or c.get("insert"))
+    """Made on the copy: a change the engineer approved -- a placement the
+    agents proposed is the engineer's to approve (or skip) first, whatever the
+    orchestrator said of it."""
+    return c["status"] == "approved" and bool(c.get("remove") or c.get("insert"))
+
+
+def readiness(db: Session, project: Project, drawing: ProjectIfcDrawing | None, row: ProjectRedesign) -> dict:
+    """Whether the drawing can go to the draftsman now, counted afresh from
+    what is there -- the review as it stands, the engineer's decisions, the
+    placements and what the last plan measured -- never from a state kept
+    since. Each reason left is an engineering check still open."""
+    from app.review import service as review
+
+    blockers: list[str] = []
+    changes = row.changes or []
+    if drawing is None:
+        return {"ready": False, "blockers": ["The drawing is not on file."]}
+    view = review.build(db, project, drawing)
+    if view["state"] != "done":
+        blockers.append(f"The drawing review is {view['state'].replace('_', ' ')}: {view['counts']['reviewed']} of "
+                        f"{view['counts']['rooms']} rooms reviewed.")
+    if view["counts"]["open"]:
+        blockers.append(f"{view['counts']['open']} review finding{'s are' if view['counts']['open'] != 1 else ' is'} "
+                        "still undecided.")
+    decided = {f["id"]: f["decision"] for f in view["findings"]}
+    pairs = [p for p in view.get("possible_duplicate_pairs") or []
+             if "dismissed" not in (decided.get(p["a"]), decided.get(p["b"]))]
+    if pairs:
+        blockers.append(f"{len(pairs)} possible duplicate pair{'s' if len(pairs) != 1 else ''} to settle "
+                        "(dismiss one, or accept both as separate changes).")
+    accepted = {f["id"] for f in view["findings"] if f["decision"] == "accepted" and f["action"] in ACTIONS}
+    from_review = [c for c in changes if c.get("source") not in (INTERFACE, PR.COVERAGE)]
+    gone = [c for c in from_review if c["status"] != "skipped" and c["id"] not in accepted]
+    if gone:
+        blockers.append(f"{len(gone)} placed change{'s are' if len(gone) != 1 else ' is'} no longer accepted in the "
+                        "review: plan again.")
+    unplaced = accepted - {c["id"] for c in from_review}
+    if unplaced:
+        blockers.append(f"{len(unplaced)} accepted finding{'s are' if len(unplaced) != 1 else ' is'} not placed "
+                        "yet: plan again.")
+    to_approve = Counter(("coverage" if c.get("source") == PR.COVERAGE else "interface"
+                          if c.get("source") == INTERFACE else "placement") for c in changes
+                         if c["status"] in ("proposed", "pending"))
+    if to_approve.get("placement"):
+        blockers.append(f"{to_approve['placement']} placement{'s' if to_approve['placement'] != 1 else ''} the "
+                        "agents proposed to approve or skip.")
+    if to_approve.get("coverage"):
+        blockers.append(f"{to_approve['coverage']} extra detector{'s' if to_approve['coverage'] != 1 else ''} "
+                        "proposed for coverage to approve or skip.")
+    if to_approve.get("interface"):
+        blockers.append(f"{to_approve['interface']} interface module{'s' if to_approve['interface'] != 1 else ''} "
+                        "to approve or skip.")
+    failed = sum(1 for c in changes if c["status"] == "failed")
+    if failed:
+        blockers.append(f"{failed} change{'s' if failed != 1 else ''} could not be placed.")
+    open_checks = [c for c in changes if c["status"] not in ("approved", "skipped")
+                   and (c.get("check") or {}).get("verdict") in ("reject", "check")]
+    if open_checks:
+        blockers.append(f"{len(open_checks)} change{'s' if len(open_checks) != 1 else ''} the orchestrator rejected "
+                        "or asked the engineer to check.")
+    run = row.run or {}
+    coordination = run.get("coordination") or {}
+    if coordination.get("gaps_left"):
+        blockers.append(f"At the last plan, {coordination['gaps_left']} room(s) short of detector coverage.")
+    if coordination.get("open_rooms"):
+        blockers.append(f"At the last plan, {coordination['open_rooms']} room(s) whose coverage could not be measured.")
+    for reason in (run.get("gate") or {}).get("reasons") or []:
+        if "column" in reason:
+            blockers.append(f"At the last plan: {reason}.")
+    placeholders = sum(1 for c in changes if c.get("placeholder") and c["status"] != "skipped")
+    if placeholders:
+        blockers.append(f"{placeholders} change{'s' if placeholders != 1 else ''} without a symbol in the drawing.")
+    if run and (run.get("review") or {}).get("state") in ("failed", "partial"):
+        blockers.append("The orchestrator's review did not finish on every floor at the last plan.")
+    if not any(_drawn(c) for c in changes):
+        blockers.append("No approved change to make.")
+    return {"ready": not blockers, "blockers": blockers}
 
 
 # --- planning ---------------------------------------------------------------------------
@@ -1209,6 +1280,10 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
                           "interface changes kept as they were")
         except Exception as exc:  # noqa: BLE001 -- the review's changes are placed all the same
             log.warning("The interface modules could not be placed: %s", exc)
+            # what the engineer settled of them stays as it was
+            kept_now = keep_interfaces(row.changes or [])
+            have = {c["id"] for c in changes}
+            changes = changes + [json.loads(json.dumps(c)) for cid, c in kept_now.items() if cid not in have]
         # the detectors the coverage added that the engineer settled: kept as they left them
         settled = {cid: c for cid, c in before.items() if c.get("source") == PR.COVERAGE
                    and (c.get("status") in ("approved", "skipped") or c.get("moved") or c.get("edited"))}
@@ -1252,9 +1327,13 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
         return {"changes": len(changes), "placed": sum(1 for c in changes if c["status"] == "proposed"),
                 "interfaces_kept": len(kept), "gate": run["gate"]["state"]}
     except Exception as exc:
+        from app.services import jobs
+
         db.rollback()
         row = state(db, project, drawing_id)
-        row.status, row.error, row.finished_at = "failed", str(exc)[:1000], utc_now()
+        stopped = isinstance(exc, (jobs.Cancelled, jobs.Interrupted))
+        row.status, row.error, row.finished_at = ("stopped" if stopped else "failed"), \
+            (None if stopped else str(exc)[:1000]), utc_now()
         db.commit()
         raise
 
@@ -1486,6 +1565,10 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
     row.output_status, row.output_error = "making", None
     db.commit()
     try:
+        ready = readiness(db, project, drawing, row)
+        if not ready["ready"]:
+            # never made while an engineering check is open: each one said
+            raise RedesignError("Not ready for the draftsman: " + " ".join(ready["blockers"]))
         source = render.source_file(project, drawing)
         if source.suffix.lower() != ".dwg":
             raise RedesignError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
@@ -1494,8 +1577,6 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
         metre = _units(drawing, db)
         refresh(db, project, drawing, row)
         todo = [c for c in row.changes or [] if _drawn(c)]
-        if not todo:
-            raise RedesignError("No change is placed to make: plan the redesign, or approve the changes first.")
         cad_changes = to_cad(todo)
         if progress:
             progress(0, 1, f"AutoCAD is making {len(cad_changes)} change{'s' if len(cad_changes) != 1 else ''} on a copy")
@@ -1538,10 +1619,12 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
     review_row = (db.query(ProjectDrawingReview)
                   .filter(ProjectDrawingReview.project_id == project.id, ProjectDrawingReview.drawing_id == drawing_id).first())
     undecided = 0
-    if review_row is not None and review_row.status == "done" and drawing is not None:
+    if review_row is not None and drawing is not None:
         from app.review import service as review
 
-        undecided = review.build(db, project, drawing)["counts"]["open"]
+        if review.outcome(review_row)[0] in ("done", "partial"):
+            undecided = review.build(db, project, drawing)["counts"]["open"]
+    ready = readiness(db, project, drawing, row)
     db.commit()
     changes = []
     for c in row.changes or []:
@@ -1566,4 +1649,6 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
                    "file": Path(row.output_path).name if row.output_path else None,
                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},
         "folder": FOLDER,
+        # whether the drawing can go to the draftsman now, and every engineering check still open
+        "readiness": ready,
     }

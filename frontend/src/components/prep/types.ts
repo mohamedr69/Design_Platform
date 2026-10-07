@@ -167,4 +167,6 @@ export interface Redesign {
   folder: string;
   run: Run | null;
   agents_on: boolean;
+  /** Whether the drawing can go to the draftsman now: every engineering check still open, said. */
+  readiness: { ready: boolean; blockers: string[] };
 }

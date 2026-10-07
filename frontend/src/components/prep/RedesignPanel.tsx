@@ -396,11 +396,21 @@ function Output({
           {rejected > 0 && <span className="text-red-700"> · {rejected} rejected by the orchestrator (left off unless approved)</span>}
         </div>
         {making && <p className="mt-2 rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900">{makingMessage ?? "AutoCAD is making the copy…"}</p>}
+        {!data.readiness.ready && (
+          <div className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            Not ready for the draftsman yet:
+            <ul className="ml-4 list-disc">
+              {data.readiness.blockers.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {canEdit && (
             <button
               onClick={onMake}
-              disabled={disabled || ready === 0}
+              disabled={disabled || ready === 0 || !data.readiness.ready}
               className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
               {making ? "AutoCAD is drawing…" : `Make the drawing copy (${ready})`}

@@ -120,17 +120,17 @@ def preflight(db, scope: Scope) -> dict:
     from app.review import rulings as R
 
     _extra, ruled = R.prompt(db)
-    held = row if row is not None else SimpleNamespace(sheets=[], source_sha256=None)
+    held = row if row is not None else SimpleNamespace(sheets=[], source_sha256=None, model=None)
     merged, tasks = service.plan_looks(held, sheets, sha, f"{A.PROMPT_VERSION}+{ruled}", [scope.page],
                                        keep_answered=True)
     sh = next(m for m in merged if m["index"] == scope.page)
     windows = sh["windows"]
     by_id = {w["id"]: w for w in windows}
     calls = []
-    for kind, _index, ids in tasks:
+    for kind, _index, ids, mode in tasks:
         if kind == "window":
             calls.append({"task": "window", "windows": ids,
-                          "rooms": [r["name"] for i in ids for r in service.rooms_to_ask(by_id[i])]})
+                          "rooms": [r["name"] for i in ids for r in service.rooms_to_ask(by_id[i], mode == "anew")]})
         elif kind == "sheet":
             calls.append({"task": "sheet", "rooms": sum(len(w["rooms"]) for w in windows)})
         else:
@@ -340,10 +340,14 @@ def _floor_view(db, project_id: int, drawing_id: int, page: int) -> dict:
             "windows": floor["windows"], "windows_done": floor["windows_done"],
             "windows_incomplete": floor["windows_incomplete"], "windows_failed": floor["windows_failed"],
             "rooms_not_reviewed": [r["name"] for r in floor["rooms"] if not r["checks"]],
-            "plan_pass": floor["sheet_status"], "fls_pass": floor["fls_status"]},
-        "merged_pass_findings": view.get("merged_pass_findings", 0),
+            "plan_pass": floor["sheet_status"], "fls_pass": floor["fls_status"],
+            "unsolicited": floor.get("unsolicited") or []},
+        "merged_duplicates": view.get("merged_duplicates", 0),
+        "possible_duplicate_pairs": view.get("possible_duplicate_pairs", []),
+        "last_attempt": view.get("last_attempt"),
         "findings": [{k: f.get(k) for k in ("id", "room", "system", "kind", "action", "device", "instruction",
-                                              "decision", "previous_decision", "also_seen")} for f in found],
+                                              "decision", "previous_decision", "sources", "possible_duplicates")}
+                     for f in found],
     }
 
 
