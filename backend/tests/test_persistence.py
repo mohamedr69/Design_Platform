@@ -105,15 +105,16 @@ def test_a_data_root_gathers_the_database_uploads_backups_and_caches(tmp_path, m
     # The test process sets these for the suite; a fresh Settings must not see them.
     for name in ("DATABASE_URL", "UPLOADS_ROOT", "CACHE_ROOT", "DATA_ROOT", "BACKUPS_ROOT"):
         monkeypatch.delenv(name, raising=False)
+    # _env_file=None: nor may it read this PC's backend/.env, so the code's own defaults are what is tested.
     root = tmp_path / "EP Platform"
-    s = Settings(data_root=str(root), secret_key="x")
+    s = Settings(data_root=str(root), secret_key="x", _env_file=None)
     assert s.database_url == "sqlite:///" + (root / "ep_platform.db").as_posix()
     assert Path(s.uploads_root) == root / "uploads"
     assert Path(s.cache_root) == root / ".cache"
     assert Path(s.backups_root) == root / "backups"
     # Set explicitly, a location is kept as set.
-    s = Settings(data_root=str(root), database_url="sqlite:///elsewhere.db", uploads_root="here", secret_key="x")
+    s = Settings(data_root=str(root), database_url="sqlite:///elsewhere.db", uploads_root="here", secret_key="x", _env_file=None)
     assert s.database_url == "sqlite:///elsewhere.db" and s.uploads_root == "here"
     # Without it, nothing moves.
-    s = Settings(secret_key="x")
+    s = Settings(secret_key="x", _env_file=None)
     assert s.data_root is None and s.database_url == "sqlite:///./ep_platform.db" and s.backups_root.endswith("backups")
