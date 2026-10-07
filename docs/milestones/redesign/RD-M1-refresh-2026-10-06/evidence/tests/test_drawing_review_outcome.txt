@@ -1,0 +1,141 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 8 items
+
+tests/test_drawing_review_outcome.py ........                            [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_drawing_review_outcome.py::test_the_models_finding_reaches_the_review_page_through_the_worker_the_database_and_the_api
+tests/test_drawing_review_outcome.py::test_a_plot_with_no_model_to_call_is_blocked_and_keeps_the_answers_and_decisions_before_it
+tests/test_drawing_review_outcome.py::test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there
+tests/test_drawing_review_outcome.py::test_a_completed_review_with_no_findings_says_so_with_the_rooms_it_read
+tests/test_drawing_review_outcome.py::test_the_disabled_providers_placeholder_saved_as_done_is_not_a_review_and_is_asked_again
+tests/test_drawing_review_outcome.py::test_an_exact_model_task_gets_no_answer_from_the_disabled_provider_and_none_is_stored
+tests/test_drawing_review_outcome.py::test_the_drawing_reviews_own_switch_calls_the_model_for_the_review_alone
+tests/test_drawing_review_outcome.py::test_a_blocked_attempt_on_a_partly_reviewed_drawing_leaves_it_partial
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+_ test_a_plot_with_no_model_to_call_is_blocked_and_keeps_the_answers_and_decisions_before_it _
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 2 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 259, in run_drawing_review
+    return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      keep_answered=bool(p.get("keep_answered")),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/review/service.py", line 189, in run
+    raise ReviewIncomplete(row.error)
+app.review.service.ReviewIncomplete: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/workers/sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 269, in run_drawing_review
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+____ test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there _____
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 2 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 259, in run_drawing_review
+    return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      keep_answered=bool(p.get("keep_answered")),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/review/service.py", line 256, in run
+    raise ReviewIncomplete(row.error)
+app.review.service.ReviewIncomplete: Plotting completed; review has not completed: none of the 2 looks was answered (transport: the route fell over). The previous answers and the engineers' decisions are kept.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/workers/sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 269, in run_drawing_review
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: Plotting completed; review has not completed: none of the 2 looks was answered (transport: the route fell over). The previous answers and the engineers' decisions are kept.
+___ test_the_drawing_reviews_own_switch_calls_the_model_for_the_review_alone ___
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 1 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 259, in run_drawing_review
+    return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      keep_answered=bool(p.get("keep_answered")),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/review/service.py", line 189, in run
+    raise ReviewIncomplete(row.error)
+app.review.service.ReviewIncomplete: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/workers/sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 269, in run_drawing_review
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+____ test_a_blocked_attempt_on_a_partly_reviewed_drawing_leaves_it_partial _____
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 2 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 259, in run_drawing_review
+    return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      keep_answered=bool(p.get("keep_answered")),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/review/service.py", line 189, in run
+    raise ReviewIncomplete(row.error)
+app.review.service.ReviewIncomplete: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/workers/sync_worker.py", line 98, in <lambda>
+    status = jobs.execute(db, job_id, lambda session, c: runner(session, session.get(type(job), job_id), c),
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 269, in run_drawing_review
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: Plotting completed; review has not completed: no model can be called (AI assistance is disabled (AI_ENABLED=false); the drawing review's own switch is DRAWING_REVIEW_AI_ENABLED). Nothing was asked of the 2 rooms; the previous answers and the engineers' decisions are kept.
+=========================== short test summary info ============================
+PASSED tests/test_drawing_review_outcome.py::test_the_models_finding_reaches_the_review_page_through_the_worker_the_database_and_the_api
+PASSED tests/test_drawing_review_outcome.py::test_a_plot_with_no_model_to_call_is_blocked_and_keeps_the_answers_and_decisions_before_it
+PASSED tests/test_drawing_review_outcome.py::test_a_plot_whose_every_look_fails_is_failed_and_keeps_what_was_there
+PASSED tests/test_drawing_review_outcome.py::test_a_completed_review_with_no_findings_says_so_with_the_rooms_it_read
+PASSED tests/test_drawing_review_outcome.py::test_the_disabled_providers_placeholder_saved_as_done_is_not_a_review_and_is_asked_again
+PASSED tests/test_drawing_review_outcome.py::test_an_exact_model_task_gets_no_answer_from_the_disabled_provider_and_none_is_stored
+PASSED tests/test_drawing_review_outcome.py::test_the_drawing_reviews_own_switch_calls_the_model_for_the_review_alone
+PASSED tests/test_drawing_review_outcome.py::test_a_blocked_attempt_on_a_partly_reviewed_drawing_leaves_it_partial
+======================== 8 passed, 9 warnings in 14.45s ========================

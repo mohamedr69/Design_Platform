@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 13 items
+
+tests/test_scoped_drawing_review.py .............                        [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_scoped_drawing_review.py::test_the_scoped_run_asks_about_the_named_floor_alone_and_puts_every_setting_back
+tests/test_scoped_drawing_review.py::test_a_scoped_run_whose_calls_all_fail_keeps_the_answers_and_decisions_and_puts_everything_back
+tests/test_scoped_drawing_review.py::test_a_run_that_breaks_off_fails_its_job_and_still_puts_everything_back
+tests/test_scoped_drawing_review.py::test_the_scoped_run_refuses_before_asking_anything
+tests/test_scoped_drawing_review.py::test_an_acceptance_stays_only_while_the_proposal_is_the_same
+tests/test_scoped_drawing_review.py::test_a_decision_made_before_proposals_were_kept_stands_only_until_a_review_runs
+tests/test_scoped_drawing_review.py::test_a_window_the_model_answered_for_some_rooms_is_not_done_and_is_asked_again
+tests/test_scoped_drawing_review.py::test_looks_go_one_at_a_time_so_a_stop_keeps_the_next_from_being_sent
+tests/test_scoped_drawing_review.py::test_the_continuation_asks_only_what_is_left_and_keeps_what_was_answered
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+_ test_a_scoped_run_whose_calls_all_fail_keeps_the_answers_and_decisions_and_puts_everything_back _
+------------------------------ Captured log call -------------------------------
+ERROR    app.services.jobs:jobs.py:257 Job 2 failed
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 259, in run_drawing_review
+    return review.run(session, project, p["drawing_id"], pages_wanted=p.get("pages"), check=ctx.check,
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      keep_answered=bool(p.get("keep_answered")),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage="review"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/review/service.py", line 256, in run
+    raise ReviewIncomplete(row.error)
+app.review.service.ReviewIncomplete: Plotting completed; review has not completed: none of the 1 looks was answered (transport: rehearsal: the call fell over). The previous answers and the engineers' decisions are kept.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/Design_Platform/backend/app/services/jobs.py", line 238, in execute
+    result = work(session, ctx)
+  File "/home/user/Design_Platform/backend/app/review/scoped.py", line 398, in <lambda>
+    db, job_id, lambda session, c: run_drawing_review(session, session.get(BackgroundJob, job_id), c),
+                                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Design_Platform/backend/app/ifc/services/runners.py", line 269, in run_drawing_review
+    raise processing.ReadError(str(exc)) from exc
+app.ifc.services.processing.ReadError: Plotting completed; review has not completed: none of the 1 looks was answered (transport: rehearsal: the call fell over). The previous answers and the engineers' decisions are kept.
+=========================== short test summary info ============================
+PASSED tests/test_scoped_drawing_review.py::test_the_scoped_run_asks_about_the_named_floor_alone_and_puts_every_setting_back
+PASSED tests/test_scoped_drawing_review.py::test_a_scoped_run_whose_calls_all_fail_keeps_the_answers_and_decisions_and_puts_everything_back
+PASSED tests/test_scoped_drawing_review.py::test_a_run_that_breaks_off_fails_its_job_and_still_puts_everything_back
+PASSED tests/test_scoped_drawing_review.py::test_the_scoped_run_refuses_before_asking_anything
+PASSED tests/test_scoped_drawing_review.py::test_the_guard_counts_every_call_refuses_one_past_the_limit_and_stops_on_more_than_it_should
+PASSED tests/test_scoped_drawing_review.py::test_an_acceptance_stays_only_while_the_proposal_is_the_same
+PASSED tests/test_scoped_drawing_review.py::test_a_decision_made_before_proposals_were_kept_stands_only_until_a_review_runs
+PASSED tests/test_scoped_drawing_review.py::test_a_window_the_model_answered_for_some_rooms_is_not_done_and_is_asked_again
+PASSED tests/test_scoped_drawing_review.py::test_the_cli_is_given_the_turn_limit_and_its_turns_are_counted
+PASSED tests/test_scoped_drawing_review.py::test_looks_go_one_at_a_time_so_a_stop_keeps_the_next_from_being_sent
+PASSED tests/test_scoped_drawing_review.py::test_the_continuation_asks_only_what_is_left_and_keeps_what_was_answered
+PASSED tests/test_scoped_drawing_review.py::test_a_plan_pass_finding_the_room_review_has_is_merged_not_shown_twice
+PASSED tests/test_scoped_drawing_review.py::test_the_clis_own_account_of_a_call_is_kept
+======================= 13 passed, 10 warnings in 20.39s =======================

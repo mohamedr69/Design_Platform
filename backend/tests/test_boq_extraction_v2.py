@@ -320,6 +320,8 @@ def test_a_temporary_folder_that_cannot_be_removed_does_not_fail_the_call(monkey
     provider._cli = "claude-fake"
     provider._models = {"small": "sonnet", "standard": "opus"}
     provider._timeout = 5.0
+    # the hand-built provider mirrors __init__: no turn limit configured, so no `--max-turns` flag
+    provider._max_turns = None
     provider._semaphore = threading.BoundedSemaphore(1)
     # the merged provider (FI-P1 Stage 0.2) also knows its CLI's version: read already, so no
     # `--version` subprocess is run here
@@ -360,6 +362,8 @@ def test_a_cli_timeout_is_a_timeout_not_an_answer(monkeypatch):
     provider._cli = "claude-fake"
     provider._models = {"small": "sonnet", "standard": "opus"}
     provider._timeout = 5.0
+    # the hand-built provider mirrors __init__: no turn limit configured, so no `--max-turns` flag
+    provider._max_turns = None
     provider._semaphore = threading.BoundedSemaphore(1)
     # the merged provider (FI-P1 Stage 0.2) also knows its CLI's version: read already, so no
     # `--version` subprocess is run here

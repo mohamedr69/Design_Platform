@@ -469,6 +469,8 @@ def test_an_ocr_failure_on_one_page_is_noted_and_the_batch_continues(client, db_
     from .test_document_processing_v2 import DRAWING_TEXT, _pdf_with_image, _png_with_text
 
     monkeypatch.setattr(jobs_router, "RUN_INLINE", False)
+    # Needs no Tesseract: every OCR call this test exercises is faked.
+    monkeypatch.setattr(document_processing.submittal_scanner, "ocr_available", lambda: True)
     folder = tmp_path / "EP-30864"
     _pdf_with_image(folder / "05- Drawings" / "stamped.pdf", DRAWING_TEXT, _png_with_text("STAMP", (200, 80)))
     # Sheets with a full text layer (a page of under 80 characters is read as a scan, and OCRed).

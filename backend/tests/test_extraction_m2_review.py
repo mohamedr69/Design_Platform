@@ -99,6 +99,8 @@ def test_a_corrupt_replacement_keeps_the_last_complete_reading_marks_the_row_and
 
 
 def test_an_ocr_failure_on_a_changed_scan_keeps_the_previous_complete_reading_as_a_partial_attempt(client, db_session, tmp_path, inline, monkeypatch):
+    # Needs no Tesseract: every OCR call this test exercises is faked.
+    monkeypatch.setattr(document_processing.submittal_scanner, "ocr_available", lambda: True)
     folder = tmp_path / "EP-30902"
     path = _pdf(folder / "05- Drawings" / "cover.pdf", FA_COVER)
     project_id = _project(client, folder, ep="30902")

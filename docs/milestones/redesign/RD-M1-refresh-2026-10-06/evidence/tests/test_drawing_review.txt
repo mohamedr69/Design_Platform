@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 11 items
+
+tests/test_drawing_review.py ...........                                 [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_drawing_review.py::test_a_drawing_is_reviewed_and_each_finding_is_the_engineers_to_settle
+tests/test_drawing_review.py::test_the_engineers_rulings_settle_the_same_change_elsewhere_and_go_to_the_model
+tests/test_drawing_review.py::test_the_ifc_signs_are_checked_against_the_fls_drawing_of_the_same_floor
+tests/test_drawing_review.py::test_a_decision_goes_to_the_same_comment_on_the_other_floors_and_is_undone_with_it
+tests/test_drawing_review.py::test_an_emergency_light_in_a_garbage_room_is_to_be_deleted
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_drawing_review.py::test_rooms_are_read_off_the_plotted_plan
+PASSED tests/test_drawing_review.py::test_the_models_answer_is_kept_only_where_it_is_well_formed
+PASSED tests/test_drawing_review.py::test_a_drawing_is_reviewed_and_each_finding_is_the_engineers_to_settle
+PASSED tests/test_drawing_review.py::test_stair_detection_is_wanted_about_every_five_floors_not_on_each
+PASSED tests/test_drawing_review.py::test_the_engineers_rulings_settle_the_same_change_elsewhere_and_go_to_the_model
+PASSED tests/test_drawing_review.py::test_the_ifc_signs_are_checked_against_the_fls_drawing_of_the_same_floor
+PASSED tests/test_drawing_review.py::test_the_plot_is_tied_to_the_drawing_by_the_texts_both_carry
+PASSED tests/test_drawing_review.py::test_a_driveway_sounder_flasher_is_asked_for_only_past_12_m
+PASSED tests/test_drawing_review.py::test_a_decision_goes_to_the_same_comment_on_the_other_floors_and_is_undone_with_it
+PASSED tests/test_drawing_review.py::test_staircase_speakers_go_on_alternate_floors
+PASSED tests/test_drawing_review.py::test_an_emergency_light_in_a_garbage_room_is_to_be_deleted
+======================== 11 passed, 6 warnings in 8.60s ========================

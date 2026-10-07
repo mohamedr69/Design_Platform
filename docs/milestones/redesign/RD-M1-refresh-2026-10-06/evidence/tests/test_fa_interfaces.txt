@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-8.3.4, pluggy-1.6.0
+rootdir: /home/user/Design_Platform/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collected 13 items
+
+tests/test_fa_interfaces.py .............                                [100%]
+
+=============================== warnings summary ===============================
+../../../../usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40
+  /usr/local/lib/python3.13/dist-packages/starlette/testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_fa_interfaces.py::test_the_schedule_is_read_floor_by_floor_from_each_disciplines_drawings
+tests/test_fa_interfaces.py::test_a_viewer_reads_the_schedule_but_does_not_answer
+tests/test_fa_interfaces.py::test_the_plans_are_checked_against_the_equipment_schedule
+tests/test_fa_interfaces.py::test_one_piece_of_equipment_on_several_drawings_is_counted_once
+  /home/user/Design_Platform/backend/alembic/versions/e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/test_fa_interfaces.py::test_the_matrix_keeps_the_sheets_contacts_and_reads_its_modules_off_them
+PASSED tests/test_fa_interfaces.py::test_tags_and_names_are_read_and_nothing_is_read_into_them
+PASSED tests/test_fa_interfaces.py::test_lift_labels_are_lifts_and_rooms_named_for_lifts_are_not
+PASSED tests/test_fa_interfaces.py::test_the_schedule_is_read_floor_by_floor_from_each_disciplines_drawings
+PASSED tests/test_fa_interfaces.py::test_a_viewer_reads_the_schedule_but_does_not_answer
+PASSED tests/test_fa_interfaces.py::test_schedule_tags_are_read_as_written_and_runs_expanded
+PASSED tests/test_fa_interfaces.py::test_the_plans_are_checked_against_the_equipment_schedule
+PASSED tests/test_fa_interfaces.py::test_one_piece_of_equipment_on_several_drawings_is_counted_once
+PASSED tests/test_fa_interfaces.py::test_a_fire_pump_room_drawn_but_not_named_gets_the_schematics_pumps_where_it_is
+PASSED tests/test_fa_interfaces.py::test_a_damper_label_is_scheduled_as_the_drawing_shows_it_once_looked_at
+PASSED tests/test_fa_interfaces.py::test_damper_without_visual_result_is_held_and_text_is_not_equipment_location
+PASSED tests/test_fa_interfaces.py::test_visual_damper_keeps_label_and_physical_equipment_anchors_separate
+PASSED tests/test_fa_interfaces.py::test_a_damper_whose_symbol_is_unclear_or_shared_or_missed_by_the_model_is_held
+======================== 13 passed, 5 warnings in 8.41s ========================
