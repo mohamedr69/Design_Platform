@@ -1,0 +1,50 @@
+{
+ "baseline": "docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml",
+ "new": "docs/milestones/M8/evidence/wall-index/full-suite.xml",
+ "baseline_counts": {
+  "passed": 1782,
+  "skipped": 35,
+  "failure": 2,
+  "total": 1819
+ },
+ "new_counts": {
+  "passed": 1796,
+  "skipped": 35,
+  "failure": 1,
+  "total": 1832
+ },
+ "failing_in_both_same_message": [
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it"
+ ],
+ "failing_in_both_message_changed": {},
+ "newly_failing": {},
+ "fixed_or_gone": {
+  "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches": {
+   "baseline": {
+    "state": "failure",
+    "message": "AssertionError: assert ('G:\\\\dev (2)\\\\dev\\\\ep-platform-merged\\\\data' is None)"
+   },
+   "new": {
+    "state": "passed",
+    "message": ""
+   }
+  }
+ },
+ "only_in_new": [
+  "tests.test_redesign_walls_layers::test_a_sparse_or_missing_wall_index_leaves_coverage_not_measured_never_measured_against_no_walls",
+  "tests.test_redesign_walls_layers::test_f1_a_simple_sheet_keeps_the_double_walls_and_accounts_for_every_other_line",
+  "tests.test_redesign_walls_layers::test_f2_nested_inserts_compose_base_point_scale_rotation_and_mirror_and_layer_0_inherits",
+  "tests.test_redesign_walls_layers::test_f2_the_transforms_agree_with_ezdxfs_own_explosion",
+  "tests.test_redesign_walls_layers::test_f3_layers_off_frozen_and_no_plot_and_inserts_on_hidden_layers_are_not_walls",
+  "tests.test_redesign_walls_layers::test_f4_the_invisible_flag_hides_a_line_and_everything_in_an_invisible_insert",
+  "tests.test_redesign_walls_layers::test_f5_a_layer_frozen_in_the_twisted_viewport_is_left_out_and_the_index_stays_in_model_space",
+  "tests.test_redesign_walls_layers::test_f6_bound_xref_layers_are_read_by_their_own_name_and_inherit_through_the_xref_block",
+  "tests.test_redesign_walls_layers::test_f7_the_allow_list_ends_the_deny_lists_false_negatives_and_an_override_its_false_positives",
+  "tests.test_redesign_walls_layers::test_golden_gc01_layer_composition_against_rd_m1_e10_and_e11",
+  "tests.test_redesign_walls_layers::test_the_saved_index_carries_its_report_and_its_name_its_version_and_rules",
+  "tests.test_redesign_walls_layers::test_the_wall_allow_list_is_a_setting_beside_the_column_layers_and_reads_the_layers_own_name",
+  "tests.test_redesign_walls_layers::test_the_walls_interface_is_unchanged_for_its_consumers"
+ ],
+ "only_in_baseline": [],
+ "skip_changes": {}
+}
