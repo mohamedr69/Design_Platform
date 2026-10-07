@@ -444,7 +444,7 @@ function Output({
               {data.output.status === "made" ? "Download DWG" : "Download the earlier copy"}
             </a>
           )}
-          {canEdit && data.output.status === "made" && data.output.available && !data.output.relative && (
+          {canEdit && data.output.status === "made" && data.output.available && !data.output.published && !data.output.filed_earlier && (
             <button
               onClick={onPublish}
               disabled={disabled || publishing}
@@ -456,8 +456,12 @@ function Output({
         </div>
         {data.output.available && (
           <div className="mt-2 break-all text-xs text-gray-500">
-            {data.output.file} · {data.output.changes} approved changes, checked · a platform copy
-            {data.output.relative ? ` · published separately to the project archive: ${data.output.relative}` : ", not in the project archive"}
+            {data.output.file} · {data.output.changes} approved changes{data.output.filed_earlier ? "" : ", checked"} · a platform copy
+            {data.output.published
+              ? ` · published to the project archive by the engineer: ${data.output.published}`
+              : data.output.filed_earlier
+                ? ` · filed by an earlier version, not verified: ${data.output.filed_earlier}`
+                : ", not in the project archive"}
             {data.output.at ? ` · ${new Date(data.output.at).toLocaleString()}` : ""}
           </div>
         )}
@@ -467,14 +471,14 @@ function Output({
         {data.output.status === "making" && !making && <div className="mt-2 text-xs text-gray-500">Being made…</div>}
         {data.output.status === "stale" && (
           <div className="mt-2 text-xs text-red-700">
-            Not published, stale: the approvals or placings changed while the copy was being made. {data.output.error}
+            Stale, no new copy was kept: the approvals or placings changed while the copy was being made. {data.output.error}
           </div>
         )}
         {data.output.status === "refused" && (
           <div className="mt-2 text-xs text-red-700">Refused before AutoCAD started, nothing was made: {data.output.error}</div>
         )}
         {["failed", "cancelled", "interrupted"].includes(data.output.status) && (
-          <div className="mt-2 text-xs text-red-700">Nothing was published: {data.output.error}</div>
+          <div className="mt-2 text-xs text-red-700">No new copy was made: {data.output.error}</div>
         )}
         {data.output.status !== "made" && data.output.available && (
           <div className="mt-1 text-xs text-gray-500">The earlier copy above is kept and can still be downloaded.</div>

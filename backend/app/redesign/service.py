@@ -1660,7 +1660,9 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
 RUNS = "runs"                    # <uploads>/EP-<n>/redesign/runs/<apply id>/: each Apply's own work folder
 ORPHANED = "orphaned"            # <uploads>/EP-<n>/redesign/orphaned/: outputs no record refers to (crash)
 PART = ".part"                   # a staged copy, never a result
+PUBLISHING = "publishing"        # <uploads>/EP-<n>/redesign/publishing/: a publication's staged copy (U2M5V-02)
 OUTPUT_NAME = re.compile(r" - Redesign \d{8}-\d{6}-\d{6}Z d\d+ s[0-9a-f]{12} j\d+-[0-9a-f]{10}\.dwg$")
+APPLY_ID = re.compile(r" d(\d+) s[0-9a-f]{12} (j(\d+)-[0-9a-f]{10})\.dwg$")   # drawing, apply id, job of an output
 
 
 def _drawn_fingerprint_part(c: dict) -> dict:
@@ -1701,6 +1703,17 @@ def apply_request(db: Session, project: Project, drawing: ProjectIfcDrawing) -> 
             "drawn": sum(1 for c in row.changes or [] if _drawn(c))}
 
 
+def _request_changed(row: ProjectRedesign, request: dict) -> str | None:
+    """Why the redesign as stored is no longer what this Apply was asked
+    for (the source, or the decision snapshot); None when it still is."""
+    if request.get("source_sha256") and request["source_sha256"] != row.source_sha256:
+        return "Refused: the drawing changed since this Apply was asked for. Ask for a new Apply."
+    if request.get("fingerprint") and request["fingerprint"] != content_fingerprint(row, row.source_sha256):
+        return ("Refused: approvals or placings changed since this Apply was asked for. "
+                "Check the changes and ask for a new Apply.")
+    return None
+
+
 def _refusal(db: Session, row: ProjectRedesign, request: dict, job_id: int | None,
              job_created_at) -> tuple[str, bool] | None:
     """Why this Apply must not run at all, and whether that is because it was
@@ -1712,12 +1725,10 @@ def _refusal(db: Session, row: ProjectRedesign, request: dict, job_id: int | Non
         # a recovered job whose work finished before its worker stopped (RD-M1 F017)
         return (f"Refused: this drawing's redesigned copy was already made at {row.output_at:%Y-%m-%d %H:%M:%S} UTC, "
                 "after this Apply was asked for. Nothing was run again.", True)
-    if request.get("source_sha256") and request["source_sha256"] != row.source_sha256:
-        return "Refused: the drawing changed since this Apply was asked for. Ask for a new Apply.", False
+    changed = _request_changed(row, request)
+    if changed:
+        return changed, False
     current = content_fingerprint(row, row.source_sha256)
-    if request.get("fingerprint") and request["fingerprint"] != current:
-        return ("Refused: approvals or placings changed since this Apply was asked for. "
-                "Check the changes and ask for a new Apply.", False)
     done = (db.query(BackgroundJob)
             .filter(BackgroundJob.project_id == row.project_id, BackgroundJob.kind == KIND_APPLY,
                     BackgroundJob.status == "succeeded")
@@ -1921,6 +1932,12 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
     if drawing is None or drawing.project_id != project.id:
         raise RedesignError("That drawing is not this project's")
     row = state(db, project, drawing_id)
+    # U2M5V-03: a copy this very job made and verified before its worker stopped (between the
+    # "made" commit and the job's own "succeeded" one) is its result: recorded, never made again.
+    # A copy another job left that way is reconciled first, so it counts as made below.
+    mine = _reconcile_row(db, project, row, own_job_id=job_id, fingerprint=request.get("fingerprint"))
+    if mine is not None:
+        return mine
     ready = readiness(db, project, drawing, row)
     if not ready["ready"]:
         # never made while an engineering check is open: each one said
@@ -1931,10 +1948,24 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
         why, already_made = refused
         _refuse(db, row, why, record=not already_made)
     check()
-    row.output_status, row.output_error = "making", None
-    db.commit()
-    # the decision snapshot this Apply works from, after its own write (RD-M2)
-    snap = _snapshot(row, row.source_sha256)
+    # U2M5V-01: the request is compared again, "making" written and the decision snapshot taken
+    # in one serialized transaction -- the publication's lock, taken the same way -- so an
+    # approval committed since the first look is refused here, never drawn, and one committed
+    # after it changes the row the snapshot was taken from: the Apply is then stale.
+    db.commit()                                      # whatever was read so far, kept as before
+    try:
+        row = _locked_publish_row(db, row.id)
+        changed = _request_changed(row, request)
+        if changed:
+            _refuse(db, row, changed, record=True)   # recorded; its commit ends the transaction
+        row.output_status, row.output_error = "making", None
+        db.flush()
+        db.expire(row)                               # the row as this transaction has written it
+        snap = _snapshot(row, row.source_sha256)
+        db.commit()
+    except BaseException:
+        db.rollback()
+        raise
     run = None
     try:
         source = render.source_file(project, drawing)
@@ -1973,7 +2004,11 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
         (Path(run.work) / "verification.json").write_text(json.dumps(
             {"ok": result.ok, "problems": result.problems, "log": result.log, "readback": result.readback,
              "returncode": run.returncode, "nonce": run.nonce, "source_sha256": run.source_sha256,
-             "copy_sha256": run.copy_sha256, "expected": expect}, indent=1, default=str), encoding="utf-8")
+             "copy_sha256": run.copy_sha256, "expected": expect,
+             # what a reconciliation needs to record this run's result (U2M5V-03)
+             "drawing_id": drawing_id, "job_id": job_id, "apply_id": apply_id, "fingerprint": snap["content"],
+             "changes": len(cad_changes), "inserts": run.expected_inserts, "erases": run.expected_erases},
+            indent=1, default=str), encoding="utf-8")
         if not result.ok:
             raise ApplyError("The redesigned copy did not verify, so it was not kept as a result: "
                              + "; ".join(result.problems)[:800])
@@ -2041,8 +2076,9 @@ def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *
 
 
 def sweep_orphans(db: Session, *, older_than_s: float = 900.0) -> dict:
-    """Outputs a crash left behind (U2M5-04): a staged copy (".<name>.part")
-    is never a result and is removed; a final-named output no redesign and
+    """Outputs a crash left behind (U2M5-04): a staged copy (".<name>.part",
+    an Apply's in redesign/, a publication's in redesign/publishing/ --
+    U2M5V-02) is never a result and is removed; a final-named output no redesign and
     no succeeded Apply refers to (a stop between the rename and the commit)
     is moved to redesign/orphaned/ -- never deleted, never published. Only
     files older than `older_than_s`, and never for a project an Apply is
@@ -2058,6 +2094,17 @@ def sweep_orphans(db: Session, *, older_than_s: float = 900.0) -> dict:
     for folder in root.glob("EP-*/redesign"):
         if not folder.is_dir():
             continue
+        # a publication's staged copy a stop left in the platform's staging folder (U2M5V-02),
+        # whatever Apply is doing (Apply never writes there); the project archive is never swept
+        staging = folder / PUBLISHING
+        for path in list(staging.iterdir()) if staging.is_dir() else []:
+            try:
+                if path.is_file() and path.name.startswith(".") and path.name.endswith(PART) \
+                        and path.stat().st_mtime <= cutoff:
+                    path.unlink()
+                    done["parts_removed"] += 1
+            except OSError:
+                log.warning("Could not sweep %s", path, exc_info=True)
         ep = folder.parent.name[len("EP-"):]
         project = db.query(Project).filter(Project.ep_number == ep).first()
         if project is not None and db.query(BackgroundJob).filter(
@@ -2099,12 +2146,113 @@ def sweep_orphans(db: Session, *, older_than_s: float = 900.0) -> dict:
     return done
 
 
+# --- a copy made whose job never said so: reconciled from its checks (U2M5V-03) ----------
+
+
+def _verified_run(path: Path) -> tuple[dict, str, int] | None:
+    """The checks of the Apply run that made this platform copy -- the run
+    folder the apply id in its name names -- with that apply id and job id,
+    when they say the copy verified and it is still the file they verified
+    (their copy_sha256, U2M5V-07); None otherwise."""
+    match = APPLY_ID.search(path.name)
+    if match is None or not OUTPUT_NAME.search(path.name):
+        return None
+    try:
+        data = json.loads((path.parent / RUNS / match.group(2) / "verification.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict) or data.get("ok") is not True or not data.get("copy_sha256"):
+        return None
+    if data.get("drawing_id") not in (None, int(match.group(1))) or cad._sha(path) != data["copy_sha256"]:
+        return None
+    return data, match.group(2), int(match.group(3))
+
+
+def _made_result(path: Path, row: ProjectRedesign, data: dict, apply_id: str, fingerprint: str | None) -> dict:
+    """An Apply job's result, as apply() returns it, for a copy its run made
+    and verified and the redesign recorded as made."""
+    root = storage.uploads_root().resolve()
+    return {"file": path.name, "path": path.relative_to(root).as_posix(),
+            "changes": data.get("changes", row.output_changes), "drawing_id": row.drawing_id,
+            "fingerprint": data.get("fingerprint") or fingerprint, "source_sha256": data.get("source_sha256"),
+            "apply_id": apply_id, "run": (path.parent / RUNS / apply_id).relative_to(root).as_posix(),
+            "inserts": data.get("inserts"), "erases": data.get("erases"),
+            "reconciled": "the copy this job made and verified, found after its worker stopped"}
+
+
+def _reconcile_row(db: Session, project: Project, row: ProjectRedesign, *, own_job_id: int | None = None,
+                   fingerprint: str | None = None) -> dict | None:
+    """The redesign's current copy when its Apply committed "made" but its
+    job never reached "succeeded" (the worker stopped between the two
+    commits): for the job asking (`own_job_id`), its result, returned for
+    the job to succeed with; for a job left failed, the job is recorded as
+    succeeded with that result. Only a copy the redesign recorded as made,
+    whose run's checks say it verified and which is still the file they
+    verified. Returns the result for the asking job, else None."""
+    from app.models import BackgroundJob
+
+    path = last_output(row, project)
+    match = APPLY_ID.search(path.name) if path is not None else None
+    if match is None:
+        return None
+    job_no = int(match.group(3))
+    if job_no == own_job_id:
+        found = _verified_run(path)
+        if found is None:
+            return None
+        data, apply_id, _job = found
+        log.warning("Apply job %s made and verified %s before its worker stopped: recorded, not made again",
+                    job_no, path.name)
+        return _made_result(path, row, data, apply_id, fingerprint)
+    job = db.get(BackgroundJob, job_no)
+    if job is None or job.kind != KIND_APPLY or job.project_id != row.project_id or job.status != "failed" \
+            or (job.params or {}).get("drawing_id") != row.drawing_id:
+        return None
+    found = _verified_run(path)
+    if found is None:
+        return None
+    data, apply_id, _job = found
+    job.status, job.error, job.finished_at = "succeeded", None, job.finished_at or utc_now()
+    job.result = _made_result(path, row, data, apply_id, (job.params or {}).get("fingerprint"))
+    job.progress = {**(job.progress or {}),
+                    "message": "Finished: the copy it made and verified was found after its worker stopped"}
+    db.commit()
+    log.warning("Apply job %s had made and verified %s before it failed: recorded as succeeded", job_no, path.name)
+    return None
+
+
+def reconcile_made(db: Session, project: Project | None = None, drawing_id: int | None = None) -> list[int]:
+    """Every redesign copy made whose Apply job was left failed, recorded
+    as that job's result (the worker's housekeeping; publish() and apply()
+    do it for their own drawing). Returns the jobs reconciled."""
+    from app.models import BackgroundJob
+
+    query = db.query(ProjectRedesign).filter(ProjectRedesign.output_path.isnot(None))
+    if project is not None:
+        query = query.filter(ProjectRedesign.project_id == project.id)
+    if drawing_id is not None:
+        query = query.filter(ProjectRedesign.drawing_id == drawing_id)
+    done: list[int] = []
+    for row in query.all():
+        match = APPLY_ID.search(PureWindowsPath(row.output_path).name)
+        owner = project if project is not None and project.id == row.project_id else db.get(Project, row.project_id)
+        if match is None or owner is None:
+            continue
+        before = db.get(BackgroundJob, int(match.group(3)))
+        if before is None or before.status != "failed":
+            continue
+        _reconcile_row(db, owner, row)
+        if db.get(BackgroundJob, int(match.group(3))).status == "succeeded":
+            done.append(int(match.group(3)))
+    return done
+
+
 # --- publication into the project archive: the engineer's separate action (OD-15 a) ------
 
 
 def _verified_job(db: Session, project: Project, drawing_id: int, path: Path):
-    """The succeeded Apply job that made and verified this output, or None:
-    only such an output may go into the archive."""
+    """The succeeded Apply job that made and verified this output, with its
+    run's checks, or None: only such an output may go into the archive."""
     from app.models import BackgroundJob
 
     jobs_ = (db.query(BackgroundJob)
@@ -2117,12 +2265,68 @@ def _verified_job(db: Session, project: Project, drawing_id: int, path: Path):
             continue
         checks = output_file_for(f"{result.get('run')}/verification.json", project.ep_number) if result.get("run") else None
         try:
-            ok = checks is not None and json.loads(checks.read_text(encoding="utf-8")).get("ok") is True
+            data = json.loads(checks.read_text(encoding="utf-8")) if checks is not None else None
         except (OSError, ValueError):
-            ok = False
-        if ok:
-            return job
+            data = None
+        if isinstance(data, dict) and data.get("ok") is True:
+            return job, data
     return None
+
+
+def _copy_exclusive(part: Path, dest: Path) -> None:
+    """The final name created exclusively and filled from the staged copy --
+    where a link or a rename cannot reach the archive (another volume):
+    never over an existing file, and removed again on any failure."""
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
+    try:
+        fd = os.open(dest, flags)
+    except FileExistsError as exc:
+        raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
+    try:
+        with os.fdopen(fd, "wb") as out, open(part, "rb") as src:
+            for chunk in iter(lambda: src.read(1 << 20), b""):
+                out.write(chunk)
+            out.flush()
+            os.fsync(out.fileno())
+    except BaseException:
+        dest.unlink(missing_ok=True)
+        raise
+
+
+def _into_archive(part: Path, dest: Path) -> None:
+    """The staged copy (in the platform's own folder) given its final name in
+    the archive, never over an existing file: a hard link, or a Windows
+    rename (which never replaces) on the same volume; else an exclusive
+    copy. No temporary file is ever made in the archive (U2M5V-02)."""
+    try:
+        os.link(part, dest)
+        return
+    except FileExistsError as exc:
+        raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
+    except OSError:
+        pass                                         # another volume, or no hard links there
+    if os.name == "nt":
+        try:
+            os.rename(part, dest)
+            return
+        except FileExistsError as exc:
+            raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
+        except OSError:
+            pass                                     # another volume
+    _copy_exclusive(part, dest)
+
+
+def _in_archive_already(final: Path, sha: str, shown: str) -> PublishRefused:
+    """The 409 for a name already taken in the archive: the same file, or a different one."""
+    try:
+        same = cad._sha(final) == sha
+    except OSError:
+        same = False
+    if same:
+        return PublishRefused(f"{shown} is already in the project archive (the same file): nothing was overwritten.",
+                              409)
+    return PublishRefused(f"A different file named {shown} is already in the project archive: nothing was "
+                          "overwritten. Move or rename it there if it should be replaced.", 409)
 
 
 def publish(db: Session, project: Project, drawing_id: int, user, output: str | None = None) -> dict:
@@ -2131,7 +2335,9 @@ def publish(db: Session, project: Project, drawing_id: int, user, output: str | 
     unique name: refused when that name is already there -- nothing is ever
     overwritten -- and recorded (who, when, which file, its hash) as an
     activity event (OD-15 a). `output`: the copy as the redesign stored it;
-    the current one when not given."""
+    the current one when not given. Only the file its Apply run verified
+    (its recorded sha256, U2M5V-07); staged in the platform's own folder,
+    never in the archive (U2M5V-02)."""
     from app.services import activity, document_control
 
     drawing = db.get(ProjectIfcDrawing, drawing_id)
@@ -2144,31 +2350,44 @@ def publish(db: Session, project: Project, drawing_id: int, user, output: str | 
     path = output_file_for(stored, project.ep_number)
     if path is None:
         raise PublishRefused("That redesigned copy is not on this PC.", 404)
-    job = _verified_job(db, project, drawing_id, path)
-    if job is None:
+    _reconcile_row(db, project, row)                 # a made copy whose job never said so (U2M5V-03)
+    found = _verified_job(db, project, drawing_id, path)
+    if found is None:
         raise PublishRefused("Only a copy Apply made and verified can be published to the project archive.")
+    job, checks = found
+    sha = cad._sha(path)
+    if sha != checks.get("copy_sha256"):
+        raise PublishRefused("The platform copy is no longer the file Apply verified (its sha256 differs from the "
+                             "one its checks recorded): it was not published. Make the drawing again.")
     if not project.source_folder_path:
         raise PublishRefused("The project has no archive folder to publish to.")
     folder = Path(project.source_folder_path) / FOLDER
-    target = folder / path.name
-    if os.path.exists(document_control._os_path(target)):
-        raise PublishRefused(f"{FOLDER}/{path.name} is already in the project archive: nothing was overwritten.", 409)
-    os.makedirs(document_control._os_path(folder), exist_ok=True)
-    final = Path(document_control._os_path(target))
+    relative = f"{FOLDER}/{path.name}"
+    final = Path(document_control._os_path(folder / path.name))
+    if os.path.exists(final):
+        raise _in_archive_already(final, sha, relative)
+    staging = (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign" / PUBLISHING).resolve()
+    try:
+        staged = _stage(path, staging / path.name)   # ".<name>.part" in the platform's own folder
+    except ApplyError as exc:
+        raise PublishRefused(
+            f"A publication of {path.name} is under way, or an interrupted one left its temporary copy in the "
+            f"platform's staging folder (redesign/{PUBLISHING}): nothing was published and nothing is in the "
+            "project archive. The worker's housekeeping removes a temporary copy left for 15 minutes; publish "
+            "again then.", 409) from exc
     created = False
     try:
-        staged = _stage(path, final)                 # beside the final name: ".<name>.part"
+        os.makedirs(document_control._os_path(folder), exist_ok=True)
         try:
-            _finalize(staged, final)
-            created = True
-        finally:
-            staged.unlink(missing_ok=True)
-        sha = cad._sha(final)
-        if sha != cad._sha(path):
+            _into_archive(staged, final)
+        except ApplyError as exc:
+            # the name was taken between the look and the placing: nothing overwritten, nothing made
+            raise _in_archive_already(final, sha, relative) from exc
+        created = True
+        if cad._sha(final) != sha:
             raise PublishRefused("The archive copy does not match the verified copy: it was removed.")
-        relative = f"{FOLDER}/{path.name}"
         if output_file_for(row.output_path, project.ep_number) == path:
-            row.output_relative = relative          # the current copy: said on the page as published separately
+            row.output_relative = relative          # the current copy: said on the page as published
         at = utc_now()
         activity.record(db, user, "redesign.published",
                         f"Published {path.name} to the project archive ({FOLDER})", project=project,
@@ -2176,18 +2395,34 @@ def publish(db: Session, project: Project, drawing_id: int, user, output: str | 
                         detail={"output": path.relative_to(storage.uploads_root().resolve()).as_posix(),
                                 "archive": relative, "sha256": sha, "job_id": job.id}, commit=False)
         db.commit()
-    except ApplyError as exc:
-        # the name was taken between the look and the rename: nothing overwritten, nothing made
-        db.rollback()
-        raise PublishRefused(f"{FOLDER}/{path.name} is already in the project archive: nothing was overwritten.",
-                             409) from exc
     except BaseException:
         db.rollback()
         if created:
             final.unlink(missing_ok=True)            # ours, made just now, and not recorded: not left behind
         raise
+    finally:
+        staged.unlink(missing_ok=True)
     return {"file": path.name, "archive": relative, "sha256": sha, "by": getattr(user, "id", None),
             "at": at.isoformat(), "job_id": job.id}
+
+
+def _published(db: Session, project: Project, drawing_id: int, row: ProjectRedesign) -> str | None:
+    """Where the engineer published the current copy in the project archive,
+    from its publication event; None when it was not (U2M5V-04: a row the
+    pre-M5 Apply filed keeps output_relative, with no such event)."""
+    from app.models import ActivityEvent
+
+    if not row.output_relative or not row.output_path:
+        return None
+    events = (db.query(ActivityEvent)
+              .filter(ActivityEvent.action == "redesign.published", ActivityEvent.project_id == project.id,
+                      ActivityEvent.entity_type == "ifc_drawing", ActivityEvent.entity_id == drawing_id)
+              .order_by(ActivityEvent.id.desc()).all())
+    for event in events:
+        detail = event.detail or {}
+        if detail.get("archive") == row.output_relative and detail.get("output") == row.output_path:
+            return row.output_relative
+    return None
 
 
 # --- the page ---------------------------------------------------------------------------
@@ -2205,6 +2440,7 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
         if review.outcome(review_row)[0] in ("done", "partial"):
             undecided = review.build(db, project, drawing)["counts"]["open"]
     ready = readiness(db, project, drawing, row)
+    published = _published(db, project, drawing_id, row)
     db.commit()
     changes = []
     for c in row.changes or []:
@@ -2232,8 +2468,12 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
         "run": row.run, "agents_on": prep_ai_on(),
         # the last attempt's state, and the last copy made: a failed, stale or refused
         # attempt leaves the earlier copy downloadable (`available`, U2M5-09);
-        # `relative`: where the engineer published it in the project archive (OD-15 a)
+        # `relative`: as stored; `published`: where the engineer published it in the project
+        # archive (OD-15 a), from its publication event; `filed_earlier`: where the pre-M5 Apply
+        # filed it, never verified nor published by anyone (U2M5V-04)
         "output": {"status": row.output_status, "error": row.output_error, "relative": row.output_relative,
+                   "published": published,
+                   "filed_earlier": row.output_relative if row.output_relative and not published else None,
                    "file": PureWindowsPath(row.output_path).name if row.output_path else None,
                    "available": last_output(row, project) is not None,
                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},
