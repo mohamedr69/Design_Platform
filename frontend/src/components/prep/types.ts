@@ -70,10 +70,15 @@ export interface Change {
   moved: boolean;
   confidence: string | null;
   residual: number | null;
+  // the spot is still to be confirmed by the engineer before it can be drawn (RD-M2, M5)
   confirm: boolean;
+  requires_confirmation?: boolean;
+  confirmed?: boolean;
+  // an orchestrator reject/check holds the change until the engineer approves it
+  held?: boolean;
   box?: number[];
   // "interface": the FA Interface Schedule's modules; "coverage": a detector the
-  // room's coverage needs. Both drawn only once approved.
+  // room's coverage needs. Like a review change, drawn only once approved (OD-14 a).
   source?: string;
   interface?: { code: string; for: string; equipment: string; tag: string };
   drawn?: boolean;
@@ -163,7 +168,18 @@ export interface Redesign {
   changes: Change[];
   symbols: Symbol[];
   counts: Record<string, number>;
-  output: { status: string; error: string | null; relative: string | null; file: string | null; at: string | null; changes: number };
+  /** The last Apply attempt's state ("made", "making", "failed", "stale", "refused", "cancelled",
+   *  "interrupted") and the last copy made: `available` when it can still be downloaded, whatever the
+   *  last attempt came to; `relative` where the engineer published it in the project archive (M5). */
+  output: {
+    status: string;
+    error: string | null;
+    relative: string | null;
+    file: string | null;
+    at: string | null;
+    changes: number;
+    available?: boolean;
+  };
   folder: string;
   run: Run | null;
   agents_on: boolean;

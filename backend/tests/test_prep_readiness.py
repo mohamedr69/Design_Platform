@@ -35,10 +35,22 @@ def test_proposed_placements_and_coverage_detectors_keep_the_drawing_from_the_dr
     assert ready["ready"] is False
     assert any("placements the agents proposed to approve or skip" in b or "placement the agents proposed" in b
                for b in ready["blockers"])
-    # the output refuses, and says why
-    job = client.post(f"/projects/{pid}/redesign/{did}/apply/jobs").json()
-    job = client.get(f"/jobs/{job['id']}").json()
-    assert job["status"] == "failed" and "Not ready for the draftsman" in job["error"]
+    # the output refuses, and says why -- at the server boundary since M5 (ORCH-039): no job is queued
+    # (the job itself still refuses too, tests/test_redesign_apply.py)
+    from app.models import BackgroundJob
+    from app.redesign import service
+
+    refused = client.post(f"/projects/{pid}/redesign/{did}/apply/jobs")
+    assert refused.status_code == 422 and "Not ready for the draftsman" in refused.json()["detail"]
+    jobs = client.get(f"/projects/{pid}/redesign/{did}").json()
+    assert jobs["output"]["status"] == "none"
+    from app.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        assert db.query(BackgroundJob).filter(BackgroundJob.kind == service.KIND_APPLY).count() == 0
+    finally:
+        db.close()
     assert not any(c["drawn"] for c in view["changes"] if c["status"] == "proposed")
 
 

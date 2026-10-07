@@ -75,12 +75,18 @@ def test_the_autocad_script_erases_inserts_at_the_true_scale_and_marks_each_chan
     assert changes[1]["remove_handle"] is None and "(erase by hand)" in changes[1]["label"]
     script = "\n".join(cad.script_lines(changes, marker=0.6, text_height=0.25))
     assert '(setvar "TILEMODE" 1)' in script                      # model space, not the sheet layout
-    assert '(entdel (handent "5DD03"))' in script and "BEEF" not in script
+    # erased only after it is checked to be the symbol meant (RD-M2, ported in M5); a symbol inside a block
+    # is not erased -- the stricter assertion that replaces the old bare-handle one (U2M5-17)
+    assert '(if (not ep_failed) (ep_erase "5DD03" nil nil nil 0.010000 "#1"))' in script and "BEEF" not in script
+    assert "(entdel (entlast))" not in script and "(entdel (handent" not in script
     # inserted once at 1 to learn the block's unit factor, then at the scale wanted divided by it
-    assert '"_.-INSERT" "HEAT DETECTOR" "_S" 1.0 (list 1.000000 2.000000 0.0) 90.000000' in script
+    assert '(command "_.-INSERT" "HEAT DETECTOR" "_S" 1.0 (list 1.000000 2.000000 0.0) 90.000000)' in script
     assert '(/ 1.000000 ep_f)' in script and '(setvar "CLAYER" "-fire alarm")' in script
     assert script.count('(cons 0 "CIRCLE")') == 2 and '"EP-REDESIGN-REPLACE"' in script
-    assert script.rstrip().endswith("_.QSAVE\n_.QUIT\n_Y") or "_.QSAVE" in script
+    # saved only when no step failed (RD-M2): never a bare QSAVE line
+    assert '(if (not ep_failed) (progn (command "_.QSAVE") (setq ep_saved T)))' in script
+    assert "_.QSAVE" not in script.splitlines()
+    assert script.rstrip().endswith("_.QUIT\n_Y")
 
 
 def test_a_block_drawn_away_from_its_base_point_is_inserted_so_it_is_seen_on_the_spot():
@@ -236,7 +242,11 @@ def test_a_library_block_is_brought_in_from_its_file_only_by_the_first_insert_an
     assert cad_change["note"]["text"] == "FOR B3-SEF-3" and cad_change["note"]["at"][0] > 10.35
     script = "\n".join(cad.script_lines([cad_change], marker=0.6, text_height=0.25))
     inserts = [line for line in script.splitlines() if '"_.-INSERT"' in line]
-    assert '(if (tblsearch "BLOCK" "CR") "CR" "CR=C:/lib/CR.dwg")' in inserts[0]
+    # from this installation's active library, resolved when the script is made -- never the path the
+    # change stored, which is kept as history (OD-17 b; RD-M1 F001)
+    here = (R.LIBRARY / "CR.dwg").resolve().as_posix()
+    assert f'(if (tblsearch "BLOCK" "CR") "CR" "CR={here}")' in inserts[0]
+    assert "C:/lib" not in script and change["insert"]["library"] == "C:/lib/CR.dwg"      # the stored value kept
     assert "CR=" not in inserts[1]                               # never "redefine?": the block is there by then
     assert '(cons 1 "FOR B3-SEF-3")' in script and '(cons 8 "fire alarm")' in script
 
