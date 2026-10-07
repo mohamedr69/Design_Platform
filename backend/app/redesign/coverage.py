@@ -20,6 +20,7 @@ Distances are in the drawing's units, taken as metres (as the walls).
 """
 from __future__ import annotations
 
+import hashlib
 import math
 import pickle
 import re
@@ -28,7 +29,7 @@ from pathlib import Path
 
 import numpy as np
 
-VERSION = 2
+VERSION = 3                 # 3 (M8): effective layers and visibility, the rules' fingerprint in the name
 CELL = 2.0                  # the columns' grid, as the walls'
 MIN_SIDE, MAX_SIDE = 0.15, 2.5
 MAX_ASPECT = 5.0
@@ -55,6 +56,8 @@ class Columns:
         self.cells = cells
         # the room boundaries (app.redesign.walls.Walls), or None
         self.bounds = bounds
+        # what a build read (build_columns), None for one made by hand
+        self.report = None
 
     def __len__(self) -> int:
         return len({b for boxes in self.cells.values() for b in boxes})
@@ -76,31 +79,37 @@ class Columns:
         return None
 
 
-def columns_path(project, drawing, sha: str | None) -> Path:
+def columns_path(project, drawing, sha: str | None, *, layers: str | None = None) -> Path:
     from app.ifc import storage
 
+    if layers is None:
+        from app.core.config import get_settings
+
+        layers = get_settings().prep_column_layers
+    rules = f"{layers}\n{BOUND_LAYERS.pattern}\n{NOT_BOUNDS.pattern}".encode("utf-8")
     return (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign"
-            / f"columns-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}.pkl").resolve()
+            / f"columns-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}-{hashlib.sha256(rules).hexdigest()[:12]}.pkl"
+            ).resolve()
 
 
-def _column_box(entity) -> tuple[float, float, float, float] | None:
-    from ezdxf import bbox
+def _column_box(item) -> tuple[float, float, float, float] | None:
+    """A column-sized closed shape's model extent (through its INSERT chain)."""
+    from app.redesign.layers import model_vertices
 
+    entity = item.entity
     kind = entity.dxftype()
     if kind in ("LWPOLYLINE", "POLYLINE") and not entity.is_closed:
         return None
     if kind not in ("LWPOLYLINE", "POLYLINE", "HATCH", "SOLID", "CIRCLE"):
         return None
-    try:
-        ext = bbox.extents([entity], fast=True)
-    except Exception:  # noqa: BLE001 -- a shape that cannot be measured is not a column here
+    vertices = model_vertices(item)
+    if not vertices:
         return None
-    if not ext.has_data:
-        return None
-    w, h = ext.size.x, ext.size.y
+    xs, ys = [v.x for v in vertices], [v.y for v in vertices]
+    w, h = max(xs) - min(xs), max(ys) - min(ys)
     if not (MIN_SIDE <= w <= MAX_SIDE and MIN_SIDE <= h <= MAX_SIDE) or max(w, h) / min(w, h) > MAX_ASPECT:
         return None
-    return (round(ext.extmin.x, 3), round(ext.extmin.y, 3), round(ext.extmax.x, 3), round(ext.extmax.y, 3))
+    return (round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3))
 
 
 def _add_segment(cells: dict, seg: tuple[float, float, float, float]) -> None:
@@ -115,38 +124,54 @@ def _add_segment(cells: dict, seg: tuple[float, float, float, float]) -> None:
             cells.setdefault(cell, []).append(seg)
 
 
-def build_columns(dxf_path: Path, out: Path, layers: str, check=None) -> Columns:
+BOUND_KINDS = {"LINE", "LWPOLYLINE", "POLYLINE", "ARC"}
+COLUMN_KINDS = {"LWPOLYLINE", "POLYLINE", "HATCH", "SOLID", "CIRCLE"}
+
+
+def build_columns(dxf_path: Path, out: Path, layers: str, check=None, *, viewport: str | None = None) -> Columns:
     """Every column-sized shape on a column layer, and every line of the
     room boundaries (BOUND_LAYERS), at any depth (the architect's background
-    is one large block), kept in a 2 m grid."""
+    is one large block), kept in a 2 m grid. By the wall index's rules
+    (app.redesign.layers, M8): the effective layer's own name, and only what
+    is shown -- a hidden boundary does not close a room, a hidden column is
+    not kept clear of."""
     import ezdxf
-    from ezdxf import disassemble
 
+    from app.redesign import layers as L
     from app.redesign.walls import Walls
 
     wanted = re.compile(layers, re.I)
     doc = ezdxf.readfile(dxf_path)
+    vp = L.viewport_info(doc, viewport) if viewport else None
+    table = L.LayerTable(doc, vp["frozen_layers"] if vp else ())
+    stats = L.WalkStats()
     cells: dict[tuple[int, int], list] = {}
     bounds: dict[tuple[int, int], list] = {}
     total = 0.0
     seen = set()
-    for n, entity in enumerate(disassemble.recursive_decompose(doc.modelspace())):
-        if check and n % 20000 == 0:
-            check()
-        layer = entity.dxf.get("layer", "") or ""
-        if BOUND_LAYERS.search(layer) and not NOT_BOUNDS.search(layer)                 and entity.dxftype() in ("LINE", "LWPOLYLINE", "POLYLINE", "ARC"):
-            try:
-                vertices = list(disassemble.make_primitive(entity).vertices())
-            except Exception:  # noqa: BLE001 -- a line that cannot be read does not close a room
-                vertices = []
+    hidden: dict[str, int] = {}
+    bound_layers: dict[str, float] = {}
+    for item in L.walk(doc, BOUND_KINDS | COLUMN_KINDS, table, check=check, stats=stats):
+        layer = L.local_name(item.layer)
+        is_bound = (item.entity.dxftype() in BOUND_KINDS and BOUND_LAYERS.search(layer)
+                    and not NOT_BOUNDS.search(layer))
+        is_column = item.entity.dxftype() in COLUMN_KINDS and wanted.search(layer)
+        if not (is_bound or is_column):
+            continue
+        if item.reason:
+            hidden[item.reason] = hidden.get(item.reason, 0) + 1
+            continue
+        if is_bound:
+            vertices = L.model_vertices(item)
             for a, b in zip(vertices, vertices[1:]):
                 length = math.hypot(b.x - a.x, b.y - a.y)
                 if length >= 0.05:
                     _add_segment(bounds, (round(a.x, 4), round(a.y, 4), round(b.x, 4), round(b.y, 4)))
                     total += length
-        if not wanted.search(layer):
+                    bound_layers[item.layer] = bound_layers.get(item.layer, 0.0) + length
+        if not is_column:
             continue
-        box = _column_box(entity)
+        box = _column_box(item)
         if box is None or box in seen:
             continue
         seen.add(box)
@@ -154,10 +179,15 @@ def build_columns(dxf_path: Path, out: Path, layers: str, check=None) -> Columns
             for j in range(int(math.floor(box[1] / CELL)), int(math.floor(box[3] / CELL)) + 1):
                 cells.setdefault((i, j), []).append(box)
     kept = bounds if total >= MIN_BOUNDS_M else {}
+    report = {"version": VERSION, "viewport": vp, "walk": stats.to_dict(), "columns": len(seen),
+              "bounds_length_m": round(total, 3), "bounds_kept": bool(kept),
+              "bounds_layers": {k: round(v, 3) for k, v in sorted(bound_layers.items())},
+              "hidden": dict(sorted(hidden.items()))}
     found = Columns(cells, Walls(kept) if kept else None)
+    found.report = report
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "wb") as f:
-        pickle.dump({"columns": cells, "bounds": kept}, f, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump({"columns": cells, "bounds": kept, "report": report}, f, protocol=pickle.HIGHEST_PROTOCOL)
     return found
 
 
@@ -169,7 +199,9 @@ def load_columns(path: Path) -> Columns | None:
 
         with open(path, "rb") as f:
             data = pickle.load(f)
-        return Columns(data["columns"], Walls(data["bounds"]) if data.get("bounds") else None)
+        found = Columns(data["columns"], Walls(data["bounds"]) if data.get("bounds") else None)
+        found.report = data.get("report")
+        return found
     except Exception:  # noqa: BLE001 -- a file that cannot be read is built again
         return None
 
@@ -269,11 +301,15 @@ def room_at(walls, columns: Columns | None, x: float, y: float, reach: float = R
     architect's walls, doors, glazing and columns where the drawing names
     them, else the plan's double lines --, its doorways closed: the
     narrowest closing that shuts it, up to a 2 m double door; None when
-    there is nothing near it at all."""
+    there is nothing near it at all -- and None from a built wall index too
+    sparse to close a room by (walls.MIN_WALLS_M): not measured, never a room
+    measured against no walls (M3 P-07)."""
     if columns is not None and columns.bounds is not None:
         segments = columns.bounds.near(x, y, reach)
+    elif walls is None or getattr(walls, "sparse", False):
+        segments = []
     else:
-        segments = double_lines(walls.near(x, y, reach)) if walls is not None else []
+        segments = double_lines(walls.near(x, y, reach))
     if not segments:
         return None
     room = None

@@ -10,9 +10,19 @@ background, one large block -- so they are read once per drawing, every
 line and polyline at any depth, kept in a grid of 2 m cells, and saved
 beside the drawing's other working files: every later placement, and every
 click of the engineer's, reads that rather than the drawing.
+
+Which lines are walls (M8, ORCH-036): a line, polyline or arc whose
+effective layer (app.redesign.layers: layer "0" inside a block takes its
+INSERT's layer) is shown -- on, thawed, plottable, not frozen in the
+viewport the index is built for, the entity and every INSERT above it
+visible -- and whose layer's own name is on the wall allow-list
+(settings.prep_wall_layers) and not on NOT_WALLS. Every segment met is
+counted in the index's layer composition report, kept or not and why.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import math
 import pickle
 import re
@@ -24,12 +34,30 @@ MIN_LENGTH = 0.3
 # doors and windows, and the fire alarm's and lighting's own symbols.
 NOT_WALLS = re.compile(r"GRID|AXIS|DIM|TEXT|NAME|ANNO|TAG|FURN|CAR|PARK|SYMBOL|FIRE|ALARM|SPK|SPEAKER|LIGHT|\bEM\b|-EM"
                        r"|EXIT|SIGN|DOOR|WIN|TITLE|LEVEL|ROOM|HATCH|ARROW|STAIR", re.I)
-VERSION = 1
+# 1: every line not on NOT_WALLS by its raw layer. 2 (M8): effective layer,
+# visibility, allow-list, composition report; the rules' fingerprint in the name.
+VERSION = 2
+KINDS = {"LINE", "LWPOLYLINE", "POLYLINE", "ARC"}
+# Under this much kept wall the index cannot close a room: coverage is "not
+# measured" (M3 P-07), never measured against no walls (as coverage.MIN_BOUNDS_M).
+MIN_WALLS_M = 200.0
 
 
 class Walls:
-    def __init__(self, cells: dict[tuple[int, int], list[tuple[float, float, float, float]]]):
+    def __init__(self, cells: dict[tuple[int, int], list[tuple[float, float, float, float]]],
+                 report: dict | None = None):
         self.cells = cells
+        # the layer composition report of a built index; None for one made by hand
+        self.report = report
+        # per-segment records, only when built with detail=True (never saved)
+        self.detail: list[dict] | None = None
+
+    @property
+    def sparse(self) -> bool:
+        """A built index with too little kept wall to close a room by."""
+        if self.report is None:
+            return False
+        return self.report["totals"]["included_length_m"] < MIN_WALLS_M
 
     def near(self, x: float, y: float, radius: float) -> list[tuple[float, float, float, float]]:
         out = []
@@ -141,57 +169,151 @@ class Walls:
         return offset, lo, hi
 
 
-def path_for(project, drawing, sha: str | None) -> Path:
+def rules(allow: str | None = None, deny: str | None = None) -> tuple[str, str]:
+    """The allow-list and deny-list a build uses: the given ones (a later
+    per-project store feeds them), else the setting and NOT_WALLS."""
+    if allow is None:
+        from app.core.config import get_settings
+
+        allow = get_settings().prep_wall_layers
+    return allow, (NOT_WALLS.pattern if deny is None else deny)
+
+
+def fingerprint(allow: str | None = None, deny: str | None = None, viewport: str | None = None) -> str:
+    """The rules' fingerprint, in the saved index's name: an index built under
+    other rules is never read for these."""
+    allow, deny = rules(allow, deny)
+    text = json.dumps({"v": VERSION, "allow": allow, "deny": deny, "viewport": viewport, "kinds": sorted(KINDS),
+                       "min": MIN_LENGTH}, sort_keys=True)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+
+
+def path_for(project, drawing, sha: str | None, *, allow: str | None = None, deny: str | None = None,
+             viewport: str | None = None) -> Path:
     from app.ifc import storage
 
     return (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign"
-            / f"walls-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}.pkl").resolve()
+            / f"walls-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}-{fingerprint(allow, deny, viewport)}.pkl").resolve()
 
 
-def build(dxf_path: Path, out: Path, check=None) -> Walls:
+def _add(cells: dict, seg: tuple[float, float, float, float]) -> None:
+    ax, ay, bx, by = seg
+    # every cell the segment passes, so a query finds it wherever it looks
+    steps = max(1, int(math.hypot(bx - ax, by - ay) / CELL) + 1)
+    seen = set()
+    for k in range(steps + 1):
+        px, py = ax + (bx - ax) * k / steps, ay + (by - ay) * k / steps
+        cell = (int(math.floor(px / CELL)), int(math.floor(py / CELL)))
+        if cell not in seen:
+            seen.add(cell)
+            cells.setdefault(cell, []).append(seg)
+
+
+def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, deny: str | None = None,
+          viewport: str | None = None, detail: bool = False) -> Walls:
     """Read every line of the drawing, at any depth, into the grid (a minute
-    or two for a large drawing), and save it."""
-    import ezdxf
-    from ezdxf import disassemble
+    or two for a large drawing), and save it with its layer composition.
 
+    `allow` / `deny`: the wall layers' regular expressions for this build
+    (default: settings.prep_wall_layers and NOT_WALLS), matched,
+    case-insensitively, on the effective layer's own name. `viewport`: the
+    handle of the paper-space VIEWPORT the index is built for (its frozen
+    layers are not walls); the index stays in model coordinates. `detail`:
+    keep every segment's record on the returned index (tests, evidence)."""
+    import ezdxf
+
+    from app.redesign import layers as L
+
+    allow, deny = rules(allow, deny)
+    wanted, refused = re.compile(allow, re.I), re.compile(deny, re.I)
     doc = ezdxf.readfile(dxf_path)
+    vp = L.viewport_info(doc, viewport) if viewport else None
+    table = L.LayerTable(doc, vp["frozen_layers"] if vp else ())
+    stats = L.WalkStats()
     cells: dict[tuple[int, int], list] = {}
-    for n, entity in enumerate(disassemble.recursive_decompose(doc.modelspace())):
-        if check and n % 20000 == 0:
-            check()
-        if entity.dxftype() not in ("LINE", "LWPOLYLINE", "POLYLINE"):
-            continue
-        if NOT_WALLS.search(entity.dxf.get("layer", "") or ""):
-            continue
-        try:
-            vertices = list(disassemble.make_primitive(entity).vertices())
-        except Exception:  # noqa: BLE001 -- a line that cannot be read is not a wall here
-            continue
+    composition: dict[str, dict] = {}
+    records: list[dict] | None = [] if detail else None
+    verdicts: dict[str, str | None] = {}
+
+    def layer_verdict(layer: str) -> str | None:
+        if layer not in verdicts:
+            own = L.local_name(layer)
+            verdicts[layer] = ("deny_listed" if refused.search(own) else
+                               None if wanted.search(own) else "not_allow_listed")
+        return verdicts[layer]
+
+    for item in L.walk(doc, KINDS, table, check=check, stats=stats):
+        vertices = L.model_vertices(item)
+        row = composition.get(item.layer)
+        if row is None:
+            row = composition[item.layer] = {"segments": 0, "length_m": 0.0, "included": 0, "included_length_m": 0.0,
+                                             "excluded": {}, "via_insert": 0, "top_level": 0,
+                                             "included_via_insert": 0}
         for a, b in zip(vertices, vertices[1:]):
-            if math.hypot(b.x - a.x, b.y - a.y) < MIN_LENGTH:
-                continue
+            length = math.hypot(b.x - a.x, b.y - a.y)
+            reason = "below_min_length" if length < MIN_LENGTH else (item.reason or layer_verdict(item.layer))
             seg = (round(a.x, 4), round(a.y, 4), round(b.x, 4), round(b.y, 4))
-            # every cell the segment passes, so a query finds it wherever it looks
-            steps = max(1, int(math.hypot(b.x - a.x, b.y - a.y) / CELL) + 1)
-            seen = set()
-            for k in range(steps + 1):
-                px, py = a.x + (b.x - a.x) * k / steps, a.y + (b.y - a.y) * k / steps
-                cell = (int(math.floor(px / CELL)), int(math.floor(py / CELL)))
-                if cell not in seen:
-                    seen.add(cell)
-                    cells.setdefault(cell, []).append(seg)
-    walls = Walls(cells)
+            row["segments"] += 1
+            row["length_m"] += length
+            row["via_insert" if item.via_insert else "top_level"] += 1
+            if reason is None:
+                row["included"] += 1
+                row["included_length_m"] += length
+                row["included_via_insert"] += item.via_insert
+                _add(cells, seg)
+            else:
+                row["excluded"][reason] = row["excluded"].get(reason, 0) + 1
+            if records is not None:
+                records.append({"seg": seg, "layer": item.layer, "raw_layer": item.raw_layer, "reason": reason,
+                                "kind": item.entity.dxftype(), "chain": list(item.chain)})
+    report = _report(composition, stats, allow, deny, vp)
+    walls = Walls(cells, report)
+    walls.detail = records
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "wb") as f:
-        pickle.dump(cells, f, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump({"format": "walls", "version": VERSION, "cells": cells, "report": report}, f,
+                    protocol=pickle.HIGHEST_PROTOCOL)
     return walls
 
 
+def _report(composition: dict, stats, allow: str, deny: str, vp: dict | None) -> dict:
+    layers = {}
+    totals = {"segments": 0, "length_m": 0.0, "included": 0, "included_length_m": 0.0, "excluded": {},
+              "via_insert": 0, "included_via_insert": 0}
+    for name in sorted(composition):
+        row = composition[name]
+        row["length_m"] = round(row["length_m"], 3)
+        row["included_length_m"] = round(row["included_length_m"], 3)
+        row["excluded"] = dict(sorted(row["excluded"].items()))
+        layers[name] = row
+        totals["segments"] += row["segments"]
+        totals["length_m"] += row["length_m"]
+        totals["included"] += row["included"]
+        totals["included_length_m"] += row["included_length_m"]
+        totals["via_insert"] += row["via_insert"]
+        totals["included_via_insert"] += row["included_via_insert"]
+        for reason, n in row["excluded"].items():
+            totals["excluded"][reason] = totals["excluded"].get(reason, 0) + n
+    totals["length_m"] = round(totals["length_m"], 3)
+    totals["included_length_m"] = round(totals["included_length_m"], 3)
+    totals["excluded"] = dict(sorted(totals["excluded"].items()))
+    return {"version": VERSION, "rules": {"allow": allow, "deny": deny, "fingerprint": fingerprint(allow, deny,
+                                                                                                    vp and vp["handle"]),
+                                          "min_length": MIN_LENGTH, "kinds": sorted(KINDS)},
+            "viewport": vp, "walk": stats.to_dict(), "totals": totals,
+            "sparse": totals["included_length_m"] < MIN_WALLS_M, "layers": layers}
+
+
 def load(path: Path) -> Walls | None:
+    """The saved index, or None -- also for one saved in another format or
+    version (it is built again, never read under other rules)."""
     if not path.is_file():
         return None
     try:
         with open(path, "rb") as f:
-            return Walls(pickle.load(f))
+            data = pickle.load(f)
     except Exception:  # noqa: BLE001 -- a file that cannot be read is built again
         return None
+    if not isinstance(data, dict) or data.get("format") != "walls" or data.get("version") != VERSION:
+        return None
+    return Walls(data["cells"], data.get("report"))

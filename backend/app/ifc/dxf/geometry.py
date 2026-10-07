@@ -426,6 +426,15 @@ def svg_preview(polylines, filled, texts, size: int = 96) -> str:
 
 # --------------------------------------------------------------- transforms
 
+def chain_matrix(insert, parent: Matrix44 | None = None) -> Matrix44:
+    """An INSERT's block-to-drawing matrix composed onto the matrix of the
+    INSERTs above it: translation, scale (negative for a mirror), rotation and
+    the block's base point, down a nested chain (`parent` is None at the top).
+    The one composition the interface symbol finder and the wall index share."""
+    m = insert.matrix44()
+    return m @ parent if parent is not None else m
+
+
 def transformed_bbox(shape: BlockShape, m: Matrix44) -> tuple[float, float, float, float]:
     corners = [
         m.transform(Vec3(shape.xmin, shape.ymin, 0)),
