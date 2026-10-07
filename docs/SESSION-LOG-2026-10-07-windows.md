@@ -62,3 +62,7 @@ Never modify the live database, the project archive or OneDrive; read-only datab
 4. M2 closure card D1–D11 (evidence/m2-closure-package-2026-10-06/OWNER-DECISION-CARD-M2.md), in particular D10 (which tree M4 accepts; S10 shows the port's shape) and D2 (model budget for the R32 v3 run, 556 requests); D5–D9 (sealed pilot, BOQ track, dates/sections, human Golden truth, H-03 eligibility).
 5. Label review rulings for a human reviewer (evidence/label-review-2026-10-07/README.md §5–7): project membership of EP-29255 F002/F023/F027, EP-22349 F035, EP-15744 F043/F071; the convention questions (d1, g(1), g2, D-005, count-once of content duplicates, F038 class, F035 p3, F024/F029).
 6. Whether the session may use `gh` (install and `gh auth login`) for pull requests, or the owner opens them.
+
+## 5. After the session: pull request #2 merged
+
+The owner opened pull request #2 (06:38 UTC); the cloud session gave it the title and body from section 4 and merged it into `merge/candidate` as 9e8d12c; the branch `claude/upbeat-lovelace-sa9j3w` was fast-forwarded to the same merge commit. Verified on the Windows PC on 7 October 2026: both remote branches share one tree; the local branch and the local `merge/candidate` ref are fast-forwarded to 9e8d12c with no working-tree change (the live services running from this clone were not disturbed). Still with the owner: committing the two copied evidence folders with their `.gitattributes` lines; deleting the superseded backup branch `claude/wip-m4-ocr-unavailable`; the decisions in section 4.
