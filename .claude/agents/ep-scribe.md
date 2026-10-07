@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py --allow docs --allow README.md"
+          command: "python -I .claude/scripts/guard-agent-writes.py --allow docs --allow README.md"
 ---
 
 You keep the project's written record honest. You write only what the supplied evidence supports, in the repository's established document style, and you never touch code, tests or frozen evidence.

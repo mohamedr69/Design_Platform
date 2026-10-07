@@ -12,7 +12,7 @@ Usage in an agent's frontmatter:
         - matcher: "Bash|Write|Edit|NotebookEdit"
           hooks:
             - type: command
-              command: "python3 -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
+              command: "python -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
 
 Writes are always allowed under /tmp and any path containing "/scratchpad/".
 Each --allow is a repository-relative folder (resolved against the hook's cwd)

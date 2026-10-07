@@ -98,13 +98,28 @@ def test_directory_upgrade_preserves_existing_project_and_adds_lookup_index(db_s
     db_session.commit()
     db_session.close()
     config = Config(str(ALEMBIC_INI))
-    with engine.begin() as connection:
-        config.attributes["connection"] = connection
-        command.downgrade(config, "c4d5e6f7a8b9")
-        assert "ep_archive_folders" not in inspect(connection).get_table_names()
-        command.upgrade(config, "head")
-        assert connection.execute(select(Project.project_name).where(
-            Project.ep_number == "stage1-keep")).scalar_one() == "Keep this project"
-        indexes = inspect(connection).get_indexes("ep_archive_folders")
-        assert any(i["name"] == "ix_ep_archive_folders_lookup"
-                   and i["column_names"] == ["archive_id", "ep_number", "is_available"] for i in indexes)
+    sqlite = engine.url.get_backend_name() == "sqlite"
+    with engine.connect() as connection:
+        if sqlite:
+            # Migrate as the platform does (app/migrations.py upgrade_to_head):
+            # batch mode rebuilds `users` by copy, and with foreign keys on,
+            # dropping the old copy fails on the project that points at it.
+            # SQLite ignores this pragma inside a transaction, so it is set
+            # before one begins and set back after it ends.
+            connection.exec_driver_sql("PRAGMA foreign_keys=OFF")
+            connection.commit()
+        try:
+            with connection.begin():
+                config.attributes["connection"] = connection
+                command.downgrade(config, "c4d5e6f7a8b9")
+                assert "ep_archive_folders" not in inspect(connection).get_table_names()
+                command.upgrade(config, "head")
+                assert connection.execute(select(Project.project_name).where(
+                    Project.ep_number == "stage1-keep")).scalar_one() == "Keep this project"
+                indexes = inspect(connection).get_indexes("ep_archive_folders")
+                assert any(i["name"] == "ix_ep_archive_folders_lookup"
+                           and i["column_names"] == ["archive_id", "ep_number", "is_available"] for i in indexes)
+        finally:
+            if sqlite:
+                connection.exec_driver_sql("PRAGMA foreign_keys=ON")
+                connection.commit()

@@ -139,8 +139,8 @@ def _two_sheet_project(client, monkeypatch, ep):
     monkeypatch.setattr(projects_router, "extract_boq_lines", extract)
     _login_admin(client)
     payload = _valid_project_payload(ep)
-    payload["design_sheets"] = [{"system_code": "FAS", "document_path": r"C:\archive\x\FAS Design.pdf"},
-                                {"system_code": "ELS", "document_path": r"C:\archive\x\ELS Design.pdf"}]
+    payload["design_sheets"] = [{"system_code": "FAS", "document_path": "C:/archive/x/FAS Design.pdf"},
+                                {"system_code": "ELS", "document_path": "C:/archive/x/ELS Design.pdf"}]
     pid = client.post("/projects", json=payload).json()["id"]
     body = client.post(f"/projects/{pid}/boq/ensure").json()
     assert body["extracted"] and len(body["items"]) == 3

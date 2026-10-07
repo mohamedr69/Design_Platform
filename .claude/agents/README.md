@@ -32,4 +32,4 @@ The implementer has no guard because it works in its own git worktree (`isolatio
 ## Files
 
 - `ep-implementer.md`, `ep-verifier.md`, `ep-test-runner.md`, `ep-surveyor.md`, `ep-scribe.md`, `ep-label-reviewer.md`, `ep-ui-checker.md` — the definitions (frontmatter + instructions).
-- `../scripts/guard-agent-writes.py` — the write guard; `python3 -I .claude/scripts/guard-agent-writes.py --help` is the docstring.
+- `../scripts/guard-agent-writes.py` — the write guard; `python -I .claude/scripts/guard-agent-writes.py --help` is the docstring.
