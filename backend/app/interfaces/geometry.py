@@ -98,6 +98,8 @@ def symbols_near(doc, points: list[tuple[float, float]], metre: float) -> list[S
     from ezdxf import bbox
     from ezdxf.math import Matrix44
 
+    from app.ifc.dxf.geometry import chain_matrix
+
     if not points:
         return []
     search, max_side = SEARCH_M * metre, MAX_SYMBOL_M * metre
@@ -163,9 +165,7 @@ def symbols_near(doc, points: list[tuple[float, float]], metre: float) -> list[S
             if bounds is None:
                 continue
             try:
-                m = e.matrix44()
-                if parent is not None:
-                    m = m @ parent
+                m = chain_matrix(e, parent)
             except Exception:  # noqa: BLE001
                 continue
             wb = world(bounds, m)

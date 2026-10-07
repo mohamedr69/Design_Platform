@@ -1,0 +1,974 @@
+{
+ "dxf_sha256": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f",
+ "rules": {
+  "allow": "^(?!.*(?:TILE|FINISH)).*(?:WALL|PARTITION|CURTAIN|GLASS|GLAZ|SILL)",
+  "deny": "GRID|AXIS|DIM|TEXT|NAME|ANNO|TAG|FURN|CAR|PARK|SYMBOL|FIRE|ALARM|SPK|SPEAKER|LIGHT|\\bEM\\b|-EM|EXIT|SIGN|DOOR|WIN|TITLE|LEVEL|ROOM|HATCH|ARROW|STAIR",
+  "fingerprint": "19e6262c56a5",
+  "min_length": 0.3,
+  "kinds": [
+   "ARC",
+   "LINE",
+   "LWPOLYLINE",
+   "POLYLINE"
+  ]
+ },
+ "totals_m8": {
+  "segments": 1338010,
+  "length_m": 293078.52,
+  "included": 16645,
+  "included_length_m": 32624.974,
+  "excluded": {
+   "below_min_length": 1195138,
+   "deny_listed": 34865,
+   "insert_invisible": 11692,
+   "invisible": 11431,
+   "layer_frozen": 342,
+   "not_allow_listed": 67897
+  },
+  "via_insert": 1335820,
+  "included_via_insert": 16641
+ },
+ "walk": {
+  "entities": 439172,
+  "inserts": 20098,
+  "depth_capped": 0,
+  "self_inserts": 0,
+  "missing_blocks": 0,
+  "unreadable_inserts": 0,
+  "kinds": {
+   "ARC": 52823,
+   "LINE": 117433,
+   "LWPOLYLINE": 101974,
+   "POLYLINE": 34
+  }
+ },
+ "sparse": false,
+ "e10_segments_kept_total_v1": 92093,
+ "v1_rule_reapplied_to_this_walk": 94008,
+ "v1_rule_segments_now": {
+  "deny_listed": 9959,
+  "included": 15697,
+  "not_allow_listed": 63659,
+  "layer_frozen": 342,
+  "invisible": 4351
+ },
+ "m8_included_layers": [
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+   10567,
+   15972.95
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$11-GLASS-1",
+   3636,
+   3492.694
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$10-SILL",
+   1176,
+   1302.671
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$31-PARAPET-WALL",
+   535,
+   1540.851
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$12-GLASS-2",
+   402,
+   667.401
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$S-RETAINING-WALL",
+   234,
+   1792.567
+  ],
+  [
+   "06-WALL",
+   95,
+   7855.84
+  ]
+ ],
+ "e10_top_layers_compared": {
+  "0": {
+   "e10_v1_raw_layer_segments": 28491,
+   "v1_rule_reapplied_now": 28968,
+   "m8_effective_layer": {
+    "segments": 26,
+    "length_m": 51.709,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 5,
+     "not_allow_listed": 21
+    },
+    "via_insert": 0,
+    "top_level": 26,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$02-CAB": {
+   "e10_v1_raw_layer_segments": 17776,
+   "v1_rule_reapplied_now": 17776,
+   "m8_effective_layer": {
+    "segments": 500152,
+    "length_m": 49704.788,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 482376,
+     "not_allow_listed": 17776
+    },
+    "via_insert": 500152,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL": {
+   "e10_v1_raw_layer_segments": 9461,
+   "v1_rule_reapplied_now": 9461,
+   "m8_effective_layer": {
+    "segments": 15494,
+    "length_m": 16645.296,
+    "included": 10567,
+    "included_length_m": 15972.95,
+    "excluded": {
+     "below_min_length": 4927
+    },
+    "via_insert": 15494,
+    "top_level": 0,
+    "included_via_insert": 10567
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$11-GLASS-1": {
+   "e10_v1_raw_layer_segments": 3948,
+   "v1_rule_reapplied_now": 3948,
+   "m8_effective_layer": {
+    "segments": 8896,
+    "length_m": 4093.57,
+    "included": 3636,
+    "included_length_m": 3492.694,
+    "excluded": {
+     "below_min_length": 4948,
+     "invisible": 312
+    },
+    "via_insert": 8896,
+    "top_level": 0,
+    "included_via_insert": 3636
+   }
+  },
+  "-Ext": {
+   "e10_v1_raw_layer_segments": 2965,
+   "v1_rule_reapplied_now": 3741,
+   "m8_effective_layer": {
+    "segments": 24376,
+    "length_m": 1927.564,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 20635,
+     "not_allow_listed": 3741
+    },
+    "via_insert": 24376,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$41-ELE-5": {
+   "e10_v1_raw_layer_segments": 2608,
+   "v1_rule_reapplied_now": 2608,
+   "m8_effective_layer": {
+    "segments": 87480,
+    "length_m": 4116.258,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 84872,
+     "not_allow_listed": 2608
+    },
+    "via_insert": 87480,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$21-HIDDEN": {
+   "e10_v1_raw_layer_segments": 2371,
+   "v1_rule_reapplied_now": 2371,
+   "m8_effective_layer": {
+    "segments": 2416,
+    "length_m": 3317.526,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 45,
+     "not_allow_listed": 2371
+    },
+    "via_insert": 2416,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN": {
+   "e10_v1_raw_layer_segments": 2353,
+   "v1_rule_reapplied_now": 2353,
+   "m8_effective_layer": {
+    "segments": 2398,
+    "length_m": 5670.662,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 45,
+     "not_allow_listed": 2353
+    },
+    "via_insert": 2398,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$55-RAMP": {
+   "e10_v1_raw_layer_segments": 2321,
+   "v1_rule_reapplied_now": 2321,
+   "m8_effective_layer": {
+    "segments": 2329,
+    "length_m": 4972.66,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 8,
+     "not_allow_listed": 2321
+    },
+    "via_insert": 2329,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$17-FIXTURE": {
+   "e10_v1_raw_layer_segments": 2242,
+   "v1_rule_reapplied_now": 2242,
+   "m8_effective_layer": {
+    "segments": 66466,
+    "length_m": 6179.332,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 58944,
+     "invisible": 12,
+     "not_allow_listed": 7510
+    },
+    "via_insert": 66466,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$A-STOPPER": {
+   "e10_v1_raw_layer_segments": 1616,
+   "v1_rule_reapplied_now": 1616,
+   "m8_effective_layer": {
+    "segments": 3232,
+    "length_m": 3312.8,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 1616,
+     "invisible": 66,
+     "not_allow_listed": 1550
+    },
+    "via_insert": 3232,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_PLOT$0$BUILDING": {
+   "e10_v1_raw_layer_segments": 1404,
+   "v1_rule_reapplied_now": 1404,
+   "m8_effective_layer": {
+    "segments": 1458,
+    "length_m": 7112.055,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 54,
+     "not_allow_listed": 1404
+    },
+    "via_insert": 1458,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "Ext": {
+   "e10_v1_raw_layer_segments": 1377,
+   "v1_rule_reapplied_now": 1671,
+   "m8_effective_layer": {
+    "segments": 9600,
+    "length_m": 1463.433,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 7929,
+     "not_allow_listed": 1671
+    },
+    "via_insert": 9600,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$S-COL": {
+   "e10_v1_raw_layer_segments": 1265,
+   "v1_rule_reapplied_now": 1265,
+   "m8_effective_layer": {
+    "segments": 1268,
+    "length_m": 934.898,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 3,
+     "not_allow_listed": 1265
+    },
+    "via_insert": 1268,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$23-WALL-TILES": {
+   "e10_v1_raw_layer_segments": 1193,
+   "v1_rule_reapplied_now": 1193,
+   "m8_effective_layer": {
+    "segments": 1999,
+    "length_m": 1086.331,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 806,
+     "not_allow_listed": 1193
+    },
+    "via_insert": 1999,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$10-SILL": {
+   "e10_v1_raw_layer_segments": 1176,
+   "v1_rule_reapplied_now": 1176,
+   "m8_effective_layer": {
+    "segments": 11440,
+    "length_m": 2384.365,
+    "included": 1176,
+    "included_length_m": 1302.671,
+    "excluded": {
+     "below_min_length": 10264
+    },
+    "via_insert": 11440,
+    "top_level": 0,
+    "included_via_insert": 1176
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$32-RAILING": {
+   "e10_v1_raw_layer_segments": 1110,
+   "v1_rule_reapplied_now": 1110,
+   "m8_effective_layer": {
+    "segments": 12703,
+    "length_m": 6295.848,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 7225,
+     "not_allow_listed": 5478
+    },
+    "via_insert": 12703,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$30-DRIVEIN": {
+   "e10_v1_raw_layer_segments": 934,
+   "v1_rule_reapplied_now": 934,
+   "m8_effective_layer": {
+    "segments": 3479,
+    "length_m": 4589.894,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 115,
+     "not_allow_listed": 3364
+    },
+    "via_insert": 3479,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_PLOT$0$PODIUM": {
+   "e10_v1_raw_layer_segments": 738,
+   "v1_rule_reapplied_now": 738,
+   "m8_effective_layer": {
+    "segments": 738,
+    "length_m": 4139.585,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "not_allow_listed": 738
+    },
+    "via_insert": 738,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$FIRNITCHER FIXED": {
+   "e10_v1_raw_layer_segments": 612,
+   "v1_rule_reapplied_now": 612,
+   "m8_effective_layer": {
+    "segments": 612,
+    "length_m": 732.355,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "not_allow_listed": 612
+    },
+    "via_insert": 612,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$TEL_BOX": {
+   "e10_v1_raw_layer_segments": 556,
+   "v1_rule_reapplied_now": 556,
+   "m8_effective_layer": {
+    "segments": 1668,
+    "length_m": 514.3,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 834,
+     "not_allow_listed": 834
+    },
+    "via_insert": 1668,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$required shafts": {
+   "e10_v1_raw_layer_segments": 408,
+   "v1_rule_reapplied_now": 408,
+   "m8_effective_layer": {
+    "segments": 408,
+    "length_m": 681.709,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "not_allow_listed": 408
+    },
+    "via_insert": 408,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$12-GLASS-2": {
+   "e10_v1_raw_layer_segments": 402,
+   "v1_rule_reapplied_now": 402,
+   "m8_effective_layer": {
+    "segments": 804,
+    "length_m": 707.601,
+    "included": 402,
+    "included_length_m": 667.401,
+    "excluded": {
+     "below_min_length": 402
+    },
+    "via_insert": 804,
+    "top_level": 0,
+    "included_via_insert": 402
+   }
+  },
+  "X-REF_PLOT$0$33-PLOT": {
+   "e10_v1_raw_layer_segments": 396,
+   "v1_rule_reapplied_now": 702,
+   "m8_effective_layer": {
+    "segments": 702,
+    "length_m": 5553.937,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "not_allow_listed": 702
+    },
+    "via_insert": 702,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  },
+  "X-REF_ FILE ALL FLOORS PLANS$0$30-DRIVEWAY": {
+   "e10_v1_raw_layer_segments": 364,
+   "v1_rule_reapplied_now": 364,
+   "m8_effective_layer": {
+    "segments": 1830,
+    "length_m": 2482.451,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 102,
+     "not_allow_listed": 1728
+    },
+    "via_insert": 1830,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  }
+ },
+ "e10_raw_layer_0_resolved": [
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$17-FIXTURE",
+   "not_allow_listed",
+   5268
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$32-RAILING",
+   "not_allow_listed",
+   4368
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+   "deny_listed",
+   3271
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+   "invisible",
+   3193
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$-XREF",
+   "not_allow_listed",
+   2574
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$A-FURNITURE",
+   "deny_listed",
+   2048
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$16-FURNITURE",
+   "deny_listed",
+   1960
+  ],
+  [
+   "X-REF_ TAG$0$49-DOOR-TAG",
+   "deny_listed",
+   1221
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$A-FURNITURE",
+   "invisible",
+   752
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$Flat_1BR",
+   "not_allow_listed",
+   576
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$SH-EQPM",
+   "not_allow_listed",
+   548
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$31-PARAPET-WALL",
+   "included",
+   435
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$SCEN BELOW",
+   "not_allow_listed",
+   435
+  ],
+  [
+   "X-REF_ELEV SEC MARK$0$44-SEC-TAG",
+   "deny_listed",
+   432
+  ],
+  [
+   "X-REF_ DIM_TEXT$0$UNITS TYPES TAG",
+   "deny_listed",
+   302
+  ],
+  [
+   "X-REF_ TAG$0$49-UNIT-TAG",
+   "deny_listed",
+   278
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$TEL_BOX",
+   "not_allow_listed",
+   278
+  ],
+  [
+   "X-REF_LANDSCAPE$0$17-FIXTURE",
+   "not_allow_listed",
+   208
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+   "included",
+   158
+  ],
+  [
+   "SPK",
+   "deny_listed",
+   158
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$46-LVL-TAG",
+   "deny_listed",
+   152
+  ],
+  [
+   "06-WALL",
+   "included",
+   80
+  ],
+  [
+   "X-REF_PLOT$0$18-DIM",
+   "deny_listed",
+   52
+  ],
+  [
+   "X-REF_ FILE ALL FLOORS PLANS$0$14-DOOR",
+   "deny_listed",
+   26
+  ],
+  [
+   "0",
+   "not_allow_listed",
+   21
+  ]
+ ],
+ "e10_non_plotting": {
+  "X-REF_PLOT$0$A-NORTH": {
+   "e10": {
+    "n": 342,
+    "on": true,
+    "frozen": true,
+    "plot": true,
+    "locked": false
+   },
+   "m8": {
+    "segments": 4410,
+    "length_m": 363.423,
+    "included": 0,
+    "included_length_m": 0.0,
+    "excluded": {
+     "below_min_length": 4068,
+     "layer_frozen": 342
+    },
+    "via_insert": 4410,
+    "top_level": 0,
+    "included_via_insert": 0
+   }
+  }
+ },
+ "e11_probes": {
+  "invisible-rect-left-edge": [
+   {
+    "e11_raw": "X-REF_GRID TOWER$0$47-GRID",
+    "e11_effective": "X-REF_GRID TOWER$0$47-GRID",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_GRID TOWER$0$47-GRID",
+      "X-REF_GRID TOWER$0$47-GRID",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "X-REF_GRID TOWER$0$47-GRID",
+    "e11_effective": "X-REF_GRID TOWER$0$47-GRID",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_GRID TOWER$0$47-GRID",
+      "X-REF_GRID TOWER$0$47-GRID",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "X-REF_ELEV SEC MARK$0$44-SEC-TAG",
+    "e11_effective": "X-REF_ELEV SEC MARK$0$44-SEC-TAG",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_ELEV SEC MARK$0$44-SEC-TAG",
+      "X-REF_ELEV SEC MARK$0$44-SEC-TAG",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+      "included"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+      "included"
+     ]
+    ]
+   }
+  ],
+  "invisible-rect-bottom": [
+   {
+    "e11_raw": "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+      "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+      "insert_invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+      "X-REF_ FILE ALL FLOORS PLANS$0$28-CARS",
+      "insert_invisible"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "0",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+    "e11_visible": true,
+    "m8": [
+     [
+      "0",
+      "X-REF_ FILE ALL FLOORS PLANS$0$29-PARKING",
+      "deny_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+      "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+      "not_allow_listed"
+     ]
+    ]
+   },
+   {
+    "e11_raw": "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+    "e11_effective": "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+    "e11_visible": true,
+    "m8": [
+     [
+      "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+      "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+      "not_allow_listed"
+     ]
+    ]
+   }
+  ]
+ },
+ "columns_index": {
+  "m8": {
+   "version": 3,
+   "viewport": null,
+   "columns": 338,
+   "bounds_length_m": 44190.664,
+   "bounds_kept": true,
+   "bounds_layers": {
+    "06-WALL": 7858.315,
+    "14-DOOR": 8.177,
+    "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL": 16629.263,
+    "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN": 5670.661,
+    "X-REF_ FILE ALL FLOORS PLANS$0$10-SILL": 2161.915,
+    "X-REF_ FILE ALL FLOORS PLANS$0$11-GLASS-1": 3689.088,
+    "X-REF_ FILE ALL FLOORS PLANS$0$12-GLASS-2": 707.601,
+    "X-REF_ FILE ALL FLOORS PLANS$0$14-DOOR": 2639.815,
+    "X-REF_ FILE ALL FLOORS PLANS$0$31-PARAPET-WALL": 1549.25,
+    "X-REF_ FILE ALL FLOORS PLANS$0$DOOR": 23.792,
+    "X-REF_ FILE ALL FLOORS PLANS$0$S-COL": 934.898,
+    "X-REF_ FILE ALL FLOORS PLANS$0$S-COL-PLANTED": 13.6,
+    "X-REF_ FILE ALL FLOORS PLANS$0$S-RETAINING-WALL": 1792.567,
+    "X-REF_ FILE ALL FLOORS PLANS$0$sh-door": 8.632,
+    "X-REF_ TAG$0$49-DOOR-TAG": 501.757,
+    "X-REF_LANDSCAPE$0$14-DOOR": 1.333
+   },
+   "hidden": {
+    "invisible": 6838
+   },
+   "bounds_length_dedup_m": 43456.556,
+   "seconds": 13.6
+  },
+  "base_v2": {
+   "columns": 338,
+   "bounds_kept": true,
+   "bounds_length_dedup_m": 40426.718,
+   "seconds": 73.1,
+   "base_commit": "5270773a469e31f5cad0b7d7a170e168a1d918ba"
+  }
+ }
+}

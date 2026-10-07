@@ -234,8 +234,11 @@ def _movable(c: dict) -> bool:
 
 def rooms(changes: list[dict], sheets: dict, walls, cols) -> list[dict]:
     """The rooms the new detectors are in: one group a room (a device whose
-    room could not be closed is a group of its own)."""
+    room could not be closed is a group of its own). With no named
+    boundaries, a wall index that is missing or too sparse to close a room
+    by leaves every room not measured (M3 P-07), and says so."""
     groups: list[dict] = []
+    unmeasurable = (cols is None or cols.bounds is None) and (walls is None or bool(getattr(walls, "sparse", False)))
     for c in changes:
         if not is_detector(c) or "box" not in c:
             continue
@@ -248,6 +251,8 @@ def rooms(changes: list[dict], sheets: dict, walls, cols) -> list[dict]:
         if group is None:
             group = {"key": f"{c['page']}:{round(x, 1)}:{round(y, 1)}", "page": c["page"], "name": c.get("room") or "",
                      "room": C.room_at(walls, cols, x, y), "changes": []}
+            if unmeasurable:
+                group["index"] = "missing" if walls is None else "sparse"
             groups.append(group)
         group["changes"].append(c)
     return groups
@@ -270,6 +275,8 @@ def propose(group: dict, sheets: dict, occurrences: list[dict], erased: set, col
         out["issues"].append(
             f"the point is in a space of {room.area:.1f} m2 (a shaft or a fixture?): check where it is"
             if room is not None and not room.open and room.mask.any() else
+            f"the drawing's wall index is {group['index']}: no room can be closed from it, coverage not measured"
+            if room is None and group.get("index") else
             "its room could not be closed from the plan's walls: coverage not measured")
         return out
     movable = [c for c in group["changes"] if _movable(c)]
