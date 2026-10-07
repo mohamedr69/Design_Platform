@@ -79,6 +79,8 @@ A test that passes is not enough on its own to supersede a finding. Two tests pa
 
 The note column is a one-line summary of S6 Table A column "Note" and column "Current file:line and decisive quote". The full quotes, locations and tests are in the CSV.
 
+Note added 7 October 2026 on RD-M1-F002 (row above): STILL OPEN is true at the surveyed commit 771001e; at owner commit bb5871d, `_drawn` was changed to draw approved changes only (OD-14 option (a), decided by code, pending the owner's confirmation) — see M2R-ACCEPTANCE-RECORD.md section 8.
+
 ## 3. Totals
 
 By classification (35 findings; S6 section 5):
