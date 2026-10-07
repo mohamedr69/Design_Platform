@@ -68,7 +68,7 @@ os.environ["SYNC_FILE_WORKERS"] = "0"
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import text
+from sqlalchemy import inspect, text
 
 from app.core.security import hash_password
 from app.database import Base, SessionLocal, engine, is_sqlite_memory
@@ -90,7 +90,16 @@ from app.models import RoleEnum, User
 def reset_database() -> None:
     """Empty the database, migration history included, so app startup
     rebuilds it through the migrations -- the tests then run against the
-    schema the migrations produce, not the one the models describe."""
+    schema the migrations produce, not the one the models describe.
+
+    A batch migration that fails half-way on SQLite leaves its temporary
+    copy (`_alembic_tmp_<table>`) behind: its DDL was committed at once.
+    No model names it, so it is dropped here too -- first, as it may point
+    at model tables -- or one failing migration test fails the next one."""
+    with engine.begin() as connection:
+        for table in inspect(connection).get_table_names():
+            if table.startswith("_alembic_tmp_"):
+                connection.execute(text(f'DROP TABLE IF EXISTS "{table}"'))
     Base.metadata.drop_all(bind=engine)
     with engine.begin() as connection:
         connection.execute(text("DROP TABLE IF EXISTS alembic_version"))

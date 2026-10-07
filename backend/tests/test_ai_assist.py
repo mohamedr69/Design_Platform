@@ -224,6 +224,7 @@ def test_an_unreadable_quantity_becomes_an_issue_not_a_missing_row(tmp_path):
     assert len(extract_boq_lines(sheet)) == 6
 
 
+@requires_tesseract
 def test_unprocessed_pages_trigger_attention_even_when_rows_look_valid(tmp_path):
     doc = pymupdf.open()
     _ruled_sheet(tmp_path / "one.pdf", GOOD_ROWS)
