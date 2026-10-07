@@ -1,0 +1,192 @@
+{
+ "task": "ORCH-039 (U2-M5-SAFE-APPLY), ep-implementer, Claude Opus 5.5",
+ "generated_at_utc": "2026-10-07T20:00:51+00:00",
+ "base": {
+  "branch": "roadmap/u2",
+  "commit": "f15ac011e14612477a805625d14446430ed75d30",
+  "code_equals": "668f92f"
+ },
+ "branch": "task/m5-safe-apply",
+ "implementation_commit": "c274205128b3e75e73c8c9ff11440f926d5a8f29",
+ "interpreter": {
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B",
+  "python": "3.12.10",
+  "sqlite": "3.49.1",
+  "sqlalchemy": "2.0.36",
+  "pytest": "8.3.4"
+ },
+ "pytest_flags": "-p no:cacheprovider --basetemp=C:/t/tmp/m5/bt",
+ "times_utc": {
+  "worktree_created": "2026-10-07T18:47:06Z",
+  "mutations_first_pass_uncommitted": "2026-10-07T19:05:05Z/19:05:36Z (superseded)",
+  "targeted_start": "2026-10-07T19:18:05Z",
+  "targeted_end": "2026-10-07T19:21:52Z",
+  "full_start": "2026-10-07T19:21:52Z",
+  "full_end": "2026-10-07T19:57:40Z",
+  "mutation_M1_start": "2026-10-07T19:58:25Z",
+  "mutation_M2_start": "2026-10-07T19:58:51Z"
+ },
+ "commands": [
+  "git -C roadmap-u2 rev-parse HEAD -> f15ac011; git branch task/m5-safe-apply f15ac011; git worktree add wt-m5 task/m5-safe-apply",
+  "candidate rebuild (scratch C:/t/tmp/m5/cand): git show b5c2222:<files>; patch -p1 < rdm2-candidate.patch (backend part); patch -p1 < RDM2-R1-correction.patch",
+  "sh scripts/run_evidence.sh (targeted: pytest -p no:cacheprovider --basetemp=C:/t/tmp/m5/bt tests/test_redesign_apply.py tests/test_redesign.py tests/test_drawing_prep.py tests/test_prep_readiness.py --junitxml=targeted.xml -q; full: AI_ENABLED=false DATA_ROOT= pytest tests -q -rs -p no:cacheprovider --basetemp=C:/t/tmp/m5/bt --junitxml=full-suite.xml)",
+  "python scripts/compare.py (full-suite-comparison.json against docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml)",
+  "python scripts/mutate.py lock|copy-in-lock|restore around pytest -k 'concurrent_publication or lock_blocks' / -k holds_no_database_lock (mutations.txt)",
+  "tsc: node <ep-platform>/frontend/node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit --incremental false on a scratch copy of wt-m5/frontend with a temporary node_modules junction (removed) -> tsc-frontend.txt (empty: 0 errors)"
+ ],
+ "changed_files": {
+  ".gitattributes": {
+   "git_blob": "1f0f5ae2c1f072bf756379312c07890b7933253e",
+   "sha256_committed": "b1fb5030384fe9291a7cc1831ed174fc8d1f90f6270d83a238fef410b8561c7e",
+   "bytes_committed": 396,
+   "sha256_worktree": "b1fb5030384fe9291a7cc1831ed174fc8d1f90f6270d83a238fef410b8561c7e"
+  },
+  "backend/app/ifc/services/runners.py": {
+   "git_blob": "4a6013990191c5c9061fa08f36abefb82207e97b",
+   "sha256_committed": "5d334a2f0508b5c1a54257033535a779f0259d567dbffc2a379d3de296f5637b",
+   "bytes_committed": 19576,
+   "sha256_worktree": "5d334a2f0508b5c1a54257033535a779f0259d567dbffc2a379d3de296f5637b"
+  },
+  "backend/app/models.py": {
+   "git_blob": "48837e6173117a4358e675a440db0cc055988d45",
+   "sha256_committed": "4ced979ac830f52978aa9bfb48ab3732f37562b9ce32106c4893630bfb36a90d",
+   "bytes_committed": 153908,
+   "sha256_worktree": "4ced979ac830f52978aa9bfb48ab3732f37562b9ce32106c4893630bfb36a90d"
+  },
+  "backend/app/redesign/cad.py": {
+   "git_blob": "1a51f63807998946e4213890d92ee13345832b96",
+   "sha256_committed": "43672b306083c0b362b2b10ce314dfa68ec0304135032a442dc4a67105c8ff00",
+   "bytes_committed": 16672,
+   "sha256_worktree": "43672b306083c0b362b2b10ce314dfa68ec0304135032a442dc4a67105c8ff00"
+  },
+  "backend/app/redesign/service.py": {
+   "git_blob": "851202bbefb3117a01e0c4b6bccd784563faf7c0",
+   "sha256_committed": "ddccfe85003f9d0e4f8ca1c212b32a892f9f21151ed7bcb7b775c4e8f04a1dc6",
+   "bytes_committed": 119517,
+   "sha256_worktree": "ddccfe85003f9d0e4f8ca1c212b32a892f9f21151ed7bcb7b775c4e8f04a1dc6"
+  },
+  "backend/app/redesign/verify.py": {
+   "git_blob": "11836b94467cefc948b49e0f319761fb14bffd48",
+   "sha256_committed": "449ad1af366e4c3072bcccaea36624e957bf24c9cfd81f8ddcbf02f55e97837a",
+   "bytes_committed": 6103,
+   "sha256_worktree": "449ad1af366e4c3072bcccaea36624e957bf24c9cfd81f8ddcbf02f55e97837a"
+  },
+  "backend/app/routers/redesign.py": {
+   "git_blob": "37f693996f146dab60a51508ce2034e83b989535",
+   "sha256_committed": "e239cf466f1a62052534d223a28331e9400204f9dea1f08f30f0d037afb3424f",
+   "bytes_committed": 13420,
+   "sha256_worktree": "e239cf466f1a62052534d223a28331e9400204f9dea1f08f30f0d037afb3424f"
+  },
+  "backend/app/workers/ifc_worker.py": {
+   "git_blob": "1f5050cd67cf8be6476bb85d576017eec6583f78",
+   "sha256_committed": "3cbeab541f8a1a52c37e4e9e4c8371b577d9bfdb65c07550ccc568411784f93c",
+   "bytes_committed": 4716,
+   "sha256_worktree": "3cbeab541f8a1a52c37e4e9e4c8371b577d9bfdb65c07550ccc568411784f93c"
+  },
+  "backend/tests/test_prep_readiness.py": {
+   "git_blob": "fcf88f901b19bea076688894c8ddffc0efff4ef2",
+   "sha256_committed": "1f20a1ab0fe94e7839ad4380aa2a7c22209b4e777a5c9d5dc13133f669fe0bfb",
+   "bytes_committed": 5142,
+   "sha256_worktree": "1f20a1ab0fe94e7839ad4380aa2a7c22209b4e777a5c9d5dc13133f669fe0bfb"
+  },
+  "backend/tests/test_redesign.py": {
+   "git_blob": "00d6f198a703f040b9af240425bef1cd6bf3b5e5",
+   "sha256_committed": "4e6eb88a61ab4641463a0b06b4cd244f95451c054b10bfd2902e65803459642a",
+   "bytes_committed": 21917,
+   "sha256_worktree": "4e6eb88a61ab4641463a0b06b4cd244f95451c054b10bfd2902e65803459642a"
+  },
+  "backend/tests/test_redesign_apply.py": {
+   "git_blob": "25ff5d72882d29fb002d0bbc512abd2701c4c7ca",
+   "sha256_committed": "73d336e15832943e64381cb617c83bf54ae021cd9961a23108e21d46ae726010",
+   "bytes_committed": 64760,
+   "sha256_worktree": "73d336e15832943e64381cb617c83bf54ae021cd9961a23108e21d46ae726010"
+  },
+  "frontend/src/components/prep/RedesignPanel.tsx": {
+   "git_blob": "c9b4d36b2087b3e1884ee2c8c82145ba77275593",
+   "sha256_committed": "a6425efe7249ff0c2f8ceafaa610e2c1283575760b7139b9b19d86f789c960b0",
+   "bytes_committed": 32237,
+   "sha256_worktree": "a6425efe7249ff0c2f8ceafaa610e2c1283575760b7139b9b19d86f789c960b0"
+  },
+  "frontend/src/components/prep/types.ts": {
+   "git_blob": "15e935300ada927bbda65d7a603aa94afa23f69a",
+   "sha256_committed": "5e0231934912f9bff085859ee618ae5a3416788c736af80264c0660d9095c26b",
+   "bytes_committed": 5118,
+   "sha256_worktree": "5e0231934912f9bff085859ee618ae5a3416788c736af80264c0660d9095c26b"
+  }
+ },
+ "evidence": {
+  "full-suite-comparison.json": {
+   "sha256": "83ad3011e7b174ffdb27b65d9903dfa18916c9bb33ce0db9f4cd3e94ccf27f17",
+   "bytes": 1884
+  },
+  "full-suite.log": {
+   "sha256": "7472032c537a21aca591f4f7466fa7c223fe6ad7a36ac362cd0cbbb76f1c61c4",
+   "bytes": 14376
+  },
+  "full-suite.xml": {
+   "sha256": "97eca2adaaf9381fb41865dc22da518d871a2aa184d36c0769a875ee4e9729fd",
+   "bytes": 257053
+  },
+  "mutation-M1-lock-removed.log": {
+   "sha256": "4a4b1f10b05bbd13cf2530d8821cf6f03460b0e083d3e52967ac3783c8730404",
+   "bytes": 6131
+  },
+  "mutation-M1-lock-removed.xml": {
+   "sha256": "a1b2c91a68d7064853c19290161a8a9350eb9fda57962a2ad8f1036449641dab",
+   "bytes": 5129
+  },
+  "mutation-M2-copy-inside-lock.log": {
+   "sha256": "224076f63dc89fef5c314e201070140c4869b0e1a322958f64ce8a1c1b27a3c5",
+   "bytes": 13229
+  },
+  "mutation-M2-copy-inside-lock.xml": {
+   "sha256": "e3adb113fc3f282ce12d95dea9b7ae57f78f242fe5fc777935a2c11c4f705b60",
+   "bytes": 12507
+  },
+  "mutation-restored-control.log": {
+   "sha256": "59b8045ab15fc963d942f2a1ea0c7e9a2094b6157877547a8e7f468f55fa7584",
+   "bytes": 1406
+  },
+  "mutations.txt": {
+   "sha256": "423f3bf7b5d82f66d41a5e7de233978f73a1aa3cd3ec1ea99923118dc3370922",
+   "bytes": 956
+  },
+  "runs.txt": {
+   "sha256": "228209cb137d9c82903caa74f90d1dad60b4f978ee55ceabd0b917396b4dfadf",
+   "bytes": 206
+  },
+  "scripts/compare.py": {
+   "sha256": "18cc9ccab7eb972118b5c3ad7aec127c2cdf9cdb22b8279be070446902ad236e",
+   "bytes": 1965
+  },
+  "scripts/manifest.py": {
+   "sha256": "c4da5ea7491d69e6dee79175d20202e0aa1f1abf5bf50de7df71a422c8628d3f",
+   "bytes": 3381
+  },
+  "scripts/mutate.py": {
+   "sha256": "a6494380fcba9ddce9bab8f6c0e315caa2940660f637e50c49bd3b02e33462e5",
+   "bytes": 2391
+  },
+  "scripts/run_evidence.sh": {
+   "sha256": "611dbd9092a6af0da09e593f0da71c4fa4f25e5c027d75aaceff53803b167b5b",
+   "bytes": 1198
+  },
+  "targeted.log": {
+   "sha256": "01f6bc8b64bceadeb5ba1428a07ea6d5d2957df016c970afb685d338509e73f0",
+   "bytes": 1357
+  },
+  "targeted.xml": {
+   "sha256": "d8e5fca5367a300e1d9a5fb721ed3b90c8be3401cfb6e0343576cee4b3468043",
+   "bytes": 13170
+  },
+  "tsc-frontend.txt": {
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  }
+ },
+ "report": {
+  "path": "docs/milestones/M5/M5-SAFE-APPLY-IMPLEMENTATION.md",
+  "sha256": "7465ccefa93dfb14a5d8b163da99ce0e2e39c9f66e90a282bd603f7ec868e268"
+ },
+ "note": "Evidence classes: FUNCTIONAL-MOCKED (stand-in AutoCAD and read-back), SQLITE (real file-backed WAL database, two connections). No REAL-AUTOCAD and no REAL-MODEL claim."
+}

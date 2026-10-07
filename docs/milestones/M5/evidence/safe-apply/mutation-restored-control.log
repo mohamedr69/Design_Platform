@@ -1,0 +1,14 @@
+....                                                                     [100%]
+============================== warnings summary ===============================
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_redesign_apply.py::test_concurrent_publication_an_edit_started_inside_the_window_waits_and_its_approval_is_kept
+tests/test_redesign_apply.py::test_concurrent_publication_an_edit_committed_before_the_lock_makes_the_apply_stale_and_writes_nothing
+tests/test_redesign_apply.py::test_the_dwg_copy_holds_no_database_lock_a_writer_to_another_table_is_not_blocked
+  G:\dev (2)\dev\ep-platform-merged\wt-m5\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+4 passed, 55 deselected, 4 warnings in 7.48s
