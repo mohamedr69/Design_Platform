@@ -1565,11 +1565,12 @@ def _read_pdf(filename: str, stamp: int, size: int, use_ocr: bool,
 
 
 def read_pdf_full(filename: str, stamp: int, size: int, use_ocr: bool, sha256: str | None = None,
-                  promote: bool | None = None) -> "Reading":
+                  promote: bool | None = None, *, ocr_unavailable: bool = False) -> "Reading":
     """`_read_pdf` with the page ledger and the observations (`Reading`), not
     cached: what `document_sync.process` reads when no reader process handed
     it the reading. An unopenable or online-only file is a Reading with no
-    records, the note it always got and an "unavailable"/"failed" ledger."""
+    records, the note it always got and an "unavailable"/"failed" ledger.
+    `ocr_unavailable` as in `read_open_pdf`."""
     path = Path(filename)
     modified = datetime.fromtimestamp(stamp / 1e9, timezone.utc)
     counted("read_pdf")
@@ -1582,7 +1583,8 @@ def read_pdf_full(filename: str, stamp: int, size: int, use_ocr: bool, sha256: s
                                    "stop_reason": "open_failed", "error": f"{type(exc).__name__}: {exc}"[:300],
                                    "parser_version": PARSER_VERSION}, [])
     with pdf:
-        return read_open_pdf(pdf, filename, modified, use_ocr, sha256, full=True, promote=promote)
+        return read_open_pdf(pdf, filename, modified, use_ocr, sha256, full=True, promote=promote,
+                             ocr_unavailable=ocr_unavailable)
 
 
 # How far the reader looks into a file that has shown it nothing yet: a
@@ -1804,7 +1806,8 @@ def _hold_decision(row: ControlledDocument, status: str, evidence: str | None, m
 
 
 def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256: str | None = None,
-                  page_texts: dict | None = None, *, full: bool = False, promote: bool | None = None):
+                  page_texts: dict | None = None, *, full: bool = False, promote: bool | None = None,
+                  ocr_unavailable: bool = False):
     """`_read_pdf` over a document already open: the one pass over its pages
     -- text, the parse, marks, OCR where the evidence calls for it, the
     reply attached to a form. `page_texts` is the document's page text
@@ -1819,6 +1822,15 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
     whose `observations` are what the reader saw but did not make a record
     of: a sheet of an untracked discipline, a scanned transmittal or a
     decision method not promoted (`promote`), the marks it held back.
+
+    `ocr_unavailable` says OCR was called for but cannot run (the processing
+    job without Tesseract, `use_ocr` False for that reason alone). A scanned
+    page OCR would have read, whose text gave nothing and which holds what
+    only OCR reads (no text layer at all, or an image), is then not an
+    empty page but an unread one: noted and counted as a failed OCR, so
+    the reading is "partial" and never stands as a complete one with its
+    scan unread. A caller that turns OCR off by choice (the whole-folder
+    scan, which says once that OCR is unavailable) leaves it False.
     """
     from app.services import title_block as title_block_reader
 
@@ -1981,6 +1993,20 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     else:
                         warnings.append(f"OCR limit reached in {path.name}; some replies may need verification.")
                         ocr_skipped.append(number)
+                elif ocr_unavailable and not use_ocr and candidate and scan and not found \
+                        and (not text.strip() or _image_regions(page)):
+                    # The page OCR would have read, unread for want of OCR:
+                    # recorded the way a failed OCR is, not passed over as blank
+                    # (roadmap section 6: unknown is never complete). Unread
+                    # means nothing came of its text and something is there
+                    # that only OCR reads: no text layer at all, or an image
+                    # large enough to hold a word. A scan whose text gave a
+                    # record was read, its status left unsettled ("UR") as
+                    # without OCR it always was; a few words of text and no
+                    # image (a caption, a separator) is a page that was read.
+                    warnings.append(f"Could not OCR {path.name}, page {number}: {OCR_UNAVAILABLE}.")
+                    ocr_failed.append(number)
+                    ocr_failures.append({"page": number, "reason": f"OCR unavailable: {OCR_UNAVAILABLE_REASON}"})
                 # What OCR added is a record like the page's own: a report is still not a sheet.
                 found = _drop_reports(found, text, number, small_text_page, observations)
                 # Every decision candidate the page gave -- its text, its marks,
@@ -2192,6 +2218,10 @@ def _answers(submission: ControlledDocument, reply: ControlledDocument) -> bool:
 # (document_sync.file_status): what kind of trouble each is, and what to say.
 NOT_DOWNLOADED = "is not downloaded from OneDrive"
 UNREADABLE = "Could not read "
+# A scanned page left unread because OCR cannot run (`read_open_pdf`,
+# `ocr_unavailable`): "Could not OCR <file>, page <n>: " + this + ".".
+OCR_UNAVAILABLE_REASON = "Tesseract not found"
+OCR_UNAVAILABLE = f"OCR is unavailable ({OCR_UNAVAILABLE_REASON})"
 # A drawing submission logged from its form alone (C1): "<file>: " + this.
 FORM_ONLY = "no drawing title block could be read in this submission; it is logged from its form only."
 
@@ -2204,6 +2234,9 @@ def describe_note(note: str) -> tuple[str, str]:
         return "unavailable", "File is online-only in OneDrive and could not be processed."
     if note.startswith(UNREADABLE):
         return "failed", "The file could not be opened as a PDF (damaged or protected)."
+    page = re.match(r"Could not OCR .*, page (\d+): " + re.escape(OCR_UNAVAILABLE) + r"\.$", note)
+    if page:
+        return "partial", f"Page {page[1]} is a scan and was not read: OCR is unavailable (Tesseract not found)."
     page = re.match(r"Could not OCR .*, page (\d+)\.$", note)
     if page:
         return "partial", f"Page {page[1]} could not be OCRed; a stamp on it may be unread."

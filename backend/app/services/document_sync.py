@@ -499,7 +499,8 @@ def _outcome_of(coverage: dict | None, notes) -> str:
         return "unavailable"
     if "failed" in kinds:
         return "failed"
-    if "partial" in kinds and any(re.match(r"Could not OCR .*, page \d+\.$|Page \d+ of .* could not be read\.$", note) for note in (notes or ())):
+    if "partial" in kinds and any(re.match(r"Could not OCR .*, page \d+(?:: " + re.escape(document_control.OCR_UNAVAILABLE) + r")?\.$"
+                                           r"|Page \d+ of .* could not be read\.$", note) for note in (notes or ())):
         return "partial"
     return "complete"
 
@@ -541,7 +542,8 @@ def process(db: Session, project: Project, row: ProjectDocument, path: Path, roo
     elif read is not None:
         records, notes = read
     else:
-        reading = document_control.read_pdf_full(str(path), stat.st_mtime_ns, stat.st_size, ocr, row.sha256)
+        reading = document_control.read_pdf_full(str(path), stat.st_mtime_ns, stat.st_size, ocr, row.sha256,
+                                                 ocr_unavailable=not ocr)
         records, notes, coverage, observations = reading.records, reading.notes, reading.coverage, reading.observations
     outcome = _outcome_of(coverage, notes)
     modified = datetime.fromtimestamp(stat.st_mtime_ns / 1e9, timezone.utc)
@@ -765,7 +767,10 @@ def extract(path: str, relative: str, sha256: str | None, ocr: bool) -> tuple[st
                                                       "parser_version": document_control.PARSER_VERSION}}
             with clock.stage("classification"):
                 role = classify_text(first, target, relative)
-            reading = document_control.read_open_pdf(pdf, path, modified, ocr, sha256, page_texts=page_texts, full=True)
+            # `ocr` is False here only because OCR cannot run (the processing job asks
+            # `ocr_available`): a scanned page is then recorded unread, not blank.
+            reading = document_control.read_open_pdf(pdf, path, modified, ocr, sha256, page_texts=page_texts, full=True,
+                                                     ocr_unavailable=not ocr)
             records, notes, coverage, observations = reading.records, reading.notes, reading.coverage, reading.observations
             # What the first pages say the document is, beside the records
             # (app.services.content_evidence): text already extracted, OCR
