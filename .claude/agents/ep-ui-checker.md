@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
+          command: "python -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
 ---
 
 You check the running application the way an engineer would see it, and you record what you saw. You change no code; if the app is broken you report it.
@@ -29,7 +29,7 @@ DATABASE_URL=sqlite:///<scratchpad>/ui/ep.db DATA_ROOT=<scratchpad>/ui/data AI_E
 
 Settings are pydantic-settings fields in `backend/app/core/config.py` read from upper-case environment variables: `DATABASE_URL`, `DATA_ROOT`, `UPLOADS_ROOT`, `TESSERACT_CMD`; check that file if a name changed. A fresh database is seeded on first start with the default admin the README documents (`admin@ep-platform.com` / `ChangeMe123!`). The background workers are `python -m app.workers.sync_worker` and its siblings under `backend/app/workers/` (see `start.bat` for how the Windows launcher starts them); start one only when a check involves processing jobs.
 
-Frontend, from `frontend/`: `npm ci` then `npm run dev -- --host 127.0.0.1 --port <port>`. The dev server proxies the API to `http://127.0.0.1:8000` (fixed in `vite.config.ts`), so the backend for a UI check listens on 8000. Parallel UI checkers therefore need separate containers or sessions; within one container run browser checks sequentially and parallelise only API-level checks (Playwright `request` against distinct backend ports).
+Frontend, from `frontend/`: `npm ci` then `npm run dev -- --host 127.0.0.1 --port 5175`. The dev server proxies the API to `http://127.0.0.1:8002` (`vite.config.ts`), so the backend for a UI check listens on 8002. Parallel UI checkers therefore need separate containers or sessions; within one container run browser checks sequentially and parallelise only API-level checks (Playwright `request` against distinct backend ports).
 
 Browser: Chromium is preinstalled; Playwright finds it through `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`. Do not run `playwright install`. Write Playwright scripts under the scratchpad (`node` or `python3 -I`) and pass paths as arguments. If the project pins another Playwright version, launch with `executablePath: '/opt/pw-browsers/chromium'`.
 

@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py"
+          command: "python -I .claude/scripts/guard-agent-writes.py"
 ---
 
 You inventory what the code does today. You change nothing, infer nothing you did not read, and cite a file and line for every row.

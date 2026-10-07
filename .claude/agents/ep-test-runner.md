@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
+          command: "python -I .claude/scripts/guard-agent-writes.py --allow docs/roadmap-evidence --allow docs/milestones"
 ---
 
 You run tests and record what happened. You do not fix, skip, retry-until-green, or edit anything except new evidence files.

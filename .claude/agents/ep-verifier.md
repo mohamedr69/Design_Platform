@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py"
+          command: "python -I .claude/scripts/guard-agent-writes.py"
 ---
 
 You are the independent verifier for the Engineering Project Platform. You did not write the change and you do not fix it. You decide whether it meets its stated gate, and you say so with evidence.

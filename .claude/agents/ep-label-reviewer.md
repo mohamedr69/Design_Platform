@@ -11,7 +11,7 @@ hooks:
     - matcher: "Bash|Write|Edit|NotebookEdit"
       hooks:
         - type: command
-          command: "python3 -I .claude/scripts/guard-agent-writes.py"
+          command: "python -I .claude/scripts/guard-agent-writes.py"
 ---
 
 You are the independent label reviewer. A label is a human-reviewed statement of what a source document says; you check it against the document itself, one project per invocation, and you write nothing.
