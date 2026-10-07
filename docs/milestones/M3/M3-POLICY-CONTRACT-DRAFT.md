@@ -4,7 +4,7 @@ Milestone: **M3 - Ownership, Access & Memory Policy** (unified roadmap, prerequi
 Date: 7 October 2026. Repository HEAD when written: `b0465ed9ba053b99aba13954e147d3ea0eb20f94` (`git rev-parse HEAD`).
 Prepared by ep-scribe from the decision pack; not reviewed by an independent verifier.
 
-Status: **DRAFT: owner decisions OD-01..OD-19 are unanswered; every clause that depends on one is marked [OD-nn OPEN] and states the roadmap's interim position where the roadmap gives one** (for example "approved as noted" does not count as final until recorded, roadmap section 6). Nothing in this draft is accepted, signed or in force.
+Status: **DRAFT: 5 owner decisions recorded (OD-20..OD-24); OD-01..OD-19 remain unanswered except the partial constraint on OD-02/OD-03.** Every clause that depends on one is marked [OD-nn OPEN] and states the roadmap's interim position where the roadmap gives one** (for example "approved as noted" does not count as final until recorded, roadmap section 6). The five decisions (owner session message of 7 October 2026, [Pack section 2a](M3-DECISION-PACK.md)) extend the Project Memory Master Plan and do not replace it. Nothing in this draft is accepted, signed or in force.
 
 ## Sources
 
@@ -22,7 +22,7 @@ How to use: Part A is final text once M3 is accepted. Part B has one slot per ow
 
 ## Part A — Policy statements in force once M3 is accepted
 
-Each clause restates a row of Pack Table D (D-1..D-18), whose deciding text already exists; no option is offered. Where a clause points to an owner decision, the question is in Part B and is not answered here.
+Clauses P-01 to P-18 restate a row of Pack Table D (D-1..D-18), whose deciding text already exists; P-19 to P-23 record the owner decisions OD-20..OD-24 of 7 October 2026. No option is offered. Where a clause points to an owner decision, the question is in Part B and is not answered here.
 
 ### A1. Ownership and canonical owners
 
@@ -128,17 +128,48 @@ Decided by: UMR section 6 "No continuous retraining" (UMR:206); Task Two.md:201.
 Applies to: M19, M23, M27, M29.
 Source row: Pack D-18.
 
+### A8. Memory history, conflicts and promotion
+
+These clauses record the owner decisions of 7 October 2026 (Pack section 2a). They extend the Project Memory Master Plan; project isolation, evidence-backed memory, revision awareness, auditability and shared memory across agents are unchanged.
+
+**P-19.** Historical and superseded memories stay available to the AI when relevant. Normal engineering decisions use the latest valid authoritative state. Historical memory is context and audit history, not the default decision source.
+Decided by: owner decision OD-20, 7 October 2026.
+Applies to: M19, M20, M22.
+Source row: Pack section 2a, OD-20. Related: P-09 (a superseded revision makes evidence ineligible without deleting it) and P-11 (scoped revisions).
+
+**P-20.** When an engineer resolves a conflict, the resolution is stored as durable memory with a structured rationale, not free text only. At minimum it holds: selected value; rejected or overridden value(s); reason or rationale; supporting evidence; authority basis; engineer or user; timestamp; applicable revision or scope.
+Decided by: owner decision OD-21, 7 October 2026.
+Applies to: M18, M19.
+Source row: Pack section 2a, OD-21. Related: P-02 and P-08 (conflicts are retained, not silently replaced).
+
+**P-21.** If the same conflict appears again, the previous resolution is applied automatically and the engineer is not asked to resolve the same issue repeatedly. The resolution is reopened only when materially stronger or higher-authority evidence appears, or when the applicable project scope or revision changes enough to invalidate it.
+Decided by: owner decision OD-22, 7 October 2026.
+Applies to: M19, M23, M31.
+Source row: Pack section 2a, OD-22. What counts as "materially stronger" evidence is not defined by the decision; evidence not supplied.
+
+**P-22.** Repeated validated knowledge may be promoted from project memory into global knowledge under the promotion logic being designed. The global record stays linked to the projects and evidence it was learned from. Provenance is never lost in promotion. This does not change P-05 and P-06: global knowledge is a separate governed namespace and approved answers remain wording guidance, never evidence. Who may promote and the retirement rule remain [OD-02 OPEN].
+Decided by: owner decision OD-23, 7 October 2026.
+Applies to: M3 global promotion rule, M19, M23, M31, M27.
+Source row: Pack section 2a, OD-23.
+
+**P-23.** Each learned global rule or pattern is traceable to all contributing project memories and evidence, so that "which projects taught the system this rule, and on what evidence?" can be answered.
+Decided by: owner decision OD-24, 7 October 2026.
+Applies to: M21, M23, M31, M25.
+Source row: Pack section 2a, OD-24. Related: P-04 (no cross-project memory reads or writes) is unchanged; how a global record's links to project memories are read under project isolation is not stated by the decision; evidence not supplied.
+
 ## Part B — Clauses awaiting the owner
 
 One slot per owner decision. The question is copied from Pack Table A. "Interim position" is what the roadmap itself says; it is not a decision. The Pack's options, current code facts and dependencies are in [Table A](M3-DECISION-PACK.md) and are not repeated. Every slot is filled by the scribe from the owner's signed answer sheet (Pack section 2), with the person, role and date.
+
+Owner decisions OD-20..OD-24 have no Part B slot because they were received as decisions, not as open questions; they are Part A clauses P-19..P-23.
 
 Dependencies: OD-03, OD-12 and OD-13 depend on the rule chosen in OD-02; OD-18 option (c) depends on OD-19; OD-10 and OD-11 interact with OD-15; OD-05 to OD-09 cannot be filed until Pack open question 1 (who is "the engineering manager") is answered.
 
 | Clause | Question (verbatim from the Pack) | State | Interim position in the roadmap | Blocks |
 |---|---|---|---|---|
 | **B-01** [OD-01 OPEN] | Does a consultant decision of "approved as noted" count as final approval when engineering workload is calculated? | [OPEN] | Not final until recorded (UMR:200). M7 stores whatever is chosen as versioned, auditable configuration; M28 applies it and shows the mapping in every drill-down. Home and the Drawings summary count it as approved today and M28 must not reuse them. | M7, M28, M29 |
-| **B-02** [OD-02 OPEN] | Under what rule, and by whom, may a project-level answer or correction become reusable company guidance in the governed global namespace? | [OPEN] | Content is fixed by P-05 and P-06 (wording guidance only, tier 8, never evidence, carrying originating project, reviewer and date). No promoter or retirement rule is stated. | M7, M19, M21, M23, M26, M27, M31 |
-| **B-03** [OD-03 OPEN] | How are the learned answers already stored treated until they are reviewed? | [OPEN] | Direction only: existing learned rows are "ungoverned until reviewed" (UMR:85, UMR:202; RC-33). The treatment is not stated. | M7, M26, M27 |
+| **B-02** [OD-02 OPEN; partly constrained by OD-23, OD-24] | Under what rule, and by whom, may a project-level answer or correction become reusable company guidance in the governed global namespace? | [OPEN, partly constrained 7 October 2026] | Content is fixed by P-05 and P-06 (wording guidance only, tier 8, never evidence, carrying originating project, reviewer and date). Partly decided 7 October 2026 (P-22, P-23): promoted items must carry full provenance to every contributing project memory and evidence item (OD-23, OD-24) and promotion applies to repeated validated knowledge. Still open: who may promote (options a-c) and the retirement rule (f/g). | M7, M19, M21, M23, M26, M27, M31 |
+| **B-03** [OD-03 OPEN; constrained by OD-23, OD-24] | How are the learned answers already stored treated until they are reviewed? | [OPEN, constrained 7 October 2026] | Direction only: existing learned rows are "ungoverned until reviewed" (UMR:85, UMR:202; RC-33). The treatment is not stated. OD-23 and OD-24 (P-22, P-23) constrain any option: existing rows cannot be promoted without provenance. | M7, M26, M27 |
 | **B-04** [OD-04 OPEN] | What does the project AI/provider policy bound (which content and which AI paths), and must it be enforced on the drawing AI paths? | [OPEN] | None stated beyond the M3 entry's wording "the project AI/provider policy that bounds what compliance evidence may be transmitted". | M7, M12, M22, M26, M27 |
 | **B-05** [OD-05 OPEN] | Which role may record a project's contract value and currency, and which may override the value, its currency conversion or its source? | [OPEN] | None. Task Two names the engineering manager (Task Two.md:146-173 lists the fields to keep). | M7, M28 |
 | **B-06** [OD-06 OPEN] | Which role may record employee capacity (and department) with effective periods, and which may change them? | [OPEN] | None. Effective-dated history is required (Task Two.md:133). | M7, M18, M28 |
@@ -161,8 +192,8 @@ Answer slots, to be filled by the scribe when the owner answers (Pack section 2 
 | Clause | Option chosen (letters or amended text) | Decided by (name, role) | Date | Conditions | Deferred to (named milestone, if deferred) |
 |---|---|---|---|---|---|
 | B-01 |  |  |  |  |  |
-| B-02 |  |  |  |  |  |
-| B-03 |  |  |  |  |  |
+| B-02 | Partly decided: promoted items carry full provenance (OD-23, OD-24); promotion applies to repeated validated knowledge. Promoter and retirement rule not filed | owner (mohamedr69), session message of 7 October 2026 (partial) | 7 October 2026 | Constraint only | not deferred |
+| B-03 | Not decided; any option limited: existing rows cannot be promoted without provenance (OD-23, OD-24) | (constraint only) | 7 October 2026 |  |  |
 | B-04 |  |  |  |  |  |
 | B-05 |  |  |  |  |  |
 | B-06 |  |  |  |  |  |
@@ -287,13 +318,15 @@ Whether M3 or M7 owns the guard code is Pack open question 4.
 
 **Evidence the M3 record will carry (Pack section 6):**
 
-1. The signed decision table: the Pack's Table A answer sheet completed with option, deciding person and role, date and conditions, one row per OD. Status: evidence not supplied.
+1. The signed decision table: the Pack's Table A answer sheet completed with option, deciding person and role, date and conditions, one row per OD. Status: evidence not supplied for OD-01..OD-19. Decisions OD-20..OD-24 are recorded in Pack section 2a from the owner's session message of 7 October 2026; OD-02 and OD-03 carry only a partial constraint.
 2. The ratified owner list: Pack Tables B and C with each row marked ratify or amend (and the amended owner), signed by the owner. Status: evidence not supplied (Part C is unmarked).
-3. The policy text: this contract, covering fact ownership, project access, critical confirmer, archive retention, global promotion, scoped revisions and artifact reuse, with the Table D statements (Part A) and the Table A answers (Part B). Status: draft.
+3. The policy text: this contract, covering fact ownership, project access, critical confirmer, archive retention, global promotion, scoped revisions and artifact reuse, with the Table D statements and the five owner decisions (Part A) and the Table A answers (Part B). Status: draft.
 4. The M1 delta cells updated from PROPOSED to SETTLED by reference, one record line per Part C row and per M3-OWNER-DECISION cell (DRV.ruling, PRJL.* 4, USR.* 5, conflicts 9, 10, 17, 25, S-1), naming the ratifying decision and its date. How the delta files are touched is Pack open question 3. Status: evidence not supplied.
 5. A statement of what M3 did not decide (Part D). Status: draft.
 
 No test, code change, migration or live action is part of M3's evidence; the milestone is a recorded contract.
+
+**Count of decided clauses.** Part A holds 23 clauses: 18 restate decided roadmap or accepted-decision text (P-01..P-18) and 5 record owner decisions of 7 October 2026 (P-19..P-23). Part B holds 19 slots: 0 filled, 2 partly constrained (B-02, B-03), 17 open. P-22 still depends on the open part of OD-02 (promoter and retirement rule).
 
 **Effect.** This contract takes effect only when every Part B slot is filled with the owner's signed answer or is explicitly deferred by the owner with a named milestone. Until then Part A states the roadmap's decided text, Part B states only the roadmap's interim positions, and "approved as noted" does not count as final for workload (UMR:200). The status wording in the roadmap and README changes only on a verifier verdict.
 

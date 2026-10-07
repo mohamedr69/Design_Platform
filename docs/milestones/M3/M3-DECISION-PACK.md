@@ -1,7 +1,7 @@
 # M3 decision pack — awaiting owner answers
 
 Milestone: **M3 - Ownership, Access & Memory Policy** (unified roadmap, prerequisites M1 and M2).
-Prepared: 6 October 2026, by ep-scribe; reviewed and filed by the orchestrator. Status: OPEN — no decision is taken until the owner completes the answer sheet in section 2; the scribe then files each answer and the M3 record is written from this pack.
+Prepared: 6 October 2026, by ep-scribe; reviewed and filed by the orchestrator. Status: OPEN. Updated 7 October 2026: 5 decisions received (OD-20..OD-24, section 2a), 2 partially constrained (OD-02, OD-03), 17 open (the rest of OD-01..OD-19). No other decision is taken until the owner completes the answer sheet in section 2; the scribe then files each answer and the M3 record is written from this pack.
 Repository HEAD when prepared: `f4d8ca0e83191989c1067a61f06e3358b5bce70d` (`git rev-parse HEAD`). The M1 refresh surveyed commit 771001e and records that `backend/` and `frontend/` are unchanged between 771001e and HEAD (M1R-ACCEPTANCE-RECORD.md section 3); this pack takes code facts only from that record and from the records it cites, plus the lines named below that the scribe opened.
 Status: preparation only. Nothing in this pack is accepted, signed or in force.
 Line-number basis: UMR line numbers are those of docs/UNIFIED_MASTER_ROADMAP.md at Revision U5 (816 lines). Revision U6 (commit f2afdf8, the M2 acceptance) added four lines at the M2 entry and near section 11, so in the current file every line at or after the M3 entry reads about 2 higher than cited. The quoted phrases and section names are the stable locators; the M3 entry and section 6 text are unchanged between U5 and U6.
@@ -65,8 +65,8 @@ Table A has 19 rows. The roadmap reserves "who may record and override contract 
 | ID | Option chosen (letters, or amended text) | Decided by (name, role) | Date | Conditions or notes |
 |---|---|---|---|---|
 | OD-01 |  |  |  |  |
-| OD-02 |  |  |  |  |
-| OD-03 |  |  |  |  |
+| OD-02 | Partly decided 7 October 2026: promoted items must carry full provenance to every contributing project memory and evidence item (OD-23, OD-24) and promotion applies to repeated validated knowledge; still OPEN: who may promote (options a–c) and the retirement rule (f/g) | owner (mohamedr69), session message of 7 October 2026 (partial) | 7 October 2026 | Constraint from OD-23 and OD-24; the choice of promoter and retirement is not filed |
+| OD-03 | Still OPEN; OD-23/OD-24 constrain any option: existing rows cannot be promoted without provenance | not decided (constraint only, owner session message of 7 October 2026) | 7 October 2026 | No option letter chosen |
 | OD-04 |  |  |  |  |
 | OD-05 |  |  |  |  |
 | OD-06 |  |  |  |  |
@@ -84,7 +84,21 @@ Table A has 19 rows. The roadmap reserves "who may record and override contract 
 | OD-18 |  |  |  |  |
 | OD-19 |  |  |  |  |
 
-Dependencies among decisions (from the table above): OD-03, OD-12 and OD-13 depend on the rule chosen in OD-02; OD-18 option (c) depends on OD-19; OD-10 and OD-11 interact with OD-15; OD-05 to OD-09 each name "the engineering manager" and cannot be filed until the role mapping in open question 1 is answered.
+Dependencies among decisions (from the table above): OD-03, OD-12 and OD-13 depend on the rule chosen in OD-02; OD-18 option (c) depends on OD-19; OD-10 and OD-11 interact with OD-15; OD-05 to OD-09 each name "the engineering manager" and cannot be filed until the role mapping in open question 1 is answered. OD-23 and OD-24 constrain OD-02 and OD-03 (section 2a). Count after the 7 October 2026 message: 5 decisions received (OD-20..OD-24), 2 partially constrained (OD-02, OD-03), 17 open (OD-01 and OD-04 to OD-19; OD-02 and OD-03 are counted as constrained, not open).
+
+## 2a. Owner decisions received (7 October 2026)
+
+The repository owner gave these five decisions in the orchestrating session on 7 October 2026 as final implementation decisions. They extend the Project Memory Master Plan and do not replace it: project isolation, evidence-backed memory, revision awareness, auditability and shared memory across agents are unchanged. They are not options of Table A; they were not asked as questions in this pack, so they carry new ids. Evidence: the owner's session message of 7 October 2026, relayed by the orchestrator (no file; evidence not supplied beyond that message). The policy clauses are P-19 to P-23 in [M3-POLICY-CONTRACT-DRAFT.md](M3-POLICY-CONTRACT-DRAFT.md).
+
+| ID | Question (decision area) | Decision | Decided by | Binds |
+|---|---|---|---|---|
+| OD-20 | How do historical and superseded memories relate to current memory? | Historical and superseded memories stay available to the AI when relevant. Normal engineering decisions use the latest valid authoritative state. Historical memory is context and audit history, not the default decision source. | owner (mohamedr69), session message of 7 October 2026 | M19, M20, M22 |
+| OD-21 | How is an engineer's resolution of a conflict stored? | The resolution is stored as durable memory with a structured rationale, not free text only. At minimum: selected value; rejected or overridden value(s); reason or rationale; supporting evidence; authority basis; engineer or user; timestamp; applicable revision or scope. | owner (mohamedr69), session message of 7 October 2026 | M18, M19 |
+| OD-22 | What happens when a previously resolved conflict appears again? | The previous resolution is applied automatically; the engineer is not asked to resolve the same issue repeatedly. It is reopened only when materially stronger or higher-authority evidence appears, or when the applicable project scope or revision changes enough to invalidate the previous resolution. | owner (mohamedr69), session message of 7 October 2026 | M19, M23, M31 |
+| OD-23 | May project memory become global knowledge? | Repeated validated knowledge may be promoted from project memory into global knowledge under the promotion logic being designed. The global record stays linked to the projects and evidence it was learned from. Provenance is never lost in promotion. | owner (mohamedr69), session message of 7 October 2026 | M3 global promotion rule, M19, M23, M31, M27 |
+| OD-24 | What provenance does global knowledge keep? | Each learned global rule or pattern is traceable to all contributing project memories and evidence, so that "which projects taught the system this rule, and on what evidence?" can be answered. | owner (mohamedr69), session message of 7 October 2026 | M21, M23, M31, M25 |
+
+Effect on Table A: OD-02 is partly constrained (promotion applies to repeated validated knowledge and must carry full provenance; promoter and retirement rule remain open). OD-03 stays open and every option is limited, because existing learned rows carry no provenance to contributing project memories and cannot be promoted as they are. No other Table A row is changed.
 
 ## 3. Table B - PROPOSED owners for M3 to ratify
 
