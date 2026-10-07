@@ -1993,17 +1993,18 @@ def read_open_pdf(pdf, filename: str, modified: datetime, use_ocr: bool, sha256:
                     else:
                         warnings.append(f"OCR limit reached in {path.name}; some replies may need verification.")
                         ocr_skipped.append(number)
-                elif ocr_unavailable and not use_ocr and candidate and scan and not found \
+                elif ocr_unavailable and not use_ocr and candidate and scan \
                         and (not text.strip() or _image_regions(page)):
                     # The page OCR would have read, unread for want of OCR:
                     # recorded the way a failed OCR is, not passed over as blank
                     # (roadmap section 6: unknown is never complete). Unread
-                    # means nothing came of its text and something is there
-                    # that only OCR reads: no text layer at all, or an image
-                    # large enough to hold a word. A scan whose text gave a
-                    # record was read, its status left unsettled ("UR") as
-                    # without OCR it always was; a few words of text and no
-                    # image (a caption, a separator) is a page that was read.
+                    # means something is there that only OCR reads: no text
+                    # layer at all, or an image large enough to hold a word.
+                    # A scan whose text gave a record is not read either: its
+                    # record is kept, status unsettled ("UR"), and the reading
+                    # is partial, as an OCR failure on the same page leaves it.
+                    # A few words of text and no image (a caption, a
+                    # separator) is a page that was read.
                     warnings.append(f"Could not OCR {path.name}, page {number}: {OCR_UNAVAILABLE}.")
                     ocr_failed.append(number)
                     ocr_failures.append({"page": number, "reason": f"OCR unavailable: {OCR_UNAVAILABLE_REASON}"})
@@ -2236,7 +2237,7 @@ def describe_note(note: str) -> tuple[str, str]:
         return "failed", "The file could not be opened as a PDF (damaged or protected)."
     page = re.match(r"Could not OCR .*, page (\d+): " + re.escape(OCR_UNAVAILABLE) + r"\.$", note)
     if page:
-        return "partial", f"Page {page[1]} is a scan and was not read: OCR is unavailable (Tesseract not found)."
+        return "partial", f"Page {page[1]} was not read: it needs OCR, which is unavailable (Tesseract not found)."
     page = re.match(r"Could not OCR .*, page (\d+)\.$", note)
     if page:
         return "partial", f"Page {page[1]} could not be OCRed; a stamp on it may be unread."

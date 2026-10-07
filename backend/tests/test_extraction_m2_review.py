@@ -173,7 +173,7 @@ def test_a_changed_scan_without_ocr_is_a_partial_attempt_not_an_empty_complete_r
     assert attempt["coverage"]["pages_visited"] == [1] and attempt["coverage"]["pages_failed"] == []
     assert attempt["notes"] == [f"Could not OCR cover.pdf, page 1: {dc.OCR_UNAVAILABLE}."]
     assert "OCR is unavailable" in attempt["notes"][0]
-    assert dc.describe_note(attempt["notes"][0]) == ("partial", "Page 1 is a scan and was not read: OCR is unavailable (Tesseract not found).")
+    assert dc.describe_note(attempt["notes"][0]) == ("partial", "Page 1 was not read: it needs OCR, which is unavailable (Tesseract not found).")
     # The previous complete reading stands, marked stale; the row is fresh, partial, and retried next run.
     assert row.state == "fresh", "a partial attempt is not a failure of the file"
     assert row.extracted["records"] == first["records"] and row.extracted["read_sha256"] == first["read_sha256"]
@@ -197,6 +197,19 @@ def test_a_changed_scan_without_ocr_is_a_partial_attempt_not_an_empty_complete_r
     assert unread.coverage["outcome"] == "partial" and unread.coverage["ocr_failed_pages"] == [1]
     assert unread.notes == (f"Could not OCR scan.pdf, page 1: {dc.OCR_UNAVAILABLE}.",)
     assert by_choice.coverage["outcome"] == "complete" and by_choice.coverage["ocr_failed_pages"] == [] and by_choice.notes == ()
+
+    # A scanned form whose text layer gives a record is still unread where OCR would have looked: its record is
+    # kept, status unsettled, and the reading is partial -- as an OCR failure on the same page leaves it.
+    with pymupdf.open() as document:
+        scanned = document.new_page()
+        image = pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, 300, 400), False)
+        image.clear_with(230)
+        scanned.insert_image(scanned.rect, pixmap=image)
+        scanned.insert_text((40, 50), "SHOP DRAWING SUBMITTAL No: ABC-XYZ-SPM-SD-MEP-FA-0054 Rev: 01", fontsize=8)
+        with_record = dc.read_open_pdf(document, str(tmp_path / "form.pdf"), NOW, False, None, full=True, ocr_unavailable=True)
+    assert with_record.coverage["outcome"] == "partial" and with_record.coverage["ocr_failed_pages"] == [1]
+    assert with_record.notes == (f"Could not OCR form.pdf, page 1: {dc.OCR_UNAVAILABLE}.",)
+    assert [(r.reference, r.status) for r in with_record.records] == [("ABC-XYZ-SPM-SD-MEP-FA-0054", "UR")]
 
 
 def test_a_failure_on_page_two_after_page_one_keeps_the_previous_complete_reading(client, db_session, tmp_path, inline, monkeypatch):

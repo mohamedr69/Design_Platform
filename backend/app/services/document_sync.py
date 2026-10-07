@@ -767,8 +767,11 @@ def extract(path: str, relative: str, sha256: str | None, ocr: bool) -> tuple[st
                                                       "parser_version": document_control.PARSER_VERSION}}
             with clock.stage("classification"):
                 role = classify_text(first, target, relative)
-            # `ocr` is False here only because OCR cannot run (the processing job asks
+            # `ocr` is False when OCR cannot run (the processing job asks
             # `ocr_available`): a scanned page is then recorded unread, not blank.
+            # scripts/repair_extraction.py passes `ocr_available() and not --no-ocr`,
+            # so `--no-ocr` on a PC with Tesseract also comes here, and its note
+            # says "Tesseract not found" although Tesseract is there.
             reading = document_control.read_open_pdf(pdf, path, modified, ocr, sha256, page_texts=page_texts, full=True,
                                                      ocr_unavailable=not ocr)
             records, notes, coverage, observations = reading.records, reading.notes, reading.coverage, reading.observations
