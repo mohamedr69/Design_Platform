@@ -35,6 +35,7 @@ Benchmarks: `backend/scripts/benchmark_processing.py` when asked.
 
 - Cloud container: Linux, Python 3.13, no Tesseract on PATH, no AutoCAD, no live `.env`, database, uploads or archive. Fixtures create temporary SQLite databases and libraries. `test_an_ocr_failure_on_one_page_is_noted_and_the_batch_continues` fails here for lack of Tesseract; report it as an environment gap, not a regression.
 - Always pass an explicit `--basetemp` under the scratchpad.
+- Owner decision (7 October 2026, docs/milestones/M4/README.md): the suite is Windows-first. Three tests exercise Windows-only behavior and fail on Linux by design: `test_ifc_zip_import.py::test_a_member_that_climbs_out_of_the_folder_is_left_behind` (the two backslash cases), `test_provider_honesty.py::test_the_cli_path_expands_the_users_own_folders`, `test_drawing_log.py::test_a_drawing_down_a_long_path_can_still_be_opened`. List them in every record under "expected on Linux: Windows-only behavior"; never count them as regressions or environment gaps, and never mark them as skips.
 - Never run against a real project archive or with `AI_ENABLED=true` unless the prompt grants a budget explicitly.
 
 ## Evidence record
