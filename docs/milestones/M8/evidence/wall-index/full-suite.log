@@ -1,0 +1,198 @@
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+......................................................s................. [ 15%]
+........................................................................ [ 19%]
+......ssssssssssssss...............s..........................sssssss... [ 23%]
+........................................................................ [ 27%]
+........................................................................ [ 31%]
+..............................................sss....................... [ 35%]
+........................................................................ [ 39%]
+........................................................................ [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 51%]
+........................................................................ [ 55%]
+......................s................................................. [ 58%]
+........................................................................ [ 62%]
+........................................................................ [ 66%]
+........................................................................ [ 70%]
+..........................F............................................. [ 74%]
+.....................................................................s.. [ 78%]
+........................................................................ [ 82%]
+.............................s.......................................... [ 86%]
+........................................................................ [ 90%]
+............s........................................................... [ 94%]
+........................................................................ [ 98%]
+................sssss...........                                         [100%]
+================================== FAILURES ===================================
+_ test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it _
+
+client = <starlette.testclient.TestClient object at 0x0000017DE4048E60>
+db_session = <sqlalchemy.orm.session.Session object at 0x0000017DFF6229C0>
+tmp_path = WindowsPath('C:/t/tmp/m8/bt/test_the_part_catalogue_knows_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000017DFF6238F0>
+
+    def test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it(client, db_session, tmp_path, monkeypatch):
+        import app.routers.materials as materials_router
+        import app.services.part_catalog as catalog_module
+        from app.services.datasheet_library import DatasheetLibrary
+    
+        edwards = tmp_path / "EST4"
+        menvier = tmp_path / "MENVIER"
+        for path, lines in [
+            (edwards / "01- PANEL" / "01- 4-CPU.pdf", ["4-CPU Central Processor Module"]),
+            (edwards / "01- PANEL" / "3-SDDC2 & 3-SSDC2.pdf", ["Loop controllers"]),
+            (edwards / "02- Initiating Devices" / "China" / "01- SIGA-OSD-FCN.pdf", ["Smoke detector"]),
+            (edwards / "00- submittal" / "EST4 Technical Reference Manual.pdf", ["Manual"]),
+            (menvier / "CTR160CGL2KS-M.pdf", ["Menvier luminaire"]),
+        ]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            doc = pymupdf.open()
+            doc.new_page().insert_text((40, 50), "\n".join(lines), fontsize=9)
+            doc.save(path)
+            doc.close()
+        libraries = {"EDWARDS": DatasheetLibrary("EDWARDS", edwards), "MENVIER": DatasheetLibrary("MENVIER", menvier)}
+        monkeypatch.setattr(catalog_module, "get_libraries", lambda: libraries)
+        monkeypatch.setattr(materials_router, "get_libraries", lambda: libraries)
+        _login(client)
+        project_id = client.post("/projects", json={
+            "ep_number": "30791", "project_name": "Titania", "design_sheets": [],
+            "systems": [{"name": "Fire Alarm", "brand": "EDWARDS", "method_statement": True, "drawing": True},
+                        {"name": "Emergency Light Monitoring", "brand": "MENVIER", "method_statement": True, "drawing": True}],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[
+            {"system_code": "FAS", "group_heading": "Panel", "catalog_no": "4-CPU", "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "SIGA-PS", "description": "Photoelectric smoke detector", "quantity": "120", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "12", "description": "GRSW-10", "quantity": "1", "manufacturer": "EDWARDS"},
+        ])
+    
+        numbers = {e.part_no for e in part_catalog.catalog(db_session, "EDWARDS")}
+>       assert {"4-CPU", "3-SDDC2", "3-SSDC2", "SIGA-OSD-FCN", "SIGA-PS"} <= numbers    # datasheet names, the BOQ
+E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}
+E         
+E         Extra items in the left set:
+E         'SIGA-OSD-FCN'
+E         '3-SDDC2'
+E         '3-SSDC2'
+
+tests\test_proposed_materials.py:108: AssertionError
+============================== warnings summary ===============================
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_ai_assist.py: 10 warnings
+tests/test_ai_evaluation.py: 6 warnings
+tests/test_ai_sheet_reader.py: 6 warnings
+tests/test_ai_verification.py: 12 warnings
+tests/test_amplifier_calculation.py: 11 warnings
+tests/test_auth.py: 11 warnings
+tests/test_battery_api.py: 21 warnings
+tests/test_boq_candidates.py: 4 warnings
+tests/test_boq_corrections_v2.py: 1 warning
+tests/test_boq_export.py: 5 warnings
+tests/test_boq_extraction_v2.py: 10 warnings
+tests/test_boq_geometry_v2.py: 2 warnings
+tests/test_boq_paste.py: 1 warning
+tests/test_boq_provenance.py: 5 warnings
+tests/test_boq_revisions.py: 9 warnings
+tests/test_boq_selective_v2.py: 7 warnings
+tests/test_boq_verification_v2.py: 4 warnings
+tests/test_calc_integrity.py: 3 warnings
+tests/test_company_library.py: 1 warning
+tests/test_compliance.py: 4 warnings
+tests/test_compliance_ai_autofill.py: 4 warnings
+tests/test_compliance_knowledge.py: 10 warnings
+tests/test_compliance_statements.py: 7 warnings
+tests/test_data_controls.py: 9 warnings
+tests/test_data_location.py: 2 warnings
+tests/test_datasheet_library.py: 6 warnings
+tests/test_design_api.py: 11 warnings
+tests/test_details_check.py: 3 warnings
+tests/test_divisions.py: 3 warnings
+tests/test_document_classification_pilot.py: 9 warnings
+tests/test_document_classification_v2.py: 11 warnings
+tests/test_document_intake.py: 5 warnings
+tests/test_document_sync.py: 12 warnings
+tests/test_draftsman_assignment.py: 1 warning
+tests/test_drawing_log.py: 6 warnings
+tests/test_drawing_prep.py: 4 warnings
+tests/test_drawing_review.py: 5 warnings
+tests/test_drawing_review_outcome.py: 8 warnings
+tests/test_drawings_module.py: 24 warnings
+tests/test_ep_archive_models.py: 7 warnings
+tests/test_ep_directory.py: 27 warnings
+tests/test_ep_directory_rebind.py: 2 warnings
+tests/test_equipment_currents.py: 9 warnings
+tests/test_estimation.py: 2 warnings
+tests/test_extraction_m2_review.py: 8 warnings
+tests/test_extraction_m2_review02.py: 6 warnings
+tests/test_extraction_m2_review03.py: 5 warnings
+tests/test_fa_cases.py: 3 warnings
+tests/test_fa_cases_pdf.py: 6 warnings
+tests/test_fa_efficiency.py: 7 warnings
+tests/test_fa_evidence.py: 36 warnings
+tests/test_fa_interfaces.py: 4 warnings
+tests/test_fa_opus_review.py: 14 warnings
+tests/test_fa_review_fixes.py: 48 warnings
+tests/test_fa_workflow.py: 12 warnings
+tests/test_file_sync_v2.py: 2 warnings
+tests/test_file_sync_v2_processing.py: 14 warnings
+tests/test_floor_aliases.py: 5 warnings
+tests/test_floor_schedule.py: 22 warnings
+tests/test_ifc_boq.py: 1 warning
+tests/test_ifc_platform.py: 14 warnings
+tests/test_ifc_worker_and_ai.py: 37 warnings
+tests/test_ifc_zip_import.py: 2 warnings
+tests/test_job_thread_sessions.py: 1 warning
+tests/test_jobs_and_eligibility.py: 6 warnings
+tests/test_logs_register.py: 6 warnings
+tests/test_m2_review05.py: 1 warning
+tests/test_m2_review05_boq.py: 3 warnings
+tests/test_migrations.py: 1 warning
+tests/test_persistence.py: 2 warnings
+tests/test_power_calculation.py: 4 warnings
+tests/test_prep_readiness.py: 4 warnings
+tests/test_project_directory.py: 1 warning
+tests/test_project_folders.py: 1 warning
+tests/test_project_log_and_drawing_scan.py: 4 warnings
+tests/test_project_state.py: 8 warnings
+tests/test_projects.py: 38 warnings
+tests/test_proposed_materials.py: 14 warnings
+tests/test_provider_honesty.py: 2 warnings
+tests/test_rbac.py: 35 warnings
+tests/test_reextraction.py: 20 warnings
+tests/test_repair_tool.py: 3 warnings
+tests/test_review_duplicates_and_concurrency.py: 4 warnings
+tests/test_review_fixes.py: 11 warnings
+tests/test_review_production.py: 5 warnings
+tests/test_sample_request.py: 3 warnings
+tests/test_schedule_materials.py: 3 warnings
+tests/test_scoped_drawing_review.py: 9 warnings
+tests/test_shop_boq.py: 1 warning
+tests/test_stale_writes.py: 2 warnings
+tests/test_submittal.py: 13 warnings
+tests/test_submittal_one_per_system.py: 4 warnings
+tests/test_submittal_package.py: 51 warnings
+tests/test_sync_worker.py: 7 warnings
+tests/test_transmittals.py: 1 warning
+tests/test_user_activity.py: 10 warnings
+tests/test_user_delete.py: 6 warnings
+tests/test_worker_runtime.py: 3 warnings
+  G:\dev (2)\dev\ep-platform-merged\wt-m8\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_document_classification_pilot.py::test_a_classification_write_that_fails_in_the_database_leaves_the_sync_and_its_session_whole
+  G:\dev (2)\dev\ep-platform-merged\wt-m8\backend\tests\test_document_classification_pilot.py:63: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    assert db_session.query(Project).get(project_id).ep_number == "30930"
+
+tests/test_submittal_one_per_system.py::test_the_migration_merges_a_brands_register_rows_and_keeps_each_brand
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: G:\dev (2)\dev\ep-platform-merged\wt-m8\docs\milestones\M8\evidence\wall-index\full-suite.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_proposed_materials.py::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it
+1 failed, 1796 passed, 35 skipped, 856 warnings in 1936.31s (0:32:16)
+exit 1
