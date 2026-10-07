@@ -68,6 +68,16 @@ class IfcWorker(Worker):
             log.warning("Could not sweep the staged IFC uploads", exc_info=True)
         finally:
             db.close()
+        from app.redesign import service as redesign
+
+        db = self.session_factory()
+        try:
+            # staged copies and unreferenced outputs a stopped Apply left (M5)
+            redesign.sweep_orphans(db)
+        except Exception:  # noqa: BLE001 -- tidying up never stops the worker
+            log.warning("Could not sweep the redesign outputs", exc_info=True)
+        finally:
+            db.close()
 
 
 def main() -> None:

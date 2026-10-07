@@ -7,8 +7,13 @@ accepted changes made on it (platform owner, 2 October 2026).
            the symbol to erase and the drawing's own symbol to insert;
   adjust   the engineer approves, moves (a click on the picture), picks
            another symbol, or skips each one;
-  apply    AutoCAD makes the changes on a copy of the DWG the review
-           plotted (app.redesign.cad), filed in the project folder.
+  apply    AutoCAD makes the explicitly approved changes on a copy of the
+           DWG the review plotted (app.redesign.cad); what it made is
+           checked (app.redesign.verify) and kept as a new, uniquely named
+           platform copy -- never written into the project archive;
+  publish  a verified platform copy put into the project archive
+           (03- Drawings/Redesign) by the engineer, as a separate action,
+           under a name that is never overwritten (M5, OD-15 a).
 
 The Fire Alarm Interface Schedule's modules come in too, each an ADD beside
 the equipment it serves, for the engineer to approve (see "the interface
@@ -33,11 +38,12 @@ import re
 import zlib
 import statistics
 from collections import Counter, defaultdict
-from datetime import datetime
-from pathlib import Path
+from datetime import datetime, timezone
+from pathlib import Path, PureWindowsPath
 
 import pymupdf
 from PIL import Image, ImageDraw
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.ai.provider import ImagePart, TextPart, get_prep_provider, prep_ai_on
@@ -65,6 +71,32 @@ CONFIRM_ABOVE_M = 1.0
 
 class RedesignError(RuntimeError):
     pass
+
+
+class ApplyError(RedesignError):
+    """An Apply that cannot be made safely: refused before AutoCAD starts,
+    or its result not promoted."""
+
+
+class ApplyRefused(ApplyError):
+    """An Apply that must not run at all: already made, or asked for a
+    drawing or a set of approvals that has changed since (RD-M2). The
+    redesign's output is left as it is."""
+
+
+class ApplyStale(ApplyError):
+    """The approvals or placings changed while AutoCAD worked: the result
+    is kept only as evidence, never published (RD-M2)."""
+
+
+class PublishRefused(RedesignError):
+    """A publication into the project archive that was not made (M5,
+    OD-15 a): nothing was written there. `status` is the HTTP status the
+    page is answered with (409 when the name is taken)."""
+
+    def __init__(self, message: str, status: int = 422):
+        super().__init__(message)
+        self.status = status
 
 
 def state(db: Session, project: Project, drawing_id: int) -> ProjectRedesign:
@@ -404,6 +436,27 @@ def _library() -> dict:
     return json.loads((LIBRARY / "modules.json").read_text(encoding="utf-8"))
 
 
+def module_library(code: str | None, change_id: str, library: Path | None = None) -> Path:
+    """The module's block file in THIS installation's library, by its
+    code -- never the path a change stored when it was placed, which is
+    another PC's on a copied database (RD-M1 F001; platform owner, RD-M2:
+    stored paths stay as history). Refused, before AutoCAD starts, for a
+    code the library does not list, a file outside the library folder, or
+    one that is missing."""
+    root = (library or LIBRARY).resolve()
+    codes = set(json.loads((root / "modules.json").read_text(encoding="utf-8"))["modules"]) \
+        if (root / "modules.json").is_file() else set()
+    if not code or not re.fullmatch(r"[A-Z0-9]{1,8}", code) or code not in codes:
+        raise ApplyError(f"Change {change_id}: module code {code!r} is not in this installation's Redesign library.")
+    path = (root / f"{code}.dwg").resolve()
+    if path.parent != root or path.suffix.lower() != ".dwg":
+        raise ApplyError(f"Change {change_id}: the {code} module's file is not inside the Redesign library.")
+    if not path.is_file():
+        raise ApplyError(f"Change {change_id}: the {code} module's file is missing from this installation's "
+                         "Redesign library.")
+    return path
+
+
 def _paper_scale(sheet: dict) -> float | None:
     """The scale a library block (the sample's, 1:100 in mm) is inserted at
     so it is as big on this sheet's paper as on the sample's."""
@@ -692,11 +745,23 @@ def set_status(db: Session, project: Project, drawing_id: int, ids: list[str], s
     return n
 
 
+def requires_confirmation(c: dict) -> bool:
+    """An added symbol placed from a plot tied to the drawing worse than
+    CONFIRM_ABOVE_M, not moved by the engineer: its spot is the engineer's
+    to confirm before it is drawn (RD-M2)."""
+    residual = c.get("residual")
+    return bool(c.get("insert") and c.get("action") == "add" and not c.get("moved")
+                and residual is not None and residual > CONFIRM_ABOVE_M)
+
+
 def _drawn(c: dict) -> bool:
-    """Made on the copy: a change the engineer approved -- a placement the
-    agents proposed is the engineer's to approve (or skip) first, whatever the
-    orchestrator said of it."""
-    return c["status"] == "approved" and bool(c.get("remove") or c.get("insert"))
+    """Made on the copy: only a change the engineer explicitly approved -- a
+    placement the agents proposed is the engineer's to approve (or skip)
+    first, whatever the orchestrator said of it (OD-14 a) -- with something
+    to make, and, where its spot needs it, the spot confirmed (RD-M2)."""
+    if c.get("status") != "approved" or not (c.get("remove") or c.get("insert")):
+        return False
+    return not requires_confirmation(c) or c.get("confirmed") is True
 
 
 def readiness(db: Session, project: Project, drawing: ProjectIfcDrawing | None, row: ProjectRedesign) -> dict:
@@ -753,6 +818,12 @@ def readiness(db: Session, project: Project, drawing: ProjectIfcDrawing | None, 
     if open_checks:
         blockers.append(f"{len(open_checks)} change{'s' if len(open_checks) != 1 else ''} the orchestrator rejected "
                         "or asked the engineer to check.")
+    to_confirm = sum(1 for c in changes if c["status"] == "approved" and requires_confirmation(c)
+                     and c.get("confirmed") is not True)
+    if to_confirm:
+        blockers.append(f"{to_confirm} approved spot{'s' if to_confirm != 1 else ''} placed less exactly than "
+                        f"{CONFIRM_ABOVE_M:g} m to confirm (or move) before {'they are' if to_confirm != 1 else 'it is'} "
+                        "drawn.")
     run = row.run or {}
     coordination = run.get("coordination") or {}
     if coordination.get("gaps_left"):
@@ -1343,9 +1414,11 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
 
 def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, status: str | None = None,
            candidate: int | None = None, symbol: int | None = None, point: list[float] | None = None,
-           rotation: float | None = None) -> dict:
+           rotation: float | None = None, confirmed: bool | None = None) -> dict:
     """Approve, skip, move (a point on the change's picture, as fractions),
-    pick another symbol to erase or to insert."""
+    pick another symbol to erase or to insert, or confirm a spot the plot
+    placed less exactly than CONFIRM_ABOVE_M (RD-M2: such a change is drawn
+    only once confirmed; placing it again clears the confirmation)."""
     row = state(db, project, drawing_id)
     changes = [dict(c) for c in row.changes or []]
     change = next((c for c in changes if c["id"] == change_id), None)
@@ -1379,6 +1452,7 @@ def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, st
             answer["y"] = (page[1] - box[1]) / (box[3] - box[1])
         change["ai"] = answer
         change["edited"] = True
+        change.pop("confirmed", None)
         was = change["status"]
         change["status"] = "pending"
         drawing = db.get(ProjectIfcDrawing, drawing_id)
@@ -1391,6 +1465,8 @@ def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, st
                    PR.columns(project, drawing, row.source_sha256))
         if was == "approved" and change["status"] == "proposed":
             change["status"] = "approved"          # an approved change, adjusted, stays approved
+    if confirmed is not None:
+        change["confirmed"] = bool(confirmed)
     if status:
         change["status"] = status
     if PR.is_detector({**change, "status": "proposed"}) or change.get("coverage"):
@@ -1476,13 +1552,27 @@ def _units(drawing: ProjectIfcDrawing, db: Session) -> float:
     return {"m": 1.0, "mm": 1000.0, "cm": 100.0, "in": 39.37, "ft": 3.281}.get(units, 1.0)
 
 
-def to_cad(changes: list[dict]) -> list[dict]:
+def to_cad(changes: list[dict], library: Path | None = None) -> list[dict]:
     """The placed changes as AutoCAD makes them (app.redesign.cad): what to
-    erase by handle, what to insert, where the marker goes and what it says."""
+    erase by handle (with the block and insertion point it must have), what
+    to insert, where the marker goes and what it says. An interface
+    module's block file is this installation's (module_library); the path
+    the change stored is never used."""
     out = []
-    for c in changes:
+    for k, c in enumerate(changes):
+        cid = str(c.get("id") or f"#{k + 1}")
         remove, insert = c.get("remove"), c.get("insert")
+        if insert and insert.get("block") and (c.get("source") == INTERFACE or insert.get("library")):
+            code = (c.get("interface") or {}).get("code")
+            if not code:
+                raise ApplyError(f"Change {cid}: a library block with no module code.")
+            insert = {**insert, "library": module_library(code, cid, library).as_posix()}
         handle = remove["handle"] if remove and remove.get("erasable") else None
+        remove_point = None
+        if handle:
+            candidate = next((x for x in c.get("candidates") or [] if x.get("n") == remove.get("n")
+                              and x.get("handle") == handle), None)
+            remove_point = (candidate or {}).get("insert_point")
         label = f"{cad.LABEL[c['action']]}: {c['device'] or (insert or remove or {}).get('name') or ''}"
         if remove and not remove.get("erasable"):
             label += " (erase by hand)"
@@ -1492,7 +1582,8 @@ def to_cad(changes: list[dict]) -> list[dict]:
         if note:
             face = c["interface"]
             label = f"{cad.LABEL[c['action']]}: {face['code']} FOR {face['for']}"
-        out.append({"action": c["action"], "remove_handle": handle,
+        out.append({"id": cid, "action": c["action"], "remove_handle": handle,
+                    "remove_block": (remove or {}).get("block") if handle else None, "remove_point": remove_point,
                     "insert": insert if insert and insert.get("block") else None,
                     "at": (insert or {}).get("seen") or (insert or remove)["model"], "label": label, "note": note})
     return out
@@ -1503,7 +1594,9 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
     -- the drawing's symbols read again (each block's drawn centre, the
     platform owner's symbol for a device), each such change placed again
     from what was decided: the model's answer and every pick or move of the
-    engineer's, its status kept. Returns how many were placed again."""
+    engineer's, its status kept. Returns how many were placed again.
+    Not called by Apply (M5): Apply makes the changes as they were approved,
+    and refuses ones an earlier version placed; it never re-coordinates."""
     from app.ifc.resolve import resolved_drawing
 
     stale = [c for c in row.changes or [] if c.get("insert")
@@ -1555,59 +1648,546 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
     return again
 
 
-def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *, progress=None, check=None) -> dict:
-    """Make the approved and proposed changes on a copy of the DWG the review
-    plotted, and file it in the project folder (03- Drawings/Redesign)."""
-    from app.review import render
+# --- Apply: fail closed, approved only, never twice (RD-M2 ported in M5, 7 October 2026) -----
+# Owner decisions: draw only explicitly approved changes (OD-14 a); Apply writes a
+# new, uniquely named platform copy and never the project archive -- publication
+# there is a separate engineer action, publish() below (OD-15 a); resolve CT1/CT2/CR
+# from this installation's active library when the script is made, the stored
+# paths kept as history (OD-17 b); refuse to publish when the approvals changed
+# while AutoCAD worked. Apply never places or coordinates again: it makes what the
+# engineer approved, as it was approved, or refuses.
 
+RUNS = "runs"                    # <uploads>/EP-<n>/redesign/runs/<apply id>/: each Apply's own work folder
+ORPHANED = "orphaned"            # <uploads>/EP-<n>/redesign/orphaned/: outputs no record refers to (crash)
+PART = ".part"                   # a staged copy, never a result
+OUTPUT_NAME = re.compile(r" - Redesign \d{8}-\d{6}-\d{6}Z d\d+ s[0-9a-f]{12} j\d+-[0-9a-f]{10}\.dwg$")
+
+
+def _drawn_fingerprint_part(c: dict) -> dict:
+    insert, remove = c.get("insert") or {}, c.get("remove") or {}
+    return {"id": c["id"], "status": c.get("status"), "confirmed": c.get("confirmed") is True,
+            "needs_confirmation": requires_confirmation(c), "action": c.get("action"),
+            "moved": bool(c.get("moved")), "edited": bool(c.get("edited")),
+            "code": (c.get("interface") or {}).get("code"),
+            "remove": {k: remove.get(k) for k in ("n", "handle", "block", "erasable")} if remove else None,
+            "insert": {k: insert.get(k) for k in ("block", "layer", "scale", "rotation", "model", "seen", "make")}
+            if insert else None}
+
+
+def content_fingerprint(row: ProjectRedesign, source_sha256: str | None) -> str:
+    """The decision snapshot an Apply works from: the source drawing, the
+    approved drawn set as it would be made, and every change's status and
+    confirmation -- any approval or placing changed makes another one."""
+    drawn = sorted((c for c in row.changes or [] if _drawn(c)), key=lambda c: str(c["id"]))
+    payload = {"source": source_sha256,
+               "drawn": [_drawn_fingerprint_part(c) for c in drawn],
+               "decisions": sorted([str(c["id"]), str(c.get("status")), c.get("confirmed") is True]
+                                   for c in row.changes or [])}
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def _snapshot(row: ProjectRedesign, source_sha256: str | None) -> dict:
+    """The fingerprint and the row's last write: any edit of the redesign
+    after the snapshot, whatever it changed, makes the Apply stale."""
+    return {"content": content_fingerprint(row, source_sha256),
+            "updated_at": row.updated_at.isoformat() if row.updated_at else None}
+
+
+def apply_request(db: Session, project: Project, drawing: ProjectIfcDrawing) -> dict:
+    """What an Apply job is asked for, kept in its params: the source and the
+    decision snapshot at the moment the engineer pressed the button."""
+    row = state(db, project, drawing.id)
+    return {"source_sha256": row.source_sha256, "fingerprint": content_fingerprint(row, row.source_sha256),
+            "drawn": sum(1 for c in row.changes or [] if _drawn(c))}
+
+
+def _refusal(db: Session, row: ProjectRedesign, request: dict, job_id: int | None,
+             job_created_at) -> tuple[str, bool] | None:
+    """Why this Apply must not run at all, and whether that is because it was
+    already made; None when it may run. Checked before anything is touched,
+    so a refusal leaves the redesign's output as it is."""
+    from app.models import BackgroundJob
+
+    if job_created_at is not None and row.output_status == "made" and row.output_at and row.output_at > job_created_at:
+        # a recovered job whose work finished before its worker stopped (RD-M1 F017)
+        return (f"Refused: this drawing's redesigned copy was already made at {row.output_at:%Y-%m-%d %H:%M:%S} UTC, "
+                "after this Apply was asked for. Nothing was run again.", True)
+    if request.get("source_sha256") and request["source_sha256"] != row.source_sha256:
+        return "Refused: the drawing changed since this Apply was asked for. Ask for a new Apply.", False
+    current = content_fingerprint(row, row.source_sha256)
+    if request.get("fingerprint") and request["fingerprint"] != current:
+        return ("Refused: approvals or placings changed since this Apply was asked for. "
+                "Check the changes and ask for a new Apply.", False)
+    done = (db.query(BackgroundJob)
+            .filter(BackgroundJob.project_id == row.project_id, BackgroundJob.kind == KIND_APPLY,
+                    BackgroundJob.status == "succeeded")
+            .order_by(BackgroundJob.id.desc()).all())
+    for job in done:
+        result = job.result or {}
+        if job.id != job_id and result.get("fingerprint") == current and result.get("drawing_id") == row.drawing_id \
+                and result.get("path") and output_file_for(result["path"], None) is not None:
+            return (f"Refused: this exact set of approved changes was already made by job {job.id} "
+                    f"({PureWindowsPath(result['path']).name}). Nothing was run again.", True)
+    return None
+
+
+def output_file_for(stored: str | None, ep_number: str | None) -> Path | None:
+    """A redesigned copy's file on this PC, from what the row stored: a path
+    relative to the uploads folder (RD-M2), or an older absolute one -- this
+    PC's, or another's whose part from EP-<n>/ on is taken against this
+    PC's uploads folder. None when it is not there, or would leave the
+    uploads folder."""
+    if not stored:
+        return None
+    root = storage.uploads_root().resolve()
+    win = PureWindowsPath(stored)
+    if win.is_absolute() or win.drive or stored.startswith(("/", "\\")):
+        parts = list(win.parts)
+        anchor = f"EP-{ep_number}" if ep_number else None
+        if anchor and anchor in parts:
+            candidate = root.joinpath(*parts[parts.index(anchor):])
+        else:
+            candidate = Path(stored)
+    else:
+        candidate = root.joinpath(*win.parts)
+    try:
+        resolved = candidate.resolve()
+    except OSError:
+        return None
+    if resolved != root and root not in resolved.parents:
+        return None
+    return resolved if resolved.is_file() else None
+
+
+def last_output(row: ProjectRedesign, project: Project) -> Path | None:
+    """The last copy made, on this PC, whatever the last attempt came to: a
+    failed, stale, refused or running attempt never touches output_path, so
+    an earlier valid copy stays downloadable (U2M5-09). Only a copy that was
+    made (output_at set, or a row still saying "made") counts."""
+    if not (row.output_at or row.output_status == "made"):
+        return None
+    return output_file_for(row.output_path, project.ep_number)
+
+
+def _unique_output(folder: Path, drawing: ProjectIfcDrawing, source_sha256: str, apply_id: str) -> Path:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
+    stem = re.sub(r"\.(dwg|dxf)$", "", drawing.filename, flags=re.I)
+    safe = re.sub(r"[^A-Za-z0-9 ._()-]", "_", stem).strip() or "drawing"
+    return folder / f"{safe} {drawing.revision or 'R0'} - Redesign {stamp}Z d{drawing.id} s{source_sha256[:12]} {apply_id}.dwg"
+
+
+def _stage(source: Path, dest: Path) -> Path:
+    """The file copied beside its final name under a staging name of its
+    own, created exclusively and flushed to disk -- before any lock is
+    taken (U2M5-02/04): the publication itself is then only a rename."""
+    part = dest.with_name(f".{dest.name}{PART}")
+    part.parent.mkdir(parents=True, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
+    try:
+        fd = os.open(part, flags)
+    except FileExistsError as exc:
+        raise ApplyError(f"A staged copy named {part.name} already exists: nothing was overwritten.") from exc
+    try:
+        with os.fdopen(fd, "wb") as out, open(source, "rb") as src:
+            for chunk in iter(lambda: src.read(1 << 20), b""):
+                out.write(chunk)
+            out.flush()
+            os.fsync(out.fileno())
+    except BaseException:
+        part.unlink(missing_ok=True)
+        raise
+    return part
+
+
+def _finalize(part: Path, dest: Path) -> None:
+    """The staged copy given its final name, never over an existing file:
+    a hard link (refused by every OS when the name is taken), or, where the
+    file system has none, a Windows rename (which never replaces a file)."""
+    try:
+        os.link(part, dest)
+        return
+    except FileExistsError as exc:
+        raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
+    except OSError:
+        if os.name != "nt":
+            raise
+    try:
+        os.rename(part, dest)
+    except FileExistsError as exc:
+        raise ApplyError(f"An output named {dest.name} already exists: nothing was overwritten.") from exc
+
+
+def _publish(copy: Path, dest: Path) -> None:
+    """The verified copy to its final name, staged then renamed exclusively:
+    an existing file is never overwritten (kept for callers outside Apply)."""
+    part = _stage(copy, dest)
+    try:
+        _finalize(part, dest)
+    finally:
+        part.unlink(missing_ok=True)
+
+
+def _locked_publish_row(db: Session, row_id: int) -> ProjectRedesign:
+    """Start the short publication transaction and lock this redesign row.
+
+    SQLite needs BEGIN IMMEDIATE: SELECT FOR UPDATE is a no-op there, and
+    SQLite's write lock is the whole database's -- so the transaction is
+    kept to the snapshot compare, the no-overwrite rename and the commit;
+    the copy is staged before it (U2M5-02). Other databases use a row lock
+    (not exercised by the tests: production is SQLite, U2M5-08). Approval
+    PATCHes the 409 guard let through wait here; none can commit between
+    the final snapshot comparison and publication (RDM2-R1)."""
+    db.rollback()  # discard the read transaction used by verification
+    if db.get_bind().dialect.name == "sqlite":
+        db.execute(text("BEGIN IMMEDIATE"))
+        row = db.get(ProjectRedesign, row_id, populate_existing=True)
+    else:
+        row = (db.query(ProjectRedesign).filter(ProjectRedesign.id == row_id)
+               .with_for_update().one_or_none())
+    if row is None:
+        raise ApplyStale("The redesign disappeared before its output could be published.")
+    return row
+
+
+def _source_readback(source: Path, source_sha256: str, folder: Path) -> Path:
+    """The source DWG read back by the same converter as the copy will be --
+    so the two DXFs are compared like for like, not with a DXF another PC's
+    converter made -- once per source (kept by its hash)."""
+    from app.ifc.dxf import convert
+
+    target = folder / f"source-readback-{source_sha256[:16]}.dxf"
+    if not target.is_file():
+        folder.mkdir(parents=True, exist_ok=True)
+        part = folder / f".{target.name}.{os.getpid()}.part"
+        convert.convert_dwg_to_dxf(source, part)
+        os.replace(part, target)
+    return target
+
+
+def _readback(run, source: Path, folder: Path, expect: dict, check) -> dict | None:
+    """The saved copy and the source, both read back to DXF by the same
+    converter, compared by handle; None when either cannot be read."""
+    from app.ifc.dxf import convert
+
+    if not Path(run.copy).is_file():
+        return None
+    out_dxf = Path(run.work) / "readback.dxf"
+    check()
+    try:
+        source_dxf = _source_readback(source, run.source_sha256, folder)
+        check()
+        convert.convert_dwg_to_dxf(run.copy, out_dxf)
+    except Exception as exc:  # noqa: BLE001 -- unreadable: verification incomplete
+        log.warning("The redesigned copy could not be read back: %s", exc)
+        return None
+    check()
+    from app.redesign import verify as V
+
+    try:
+        return V.reconcile(source_dxf, out_dxf, expect)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("The redesigned copy could not be compared: %s", exc)
+        return None
+
+
+def _refuse(db: Session, row: ProjectRedesign, why: str, *, record: bool) -> None:
+    """Refused before anything ran. Recorded on the redesign as "refused"
+    when asked -- the output's file, path and time are left as they were,
+    so an earlier valid copy stays downloadable (U2M5-09)."""
+    if record:
+        row.output_status, row.output_error = "refused", why[:1000]
+        db.commit()
+    raise ApplyRefused(why)
+
+
+def apply(db: Session, project: Project, drawing_id: int, user_id: int | None, *, progress=None, check=None,
+          request: dict | None = None, job_id: int | None = None, job_created_at=None) -> dict:
+    """Make the explicitly approved changes on a copy of the DWG the review
+    plotted, verify what AutoCAD made, and keep it as a new, uniquely named
+    platform copy (never the project archive: publish() is the engineer's
+    separate action). Refused before anything runs when the drawing is not
+    ready for the draftsman (readiness(), the first refusal), when it was
+    already made, or the drawing or the approvals changed since it was asked
+    for; not published when the approvals changed while AutoCAD worked
+    (stale), or the copy does not verify. The changes are made as they were
+    approved: Apply never places or coordinates them again."""
+    from app.redesign import verify as V
+    from app.review import render
+    from app.services import jobs
+
+    check = check or (lambda: None)
+    request = request or {}
     drawing = db.get(ProjectIfcDrawing, drawing_id)
+    if drawing is None or drawing.project_id != project.id:
+        raise RedesignError("That drawing is not this project's")
     row = state(db, project, drawing_id)
+    ready = readiness(db, project, drawing, row)
+    if not ready["ready"]:
+        # never made while an engineering check is open: each one said
+        _refuse(db, row, "Refused: not ready for the draftsman: " + " ".join(ready["blockers"]), record=True)
+    refused = _refusal(db, row, request, job_id, job_created_at)
+    if refused:
+        # already made: the output stands as it is; a changed request is said on the page
+        why, already_made = refused
+        _refuse(db, row, why, record=not already_made)
+    check()
     row.output_status, row.output_error = "making", None
     db.commit()
+    # the decision snapshot this Apply works from, after its own write (RD-M2)
+    snap = _snapshot(row, row.source_sha256)
+    run = None
     try:
-        ready = readiness(db, project, drawing, row)
-        if not ready["ready"]:
-            # never made while an engineering check is open: each one said
-            raise RedesignError("Not ready for the draftsman: " + " ".join(ready["blockers"]))
         source = render.source_file(project, drawing)
         if source.suffix.lower() != ".dwg":
-            raise RedesignError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
-        if row.source_sha256 and render._sha(source) != row.source_sha256:
-            raise RedesignError("The drawing has changed since it was reviewed: review it again before redesigning.")
-        metre = _units(drawing, db)
-        refresh(db, project, drawing, row)
+            raise ApplyError("The drawing's DWG is not on this PC: import the fire alarm IFC drawing again.")
+        source_sha = render._sha(source)
+        if row.source_sha256 and source_sha != row.source_sha256:
+            raise ApplyError("The drawing has changed since it was reviewed: review it again before redesigning.")
         todo = [c for c in row.changes or [] if _drawn(c)]
-        cad_changes = to_cad(todo)
+        if not todo:
+            raise ApplyError("No change is approved to make: approve the changes first (a proposed change is never drawn).")
+        stale = [c["id"] for c in todo if c.get("insert") and c["insert"].get("block")
+                 and ("seen" not in c["insert"] or "placed" not in c["insert"])]
+        if stale:
+            # placed by an earlier version: the engineer places them again (Apply never does)
+            raise ApplyError(f"{len(stale)} approved change(s) were placed by an earlier version of the redesign: "
+                             "place them again before making the drawing.")
+        cad_changes = to_cad(todo)                   # module files resolved here, from the active library
+        metre = _units(drawing, db)
+        apply_id = f"j{job_id or 0}-{hashlib.sha1(os.urandom(16)).hexdigest()[:10]}"
+        folder = (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign").resolve()
+        check()
         if progress:
-            progress(0, 1, f"AutoCAD is making {len(cad_changes)} change{'s' if len(cad_changes) != 1 else ''} on a copy")
-        stamp = datetime.now().strftime("%Y-%m-%d %H%M")
-        stem = re.sub(r"\.(dwg|dxf)$", "", drawing.filename, flags=re.I)
-        name = f"{stem} {drawing.revision or 'R0'} - Redesign {stamp}.dwg"
-        platform_copy = (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign" / name).resolve()
-        cad.apply(source, platform_copy, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
-                  work=platform_copy.parent / f"work-{row.id}")
-        relative = None
-        if project.source_folder_path:
-            from app.services import document_control
-
-            target = Path(project.source_folder_path) / FOLDER / name
+            progress(0, 3, f"AutoCAD is making {len(cad_changes)} approved change{'s' if len(cad_changes) != 1 else ''} on a copy")
+        run = cad.run(source, folder / RUNS / apply_id, cad_changes, marker=0.6 * metre, text_height=0.25 * metre,
+                      check=check)
+        check()
+        if progress:
+            progress(1, 3, "Checking what AutoCAD made")
+        expect = V.expectation(cad_changes)
+        log_ok = V.parse_log(run.log, run.nonce)
+        readback = _readback(run, source, folder, expect, check) if run.returncode == 0 and len(log_ok["ok"]) == 1 \
+            and not log_ok["failures"] else None
+        check()
+        result = V.verify(run, expect=expect, readback=readback)
+        (Path(run.work) / "verification.json").write_text(json.dumps(
+            {"ok": result.ok, "problems": result.problems, "log": result.log, "readback": result.readback,
+             "returncode": run.returncode, "nonce": run.nonce, "source_sha256": run.source_sha256,
+             "copy_sha256": run.copy_sha256, "expected": expect}, indent=1, default=str), encoding="utf-8")
+        if not result.ok:
+            raise ApplyError("The redesigned copy did not verify, so it was not kept as a result: "
+                             + "; ".join(result.problems)[:800])
+        if run.source_sha256 != source_sha:
+            raise ApplyStale("The drawing changed while it was being made: it was not published.")
+        dest = _unique_output(folder, drawing, source_sha, apply_id)
+        staged = _stage(Path(run.copy), dest)        # the slow copy, before the lock (U2M5-02/04)
+        try:
+            # the last check: none inside the lock, which another connection could need (U2M5-03)
+            check()
+            # Publication is one short serialized transaction: the final
+            # snapshot compare, the no-overwrite rename and the state
+            # transition, nothing else. An approval PATCH the 409 guard let
+            # through waits here (RDM2-R1).
+            published = False
             try:
-                os.makedirs(document_control._os_path(target.parent), exist_ok=True)
-                with open(platform_copy, "rb") as src, open(document_control._os_path(target), "wb") as out:
-                    out.write(src.read())
-                relative = f"{FOLDER}/{name}"
-            except OSError as exc:
-                log.warning("The redesigned drawing could not be filed in the project folder: %s", exc)
-        row.output_status, row.output_path, row.output_relative = "made", str(platform_copy), relative
-        row.output_at, row.output_changes = utc_now(), len(cad_changes)
+                row = _locked_publish_row(db, row.id)
+                if _snapshot(row, row.source_sha256) != snap:
+                    raise ApplyStale("Approvals or placings changed while the drawing was being made: it was not "
+                                     "published. Check the changes and make the drawing again.")
+                _finalize(staged, dest)
+                published = True
+                relative = dest.relative_to(storage.uploads_root().resolve()).as_posix()
+                row.output_status, row.output_error, row.output_path, row.output_relative = "made", None, relative, None
+                row.output_at, row.output_changes = utc_now(), len(cad_changes)
+                db.commit()
+            except BaseException:
+                db.rollback()
+                if published:
+                    dest.unlink(missing_ok=True)
+                raise
+        finally:
+            staged.unlink(missing_ok=True)
+        # Cleanup and progress reporting happen after the committed result and
+        # cannot turn it into a failed database state.
+        try:
+            Path(run.copy).unlink(missing_ok=True)   # published; the run folder keeps the script, log and checks
+        except OSError:
+            log.warning("Could not remove the published run copy %s", run.copy, exc_info=True)
+        if progress:
+            try:
+                progress(3, 3, "Made and checked")
+            except Exception:  # noqa: BLE001
+                log.warning("Could not report final Apply progress", exc_info=True)
+        return {"file": dest.name, "path": relative, "changes": len(cad_changes), "drawing_id": drawing_id,
+                "fingerprint": snap["content"], "source_sha256": source_sha, "apply_id": apply_id,
+                "run": Path(run.work).relative_to(storage.uploads_root().resolve()).as_posix(),
+                "inserts": run.expected_inserts, "erases": run.expected_erases}
+    except (jobs.Cancelled, jobs.Interrupted) as exc:
+        db.rollback()
+        row = state(db, project, drawing_id)
+        row.output_status = "cancelled" if isinstance(exc, jobs.Cancelled) else "interrupted"
+        row.output_error = "Cancelled: nothing was published; the run's log is kept." if isinstance(exc, jobs.Cancelled) \
+            else "Interrupted when the worker stopped: nothing was published."
         db.commit()
-        return {"file": name, "filed": relative, "changes": len(cad_changes)}
+        raise
     except Exception as exc:
         db.rollback()
         row = state(db, project, drawing_id)
-        row.output_status, row.output_error = "failed", str(exc)[:1000]
+        # the attempt's state only: an earlier valid copy (output_path, output_at) stays downloadable
+        row.output_status = "stale" if isinstance(exc, ApplyStale) else "failed"
+        row.output_error = str(exc)[:1000]
         db.commit()
         raise
+
+
+def sweep_orphans(db: Session, *, older_than_s: float = 900.0) -> dict:
+    """Outputs a crash left behind (U2M5-04): a staged copy (".<name>.part")
+    is never a result and is removed; a final-named output no redesign and
+    no succeeded Apply refers to (a stop between the rename and the commit)
+    is moved to redesign/orphaned/ -- never deleted, never published. Only
+    files older than `older_than_s`, and never for a project an Apply is
+    running or queued for. Returns what was done."""
+    from app.models import BackgroundJob
+    from app.services.jobs import ACTIVE
+
+    done = {"parts_removed": 0, "outputs_moved": 0}
+    root = storage.uploads_root()
+    if not root.is_dir():
+        return done
+    cutoff = datetime.now().timestamp() - older_than_s
+    for folder in root.glob("EP-*/redesign"):
+        if not folder.is_dir():
+            continue
+        ep = folder.parent.name[len("EP-"):]
+        project = db.query(Project).filter(Project.ep_number == ep).first()
+        if project is not None and db.query(BackgroundJob).filter(
+                BackgroundJob.project_id == project.id, BackgroundJob.kind == KIND_APPLY,
+                BackgroundJob.status.in_(ACTIVE)).first() is not None:
+            continue
+        referenced: set[Path] = set()
+        if project is not None:
+            for (stored,) in db.query(ProjectRedesign.output_path).filter(ProjectRedesign.project_id == project.id):
+                path = output_file_for(stored, ep)
+                if path is not None:
+                    referenced.add(path)
+            for (result,) in db.query(BackgroundJob.result).filter(
+                    BackgroundJob.project_id == project.id, BackgroundJob.kind == KIND_APPLY,
+                    BackgroundJob.status == "succeeded"):
+                path = output_file_for((result or {}).get("path"), ep)
+                if path is not None:
+                    referenced.add(path)
+        for path in list(folder.iterdir()):
+            try:
+                if not path.is_file() or path.stat().st_mtime > cutoff:
+                    continue
+                if path.name.startswith(".") and path.name.endswith(PART):
+                    path.unlink()
+                    done["parts_removed"] += 1
+                elif OUTPUT_NAME.search(path.name) and path.resolve() not in referenced:
+                    target = folder / ORPHANED / path.name
+                    if target.exists():
+                        log.warning("An orphaned output named %s is already set aside: %s left as it is",
+                                    path.name, path)
+                        continue
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    os.replace(path, target)
+                    done["outputs_moved"] += 1
+            except OSError:
+                log.warning("Could not sweep %s", path, exc_info=True)
+    if done["parts_removed"] or done["outputs_moved"]:
+        log.info("Redesign outputs swept: %s", done)
+    return done
+
+
+# --- publication into the project archive: the engineer's separate action (OD-15 a) ------
+
+
+def _verified_job(db: Session, project: Project, drawing_id: int, path: Path):
+    """The succeeded Apply job that made and verified this output, or None:
+    only such an output may go into the archive."""
+    from app.models import BackgroundJob
+
+    jobs_ = (db.query(BackgroundJob)
+             .filter(BackgroundJob.project_id == project.id, BackgroundJob.kind == KIND_APPLY,
+                     BackgroundJob.status == "succeeded")
+             .order_by(BackgroundJob.id.desc()).all())
+    for job in jobs_:
+        result = job.result or {}
+        if result.get("drawing_id") != drawing_id or output_file_for(result.get("path"), project.ep_number) != path:
+            continue
+        checks = output_file_for(f"{result.get('run')}/verification.json", project.ep_number) if result.get("run") else None
+        try:
+            ok = checks is not None and json.loads(checks.read_text(encoding="utf-8")).get("ok") is True
+        except (OSError, ValueError):
+            ok = False
+        if ok:
+            return job
+    return None
+
+
+def publish(db: Session, project: Project, drawing_id: int, user, output: str | None = None) -> dict:
+    """A verified platform copy put into the project archive
+    (<source folder>/03- Drawings/Redesign) by the engineer, under its own
+    unique name: refused when that name is already there -- nothing is ever
+    overwritten -- and recorded (who, when, which file, its hash) as an
+    activity event (OD-15 a). `output`: the copy as the redesign stored it;
+    the current one when not given."""
+    from app.services import activity, document_control
+
+    drawing = db.get(ProjectIfcDrawing, drawing_id)
+    if drawing is None or drawing.project_id != project.id:
+        raise PublishRefused("That drawing is not this project's", 404)
+    row = state(db, project, drawing_id)
+    stored = output or row.output_path
+    if not stored:
+        raise PublishRefused("No redesigned copy has been made to publish.")
+    path = output_file_for(stored, project.ep_number)
+    if path is None:
+        raise PublishRefused("That redesigned copy is not on this PC.", 404)
+    job = _verified_job(db, project, drawing_id, path)
+    if job is None:
+        raise PublishRefused("Only a copy Apply made and verified can be published to the project archive.")
+    if not project.source_folder_path:
+        raise PublishRefused("The project has no archive folder to publish to.")
+    folder = Path(project.source_folder_path) / FOLDER
+    target = folder / path.name
+    if os.path.exists(document_control._os_path(target)):
+        raise PublishRefused(f"{FOLDER}/{path.name} is already in the project archive: nothing was overwritten.", 409)
+    os.makedirs(document_control._os_path(folder), exist_ok=True)
+    final = Path(document_control._os_path(target))
+    created = False
+    try:
+        staged = _stage(path, final)                 # beside the final name: ".<name>.part"
+        try:
+            _finalize(staged, final)
+            created = True
+        finally:
+            staged.unlink(missing_ok=True)
+        sha = cad._sha(final)
+        if sha != cad._sha(path):
+            raise PublishRefused("The archive copy does not match the verified copy: it was removed.")
+        relative = f"{FOLDER}/{path.name}"
+        if output_file_for(row.output_path, project.ep_number) == path:
+            row.output_relative = relative          # the current copy: said on the page as published separately
+        at = utc_now()
+        activity.record(db, user, "redesign.published",
+                        f"Published {path.name} to the project archive ({FOLDER})", project=project,
+                        entity_type="ifc_drawing", entity_id=drawing.id,
+                        detail={"output": path.relative_to(storage.uploads_root().resolve()).as_posix(),
+                                "archive": relative, "sha256": sha, "job_id": job.id}, commit=False)
+        db.commit()
+    except ApplyError as exc:
+        # the name was taken between the look and the rename: nothing overwritten, nothing made
+        db.rollback()
+        raise PublishRefused(f"{FOLDER}/{path.name} is already in the project archive: nothing was overwritten.",
+                             409) from exc
+    except BaseException:
+        db.rollback()
+        if created:
+            final.unlink(missing_ok=True)            # ours, made just now, and not recorded: not left behind
+        raise
+    return {"file": path.name, "archive": relative, "sha256": sha, "by": getattr(user, "id", None),
+            "at": at.isoformat(), "job_id": job.id}
 
 
 # --- the page ---------------------------------------------------------------------------
@@ -1629,11 +2209,15 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
     changes = []
     for c in row.changes or []:
         out = {k: v for k, v in c.items() if k not in ("ai",)}
-        residual = c.get("residual")
         out["coordinated"] = bool(c.get("coordinated"))
         out["drawn"] = _drawn(c)
-        out["confirm"] = bool(c.get("insert") and c["action"] == "add" and not c.get("moved")
-                              and residual is not None and residual > CONFIRM_ABOVE_M)
+        out["requires_confirmation"] = requires_confirmation(c)
+        out["confirmed"] = c.get("confirmed") is True
+        # the spot still to be confirmed by the engineer before it can be drawn (RD-M2)
+        out["confirm"] = out["requires_confirmation"] and not out["confirmed"]
+        # an orchestrator reject/check holds the change until the engineer approves it
+        out["held"] = c["status"] not in ("approved", "skipped") and (c.get("check") or {}).get("verdict") in (
+            "reject", "check")
         changes.append(out)
     counts = Counter(c["status"] for c in changes)
     return {
@@ -1643,10 +2227,15 @@ def view(db: Session, project: Project, drawing_id: int) -> dict:
         "started_at": row.started_at.isoformat() if row.started_at else None,
         "finished_at": row.finished_at.isoformat() if row.finished_at else None,
         "changes": changes, "symbols": [{k: s[k] for k in ("id", "name", "code", "block", "count")} for s in row.symbols or []],
-        "counts": {k: counts.get(k, 0) for k in ("pending", "proposed", "approved", "skipped", "failed")},
+        "counts": {**{k: counts.get(k, 0) for k in ("pending", "proposed", "approved", "skipped", "failed")},
+                   "drawn": sum(1 for c in changes if c["drawn"])},
         "run": row.run, "agents_on": prep_ai_on(),
+        # the last attempt's state, and the last copy made: a failed, stale or refused
+        # attempt leaves the earlier copy downloadable (`available`, U2M5-09);
+        # `relative`: where the engineer published it in the project archive (OD-15 a)
         "output": {"status": row.output_status, "error": row.output_error, "relative": row.output_relative,
-                   "file": Path(row.output_path).name if row.output_path else None,
+                   "file": PureWindowsPath(row.output_path).name if row.output_path else None,
+                   "available": last_output(row, project) is not None,
                    "at": row.output_at.isoformat() if row.output_at else None, "changes": row.output_changes},
         "folder": FOLDER,
         # whether the drawing can go to the draftsman now, and every engineering check still open
