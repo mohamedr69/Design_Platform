@@ -208,9 +208,14 @@ def test_interface_modules_are_the_samples_blocks_as_big_on_paper_and_drawn_only
     assert R._for({"tag": "B3-SEF-3"}, "Tag Not Identified") == "B3-SEF-3"
     assert R._for({"tag": "Tag Not Identified", "description": 'Zone Control Valve (drawn: "\u00d8150 ZCV")',
                    "equipment": "Zone Control Valve"}, "Tag Not Identified") == "ZCV"
-    # proposed review changes are drawn; proposed modules wait for the engineer
+    # only what the engineer approved is drawn: a proposed change, review or
+    # module, waits for the engineer, as do pending and skipped ones
     placed = {"insert": {"block": "CR"}, "remove": None}
-    assert R._drawn({**placed, "status": "proposed"})
+    assert R._drawn({**placed, "status": "approved"})
+    assert not R._drawn({**placed, "status": "proposed"})
+    assert not R._drawn({**placed, "status": "pending"})
+    assert not R._drawn({**placed, "status": "skipped"})
+    assert not R._drawn({"insert": None, "remove": None, "status": "approved"})
     assert not R._drawn({**placed, "status": "proposed", "source": "interface"})
     assert R._drawn({**placed, "status": "approved", "source": "interface"})
     # the engineer's word on a module survives bringing the schedule in again
