@@ -1,0 +1,2382 @@
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+......................................................s................. [ 15%]
+........................F............................................... [ 19%]
+......ssssssssssssss...............s..........................sssssss... [ 23%]
+........................................................................ [ 27%]
+........................................................................ [ 31%]
+..............................................sss.....FEEEEEEEEEEEEEEEEE [ 35%]
+EEEEEEEEEE.F............................................................ [ 39%]
+...........F............................................................ [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 51%]
+........................................................................ [ 55%]
+......................s................................................. [ 59%]
+........................................................................ [ 63%]
+......................................................F..F.............. [ 67%]
+........................................................................ [ 71%]
+..........................F............................................. [ 75%]
+........................................................s............... [ 79%]
+........................................................................ [ 83%]
+................s....................................................... [ 87%]
+.......................................F..F............................s [ 91%]
+........................................................................ [ 94%]
+........................................................................ [ 98%]
+...sssss...........                                                      [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_scan_indexes_every_ep_folder_and_never_descends_into_one _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...indexes_every_ep_fol0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_indexes_every_ep_fol0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_scan_indexes_every_ep_fol0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_indexes_every_ep_fol0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_scan_indexes_every_ep_fol0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6139072C0>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_scan_indexes_every_ep_fol0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_indexes_every_ep_fol0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_scan_stores_paths_below_the_root_so_the_index_is_not_one_users _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...stores_paths_below_t0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_stores_paths_below_t0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_scan_stores_paths_below_t0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_stores_paths_below_t0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_scan_stores_paths_below_t0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A616342600>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_scan_stores_paths_below_t0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_scan_stores_paths_below_t0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_the_same_archive_under_another_profile_reuses_the_index _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ame_archive_under_an0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_same_archive_under_an0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_same_archive_under_an0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_same_archive_under_an0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_same_archive_under_an0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A621C7A780>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_same_archive_under_an0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_same_archive_under_an0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_rescanning_adds_the_new_folder_and_leaves_the_rest_alone _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...nning_adds_the_new_f0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_rescanning_adds_the_new_f0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_rescanning_adds_the_new_f0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_rescanning_adds_the_new_f0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_rescanning_adds_the_new_f0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E50D790>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_rescanning_adds_the_new_f0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_rescanning_adds_the_new_f0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_a_removed_folder_is_kept_as_history_and_stops_being_suggested _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...oved_folder_is_kept_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_removed_folder_is_kept_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_removed_folder_is_kept_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_removed_folder_is_kept_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_removed_folder_is_kept_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A612703080>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_removed_folder_is_kept_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_removed_folder_is_kept_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+__ ERROR at setup of test_a_scan_that_read_nothing_concludes_nothing_is_gone __
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...n_that_read_nothing_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_read_nothing_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_scan_that_read_nothing_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_read_nothing_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_scan_that_read_nothing_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A613051400>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_scan_that_read_nothing_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_read_nothing_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_one_unreadable_folder_does_not_hold_the_rest_of_the_index_back _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...nreadable_folder_doe0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_one_unreadable_folder_doe0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_one_unreadable_folder_doe0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_one_unreadable_folder_doe0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_one_unreadable_folder_doe0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60EDBB410>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_one_unreadable_folder_doe0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_one_unreadable_folder_doe0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+____ ERROR at setup of test_a_folder_that_comes_back_is_the_same_row_again ____
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...der_that_comes_back_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_folder_that_comes_back_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_folder_that_comes_back_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_folder_that_comes_back_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_folder_that_comes_back_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6177B3FB0>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_folder_that_comes_back_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_folder_that_comes_back_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_suggests_while_the_number_is_still_being_typed _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_suggests_while_the0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_suggests_while_the0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_suggests_while_the0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_suggests_while_the0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_suggests_while_the0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6124ACD40>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_suggests_while_the0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_suggests_while_the0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_reads_the_ep_prefix_the_way_it_is_typed[EP-294] _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_reads_the_ep_prefi0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_reads_the_ep_prefi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E2063F0>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_reads_the_ep_prefix_the_way_it_is_typed[ep 294] _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_reads_the_ep_prefi1/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi1\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi1/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi1\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_reads_the_ep_prefi1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E0BFC50>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi1/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi1\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_reads_the_ep_prefix_the_way_it_is_typed[EP294] _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_reads_the_ep_prefi2/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi2\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi2/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi2\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_reads_the_ep_prefi2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A617CAA930>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi2/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi2\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_reads_the_ep_prefix_the_way_it_is_typed[ 294 ] _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_reads_the_ep_prefi3/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi3\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi3/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi3\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_reads_the_ep_prefi3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A61201E540>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_reads_the_ep_prefi3/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_reads_the_ep_prefi3\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+__________ ERROR at setup of test_search_finds_a_project_by_its_name __________
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_finds_a_project_by0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_finds_a_project_by0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_finds_a_project_by0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_finds_a_project_by0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_finds_a_project_by0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A61201E3F0>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_finds_a_project_by0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_finds_a_project_by0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_says_when_the_platform_already_has_the_project _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_says_when_the_plat0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_says_when_the_plat0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_says_when_the_plat0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_says_when_the_plat0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_says_when_the_plat0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A619863650>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_says_when_the_plat0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_says_when_the_plat0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_search_ignores_a_query_too_short_to_narrow_anything __
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_ignores_a_query_to0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_ignores_a_query_to0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_ignores_a_query_to0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_ignores_a_query_to0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_ignores_a_query_to0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A619523020>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_ignores_a_query_to0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_ignores_a_query_to0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+__________ ERROR at setup of test_search_puts_the_exact_number_first __________
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...h_puts_the_exact_num0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_puts_the_exact_num0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_puts_the_exact_num0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_puts_the_exact_num0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_search_puts_the_exact_num0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A612333590>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_search_puts_the_exact_num0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_search_puts_the_exact_num0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_the_search_endpoint_serves_suggestions_to_anyone_signed_in _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...earch_endpoint_serve0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_search_endpoint_serve0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_search_endpoint_serve0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_search_endpoint_serve0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_search_endpoint_serve0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A616164470>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_search_endpoint_serve0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_search_endpoint_serve0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_____ ERROR at setup of test_the_status_endpoint_reports_what_is_indexed ______
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...tatus_endpoint_repor0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_status_endpoint_repor0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_status_endpoint_repor0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_status_endpoint_repor0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_status_endpoint_repor0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60EDBB410>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_status_endpoint_repor0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_status_endpoint_repor0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_____ ERROR at setup of test_only_the_project_roles_may_rebuild_the_index _____
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...the_project_roles_ma0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_only_the_project_roles_ma0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_only_the_project_roles_ma0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_only_the_project_roles_ma0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_only_the_project_roles_ma0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E831250>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_only_the_project_roles_ma0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_only_the_project_roles_ma0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_a_search_with_nothing_indexed_suggests_nothing_rather_than_failing _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...rch_with_nothing_ind0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_search_with_nothing_ind0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_search_with_nothing_ind0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_search_with_nothing_ind0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_search_with_nothing_ind0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A613126CF0>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_search_with_nothing_ind0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_search_with_nothing_ind0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_find_project_answers_from_the_index_without_walking __
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...project_answers_from0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_find_project_answers_from0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_find_project_answers_from0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_find_project_answers_from0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_find_project_answers_from0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A617B65C40>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_find_project_answers_from0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_find_project_answers_from0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_a_number_added_since_the_last_scan_is_still_found_and_then_indexed _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ber_added_since_the_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_number_added_since_the_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_number_added_since_the_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_number_added_since_the_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_number_added_since_the_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6125E1460>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_number_added_since_the_0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_number_added_since_the_0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+__ ERROR at setup of test_duplicate_ep_numbers_still_reach_the_folder_picker __
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...cate_ep_numbers_stil0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_duplicate_ep_numbers_stil0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_duplicate_ep_numbers_stil0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_duplicate_ep_numbers_stil0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_duplicate_ep_numbers_stil0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A617A99910>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_duplicate_ep_numbers_stil0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_duplicate_ep_numbers_stil0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_the_refresh_is_due_only_once_the_last_scan_is_old_enough _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...efresh_is_due_only_o0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_refresh_is_due_only_o0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_refresh_is_due_only_o0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_refresh_is_due_only_o0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_refresh_is_due_only_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6133DBB30>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_the_refresh_is_due_only_o0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_the_refresh_is_due_only_o0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ ERROR at setup of test_a_scan_that_trips_on_a_folder_still_paces_the_next_one _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...n_that_trips_on_a_fo0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_trips_on_a_fo0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_scan_that_trips_on_a_fo0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_trips_on_a_fo0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_scan_that_trips_on_a_fo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60DF74C80>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_scan_that_trips_on_a_fo0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_scan_that_trips_on_a_fo0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+__ ERROR at setup of test_a_dry_run_names_the_new_numbers_and_writes_nothing __
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529..._run_names_the_new_n0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2/Scan Document')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_dry_run_names_the_new_n0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2\\Scan Document'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_dry_run_names_the_new_n0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_dry_run_names_the_new_n0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_dry_run_names_the_new_n0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6132BDB20>
+
+    @pytest.fixture()
+    def archive(tmp_path, monkeypatch):
+        """A stand-in archive: two clients, one duplicated EP number, and an
+        internal folder named after another EP number that must not be indexed
+        as a project of its own."""
+        root = tmp_path / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+>       (root / "Client A" / "EP-29495 IVY Garden 2" / "Scan Document").mkdir(parents=True)
+
+tests\test_ep_directory.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1315: in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...ull/test_a_dry_run_names_the_new_n0/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Client A/EP-29495 IVY Garden 2')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_a_dry_run_names_the_new_n0\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Client A\\EP-29495 IVY Garden 2'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+================================== FAILURES ===================================
+_______________ test_the_specification_of_each_system_is_found ________________
+
+client = <starlette.testclient.TestClient object at 0x000001A612E60B30>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_specification_of_each0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E006E40>
+
+    def test_the_specification_of_each_system_is_found(client, tmp_path, monkeypatch):
+        monkeypatch.setattr(settings, "uploads_root", str(tmp_path / "uploads"))
+        _clear_cache()
+        folder = tmp_path / "EP-30784"
+>       _spec(folder / "02- inputs" / "Specification" / "283111 - ADDRESSABLE FIRE DETECTION AND VOICE EVACUATION.pdf", "283111", "ADDRESSABLE FIRE DETECTION AND VOICE EVACUATION")
+
+tests\test_compliance.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_spec_finder.py:44: in _spec
+    return _pdf(path, body)
+tests\test_spec_finder.py:36: in _pdf
+    doc.save(path)
+venv\Lib\site-packages\pymupdf\__init__.py:6644: in save
+    mupdf.pdf_save_document(pdf, filename, opts)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+doc = <pymupdf.mupdf.PdfDocument; proxy of <Swig Object of type 'mupdf::PdfDocument *' at 0x000001A60EDC65F0> >
+filename = 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a...cification_of_each0\\EP-30784\\02- inputs\\Specification\\283111 - ADDRESSABLE FIRE DETECTION AND VOICE EVACUATION.pdf'
+opts = (do_incremental=0 do_pretty=0 do_ascii=0 do_compress=0 do_compress_images=0 do_compress_fonts=0 do_decompress=0 do_gar...utf8= upwd_utf8= do_snapshot=0 do_preserve_metadata=1 do_use_objstms=0 compression_effort=0 do_labels=0 reproducible=0)
+
+    def pdf_save_document(doc, filename, opts):
+        r"""Class-aware wrapper for `::pdf_save_document()`."""
+>       return _mupdf.pdf_save_document(doc, filename, opts)
+E       pymupdf.mupdf.FzErrorSystem: code=2: cannot open file 'C:\Users\moham\AppData\Local\Temp\claude\g--dev--2--dev-ep-platform-merged\d223f746-dc1e-49c3-9577-b38529525a1e\scratchpad\pytest-temp-full\test_the_specification_of_each0\EP-30784\02- inputs\Specification\283111 - ADDRESSABLE FIRE DETEC
+
+venv\Lib\site-packages\pymupdf\mupdf.py:60655: FzErrorSystem
+___ test_directory_upgrade_preserves_existing_project_and_adds_lookup_index ___
+
+self = <sqlalchemy.engine.base.Connection object at 0x000001A61350D850>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001A674DEE6C0>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001A6136172F0>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteDDLCompiler object at 0x000001A613614D10>
+parameters = [()]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001A674DEE6C0>
+cursor = <sqlite3.Cursor object at 0x000001A616153040>
+statement = '\nDROP TABLE users', parameters = ()
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001A6136172F0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError
+
+The above exception was the direct cause of the following exception:
+
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A61214FF80>
+
+    def test_directory_upgrade_preserves_existing_project_and_adds_lookup_index(db_session):
+        user = db_session.query(User).first()
+        project = Project(ep_number="stage1-keep", created_by_id=user.id, project_name="Keep this project")
+        db_session.add(project)
+        db_session.commit()
+        db_session.close()
+        config = Config(str(ALEMBIC_INI))
+        with engine.begin() as connection:
+            config.attributes["connection"] = connection
+>           command.downgrade(config, "c4d5e6f7a8b9")
+
+tests\test_ep_archive_models.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+venv\Lib\site-packages\alembic\command.py:534: in downgrade
+    script.run_env()
+venv\Lib\site-packages\alembic\script\base.py:550: in run_env
+    util.load_python_file(self.dir, "env.py")
+venv\Lib\site-packages\alembic\util\pyfiles.py:114: in load_python_file
+    module = load_module_py(module_id, path)
+venv\Lib\site-packages\alembic\util\pyfiles.py:132: in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+alembic\env.py:68: in <module>
+    run_migrations_online()
+alembic\env.py:51: in run_migrations_online
+    context.run_migrations()
+<string>:8: in run_migrations
+    ???
+venv\Lib\site-packages\alembic\runtime\environment.py:970: in run_migrations
+    self.get_context().run_migrations(**kw)
+venv\Lib\site-packages\alembic\runtime\migration.py:621: in run_migrations
+    step.migration_fn(**kw)
+alembic\versions\f2a8c4e01d76_specific_engineer_roles.py:71: in downgrade
+    with op.batch_alter_table("users", schema=None) as batch:
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:144: in __exit__
+    next(self.gen)
+venv\Lib\site-packages\alembic\operations\base.py:404: in batch_alter_table
+    impl.flush()
+venv\Lib\site-packages\alembic\operations\batch.py:160: in flush
+    batch_impl._create(self.impl)
+venv\Lib\site-packages\alembic\operations\batch.py:457: in _create
+    op_impl.drop_table(self.table)
+venv\Lib\site-packages\alembic\ddl\impl.py:457: in drop_table
+    self._exec(schema.DropTable(table, **kw))
+venv\Lib\site-packages\alembic\ddl\impl.py:252: in _exec
+    return conn.execute(construct, params)
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1418: in execute
+    return meth(
+venv\Lib\site-packages\sqlalchemy\sql\ddl.py:180: in _execute_on_connection
+    return connection._execute_ddl(
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1529: in _execute_ddl
+    ret = self._execute_context(
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+venv\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x000001A674DEE6C0>
+cursor = <sqlite3.Cursor object at 0x000001A616153040>
+statement = '\nDROP TABLE users', parameters = ()
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000001A6136172F0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed
+E       [SQL: 
+E       DROP TABLE users]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+venv\Lib\site-packages\sqlalchemy\engine\default.py:941: IntegrityError
+_____________ test_rebinds_only_existing_relative_project_folders _____________
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529.../test_rebinds_only_existing_rel0/current/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Contractor/EP-40001 Tower')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_rebinds_only_existing_rel0\\current\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Contractor\\EP-40001 Tower'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A616482450>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_rebinds_only_existing_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A613249610>
+
+    def test_rebinds_only_existing_relative_project_folders(db_session, tmp_path, monkeypatch):
+        from app.models import Project, User
+        from app.services import ep_directory
+    
+        archive = tmp_path / "current" / "SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects"
+        present = archive / "Contractor" / "EP-40001 Tower"
+>       present.mkdir(parents=True)
+
+tests\test_ep_directory_rebind.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1316: in mkdir
+    self.mkdir(mode, parents=False, exist_ok=exist_ok)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529.../test_rebinds_only_existing_rel0/current/SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects/Contractor/EP-40001 Tower')
+mode = 511, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 206] The filename or extension is too long: 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a1e\\scratchpad\\pytest-temp-full\\test_rebinds_only_existing_rel0\\current\\SSD FIRE ALARM PROJECTS - Fire Alarm 2021 Projects\\Contractor\\EP-40001 Tower'
+
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1311: FileNotFoundError
+_ test_an_engineer_confirmed_revision_survives_a_new_reading_that_says_otherwise _
+
+client = <starlette.testclient.TestClient object at 0x000001A60C4512E0>
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A614963CB0>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_an_engineer_confirmed_rev0')
+inline = None
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A60E170560>
+
+    def test_an_engineer_confirmed_revision_survives_a_new_reading_that_says_otherwise(client, db_session, tmp_path, inline, monkeypatch):
+        from app.models import ProjectShopDrawing, ShopDrawingRevision
+    
+        folder = tmp_path / "EP-30906"
+        sheet = ("SHOP DRAWING\nDRAWING TITLE:\nGROUND FLOOR PLAN\nDRAWING NO:\nBBY006-GME-SDW-FP-FA-POD-BGF-010002\nREV: 00\n"
+                 "GROUND FLOOR PLAN FIRE ALARM LAYOUT\nFIRE ALARM\n")
+>       path = _pdf(folder / "03- Drawings" / "SD" / "FA" / "05. Ground Floor" / "R0" / "Submitted" / "BBY006-GME-SDW-FP-FA-POD-BGF-010002.pdf", sheet)
+
+tests\test_extraction_m2_review.py:576: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_document_sync.py:67: in _pdf
+    doc.save(path)
+venv\Lib\site-packages\pymupdf\__init__.py:6644: in save
+    mupdf.pdf_save_document(pdf, filename, opts)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+doc = <pymupdf.mupdf.PdfDocument; proxy of <Swig Object of type 'mupdf::PdfDocument *' at 0x000001A6136A9C70> >
+filename = 'C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\g--dev--2--dev-ep-platform-merged\\d223f746-dc1e-49c3-9577-b38529525a...nfirmed_rev0\\EP-30906\\03- Drawings\\SD\\FA\\05. Ground Floor\\R0\\Submitted\\BBY006-GME-SDW-FP-FA-POD-BGF-010002.pdf'
+opts = (do_incremental=0 do_pretty=0 do_ascii=0 do_compress=0 do_compress_images=0 do_compress_fonts=0 do_decompress=0 do_gar...utf8= upwd_utf8= do_snapshot=0 do_preserve_metadata=1 do_use_objstms=0 compression_effort=0 do_labels=0 reproducible=0)
+
+    def pdf_save_document(doc, filename, opts):
+        r"""Class-aware wrapper for `::pdf_save_document()`."""
+>       return _mupdf.pdf_save_document(doc, filename, opts)
+E       pymupdf.mupdf.FzErrorSystem: code=2: cannot open file 'C:\Users\moham\AppData\Local\Temp\claude\g--dev--2--dev-ep-platform-merged\d223f746-dc1e-49c3-9577-b38529525a1e\scratchpad\pytest-temp-full\test_an_engineer_confirmed_rev0\EP-30906\03- Drawings\SD\FA\05. Ground Floor\R0\Submitted\BBY006-
+
+venv\Lib\site-packages\pymupdf\mupdf.py:60655: FzErrorSystem
+____________ test_migrations_build_the_schema_the_models_describe _____________
+
+client = <starlette.testclient.TestClient object at 0x000001A60E2050A0>
+
+    def test_migrations_build_the_schema_the_models_describe(client):
+        """A model change without a migration fails here rather than in the
+        running app, where it shows up as a query against a column that isn't
+        there. The `client` fixture has just built the database by running the
+        migrations; any difference from the models is a missing migration --
+        `alembic revision --autogenerate` writes it."""
+        with engine.connect() as connection:
+            context = MigrationContext.configure(connection, opts={"compare_type": True})
+>           assert compare_metadata(context, Base.metadata) == []
+E           AssertionError: assert [('remove_tab...schema=None))] == []
+E             
+E             Left contains one more item: ('remove_table', Table('_alembic_tmp_project_redesign', MetaData(), Column('id', INTEGER(), table=<_alembic_tmp_projec...ject_redesign>), Column('updated_at', DATETIME(), table=<_alembic_tmp_project_redesign>, nullable=False), schema=None))
+E             Use -v to get more diff
+
+tests\test_migrations.py:15: AssertionError
+______ test_a_data_root_gathers_the_database_uploads_backups_and_caches _______
+
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_data_root_gathers_the_d0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6134ABBF0>
+
+    def test_a_data_root_gathers_the_database_uploads_backups_and_caches(tmp_path, monkeypatch):
+        # The test process sets these for the suite; a fresh Settings must not see them.
+        for name in ("DATABASE_URL", "UPLOADS_ROOT", "CACHE_ROOT", "DATA_ROOT", "BACKUPS_ROOT"):
+            monkeypatch.delenv(name, raising=False)
+        root = tmp_path / "EP Platform"
+        s = Settings(data_root=str(root), secret_key="x")
+        assert s.database_url == "sqlite:///" + (root / "ep_platform.db").as_posix()
+        assert Path(s.uploads_root) == root / "uploads"
+        assert Path(s.cache_root) == root / ".cache"
+        assert Path(s.backups_root) == root / "backups"
+        # Set explicitly, a location is kept as set.
+        s = Settings(data_root=str(root), database_url="sqlite:///elsewhere.db", uploads_root="here", secret_key="x")
+        assert s.database_url == "sqlite:///elsewhere.db" and s.uploads_root == "here"
+        # Without it, nothing moves.
+        s = Settings(secret_key="x")
+>       assert s.data_root is None and s.database_url == "sqlite:///./ep_platform.db" and s.backups_root.endswith("backups")
+E       AssertionError: assert ('G:\\dev (2)\\dev\\ep-platform-merged\\data' is None)
+E        +  where 'G:\\dev (2)\\dev\\ep-platform-merged\\data' = Settings(app_name='Engineering Project Platform', app_tagline='Engineering a Safer Tomorrow', company_name='Al Arabia ...detect=False, compliance_knowledge_import_on_start=False, archive_datasheet_libraries={}, archive_submittal_library='').data_root
+
+tests\test_persistence.py:119: AssertionError
+_ test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it _
+
+client = <starlette.testclient.TestClient object at 0x000001A617C2BCE0>
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A617D0FE90>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_the_part_catalogue_knows_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A632005C70>
+
+    def test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it(client, db_session, tmp_path, monkeypatch):
+        import app.routers.materials as materials_router
+        import app.services.part_catalog as catalog_module
+        from app.services.datasheet_library import DatasheetLibrary
+    
+        edwards = tmp_path / "EST4"
+        menvier = tmp_path / "MENVIER"
+        for path, lines in [
+            (edwards / "01- PANEL" / "01- 4-CPU.pdf", ["4-CPU Central Processor Module"]),
+            (edwards / "01- PANEL" / "3-SDDC2 & 3-SSDC2.pdf", ["Loop controllers"]),
+            (edwards / "02- Initiating Devices" / "China" / "01- SIGA-OSD-FCN.pdf", ["Smoke detector"]),
+            (edwards / "00- submittal" / "EST4 Technical Reference Manual.pdf", ["Manual"]),
+            (menvier / "CTR160CGL2KS-M.pdf", ["Menvier luminaire"]),
+        ]:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            doc = pymupdf.open()
+            doc.new_page().insert_text((40, 50), "\n".join(lines), fontsize=9)
+            doc.save(path)
+            doc.close()
+        libraries = {"EDWARDS": DatasheetLibrary("EDWARDS", edwards), "MENVIER": DatasheetLibrary("MENVIER", menvier)}
+        monkeypatch.setattr(catalog_module, "get_libraries", lambda: libraries)
+        monkeypatch.setattr(materials_router, "get_libraries", lambda: libraries)
+        _login(client)
+        project_id = client.post("/projects", json={
+            "ep_number": "30791", "project_name": "Titania", "design_sheets": [],
+            "systems": [{"name": "Fire Alarm", "brand": "EDWARDS", "method_statement": True, "drawing": True},
+                        {"name": "Emergency Light Monitoring", "brand": "MENVIER", "method_statement": True, "drawing": True}],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[
+            {"system_code": "FAS", "group_heading": "Panel", "catalog_no": "4-CPU", "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "SIGA-PS", "description": "Photoelectric smoke detector", "quantity": "120", "manufacturer": "EDWARDS"},
+            {"system_code": "FAS", "group_heading": "Field", "catalog_no": "12", "description": "GRSW-10", "quantity": "1", "manufacturer": "EDWARDS"},
+        ])
+    
+        numbers = {e.part_no for e in part_catalog.catalog(db_session, "EDWARDS")}
+>       assert {"4-CPU", "3-SDDC2", "3-SSDC2", "SIGA-OSD-FCN", "SIGA-PS"} <= numbers    # datasheet names, the BOQ
+E       AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}
+E         
+E         Extra items in the left set:
+E         '3-SSDC2'
+E         '3-SDDC2'
+E         'SIGA-OSD-FCN'
+
+tests\test_proposed_materials.py:108: AssertionError
+_ test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_register_and_the_log _
+
+client = <starlette.testclient.TestClient object at 0x000001A61AD6E720>
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A6186C55B0>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_built_package_is_filed_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A6186C47A0>
+
+    def test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_register_and_the_log(client, db_session, tmp_path, monkeypatch):
+        """The package goes to 02- Material Submittals/FA/R0/Submitted/, and the tab, the
+        index and the log know it at once -- no scan, no model."""
+        import app.routers.submittal as submittal_router
+        from app.models import DocumentReading, ProjectDocument, ProjectSubmittal
+    
+        library = _library(tmp_path)
+        monkeypatch.setattr(submittal_router, "_submittal_library", lambda: library)
+        monkeypatch.setattr(submittal_router, "get_libraries", lambda *_: {"EDWARDS": _datasheets(tmp_path)})
+        _login_admin(client)
+        root = tmp_path / "EP-30785"
+        root.mkdir()
+        project_id = client.post("/projects", json={
+            "ep_number": "30785", "project_name": "Binghatti Titania", "source_folder_path": str(root), "design_sheets": [],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[{"system_code": "FAS", "group_heading": PANEL, "catalog_no": "4-CPU",
+                                                         "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"}])
+    
+        resp = client.post(f"/projects/{project_id}/submittal/package",
+                           json={"sections": [1, 8], "system_code": "FAS", "revision": "R0"})
+        assert resp.status_code == 200 and resp.content.startswith(b"%PDF")
+        filed = root / "02- Material Submittals" / "FA" / "R0" / "Submitted" / "EP-30785 - Material Submittal - FA - R0.pdf"
+>       assert filed.is_file() and filed.read_bytes() == resp.content
+E       AssertionError: assert (False)
+E        +  where False = is_file()
+E        +    where is_file = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...built_package_is_filed_0/EP-30785/02- Material Submittals/FA/R0/Submitted/EP-30785 - Material Submittal - FA - R0.pdf').is_file
+
+tests\test_submittal_package.py:1167: AssertionError
+_ test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_takes_the_file_with_it _
+
+client = <starlette.testclient.TestClient object at 0x000001A60C84BB90>
+db_session = <sqlalchemy.orm.session.Session object at 0x000001A632015730>
+tmp_path = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529525a1e/scratchpad/pytest-temp-full/test_a_revision_already_prepar0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A65BB591C0>
+
+    def test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_takes_the_file_with_it(client, db_session, tmp_path, monkeypatch):
+        import app.routers.submittal as submittal_router
+        from app.models import ProjectDocument, ProjectSubmittal
+    
+        library = _library(tmp_path)
+        monkeypatch.setattr(submittal_router, "_submittal_library", lambda: library)
+        monkeypatch.setattr(submittal_router, "get_libraries", lambda *_: {"EDWARDS": _datasheets(tmp_path)})
+        _login_admin(client)
+        root = tmp_path / "EP-30786"
+        root.mkdir()
+        project_id = client.post("/projects", json={
+            "ep_number": "30786", "project_name": "Titania", "source_folder_path": str(root), "design_sheets": [],
+        }).json()["id"]
+        client.put(f"/projects/{project_id}/boq", json=[{"system_code": "FAS", "group_heading": PANEL, "catalog_no": "4-CPU",
+                                                         "description": "Central Processor Module", "quantity": "1", "manufacturer": "EDWARDS"}])
+        body = {"sections": [1, 8], "system_code": "FAS", "revision": "R0"}
+        assert client.post(f"/projects/{project_id}/submittal/package", json=body).status_code == 200
+        filed = root / "02- Material Submittals" / "FA" / "R0" / "Submitted" / "EP-30786 - Material Submittal - FA - R0.pdf"
+>       assert filed.is_file()
+E       AssertionError: assert False
+E        +  where False = is_file()
+E        +    where is_file = WindowsPath('C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/d223f746-dc1e-49c3-9577-b38529...revision_already_prepar0/EP-30786/02- Material Submittals/FA/R0/Submitted/EP-30786 - Material Submittal - FA - R0.pdf').is_file
+
+tests\test_submittal_package.py:1266: AssertionError
+============================== warnings summary ===============================
+venv\Lib\site-packages\starlette\testclient.py:40
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_ai_assist.py: 10 warnings
+tests/test_ai_evaluation.py: 6 warnings
+tests/test_ai_sheet_reader.py: 6 warnings
+tests/test_ai_verification.py: 12 warnings
+tests/test_amplifier_calculation.py: 11 warnings
+tests/test_auth.py: 11 warnings
+tests/test_battery_api.py: 21 warnings
+tests/test_boq_candidates.py: 4 warnings
+tests/test_boq_corrections_v2.py: 1 warning
+tests/test_boq_export.py: 5 warnings
+tests/test_boq_extraction_v2.py: 10 warnings
+tests/test_boq_geometry_v2.py: 2 warnings
+tests/test_boq_paste.py: 1 warning
+tests/test_boq_provenance.py: 5 warnings
+tests/test_boq_revisions.py: 9 warnings
+tests/test_boq_selective_v2.py: 7 warnings
+tests/test_boq_verification_v2.py: 4 warnings
+tests/test_calc_integrity.py: 3 warnings
+tests/test_company_library.py: 1 warning
+tests/test_compliance.py: 4 warnings
+tests/test_compliance_ai_autofill.py: 4 warnings
+tests/test_compliance_knowledge.py: 10 warnings
+tests/test_compliance_statements.py: 7 warnings
+tests/test_data_controls.py: 9 warnings
+tests/test_data_location.py: 2 warnings
+tests/test_datasheet_library.py: 6 warnings
+tests/test_design_api.py: 11 warnings
+tests/test_details_check.py: 3 warnings
+tests/test_divisions.py: 3 warnings
+tests/test_document_classification_pilot.py: 9 warnings
+tests/test_document_classification_v2.py: 11 warnings
+tests/test_document_intake.py: 5 warnings
+tests/test_document_sync.py: 12 warnings
+tests/test_draftsman_assignment.py: 1 warning
+tests/test_drawing_log.py: 6 warnings
+tests/test_drawing_prep.py: 4 warnings
+tests/test_drawing_review.py: 5 warnings
+tests/test_drawing_review_outcome.py: 8 warnings
+tests/test_drawings_module.py: 24 warnings
+tests/test_ep_archive_models.py: 6 warnings
+tests/test_ep_directory.py: 27 warnings
+tests/test_ep_directory_rebind.py: 2 warnings
+tests/test_equipment_currents.py: 9 warnings
+tests/test_estimation.py: 2 warnings
+tests/test_extraction_m2_review.py: 8 warnings
+tests/test_extraction_m2_review02.py: 6 warnings
+tests/test_extraction_m2_review03.py: 5 warnings
+tests/test_fa_cases.py: 3 warnings
+tests/test_fa_cases_pdf.py: 6 warnings
+tests/test_fa_efficiency.py: 7 warnings
+tests/test_fa_evidence.py: 36 warnings
+tests/test_fa_interfaces.py: 4 warnings
+tests/test_fa_opus_review.py: 14 warnings
+tests/test_fa_review_fixes.py: 48 warnings
+tests/test_fa_workflow.py: 12 warnings
+tests/test_file_sync_v2.py: 2 warnings
+tests/test_file_sync_v2_processing.py: 14 warnings
+tests/test_floor_aliases.py: 5 warnings
+tests/test_floor_schedule.py: 22 warnings
+tests/test_ifc_boq.py: 1 warning
+tests/test_ifc_platform.py: 14 warnings
+tests/test_ifc_worker_and_ai.py: 37 warnings
+tests/test_ifc_zip_import.py: 2 warnings
+tests/test_job_thread_sessions.py: 1 warning
+tests/test_jobs_and_eligibility.py: 6 warnings
+tests/test_logs_register.py: 6 warnings
+tests/test_m2_review05.py: 1 warning
+tests/test_m2_review05_boq.py: 3 warnings
+tests/test_migrations.py: 1 warning
+tests/test_persistence.py: 2 warnings
+tests/test_power_calculation.py: 4 warnings
+tests/test_prep_readiness.py: 4 warnings
+tests/test_project_directory.py: 1 warning
+tests/test_project_folders.py: 1 warning
+tests/test_project_log_and_drawing_scan.py: 4 warnings
+tests/test_project_state.py: 8 warnings
+tests/test_projects.py: 38 warnings
+tests/test_proposed_materials.py: 14 warnings
+tests/test_provider_honesty.py: 2 warnings
+tests/test_rbac.py: 35 warnings
+tests/test_reextraction.py: 20 warnings
+tests/test_repair_tool.py: 3 warnings
+tests/test_review_duplicates_and_concurrency.py: 4 warnings
+tests/test_review_fixes.py: 11 warnings
+tests/test_review_production.py: 5 warnings
+tests/test_sample_request.py: 3 warnings
+tests/test_schedule_materials.py: 3 warnings
+tests/test_scoped_drawing_review.py: 9 warnings
+tests/test_shop_boq.py: 1 warning
+tests/test_stale_writes.py: 2 warnings
+tests/test_submittal.py: 13 warnings
+tests/test_submittal_one_per_system.py: 4 warnings
+tests/test_submittal_package.py: 51 warnings
+tests/test_sync_worker.py: 7 warnings
+tests/test_transmittals.py: 1 warning
+tests/test_user_activity.py: 10 warnings
+tests/test_user_delete.py: 6 warnings
+tests/test_worker_runtime.py: 3 warnings
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_document_classification_pilot.py::test_a_classification_write_that_fails_in_the_database_leaves_the_sync_and_its_session_whole
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\tests\test_document_classification_pilot.py:63: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    assert db_session.query(Project).get(project_id).ep_number == "30930"
+
+tests/test_submittal_one_per_system.py::test_the_migration_merges_a_brands_register_rows_and_keeps_each_brand
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: G:\dev (2)\dev\ep-platform-merged\ep-platform\docs\milestones\M4\evidence\tests-2026-10-07-windows\full-suite.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_compliance.py::test_the_specification_of_each_system_is_found
+FAILED tests/test_ep_archive_models.py::test_directory_upgrade_preserves_existing_project_and_adds_lookup_index
+FAILED tests/test_ep_directory_rebind.py::test_rebinds_only_existing_relative_project_folders
+FAILED tests/test_extraction_m2_review.py::test_an_engineer_confirmed_revision_survives_a_new_reading_that_says_otherwise
+FAILED tests/test_migrations.py::test_migrations_build_the_schema_the_models_describe
+FAILED tests/test_persistence.py::test_a_data_root_gathers_the_database_uploads_backups_and_caches
+FAILED tests/test_proposed_materials.py::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it
+FAILED tests/test_submittal_package.py::test_a_built_package_is_filed_in_the_project_folder_and_entered_in_the_register_and_the_log
+FAILED tests/test_submittal_package.py::test_a_revision_already_prepared_is_refused_unless_replaced_and_deleting_takes_the_file_with_it
+ERROR tests/test_ep_directory.py::test_scan_indexes_every_ep_folder_and_never_descends_into_one
+ERROR tests/test_ep_directory.py::test_scan_stores_paths_below_the_root_so_the_index_is_not_one_users
+ERROR tests/test_ep_directory.py::test_the_same_archive_under_another_profile_reuses_the_index
+ERROR tests/test_ep_directory.py::test_rescanning_adds_the_new_folder_and_leaves_the_rest_alone
+ERROR tests/test_ep_directory.py::test_a_removed_folder_is_kept_as_history_and_stops_being_suggested
+ERROR tests/test_ep_directory.py::test_a_scan_that_read_nothing_concludes_nothing_is_gone
+ERROR tests/test_ep_directory.py::test_one_unreadable_folder_does_not_hold_the_rest_of_the_index_back
+ERROR tests/test_ep_directory.py::test_a_folder_that_comes_back_is_the_same_row_again
+ERROR tests/test_ep_directory.py::test_search_suggests_while_the_number_is_still_being_typed
+ERROR tests/test_ep_directory.py::test_search_reads_the_ep_prefix_the_way_it_is_typed[EP-294]
+ERROR tests/test_ep_directory.py::test_search_reads_the_ep_prefix_the_way_it_is_typed[ep 294]
+ERROR tests/test_ep_directory.py::test_search_reads_the_ep_prefix_the_way_it_is_typed[EP294]
+ERROR tests/test_ep_directory.py::test_search_reads_the_ep_prefix_the_way_it_is_typed[ 294 ]
+ERROR tests/test_ep_directory.py::test_search_finds_a_project_by_its_name - F...
+ERROR tests/test_ep_directory.py::test_search_says_when_the_platform_already_has_the_project
+ERROR tests/test_ep_directory.py::test_search_ignores_a_query_too_short_to_narrow_anything
+ERROR tests/test_ep_directory.py::test_search_puts_the_exact_number_first - F...
+ERROR tests/test_ep_directory.py::test_the_search_endpoint_serves_suggestions_to_anyone_signed_in
+ERROR tests/test_ep_directory.py::test_the_status_endpoint_reports_what_is_indexed
+ERROR tests/test_ep_directory.py::test_only_the_project_roles_may_rebuild_the_index
+ERROR tests/test_ep_directory.py::test_a_search_with_nothing_indexed_suggests_nothing_rather_than_failing
+ERROR tests/test_ep_directory.py::test_find_project_answers_from_the_index_without_walking
+ERROR tests/test_ep_directory.py::test_a_number_added_since_the_last_scan_is_still_found_and_then_indexed
+ERROR tests/test_ep_directory.py::test_duplicate_ep_numbers_still_reach_the_folder_picker
+ERROR tests/test_ep_directory.py::test_the_refresh_is_due_only_once_the_last_scan_is_old_enough
+ERROR tests/test_ep_directory.py::test_a_scan_that_trips_on_a_folder_still_paces_the_next_one
+ERROR tests/test_ep_directory.py::test_a_dry_run_names_the_new_numbers_and_writes_nothing
+9 failed, 1748 passed, 35 skipped, 855 warnings, 27 errors in 1605.69s (0:26:45)
