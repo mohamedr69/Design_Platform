@@ -1,0 +1,145 @@
+{
+ "task": "ORCH-041 (U2-M5-LOW-FIXES), ep-implementer, Claude Opus 5.5",
+ "generated_at_utc": "2026-10-08T00:07:50+00:00",
+ "base": {
+  "branch": "roadmap/u2",
+  "commit": "48fe702955329fb8114ee18bf33916d7b8afed13",
+  "contains": [
+   "fcc5ddd (M5 merge)",
+   "f95a3f4 (M8 merge)"
+  ]
+ },
+ "branch": "task/m5-low-fixes",
+ "implementation_commit": "a19b61e448d56e8f86e55eb8c2bc32fbba87f6be",
+ "interpreter": {
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B",
+  "python": "3.12.10",
+  "sqlite": "3.49.1",
+  "sqlalchemy": "2.0.36",
+  "pytest": "8.3.4"
+ },
+ "pytest_flags": "-p no:cacheprovider --basetemp=C:/t/tmp/m5b/bt (TEMP/TMP=C:/t/tmp/m5b/tmp)",
+ "times_utc": {
+  "worktree_created": "2026-10-07T23:10Z (approx.)",
+  "before_fix_start": "2026-10-07T23:18:00Z",
+  "before_fix_end": "2026-10-07T23:18:53Z",
+  "tsc": "2026-10-07T23:25:15Z",
+  "targeted_start": "2026-10-07T23:26:26Z",
+  "targeted_end": "2026-10-07T23:31:23Z",
+  "full_start": "2026-10-07T23:31:23Z",
+  "full_end": "2026-10-08T00:07:12Z"
+ },
+ "commands": [
+  "git -C roadmap-u2 rev-parse HEAD -> 48fe702; git -C roadmap-u2 worktree add -b task/m5-low-fixes wt-m5b HEAD",
+  "before fix (code of 48fe702 + the new tests, uncommitted): python -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m5b/bt tests/test_redesign_apply.py -k '<the 11 new tests>' --junitxml=before-fix.xml -q -rf > before-fix.log",
+  "git commit (a19b61e)",
+  "tsc: see tsc-frontend.txt",
+  "sh scripts/run_evidence.sh (targeted: pytest -p no:cacheprovider --basetemp=C:/t/tmp/m5b/bt tests/test_redesign_apply.py tests/test_redesign.py tests/test_drawing_prep.py tests/test_prep_readiness.py; full: AI_ENABLED=false DATA_ROOT= pytest tests -q -rs -p no:cacheprovider --basetemp=C:/t/tmp/m5b/bt)",
+  "python -B scripts/compare.py (full-suite-comparison.json)",
+  "python -B scripts/manifest.py <spec> (this file)"
+ ],
+ "changed_files": {
+  "backend/app/redesign/service.py": {
+   "git_blob": "bfa3a756a1b7eacec60b88ccc119b397e3b1d7bc",
+   "sha256_committed": "dfd5ade7f4f0670666bce94ffce26a484c28d73245e9ef92a24b0848716a0831",
+   "bytes_committed": 132397,
+   "crlf_committed": false,
+   "bom_committed": false
+  },
+  "backend/app/workers/ifc_worker.py": {
+   "git_blob": "d7463f48b04115a4bc628e0c8a87f9a3701e3460",
+   "sha256_committed": "ac350cc51a6de4a9a6450456b9641b7ab3dcd9ca0486051f25b129af7bb7bd0f",
+   "bytes_committed": 5096,
+   "crlf_committed": false,
+   "bom_committed": false
+  },
+  "backend/tests/test_redesign_apply.py": {
+   "git_blob": "278d3e1c2dca84f29ea3d399beabc0cbc07e07a5",
+   "sha256_committed": "25bc15e911b452f585c8bc9fc3bce13ddc569bf5df66f62a5b2b05ab07f40e0e",
+   "bytes_committed": 78755,
+   "crlf_committed": false,
+   "bom_committed": false
+  },
+  "frontend/src/components/prep/RedesignPanel.tsx": {
+   "git_blob": "1b3665a30f59a92367db527751d78e6f7862aa76",
+   "sha256_committed": "d89d162e6689a1aae6774cbaa928585f0855b89f484cd36a0de0f0e62bf91191",
+   "bytes_committed": 32486,
+   "crlf_committed": false,
+   "bom_committed": false
+  },
+  "frontend/src/components/prep/types.ts": {
+   "git_blob": "3dd77915b55cc3b4f1193790f3c2372cc9fe3d72",
+   "sha256_committed": "ad5b133883db60b1669eb335ba81c45193c22eed47a4b3f58d60afce1eda810f",
+   "bytes_committed": 5337,
+   "crlf_committed": false,
+   "bom_committed": false
+  }
+ },
+ "protected_files": {
+  "backend/app/redesign/cad.py": {
+   "sha256_impl": "43672b306083c0b362b2b10ce314dfa68ec0304135032a442dc4a67105c8ff00",
+   "sha256_orch039_c274205": "43672b306083c0b362b2b10ce314dfa68ec0304135032a442dc4a67105c8ff00",
+   "byte_equal": true
+  },
+  "backend/app/redesign/verify.py": {
+   "sha256_impl": "449ad1af366e4c3072bcccaea36624e957bf24c9cfd81f8ddcbf02f55e97837a",
+   "sha256_orch039_c274205": "449ad1af366e4c3072bcccaea36624e957bf24c9cfd81f8ddcbf02f55e97837a",
+   "byte_equal": true
+  }
+ },
+ "evidence": {
+  "before-fix.log": {
+   "sha256": "33a2261fd6b3760a817cf375b76a2bd0720ac2aef17d9a27ba1a32cbb315edb7",
+   "bytes": 47160
+  },
+  "before-fix.xml": {
+   "sha256": "d3dda0731842ea8941f50222cbe9ff093ed89a377bb6f3a798655dea8e6b44f3",
+   "bytes": 45954
+  },
+  "full-suite-comparison.json": {
+   "sha256": "4ce4538e7c3783438e5d8efb5f5fca1ad555a807dafc2ff72e18c93caff892ea",
+   "bytes": 2201
+  },
+  "full-suite.log": {
+   "sha256": "7fb4c926be3b95bcc80c802b6c8c68426f62070eaa2478e6bc26c7231c50c7cf",
+   "bytes": 14379
+  },
+  "full-suite.xml": {
+   "sha256": "b2ac9eff12c5c4fe34771f04c43ebbda27cb7c430e6c148c7e4dca28a4b0ff42",
+   "bytes": 260857
+  },
+  "runs.txt": {
+   "sha256": "89fd48d6676031995ba872add8e695865c2f74590bf5c626d94a387fa7af0b93",
+   "bytes": 206
+  },
+  "scripts/compare.py": {
+   "sha256": "466b24b5988428d3f0cc1036a3845550182781c80d4671dd54c518c12092072c",
+   "bytes": 3355
+  },
+  "scripts/manifest.py": {
+   "sha256": "4cb132c4a01d5894d3af6b9b8dddead7f330744061c5756a0288ab64b496637a",
+   "bytes": 3820
+  },
+  "scripts/run_evidence.sh": {
+   "sha256": "123532a3fd24c63eca8918bf2afe75673ca964c66b8928da9abf2f8163d00283",
+   "bytes": 1175
+  },
+  "targeted.log": {
+   "sha256": "3f7f2bc1471c6efbb7c5d17411f5352cf09a517d5669305d900a0e7fd306d152",
+   "bytes": 1359
+  },
+  "targeted.xml": {
+   "sha256": "aab2292b3fab8673ed49d78c5efb2e8d80204080865b3ddaf954e78081c3ffad",
+   "bytes": 14897
+  },
+  "tsc-frontend.txt": {
+   "sha256": "2e9df22932f68f3b4dc5f82c3baaf4d2d469e1db17b010085d19b7eb611fa19b",
+   "bytes": 879
+  }
+ },
+ "report": {
+  "path": "docs/milestones/M5/M5-LOW-FIXES-IMPLEMENTATION.md",
+  "sha256": "c52977513f7da694c9f3cd4be631be631475ccc0fb38b368e01fb394e04da992"
+ },
+ "note": "Evidence classes: FUNCTIONAL-MOCKED (stand-in AutoCAD and read-back), SQLITE (real file-backed WAL database, two connections). No REAL-AUTOCAD and no REAL-MODEL claim."
+}

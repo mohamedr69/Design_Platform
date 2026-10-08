@@ -1,0 +1,12 @@
+ORCH-041 frontend type-check, 2026-10-07T23:25:15Z (UTC), on the committed frontend of a19b61e
+(the two changed files, RedesignPanel.tsx and types.ts, as committed).
+
+Junction: wt-m5b/frontend/node_modules -> ep-platform/frontend/node_modules (live clone; package.json and
+package-lock.json byte-equal to the live clone's, checked with cmp). Nothing installed.
+Command (PowerShell, cwd wt-m5b/frontend):
+  node node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit --incremental false
+Exit code: 0
+Output: (none -- 0 errors)
+Junction removed afterwards with `cmd /c rmdir` (Test-Path wt-m5b/frontend/node_modules -> False);
+the live node_modules is intact (Test-Path ep-platform/frontend/node_modules/typescript/bin/tsc -> True).
+Not rendered in a browser: wording checked by test_the_panel_says_a_pre_m5_filing_apart_from_a_publication_and_keeps_the_two_meanings_apart.
