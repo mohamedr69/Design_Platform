@@ -54,10 +54,20 @@ case-insensitive, matched (as `NOT_WALLS`) on the layer's own name: `X-REF_ FILE
   (5 leaders x 18 inserts of `X-REF_PLOT`) into lines, M8 reads only line primitives; (b) wide polylines: v1's
   `make_primitive` indexed the outline of a polyline's width (a zigzag), M8 its centre line (layers "0", -Ext, Ext,
   33-PLOT).
-- New false positive found: 72 segments (119.8 m lines) of the title-frame block `T.FRAM` are drawn on "0" and
+- New false positive found: 72 segments of the title-frame block `T.FRAM` are drawn on "0" and
   inserted on the CCSD file's own layer `06-WALL`, so they inherit a wall layer and are kept. AutoCAD shows them on
   06-WALL too; no rule here removes them. Engineer/owner decision (block-name deny or per-project list).
-- Named-boundary index: base 40,427 m -> M8 43,457 m (deduplicated), 338 columns both, build 87 s -> 17 s.
+  **Correction (ORCH-044, from ORCH-042 U2M8V-01):** the 72 segments total **7,733.5 m** (23.7 % of the 32,625 m
+  kept), not "119.8 m": 119.83 m is one horizontal edge (36 such edges, plus 36 vertical edges of 94.98 m).
+  Same class, smaller: 4 segments (13.9 m) of `X-REF_ DIM_TEXT`'s layer-"0" content on 06-WALL.
+- Named-boundary index: base 40,427 m -> M8 43,457 m (deduplicated), 338 columns both, build 73.1 s -> 13.6 s (the
+  run's own `gc01-vs-rd-m1.json`; "87 s -> 17 s" earlier in this report was wrong, U2M8V-08).
+  **Correction (ORCH-044):** the whole rise is title-frame lines and more: the T.FRAM segments are boundaries too,
+  **72 segments, 7,733.5 m** after deduplication (36 horizontal edges of 119.83 m = 4,314.1 m, which ORCH-042
+  counted, and 36 vertical edges of 94.98 m = 3,419.4 m, which it did not). Without them this index held
+  **35,723.1 m**, 4,703.7 m less than the base, not more. The M8 walk itself (effective layer, visibility) lowered
+  the boundaries; the frame lines alone made the total look higher. Measured by ORCH-044
+  (`evidence/exit-fixes/gc01-exit-fixes.json`, `bounds.attribution_dedup_m`).
   `X-REF_ TAG$0$49-DOOR-TAG` (502 m) still counts as a boundary because the unchanged `BOUND_LAYERS` matches DOOR
   and `NOT_BOUNDS` lacks TAG: pre-existing, left for a later M8 stage.
 
@@ -84,6 +94,23 @@ term, and nothing in redesign reads `Window.twist`. F021 remains open.
   test_fa_cases, test_fa_evidence, test_fa_review_fixes, test_ifc_boq, test_render_bounds: **211 passed, 1 skipped**
   (pre-existing: no DWG converter), 337 s.
 - Full suite (`full-suite.xml`, `full-suite.log`, `full-suite-vs-baseline.json`): **1796 passed, 1 failed, 35 skipped** (1832), 1936 s, 2026-10-07T21:34:39Z-22:07:09Z. Baseline (M4 windows run2): 1782 passed, 2 failed, 35 skipped (1819). Differences by name and message: newly failing none; failing in both with the same message `test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it`; baseline failure now passing `test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches` (it asserts the default data root is None, so it depends on the shell environment -- most likely a data-root variable set in the baseline shell; this change does not touch persistence); 13 new tests (this file); no skip changes; none removed.
+
+## Engineer decisions applied (A-16)
+
+The engineer's decision sheet (`M8-ENGINEER-DECISIONS-2026-10-08.md`, answered by the owner on 8 October 2026,
+register A-16) was implemented by ORCH-044 on `task/m8-exit-fixes` (worktree `wt-m8b`, from `roadmap/u2` at
+`1708692`). Full detail, numbers and runs: `M8-EXIT-FIXES-IMPLEMENTATION.md`.
+
+| # | Decision | Change | Test |
+|---|---|---|---|
+| 1 | B: default-deny `T\.FRAM\|TITLE\|FRAME\|BORDER\|SHEET` block names in the INSERT chain; DIM_TEXT-class inherited content too | `layers.FrameRule`, `settings.prep_frame_blocks` (beside `prep_wall_layers`), `walls.build(deny_blocks=, annotation_blocks=)`, `coverage.build_columns` same; reason `title_frame` | f8; GC-01 golden |
+| 2 | B: AutoCAD rule (off / no-plot hides inherited "0" content only; frozen hides all) | `layers.walk` | f3, f6 (updated, cited), f11 |
+| 3 | A + C: 200 m kept; `$INSUNITS` -> metres before the threshold and the report; unknown unit held | `layers.drawing_units`, `walls.build`, `Walls.held`, `coverage.build_columns`, `prepare.rooms/gate` | u1..u4 |
+| 4 | C: MLINE not read; `mline_unsupported` in the report and the gate | `walls.build`, `Walls.held`, `prepare.rooms/index_state/gate` | f9 |
+| 5 | B: TAG in `NOT_BOUNDS` | `coverage.NOT_BOUNDS` | regex test; GC-01 golden |
+| 6 | A: rotation term in the plot-to-model tie; viewport passed | `review/geometry.py fit/to_model/to_page/sheet_view/fit_sheets`; `service._page`, `service._index_viewport`, `service._walls(sheets=)` | f12 end to end; synthetic pages |
+| 7 | arcs candidates; meshes not read, counted (`mesh_not_read`) | `walls.build`, `coverage.build_columns`, `layers.is_mesh` | f10 |
+| 8 | A: allow-list regex unchanged | none | pin test |
 
 ## Limitations
 

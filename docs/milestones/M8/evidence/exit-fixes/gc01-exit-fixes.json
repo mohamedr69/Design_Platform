@@ -1,0 +1,909 @@
+{
+ "dxf": "G:\\dev (2)\\dev\\ep-platform-merged\\data\\uploads\\EP-30880\\ifc\\60de2a377daa.dxf",
+ "dxf_sha256": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f",
+ "access": "read-only",
+ "walls": {
+  "seconds": 70.9,
+  "rules": {
+   "allow": "^(?!.*(?:TILE|FINISH)).*(?:WALL|PARTITION|CURTAIN|GLASS|GLAZ|SILL)",
+   "deny": "GRID|AXIS|DIM|TEXT|NAME|ANNO|TAG|FURN|CAR|PARK|SYMBOL|FIRE|ALARM|SPK|SPEAKER|LIGHT|\\bEM\\b|-EM|EXIT|SIGN|DOOR|WIN|TITLE|LEVEL|ROOM|HATCH|ARROW|STAIR",
+   "deny_blocks": "T\\.FRAM|TITLE|FRAME|BORDER|SHEET",
+   "annotation_blocks": "DIM|TEXT",
+   "fingerprint": "69d88aa1e65a",
+   "min_length": 0.3,
+   "min_walls_m": 200.0,
+   "kinds": [
+    "ARC",
+    "LINE",
+    "LWPOLYLINE",
+    "POLYLINE"
+   ]
+  },
+  "units": {
+   "insunits": 6,
+   "measurement": 0,
+   "lunits": 2,
+   "unit": "m",
+   "factor_to_m": 1.0,
+   "known": true,
+   "source": "$INSUNITS",
+   "lengths_in": "m"
+  },
+  "sparse": false,
+  "held": null,
+  "totals_before_orch036": {
+   "segments": 1338010,
+   "length_m": 293078.52,
+   "included": 16645,
+   "included_length_m": 32624.974,
+   "excluded": {
+    "below_min_length": 1195138,
+    "deny_listed": 34865,
+    "insert_invisible": 11692,
+    "invisible": 11431,
+    "layer_frozen": 342,
+    "not_allow_listed": 67897
+   },
+   "via_insert": 1335820,
+   "included_via_insert": 16641
+  },
+  "totals_now": {
+   "segments": 1338010,
+   "length_m": 293078.52,
+   "included": 16569,
+   "included_length_m": 24877.578,
+   "excluded": {
+    "below_min_length": 1195138,
+    "deny_listed": 34275,
+    "insert_invisible": 11692,
+    "invisible": 11431,
+    "layer_frozen": 342,
+    "not_allow_listed": 67897,
+    "title_frame": 666
+   },
+   "via_insert": 1335820,
+   "included_via_insert": 16565
+  },
+  "kept_delta": {
+   "segments": -76,
+   "length_m": -7747.396
+  },
+  "title_frame_blocks": {
+   "X-REF_ DIM_TEXT": {
+    "segments": 306,
+    "length_m": 251.711,
+    "layers": {
+     "06-WALL": 4,
+     "X-REF_ DIM_TEXT$0$UNITS TYPES TAG": 302
+    }
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM": {
+    "segments": 360,
+    "length_m": 7875.0,
+    "layers": {
+     "06-WALL": 72,
+     "X-REF_ FILE ALL FLOORS PLANS$0$47-GRID": 288
+    }
+   }
+  },
+  "title_frame_removed_from_kept_by_block": {
+   "X-REF_ DIM_TEXT": {
+    "segments": 4,
+    "length_m": 13.886
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM": {
+    "segments": 72,
+    "length_m": 7733.509
+   }
+  },
+  "title_frame_by_block_and_would_be_reason": {
+   "X-REF_ DIM_TEXT | deny_listed": {
+    "segments": 302,
+    "length_m": 237.825
+   },
+   "X-REF_ DIM_TEXT | kept": {
+    "segments": 4,
+    "length_m": 13.886
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM | deny_listed": {
+    "segments": 288,
+    "length_m": 141.491
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM | kept": {
+    "segments": 72,
+    "length_m": 7733.509
+   }
+  },
+  "title_frame_by_block_layer_reason": {
+   "X-REF_ DIM_TEXT | 06-WALL | kept": {
+    "segments": 4,
+    "length_m": 13.886
+   },
+   "X-REF_ DIM_TEXT | X-REF_ DIM_TEXT$0$UNITS TYPES TAG | deny_listed": {
+    "segments": 302,
+    "length_m": 237.825
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM | 06-WALL | kept": {
+    "segments": 72,
+    "length_m": 7733.509
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM | X-REF_ FILE ALL FLOORS PLANS$0$47-GRID | deny_listed": {
+    "segments": 288,
+    "length_m": 141.491
+   }
+  },
+  "mline_unsupported": {
+   "count": 0,
+   "length_m": 0.0,
+   "hidden": 0,
+   "title_frame": 0,
+   "layers": {}
+  },
+  "mesh_not_read": {
+   "polyface": 0,
+   "polygon_mesh": 0,
+   "on_wall_layers": 0,
+   "layers": {}
+  },
+  "walk": {
+   "entities": 439172,
+   "inserts": 20098,
+   "depth_capped": 0,
+   "self_inserts": 0,
+   "missing_blocks": 0,
+   "unreadable_inserts": 0,
+   "kinds": {
+    "ARC": 52823,
+    "LINE": 117433,
+    "LWPOLYLINE": 101974,
+    "POLYLINE": 34
+   }
+  },
+  "x_ref_plot_a_north": {
+   "segments": 4410,
+   "length_m": 363.423,
+   "included": 0,
+   "included_length_m": 0.0,
+   "excluded": {
+    "below_min_length": 4068,
+    "layer_frozen": 342
+   },
+   "via_insert": 4410,
+   "top_level": 0,
+   "included_via_insert": 0
+  },
+  "layer_changes_vs_orch036": {
+   "06-WALL": {
+    "before": {
+     "included": 95,
+     "included_length_m": 7855.84,
+     "excluded": {
+      "below_min_length": 80
+     }
+    },
+    "now": {
+     "included": 19,
+     "included_length_m": 108.444,
+     "excluded": {
+      "below_min_length": 80,
+      "title_frame": 76
+     }
+    }
+   },
+   "X-REF_ DIM_TEXT$0$UNITS TYPES TAG": {
+    "before": {
+     "included": 0,
+     "included_length_m": 0.0,
+     "excluded": {
+      "below_min_length": 5134,
+      "deny_listed": 302
+     }
+    },
+    "now": {
+     "included": 0,
+     "included_length_m": 0.0,
+     "excluded": {
+      "below_min_length": 5134,
+      "title_frame": 302
+     }
+    }
+   },
+   "X-REF_ FILE ALL FLOORS PLANS$0$47-GRID": {
+    "before": {
+     "included": 0,
+     "included_length_m": 0.0,
+     "excluded": {
+      "deny_listed": 288
+     }
+    },
+    "now": {
+     "included": 0,
+     "included_length_m": 0.0,
+     "excluded": {
+      "title_frame": 288
+     }
+    }
+   }
+  },
+  "included_layers_now": [
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+    10567,
+    15972.95
+   ],
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$11-GLASS-1",
+    3636,
+    3492.694
+   ],
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$S-RETAINING-WALL",
+    234,
+    1792.567
+   ],
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$31-PARAPET-WALL",
+    535,
+    1540.851
+   ],
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$10-SILL",
+    1176,
+    1302.671
+   ],
+   [
+    "X-REF_ FILE ALL FLOORS PLANS$0$12-GLASS-2",
+    402,
+    667.401
+   ],
+   [
+    "06-WALL",
+    19,
+    108.444
+   ]
+  ]
+ },
+ "bounds": {
+  "base_v2_orch036_record": {
+   "columns": 338,
+   "bounds_length_dedup_m": 40426.718
+  },
+  "m8_orch036_record": {
+   "columns": 338,
+   "bounds_length_dedup_m": 43456.556,
+   "bounds_length_m": 44190.664,
+   "hidden": {
+    "invisible": 6838
+   }
+  },
+  "now": {
+   "columns": 338,
+   "bounds_kept": true,
+   "bounds_length_m": 35941.511,
+   "bounds_length_dedup_m": 35221.286,
+   "hidden": {
+    "invisible": 6838,
+    "title_frame": 76
+   },
+   "held": null,
+   "units": {
+    "unit": "m",
+    "factor_to_m": 1.0,
+    "known": true
+   },
+   "mesh_not_read": {
+    "polyface": 0,
+    "polygon_mesh": 0
+   },
+   "seconds": 19.8,
+   "bounds_layers_top": [
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$06-WALL",
+     16629.263
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$08-COLUMN",
+     5670.661
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$11-GLASS-1",
+     3689.088
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$14-DOOR",
+     2639.815
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$10-SILL",
+     2161.915
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$S-RETAINING-WALL",
+     1792.567
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$31-PARAPET-WALL",
+     1549.25
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$S-COL",
+     934.898
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$12-GLASS-2",
+     707.601
+    ],
+    [
+     "06-WALL",
+     110.919
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$DOOR",
+     23.792
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$S-COL-PLANTED",
+     13.6
+    ],
+    [
+     "X-REF_ FILE ALL FLOORS PLANS$0$sh-door",
+     8.632
+    ],
+    [
+     "14-DOOR",
+     8.177
+    ],
+    [
+     "X-REF_LANDSCAPE$0$14-DOOR",
+     1.333
+    ]
+   ]
+  },
+  "frame_rule_off": {
+   "columns": 338,
+   "bounds_kept": true,
+   "bounds_length_m": 43688.907,
+   "bounds_length_dedup_m": 42954.791,
+   "hidden": {
+    "invisible": 6838
+   },
+   "held": null,
+   "units": {
+    "unit": "m",
+    "factor_to_m": 1.0,
+    "known": true
+   },
+   "mesh_not_read": {
+    "polyface": 0,
+    "polygon_mesh": 0
+   },
+   "seconds": 19.7
+  },
+  "tag_still_bound": {
+   "columns": 338,
+   "bounds_kept": true,
+   "bounds_length_m": 36443.269,
+   "bounds_length_dedup_m": 35723.05,
+   "hidden": {
+    "invisible": 6838,
+    "title_frame": 76
+   },
+   "held": null,
+   "units": {
+    "unit": "m",
+    "factor_to_m": 1.0,
+    "known": true
+   },
+   "mesh_not_read": {
+    "polyface": 0,
+    "polygon_mesh": 0
+   },
+   "seconds": 22.0
+  },
+  "attribution_dedup_m": {
+   "frame_rule": 7733.505,
+   "tag": 501.764,
+   "tag_layer_undeduplicated_m": 501.757,
+   "now_vs_base": -5205.432,
+   "now_vs_orch036": -8235.27
+  }
+ },
+ "viewport_fa101": {
+  "handle": "71BF",
+  "viewport": {
+   "handle": "71BF",
+   "layout": "FA 101",
+   "frozen_layers": [
+    "X-REF_PLOT$0$18-DIM",
+    "X-REF_PLOT$0$BUILDING"
+   ],
+   "view_twist_deg": 0.0,
+   "view_center": [
+    732.9910356859118,
+    135.2715844333968
+   ],
+   "view_height": 96.95000213032729
+  },
+  "seconds": 43.5,
+  "kept_model": [
+   16569,
+   24877.578
+  ],
+  "kept_viewport": [
+   16569,
+   24877.578
+  ],
+  "excluded_viewport": {
+   "below_min_length": 1195138,
+   "deny_listed": 33647,
+   "insert_invisible": 11692,
+   "insert_viewport_frozen": 52,
+   "invisible": 11431,
+   "layer_frozen": 342,
+   "not_allow_listed": 66493,
+   "title_frame": 666,
+   "viewport_frozen": 1980
+  },
+  "layers_changed": {}
+ },
+ "fit_f021": {
+  "note": "pages drawn from each sheet's own viewport through ezdxf's model->paper matrix (paper units -> pt by $INSUNITS, y down); the plotted review PDF is under the live uploads and was not read",
+  "points_per_paper_unit": 2834.646,
+  "sheets": {
+   "FA 101": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [
+     "X-REF_PLOT$0$18-DIM",
+     "X-REF_PLOT$0$BUILDING"
+    ],
+    "texts": 400,
+    "before": {
+     "a": 0.061736112467667276,
+     "bx": 662.4392085964699,
+     "by": 215.69760677033008,
+     "pairs": 38,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667276,
+     "bx": 662.4392085964699,
+     "by": 215.69760677033008,
+     "pairs": 38,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 102": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [
+     "X-REF_PLOT$0$18-DIM",
+     "X-REF_PLOT$0$BUILDING"
+    ],
+    "texts": 397,
+    "before": {
+     "a": 0.06173611246766729,
+     "bx": 812.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766729,
+     "bx": 812.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 103": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [
+     "X-REF_PLOT$0$18-DIM",
+     "X-REF_PLOT$0$BUILDING"
+    ],
+    "texts": 418,
+    "before": {
+     "a": 0.06173611246766727,
+     "bx": 962.4392085964693,
+     "by": 215.69760677033008,
+     "pairs": 34,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766727,
+     "bx": 962.4392085964693,
+     "by": 215.69760677033008,
+     "pairs": 34,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 104": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 778,
+    "before": {
+     "a": 0.06173611246766728,
+     "bx": 1112.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 280,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766728,
+     "bx": 1112.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 280,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 105": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 294,
+    "before": {
+     "a": 0.06173611246766729,
+     "bx": 1262.4392085964703,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766729,
+     "bx": 1262.4392085964703,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 106": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 278,
+    "before": {
+     "a": 0.06173611246766727,
+     "bx": 1412.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 32,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766727,
+     "bx": 1412.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 32,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 107": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 279,
+    "before": {
+     "a": 0.06173611246766727,
+     "bx": 1562.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 32,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766727,
+     "bx": 1562.4392085964703,
+     "by": 215.69760677033008,
+     "pairs": 32,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 108": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 289,
+    "before": {
+     "a": 0.061736112467667255,
+     "bx": 1712.4392085964705,
+     "by": 215.69760677033008,
+     "pairs": 30,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667255,
+     "bx": 1712.4392085964705,
+     "by": 215.69760677033008,
+     "pairs": 30,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 109": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 740,
+    "before": {
+     "a": 0.0617361124676673,
+     "bx": 1862.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 42,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.0617361124676673,
+     "bx": 1862.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 42,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 110": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 690,
+    "before": {
+     "a": 0.0617361124676673,
+     "bx": 2012.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.0617361124676673,
+     "bx": 2012.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 34,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 111": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 753,
+    "before": {
+     "a": 0.061736112467667296,
+     "bx": 2162.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 32,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667296,
+     "bx": 2162.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 32,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 112": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 319,
+    "before": {
+     "a": 0.061736112467667276,
+     "bx": 2312.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 20,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667276,
+     "bx": 2312.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 20,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 113": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 255,
+    "before": {
+     "a": 0.061736112467667276,
+     "bx": 2462.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 28,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667276,
+     "bx": 2462.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 28,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 114": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 753,
+    "before": {
+     "a": 0.0617361124676673,
+     "bx": 2612.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 37,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.0617361124676673,
+     "bx": 2612.43920859647,
+     "by": 215.6976067703301,
+     "pairs": 37,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 115": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 768,
+    "before": {
+     "a": 0.06173611246766731,
+     "bx": 2762.43920859647,
+     "by": 215.69760677033014,
+     "pairs": 37,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06173611246766731,
+     "bx": 2762.43920859647,
+     "by": 215.69760677033014,
+     "pairs": 37,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 116": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 764,
+    "before": {
+     "a": 0.061736112467667276,
+     "bx": 2912.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 37,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667276,
+     "bx": 2912.43920859647,
+     "by": 215.69760677033008,
+     "pairs": 37,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 117": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 180,
+    "before": {
+     "a": 0.0617361124676673,
+     "bx": 3062.4392085964696,
+     "by": 215.6976067703301,
+     "pairs": 16,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.0617361124676673,
+     "bx": 3062.4392085964696,
+     "by": 215.6976067703301,
+     "pairs": 16,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 118": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 111,
+    "before": {
+     "a": 0.061736112467667276,
+     "bx": 3212.439208596469,
+     "by": 215.69760677033008,
+     "pairs": 16,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.061736112467667276,
+     "bx": 3212.439208596469,
+     "by": 215.69760677033008,
+     "pairs": 16,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 119": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 731,
+    "before": {
+     "a": 0.06497910199674976,
+     "bx": 3616.5316542611936,
+     "by": 213.77417294024332,
+     "pairs": 68,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06497910199674976,
+     "bx": 3616.5316542611936,
+     "by": 213.77417294024332,
+     "pairs": 68,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   },
+   "FA 120": {
+    "viewports": 1,
+    "twist_deg": 0.0,
+    "frozen_layers": [],
+    "texts": 452,
+    "before": {
+     "a": 0.06543852584456655,
+     "bx": 3817.0607553005457,
+     "by": 211.77970800548593,
+     "pairs": 51,
+     "residual": 0.0
+    },
+    "after": {
+     "a": 0.06543852584456655,
+     "bx": 3817.0607553005457,
+     "by": 211.77970800548593,
+     "pairs": 51,
+     "residual": 0.0,
+     "rot_deg": null
+    },
+    "identical": true
+   }
+  },
+  "twisted_sheets": [],
+  "all_identical": true,
+  "fitted_before": 20,
+  "fitted_after": 20
+ },
+ "seconds": 188.5
+}
