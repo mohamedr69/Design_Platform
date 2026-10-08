@@ -1,0 +1,180 @@
+{
+ "task": "ORCH-044 (U2-M8-EXIT-FIXES), authority A-16 (engineer decisions 1-8)",
+ "branch": "task/m8-exit-fixes",
+ "head": "6357c73a820d96a14dd13ea2f8b433d9eea42006",
+ "base": "1708692084f2253fa0eb792910f7c8b685680da7",
+ "hashing": "sha256 of the committed blob bytes (git cat-file blob), and the blob id; never the checkout's bytes (U2M8V-02). check_manifest.py recomputes both from a commit and from a checkout.",
+ "start_utc": "2026-10-08T11:05:46Z",
+ "end_utc": "2026-10-08T12:53:57Z",
+ "interpreter": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B",
+ "python": "3.12.10",
+ "platform": "Windows-10-10.0.19045-SP0",
+ "ezdxf": "1.4.4",
+ "golden_input": {
+  "path": "G:\\dev (2)\\dev\\ep-platform-merged\\data\\uploads\\EP-30880\\ifc\\60de2a377daa.dxf",
+  "sha256": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f",
+  "access": "read-only"
+ },
+ "commands": [
+  "git -C roadmap-u2 worktree add -b task/m8-exit-fixes wt-m8b 1708692084f2253fa0eb792910f7c8b685680da7",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B tests/fixtures_m8/make_fixtures.py   (cwd backend)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/exit-fixes/scripts/fixtures_determinism.py <evidence>/fixtures-determinism.json   (8 runs, 7 PYTHONHASHSEED values and none)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m8b/bt --junitxml=<evidence>/targeted.xml -q tests/test_redesign_walls_layers.py tests/test_redesign_exit_fixes.py tests/test_redesign.py tests/test_drawing_prep.py tests/test_redesign_apply.py tests/test_prep_readiness.py tests/test_drawing_review.py tests/test_fa_interfaces.py   (cwd backend; targeted.log)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m8b/bt --junitxml=<evidence>/full-suite.xml -q   (cwd backend; full-suite.log)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/wall-index/scripts/compare_junit.py docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml <evidence>/full-suite.xml <evidence>/full-suite-vs-m4-baseline.json",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/wall-index/scripts/compare_junit.py docs/milestones/M6/evidence/merge-and-conditions/full-suite.xml <evidence>/full-suite.xml <evidence>/full-suite-vs-roadmap-u2-latest.json",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B ../docs/milestones/M8/evidence/exit-fixes/scripts/gc01_exit_fixes.py   (cwd backend; GC-01 read-only)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/exit-fixes/scripts/manifest.py START END",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/exit-fixes/scripts/check_manifest.py [REV]"
+ ],
+ "changed_source": {
+  ".gitattributes": {
+   "blob": "5638d9f647484f63f827a236e4ad1b01da4d99e4",
+   "sha256": "66f56d7d7e68d0c60e2f9d873be5bf04a720c05e01f427f4be0602abcd6b1779"
+  },
+  "backend/app/core/config.py": {
+   "blob": "8046c8c31128122d120a003f2280a958a54c2015",
+   "sha256": "1a7a79bf125af856402cbb5f1005db5ac8f20a7c8ac4e05055af0b2523cf3144"
+  },
+  "backend/app/redesign/coverage.py": {
+   "blob": "7e8a300e0dc2c3ad935fcf20cfb13618e80bb151",
+   "sha256": "dcdb24168c963e4b93b2603ae58b96540676f1f461ac5b89bfca6729f3615086"
+  },
+  "backend/app/redesign/layers.py": {
+   "blob": "7b7c554aab2ca9ff071003cd1c15f2ccc56949fc",
+   "sha256": "3c64195a705641a76b1901354ec036597b7329468104f915f176a56d6d568920"
+  },
+  "backend/app/redesign/prepare.py": {
+   "blob": "dba71ed554c2210a4aa750299792b2bc9453a305",
+   "sha256": "e202acddc8ab60a9cbe09138fb35220023a622d899b10ab60a28d21319020b9c"
+  },
+  "backend/app/redesign/service.py": {
+   "blob": "87ac0e19a8c47727eeab917a0cf1a8be01568e7b",
+   "sha256": "013b756aaa2118ac783a48bec6ea38ee849e7db25c39ce27ef4c714189f1e3bc"
+  },
+  "backend/app/redesign/walls.py": {
+   "blob": "ca5756c8592b6fc11f6ce84cc8b86079c768e0ba",
+   "sha256": "d82690451173f3832b2ea45e3d8257f4ae6319339d8eb2cd56c060ec6c6a928b"
+  },
+  "backend/app/review/geometry.py": {
+   "blob": "71b8a9fdb3f80f02686136bf460875d71b63866c",
+   "sha256": "0a89b9c48048c9275a747cf48d93372f9d979ba46f5eca30f7744f1548744a0a"
+  },
+  "backend/tests/fixtures_m8/f10_meshes.dxf": {
+   "blob": "1d4a5ef5226300578e45473882b2efb368046e9e",
+   "sha256": "3c8621ed6f42f82b2bbd367b5dd50aea8220504a5be026dff04061daee12f97c"
+  },
+  "backend/tests/fixtures_m8/f11_bounds_hidden.dxf": {
+   "blob": "7cf194ea5ae0377eb9b48a3eb9b3d4b8445cc25b",
+   "sha256": "b3a84fb041b93ec332af3f4d5e5d365ad7648c3c5bb175dd79a487a36821fa93"
+  },
+  "backend/tests/fixtures_m8/f12_rotated_view.dxf": {
+   "blob": "e9feab7184eafbd4969df6245b67e3a6706db1d1",
+   "sha256": "53a034b1bbc3b4cbed8102c7c4db264c2da5498791866a715839733d4132b809"
+  },
+  "backend/tests/fixtures_m8/f8_title_frame.dxf": {
+   "blob": "f098e09f71194b434d2ba58cce495e3a55fcc35f",
+   "sha256": "2686a0fe3897e5808bde1e366327ad39d4747e7a8a8f6cf12a175f74dc225ea7"
+  },
+  "backend/tests/fixtures_m8/f9_mline.dxf": {
+   "blob": "f39af491e6ae652feff76644fb19d3508a422ba3",
+   "sha256": "fb05c04a00a1eb1aa41b3eb1997c10a26a013983bcd7dd18b1206b20458a364a"
+  },
+  "backend/tests/fixtures_m8/make_fixtures.py": {
+   "blob": "9208727fe6cb36336e1d6b39e706042f2c71cb8d",
+   "sha256": "feefe8a7d932ec2e7faaae770b14ecf2e1af9dd08c559307b54a7d02c533e7ee"
+  },
+  "backend/tests/fixtures_m8/u1_metres.dxf": {
+   "blob": "cb5cf2c86f372b0410650b1ab2f5e3eb7258fccb",
+   "sha256": "6b9beb8c639716b312eed82818d20dc1f5aaf9f70a76c7638256ea40ebe348df"
+  },
+  "backend/tests/fixtures_m8/u2_millimetres.dxf": {
+   "blob": "26096e448488aee0e9cbdf664bc2206ab0dc3610",
+   "sha256": "e008aa885aa983f081824aa70a8a8cc5bd8be56e5f834fe918a60bea8d3eaed0"
+  },
+  "backend/tests/fixtures_m8/u3_inches.dxf": {
+   "blob": "719d7d04ac8bd7fbbe8a15b78866511c372ea59a",
+   "sha256": "ed06dbbad0e90d0b670c1a1a7470b3e32d614e7abe50e021c1608a244f161611"
+  },
+  "backend/tests/fixtures_m8/u4_unitless.dxf": {
+   "blob": "e89583cf6eb4fbb4948f6180ac05779203e9dcb2",
+   "sha256": "6ecaf3ed36609d38706214d446eb2e73131512f89a2cfe552007bbcee58f2af2"
+  },
+  "backend/tests/test_redesign_exit_fixes.py": {
+   "blob": "6c12bec0906bf05a40e561c8126d22e94aa17254",
+   "sha256": "7d6e098045393e68848bff08d9a9997cdad802f6bc6937fb593b77d9e70829d3"
+  },
+  "backend/tests/test_redesign_walls_layers.py": {
+   "blob": "f631eb3cd62cb3a56b206ff68eb5bbbb17c8fbc6",
+   "sha256": "d7eb9a9f77f2623fb934b4e5d7a828dba1ee0c60a74ed57c060551408385dadb"
+  }
+ },
+ "reports": {
+  "docs/milestones/M8/M8-EXIT-FIXES-IMPLEMENTATION.md": {
+   "blob": "29457b34457aef3d608501c0bae429f800ccd7ff",
+   "sha256": "f65909965a64d45fbb783b163a04a70970a2af9d069d667f3aa25e960a772e26"
+  },
+  "docs/milestones/M8/M8-WALL-INDEX-IMPLEMENTATION.md": {
+   "blob": "dfb2f618506716a4b5e34fc319f3242eedf096d4",
+   "sha256": "cc3ff6cbd1839c1b4f9605fc1e71fca0aea582007058ef342fadb352f976e92e"
+  }
+ },
+ "evidence": {
+  "docs/milestones/M8/evidence/exit-fixes/fixtures-determinism.json": {
+   "blob": "24c12f0776cbf5eb116d11e0ce4d8a9255d7ffa6",
+   "sha256": "fb13d9fd62bb08bb683e34740f1c90a4d53108a4e98a8963ea50fb24167d8af5"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/full-suite-vs-m4-baseline.json": {
+   "blob": "4cb88bcd434c041f568b5ad9fdd4366197800a65",
+   "sha256": "4db415d5971a63fb545cb30735118fa2216bca26205b21fd63b20a5bea31940f"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/full-suite-vs-roadmap-u2-latest.json": {
+   "blob": "c9fbad6b7c9ee651f49d82b3a403332bd0d05b8f",
+   "sha256": "67ddc39f9f8959b5848cc2c0445227d2a1112a2b3ed21f2e86f1f77b0cd5bf84"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/full-suite.log": {
+   "blob": "9d9bca3515d3bcbd09025a56b79d8fb818f26d0b",
+   "sha256": "9396d2e526c5592ff346a07190cc76c9355f005e21bfed0d11b218a198af83ee"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/full-suite.xml": {
+   "blob": "ec04c03a08e34ee14022e445fb46ba79a66b5888",
+   "sha256": "cc7a68b936b74e001166c0017ddcbb060d775acd7900502f82595b25a902d951"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/gc01-composition-exit-fixes.json": {
+   "blob": "0daccd1e92b8aad087a30494a15776f106655ebb",
+   "sha256": "e0ad7c271d3c1bb4699eb1455cba1872d3c87e524958cfe7d92ef5c63d2bfaf9"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/gc01-exit-fixes.json": {
+   "blob": "e50524c3c62995b816187c024626e6e74ab7c468",
+   "sha256": "f0e1982428dcde658002abe518e26e88a0689afe35b4448b04cd8e0a55149d7a"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/gc01-run.log": {
+   "blob": "78179c7ba666651d07e727ebe7713e3634b965d3",
+   "sha256": "0ab6f020404c714f2fbe02efdbc3eea30f991c5d7a2e558a32902cdec9591abf"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/scripts/check_manifest.py": {
+   "blob": "3491546090639ce7cd38e978d9b022e7d9a91f34",
+   "sha256": "849035eb528839d1d248b67a3a4cebc21126d8d4848403f24b5a5dafed2bd768"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/scripts/fixtures_determinism.py": {
+   "blob": "2735a20d46461b9ed374e7b5ca7fbdab6fb2871e",
+   "sha256": "340edfc3fce2015f233598de21fda84a0173d0eea74dfb51f765899bc5573e50"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/scripts/gc01_exit_fixes.py": {
+   "blob": "835be594e675f0f603f01f3a44f6f1658d986306",
+   "sha256": "2757925ba3b5c6ca629df80c5b33222bf069b20f8ee662f83eedfea2cb9510a7"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/scripts/manifest.py": {
+   "blob": "7f3927ebf009ca50f9765f4b44d2eac0a994e386",
+   "sha256": "16f901e4a49901ff90828c54df3407eda6743fcc01f55a49bf74eb5b432bc381"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/targeted.log": {
+   "blob": "0d362f0e0a51b78a6ae005e36714f5e616c72a00",
+   "sha256": "5964a8e2cd2e49dba88cb14e4ea6769c90dfdf047bd3a4cd200a7023e7802dc2"
+  },
+  "docs/milestones/M8/evidence/exit-fixes/targeted.xml": {
+   "blob": "b5b3a21f40e2dffb5246d07bd9cabf707b1795e5",
+   "sha256": "184b7f42bd24dcccbedfe42f35c69f9f7ad54fe0a619b03265ca2b2115085316"
+  }
+ }
+}
