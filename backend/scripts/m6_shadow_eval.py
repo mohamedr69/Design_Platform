@@ -16,7 +16,17 @@ Arms
           a *scripted* provider (app.ai.provider.RecordingProvider, answers
           from a file or handed in by a test). No real model is ever called:
           any other provider is refused. It validates the harness and the
-          AI-arm accounting, not a model.
+          AI-arm accounting, not a model. Review-only (A-15 item 1): a model
+          answer is read exactly as the live pass reads it
+          (document_classification_ai._assessment) -- at most a hint
+          (moderate when the model is sure), never supported.
+
+Per source. Every report has `by_source`: the metrics of the answers each
+source gave -- rules / ai for the rules and ai arms; stored / ai / engineer
+for the stored arm (the clone's `source` column: hint, assessment and
+backfill rows are "stored"). The stored arm reads a stored model answer as
+review-only too: an "ai" row stored as supported (written before A-15) is
+counted as a hint, and how many were is reported (`stored.ai_supported_capped`).
 
 Join. A label is joined to `project_documents` by (project EP number,
 sha256), the row whose relative path matches the label's path when the
@@ -72,7 +82,7 @@ REPO = BACKEND.parent
 DEFAULT_LABELS = REPO / "docs" / "milestones" / "M2" / "real-project-pilot" / "GOLDEN-LABELS.json"
 DEFAULT_KIND_MAP = BACKEND / "app" / "services" / "classification_kind_map.json"
 COHORTS = ("regression", "exploration", "holdout")
-HARNESS_VERSION = "m6-shadow-eval-2026-10-08.1"
+HARNESS_VERSION = "m6-shadow-eval-2026-10-08.2"   # .2: AI arm review-only (A-15 item 1), per-source breakdown
 TRUTH_VERSION = "attribution-truth-provisional-2026-10-08.1"
 AI_PROMPT_VERSION = "m6-shadow-scripted-2026-10-08.1"
 WEAK_STAGES = ("hint", "unknown", "ambiguous")
@@ -259,11 +269,27 @@ AI_SCHEMA = {"type": "object", "properties": {"primary_type": {"type": "string"}
              "required": ["primary_type", "confidence"]}
 
 
+def review_only_assessment(row, base, verdict: dict):
+    """A model answer read the way the live pass reads it
+    (document_classification_ai._assessment, A-15 item 1): review-only -- a
+    hint at most (moderate when the model is sure), unknown for UNKNOWN or a
+    low OTHER, never supported. `base`: the rules' Assessment of the row."""
+    from app.services import document_classification as dc
+    from app.services import document_classification_ai as live
+
+    entry = SimpleNamespace(primary_type=base.primary_type.value, stage=base.stage.value, evidence=list(base.evidence),
+                            evidence_sources=list(base.evidence_sources), system_code=base.system_code,
+                            discipline=base.discipline, assessment={"flags": list(base.flags)})
+    assessment = live._assessment(SimpleNamespace(row=row, entry=entry), verdict)
+    if assessment.stage is dc.Stage.SUPPORTED:   # never by the live rule; the harness does not depend on it
+        assessment.stage = dc.Stage.HINT
+    return assessment
+
+
 def ai_answer(row, facts, rules: dict, provider, counts: dict) -> dict:
-    """The rules' answer, or for a weak one the scripted provider's, mapped to
-    a stage the way the owner's pass describes it (high / medium -> supported,
-    low -> hint, UNKNOWN or a low OTHER -> unknown). The attribution is the
-    rules' attribution of the answered type."""
+    """The rules' answer, or for a weak one the scripted provider's, read as
+    the live pass reads it (`review_only_assessment`: never supported). The
+    attribution is the rules' attribution of the answered type."""
     from app.ai.provider import AiRequest, RecordingProvider, TextPart
     from app.services import document_attribution
     from app.services import document_classification as dc
@@ -289,19 +315,13 @@ def ai_answer(row, facts, rules: dict, provider, counts: dict) -> dict:
     except ValueError:
         counts["failed"] += 1
         return {**rules, "source": "rules (model answer unusable)"}
-    if kind is dc.DocumentType.UNKNOWN or (kind is dc.DocumentType.OTHER and confidence == "low"):
-        stage = dc.Stage.UNKNOWN
-    elif confidence == "low":
-        stage = dc.Stage.HINT
-    else:
-        stage = dc.Stage.SUPPORTED
-    system = (data or {}).get("system_code") or base.system_code
-    assessment = dc.Assessment(kind, stage, dc.Strength.MODERATE if confidence == "high" else dc.Strength.WEAK,
-                               system_code=system, basis=dc.Basis.CONTENT if stage is dc.Stage.SUPPORTED else dc.Basis.METADATA)
+    assessment = review_only_assessment(row, base, {**(data or {}), "primary_type": kind.value, "confidence": confidence})
     attributed = document_attribution.attribute(row, assessment, facts)
     counts["answered"] += 1
-    return {"type": kind.value, "stage": stage.value, "system": system, "attribution": attributed.state.value,
-            "source": "ai", "model": response.model, "prompt_version": AI_PROMPT_VERSION, "page_chars": 0}
+    counts["stages"][assessment.stage.value] = counts["stages"].get(assessment.stage.value, 0) + 1
+    return {"type": assessment.primary_type.value, "stage": assessment.stage.value, "system": assessment.system_code,
+            "attribution": attributed.state.value, "source": "ai", "needs_review": True, "model": response.model,
+            "prompt_version": AI_PROMPT_VERSION, "page_chars": 0}
 
 
 # --- the metrics -------------------------------------------------------------------------------------
@@ -317,6 +337,16 @@ def _side(state: str | None) -> str:
     if state in ("RELATED_EXTERNAL", "REFERENCE_ONLY"):
         return "external"
     return "unknown"
+
+
+def source_group(arm: str, pred: dict | None) -> str | None:
+    """Which source an answer counts under in `by_source`."""
+    if pred is None:
+        return None
+    source = pred.get("source")
+    if arm == "stored":
+        return source if source in ("ai", "engineer") else "stored"
+    return "ai" if source == "ai" else "rules"
 
 
 def metrics(items: list[dict]) -> dict:
@@ -367,7 +397,8 @@ def evaluate(engine, labels_doc: dict, kind_map: dict, *, arm: str = "rules", pr
     clone = read_clone(engine)
     joined = join(labels, clone)
     facts_cache: dict = {}
-    counts = {"asked": 0, "answered": 0, "failed": 0, "not_asked": 0}
+    counts = {"asked": 0, "answered": 0, "failed": 0, "not_asked": 0, "stages": {}}
+    stored_counts = {"ai_supported_capped": 0, "sources": {}}
     items = []
     for i, label in enumerate(labels):
         kind = label["labels"].get("kind")
@@ -379,6 +410,11 @@ def evaluate(engine, labels_doc: dict, kind_map: dict, *, arm: str = "rules", pr
         if row is not None:
             if arm == "stored":
                 pred = clone["stored"].get(row.id)
+                if pred is not None:
+                    stored_counts["sources"][str(pred.get("source"))] = stored_counts["sources"].get(str(pred.get("source")), 0) + 1
+                if pred is not None and pred.get("source") == "ai" and pred.get("stage") == "supported":
+                    pred = {**pred, "stage": "hint"}   # A-15 item 1: a model answer alone is never supported
+                    stored_counts["ai_supported_capped"] += 1
             else:
                 if row.project_id not in facts_cache:
                     facts_cache[row.project_id] = project_facts_of(engine, row.project_id, clone["projects"].get(row.project_id))
@@ -388,13 +424,16 @@ def evaluate(engine, labels_doc: dict, kind_map: dict, *, arm: str = "rules", pr
                     pred = ai_answer(row, facts, pred, provider, counts)
                 pred = {k: v for k, v in pred.items() if not k.startswith("_")}
         items.append({"cohort": label.get("cohort"), "truth_type": truth_type, "truth_system": truth_system,
-                      "truth_attribution": truth_attribution, "pred": pred, "joined": row is not None})
+                      "truth_attribution": truth_attribution, "pred": pred, "joined": row is not None,
+                      "source": source_group(arm, pred)})
     report = {
         "harness_version": HARNESS_VERSION, "truth_version": TRUTH_VERSION, "arm": arm,
         "labels": {"documents": len(labels), "at_utc": labels_doc.get("at_utc"), "labeller": labels_doc.get("labeller")},
         "kind_map": kind_map_coverage(kind_map, labels),
         "cohorts": {c: metrics([it for it in items if it["cohort"] == c]) for c in COHORTS},
         "all": metrics(items),
+        "by_source": {s: metrics([it for it in items if it["source"] == s])
+                      for s in sorted({it["source"] for it in items if it["source"] is not None})},
         "provisional": [
             "attribution truth is derived from the labelled originator and system (derive_attribution), not labelled",
             "the labels are a model's, from renders; the owner has not countersigned them",
@@ -402,7 +441,10 @@ def evaluate(engine, labels_doc: dict, kind_map: dict, *, arm: str = "rules", pr
         ],
     }
     if arm == "ai":
-        report["ai"] = {**counts, "prompt_version": AI_PROMPT_VERSION, "provider": getattr(provider, "name", None)}
+        report["ai"] = {**counts, "review_only": True, "prompt_version": AI_PROMPT_VERSION,
+                        "provider": getattr(provider, "name", None)}
+    if arm == "stored":
+        report["stored"] = stored_counts
     return report
 
 

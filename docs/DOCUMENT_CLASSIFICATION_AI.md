@@ -54,6 +54,9 @@ little). No images.
   project over a rolling 24 hours, checked before each batch, inside the platform's `AI_MAX_CALLS_PER_PROJECT_PER_DAY`
   (150, shared by every AI task). Cache hits do not count.
 * A stop asked for on the processing job is honoured between batches: the job's context is handed to the pass.
+* Each row it writes also fills the M6 stage-record slots (`model`, `prompt_version`, `page_chars`, `producing_job_id`
+  through `record(stage_record=...)`), so a conflict with an engineer's confirmation carries the prompt version
+  (DOCUMENT_CLASSIFICATION_V2.md, section E).
 * After documents are processed, the pass runs for that project by itself; only new or changed documents cost.
 
 ## Running it

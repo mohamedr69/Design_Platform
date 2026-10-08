@@ -189,6 +189,8 @@ class ClassificationOut(BaseModel):
     # What produced the row: rules version, input fingerprint and the model-stage slots (M7 adoption).
     stage_record: dict = {}
     confirmed_by_id: int | None = None
+    # The attribution's inputs changed since it was recorded (input_fingerprint, U2M6V-07); never for a confirmation.
+    attribution_stale: bool | None = None
 
 
 class SyncFileOut(BaseModel):
@@ -240,6 +242,8 @@ class ClassificationMetricsOut(BaseModel):
     by_basis: dict[str, int]
     by_freshness: dict[str, int]
     by_attribution: dict[str, int] = {}
+    # Current rows whose attribution's inputs changed since they were recorded (U2M6V-07).
+    attribution_stale: int = 0
     unknown: int
     ambiguous: int
     agree_with_role: int
@@ -309,10 +313,13 @@ def document_classification(
     entries = {e.document_id: e for e in db.query(DocumentClassification)
                .filter(DocumentClassification.project_id == project.id, DocumentClassification.superseded_at.is_(None))}
     conflicts = classification.conflicts_of(db, project)
+    from app.services import document_attribution
+
+    facts = document_attribution.project_facts(project)   # once per listing (attribution_stale)
     return [DocumentClassificationRowOut(document_id=row.id, name=row.filename, path=row.relative_path or row.filename,
                                          role=row.role, state=row.state,
                                          classification=classification.as_dict(entries.get(row.id), row, project,
-                                                                               conflicts=conflicts.get(row.id)),
+                                                                               conflicts=conflicts.get(row.id), facts=facts),
                                          extracted=_extracted_summary(row))
             for row in rows]
 

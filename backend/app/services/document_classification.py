@@ -848,6 +848,22 @@ def input_fingerprint(row: ProjectDocument, project: Project | None, facts=None)
     return hashlib.sha256(material.encode()).hexdigest()
 
 
+def attribution_stale(entry: DocumentClassification | None, row: ProjectDocument | None, project: Project | None, *,
+                      facts=None) -> bool:
+    """Whether what the stored attribution rests on changed since it was
+    recorded (U2M6V-07): the stored `input_fingerprint` against the one the
+    row would get now (this company's names, the project's systems and
+    drawings_in_scope, the rules and attribution versions, the content and
+    path). A row written before the fingerprint was recorded counts as
+    stale (its attribution was never computed). An engineer's confirmation
+    is the engineer's word: never stale this way. Separate from
+    `freshness`, whose semantics are unchanged; the backfill re-attributes
+    a stale row once."""
+    if entry is None or row is None or project is None or entry.engineer_confirmed:
+        return False
+    return entry.input_fingerprint != input_fingerprint(row, project, facts)
+
+
 # The fields a conflict with an engineer's confirmation is recorded for (M3 P-02).
 CONFLICT_FIELDS = ("primary_type", "system_code", "attribution")
 # The stage-record slots a producing stage may fill (`record(stage_record=...)`).
@@ -863,6 +879,24 @@ def _proposes(field_name: str, value) -> bool:
     return not (field_name in ("primary_type", "attribution") and value == "UNKNOWN")
 
 
+def _same_side(confirmed_value, proposed_value) -> bool:
+    """Whether two attributions are on the same side -- ours (OUR_SCOPE,
+    LIKELY_OUR_SCOPE) or not ours (RELATED_EXTERNAL, REFERENCE_ONLY). A
+    weaker claim on the engineer's side (the rules' LIKELY_OUR_SCOPE against
+    a confirmed OUR_SCOPE) is no disagreement (U2M6V-03); only a claim on the
+    opposite side conflicts."""
+    from app.services import document_attribution
+
+    def side(value):
+        if value in {a.value for a in document_attribution.OURS}:
+            return "ours"
+        if value in {a.value for a in document_attribution.EXTERNAL}:
+            return "external"
+        return None
+
+    return side(confirmed_value) is not None and side(confirmed_value) == side(proposed_value)
+
+
 def _record_conflicts(db: Session, confirmed: DocumentClassification, proposed: DocumentClassification,
                       source: str, now) -> list[DocumentClassificationConflict]:
     """Where the automatic row disagrees with the confirmed one: a conflict
@@ -873,6 +907,8 @@ def _record_conflicts(db: Session, confirmed: DocumentClassification, proposed: 
         confirmed_value, proposed_value = getattr(confirmed, name), getattr(proposed, name)
         if name == "attribution" and confirmed_value == "UNKNOWN":
             continue   # the engineer confirmed no attribution: nothing to disagree with
+        if name == "attribution" and _same_side(confirmed_value, proposed_value):
+            continue   # the same side as the engineer's (U2M6V-03): not a disagreement
         if not _proposes(name, proposed_value) or proposed_value == confirmed_value:
             continue
         version = (proposed.attribution_version if name == "attribution"
@@ -902,7 +938,7 @@ def _record_conflicts(db: Session, confirmed: DocumentClassification, proposed: 
 
 def record(db: Session, project: Project, row: ProjectDocument, assessment: Assessment, *, source: str,
            extra: dict | None = None, confirmed_by_id: int | None = None, attribution=None,
-           stage_record: dict | None = None) -> DocumentClassification | None:
+           stage_record: dict | None = None, skip_unchanged_history: bool = False) -> DocumentClassification | None:
     """Keep the assessment beside the row: the earlier current one is
     superseded (kept as history), unless an engineer confirmed it -- then
     the automatic one is stored already superseded, the engineer's stays
@@ -925,7 +961,14 @@ def record(db: Session, project: Project, row: ProjectDocument, assessment: Asse
     `extra` is merged into the stored assessment before the no-op
     comparison and the insert (the model pass's provenance), so the row
     is written whole in one INSERT: on SQLite the savepoint's release can
-    be final, and nothing may be left to add afterwards."""
+    be final, and nothing may be left to add afterwards.
+    The no-op comparison includes the input fingerprint, so an answer whose
+    attribution inputs changed is written again (re-attributed, U2M6V-07).
+    `skip_unchanged_history` (the backfill): when the current row is an
+    engineer's confirmation and the automatic answer equals the last
+    automatic answer recorded since that confirmation, nothing is written
+    (U2M6V-04: a confirmed row is re-marked once after a rules change, not
+    on every backfill)."""
     from app.services import document_attribution
 
     intake_role, intake_system = intake_of(project, row)
@@ -935,10 +978,23 @@ def record(db: Session, project: Project, row: ProjectDocument, assessment: Asse
     facts = document_attribution.project_facts(project)
     attributed = attribution if attribution is not None else document_attribution.attribute_safely(row, assessment, facts=facts)
     confirmed = confirmed_by_id is not None
+    inputs = input_fingerprint(row, project, facts)
     if (not confirmed and is_current(existing, row, fingerprint) and existing.assessment == data
             and existing.stage == assessment.stage.value and existing.attribution == attributed.state.value
-            and existing.attribution_basis == attributed.basis and existing.attribution_conflict == attributed.conflict):
+            and existing.attribution_basis == attributed.basis and existing.attribution_conflict == attributed.conflict
+            and existing.input_fingerprint == inputs):
         return None
+    if skip_unchanged_history and not confirmed and existing is not None and existing.engineer_confirmed:
+        last = (db.query(DocumentClassification)
+                .filter(DocumentClassification.document_id == row.id, DocumentClassification.id > existing.id,
+                        DocumentClassification.engineer_confirmed.is_(False))
+                .order_by(DocumentClassification.id.desc()).first())
+        if (last is not None and last.rules_version == RULES_VERSION and last.content_sha256 == row.sha256
+                and last.context_fingerprint == fingerprint and last.input_fingerprint == inputs
+                and last.assessment == data and last.stage == assessment.stage.value
+                and last.attribution == attributed.state.value and last.attribution_basis == attributed.basis
+                and last.attribution_conflict == attributed.conflict):
+            return None
     slots = {"stage_status": "complete", **{k: v for k, v in (stage_record or {}).items() if k in STAGE_RECORD_FIELDS}}
     now = utc_now()
     entry = DocumentClassification(
@@ -949,7 +1005,7 @@ def record(db: Session, project: Project, row: ProjectDocument, assessment: Asse
         reason=assessment.reason[:500], system_code=assessment.system_code, discipline=assessment.discipline,
         source=source, engineer_confirmed=confirmed, confirmed_by_id=confirmed_by_id, assessment=data, created_at=now,
         attribution=attributed.state.value, attribution_basis=attributed.basis, attribution_version=attributed.version,
-        attribution_conflict=attributed.conflict, input_fingerprint=input_fingerprint(row, project, facts), **slots,
+        attribution_conflict=attributed.conflict, input_fingerprint=inputs, **slots,
     )
     with db.begin_nested():
         if existing is not None and existing.engineer_confirmed and not confirmed:
@@ -1135,10 +1191,12 @@ def conflicts_of(db: Session, project: Project) -> dict[int, list[dict]]:
 
 
 def as_dict(entry: DocumentClassification | None, row: ProjectDocument | None = None, project: Project | None = None,
-            conflicts: list[dict] | None = None) -> dict | None:
+            conflicts: list[dict] | None = None, facts=None) -> dict | None:
     """The stored assessment as the API shows it -- no absolute path; and
     whether it is still current for the row it is about. `conflicts`: the
-    conflict records against this (confirmed) row, from `conflicts_of`."""
+    conflict records against this (confirmed) row, from `conflicts_of`.
+    `facts`: the project's attribution facts, computed once by a listing
+    (`attribution_stale`; None when there is no row or project)."""
     from app.services import document_attribution
 
     if entry is None:
@@ -1156,6 +1214,8 @@ def as_dict(entry: DocumentClassification | None, row: ProjectDocument | None = 
         "attribution": attribution, "scope_reading": document_attribution.scope_reading(attribution),
         "attribution_basis": entry.attribution_basis, "attribution_version": entry.attribution_version,
         "attribution_conflict": entry.attribution_conflict, "conflicts": list(conflicts or []),
+        "attribution_stale": (attribution_stale(entry, row, project, facts=facts)
+                              if row is not None and project is not None else None),
         "stage_record": {"rules_version": entry.rules_version, "input_fingerprint": entry.input_fingerprint,
                          **{name: getattr(entry, name) for name in STAGE_RECORD_FIELDS}},
         "confirmed_by_id": entry.confirmed_by_id,
@@ -1179,7 +1239,12 @@ def as_dict(entry: DocumentClassification | None, row: ProjectDocument | None = 
 
 def backfill(db: Session, project: Project, *, ctx=None, batch: int = 200) -> dict:
     """Assess every indexed row of the project from stored data, in batches,
-    skipping rows whose current assessment already applies. Reads no file,
+    skipping rows whose current assessment already applies and whose
+    attribution's inputs are unchanged (`attribution_stale`; a current
+    answer of the model's pass is not re-assessed for that). A confirmed
+    row stays the engineer's: after a rules change its automatic answer is
+    kept as history once, not on every backfill (skipped as unchanged after
+    that). Reads no file,
     calls no model, marks nothing stale, reconciles nothing. Resumable
     (what is done is skipped next time) and cancellable between batches.
     Every eligible row ends assessed, skipped (already current) or failed
@@ -1189,6 +1254,9 @@ def backfill(db: Session, project: Project, *, ctx=None, batch: int = 200) -> di
     rows = (db.query(ProjectDocument).filter(ProjectDocument.project_id == project.id, ProjectDocument.state != "removed")
             .order_by(ProjectDocument.id).all())
     counts["documents"] = counts["eligible"] = len(rows)
+    from app.services import document_attribution
+
+    facts = document_attribution.project_facts(project)
     for start in range(0, len(rows), batch):
         if ctx is not None:
             ctx.progress(start, len(rows), f"Classifying documents — {start} of {len(rows)}")
@@ -1197,14 +1265,20 @@ def backfill(db: Session, project: Project, *, ctx=None, batch: int = 200) -> di
             document_id, relative = row.id, row.relative_path or row.filename
             intake_role, intake_system = intake_of(project, row)
             fingerprint = context_fingerprint(row, project, intake_role=intake_role, intake_system=intake_system)
-            if is_current(current(db, row), row, fingerprint):
+            existing = current(db, row)
+            # A stale attribution is re-attributed by re-assessing a rules row; the model's answer stays current (the
+            # backfill never replaces it to re-attribute it: the pass's next write does).
+            reattribute = (existing is not None and existing.source != AI_SOURCE
+                           and attribution_stale(existing, row, project, facts=facts))
+            if is_current(existing, row, fingerprint) and not reattribute:
                 counts["skipped"] += 1
                 continue
             try:
                 assessment = assess(row, intake_role=intake_role, intake_system=intake_system, project_ep=project.ep_number)
-                record(db, project, row, assessment, source="backfill",
-                       stage_record={"producing_job_id": getattr(ctx, "job_id", None)})
-                counts["assessed"] += 1
+                written = record(db, project, row, assessment, source="backfill",
+                                 stage_record={"producing_job_id": getattr(ctx, "job_id", None)},
+                                 skip_unchanged_history=True)
+                counts["assessed" if written is not None else "skipped"] += 1
             except Exception as exc:  # noqa: BLE001 -- named in the result; the savepoint keeps the session usable
                 log.exception("Backfill classification failed for document %s (%s)", document_id, relative)
                 counts["failed"] += 1
@@ -1233,8 +1307,11 @@ def metrics(db: Session, project: Project) -> dict:
     by_basis: dict[str, int] = {}
     by_freshness: dict[str, int] = {}
     by_attribution: dict[str, int] = {}
-    agree = conflict = mixed = path_only = content = stale = review = flagged = 0
+    agree = conflict = mixed = path_only = content = stale = review = flagged = attribution_inputs_changed = 0
     seen: dict[int, int] = {}
+    from app.services import document_attribution
+
+    facts = document_attribution.project_facts(project)
     for entry in entries:
         row = rows.get(entry.document_id)
         if row is None:
@@ -1264,6 +1341,8 @@ def metrics(db: Session, project: Project) -> dict:
         by_attribution[attribution] = by_attribution.get(attribution, 0) + 1
         if fresh != CURRENT:
             stale += 1
+        if attribution_stale(entry, row, project, facts=facts):
+            attribution_inputs_changed += 1
         if review_reasons(entry, row, fresh):
             review += 1
         if (entry.assessment or {}).get("flags"):
@@ -1273,7 +1352,7 @@ def metrics(db: Session, project: Project) -> dict:
         "documents": len(rows), "eligible": len(rows), "assessed": assessed, "unassessed": len(rows) - assessed,
         "by_type": dict(sorted(by_type.items())), "by_stage": dict(sorted(by_stage.items())),
         "by_basis": dict(sorted(by_basis.items())), "by_freshness": dict(sorted(by_freshness.items())),
-        "by_attribution": dict(sorted(by_attribution.items())),
+        "by_attribution": dict(sorted(by_attribution.items())), "attribution_stale": attribution_inputs_changed,
         "unknown": by_type.get("UNKNOWN", 0), "ambiguous": by_stage.get("ambiguous", 0),
         "agree_with_role": agree, "conflict_with_role": conflict, "mixed_component_files": mixed,
         "path_only": path_only, "metadata_only": path_only, "content_supported": content, "stale": stale,

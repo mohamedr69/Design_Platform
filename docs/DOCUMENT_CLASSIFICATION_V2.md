@@ -289,6 +289,7 @@ No accuracy figure: there is no engineer-verified truth set yet.
 - Discipline is never populated.
 - The engineer override is prepared in the model (`source = "engineer"`,
   `engineer_confirmed`, `confirmed_by_id`) but has no endpoint yet.
+  (Since M6 it has one: section E2.)
 
 ### B12. Separately identified defects (not fixed here)
 
@@ -777,3 +778,71 @@ failure is `test_document_sync.py::test_a_read_that_fails_keeps_the_previous_res
 failing on the branch before this work (B12.3). Frontend: `tsc -b` and
 `vite build` pass; the inspector was not opened in a browser in this
 session.
+
+
+## E. Attribution, the engineer's confirmation and conflict records (M6: ORCH-043, merged by ORCH-049)
+
+### E1. The attribution field
+
+Each classification row carries an attribution of its own, beside the type and never a fifth stage string
+(`app/services/document_attribution.py`, version `ATTRIBUTION_VERSION`): `OUR_SCOPE`, `LIKELY_OUR_SCOPE`,
+`RELATED_EXTERNAL`, `REFERENCE_ONLY` or `UNKNOWN`. Columns on `document_classifications` (migration
+`c6d8e0f2a4b6`): `attribution` (default `UNKNOWN`), `attribution_basis` (the rule that decided and every claim
+weighed), `attribution_version`, `attribution_conflict` (opposite-side claims, kept for a person, never resolved by a
+guess).
+
+- `OUR_SCOPE` comes only from the intake association (the project's own DRF or Design Sheet) or a stored title-block
+  originator that is this company (`COMPANY_NAME`, `ATTRIBUTION_OWN_ORIGINATORS`). A type -- a shop drawing, an IFC
+  drawing, a model's answer -- never makes a document `OUR_SCOPE` (P-10): a shop drawing outside the folders of
+  drawings given to us is `LIKELY_OUR_SCOPE`; an IFC drawing is `RELATED_EXTERNAL` / `REFERENCE_ONLY` wherever it is
+  filed.
+- `UNKNOWN` is neither in nor out of scope (P-07): `in_scope()` answers None, and the API's `scope_reading` says
+  `unknown`.
+- The API (`GET /projects/{id}/documents/classification`, and the sync listing) shows `attribution`,
+  `scope_reading`, `attribution_basis`, `attribution_version`, `attribution_conflict`, `attribution_stale`,
+  `conflicts` and `stage_record`; the metrics endpoint adds `by_attribution` and `attribution_stale`.
+- `attribution_stale`: the row's stored `input_fingerprint` (content, path, rules and attribution versions, this
+  company's names, the project's systems and `drawings_in_scope`) differs from the one it would get now (U2M6V-07).
+  `freshness` is unchanged by this; the backfill re-attributes a stale row once. Rows written before the fingerprint
+  existed read stale (their attribution was never computed). A confirmation is never stale this way.
+
+### E2. The engineer's confirmation
+
+`POST /projects/{project_id}/documents/{document_id}/classification/confirm` with
+`{"primary_type", "system_code" (null: no system of ours), "attribution", "reason"}`.
+
+- Who: the design manager and the design engineers (`CONFIRMER_ROLES`). Admin, viewer, draftsman and estimation
+  engineers get 403; admin carries no engineering authority (B-05, B-19). Project membership is not checked yet (M7).
+- 409 when `DOCUMENT_CLASSIFICATION_V2` is off; 422 for an unknown type, `UNKNOWN`, an unknown attribution or an
+  empty reason; 404 for another project's document or a removed one.
+- The confirmation becomes the current row (`source = "engineer"`, `engineer_confirmed`, `confirmed_by_id`, stage
+  `supported`, basis `engineer`); the earlier current row, an earlier confirmation included, is kept as history. An
+  activity event `classification.confirmed` (before / after / reason) is written in the same transaction.
+- Nothing automatic supersedes a confirmation: the assessment, the hint, the backfill and the model's pass store
+  their answers already superseded (history). After a rules change the backfill keeps one such history row, not one
+  per run (U2M6V-04). A confirmation stays current after the file's content changes; the engineer re-confirms a
+  revised file.
+
+### E3. Conflict records
+
+Where an automatic answer disagrees with the current confirmation, a `document_classification_conflicts` row is
+written (field `primary_type`, `system_code` or `attribution`; confirmed and proposed values; source; version), or
+the same open one is counted again (`seen_count`, `last_seen_at`). The version is the producing stage's: the prompt
+version for the model's pass (it fills the stage-record slots), the rules version for the rules, the attribution
+version for attribution. No evidence (an unknown type, no system, an `UNKNOWN` attribution) is no disagreement, and
+neither is a claim on the engineer's side of attribution (`LIKELY_OUR_SCOPE` against a confirmed `OUR_SCOPE`,
+`RELATED_EXTERNAL` against `REFERENCE_ONLY`: U2M6V-03); only an opposite-side claim conflicts. Conflicts are shown
+with the confirmed row and add a review reason; nothing is applied.
+
+### E4. The stage record
+
+`input_fingerprint`, `model`, `prompt_version`, `page_chars`, `producing_job_id` and `stage_status`, all nullable
+(`record(stage_record=...)`, `STAGE_RECORD_FIELDS`). The rules fill `stage_status`; the backfill its job; the
+model's pass `model`, `prompt_version`, `page_chars` and `producing_job_id` (a reused answer carries the model,
+prompt version and page size it came from). Shown as `stage_record` in the API.
+
+### E5. Not done here
+
+The inspector shows none of E1-E4 yet (frontend `ClassificationBasis` lacks `engineer`; the new fields are untyped);
+membership enforcement for the endpoint (B-19, M7); a real database-clone run of the shadow-evaluation harness
+(`backend/scripts/m6_shadow_eval.py`, separately authorised).

@@ -1480,12 +1480,15 @@ def sync_files(db: Session, project: Project) -> list[dict]:
         for entry in (db.query(DocumentClassification)
                       .filter(DocumentClassification.project_id == project.id, DocumentClassification.superseded_at.is_(None))):
             classified[entry.document_id] = entry
+        from app.services import document_attribution
+
+        facts = document_attribution.project_facts(project) if classified else None   # once per listing
     for row in rows:
         status, reason = file_status(row, window)
         files.append({"name": row.filename, "path": row.relative_path or row.filename, "status": status,
                       "reason": reason, "role": row.role,
                       # Document Classification V2: metadata beside the file when the feature is on; null otherwise.
-                      "classification": document_classification.as_dict(classified.get(row.id), row, project)
+                      "classification": document_classification.as_dict(classified.get(row.id), row, project, facts=facts)
                       if row.id in classified else None})   # noqa: F821 -- bound above when the feature is on
     return files
 

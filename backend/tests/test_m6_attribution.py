@@ -383,8 +383,9 @@ def test_a_later_confirmation_supersedes_the_earlier_one_and_agreement_is_no_con
     db_session.commit()
     conflicts = db_session.query(DocumentClassificationConflict).filter(
         DocumentClassificationConflict.confirmed_classification_id == second["id"]).all()
-    # The engineer said no system; the records name FAS: that disagreement is recorded too.
-    assert {c.field for c in conflicts} == {"attribution", "system_code"}
+    # The engineer said no system; the records name FAS: that disagreement is recorded. The rules' LIKELY_OUR_SCOPE is on
+    # the engineer's side (OUR_SCOPE): no attribution conflict (ORCH-049, U2M6V-03; was {"attribution", "system_code"}).
+    assert {c.field for c in conflicts} == {"system_code"}
     assert _classifications(db_session, project_id)["05- Drawings/L01.pdf"].id == second["id"]
 
 
@@ -613,7 +614,8 @@ def test_the_harness_ai_arm_asks_only_a_scripted_provider_and_only_for_weak_answ
     assert provider.calls == 5 and report["ai"]["asked"] == 5 and report["ai"]["answered"] == 4 and report["ai"]["failed"] == 1
     assert all(r.task == "m6_shadow_classify" for r in provider.requests)
     m = report["all"]
-    assert m["type_accuracy"] == _rate(2, 4) and m["false_supported_rate"] == _rate(1, 2)
+    # Review-only (A-15 item 1, ORCH-049): no model answer is supported, so none is falsely supported (was 1/2).
+    assert m["type_accuracy"] == _rate(2, 4) and m["false_supported_rate"] == _rate(0, 0)
     assert m["system_accuracy"] == _rate(5, 5)
     assert m["attribution_accuracy"] == _rate(2, 4) and m["false_our_scope_rate_incl_likely"] == _rate(0, 1)
 
