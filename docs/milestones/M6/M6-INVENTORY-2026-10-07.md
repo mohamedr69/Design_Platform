@@ -62,3 +62,22 @@ Provider-boundary review ORCH-038 pending. No review file was available at launc
 ## 5. Not placed under a milestone by the survey beyond M6
 
 The classification-in-processing sequence is carried to M7 in `docs/milestones/M7/M7-INVENTORY-2026-10-07.md`.
+
+## Orchestrator assessment 2026-10-08 (A-14 item 1): live AI classification
+
+This section is the orchestrator's recommendation, dated 8 October 2026. The switch itself stays the owner's decision.
+
+**Position.** The classification switch is ON in the live installation ahead of M6.
+
+**Evidence available.** Implementation-only. There is no shadow evaluation, no per-type precision/recall, no false-supported rate and no false-OUR_SCOPE rate, no audit sample of confidently supported results. Review findings F-02 and F-03 are open until applied. No conflict record (P-02) is written when an AI answer disagrees with a confirmed row. Policy is enforced only at the feature gate (B-04), not below it.
+
+**Assessment.** NOT ready for closure.
+
+**Recommendation.** Remain a pilot only, with all of the following:
+
+1. F-02 and F-03 applied before the commit (A-14 item 2).
+2. Its own daily cap, distinct from the 150-a-day project limit.
+3. AI rows flagged for review and never setting SUPPORTED alone until the M6 shadow evaluation reports.
+4. The M6 harness (ORCH-043) run against a database clone with the GOLDEN-LABELS set before any acceptance.
+
+Otherwise, switch it off.
