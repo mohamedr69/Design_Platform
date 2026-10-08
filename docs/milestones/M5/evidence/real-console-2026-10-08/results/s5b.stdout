@@ -1,0 +1,86 @@
+{
+ "events": [
+  {
+   "at": "2026-10-08T03:18:46+00:00",
+   "worker_pid": 22872,
+   "console_seen": [
+    {
+     "pid": 1572,
+     "ppid": 23932,
+     "cmdline": [
+      "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+      "/i",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j6-b30f8b6155\\redesign.dwg",
+      "/s",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j6-b30f8b6155\\redesign.scr",
+      "/l",
+      "en-US",
+      "/isolate",
+      "m5cad",
+      "C:\\t\\tmp\\m5cad\\profile"
+     ]
+    }
+   ]
+  },
+  {
+   "at": "2026-10-08T03:18:47+00:00",
+   "target_pid": 23932,
+   "target_alive": true,
+   "target_name": "python.exe",
+   "launcher_pid": 22872
+  },
+  {
+   "at": "2026-10-08T03:18:47+00:00",
+   "action": "taskkill /F /PID 23932 (the worker, not its tree)",
+   "taskkill": [
+    0,
+    "SUCCESS: The process with PID 23932 has been terminated.",
+    ""
+   ],
+   "console_parent_alive_after": true
+  },
+  {
+   "at": "2026-10-08T03:18:47+00:00",
+   "worker_exit": 1,
+   "console_alive_after_worker_kill": [
+    1572
+   ]
+  },
+  {
+   "at": "2026-10-08T03:18:57+00:00",
+   "console_alive_after_wait": [],
+   "waited_s": 9.7
+  }
+ ],
+ "row": {
+  "output_status": "making",
+  "output_error": null,
+  "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+  "output_relative": null,
+  "output_at": "2026-10-08 03:14:19.665116",
+  "output_changes": 0
+ },
+ "job": {
+  "id": 6,
+  "status": "running"
+ },
+ "last_run_dir": "j6-b30f8b6155",
+ "last_run_files": [
+  {
+   "path": "redesign.dwg",
+   "bytes": 4380643,
+   "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+  },
+  {
+   "path": "redesign.scr",
+   "bytes": 4926,
+   "sha256": "f75c9a9f573efbe251cc4e748288d5144464b4acb95f2a23a7e5d28f41496f55"
+  }
+ ],
+ "final_named_outputs": [
+  "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+ ],
+ "parts": [],
+ "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "consoles": []
+}

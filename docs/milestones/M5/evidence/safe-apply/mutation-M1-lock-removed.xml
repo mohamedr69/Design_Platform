@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="11.345" timestamp="2026-10-07T23:58:38.888060+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_redesign_apply" name="test_publication_lock_blocks_an_approval_write_until_the_result_commits" time="4.224"><failure message="assert not True&#10; +  where True = is_set()&#10; +    where is_set = &lt;threading.Event at 0x23380ab3b30: set&gt;.is_set">tmp_path = WindowsPath('C:/t/tmp/m5/bt/test_publication_lock_blocks_a0')
+
+    def test_publication_lock_blocks_an_approval_write_until_the_result_commits(tmp_path):
+        """The lock used around final snapshot + publish is a real database lock,
+        not an in-process mutex: another session cannot commit an approval inside
+        the publication window."""
+        import threading
+        import time
+    
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        from app.models import ProjectRedesign
+    
+        engine = create_engine(f"sqlite:///{tmp_path / 'publish-lock.db'}",
+                               connect_args={"check_same_thread": False, "timeout": 3})
+        ProjectRedesign.__table__.create(engine)
+        Sessions = sessionmaker(bind=engine)
+        setup = Sessions()
+        row = ProjectRedesign(project_id=1, drawing_id=1, status="planned", changes=[], symbols=[])
+        setup.add(row)
+        setup.commit()
+        row_id = row.id
+        setup.close()
+    
+        publisher = Sessions()
+        locked = R._locked_publish_row(publisher, row_id)
+        assert locked.id == row_id
+        attempted = threading.Event()
+        committed = threading.Event()
+        errors = []
+    
+        def approve():
+            other = Sessions()
+            try:
+                changed = other.get(ProjectRedesign, row_id)
+                changed.changes = [{"id": "late", "status": "approved"}]
+                attempted.set()
+                other.commit()
+                committed.set()
+            except Exception as exc:  # pragma: no cover - reported by the assertion
+                errors.append(exc)
+            finally:
+                other.close()
+    
+        thread = threading.Thread(target=approve, daemon=True)
+        thread.start()
+        assert attempted.wait(1)
+        time.sleep(0.15)
+&gt;       assert not committed.is_set()                   # blocked inside the publication transaction
+E       assert not True
+E        +  where True = is_set()
+E        +    where is_set = &lt;threading.Event at 0x23380ab3b30: set&gt;.is_set
+
+tests\test_redesign_apply.py:681: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_concurrent_publication_an_edit_started_inside_the_window_waits_and_its_approval_is_kept" time="4.156"><failure message="AssertionError: an approval committed inside the publication window&#10;assert False">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x00000233FF985040&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x0000023380AC5DF0&gt;, ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000023380AC7890&gt;
+
+    def test_concurrent_publication_an_edit_started_inside_the_window_waits_and_its_approval_is_kept(gc, monkeypatch):
+        """(a) An approval PATCH started while Apply is inside the publication
+        transaction (after the final compare, at the rename) cannot commit until
+        Apply has committed; the output is made from the pre-PATCH snapshot and
+        the new approval is kept. With the lock removed this test FAILS (the
+        PATCH commits inside the window): mutation evidence in the M5 package."""
+        fingerprint_before = R.content_fingerprint(_row(gc), _row(gc).source_sha256)
+        inside, release = threading.Event(), threading.Event()
+        original = R._finalize
+    
+        def held_finalize(part, dest):
+            inside.set()
+            assert release.wait(30)
+            return original(part, dest)
+    
+        monkeypatch.setattr(R, "_finalize", held_finalize)
+        applied: dict = {}
+        approved: dict = {}
+        a = _apply_in_thread(gc, applied)
+        assert inside.wait(60), applied.get("error")
+        b = _approve_in_thread(gc, "p1", approved)
+        time.sleep(1.5)                                  # the PATCH has had every chance to commit
+        blocked = "done" not in approved and "error" not in approved
+        release.set()
+        a.join(60)
+        b.join(60)
+&gt;       assert blocked, "an approval committed inside the publication window"
+E       AssertionError: an approval committed inside the publication window
+E       assert False
+
+tests\test_redesign_apply.py:821: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_concurrent_publication_an_edit_committed_before_the_lock_makes_the_apply_stale_and_writes_nothing" time="1.610" /></testsuite></testsuites>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="21.371" timestamp="2026-10-07T23:58:58.840934+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_redesign_apply" name="test_the_dwg_copy_holds_no_database_lock_a_writer_to_another_table_is_not_blocked" time="18.437"><failure message="sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked&#10;[SQL: INSERT INTO activity_events (user_id, at, action, summary, project_id, project_label, entity_type, entity_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)]&#10;[parameters: (1, '2026-10-07 19:59:01.300838', 'test.write', 'an unrelated write', None, None, None, None)]&#10;(Background on this error at: https://sqlalche.me/e/20/e3q8)">self = &lt;sqlalchemy.engine.base.Connection object at 0x000002005E0CDFD0&gt;
+dialect = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x0000020047267050&gt;
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002005E0555E0&gt;
+statement = &lt;sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x000002005E055580&gt;
+parameters = [(1, '2026-10-07 19:59:01.300838', 'test.write', 'an unrelated write', None, None, ...)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -&gt; CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+&gt;                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x0000020047267050&gt;
+cursor = &lt;sqlite3.Cursor object at 0x000002005E0B6E40&gt;
+statement = 'INSERT INTO activity_events (user_id, at, action, summary, project_id, project_label, entity_type, entity_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+parameters = (1, '2026-10-07 19:59:01.300838', 'test.write', 'an unrelated write', None, None, ...)
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002005E0555E0&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: database is locked
+
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002005C3AB410&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002005C762570&gt;, ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002005C761850&gt;
+
+    def test_the_dwg_copy_holds_no_database_lock_a_writer_to_another_table_is_not_blocked(gc, monkeypatch):
+        """U2M5-02: the slow copy is staged before the publication lock, so a
+        write to an unrelated table (another drawing's job progress, here an
+        activity event) is not blocked while it runs."""
+        from app.models import ActivityEvent, User
+    
+        copying, release = threading.Event(), threading.Event()
+        original = R._stage
+    
+        def slow_stage(source, dest):
+            copying.set()
+            assert release.wait(30)
+            return original(source, dest)
+    
+        monkeypatch.setattr(R, "_stage", slow_stage)
+        applied: dict = {}
+        a = _apply_in_thread(gc, applied)
+        assert copying.wait(60), applied.get("error")
+        db, _project = _session_project(gc)
+        try:
+            user = db.query(User).first()
+            t0 = time.monotonic()
+            db.add(ActivityEvent(user_id=user.id, action="test.write", summary="an unrelated write"))
+&gt;           db.commit()
+
+tests\test_redesign_apply.py:880: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:2028: in commit
+    trans.commit(_to_root=True)
+&lt;string&gt;:2: in commit
+    ???
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:1313: in commit
+    self._prepare_impl()
+&lt;string&gt;:2: in _prepare_impl
+    ???
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:1288: in _prepare_impl
+    self.session.flush()
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:4352: in flush
+    self._flush(objects)
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:4487: in _flush
+    with util.safe_reraise():
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py:4448: in _flush
+    flush_context.execute()
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:466: in execute
+    rec.execute(self)
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\persistence.py:93: in save_obj
+    _emit_insert_statements(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1233: in _emit_insert_statements
+    result = connection.execute(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1418: in execute
+    return meth(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py:515: in _execute_on_connection
+    return connection._execute_clauseelement(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1640: in _execute_clauseelement
+    ret = self._execute_context(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1846: in _execute_context
+    return self._exec_single_context(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:2355: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x0000020047267050&gt;
+cursor = &lt;sqlite3.Cursor object at 0x000002005E0B6E40&gt;
+statement = 'INSERT INTO activity_events (user_id, at, action, summary, project_id, project_label, entity_type, entity_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+parameters = (1, '2026-10-07 19:59:01.300838', 'test.write', 'an unrelated write', None, None, ...)
+context = &lt;sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x000002005E0555E0&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+E       [SQL: INSERT INTO activity_events (user_id, at, action, summary, project_id, project_label, entity_type, entity_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)]
+E       [parameters: (1, '2026-10-07 19:59:01.300838', 'test.write', 'an unrelated write', None, None, None, None)]
+E       (Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+..\..\ep-platform\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py:941: OperationalError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,12 @@
+(princ (strcat "\n" "P2-LISP" "-ALIVE" "\n"))
+(setvar "FILEDIA" 0)
+(princ (strcat "\n" "P2-FILEDIA:" (itoa (getvar "FILEDIA")) "\n"))
+_.CIRCLE
+0,0
+5
+(princ (strcat "\n" "P2-AFTER-CIRCLE:" (if (entlast) (cdr (assoc 0 (entget (entlast)))) "NONE") "\n"))
+(setq p2e (entmake (list (cons 0 "LINE") (cons 8 "0") (list 10 0.0 0.0 0.0) (list 11 10.0 10.0 0.0))))
+(princ (strcat "\n" "P2-ENTMAKE:" (if p2e "YES" "NO") "\n"))
+_.QUIT
+_Y
+

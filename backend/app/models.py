@@ -695,11 +695,15 @@ class ProjectRedesign(Base):
     # Drawings Preparation's last placing (app.redesign.prepare): its agents, the
     # coordination's rooms, the orchestrator's floor reviews, and the gate.
     run: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    # The redesigned copy: "none" | "making" | "made" | "failed"
+    # The last Apply attempt: "none" | "making" | "made" | "failed" | "stale" | "refused" | "cancelled" |
+    # "interrupted" (M5). output_path and output_at name the last copy made, which a later failed,
+    # stale or refused attempt leaves as it is (still downloadable).
     output_status: Mapped[str] = mapped_column(String(16), nullable=False, default="none")
     output_error: Mapped[str | None] = mapped_column(Text, nullable=True)
-    output_path: Mapped[str | None] = mapped_column(Text, nullable=True)        # the platform's copy
-    output_relative: Mapped[str | None] = mapped_column(Text, nullable=True)    # where it was filed in the project folder
+    output_path: Mapped[str | None] = mapped_column(Text, nullable=True)        # the platform's copy (relative to uploads)
+    # where the engineer published it in the project folder (a separate action, OD-15 a); older rows:
+    # where the pre-M5 Apply filed it
+    output_relative: Mapped[str | None] = mapped_column(Text, nullable=True)
     output_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
     output_changes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)

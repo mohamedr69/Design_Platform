@@ -279,8 +279,11 @@ def _redesign(kind: str):
 
         project = session.get(Project, job.project_id)
         p = job.params or {}
+        # an Apply is told what it was asked for and when, so a recovered or stale job
+        # refuses to run instead of making the drawing again (RD-M2)
         step = redesign.plan if kind == "plan" else (
-            lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), **kw))
+            lambda db, project, drawing_id, **kw: redesign.apply(db, project, drawing_id, p.get("user_id"), request=p,
+                                                                 job_id=job.id, job_created_at=job.created_at, **kw))
         try:
             return step(session, project, p["drawing_id"], check=ctx.check,
                         progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage=kind))

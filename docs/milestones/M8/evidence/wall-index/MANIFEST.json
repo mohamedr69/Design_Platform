@@ -1,0 +1,61 @@
+{
+ "task": "ORCH-036 (U2-M8-WALL-INDEX)",
+ "branch": "task/m8-wall-index",
+ "head": "3317b8814f96949eafd3fa89e3be3045df51b149",
+ "base": "5270773a469e31f5cad0b7d7a170e168a1d918ba",
+ "base_code_equals": "668f92f",
+ "start_utc": "2026-10-07T20:51:47Z",
+ "end_utc": "2026-10-07T22:10:32Z",
+ "interpreter": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B",
+ "python": "3.12.10",
+ "platform": "Windows-10-10.0.19045-SP0",
+ "ezdxf": "1.4.4",
+ "golden_input": {
+  "path": "G:\\dev (2)\\dev\\ep-platform-merged\\data\\uploads\\EP-30880\\ifc\\60de2a377daa.dxf",
+  "sha256": "dbe7900f21033b2a9c5d3379c93cbf56250735143f8a424559b09a9d4ee5c14f",
+  "access": "read-only"
+ },
+ "commands": [
+  "git -C roadmap-u2 worktree add -b task/m8-wall-index wt-m8 5270773a469e31f5cad0b7d7a170e168a1d918ba",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B tests/fixtures_m8/make_fixtures.py   (cwd backend; run twice, byte-identical)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m8/bt --junitxml=<evidence>/targeted.xml -q tests/test_redesign_walls_layers.py tests/test_redesign.py tests/test_drawing_prep.py tests/test_fa_interfaces.py tests/test_fa_cases.py tests/test_fa_evidence.py tests/test_fa_review_fixes.py tests/test_ifc_boq.py tests/test_render_bounds.py   (cwd backend; log targeted.log)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m8/bt --junitxml=<evidence>/full-suite.xml -q   (cwd backend; log full-suite.log)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B ../docs/milestones/M8/evidence/wall-index/scripts/gc01_composition.py   (cwd backend; GC-01 read-only)",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/wall-index/scripts/compare_junit.py docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml <evidence>/full-suite.xml <evidence>/full-suite-vs-baseline.json",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M8/evidence/wall-index/scripts/manifest.py START END"
+ ],
+ "changed_source": {
+  "backend/app/core/config.py": "bbc33eaf935e6f8a39d82fd6d9ce5af7a43765a6d220c9de9b313e683991f127",
+  "backend/app/ifc/dxf/geometry.py": "b28496ae36f14751f014aa03d3f05834a42054b1817801b09a2c9f278b469fe0",
+  "backend/app/interfaces/geometry.py": "aca8eea13796c37e946b2cc2453e5837e269b745b2cdbf51762e4f6b9194cff1",
+  "backend/app/redesign/coverage.py": "07b835380fd6a76a0243eb08e6605724edc3d660010e35b9609abbfc2baa8b36",
+  "backend/app/redesign/layers.py": "854e32d69b55225401ba20ffb1e6a71f0ac323d44820dcf64faba53ea5801e2a",
+  "backend/app/redesign/prepare.py": "95a922a4229615c23c917828ec192224bbe2d7dd3e99b4fb43f4a77638403000",
+  "backend/app/redesign/walls.py": "44cabb4b69ae1f48d9a749a350e1f2607b8b229c2182315da5fc1490d6d7f302",
+  "backend/tests/fixtures_m8/f1_simple.dxf": "5edb0da66f0ffabb87ba3e1f44322d4364a67442c09bb026b4cb0031eb139cc0",
+  "backend/tests/fixtures_m8/f2_nested.dxf": "90ac76080fee436e9135db7cd4e73c1f579de714b0c2a7c0f6f3dd1ef6e6d229",
+  "backend/tests/fixtures_m8/f3_states.dxf": "87c2705d98ae367f96dd71a7883cd9e9b465efc9a13596454b9f3aa6aaeca2ef",
+  "backend/tests/fixtures_m8/f4_invisible.dxf": "958798ca387720fce224b66559b79432f2cee2d730f8309e1c863ec7e43a4099",
+  "backend/tests/fixtures_m8/f5_viewport.dxf": "2c7939c95ee887c7684800a0ff39f79cb47aa665c41d1dbdcdbd54dbcd2606b2",
+  "backend/tests/fixtures_m8/f6_xref.dxf": "83099f422d312d60cefc55ef0352ba03a35dd5ea15dc76811b038d283e63eb80",
+  "backend/tests/fixtures_m8/f7_denylist.dxf": "1b62e86065f2bacb050298c0bd7dffb2d57a3b57422c83b4630ffe79314474c4",
+  "backend/tests/fixtures_m8/make_fixtures.py": "269c8b26508c5a9d332d420aeb852d82b607da8ccf91dfb0222a76d899bd746b",
+  "backend/tests/test_redesign_walls_layers.py": "3829b74b444950cd05475049920b66fbaf806e4927f056d7f872ad7db33072f9"
+ },
+ "report": {
+  "docs/milestones/M8/M8-WALL-INDEX-IMPLEMENTATION.md": "3b066074a24930ca32d98d053e856bc1886b6fbc9d0e06ae9194e110c7b9163c"
+ },
+ "evidence": {
+  "docs/milestones/M8/evidence/wall-index/full-suite-vs-baseline.json": "4f678c4041c0f38b71168c08de4a8b001a746669d3d3bf3a8f8a05c5ad29c715",
+  "docs/milestones/M8/evidence/wall-index/full-suite.log": "ea5f74a17c745d7ff61008843e419b99459305cf4c0bd80716cf76db53031cd2",
+  "docs/milestones/M8/evidence/wall-index/full-suite.xml": "6ff67797047cd1e0f096b12408cb167ca50523b55d3657345f997cbce0cf8f97",
+  "docs/milestones/M8/evidence/wall-index/gc01-composition.json": "307eb50c52418a2aa08eacff95c00b82896d144236ebdfbcfb5549ece4039789",
+  "docs/milestones/M8/evidence/wall-index/gc01-run.log": "0e25e6558ba37a6739133d6e4246c8c1e836f16ce0599384be9ae1b5d06d7169",
+  "docs/milestones/M8/evidence/wall-index/gc01-vs-rd-m1.json": "fe108cbe8b8a91961c320a574eaa25d18e52c4f1fe53d143cd97cb1b6b5b1396",
+  "docs/milestones/M8/evidence/wall-index/scripts/compare_junit.py": "ce11671148a21a41b87eec8a35718ac6180c0c3a85ad81bef0afe5ad960bec2c",
+  "docs/milestones/M8/evidence/wall-index/scripts/gc01_composition.py": "54cd9ee9cb929c7a1c3b00daf3ba4981acd1ec35e88450360e1c618102a25385",
+  "docs/milestones/M8/evidence/wall-index/scripts/manifest.py": "5258ee09a920572993f97dcaf1f89abcf6bbc7c361269fa08ff6fbce56589b9a",
+  "docs/milestones/M8/evidence/wall-index/targeted.log": "77b0bc9fd5a17548485bce3a023f8c4cc25b8f21f034e1429c96728bff04382e",
+  "docs/milestones/M8/evidence/wall-index/targeted.xml": "bc615abd31e00ec79ff54b7bb70d37b014e55289e0d384c87ae6b0c5b7d7e03b"
+ }
+}

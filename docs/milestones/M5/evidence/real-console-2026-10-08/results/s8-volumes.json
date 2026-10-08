@@ -1,0 +1,161 @@
+{
+ "at": "2026-10-08T03:19:37+00:00",
+ "payload": "C:\\t\\tmp\\m5cad\\src\\GC-01-copy.dwg",
+ "payload_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "trials": [
+  {
+   "label": "Apply: platform copy, same volume (C:)",
+   "function": "_finalize",
+   "part": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\vol-test-staging\\.GC-01 FA LAYOUT R0 - Redesign volume trial A.dwg.part",
+   "dest": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\vol-test\\GC-01 FA LAYOUT R0 - Redesign volume trial A.dwg",
+   "volumes": [
+    "C:",
+    "C:"
+   ],
+   "raised": null,
+   "part_before": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "part_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 2,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "dest_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 2,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "branch": "hard link",
+   "dest_equals_payload": true,
+   "second_raised": "ApplyError: An output named GC-01 FA LAYOUT R0 - Redesign volume trial A.dwg already exists: nothing was overwritten.",
+   "dest_after_second": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "unchanged_after_second": true
+  },
+  {
+   "label": "Publish: archive on the same volume (C:)",
+   "function": "_into_archive",
+   "part": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\vol-test-staging\\.GC-01 FA LAYOUT R0 - Redesign volume trial B.dwg.part",
+   "dest": "C:\\t\\tmp\\m5cad\\archive\\vol-test archive (same volume)\\03- Drawings\\Redesign\\GC-01 FA LAYOUT R0 - Redesign volume trial B.dwg",
+   "volumes": [
+    "C:",
+    "C:"
+   ],
+   "raised": null,
+   "part_before": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "part_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 2,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "dest_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 2,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "branch": "hard link",
+   "dest_equals_payload": true,
+   "second_raised": "ApplyError: An output named GC-01 FA LAYOUT R0 - Redesign volume trial B.dwg already exists: nothing was overwritten.",
+   "dest_after_second": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "unchanged_after_second": true
+  },
+  {
+   "label": "Publish: archive on a second volume (G:)",
+   "function": "_into_archive",
+   "part": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\vol-test-staging\\.GC-01 FA LAYOUT R0 - Redesign volume trial C.dwg.part",
+   "dest": "G:\\t\\tmp\\m5cad-vol2\\archive (second volume)\\03- Drawings\\Redesign\\GC-01 FA LAYOUT R0 - Redesign volume trial C.dwg",
+   "volumes": [
+    "C:",
+    "G:"
+   ],
+   "raised": null,
+   "part_before": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "part_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "dest_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "branch": "exclusive copy",
+   "dest_equals_payload": true,
+   "second_raised": "ApplyError: An output named GC-01 FA LAYOUT R0 - Redesign volume trial C.dwg already exists: nothing was overwritten.",
+   "dest_after_second": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "unchanged_after_second": true
+  },
+  {
+   "label": "Apply's _finalize across volumes (C: -> G:), for the record",
+   "function": "_finalize",
+   "part": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\vol-test-staging\\.GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg.part",
+   "dest": "G:\\t\\tmp\\m5cad-vol2\\finalize cross-volume\\GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg",
+   "volumes": [
+    "C:",
+    "G:"
+   ],
+   "raised": "OSError: [WinError 17] The system cannot move the file to a different disk drive: 'C:\\\\t\\\\tmp\\\\m5cad\\\\uploads\\\\EP-90880\\\\redesign\\\\vol-test-staging\\\\.GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg.part' -> 'G:\\\\t\\\\tmp\\\\m5cad-vol2\\\\finalize cross-volume\\\\GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg'",
+   "part_before": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "part_after": {
+    "exists": true,
+    "bytes": 4380643,
+    "nlink": 1,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   "dest_after": {
+    "exists": false
+   },
+   "branch": "none",
+   "dest_equals_payload": false,
+   "second_raised": "OSError: [WinError 17] The system cannot move the file to a different disk drive: 'C:\\\\t\\\\tmp\\\\m5cad\\\\uploads\\\\EP-90880\\\\redesign\\\\vol-test-staging\\\\.again-GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg.part' -> 'G:\\\\t\\\\tmp\\\\m5cad-vol2\\\\finalize cross-volume\\\\GC-01 FA LAYOUT R0 - Redesign volume trial D.dwg'",
+   "dest_after_second": {
+    "exists": false
+   },
+   "unchanged_after_second": true
+  }
+ ],
+ "raw_link_probe": {
+  "same volume": "os.link ok",
+  "second volume": "os.link OSError winerror=17: [WinError 17] The system cannot move the file to a different disk drive: 'C:\\\\t\\\\tmp\\\\m5cad\\\\uploads\\\\EP-90880\\\\redesign\\\\vol-test-staging\\\\link-probe-src.bin' -> 'G:\\\\t\\\\tmp\\\\m5cad-vol2\\\\link-probe-dst.bin'"
+ }
+}

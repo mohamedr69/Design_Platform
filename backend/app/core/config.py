@@ -483,6 +483,11 @@ class Settings(BaseSettings):
     prep_heat_radius_m: float = 6.3
     # The drawing's columns: what is drawn on a layer like these, column-sized.
     prep_column_layers: str = r"COLUMN|\bCOLS?\b|S-COL|A-COL|STR.*COL|PILLAR|\bCOL[-_ ]"
+    # The drawing's walls (app.redesign.walls, M8): only lines whose effective layer's
+    # own name (a bound xref's "X$0$" prefix taken off) is like these are walls --
+    # EP-30880: 06-WALL, 11-GLASS-1, 10-SILL; finishes drawn along a wall (23-WALL-TILES)
+    # are not. Case-insensitive; walls.NOT_WALLS still refuses what it names.
+    prep_wall_layers: str = r"^(?!.*(?:TILE|FINISH)).*(?:WALL|PARTITION|CURTAIN|GLASS|GLAZ|SILL)"
     # The interface schedule's damper pictures (app.interfaces.render): drawn in
     # a child process with a deadline per picture and for opening the drawing;
     # an overrun kills the child and that window is reported unread, never

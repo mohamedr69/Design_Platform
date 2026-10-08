@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="11" time="32.684" timestamp="2026-10-08T03:18:18.333843+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_redesign_apply" name="test_an_approval_committed_between_the_request_check_and_the_making_write_is_refused_not_drawn" time="4.250"><failure message="AssertionError: {'result': {'apply_id': 'j0-8907bc6dd2', 'changes': 5, 'drawing_id': 1, 'erases': 1, ...}}&#10;assert False&#10; +  where False = isinstance(None, &lt;class 'app.redesign.service.ApplyRefused'&gt;)&#10; +    where None = &lt;built-in method get of dict object at 0x0000022809A35540&gt;('error')&#10; +      where &lt;built-in method get of dict object at 0x0000022809A35540&gt; = {'result': {'apply_id': 'j0-8907bc6dd2', 'changes': 5, 'drawing_id': 1, 'erases': 1, ...}}.get&#10; +    and   &lt;class 'app.redesign.service.ApplyRefused'&gt; = R.ApplyRefused">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x0000022871D53E90&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x0000022809D98F50&gt;, ...}
+
+    def test_an_approval_committed_between_the_request_check_and_the_making_write_is_refused_not_drawn(gc):
+        """U2M5V-01 (probe P3): an approval committed after Apply's first look at
+        the request and before its own "making" write was drawn -- Apply made the
+        newer approved set, not the one it was asked for. The request is now
+        checked again inside the serialized transaction that writes "making" and
+        takes the snapshot: refused, nothing run, the newer approval kept."""
+        request = R.apply_request(gc["db"], gc["project"], gc["drawing"])
+        assert request["drawn"] == 4
+        approved: dict = {}
+    
+        def check():
+            if not approved:                              # the first check after the request's first look
+                _approve_in_thread(gc, "p1", approved).join(30)
+                assert "done" in approved, approved.get("error")
+    
+        applied: dict = {}
+        _apply_in_thread(gc, applied, request=request, check=check).join(120)
+&gt;       assert isinstance(applied.get("error"), R.ApplyRefused), applied
+E       AssertionError: {'result': {'apply_id': 'j0-8907bc6dd2', 'changes': 5, 'drawing_id': 1, 'erases': 1, ...}}
+E       assert False
+E        +  where False = isinstance(None, &lt;class 'app.redesign.service.ApplyRefused'&gt;)
+E        +    where None = &lt;built-in method get of dict object at 0x0000022809A35540&gt;('error')
+E        +      where &lt;built-in method get of dict object at 0x0000022809A35540&gt; = {'result': {'apply_id': 'j0-8907bc6dd2', 'changes': 5, 'drawing_id': 1, 'erases': 1, ...}}.get
+E        +    and   &lt;class 'app.redesign.service.ApplyRefused'&gt; = R.ApplyRefused
+
+tests\test_redesign_apply.py:1326: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_publish_stages_its_temporary_copy_in_the_platform_folder_never_in_the_archive" time="1.848"><failure message="AssertionError: assert [WindowsPath(...gs/Redesign')] == [WindowsPath(.../publishing')]&#10;  &#10;  At index 0 diff: WindowsPath('C:/t/tmp/m5b/bt/test_publish_stages_its_tempor0/archive/EP-40951 Tower/03- Drawings/Redesign') != WindowsPath('C:/t/tmp/m5b/bt/test_publish_stages_its_tempor0/uploads/EP-40951/redesign/publishing')&#10;  Use -v to get more diff">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280A6F2540&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280A6CC2F0&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_publish_stages_its_tempor0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002280A6CC2C0&gt;
+
+    def test_publish_stages_its_temporary_copy_in_the_platform_folder_never_in_the_archive(gc, tmp_path, monkeypatch):
+        """U2M5V-02: the publication's ".part" is staged in the platform's own
+        redesign folder (redesign/publishing), then put into the archive under
+        its final name; no temporary file is ever created in the archive."""
+        archive = _archive(gc, tmp_path)
+        result = _apply(gc)
+        _succeeded(gc, result)
+        staged: list[Path] = []
+        in_archive_while_staged: list[list[str]] = []
+        original = R._stage
+    
+        def stage(source, dest):
+            part = original(source, dest)
+            staged.append(Path(part))
+            in_archive_while_staged.append(sorted(p.name for p in archive.rglob("*") if p.is_file()))
+            return part
+    
+        monkeypatch.setattr(R, "_stage", stage)
+        response = gc["client"].post(_publish_url(gc), json={})
+        assert response.status_code == 200, response.text
+        platform = (gc["uploads"] / "EP-40951" / "redesign" / "publishing").resolve()
+&gt;       assert [p.parent.resolve() for p in staged] == [platform]
+E       AssertionError: assert [WindowsPath(...gs/Redesign')] == [WindowsPath(.../publishing')]
+E         
+E         At index 0 diff: WindowsPath('C:/t/tmp/m5b/bt/test_publish_stages_its_tempor0/archive/EP-40951 Tower/03- Drawings/Redesign') != WindowsPath('C:/t/tmp/m5b/bt/test_publish_stages_its_tempor0/uploads/EP-40951/redesign/publishing')
+E         Use -v to get more diff
+
+tests\test_redesign_apply.py:1359: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_leftover_publication_temporary_is_said_as_such_swept_and_does_not_block_for_good" time="2.780"><failure message="AssertionError: assert ('temporary' in '03- Drawings/Redesign/FA LAYOUT R0 - Redesign 20261007-231828-488844Z d1 s653086a7b9ec j0-6dfe00bc7c.dwg is already in the project archive: nothing was overwritten.')">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280A30F380&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280A589B80&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_a_leftover_publication_te0')
+
+    def test_a_leftover_publication_temporary_is_said_as_such_swept_and_does_not_block_for_good(gc, tmp_path):
+        """U2M5V-02: a publication stopped mid-copy leaves its temporary copy in
+        the platform's staging folder. A publication meanwhile is refused with a
+        409 that says so (not "already in the archive"), the worker's sweep
+        removes it, and the copy can then be published. A ".part" an earlier
+        version left in the archive itself never blocks a publication and is
+        never touched by the platform."""
+        archive = _archive(gc, tmp_path)
+        result = _apply(gc)
+        _succeeded(gc, result)
+        platform = gc["uploads"] / "EP-40951" / "redesign" / "publishing"
+        platform.mkdir(parents=True, exist_ok=True)
+        leftover = platform / f".{result['file']}{R.PART}"
+        leftover.write_bytes(b"half a copy")
+        _old(leftover)
+        (archive / R.FOLDER).mkdir(parents=True)
+        earlier = archive / R.FOLDER / f".{result['file']}{R.PART}"
+        earlier.write_bytes(b"left by the earlier version")
+        refused = gc["client"].post(_publish_url(gc), json={})
+        assert refused.status_code == 409
+        detail = refused.json()["detail"]
+&gt;       assert "temporary" in detail and "already in the project archive" not in detail
+E       AssertionError: assert ('temporary' in '03- Drawings/Redesign/FA LAYOUT R0 - Redesign 20261007-231828-488844Z d1 s653086a7b9ec j0-6dfe00bc7c.dwg is already in the project archive: nothing was overwritten.')
+
+tests\test_redesign_apply.py:1387: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_publishing_to_an_archive_on_another_volume_copies_exclusively_and_never_overwrites" time="2.462"><failure message="OSError: [Errno 18] not the same device">+ Exception Group Traceback (most recent call last):
+  |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_utils.py", line 76, in collapse_excgroups
+  |     yield
+  |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\runner.py", line 341, in from_call
+    |     result: TResult | None = func()
+    |                              ^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\runner.py", line 242, in &lt;lambda&gt;
+    |     lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\threadexception.py", line 92, in pytest_runtest_call
+    |     yield from thread_exception_runtest_hook()
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\threadexception.py", line 68, in thread_exception_runtest_hook
+    |     yield
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\unraisableexception.py", line 95, in pytest_runtest_call
+    |     yield from unraisable_exception_runtest_hook()
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\unraisableexception.py", line 70, in unraisable_exception_runtest_hook
+    |     yield
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\logging.py", line 846, in pytest_runtest_call
+    |     yield from self._runtest_for(item, "call")
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\logging.py", line 829, in _runtest_for
+    |     yield
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\capture.py", line 880, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\skipping.py", line 257, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\runner.py", line 174, in pytest_runtest_call
+    |     item.runtest()
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\python.py", line 1627, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\_pytest\python.py", line 159, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\tests\test_redesign_apply.py", line 1417, in test_publishing_to_an_archive_on_another_volume_copies_exclusively_and_never_overwrites
+    |     response = gc["client"].post(_publish_url(gc), json={})
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py", line 593, in post
+    |     return super().post(
+    |            ^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 1144, in post
+    |     return self.request(
+    |            ^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py", line 484, in request
+    |     return super().request(
+    |            ^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 825, in request
+    |     return self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 914, in send
+    |     response = self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    |     response = self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    |     response = self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    |     response = transport.handle_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py", line 377, in handle_request
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py", line 374, in handle_request
+    |     portal.call(self.app, scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\from_thread.py", line 340, in call
+    |     return cast(T_Retval, self.start_task_soon(func, *args).result())
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 456, in result
+    |     return self.__get_result()
+    |            ^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    |     raise self._exception
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\from_thread.py", line 265, in _call_func
+    |     retval = await retval_or_awaitable
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\fastapi\applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 187, in __call__
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |          ^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\app\main.py", line 171, in slide_session
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |          ^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\app\main.py", line 141, in request_id
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py", line 715, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py", line 735, in app
+    |     await route.handle(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\fastapi\routing.py", line 301, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\fastapi\routing.py", line 214, in run_endpoint_function
+    |     return await run_in_threadpool(dependant.call, **values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func, *args)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    |     result = context.run(func, *args)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\app\routers\redesign.py", line 233, in publish
+    |     done = service.publish(db, project, drawing_id, current_user, (body or PublishIn()).output)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\app\redesign\service.py", line 2162, in publish
+    |     _finalize(staged, final)
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\app\redesign\service.py", line 1815, in _finalize
+    |     os.rename(part, dest)
+    |   File "G:\dev (2)\dev\ep-platform-merged\wt-m5b\backend\tests\test_redesign_apply.py", line 1411, in op
+    |     raise OSError(errno.EXDEV, "not the same device")
+    | OSError: [Errno 18] not the same device
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280AB198E0&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280C2D68D0&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_publishing_to_an_archive_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002280C2D6DE0&gt;
+
+    def test_publishing_to_an_archive_on_another_volume_copies_exclusively_and_never_overwrites(gc, tmp_path, monkeypatch):
+        """U2M5V-02: where the archive is on another volume (no hard link, no
+        rename across volumes) the final name is created exclusively and
+        filled; a name already there is refused, and the 409 says whether it
+        holds the same file or a different one."""
+        import errno
+    
+        archive = _archive(gc, tmp_path)
+        result = _apply(gc)
+        _succeeded(gc, result)
+        link, rename = os.link, os.rename
+    
+        def no_cross_volume(real):
+            def op(src, dst, *a, **kw):
+                if str(archive) in str(dst):
+                    raise OSError(errno.EXDEV, "not the same device")
+                return real(src, dst, *a, **kw)
+            return op
+    
+        monkeypatch.setattr(os, "link", no_cross_volume(link))
+        monkeypatch.setattr(os, "rename", no_cross_volume(rename))
+&gt;       response = gc["client"].post(_publish_url(gc), json={})
+
+tests\test_redesign_apply.py:1417: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:593: in post
+    return super().post(
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:484: in request
+    return super().request(
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+..\..\ep-platform\backend\venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:377: in handle_request
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:374: in handle_request
+    portal.call(self.app, scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\..\ep-platform\backend\venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+..\..\ep-platform\backend\venv\Lib\site-packages\fastapi\applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\errors.py:187: in __call__
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:185: in __call__
+    with collapse_excgroups():
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:158: in __exit__
+    self.gen.throw(value)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_utils.py:82: in collapse_excgroups
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:187: in __call__
+    response = await self.dispatch_func(request, call_next)
+app\main.py:171: in slide_session
+    response = await call_next(request)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:163: in call_next
+    raise app_exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:185: in __call__
+    with collapse_excgroups():
+C:\Users\moham\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:158: in __exit__
+    self.gen.throw(value)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_utils.py:82: in collapse_excgroups
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:187: in __call__
+    response = await self.dispatch_func(request, call_next)
+app\main.py:141: in request_id
+    response = await call_next(request)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:163: in call_next
+    raise app_exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py:62: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py:715: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py:735: in app
+    await route.handle(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py:288: in handle
+    await self.app(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\routing.py:73: in app
+    response = await f(request)
+..\..\ep-platform\backend\venv\Lib\site-packages\fastapi\routing.py:301: in app
+    raw_response = await run_endpoint_function(
+..\..\ep-platform\backend\venv\Lib\site-packages\fastapi\routing.py:214: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\concurrency.py:39: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+..\..\ep-platform\backend\venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+..\..\ep-platform\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+..\..\ep-platform\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+app\routers\redesign.py:233: in publish
+    done = service.publish(db, project, drawing_id, current_user, (body or PublishIn()).output)
+app\redesign\service.py:2162: in publish
+    _finalize(staged, final)
+app\redesign\service.py:1815: in _finalize
+    os.rename(part, dest)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/t/tmp/m5b/bt/test_publishing_to_an_archive_0/archive/EP-40951 Tower/03- Drawings/Redesign/.FA LAYOUT R0 - Redesign 20261007-231831-016364Z d1 s653086a7b9ec j0-c7eae5211a.dwg.part')
+dst = WindowsPath('C:/t/tmp/m5b/bt/test_publishing_to_an_archive_0/archive/EP-40951 Tower/03- Drawings/Redesign/FA LAYOUT R0 - Redesign 20261007-231831-016364Z d1 s653086a7b9ec j0-c7eae5211a.dwg')
+a = (), kw = {}
+
+    def op(src, dst, *a, **kw):
+        if str(archive) in str(dst):
+&gt;           raise OSError(errno.EXDEV, "not the same device")
+E           OSError: [Errno 18] not the same device
+
+tests\test_redesign_apply.py:1411: OSError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_copy_made_whose_job_never_succeeded_is_reconciled_when_the_recovered_job_runs_again" time="2.831"><failure message="AssertionError: ('failed', &quot;ReadError: Refused: this drawing's redesigned copy was already made at 2026-10-07 23:18:37 UTC, after this Apply was asked for. Nothing was run again.&quot;)&#10;assert ('failed' == 'succeeded'&#10;  &#10;  - succeeded&#10;  + failed)">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280A7D0170&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280C2D7F80&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_a_copy_made_whose_job_nev0')
+
+    def test_a_copy_made_whose_job_never_succeeded_is_reconciled_when_the_recovered_job_runs_again(gc, tmp_path):
+        """U2M5V-03: the recovered job finds the copy it made and verified
+        (bound by its run's verification.json and the copy's sha256) and
+        succeeds with it -- AutoCAD is not run again -- so the copy can be
+        published."""
+        from app.ifc.services import runners
+        from app.models import BackgroundJob
+        from app.services import jobs
+    
+        db = gc["db"]
+        job, made = _made_then_worker_stopped(gc)
+        jobs.recover_stale(db, stale_after=timedelta(minutes=1))
+        db.refresh(job)
+        assert job.status == "queued"
+        ended = jobs.execute(db, job.id, lambda s, ctx: runners.RUNNERS[R.KIND_APPLY](s, s.get(BackgroundJob, job.id), ctx))
+        db.expire_all()
+        job = db.get(BackgroundJob, job.id)
+&gt;       assert ended == "succeeded" and job.result["path"] == made["path"], (ended, job.error)
+E       AssertionError: ('failed', "ReadError: Refused: this drawing's redesigned copy was already made at 2026-10-07 23:18:37 UTC, after this Apply was asked for. Nothing was run again.")
+E       assert ('failed' == 'succeeded'
+E         
+E         - succeeded
+E         + failed)
+
+tests\test_redesign_apply.py:1469: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_made_copy_whose_job_failed_is_reconciled_by_housekeeping_only_while_it_still_verifies" time="2.798"><failure message="AttributeError: module 'app.redesign.service' has no attribute 'reconcile_made'">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280A589700&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280E0928D0&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_a_made_copy_whose_job_fai0')
+
+    def test_a_made_copy_whose_job_failed_is_reconciled_by_housekeeping_only_while_it_still_verifies(gc, tmp_path):
+        """U2M5V-03: a job left "failed" (its own commit failed, or it was given
+        up after the worker stopped) is reconciled by the worker's housekeeping
+        from the verified copy -- but never while the copy is not the file its
+        run verified."""
+        from app.models import BackgroundJob
+        from app.workers import ifc_worker
+        from app.database import SessionLocal
+    
+        db = gc["db"]
+        job, made = _made_then_worker_stopped(gc)
+        job.status, job.error, job.finished_at = "failed", "The worker stopped without finishing this job", utc_now()
+        db.commit()
+        copy = gc["uploads"] / made["path"]
+        good = copy.read_bytes()
+        copy.write_bytes(good + b" ALTERED")
+&gt;       assert R.reconcile_made(db) == []
+E       AttributeError: module 'app.redesign.service' has no attribute 'reconcile_made'
+
+tests\test_redesign_apply.py:1493: AttributeError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_made_copy_whose_job_failed_is_reconciled_by_the_next_publish_or_apply_request" time="2.500"><failure message="AssertionError: {&quot;detail&quot;:&quot;Only a copy Apply made and verified can be published to the project archive.&quot;}&#10;assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280C3225A0&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280D019BB0&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_a_made_copy_whose_job_fai1')
+
+    def test_a_made_copy_whose_job_failed_is_reconciled_by_the_next_publish_or_apply_request(gc, tmp_path):
+        """U2M5V-03: without housekeeping, the next publish request reconciles
+        the job from the verified copy; the next Apply of the same approved set
+        is then refused as already made instead of drawing it again."""
+        from app.models import BackgroundJob
+    
+        db = gc["db"]
+        job, made = _made_then_worker_stopped(gc)
+        job.status, job.error = "failed", "OperationalError: database is locked"
+        db.commit()
+        _archive(gc, tmp_path)
+        response = gc["client"].post(_publish_url(gc), json={})
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: {"detail":"Only a copy Apply made and verified can be published to the project archive."}
+E       assert 422 == 200
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests\test_redesign_apply.py:1519: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_made_copy_whose_job_failed_is_reconciled_when_the_next_apply_is_asked_for" time="2.810"><failure message="Failed: DID NOT RAISE &lt;class 'app.redesign.service.ApplyRefused'&gt;">gc = {'blockers': [], 'calls': {'autocad': 2, 'readback': 3}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280D6189E0&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280D5E2F90&gt;, ...}
+
+    def test_a_made_copy_whose_job_failed_is_reconciled_when_the_next_apply_is_asked_for(gc):
+        from app.models import BackgroundJob
+    
+        db = gc["db"]
+        job, made = _made_then_worker_stopped(gc)
+        job.status = "failed"
+        db.commit()
+&gt;       with pytest.raises(R.ApplyRefused, match=f"already made by job {job.id}"):
+E       Failed: DID NOT RAISE &lt;class 'app.redesign.service.ApplyRefused'&gt;
+
+tests\test_redesign_apply.py:1534: Failed</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_publish_refuses_a_copy_that_is_no_longer_the_file_apply_verified" time="2.555"><failure message="assert (200 == 422)&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">gc = {'blockers': [], 'calls': {'autocad': 1, 'readback': 2}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280CFF8140&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280CE2A180&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_publish_refuses_a_copy_th0')
+
+    def test_publish_refuses_a_copy_that_is_no_longer_the_file_apply_verified(gc, tmp_path):
+        """U2M5V-07: publication is bound to the copy_sha256 its run's
+        verification.json recorded: a platform copy altered on disk since is
+        refused, and nothing reaches the archive."""
+        archive = _archive(gc, tmp_path)
+        result = _apply(gc)
+        _succeeded(gc, result)
+        copy = gc["uploads"] / result["path"]
+        good = copy.read_bytes()
+        copy.write_bytes(good + b" ALTERED")
+        response = gc["client"].post(_publish_url(gc), json={})
+&gt;       assert response.status_code == 422 and "no longer the file" in response.json()["detail"]
+E       assert (200 == 422)
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+tests\test_redesign_apply.py:1551: AssertionError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_a_copy_filed_by_the_pre_m5_apply_is_said_filed_by_an_earlier_version_not_published" time="2.206"><failure message="KeyError: 'published'">gc = {'blockers': [], 'calls': {'autocad': 0, 'readback': 0}, 'client': &lt;starlette.testclient.TestClient object at 0x000002280CE43800&gt;, 'db': &lt;sqlalchemy.orm.session.Session object at 0x000002280D18A1B0&gt;, ...}
+tmp_path = WindowsPath('C:/t/tmp/m5b/bt/test_a_copy_filed_by_the_pre_m0')
+
+    def test_a_copy_filed_by_the_pre_m5_apply_is_said_filed_by_an_earlier_version_not_published(gc, tmp_path):
+        """U2M5V-04: a row the pre-M5 Apply filed keeps output_relative; with
+        no publication event it is "filed by an earlier version, not verified",
+        never "published". A copy the engineer published is said published."""
+        folder = gc["uploads"] / "EP-40951" / "redesign"
+        folder.mkdir(parents=True, exist_ok=True)
+        name = "FA LAYOUT R0 - Redesign 2026-10-02 1654.dwg"
+        (folder / name).write_bytes(b"made by the old Apply")
+        row = _row(gc)
+        row.output_status, row.output_path, row.output_relative = "made", f"EP-40951/redesign/{name}", f"{R.FOLDER}/{name}"
+        row.output_at = utc_now()
+        gc["db"].commit()
+        out = gc["client"].get(f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}").json()["output"]
+&gt;       assert out["available"] and out["published"] is None and out["filed_earlier"] == f"{R.FOLDER}/{name}"
+E       KeyError: 'published'
+
+tests\test_redesign_apply.py:1570: KeyError</failure></testcase><testcase classname="tests.test_redesign_apply" name="test_the_panel_says_a_pre_m5_filing_apart_from_a_publication_and_keeps_the_two_meanings_apart" time="0.003"><failure message="assert 'filed by an earlier version, not verified' in &quot;/** Drawings Preparation's steps after the review (app.redesign):\n *\n *  devices     every change accepted on the r.../button&gt;\n              )}\n            &lt;/span&gt;\n          &lt;/div&gt;\n        )}\n      &lt;/div&gt;\n    &lt;/section&gt;\n  );\n}\n&quot;">def test_the_panel_says_a_pre_m5_filing_apart_from_a_publication_and_keeps_the_two_meanings_apart():
+        """U2M5V-04/-05: the panel's wording follows the view."""
+        path = Path(__file__).resolve().parents[2] / "frontend" / "src" / "components" / "prep" / "RedesignPanel.tsx"
+        if not path.is_file():
+            pytest.skip("the frontend is not beside this backend")
+        panel = path.read_text(encoding="utf-8")
+&gt;       assert "filed by an earlier version, not verified" in panel
+E       assert 'filed by an earlier version, not verified' in "/** Drawings Preparation's steps after the review (app.redesign):\n *\n *  devices     every change accepted on the r.../button&gt;\n              )}\n            &lt;/span&gt;\n          &lt;/div&gt;\n        )}\n      &lt;/div&gt;\n    &lt;/section&gt;\n  );\n}\n"
+
+tests\test_redesign_apply.py:1586: AssertionError</failure></testcase></testsuite></testsuites>

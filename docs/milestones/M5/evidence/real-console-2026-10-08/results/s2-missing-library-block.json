@@ -1,0 +1,240 @@
+{
+ "name": "s2-missing-library-block",
+ "at": "2026-10-08T03:15:14+00:00",
+ "seconds": 0.05,
+ "job_id": 2,
+ "job_status": "failed",
+ "request": {
+  "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "fingerprint": "8ddcc9ca6b5280e01b391cae254054a963aceadac4965046e6ac1b203b92841f",
+  "drawn": 3
+ },
+ "commands": [],
+ "outcome": {
+  "raised": "ApplyError",
+  "message": "Change m1: the CR module's file is missing from this installation's Redesign library.",
+  "traceback": [
+   "  File \"C:\\t\\tmp\\m5cad\\code\\ep platform (m5 copy)\\backend\\app\\redesign\\service.py\", line 1569, in to_cad",
+   "    insert = {**insert, \"library\": module_library(code, cid, library).as_posix()}",
+   "                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+   "  File \"C:\\t\\tmp\\m5cad\\code\\ep platform (m5 copy)\\backend\\app\\redesign\\service.py\", line 455, in module_library",
+   "    raise ApplyError(f\"Change {change_id}: the {code} module's file is missing from this installation's \"",
+   "app.redesign.service.ApplyError: Change m1: the CR module's file is missing from this installation's Redesign library."
+  ]
+ },
+ "checks_called": 1,
+ "events": [],
+ "before": {
+  "row": {
+   "output_status": "failed",
+   "output_error": "The redesigned copy did not verify, so it was not kept as a result: AutoCAD's completion marker is missing.; The redesigned copy is the same as the source: nothing was saved.; The redesigned copy could not be read back.",
+   "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+   "output_relative": null,
+   "output_at": "2026-10-08 03:14:19.665116",
+   "output_changes": 0
+  },
+  "redesign_tree": [
+   {
+    "path": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/autocad.log",
+    "bytes": 1210,
+    "sha256": "4f6ffd8eccc383d168151cda038e593cc3bff0f9c763630ea71f73df5b661147"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.scr",
+    "bytes": 4926,
+    "sha256": "eee1a6ce0ab173606d7edf0609a460012c18780db059281da231118283aedcdb"
+   },
+   {
+    "path": "runs/j1-238d814a69/verification.json",
+    "bytes": 999,
+    "sha256": "ea2ed277a9ff81f87168374cbf1fd61ddfddc81af8b9f258715dc047138d9768"
+   }
+  ],
+  "archive_tree": [],
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "source_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "consoles": [],
+  "last_output": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+ },
+ "run": {
+  "run_dir": "j1-238d814a69",
+  "files": [
+   {
+    "path": "autocad.log",
+    "bytes": 1210,
+    "sha256": "4f6ffd8eccc383d168151cda038e593cc3bff0f9c763630ea71f73df5b661147"
+   },
+   {
+    "path": "redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "redesign.scr",
+    "bytes": 4926,
+    "sha256": "eee1a6ce0ab173606d7edf0609a460012c18780db059281da231118283aedcdb"
+   },
+   {
+    "path": "verification.json",
+    "bytes": 999,
+    "sha256": "ea2ed277a9ff81f87168374cbf1fd61ddfddc81af8b9f258715dc047138d9768"
+   }
+  ],
+  "parse_log": {
+   "failures": [],
+   "ok": [],
+   "nosave": 0
+  },
+  "nonce": "64bcfedb537095e3",
+  "log_lines_after_open": [
+   "Loading AEC Base Extended...",
+   "Loading AEC Core...",
+   "Loading AEC Project Base...",
+   "Loading AEC Architectural Base...",
+   "Loading AEC Schedule...",
+   "Substituting [simplex.shx] for [SUPEROS.SHX].",
+   "Missing font.  Text may not plotRegenerating layout.",
+   "Regenerating model.",
+   "**** System Variable Changed ****",
+   "1 of the monitored system variables has changed from the preferred value. Use SYSVARMONITOR command to view changes.",
+   "_.FILEDIA",
+   "Unknown command \"FILEDIA\".  Press F1 for help."
+  ],
+  "verification": {
+   "ok": false,
+   "problems": [
+    "AutoCAD's completion marker is missing.",
+    "The redesigned copy is the same as the source: nothing was saved.",
+    "The redesigned copy could not be read back."
+   ],
+   "log": {
+    "failures": [],
+    "ok": [],
+    "nosave": 0
+   },
+   "readback": {},
+   "returncode": 0,
+   "nonce": "64bcfedb537095e3",
+   "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+   "expected": {
+    "erase": [
+     "63868"
+    ],
+    "insert": [
+     {
+      "id": "r1",
+      "block": "HEAT DETECTOR",
+      "point": [
+       2952.0865,
+       145.8098
+      ]
+     },
+     {
+      "id": "m1",
+      "block": "CR",
+      "point": [
+       2955.0865,
+       145.8098
+      ]
+     }
+    ]
+   },
+   "drawing_id": 1,
+   "job_id": 1,
+   "apply_id": "j1-238d814a69",
+   "fingerprint": "8ddcc9ca6b5280e01b391cae254054a963aceadac4965046e6ac1b203b92841f",
+   "changes": 3,
+   "inserts": 2,
+   "erases": 1
+  }
+ },
+ "after": {
+  "row": {
+   "output_status": "failed",
+   "output_error": "Change m1: the CR module's file is missing from this installation's Redesign library.",
+   "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+   "output_relative": null,
+   "output_at": "2026-10-08 03:14:19.665116",
+   "output_changes": 0
+  },
+  "redesign_tree": [
+   {
+    "path": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/autocad.log",
+    "bytes": 1210,
+    "sha256": "4f6ffd8eccc383d168151cda038e593cc3bff0f9c763630ea71f73df5b661147"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.scr",
+    "bytes": 4926,
+    "sha256": "eee1a6ce0ab173606d7edf0609a460012c18780db059281da231118283aedcdb"
+   },
+   {
+    "path": "runs/j1-238d814a69/verification.json",
+    "bytes": 999,
+    "sha256": "ea2ed277a9ff81f87168374cbf1fd61ddfddc81af8b9f258715dc047138d9768"
+   }
+  ],
+  "archive_tree": [],
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "source_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "uploads_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "consoles": [],
+  "last_output": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+  "final_named_outputs": [
+   "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+  ],
+  "parts": [],
+  "view_available": null,
+  "view_output": {
+   "output": {
+    "status": "failed",
+    "error": "Change m1: the CR module's file is missing from this installation's Redesign library.",
+    "relative": null,
+    "published": null,
+    "filed_earlier": null,
+    "file": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "available": true,
+    "at": "2026-10-08T03:14:19.665116",
+    "changes": 0
+   }
+  },
+  "view_keys": [
+   "agents_on",
+   "calls",
+   "changes",
+   "counts",
+   "drawing",
+   "error",
+   "finished_at",
+   "folder",
+   "output",
+   "readiness",
+   "review",
+   "run",
+   "started_at",
+   "status",
+   "symbols"
+  ]
+ }
+}

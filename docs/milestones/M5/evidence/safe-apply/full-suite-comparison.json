@@ -1,0 +1,47 @@
+{
+ "baseline": {
+  "file": "docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml",
+  "totals": {
+   "tests": 1819,
+   "failures": 2,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 1450.575
+  },
+  "failing": {
+   "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches": {
+    "kind": "failure",
+    "message": "AssertionError: assert ('G:\\\\dev (2)\\\\dev\\\\ep-platform-merged\\\\data' is None)\n +  where 'G:\\\\dev (2)\\\\dev\\\\ep-platform-merged\\\\data' = Settings(app_name='Engineering Project Platform', app_tagline='Engineering a Safer Tomorrow', company_name='Al Arabia ...detect=False, compliance_knowledge_import_on"
+   },
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  'SIGA-OSD-FCN'\n  '3-SDDC2'\n  '3-SSDC2'"
+   }
+  }
+ },
+ "m5": {
+  "file": "docs/milestones/M5/evidence/safe-apply/full-suite.xml",
+  "totals": {
+   "tests": 1878,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 2091.538
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  '3-SDDC2'\n  'SIGA-OSD-FCN'"
+   }
+  }
+ },
+ "new_failures": [],
+ "fixed_since_baseline": [
+  "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches"
+ ],
+ "same_name": {
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "same_message": true
+  }
+ }
+}

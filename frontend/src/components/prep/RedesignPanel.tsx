@@ -9,7 +9,9 @@
  *  interfaces  the FA Interface Schedule's modules, each at its equipment's
  *              location, drawn once approved;
  *  output      the draftsman's PDF (each floor marked, then the schedule), and
- *              the copy of the drawing AutoCAD makes the changes on. */
+ *              the copy of the drawing AutoCAD makes the approved changes on:
+ *              checked, kept as a platform copy, and put into the project
+ *              archive only when the engineer publishes it (M5, OD-15 a). */
 import { useCallback, useEffect, useState } from "react";
 
 import { useAuth } from "../../context/AuthContext";
@@ -134,6 +136,19 @@ export function RedesignPanel({
     }
   }
 
+  async function publish() {
+    setBusy("publish");
+    setError(null);
+    try {
+      setData(await api.post<Redesign>(`${base}/publish`, {}));
+      setVersion((v) => v + 1);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "The copy could not be published to the project archive");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function bringInterfaces() {
     setBusy("interfaces");
     setError(null);
@@ -234,6 +249,8 @@ export function RedesignPanel({
           makingMessage={(applyJob.job?.progress as { message?: string } | undefined)?.message}
           disabled={jobsBusy}
           onMake={() => void start("apply")}
+          publishing={busy === "publish"}
+          onPublish={() => void publish()}
           base={base}
         />
       )}
@@ -341,6 +358,8 @@ function Output({
   makingMessage,
   disabled,
   onMake,
+  publishing,
+  onPublish,
   base,
 }: {
   projectId: number;
@@ -351,6 +370,8 @@ function Output({
   makingMessage?: string;
   disabled: boolean;
   onMake: () => void;
+  publishing: boolean;
+  onPublish: () => void;
   base: string;
 }) {
   const all = data.changes;
@@ -387,8 +408,10 @@ function Output({
         <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">2 · On the drawing</div>
         <h3 className="mt-1 text-lg font-semibold text-navy-900">Add the changes to a copy of the drawing</h3>
         <p className="mt-1 text-sm text-gray-600">
-          AutoCAD makes the changes on a copy of the DWG the review plotted &mdash; the drawing&rsquo;s own blocks inserted, the erased ones
-          deleted, each change marked on an EP-REDESIGN layer &mdash; filed in the project folder ({data.folder}).
+          AutoCAD makes the changes you approved on a copy of the DWG the review plotted &mdash; the drawing&rsquo;s own blocks inserted,
+          the erased ones deleted, each change marked on an EP-REDESIGN layer &mdash;, checks what it made, and keeps it as a new platform
+          copy to download. A proposed change is not drawn until approved. The copy is not filed in the project folder: once you have
+          checked it, publish it there yourself ({data.folder}), under its own name, never over another file.
         </p>
         <div className="mt-3 text-sm text-navy-900">
           {ready} change{ready === 1 ? "" : "s"} to make
@@ -413,23 +436,53 @@ function Output({
               disabled={disabled || ready === 0 || !data.readiness.ready}
               className="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
-              {making ? "AutoCAD is drawing…" : `Make the drawing copy (${ready})`}
+              {making ? "AutoCAD is drawing…" : `Make the drawing copy (${ready} approved)`}
             </button>
           )}
-          {data.output.status === "made" && (
+          {data.output.available && (
             <a href={apiUrl(`${base}/output.dwg`)} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-brand-700">
-              Download DWG
+              {data.output.status === "made" ? "Download DWG" : "Download the earlier copy"}
             </a>
           )}
+          {canEdit && data.output.status === "made" && data.output.available && !data.output.published && !data.output.filed_earlier && (
+            <button
+              onClick={onPublish}
+              disabled={disabled || publishing}
+              className="rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 disabled:opacity-50"
+            >
+              {publishing ? "Publishing…" : "Publish to the project archive"}
+            </button>
+          )}
         </div>
-        {data.output.status === "made" && (
+        {data.output.available && (
           <div className="mt-2 break-all text-xs text-gray-500">
-            {data.output.file} · {data.output.changes} changes ·{" "}
-            {data.output.relative ? `filed in ${data.output.relative}` : "not filed (project folder not reachable)"}
+            {data.output.file} · {data.output.changes} approved changes{data.output.filed_earlier ? "" : ", checked"} · a platform copy
+            {data.output.published
+              ? ` · published to the project archive by the engineer: ${data.output.published}`
+              : data.output.filed_earlier
+                ? ` · filed by an earlier version, not verified: ${data.output.filed_earlier}`
+                : ", not in the project archive"}
             {data.output.at ? ` · ${new Date(data.output.at).toLocaleString()}` : ""}
           </div>
         )}
-        {data.output.status === "failed" && <div className="mt-2 text-xs text-red-700">{data.output.error}</div>}
+        {data.output.status === "made" && !data.output.available && (
+          <div className="mt-2 text-xs text-amber-700">Made, but the file is not on this PC.</div>
+        )}
+        {data.output.status === "making" && !making && <div className="mt-2 text-xs text-gray-500">Being made…</div>}
+        {data.output.status === "stale" && (
+          <div className="mt-2 text-xs text-red-700">
+            Stale, no new copy was kept: the approvals or placings changed while the copy was being made. {data.output.error}
+          </div>
+        )}
+        {data.output.status === "refused" && (
+          <div className="mt-2 text-xs text-red-700">Refused before AutoCAD started, nothing was made: {data.output.error}</div>
+        )}
+        {["failed", "cancelled", "interrupted"].includes(data.output.status) && (
+          <div className="mt-2 text-xs text-red-700">No new copy was made: {data.output.error}</div>
+        )}
+        {data.output.status !== "made" && data.output.available && (
+          <div className="mt-1 text-xs text-gray-500">The earlier copy above is kept and can still be downloaded.</div>
+        )}
       </section>
     </div>
   );
@@ -493,9 +546,9 @@ function ChangeCard({
             </span>
           )}
           {c.confidence && c.source !== "interface" && <span className="text-xs text-gray-400">placement confidence: {c.confidence}</span>}
-          {(c.source === "interface" || c.source === "coverage") && c.status === "proposed" && (
-            <span className="text-xs text-amber-700">drawn once approved</span>
-          )}
+          {c.status === "proposed" && <span className="text-xs text-amber-700">Proposed, not drawn until approved</span>}
+          {c.held && <span className="text-xs text-red-700">held until you approve it</span>}
+          {c.status === "approved" && c.drawn && <span className="text-xs text-green-700">will be drawn</span>}
         </div>
         <div className="mt-1 text-sm text-gray-600">
           {c.floor} ({c.sheet}) · {c.room || "—"}
@@ -536,8 +589,20 @@ function ChangeCard({
           <div className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">This symbol is inside a block: marked to erase by hand, not erased.</div>
         )}
         {c.confirm && (
-          <div className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
-            Placed within about ±{(c.residual ?? 1).toFixed(1)} m on this sheet: check the spot, or click the picture to set it.
+          <div className="mt-1 flex flex-wrap items-center gap-2 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
+            <span>
+              Placed within about ±{(c.residual ?? 1).toFixed(1)} m on this sheet: not drawn until you confirm the spot, or click the
+              picture to set it.
+            </span>
+            {canEdit && (
+              <button
+                onClick={() => onChange({ confirmed: true })}
+                disabled={busy}
+                className="rounded border border-amber-600 px-2 py-0.5 font-semibold text-amber-800 disabled:opacity-50"
+              >
+                Confirm this spot
+              </button>
+            )}
           </div>
         )}
         {c.insert && (
