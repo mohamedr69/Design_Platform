@@ -366,3 +366,273 @@ Two read-only passes by the verifier role (general-purpose agent with the ep-ver
 2. Second pass (evening): **ACCEPT WITH NOTES**. S1-S3 recorded faithfully with no policy beyond the owner's words; all seven gate subjects settled; fourteen clerical notes, resolved by the orchestrator before the acceptance record was written. The owner's acceptance of the record (Part E, last step) is outside the verdict.
 
 Second-pass status line (verbatim): "ACCEPT WITH NOTES. The three owner resolutions (S1, S2, S3) are recorded faithfully, they add no policy of substance beyond the owner's words, and no substantive conflict remains. All seven gate subjects are settled."
+
+
+## Amendments
+
+This section is append-only. Each amendment extends the ratified text it cites. No clause, slot, row or answer above this section is edited; each amendment preserves the previous wording by quotation. The ratified text read together with its amendments is the contract. The rows of `M3-DECISION-PACK.md` are unchanged; reference lines pointing to these amendments are appended after the affected tables of the Pack, never inside a ratified cell.
+
+### M3 Amendment 1
+
+- Version: M3 Amendment 1
+- Status: RATIFIED
+- Date of final text: 8 October 2026
+- Ratified by: Mohamed Elazab (Owner), approval reference A-30
+- Date of ratification: 8 October 2026
+- Sources: Authority Register A-25 (AI budget rulings D1–D7), A-26 (seven directions), A-27 (conditional approval of direction; wording corrections A1–A9; additional clarifications), A-28 (final clarifications: five rulings), A-29 item 1 (final four choices).
+- Clauses: M3-A0 (definitions, hierarchy and precedence), M3-A1 to M3-A9, M3-A10 (deferred items, no authority created), M3-A11 (non-authorization).
+- Effect: this amendment takes effect on the Date of ratification recorded above (the Effective Date). It states policy and design requirements only (M3-A11).
+
+#### M3-A0. Definitions, hierarchy and precedence
+
+Extends Part C row B-11 (`AI.usage`), Part C row B-12 (`AI.budget_limits`) and Part B slot B-04; read with P-24 and Part B slot B-19. The previous wording of these items is quoted in M3-A1, M3-A2 and M3-A3.
+
+**M3-A0.1 Terms.** In this amendment each capitalised term below has the meaning given here and no other.
+
+- (a) **Project**: a project of the platform, with the membership of Part B slot B-19.
+- (b) **Allowed** and **Blocked**: the two values of the project AI policy of Part B slot B-04 ("The allowed/blocked values stay").
+- (c) **Policy Status**: the value of a Project's AI policy under this contract.
+- (d) **Stored Value**: the value of a Project's AI policy held in the platform's live data. The Policy Status and the Stored Value differ only where this amendment says so (M3-A2.2, M3-A2.11, M3-A2.13).
+- (e) **Provider Boundary**: the point at which Project content would leave the platform for an external AI provider.
+- (f) **Request**: one request genuinely dispatched to an external AI provider, whether it succeeds or fails. Each dispatched retry and each dispatched escalation is a separate Request. A cache hit, a NullProvider placeholder, a policy refusal, a budget refusal and a confirmed pre-dispatch failure are not Requests (A-25 D4). Before it is dispatched, the same request is a "proposed request" (not capitalised).
+- (g) **Interactive Action**: one chat message, or one standalone compliance action, that does not run inside a background processing job.
+- (h) **Job**: one background processing job, for the life of that job, or one Interactive Action. A background processing job may contain several Requests and several documents. Each Interactive Action is one Job (A-28 item 2).
+- (i) **Task Group**: a named group of AI tasks, held in the AI platform budget configuration. Each Task Group, and the membership of each task in it, is an explicit, versioned and auditable record. Membership of a task in a Task Group is never inferred from the task's name (A-28 item 2).
+- (j) **Per-Document Limit**: the per-document AI limit named in Pack Table B row 12 ("per-job, per-document and per-project-per-day AI limits"), preserved by M3-A0.3.
+- (k) **Reservation**: an entry in the Reservation Ledger (M3-A1.5) that holds allowance for one proposed request before it is dispatched.
+- (l) **Usage Record**: one record of the AI platform usage record of Part C row B-11, of one of the kinds listed in M3-A1.3.
+- (m) **Administrator**: a user who holds the `admin` role.
+- (n) **Design Engineer**: a design engineer within the meaning of Part B slots B-08 and B-19.
+- (o) **Authorized Design Manager**: as defined in M3-A0.4.
+- (p) **Owner**: the platform owner whose rulings are recorded in the Authority Register; at the Effective Date, mohamedr69 (Mohamed Elazab). Owner is not a software role (M3-A6.1).
+- (q) **Owner Approval**: an approval given by the Owner and recorded with a verifiable approval reference, the approver's identity, an effective date and the recorded evidence (A-25 D6c).
+- (r) **Pending Change**: a proposed change to a Project's AI policy that has not been executed, withdrawn or expired. A change that is approved but not yet executed is a Pending Change.
+- (s) **Sensitive Policy Change**: a change listed in M3-A7.1.
+- (t) **Precautionary Block**, **Emergency Security Block**, **Existing Allowed Project**, **Unverified Allowed Project**, **Transition Review**: as defined in M3-A2.5, M3-A2.6 and M3-A2.13.
+- (u) **Price Basis**: as defined in M3-A1.4.
+- (v) **Shadow Threshold**: as defined in M3-A1.6.
+- (w) **Company Ceiling**, **Budget Adjustment**, **Budget Override**: as defined in M3-A8.1.
+- (x) **Rolling 24-Hour Window**, **Calendar-Month Window**, **Budget Time Zone**: as defined in M3-A9.1 and M3-A9.2.
+- (y) **Controlled Security Procedure**: the procedure named in M3-A2.5.
+- (z) **Effective Date**: the Date of ratification of this amendment.
+
+**M3-A0.2 Hierarchy.** AI usage control has five levels (A-28 item 2):
+
+- **L0 Project AI Policy Gate**: the project AI policy of Part B slot B-04 as extended by M3-A2. It decides whether a proposed request for a Project may be dispatched at all.
+- **L1 Project Budget**: one budget for all AI work of one Project.
+- **L2 Task Group Budget**: one budget for one Task Group of one Project. Each Task Group Budget is versioned and named.
+- **L3 Job Limit**: the limits of one Job for the life of the Job; for an Interactive Action, the limits of that one action.
+- **L4 Request Limit**: the limits of one Request.
+
+The hierarchy Project → Task Group → Job → Request of A-27 is L1 → L2 → L3 → L4, below L0. The server-wide and per-project budget wording of Part C row B-12 and Pack Table B row 12 is extended to these levels.
+
+**M3-A0.3 Per-Document Limit preserved.** The Per-Document Limit is preserved. Where a document is processed, it applies as an additional applicable constraint together with L1 to L4. It is measured at its own scope, the document.
+
+**M3-A0.4 Authorized Design Manager.** An Authorized Design Manager of a Project is a user who, at the time of the act, (a) holds the `design_manager` role and (b) is a member of that Project (Part B slot B-19; P-24). Under P-24, that role together with that membership implies the `engineering_approval` capability for that Project; that capability is the applicable engineering approval capability (A-28 item 4). No new role, no sixth capability and no separate grant is created or required. A user who holds `design_manager` and is not a member of the Project is not an Authorized Design Manager of that Project.
+
+**M3-A0.5 Policy gate first.** L0 is applied before any budget check at any level and before any Reservation is taken (A-27). A proposed request refused at L0 is not dispatched, is recorded as a policy refusal, takes no Reservation and consumes no allowance at any level. Where the Project or its Policy Status cannot be established, the proposed request is not dispatched: L0 fails closed, as the project AI policy of Part B slot B-04 and the ORCH-053 design (central fail-closed project AI-policy enforcement, A-19 item 4) provide and as A-22 decisions 1 and 2 require, subject only to the synthetic operator-evaluation exception of A-22 decision 3. This sentence restates existing rulings and grants nothing.
+
+**M3-A0.6 Most restrictive wins.** Where more than one of L1 to L4 and the Per-Document Limit applies to a proposed request, the most restrictive applicable budget or limit decides (A-27). A value at a lower level never raises, bypasses or replaces the remaining allowance of a higher level; a lower-level value above that remaining allowance has no effect.
+
+**M3-A0.7 Reservations create no allowance.** Reservation accounting operates within the hierarchy of M3-A0.2. A Reservation counts against the allowance of every level it is checked against and creates no additional allowance at any level (A-28 item 2).
+
+#### M3-A1. Budget configuration objects, usage kinds and windows
+
+Extends Part C row B-11 and Part C row B-12; read with Pack Table B rows 11 and 12 and Part B slot B-04. Previous wording preserved: Part C row B-11 "AI.usage | AI platform service (M7, M22); AI platform usage record | None; UMR section 5; M22 (UMR:534) | owner (mohamedr69, Mohamed Elazab) on 2026-10-07"; Part C row B-12 "AI.budget_limits | As B-11; AI platform budget configuration | None; UMR section 5 | owner (mohamedr69, Mohamed Elazab) on 2026-10-07"; Pack Table B row 11 "AI.usage - AiUsage, one row per model call or cache hit; basis of the daily budget"; Pack Table B row 12 "AI.budget_limits - per-job, per-document and per-project-per-day AI limits (server-wide settings)". The ownership cells of both rows are unchanged.
+
+**M3-A1.1 Scope of the ratified rows.** Part C row B-11 covers the Usage Records of M3-A1.3. Part C row B-12 covers the levels L1 to L4, the Per-Document Limit, the Task Group records, the Price Basis and price table (M3-A1.4), the Reservation Ledger (M3-A1.5), the Shadow Threshold (M3-A1.6), the Company Ceiling (M3-A8) and the Budget Time Zone (M3-A9).
+
+**M3-A1.2 Windows.** The Rolling 24-Hour Window applies to the Request counters and the token counters of L1 and L2 (A-25 D2). The Calendar-Month Window is an additional window for L1 and L2 (A-25 D2). L3 Job Limits apply for the life of the Job, L4 Request Limits apply to the single Request, and the Per-Document Limit applies to the document; none of these three is measured in either window (A-27 correction A1). The measures to which the Calendar-Month Window applies, and whether either window applies to cost, are deferred item DI-10.
+
+**M3-A1.3 Usage kinds.** The AI platform usage record of Part C row B-11 records each of the following as a separate kind of Usage Record: (a) Request; (b) cache hit; (c) NullProvider placeholder; (d) policy refusal; (e) budget refusal; (f) confirmed pre-dispatch failure. Of these kinds, only kind (a) counts against the Request allowance; Reservations count under M3-A0.7 and M3-A1.5. Actual reported tokens and cost are accounted separately from the Request count (A-25 D4). The Pack's "one row per model call or cache hit" is read as one Usage Record per event of these kinds. A circuit breaker prevents provider-error retry storms (A-25 D4); this amendment does not set its design.
+
+**M3-A1.4 Price table and Price Basis.** The AI platform budget configuration includes a versioned provider and model price table. The **Price Basis** is the approved basis on which that table prices metered usage. Metered API routes use versioned provider and model pricing supported by reliable billing or pricing evidence. Cost reported for the Claude Code subscription route is an estimated equivalent value, not verified billed expenditure; subscription routes stay under Request and token limits, with no monetary hard stop on notional cost. No monetary enforcement applies without an approved Price Basis (A-25 D1). Approving a Price Basis, and changing it, each require a recorded authorization (A-27) and are Sensitive Policy Changes (M3-A7.1). Who gives that authorization is deferred item DI-9.
+
+**M3-A1.5 Reservation Ledger.** The AI platform budget configuration includes a Reservation Ledger of atomic cross-process Reservations (A-24 item 4). An expired Reservation whose dispatch status is unknown stays counted until it is reconciled. Reconciliation is an audited workflow supported by health and dashboard alerts and operational escalation for stale Reservations. Automatic release is permitted only on reliable evidence that no Request was dispatched. A potentially dispatched Request is never silently released (A-25 D5). The evidence that counts for automatic release and for release in the reconciliation workflow is deferred item DI-14.
+
+**M3-A1.6 Shadow Threshold.** The AI platform budget configuration includes a **Shadow Threshold**: a comparison value only. Would-be refusals against it are recorded without blocking legitimate engineering work. It is not an enforceable budget. The Shadow Threshold ruled in A-25 D7 is not the initial enforceable Project Budget. This amendment does not state its figure (A-27 correction A1: no numbers).
+
+**M3-A1.7 No numbers.** This amendment sets and approves no numerical value at any level and no Per-Document Limit value. Existing job-level safety bounds remain effective. A level without an effective limit is shown explicitly as uncapped at that level; "inherit" never implies protection where none exists (A-25 D3). No L1, L2, reserve or retry value is proposed before at least 30 days of corrected accounting and the reservation system in shadow mode (A-25 D3). An enforceable Project Budget is determined only after corrected accounting, shadow measurement and a separate Owner Approval (A-25 D7). A-23 item 5 provides that the Design Manager or Owner authorizes engineering AI-budget policy values; which of the two approves which value at L2, L3 and L4 and the retry bound is deferred item DI-13.
+
+**M3-A1.8 Records.** Budget configuration (values at each level, the Per-Document Limit, Task Group records, the price table and Price Basis, the Shadow Threshold, the Company Ceiling and the Budget Time Zone) is held as versioned, audited records. Each change is a durable event with effective time and recording time (P-15).
+
+#### M3-A2. Authority over a Project's AI policy
+
+Extends Part B slot B-04 (OD-04); read with P-24 and Part B slot B-19. Previous wording preserved: Part B slot B-04 answer "(a) the project AI policy applies to every path that sends project content to an external AI provider: document reading, compliance assist, Drawing Review, Redesign, IFC Symbol AI, the Drawings Assistant and every future AI path. Content-keyed previously generated results may be reused for a blocked project only when the reuse is entirely server-side and sends no blocked-project content to a provider"; conditions "Enforcement on the drawing paths is the M7/M12 server-boundary gap (Delta #25). The allowed/blocked values stay". The Contract contained no clause on who may change a Project's AI policy; this amendment adds one.
+
+**M3-A2.1 Values.** Allowed and Blocked remain the only values. This amendment adds no value and no review state.
+
+**M3-A2.2 Approval of changes.** Every change to a Project's AI policy requires the approval of an Authorized Design Manager of that Project, given before the change is executed (A-25 D6b). The only exceptions are the Precautionary Block (M3-A2.5), the Emergency Security Block (M3-A2.6) and placement in Blocked under Transition Review (M3-A2.13). A change that sets Allowed, or otherwise permits Project content to pass the Provider Boundary, takes effect only with that approval; no other approval replaces it (A-27 correction A2; M3-A3.3). A Stored Value set to Allowed without that approval, including through the Project-Update Authorization Gap (M3-A4.1), does not change the Policy Status.
+
+**M3-A2.3 Proposal.** A Design Engineer who is a member of the Project may propose a change. A proposal is not an approval (A-26 direction 3).
+
+**M3-A2.4 Execution.** An Administrator may execute a change approved under M3-A2.2. An Administrator cannot independently grant external AI permission. Executing a change is not approving it (M3-A7.3).
+
+**M3-A2.5 Precautionary Block.** An authorized project member may request, or apply with immediate effect, a **Precautionary Block** (Blocked) of the Project under a **Controlled Security Procedure** (A-27 correction A2). Each Precautionary Block is audited with the member, the time, the reason, the procedure reference and the previous value. This amendment does not define the Controlled Security Procedure or name the authorized project members (deferred item DI-3). Until the Owner answers deferred item DI-3 by a recorded ruling, this clause cannot be exercised; M3-A2.2 (a change to Blocked approved by an Authorized Design Manager) and M3-A2.6 remain available.
+
+**M3-A2.6 Emergency Security Block.** An Administrator may apply an **Emergency Security Block** (Blocked) to a Project. Applying it gives the Administrator no access to Project content and no engineering authority (Part B slot B-19). An Administrator cannot independently restore Allowed. A restoration follows M3-A2.7; an Administrator may execute it only under M3-A2.4.
+
+**M3-A2.7 Restoration.** Every restoration of Allowed, after a Precautionary Block, an Emergency Security Block, placement in Blocked under Transition Review or any other Blocked state, requires the approval of an Authorized Design Manager of the Project under M3-A2.2. That approval is the engineering authorization required by A-27 correction A2 and A-25 D6b. A restoration is a Sensitive Policy Change (M3-A7.1).
+
+**M3-A2.8 Pending Changes never weaken.** A Pending Change never weakens the existing restriction. While a change toward Allowed is pending, the Project's current Policy Status applies unchanged (A-25 D6b).
+
+**M3-A2.9 Pending-Change lifecycle.** A Pending Change expires 30 days after it is proposed. The person who proposed it may withdraw it at any time before it is executed. Expiry and withdrawal leave the Project's Policy Status and Stored Value unchanged. The change, its expiry or withdrawal, and its full audit history are retained; nothing is deleted (A-27 clarification). Whether other pending changes expire is deferred item DI-7.
+
+**M3-A2.10 Audit.** Every proposal, approval, execution, Precautionary Block, Emergency Security Block, restoration, expiry, withdrawal, Transition Review placement and Transition Review confirmation is versioned and audited with: proposer or requester, approver and approval reference, executor, reason, evidence, previous value, new value, effective time and recording time. Where these records are kept before a dedicated store exists is deferred item DI-17; a change under this clause is executed only when every field of this clause is recorded.
+
+**M3-A2.11 New Projects.** A Project created on or after the Effective Date has the Policy Status Blocked from its creation, until a change approved under M3-A2.2 has been executed for it. A new Project never automatically gains permission to transmit content externally; while approval is pending, deterministic local processing continues (A-26 direction 7; Part B slot B-04 two values).
+
+**M3-A2.12 Enforcement status.** No record, report or statement claims that a Blocked Policy Status is technically enforced for a Project until all relevant provider paths are protected at the Provider Boundary (A-28 item 1; Part B slot B-04 conditions "Enforcement on the drawing paths is the M7/M12 server-boundary gap (Delta #25)").
+
+**M3-A2.13 Transition Review of Existing Allowed Projects (T2).**
+
+- (a) **Existing Allowed Project**: a Project whose Stored Value is Allowed on the Effective Date.
+- (b) **Unverified Allowed Project**: an Existing Allowed Project for which no independently verified external-AI authorization is recorded. Holding Allowed does not by itself establish that external transmission was authorized (A-27 clarification). Which records made before the Effective Date count as independently verified external-AI authorization is deferred item DI-1; until the Owner answers it, every Existing Allowed Project is an Unverified Allowed Project.
+- (c) **Placement.** From the Effective Date, the Policy Status of each Unverified Allowed Project is Blocked during its **Transition Review**, until an Authorized Design Manager of that Project confirms the permission with sufficient evidence (A-28 item 1).
+- (d) **Individual review.** Each Project is reviewed individually. Each review records the evidence relied on, the identity of the Authorized Design Manager, the approval reference, and the effective timestamps of the placement and of any confirmation. Whether a further standard for "sufficient evidence" is set is deferred item DI-2.
+- (e) **Outcome.** A confirmation is an approval under M3-A2.2 and a Sensitive Policy Change; the Policy Status is Allowed when the confirmation has been recorded under M3-A2.10 and executed under M3-A2.4 and M3-A7.2. Without a confirmation the Policy Status stays Blocked. This amendment sets no completion date for a Transition Review.
+- (f) **Preservation.** The original Stored Value and the complete history of every Existing Allowed Project are preserved. No history is erased or overwritten.
+- (g) **No mass update.** Ratification of this amendment changes no Stored Value. No mass update of live Projects is made or authorized. A Stored Value is changed under this clause only under the plan of item (h), after that plan's separate approval.
+- (h) **Transition plan.** A separate controlled transition and deployment plan, with safeguards against external transmission during the review, enforced at the Provider Boundary, is prepared and submitted for separate approval. This amendment approves neither that plan nor any deployment.
+- (i) **Enforcement.** M3-A2.12 applies: the Blocked Policy Status under this clause is not claimed as technically enforced until all relevant provider paths are protected.
+
+#### M3-A3. The Authorized Design Manager; Owner Approval; delegation
+
+Extends Part B slot B-04 and Part B slot B-09; read with P-24 and Pack section 2b Q-1. Previous wording preserved: P-24 "The `design_manager` role implies the five capabilities only for projects where that user holds project membership.", "A `design_manager` who needs to perform engineering actions on a project must first be a member of it." and "`admin` remains outside engineering authority unless separately granted the appropriate engineering role and membership."; Part B slot B-09 answer "(b) design_manager controls strength-score acceptance and override and may designate one named delegate for an effective period. Complete versioned audit and evidence preserved (previous value, new value, reason, actor, timestamp, evidence, effective version). Overrides authorise no model retraining"; Pack section 2b Q-1 decision "\"Engineering Manager\" maps to the existing `design_manager` role. `admin` does not automatically carry engineering authority. No new `engineering_manager` role is introduced."
+
+**M3-A3.1 Approver.** Every approval under M3-A2.2, M3-A2.7 and M3-A2.13(c) is given by an Authorized Design Manager (M3-A0.4) of the Project concerned.
+
+**M3-A3.2 Capability.** The applicable engineering approval capability is the existing P-24 `engineering_approval` capability, implied for an Authorized Design Manager by role and membership (M3-A0.4; A-28 item 4).
+
+**M3-A3.3 Owner Approval.** Owner approval authority is documented separately from the software roles (M3-A6.4). An Owner Approval does not replace the approval of an Authorized Design Manager under M3-A2 (A-27 correction A3: "not an automatic substitute"). This amendment provides no means by which an Owner Approval replaces it; whether one is to exist is deferred item DI-4.
+
+**M3-A3.4 Delegation.** The delegation of Part B slot B-09 remains limited to its previously authorized scope, strength-score acceptance and override, and conveys no AI-policy authority (A-27 correction A3; A-28 item 4). An approval under M3-A2 requires an Authorized Design Manager of the Project (A-27 correction A2); a delegate who is not an Authorized Design Manager of the Project cannot give it. This amendment creates no delegation of AI-policy authority.
+
+#### M3-A4. Project-update authorization gap and Interim Technical Restriction
+
+Extends Part B slot B-04; read with Part B slot B-19 and M3-A2. Previous wording preserved (the pattern applied): Part B slot B-19 answer "... the current unrestricted behaviour is a known implementation gap until centralised authorisation lands. Option (c) not used".
+
+**M3-A4.1 Recorded gap.** The existing behaviour in which an Administrator, a Design Manager or a Design Engineer can set a Project's AI policy to Allowed alone, through the general project-update path, with immediate effect and recorded only as a general project update, does not meet M3-A2. It is recorded as a known implementation gap: the **Project-Update Authorization Gap**.
+
+**M3-A4.2 Interim Technical Restriction: written specification only.** An Interim Technical Restriction on that path is prepared as a written specification only (A-28 item 3). The specification is coordinated with ORCH-053, ORCH-059 and ORCH-060. Its preparation adds no code writer and no implementation that overlaps those tasks. No deployment is made. The specification is submitted for separate approval; its implementation and its deployment each require a separate approval. The behaviour the restriction imposes on the path is decided at that separate approval (deferred item DI-16) and meets M3-A2 and M3-A7.
+
+**M3-A4.3 Instructions insufficient.** Operational instructions alone, such as instructions to users not to use that path, do not close or mitigate the Project-Update Authorization Gap (A-27 correction A4).
+
+**M3-A4.4 Duration.** The Project-Update Authorization Gap stays recorded until a technical restriction that meets M3-A2 is in force under a separate approval.
+
+#### M3-A5. Visibility of usage and cost
+
+Extends Part C row B-11; read with Part B slot B-19 and P-24. Previous wording preserved: Part B slot B-19 answer "(b) project membership enforced centrally across project data, documents and sources, jobs, exports, Project Memory, RAG and retrieval, part search and review rulings; design_manager manages engineering project membership; admin remains system and account administration and gains no engineering access merely by being admin; ..."; P-24 "Role determines engineering authority level; project membership determines project access scope".
+
+**M3-A5.1 Project members.** A member of a Project views usage and cost from the Usage Records attributed to that Project (A-25 D6a).
+
+**M3-A5.2 Design Managers.** A user who holds `design_manager` views usage and cost only for the Projects of which that user is an Authorized Design Manager (A-27 correction A5).
+
+**M3-A5.3 Platform-wide operational cost aggregates.** For authorized administrative accounting, platform-wide operational cost aggregates are viewed with project identifiers and job references. They exclude document names, drawing names, Project contents and unrestricted source access (A-27 correction A5). A field that contains a document name or a drawing name, including a job title that contains one, is excluded. Whether a Project's name may appear as a project identifier is deferred item DI-8.
+
+**M3-A5.4 No access by viewing.** Viewing usage or cost under this clause grants no Project membership, no access to Project content and no engineering authority (Part B slot B-19; P-24).
+
+**M3-A5.5 Unattributed records.** A Usage Record that is attributed to no Project is outside M3-A5.1 and M3-A5.2 and appears only in the aggregates of M3-A5.3. The Project to which a cache hit on a shared content-keyed store is attributed is deferred item DI-15.
+
+**M3-A5.6 Estimated cost.** Cost shown for the Claude Code subscription route is labelled as an estimated equivalent value (M3-A1.4).
+
+#### M3-A6. Role mapping; no Owner software role
+
+Extends Pack section 2b Q-1 (Contract Part D3, open question 1); read with Part B slot B-19 and P-24. Previous wording preserved: Contract Part D3 row 1 "ANSWERED 7 October 2026 (Pack section 2b, Q-1): the `design_manager` role; `admin` does not act; no new role."; Part B slot B-19 "admin remains system and account administration and gains no engineering access merely by being admin".
+
+**M3-A6.1 No Owner role.** No Owner software role is created (A-26 direction 2; A-27 correction A6).
+
+**M3-A6.2 Platform-wide view.** The platform-wide operational cost view of M3-A5.3 maps to the existing `admin` role and to no other role.
+
+**M3-A6.3 Design Managers.** For usage and cost, the `design_manager` role is project-scoped only (M3-A5.2) and carries no platform-wide view.
+
+**M3-A6.4 Owner approval authority.** Owner approval authority is separate from the software roles. It is exercised and documented outside the role mapping, by the Owner's rulings recorded in the Authority Register, and confers no software permission, no engineering authority and no Project membership. Within the software, the Owner sees the platform-wide view only through an account that holds `admin`. The A-25 D6a reference to "Admin and Owner" platform-wide access is read through M3-A6.2 and this clause.
+
+#### M3-A7. Separation of approval and execution
+
+Extends Part B slot B-04 and Part C row B-12; read with Part B slots B-05 and B-19, Pack section 2b Q-1 and the Pack's standing conditions. Previous wording preserved: Part B slot B-05 answer "(b) amended: design_manager records and overrides contract value and currency, with a reason. admin may administer the underlying system data but gains no engineering authority from the admin role (question 1); where administrative data entry by admin is technically required it is not an engineering approval or override. Missing values are flagged and never defaulted"; Pack standing conditions "`admin` is system and account administration only and never gains engineering authority or project access from the role (Q-1, OD-05, OD-06, OD-19); every manager override records a reason and a full audit trail (OD-01, OD-05, OD-09, OD-13)".
+
+**M3-A7.1 Sensitive Policy Changes.** Each of the following is a Sensitive Policy Change:
+
+- (a) a change to a Project's AI policy that permits Project content to pass the Provider Boundary, including a restoration (M3-A2.7) and a Transition Review confirmation (M3-A2.13(e)) (A-25 D6b; A-26 directions 3 and 6);
+- (b) the approval of a numerical budget value at any level, a Budget Adjustment or a Budget Override (M3-A1.7, M3-A8) (A-25 D6c; A-26 directions 5 and 6);
+- (c) the approval of a Company Ceiling (M3-A8) (A-25 D6c; A-27 correction A8);
+- (d) the approval of a Price Basis and any change to it (M3-A1.4) (A-25 D1; A-27 clarification);
+- (e) a change of the Budget Time Zone (M3-A9.6) (A-27 correction A9 and clarification);
+- (f) a change to Blocked approved under M3-A2.2 (A-26 direction 6; A-29 item 1).
+
+**M3-A7.2 Different persons.** Except under the Emergency Exception of M3-A7.4, the approval and the execution of a Sensitive Policy Change are performed by different natural persons and recorded separately (A-27 correction A7; A-29 item 1). One natural person who holds Owner authority and an `admin` account is one person for this clause.
+
+**M3-A7.3 Execution is not approval.** An Administrator who enters or applies an approved value records the verifiable approval reference, the approver's identity, the effective date and the recorded evidence (A-25 D6c). Executing a change is not approving it. Administrative privilege is never treated as engineering approval (A-26 direction 6). The form of a verifiable approval reference for an Owner Approval given outside the software is deferred item DI-18.
+
+**M3-A7.4 Emergency Exception.** One natural person may approve and execute the same Sensitive Policy Change only as an **Emergency Exception**, which requires all of: an explicit recorded Owner authorization; a limited scope; a recorded justification; and a retrospective independent review by a person who neither approved nor executed the change (A-27 correction A7). Whether the Owner authorization is given per instance or may be standing, who performs the review, and within what time, are deferred item DI-6.
+
+**M3-A7.5 No automatic escalation.** No role, account, emergency or exception confers approval or execution authority automatically. There is no automatic privilege escalation (A-27 correction A7).
+
+**M3-A7.6 Blocks are outside this clause.** A Precautionary Block (M3-A2.5) and an Emergency Security Block (M3-A2.6) are acts of one actor permitted by A-27 correction A2. They, and placement in Blocked under M3-A2.13(c), are not Sensitive Policy Changes. A change to Blocked approved under M3-A2.2 is a Sensitive Policy Change under M3-A7.1(f).
+
+#### M3-A8. Budget Adjustments and Budget Overrides
+
+Extends Part C row B-12; read with Part B slot B-01 (override pattern), Part B slot B-09 (audit standard) and P-15. Previous wording preserved: Part B slot B-01 answer "... explicit per-project override by design_manager only, with a mandatory reason and audit record, where the project's consultant or contractual practice establishes it as final"; Part B slot B-09 "Complete versioned audit and evidence preserved (previous value, new value, reason, actor, timestamp, evidence, effective version)"; P-15 "configuration versions ... are durable events with effective and recording time".
+
+**M3-A8.1 Terms.** A **Company Ceiling** is an Owner-approved upper bound for Budget Adjustments. A **Budget Adjustment** is a time-bound change to an approved budget value of a Project that stays within the Company Ceiling. A **Budget Override** is a time-bound change to an approved budget value of a Project beyond the Company Ceiling. What the Company Ceiling measures is deferred item DI-5.
+
+**M3-A8.2 Within the Company Ceiling.** An Authorized Design Manager of the Project may approve a Budget Adjustment (A-27 correction A8).
+
+**M3-A8.3 Beyond the Company Ceiling.** A Budget Override requires a separate Owner Approval (A-27 correction A8).
+
+**M3-A8.4 No ceiling, no budget yet.** Where no Company Ceiling has been approved and recorded, no change falls within one and M3-A8.2 cannot be exercised. Where no budget value of a Project has been approved (M3-A1.7), there is nothing to adjust or override.
+
+**M3-A8.5 Recording the Company Ceiling.** The Company Ceiling is set by an Owner Approval, entered by an Administrator with the verifiable approval reference, the approver's identity, the effective date and the recorded evidence (A-25 D6c), and held as a versioned, audited record (M3-A1.8).
+
+**M3-A8.6 Time-bound.** Every Budget Adjustment and every Budget Override has an effective start date and an effective end date. When it ends, the value it changed applies again (A-26 direction 5; A-27 correction A8).
+
+**M3-A8.7 Justification and audit.** Every Budget Adjustment and every Budget Override carries a written justification and a full audit history: previous value, new value, reason, actor, approver, approval reference, timestamp, evidence, effective version and effective dates. It never replaces the audit history of the value it changes.
+
+**M3-A8.8 Separation.** The approval and the execution of a Budget Adjustment or a Budget Override follow M3-A7.
+
+**M3-A8.9 No value set.** This clause sets no Company Ceiling and no budget value.
+
+#### M3-A9. Windows and Budget Time Zone
+
+Extends Part C row B-12; read with Pack Table B rows 11 and 12 and P-15. Previous wording preserved: Pack Table B row 11 "... basis of the daily budget"; Pack Table B row 12 "AI.budget_limits - per-job, per-document and per-project-per-day AI limits (server-wide settings)".
+
+**M3-A9.1 Daily.** "Daily", "per day" and "daily budget" in the budget wording mean the **Rolling 24-Hour Window**: the 24 hours ending at the moment of the check (A-25 D2; A-27 correction A9).
+
+**M3-A9.2 Monthly.** The **Calendar-Month Window** is an additional window: a calendar month computed in the **Budget Time Zone**. The Budget Time Zone is Asia/Dubai (+04:00) (A-25 D2; A-27 correction A9).
+
+**M3-A9.3 Storage and retries.** Timestamps are stored in UTC. Monthly boundaries are computed in the Budget Time Zone. Retry accounting follows the same window rules (A-25 D2).
+
+**M3-A9.4 Display.** The exact remaining allowance and the next availability time are displayed (A-25 D2).
+
+**M3-A9.5 No monthly number.** No monthly numeric limit is set or approved.
+
+**M3-A9.6 Changing the Budget Time Zone.** A change of the Budget Time Zone requires a separate policy approval and a recorded authorization (A-27 correction A9 and clarification) and is a Sensitive Policy Change (M3-A7.1). Who gives that approval is deferred item DI-9. Until a change is approved and executed, Asia/Dubai (+04:00) applies.
+
+#### M3-A10. Deferred items (no authority created)
+
+Each item below is a question this amendment does not answer. No permission, approval route, allowance, exemption or ceiling that depends on an answer exists until the Owner answers the question by a recorded ruling. Until then the clause cited applies as written, together with the ratified text it extends.
+
+- **DI-1** (M3-A2.13(b)). Which records made before the Effective Date count as "independently verified external-AI authorization", so that an Existing Allowed Project is not an Unverified Allowed Project?
+- **DI-2** (M3-A2.13(d)). Is a standard for "sufficient evidence" in a Transition Review confirmation to be set, beyond the evidence the Authorized Design Manager records?
+- **DI-3** (M3-A2.5). What does the Controlled Security Procedure require, and which project members are "authorized project members" who may request or apply a Precautionary Block under it?
+- **DI-4** (M3-A3.3). Is there to be any means, such as an explicit recorded act of the Owner, by which an Owner Approval stands in place of an Authorized Design Manager's approval under M3-A2?
+- **DI-5** (M3-A8.1). What does the Company Ceiling measure: a maximum for any one Project or an aggregate across Projects, and for which windows and which measures (Requests, tokens, cost)?
+- **DI-6** (M3-A7.4). For an Emergency Exception, is the Owner authorization given for each instance or may it be standing for a class of emergencies; who performs the retrospective independent review; and within what time?
+- **DI-7** (M3-A2.9). Do pending Budget Adjustments, Budget Overrides, Price Basis approvals or changes, and Budget Time Zone changes also expire after 30 days?
+- **DI-8** (M3-A5.3). May a Project's name appear as a project identifier in platform-wide operational cost aggregates, or only its code and numeric identifier?
+- **DI-9** (M3-A1.4, M3-A9.6). Who gives the recorded authorization and approval for (a) the first Price Basis, (b) a change to the Price Basis and (c) a change of the Budget Time Zone; and is updating a price under an existing Price Basis, after a provider changes its published price, a change to the Price Basis? (A-23 item 5 concerns engineering AI-budget policy values; whether it covers the Price Basis and the Budget Time Zone is part of this question.)
+- **DI-10** (M3-A1.2). To which measures (Requests, tokens, cost) does the Calendar-Month Window apply, and does either window apply to cost?
+- **DI-11** (M3-A0.1(i)). Which Task Groups exist, who approves the creation of a Task Group and a change to its membership, and is such a change a Sensitive Policy Change?
+- **DI-12** (M3-A0.2). May a Task Group hold a reserved share of the Project Budget (the "reserve" values of A-25 D3), and how does a reserve sit within L1?
+- **DI-13** (M3-A1.7). A-23 item 5 provides that "the Design Manager or Owner authorizes engineering AI-budget policy values". For values at L2, L3 and L4 and the retry bound: which of the two approves which value, and for a value not scoped to one Project, which Design Manager?
+- **DI-14** (M3-A1.5). What evidence counts as "reliable evidence that no request was dispatched" for automatic release, and what evidence does the audited reconciliation workflow accept to release an expired Reservation?
+- **DI-15** (M3-A5.5). To which Project is the Usage Record of a cache hit on a shared content-keyed store attributed: the consuming Project or the Project that created the entry?
+- **DI-16** (M3-A4.2). Which behaviour does the Interim Technical Restriction impose on the general project-update path: refusal of every change to Allowed for every role, refusal except for a change approved by an Authorized Design Manager and executed under M3-A2.4 and M3-A7, or conversion of such a change into a Pending Change?
+- **DI-17** (M3-A2.10). Where are Pending Changes, approvals, executions, blocks and Transition Review records kept before a dedicated store exists?
+- **DI-18** (M3-A7.3). What form does a verifiable approval reference take for an Owner Approval given outside the software: an Authority Register entry number, a dated session-message reference, or both?
+
+#### M3-A11. Non-authorization
+
+This amendment states policy and design requirements only. It authorizes no implementation increment (I1 to I4 or any other); sets or approves no numerical limit, ceiling, threshold or price; authorizes no live policy change and changes no Stored Value; and authorizes no database migration, merge, restart, deployment or live configuration change. The Interim Technical Restriction exists only as a written specification (M3-A4.2), and the transition plan of M3-A2.13(h) is prepared only for separate approval. Existing authorized ORCH work, including ORCH-053, ORCH-059, ORCH-060 and ORCH-064, continues within its existing authorization and is not extended by this amendment.
+
