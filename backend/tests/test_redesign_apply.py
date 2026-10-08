@@ -1301,3 +1301,288 @@ def test_the_ifc_worker_sweeps_the_redesign_outputs_in_its_housekeeping(gc, monk
 def test_service_py_has_no_byte_order_mark():
     raw = (Path(R.__file__)).read_bytes()
     assert not raw.startswith(b"\xef\xbb\xbf")
+
+
+# --- ORCH-041: the M5 verification's low findings (U2M5V-01..04, -07) ----------------------------
+
+
+def test_an_approval_committed_between_the_request_check_and_the_making_write_is_refused_not_drawn(gc):
+    """U2M5V-01 (probe P3): an approval committed after Apply's first look at
+    the request and before its own "making" write was drawn -- Apply made the
+    newer approved set, not the one it was asked for. The request is now
+    checked again inside the serialized transaction that writes "making" and
+    takes the snapshot: refused, nothing run, the newer approval kept."""
+    request = R.apply_request(gc["db"], gc["project"], gc["drawing"])
+    assert request["drawn"] == 4
+    approved: dict = {}
+
+    def check():
+        if not approved:                              # the first check after the request's first look
+            _approve_in_thread(gc, "p1", approved).join(30)
+            assert "done" in approved, approved.get("error")
+
+    applied: dict = {}
+    _apply_in_thread(gc, applied, request=request, check=check).join(120)
+    assert isinstance(applied.get("error"), R.ApplyRefused), applied
+    assert "approvals or placings changed" in str(applied["error"])
+    row = _row(gc)
+    assert row.output_status == "refused" and row.output_path is None
+    assert gc["calls"]["autocad"] == 0 and _outputs(gc) == []
+    assert _status_of("p1", gc) == "approved"                          # the newer approval kept
+
+
+def _publish_url(gc) -> str:
+    return f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}/publish"
+
+
+def test_publish_stages_its_temporary_copy_in_the_platform_folder_never_in_the_archive(gc, tmp_path, monkeypatch):
+    """U2M5V-02: the publication's ".part" is staged in the platform's own
+    redesign folder (redesign/publishing), then put into the archive under
+    its final name; no temporary file is ever created in the archive."""
+    archive = _archive(gc, tmp_path)
+    result = _apply(gc)
+    _succeeded(gc, result)
+    staged: list[Path] = []
+    in_archive_while_staged: list[list[str]] = []
+    original = R._stage
+
+    def stage(source, dest):
+        part = original(source, dest)
+        staged.append(Path(part))
+        in_archive_while_staged.append(sorted(p.name for p in archive.rglob("*") if p.is_file()))
+        return part
+
+    monkeypatch.setattr(R, "_stage", stage)
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200, response.text
+    platform = (gc["uploads"] / "EP-40951" / "redesign" / "publishing").resolve()
+    assert [p.parent.resolve() for p in staged] == [platform]
+    assert in_archive_while_staged == [[]]                               # nothing in the archive while staging
+    assert [p.name for p in (archive / R.FOLDER).iterdir()] == [result["file"]]
+    assert not [p for p in archive.rglob("*") if p.name.endswith(R.PART)]
+    assert not [p for p in platform.iterdir() if p.name.endswith(R.PART)]  # the temporary removed
+
+
+def test_a_leftover_publication_temporary_is_said_as_such_swept_and_does_not_block_for_good(gc, tmp_path):
+    """U2M5V-02: a publication stopped mid-copy leaves its temporary copy in
+    the platform's staging folder. A publication meanwhile is refused with a
+    409 that says so (not "already in the archive"), the worker's sweep
+    removes it, and the copy can then be published. A ".part" an earlier
+    version left in the archive itself never blocks a publication and is
+    never touched by the platform."""
+    archive = _archive(gc, tmp_path)
+    result = _apply(gc)
+    _succeeded(gc, result)
+    platform = gc["uploads"] / "EP-40951" / "redesign" / "publishing"
+    platform.mkdir(parents=True, exist_ok=True)
+    leftover = platform / f".{result['file']}{R.PART}"
+    leftover.write_bytes(b"half a copy")
+    _old(leftover)
+    (archive / R.FOLDER).mkdir(parents=True)
+    earlier = archive / R.FOLDER / f".{result['file']}{R.PART}"
+    earlier.write_bytes(b"left by the earlier version")
+    refused = gc["client"].post(_publish_url(gc), json={})
+    assert refused.status_code == 409
+    detail = refused.json()["detail"]
+    assert "temporary" in detail and "already in the project archive" not in detail
+    assert not (archive / R.FOLDER / result["file"]).exists()
+    assert R.sweep_orphans(gc["db"])["parts_removed"] == 1 and not leftover.exists()
+    done = gc["client"].post(_publish_url(gc), json={})
+    assert done.status_code == 200, done.text
+    assert (archive / R.FOLDER / result["file"]).read_bytes() == (gc["uploads"] / result["path"]).read_bytes()
+    assert earlier.read_bytes() == b"left by the earlier version"
+
+
+def test_publishing_to_an_archive_on_another_volume_copies_exclusively_and_never_overwrites(gc, tmp_path, monkeypatch):
+    """U2M5V-02: where the archive is on another volume (no hard link, no
+    rename across volumes) the final name is created exclusively and
+    filled; a name already there is refused, and the 409 says whether it
+    holds the same file or a different one."""
+    import errno
+
+    archive = _archive(gc, tmp_path)
+    result = _apply(gc)
+    _succeeded(gc, result)
+    link, rename = os.link, os.rename
+
+    def no_cross_volume(real):
+        def op(src, dst, *a, **kw):
+            if str(archive) in str(dst):
+                raise OSError(errno.EXDEV, "not the same device")
+            return real(src, dst, *a, **kw)
+        return op
+
+    monkeypatch.setattr(os, "link", no_cross_volume(link))
+    monkeypatch.setattr(os, "rename", no_cross_volume(rename))
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200, response.text
+    target = archive / R.FOLDER / result["file"]
+    assert target.read_bytes() == (gc["uploads"] / result["path"]).read_bytes()
+    assert [p.name for p in (archive / R.FOLDER).iterdir()] == [result["file"]]
+    same = gc["client"].post(_publish_url(gc), json={})
+    assert same.status_code == 409 and "already in the project archive (the same file)" in same.json()["detail"]
+    target.write_bytes(b"someone else's drawing")
+    other = gc["client"].post(_publish_url(gc), json={})
+    assert other.status_code == 409 and "a different file" in other.json()["detail"].lower()
+    assert target.read_bytes() == b"someone else's drawing"                 # never overwritten
+
+
+def _running_apply_job(gc, request: dict, minutes_ago: float = 5.0):
+    from app.models import BackgroundJob
+
+    created = utc_now() - timedelta(minutes=minutes_ago)
+    job = BackgroundJob(project_id=gc["pid"], kind=R.KIND_APPLY, status="running", progress={}, cancel_requested=False,
+                        created_at=created, started_at=created, heartbeat_at=created, worker_id="ifc:PC:1:1:0",
+                        attempts=0, params={"drawing_id": gc["drawing"].id, "user_id": None, **request})
+    gc["db"].add(job)
+    gc["db"].commit()
+    return job
+
+
+def _made_then_worker_stopped(gc):
+    """Apply made and verified the copy and committed "made"; the worker
+    stopped before the job's own "succeeded" commit."""
+    request = R.apply_request(gc["db"], gc["project"], gc["drawing"])
+    job = _running_apply_job(gc, request)
+    made = _apply(gc, request=request, job_id=job.id, job_created_at=job.created_at)
+    assert _row(gc).output_status == "made" and gc["calls"]["autocad"] == 1
+    return job, made
+
+
+def test_a_copy_made_whose_job_never_succeeded_is_reconciled_when_the_recovered_job_runs_again(gc, tmp_path):
+    """U2M5V-03: the recovered job finds the copy it made and verified
+    (bound by its run's verification.json and the copy's sha256) and
+    succeeds with it -- AutoCAD is not run again -- so the copy can be
+    published."""
+    from app.ifc.services import runners
+    from app.models import BackgroundJob
+    from app.services import jobs
+
+    db = gc["db"]
+    job, made = _made_then_worker_stopped(gc)
+    jobs.recover_stale(db, stale_after=timedelta(minutes=1))
+    db.refresh(job)
+    assert job.status == "queued"
+    ended = jobs.execute(db, job.id, lambda s, ctx: runners.RUNNERS[R.KIND_APPLY](s, s.get(BackgroundJob, job.id), ctx))
+    db.expire_all()
+    job = db.get(BackgroundJob, job.id)
+    assert ended == "succeeded" and job.result["path"] == made["path"], (ended, job.error)
+    assert gc["calls"]["autocad"] == 1 and _row(gc).output_path == made["path"]
+    _archive(gc, tmp_path)
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200, response.text
+    assert response.json()["published"]["job_id"] == job.id
+
+
+def test_a_made_copy_whose_job_failed_is_reconciled_by_housekeeping_only_while_it_still_verifies(gc, tmp_path):
+    """U2M5V-03: a job left "failed" (its own commit failed, or it was given
+    up after the worker stopped) is reconciled by the worker's housekeeping
+    from the verified copy -- but never while the copy is not the file its
+    run verified."""
+    from app.models import BackgroundJob
+    from app.workers import ifc_worker
+    from app.database import SessionLocal
+
+    db = gc["db"]
+    job, made = _made_then_worker_stopped(gc)
+    job.status, job.error, job.finished_at = "failed", "The worker stopped without finishing this job", utc_now()
+    db.commit()
+    copy = gc["uploads"] / made["path"]
+    good = copy.read_bytes()
+    copy.write_bytes(good + b" ALTERED")
+    assert R.reconcile_made(db) == []
+    _archive(gc, tmp_path)
+    assert gc["client"].post(_publish_url(gc), json={}).status_code == 422
+    copy.write_bytes(good)
+    worker = ifc_worker.IfcWorker.__new__(ifc_worker.IfcWorker)
+    worker.slot, worker.session_factory = 0, SessionLocal
+    worker.housekeeping()
+    db.expire_all()
+    job = db.get(BackgroundJob, job.id)
+    assert job.status == "succeeded" and job.result["path"] == made["path"] and job.result["fingerprint"]
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200 and response.json()["published"]["job_id"] == job.id
+
+
+def test_a_made_copy_whose_job_failed_is_reconciled_by_the_next_publish_or_apply_request(gc, tmp_path):
+    """U2M5V-03: without housekeeping, the next publish request reconciles
+    the job from the verified copy; the next Apply of the same approved set
+    is then refused as already made instead of drawing it again."""
+    from app.models import BackgroundJob
+
+    db = gc["db"]
+    job, made = _made_then_worker_stopped(gc)
+    job.status, job.error = "failed", "OperationalError: database is locked"
+    db.commit()
+    _archive(gc, tmp_path)
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200, response.text
+    db.expire_all()
+    assert db.get(BackgroundJob, job.id).status == "succeeded"
+    with pytest.raises(R.ApplyRefused, match="already made by job"):
+        _apply(gc, job_id=job.id + 1)
+    assert gc["calls"]["autocad"] == 1
+
+
+def test_a_made_copy_whose_job_failed_is_reconciled_when_the_next_apply_is_asked_for(gc):
+    from app.models import BackgroundJob
+
+    db = gc["db"]
+    job, made = _made_then_worker_stopped(gc)
+    job.status = "failed"
+    db.commit()
+    with pytest.raises(R.ApplyRefused, match=f"already made by job {job.id}"):
+        _apply(gc, job_id=job.id + 1)
+    db.expire_all()
+    assert db.get(BackgroundJob, job.id).status == "succeeded" and gc["calls"]["autocad"] == 1
+
+
+def test_publish_refuses_a_copy_that_is_no_longer_the_file_apply_verified(gc, tmp_path):
+    """U2M5V-07: publication is bound to the copy_sha256 its run's
+    verification.json recorded: a platform copy altered on disk since is
+    refused, and nothing reaches the archive."""
+    archive = _archive(gc, tmp_path)
+    result = _apply(gc)
+    _succeeded(gc, result)
+    copy = gc["uploads"] / result["path"]
+    good = copy.read_bytes()
+    copy.write_bytes(good + b" ALTERED")
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 422 and "no longer the file" in response.json()["detail"]
+    assert [p for p in archive.rglob("*") if p.is_file()] == []
+    copy.write_bytes(good)
+    assert gc["client"].post(_publish_url(gc), json={}).status_code == 200
+
+
+def test_a_copy_filed_by_the_pre_m5_apply_is_said_filed_by_an_earlier_version_not_published(gc, tmp_path):
+    """U2M5V-04: a row the pre-M5 Apply filed keeps output_relative; with
+    no publication event it is "filed by an earlier version, not verified",
+    never "published". A copy the engineer published is said published."""
+    folder = gc["uploads"] / "EP-40951" / "redesign"
+    folder.mkdir(parents=True, exist_ok=True)
+    name = "FA LAYOUT R0 - Redesign 2026-10-02 1654.dwg"
+    (folder / name).write_bytes(b"made by the old Apply")
+    row = _row(gc)
+    row.output_status, row.output_path, row.output_relative = "made", f"EP-40951/redesign/{name}", f"{R.FOLDER}/{name}"
+    row.output_at = utc_now()
+    gc["db"].commit()
+    out = gc["client"].get(f"/projects/{gc['pid']}/redesign/{gc['drawing'].id}").json()["output"]
+    assert out["available"] and out["published"] is None and out["filed_earlier"] == f"{R.FOLDER}/{name}"
+    _archive(gc, tmp_path)
+    result = _apply(gc)
+    _succeeded(gc, result)
+    response = gc["client"].post(_publish_url(gc), json={})
+    assert response.status_code == 200, response.text
+    out = response.json()["output"]
+    assert out["published"] == f"{R.FOLDER}/{result['file']}" and out["filed_earlier"] is None
+
+
+def test_the_panel_says_a_pre_m5_filing_apart_from_a_publication_and_keeps_the_two_meanings_apart():
+    """U2M5V-04/-05: the panel's wording follows the view."""
+    path = Path(__file__).resolve().parents[2] / "frontend" / "src" / "components" / "prep" / "RedesignPanel.tsx"
+    if not path.is_file():
+        pytest.skip("the frontend is not beside this backend")
+    panel = path.read_text(encoding="utf-8")
+    assert "filed by an earlier version, not verified" in panel
+    assert "published separately to the project archive" not in panel
+    assert "Not published, stale" not in panel and "Nothing was published:" not in panel

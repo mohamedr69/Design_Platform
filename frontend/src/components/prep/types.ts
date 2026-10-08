@@ -170,11 +170,15 @@ export interface Redesign {
   counts: Record<string, number>;
   /** The last Apply attempt's state ("made", "making", "failed", "stale", "refused", "cancelled",
    *  "interrupted") and the last copy made: `available` when it can still be downloaded, whatever the
-   *  last attempt came to; `relative` where the engineer published it in the project archive (M5). */
+   *  last attempt came to; `relative` as stored; `published` where the engineer published it in the
+   *  project archive (M5, from its publication event); `filed_earlier` where the pre-M5 Apply filed it,
+   *  never verified nor published (U2M5V-04). */
   output: {
     status: string;
     error: string | null;
     relative: string | null;
+    published?: string | null;
+    filed_earlier?: string | null;
     file: string | null;
     at: string | null;
     changes: number;

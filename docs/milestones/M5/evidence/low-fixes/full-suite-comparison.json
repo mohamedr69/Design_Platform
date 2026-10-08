@@ -1,0 +1,81 @@
+{
+ "run": {
+  "file": "docs/milestones/M5/evidence/low-fixes/full-suite.xml",
+  "totals": {
+   "tests": 1902,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 2137.395
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  'SIGA-OSD-FCN'\n  '3-SDDC2'"
+   }
+  }
+ },
+ "against": {
+  "m4_run2": {
+   "file": "docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml",
+   "totals": {
+    "tests": 1819,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 35,
+    "time_s": 1450.575
+   },
+   "new_failures": [],
+   "fixed_since": [
+    "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches"
+   ],
+   "missing_now": [],
+   "added_now_by_file": {
+    "tests.test_redesign_apply": 70,
+    "tests.test_redesign_walls_layers": 13
+   },
+   "added_now_states": {
+    "passed": 83
+   },
+   "state_changed": {
+    "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches": {
+     "before": "failure",
+     "now": "passed"
+    }
+   },
+   "same_failure": {
+    "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+     "same_message_first_120": true,
+     "same_extra_items_sorted": true
+    }
+   }
+  },
+  "orch039": {
+   "file": "docs/milestones/M5/evidence/safe-apply/full-suite.xml",
+   "totals": {
+    "tests": 1878,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 35,
+    "time_s": 2091.538
+   },
+   "new_failures": [],
+   "fixed_since": [],
+   "missing_now": [],
+   "added_now_by_file": {
+    "tests.test_redesign_apply": 11,
+    "tests.test_redesign_walls_layers": 13
+   },
+   "added_now_states": {
+    "passed": 24
+   },
+   "state_changed": {},
+   "same_failure": {
+    "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+     "same_message_first_120": true,
+     "same_extra_items_sorted": true
+    }
+   }
+  }
+ }
+}

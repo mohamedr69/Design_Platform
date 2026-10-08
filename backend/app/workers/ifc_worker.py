@@ -78,6 +78,14 @@ class IfcWorker(Worker):
             log.warning("Could not sweep the redesign outputs", exc_info=True)
         finally:
             db.close()
+        db = self.session_factory()
+        try:
+            # a copy an Apply made and verified whose job was left failed (U2M5V-03)
+            redesign.reconcile_made(db)
+        except Exception:  # noqa: BLE001 -- tidying up never stops the worker
+            log.warning("Could not reconcile the redesign copies made", exc_info=True)
+        finally:
+            db.close()
 
 
 def main() -> None:
