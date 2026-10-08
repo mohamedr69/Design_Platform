@@ -9,6 +9,8 @@ reading of its documents (app.services.document_processing).
   POST /projects/{id}/jobs/sync-documents        queue a file sync: the sync worker stats the folder and
                                                  records what is new, changed and removed -- seconds; the
                                                  documents are then read by a processing job it queues
+  POST /projects/{id}/documents/{doc}/classification/confirm
+                                                 an engineer confirms what a document is and whose it is
   POST /projects/{id}/jobs/process-documents     queue the reading of the documents still pending (after a
                                                  stop, or to retry the failed ones with retry_failed)
 """
@@ -23,7 +25,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.deps import get_current_user, require_role
-from app.models import BackgroundJob, User
+from app.models import DESIGN_ROLES, BackgroundJob, RoleEnum, User
 from app.routers import jobs as jobs_router
 from app.routers.jobs import JobOut, _out
 from app.routers.projects import CREATOR_ROLES, _get_project_or_404
@@ -175,6 +177,18 @@ class ClassificationOut(BaseModel):
     flags: list[str] = []
     # What the first pages were found to hold: kind, page, excerpt, method (text / ocr).
     evidence_pages: list[dict] = []
+    # Attribution (app.services.document_attribution), a field of its own: OUR_SCOPE / LIKELY_OUR_SCOPE /
+    # RELATED_EXTERNAL / REFERENCE_ONLY / UNKNOWN; scope_reading "unknown" for UNKNOWN (never in or out).
+    attribution: str = "UNKNOWN"
+    scope_reading: str = "unknown"
+    attribution_basis: dict | None = None
+    attribution_version: str | None = None
+    attribution_conflict: dict | None = None
+    # Automated answers that disagree with this engineer-confirmed row, recorded and not applied (M3 P-02).
+    conflicts: list[dict] = []
+    # What produced the row: rules version, input fingerprint and the model-stage slots (M7 adoption).
+    stage_record: dict = {}
+    confirmed_by_id: int | None = None
 
 
 class SyncFileOut(BaseModel):
@@ -225,6 +239,7 @@ class ClassificationMetricsOut(BaseModel):
     by_stage: dict[str, int]
     by_basis: dict[str, int]
     by_freshness: dict[str, int]
+    by_attribution: dict[str, int] = {}
     unknown: int
     ambiguous: int
     agree_with_role: int
@@ -293,11 +308,65 @@ def document_classification(
             .order_by(ProjectDocument.relative_path).all())
     entries = {e.document_id: e for e in db.query(DocumentClassification)
                .filter(DocumentClassification.project_id == project.id, DocumentClassification.superseded_at.is_(None))}
+    conflicts = classification.conflicts_of(db, project)
     return [DocumentClassificationRowOut(document_id=row.id, name=row.filename, path=row.relative_path or row.filename,
                                          role=row.role, state=row.state,
-                                         classification=classification.as_dict(entries.get(row.id), row, project),
+                                         classification=classification.as_dict(entries.get(row.id), row, project,
+                                                                               conflicts=conflicts.get(row.id)),
                                          extracted=_extracted_summary(row))
             for row in rows]
+
+
+# Who may confirm what a document is and whose it is: the engineers -- the design engineers and the
+# design manager (M3 Q-1 / P-24). `admin` carries no engineering authority by itself (B-05, B-19), and
+# estimation engineers, draftsmen and viewers do not confirm classifications. Project membership
+# (B-19) is not enforced here: the platform has no membership check yet (a known gap, M7).
+CONFIRMER_ROLES = (RoleEnum.design_manager, *DESIGN_ROLES)
+
+
+class ClassificationConfirmIn(BaseModel):
+    primary_type: str
+    # None: the engineer confirms that no system of ours applies.
+    system_code: str | None
+    attribution: str
+    reason: str
+
+
+@router.post("/{project_id}/documents/{document_id}/classification/confirm", response_model=ClassificationOut)
+def confirm_document_classification(
+    project_id: int,
+    document_id: int,
+    payload: ClassificationConfirmIn,
+    current_user: User = Depends(require_role(*CONFIRMER_ROLES)),
+    db: Session = Depends(get_db),
+) -> ClassificationOut:
+    """An engineer confirms what the document is, its system and whose it
+    is, with a reason (gap G-02). The confirmation becomes the document's
+    current classification; automatic runs after it are kept as history
+    and, where they disagree, as conflict records -- never applied. Written
+    with its activity event in one transaction."""
+    from app.models import ProjectDocument
+    from app.services import document_classification as classification
+
+    if not classification.enabled():
+        raise HTTPException(status.HTTP_409_CONFLICT, detail="Document classification is off (DOCUMENT_CLASSIFICATION_V2).")
+    project = _get_project_or_404(db, project_id)
+    row = db.get(ProjectDocument, document_id)
+    if row is None or row.project_id != project.id or row.state == document_sync.REMOVED:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Document not found")
+    try:
+        entry = classification.confirm(db, project, row, current_user, primary_type=payload.primary_type,
+                                       system_code=payload.system_code, attribution=payload.attribution,
+                                       reason=payload.reason)
+        db.commit()
+    except classification.ConfirmationError as exc:
+        db.rollback()
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+    except Exception:
+        db.rollback()
+        raise
+    db.refresh(entry)
+    return ClassificationOut(**classification.as_dict(entry, row, project))
 
 
 def _extracted_summary(row) -> ExtractedSummaryOut:
