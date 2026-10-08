@@ -1,0 +1,45 @@
+{
+ "after_the_refusal": {
+  "run_folder_exists": false
+ },
+ "ai_ledger_after": {
+  "entries": 484,
+  "limit_amendments": 0,
+  "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+  "scopes": 18
+ },
+ "ai_ledger_before": {
+  "entries": 484,
+  "limit_amendments": 0,
+  "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+  "scopes": 18
+ },
+ "ai_ledger_unchanged": true,
+ "final_invocations": [
+  {
+   "kind": "fresh",
+   "n": 1,
+   "run_state": "FINISHED",
+   "status": "finished"
+  }
+ ],
+ "model_requests": 0,
+ "name": "CLI-version case under the corrected runner (dry)",
+ "ok": true,
+ "reading": "the runner now compares the CLI version line BEFORE it creates the run folder: a refusal at invocation 1 creates nothing (and, in live mode, consumes no authorization); the same 'run' command then starts the run normally -- the dead-end of Verification 41 (R41-09 case A) no longer exists",
+ "run_folder": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-cli-30b02b",
+ "stamp": "r43d-cli-30b02b",
+ "steps": [
+  {
+   "command": "run",
+   "injected": "CLI version refusal at invocation 1",
+   "result": "refused",
+   "why": "refused: CLI version '9.9.9 (Claude Code)' differs from the declared '2.1.263 (Claude Code)' [dry drill: the live check's refusal injected in-process] (nothing was created and no authorization was consumed)"
+  },
+  {
+   "command": "run",
+   "injected": null,
+   "result": "finished"
+  }
+ ]
+}

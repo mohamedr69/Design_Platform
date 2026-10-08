@@ -1,0 +1,1 @@
+Copied byte-for-byte on 7 October 2026 from the governance folder C:\Users\moham\.codex\visualizations\2026\09\27\01a0e218-6014-77a0-be80-501dcc922424\master-roadmap\ (the M2 closure package cites these hashes: policy 7efa891b...4f47, amendment 815d43fd...5de6). The originals stay where they are; these copies are M4 input 4 (docs/milestones/M4/README.md).

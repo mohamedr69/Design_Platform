@@ -1,0 +1,149 @@
+{
+ "allowance": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-m22349-30b02b/allowance.sqlite",
+ "application_env": {
+  "DRAWINGS_AI_REVIEW_ENABLED": "false"
+ },
+ "binding": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review43/BINDING-MANIFEST-R43-HARNESS.json",
+ "binding_sha256": "f35355aa8a8bca16803db3576fda8260a470915fee9c905b035f8d8bd9a374a7",
+ "caps": {
+  "B": 240,
+  "C": 240,
+  "P": 36,
+  "R": 40
+ },
+ "cli_version": "dry mode: no CLI is run",
+ "decision_coverage_gate": "C_GE_B_ONLY",
+ "declaration_path": null,
+ "declaration_sha256": null,
+ "harness_dir": "C:\\t\\r2x\\r42-sandbox\\r43p\\run\\h43\\harness-r32",
+ "invocation": 1,
+ "lane_switches": {
+  "B": {
+   "AI_EVIDENCE_VARIANT": "off"
+  },
+  "C": {
+   "AI_EVIDENCE_ADJUDICATE": "1",
+   "AI_EVIDENCE_ASSOC": "1",
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_DECISION_REGION": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_IDGUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  },
+  "P": {},
+  "R": {
+   "AI_EVIDENCE_DEADLINE": "1",
+   "AI_EVIDENCE_GUARD": "1",
+   "AI_EVIDENCE_SCHEDULING": "required_first",
+   "AI_EVIDENCE_SUPPORT": "v2",
+   "AI_EVIDENCE_TARGETED": "1",
+   "AI_EVIDENCE_VARIANT": "EV1"
+  }
+ },
+ "lane_task_kinds": {
+  "B": [
+   "read_submittal_form"
+  ],
+  "C": [
+   "discover_page",
+   "locate_decision",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ],
+  "P": [
+   "discover_page",
+   "locate_decision",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ],
+  "R": [
+   "discover_page",
+   "read_decision",
+   "read_field_context",
+   "read_identity",
+   "read_revision"
+  ]
+ },
+ "mode": "dry",
+ "model_identity": {
+  "cli_path": null,
+  "cli_version": null,
+  "provider": "claude-code",
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "out_dir": "C:\\t\\r2x\\r42-sandbox\\r43p\\sb\\r43d-m22349-30b02b\\inv-1\\out",
+ "parent": {
+  "elapsed_s": 604800,
+  "input_tokens": 16300000,
+  "output_tokens": 3260000,
+  "total": 556
+ },
+ "policies": {
+  "B": "B:accepted-path:evidence-off"
+ },
+ "project_totals": {
+  "EP-22349": {
+   "planning": 37.3,
+   "structural": 109
+  }
+ },
+ "project_window": {
+  "limit": 60,
+  "window_s": 86400
+ },
+ "provider_env": null,
+ "reader": "none",
+ "resume_policy": "full",
+ "run_folder": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-m22349-30b02b",
+ "run_key": "aea10093dac06ee39f5eadf3df7d3c8fe09fe80cbee56149993c82fc9d1f83f2",
+ "run_set": [
+  {
+   "doc_key": "EP-22349/Civil Defence Approved Drawings/CIVIL DEFENSE_compressed.pdf",
+   "ep": "22349",
+   "pool_id": "F038"
+  },
+  {
+   "doc_key": "EP-22349/EP-22349 MS/EMLSC/Project Approvals.pdf",
+   "ep": "22349",
+   "pool_id": "F035"
+  },
+  {
+   "doc_key": "EP-22349/DWGS/As Built  Dwg/EM SYSTEM/PDF/EM LIGHT-10TH FLOOR (10).pdf",
+   "ep": "22349",
+   "pool_id": "F051"
+  },
+  {
+   "doc_key": "EP-22349/DWGS/As Built  Dwg/FA SYSTEM/PDF/Fire Alarm-2ND PARKING.pdf",
+   "ep": "22349",
+   "pool_id": "F042"
+  },
+  {
+   "doc_key": "EP-22349/DWGS/Shop Dwg/EM LIGHT SYSTEM/EM-02.pdf",
+   "ep": "22349",
+   "pool_id": "F047"
+  }
+ ],
+ "run_set_path": "C:\\t\\r2x\\r42-sandbox\\r43p\\dry\\RUN-SET-EP22349.json",
+ "sandbox": {
+  "B": "C:\\t\\r2x\\r42-sandbox\\r43p\\sb\\r43d-m22349-30b02b\\inv-1\\B",
+  "C": "C:\\t\\r2x\\r42-sandbox\\r43p\\sb\\r43d-m22349-30b02b\\inv-1\\C",
+  "R": "C:\\t\\r2x\\r42-sandbox\\r43p\\sb\\r43d-m22349-30b02b\\inv-1\\R"
+ },
+ "sandbox_base": "C:/t/r2x/r42-sandbox/r43p/sb",
+ "stamp": "r43d-m22349-30b02b",
+ "store": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-m22349-30b02b/capture.sqlite",
+ "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode",
+ "trees": {
+  "baseline": "C:/t/iso/frozen-r13/backend",
+  "candidate": "C:/t/iso/cand-r30n/backend"
+ },
+ "truth": "C:\\t\\r2x\\r42-sandbox\\r43p\\sb\\r43d-m22349-30b02b\\inv-1\\out\\TRUTH-R32.json"
+}

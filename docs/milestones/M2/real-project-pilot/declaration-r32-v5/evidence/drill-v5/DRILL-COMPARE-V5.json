@@ -1,0 +1,130 @@
+{
+ "binding": {
+  "review45_evidence_run": "db18f5f8e2d63701611ebe7cf7daf396c8da122332fa368c27814eeea7f447c9",
+  "v5_binding_files_verified": 629,
+  "v5_binding_run": "9af8e07ade4e0c15d1a04189b654eeabbcba7646ab726ef2c04ffa107b0c9ffb"
+ },
+ "criterion": {
+  "review45": "PASS",
+  "v5_binding": "PASS"
+ },
+ "facts_equal_after_normalising": true,
+ "ingest_note": "b_database_sha256 differs by design (the sandbox database records its own paths and times); documents, projects and registration equal",
+ "ingest_registration_equal": true,
+ "per_document": {
+  "F009": {
+   "review45": {
+    "exercised": true,
+    "facts_final": 19,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   },
+   "v5_binding": {
+    "exercised": true,
+    "facts_final": 19,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   }
+  },
+  "F020": {
+   "review45": {
+    "exercised": true,
+    "facts_final": 21,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   },
+   "v5_binding": {
+    "exercised": true,
+    "facts_final": 21,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   }
+  },
+  "F030": {
+   "review45": {
+    "exercised": true,
+    "facts_final": 18,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   },
+   "v5_binding": {
+    "exercised": true,
+    "facts_final": 18,
+    "resolved_criticals": [],
+    "unresolved_criticals": []
+   }
+  }
+ },
+ "report_keys_differing_after_normalising": [
+  "binding",
+  "free_disk",
+  "ingest",
+  "seconds"
+ ],
+ "requests": {
+  "review45": {
+   "dry_stub_calls": 0,
+   "live_provider_attempts_blocked": [],
+   "model_requests": 0,
+   "provider_complete_calls_traced": 0,
+   "refusing_provider_calls": 0
+  },
+  "v5_binding": {
+   "dry_stub_calls": 0,
+   "live_provider_attempts_blocked": [],
+   "model_requests": 0,
+   "provider_complete_calls_traced": 0,
+   "refusing_provider_calls": 0
+  }
+ },
+ "rows_B_equal_after_normalising": true,
+ "stop_condition_fired": {
+  "review45": false,
+  "v5_binding": false
+ },
+ "trace_events": {
+  "review45": 35,
+  "sequence_equal": true,
+  "tripwire_inputs": {
+   "review45": [
+    [
+     12,
+     "after_document"
+    ],
+    [
+     20,
+     "after_document"
+    ],
+    [
+     28,
+     "after_document"
+    ],
+    [
+     32,
+     "final"
+    ]
+   ],
+   "v5_binding": [
+    [
+     12,
+     "after_document"
+    ],
+    [
+     20,
+     "after_document"
+    ],
+    [
+     28,
+     "after_document"
+    ],
+    [
+     32,
+     "final"
+    ]
+   ]
+  },
+  "tripwire_payloads_equal_after_normalising": true,
+  "v5_binding": 35
+ },
+ "trip_out_equal_after_normalising": true
+}

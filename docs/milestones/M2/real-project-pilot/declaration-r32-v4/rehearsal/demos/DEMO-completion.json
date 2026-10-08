@@ -1,0 +1,74 @@
+{
+ "facts": {
+  "allowance_exists": true,
+  "charges": {
+   "by_lane_outcome": [
+    [
+     "B",
+     "dry_refused",
+     2
+    ],
+    [
+     "C",
+     "dry_refused",
+     2
+    ],
+    [
+     "R",
+     "dry_refused",
+     1
+    ]
+   ],
+   "stops": [],
+   "total": 5
+  },
+  "folder_exists": true,
+  "invocations": [
+   {
+    "comparison_state": "PENDING",
+    "kind": "fresh",
+    "n": 1,
+    "run_state": "FINISHED",
+    "status": "finished"
+   }
+  ],
+  "store": {
+   "duplicate_bound_keys": 0,
+   "reserved_without_answer": 0,
+   "rows": 5,
+   "serves": [
+    {
+     "lane": "R",
+     "mode": "reference_from_capture",
+     "n": 2,
+     "served_lane": "C"
+    }
+   ]
+  }
+ },
+ "ledger_unchanged": true,
+ "model_requests": 0,
+ "ok": true,
+ "run_state": "FINISHED",
+ "seconds": 19.9,
+ "statuses": {
+  "B": [
+   "COMPLETE"
+  ],
+  "C": [
+   "COMPLETE"
+  ],
+  "R": [
+   "COMPLETE"
+  ]
+ },
+ "steps": [
+  {
+   "result": "finished"
+  }
+ ],
+ "tests": [
+  "test_runner_r32.py (the dry pipeline on the real reference set)",
+  "test_runner_order_r42.py::test_dry_A_and_T_..."
+ ]
+}

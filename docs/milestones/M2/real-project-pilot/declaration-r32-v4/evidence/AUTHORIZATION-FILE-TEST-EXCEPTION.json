@@ -1,0 +1,25 @@
+{
+ "exception_holds": true,
+ "finding": "Verification 43 R43V-05 (minor): a test-environment artefact and a v4 precondition, not a harness defect",
+ "hits": [
+  {
+   "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json",
+   "sha256": "f2546c91912e4fefc5516158327a54c4c05776286310f61d6bea10f09b84425f"
+  }
+ ],
+ "roots": [
+  "C:/t/r2x/r42-sandbox",
+  "C:/t/iso/work/r2x/r38",
+  "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot"
+ ],
+ "search_lines": {
+  "513": "found = [str(p) for r in roots if r.exists() for p in r.rglob(\"OWNER-DISPATCH-AUTHORIZATION*.json\")]"
+ },
+ "test": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review43/scripts/harness-r32/test_runner_r32.py::test_no_authorization_file_was_written_by_the_tests",
+ "test_sha256": "18beb790b5a89549cd894c77cc63d0398ec17d2a6a772f53d61fa1518c323332",
+ "v3_file": {
+  "commit": "7a1bf6f M4 R32 v3: commit the executed run record and the dispatch authorization (owner decision A-13 item 6)",
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json",
+  "sha256": "f2546c91912e4fefc5516158327a54c4c05776286310f61d6bea10f09b84425f"
+ }
+}

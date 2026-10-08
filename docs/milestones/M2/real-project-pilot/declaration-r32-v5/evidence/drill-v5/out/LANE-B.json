@@ -1,0 +1,443 @@
+{
+ "application_env_check": {
+  "application_env_verified": [
+   {
+    "key": "DRAWINGS_AI_REVIEW_ENABLED",
+    "setting": "drawings_ai_review_enabled",
+    "setting_value": false,
+    "value": "false"
+   }
+  ],
+  "drawings_ai_review_enabled": {
+   "enabled": false,
+   "why": "the drawings AI review is switched off (DRAWINGS_AI_REVIEW_ENABLED)"
+  }
+ },
+ "application_processing_run": true,
+ "authorization": null,
+ "cli_version": "dry mode: no CLI is run",
+ "declared_identity": {
+  "provider": "dry-refusing",
+  "small": "claude-sonnet-5",
+  "standard": "claude-opus-5"
+ },
+ "deferred_projects": {},
+ "documents": {
+  "F009": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "processed by the application (B)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  },
+  "F020": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "processed by the application (B)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  },
+  "F030": {
+   "class": null,
+   "classes": [],
+   "events": 0,
+   "kinds": [],
+   "pages": {},
+   "partially_read_pages": [],
+   "reason": "processed by the application (B)",
+   "retries": 0,
+   "retry_at": null,
+   "retry_at_utc": null,
+   "status": "COMPLETE",
+   "unread_page_count": 0,
+   "unread_pages": {}
+  }
+ },
+ "drill": "baseline-facts",
+ "drill_check": {
+  "documents": [
+   "F009",
+   "F020",
+   "F030"
+  ],
+  "drill": "baseline-facts",
+  "forbidden_keys_absent": [
+   "store",
+   "allowance",
+   "run_key",
+   "ledger",
+   "dry_ledger",
+   "dry_inject",
+   "dry_application_limits",
+   "declaration_path",
+   "declaration_sha256",
+   "auth_path",
+   "provider_env",
+   "caps",
+   "parent",
+   "project_window",
+   "project_totals"
+  ],
+  "lane": "B"
+ },
+ "dry_stub_calls": 0,
+ "environment_check": {
+  "provider_env_verified": [],
+  "switches": {
+   "AI_EVIDENCE_VARIANT": "off"
+  }
+ },
+ "global_provider": {
+  "at_end": "RefusingGlobalProvider",
+  "events": [],
+  "installed": {
+   "ai_enabled_setting": false,
+   "application_modules_at_installation": [
+    "app",
+    "app.ai",
+    "app.ai.guard",
+    "app.ai.provider",
+    "app.core",
+    "app.core.config"
+   ],
+   "calls": 0,
+   "global_provider": "RefusingGlobalProvider",
+   "name": "r42-refusing-global"
+  },
+  "lane_kind": "refusing (baseline-facts drill)",
+  "records": [],
+  "requests_refused": 0,
+  "still_installed_at_end": true
+ },
+ "invocation": 1,
+ "isolation_check": {
+  "end": {
+   "allowed": [
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv",
+    "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32"
+   ],
+   "environment_values": 92,
+   "forbidden_root": "G:/dev (2)/dev/ep-platform-merged",
+   "lane": "B",
+   "modules_checked": 1281,
+   "ok": true,
+   "settings_checked": 29,
+   "sys_path_entries": 13
+  },
+  "start": {
+   "allowed": [
+    "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv",
+    "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32"
+   ],
+   "environment_values": 92,
+   "forbidden_root": "G:/dev (2)/dev/ep-platform-merged",
+   "lane": "B",
+   "modules_checked": 272,
+   "ok": true,
+   "settings_checked": 29,
+   "sys_path_entries": 13
+  }
+ },
+ "lane": "B",
+ "lane_stop_state": {
+  "reason": null,
+  "state": "running",
+  "streak": 0
+ },
+ "limit_events": [],
+ "live_provider_attempts_blocked": [],
+ "mode": "dry",
+ "model_requests": 0,
+ "not_consulted": "run state, allowance, capture store, gate, ledger (real or fake), ledger scope, authorization, nonce, token, RUN file",
+ "per_project": {
+  "27331": {
+   "drawings": {
+    "floors": {
+     "added": [
+      "L5",
+      "L7",
+      "L9"
+     ],
+     "inactive": [],
+     "merged": [],
+     "missing": []
+    },
+    "systems": {
+     "FAS": {
+      "candidates": 0,
+      "drawings": 3,
+      "missing": 0,
+      "revisions": 3
+     }
+    }
+   },
+   "failed": 0,
+   "finished_at": "2026-10-08T00:21:59.023436",
+   "forms_changed": true,
+   "missing": 0,
+   "partial": 0,
+   "planned": 3,
+   "processed": 3,
+   "read_by_ai": 0,
+   "remaining": 0,
+   "stale": 0,
+   "telemetry": {
+    "ai_documents": 0,
+    "ai_seconds": 0.0,
+    "discovery_seconds": 0.0,
+    "document_processing_seconds": 230.14,
+    "documents": 3,
+    "documents_per_minute": 0.7,
+    "events": {
+     "ocr_full_pages": 7,
+     "ocr_pages_attempted": 17,
+     "ocr_pages_used": 2,
+     "ocr_regions": 59,
+     "ocr_runs": 17,
+     "page_text_extractions": 21,
+     "page_text_reused": 12,
+     "pages_scanned": 21,
+     "pdf_opens": 3,
+     "read_pdf": 3
+    },
+    "failed_count": 0,
+    "hashing_seconds": 0.09,
+    "largest_files": [
+     {
+      "mb": 8.4,
+      "path": "Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+      "role": "document",
+      "seconds": 189.5
+     },
+     {
+      "mb": 5.1,
+      "path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0047-Rev.00 Shop Drawing for 7th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+      "role": "submittal_form",
+      "seconds": 169.9
+     },
+     {
+      "mb": 4.6,
+      "path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0034-Rev.00 SD for 5th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+      "role": "submittal_form",
+      "seconds": 98.3
+     }
+    ],
+    "ocr_documents": 3,
+    "partial_count": 0,
+    "percentiles_ms": {
+     "max": 189477,
+     "median": 169900,
+     "p90": 189477,
+     "p95": 189477,
+     "p99": 189477
+    },
+    "planned": 3,
+    "processed_count": 3,
+    "processor_version": "2.0-phase0",
+    "reconcile_actions_seconds": 9.22,
+    "reconcile_drawings_seconds": 0.35,
+    "reconcile_seconds": 9.57,
+    "roles": {
+     "document": 1,
+     "submittal_form": 2
+    },
+    "slowest_files": [
+     {
+      "path": "Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+      "result": "processed",
+      "role": "document",
+      "seconds": 189.5
+     },
+     {
+      "path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0047-Rev.00 Shop Drawing for 7th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+      "result": "processed",
+      "role": "submittal_form",
+      "seconds": 169.9
+     },
+     {
+      "path": "Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0034-Rev.00 SD for 5th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+      "result": "processed",
+      "role": "submittal_form",
+      "seconds": 98.3
+     }
+    ],
+    "stage_ms": {
+     "boxes": 160029,
+     "classification": 0,
+     "content_evidence": 16,
+     "db_write": 21,
+     "deterministic_extract": 1043,
+     "hash": 86,
+     "ocr_engine": 34095,
+     "ocr_render": 11675,
+     "pdf_open": 19,
+     "pdf_text_extract": 5052,
+     "storage_wait": 2,
+     "title_block": 10875
+    },
+    "stage_share_pct": {
+     "boxes": 71.8,
+     "classification": 0.0,
+     "content_evidence": 0.0,
+     "db_write": 0.0,
+     "deterministic_extract": 0.5,
+     "hash": 0.0,
+     "ocr_engine": 15.3,
+     "ocr_render": 5.2,
+     "pdf_open": 0.0,
+     "pdf_text_extract": 2.3,
+     "storage_wait": 0.0,
+     "title_block": 4.9
+    },
+    "total_seconds": 241.41,
+    "unavailable_count": 0,
+    "unchanged_after_hash_count": 0,
+    "workers": 0
+   },
+   "unavailable": 0,
+   "unchanged_after_hash": 0
+  }
+ },
+ "policy": "B:accepted-path:evidence-off",
+ "reader": "application",
+ "rows": 3,
+ "run_key": null,
+ "sandbox": "C:\\t\\r2x\\r42-sandbox\\r45q\\sb\\r32-drill-r45q-v5bind-1\\B",
+ "seconds": 245.6,
+ "stop_state": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "stopped": null,
+ "switch_source": "dry defaults (the DRAFT-DECLARATION.v2 arms); used in dry mode only, never in live mode",
+ "task_kinds": [
+  "read_submittal_form"
+ ],
+ "trace": {
+  "calls_by_function": {
+   "document_processing.read_task": 3,
+   "document_processing.run": 1,
+   "document_sync.process": 3,
+   "document_sync.read_in_completion_order": 4,
+   "lane_r32._after": 3,
+   "lane_r32.b_tripwire": 4,
+   "lane_r32.dump_rows": 1,
+   "lane_r32.observe_trip": 6,
+   "lane_r32.process": 3,
+   "lane_r32.row_dict": 3,
+   "submittal_reader.available": 1,
+   "submittal_scanner.ocr_available": 1
+  },
+  "provider_complete_calls": [],
+  "tripwire_calls": [
+   {
+    "pool_ids": [
+     "F009"
+    ],
+    "seq": 12,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F020"
+    ],
+    "seq": 20,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F030"
+    ],
+    "seq": 28,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F009",
+     "F020",
+     "F030"
+    ],
+    "seq": 32,
+    "when": "final"
+   }
+  ]
+ },
+ "tree": "C:\\t\\iso\\frozen-r13\\backend",
+ "tripwire": [
+  {
+   "pool_id": "F009",
+   "resolved": [],
+   "unresolved": [],
+   "when": "after_document"
+  },
+  {
+   "pool_id": "F020",
+   "resolved": [],
+   "unresolved": [],
+   "when": "after_document"
+  },
+  {
+   "pool_id": "F030",
+   "resolved": [],
+   "unresolved": [],
+   "when": "after_document"
+  },
+  {
+   "pool_id": "F009",
+   "resolved": [],
+   "unresolved": [],
+   "when": "final"
+  },
+  {
+   "pool_id": "F020",
+   "resolved": [],
+   "unresolved": [],
+   "when": "final"
+  },
+  {
+   "pool_id": "F030",
+   "resolved": [],
+   "unresolved": [],
+   "when": "final"
+  }
+ ],
+ "violations": []
+}

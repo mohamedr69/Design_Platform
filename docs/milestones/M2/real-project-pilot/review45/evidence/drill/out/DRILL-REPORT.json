@@ -1,0 +1,1180 @@
+{
+ "binding": {
+  "binding_manifest": "C:/t/r2x/r42-sandbox/r45p/o/PRE-BINDING-R45.json",
+  "files_verified": 133,
+  "sha256": "db18f5f8e2d63701611ebe7cf7daf396c8da122332fa368c27814eeea7f447c9"
+ },
+ "criterion": {
+  "all_exercised": true,
+  "criticals_in_the_three_fields": true,
+  "declared_in": "DRILL-CRITERION.md (sha256 recorded in the R43 session log before the first run)",
+  "not_exercised": {},
+  "resolved_criticals": {},
+  "result": "PASS",
+  "rule": "a critical is reported, never fixed here",
+  "stop_condition_fired": false,
+  "zero_requests": true,
+  "zero_resolved_criticals": true
+ },
+ "drill": "baseline-facts",
+ "evaluator": "m2-pilot-eval-2026-10-02.10",
+ "folder": "C:/t/r2x/r42-sandbox/r45p/sb/r32-drill-r45-evidence-1",
+ "forbidden_in_runner": [
+  "allowance_r32.LaneAllowance",
+  "allowance_r32.AllowanceProvider",
+  "allowance_r32.bind_store",
+  "allowance_r32.bound_key",
+  "dispatch_guard_r32.check",
+  "dispatch_guard_r32.authorize",
+  "dispatch_guard_r32.GuardedProvider",
+  "preflight_r32.verify_ledger_scope",
+  "preflight_r32.ledger_counts",
+  "preflight_r32.ledger_snapshot",
+  "preflight_r32.ledger_live_check",
+  "preflight_r32.load_declaration",
+  "preflight_r32.live_preflight",
+  "preflight_r32.verify_bounds",
+  "preflight_r32.verify_cli",
+  "model_identity_r38.record_invocation",
+  "model_identity_r38.check_version",
+  "model_identity_r38.cli_version",
+  "runner_r32.ledger_state",
+  "runner_r32.reentry_proof",
+  "runner_r32.create_allowance_atomic",
+  "runner_r32.open_allowance",
+  "runner_r32.allowance_state",
+  "runner_r32.store_counts",
+  "runner_r32.execute",
+  "runner_r32._state_write",
+  "runner_r32._state_of_reentry",
+  "runner_r32._close"
+ ],
+ "free_disk": {
+  "free_bytes": 4401782784,
+  "min_free_bytes": 2147483648,
+  "ok": true,
+  "path": "C:/"
+ },
+ "global_provider": {
+  "at_end": "RefusingGlobalProvider",
+  "installed": {
+   "ai_enabled_setting": false,
+   "application_modules_at_installation": [
+    "app",
+    "app.ai",
+    "app.ai.guard",
+    "app.ai.provider",
+    "app.core",
+    "app.core.config"
+   ],
+   "calls": 0,
+   "global_provider": "RefusingGlobalProvider",
+   "name": "r42-refusing-global"
+  },
+  "requests_refused": 0,
+  "still_installed_at_end": true
+ },
+ "heads": {
+  "C:/t/iso/cand-r30n": "436daef215c72fbe2429dcd783e087bf39756ad7",
+  "C:/t/iso/frozen-r13": "7ec3d2cf983b70a604844beda8eb6b1ec6173d34"
+ },
+ "ingest": {
+  "b_database_sha256": "d0006b541a3ea9a61ee2e32ac87e05020f2b37cd2a966b090f878c856882630d",
+  "documents": 3,
+  "ok": true,
+  "projects": [
+   "27331"
+  ],
+  "registration": {
+   "by_project": {
+    "27331": 3
+   },
+   "by_state": {
+    "pending": 3
+   },
+   "ok": true,
+   "problems": [],
+   "rows": 3,
+   "table_counts": {
+    "ai_usage": 0,
+    "background_jobs": 0,
+    "document_readings": 0,
+    "extraction_runs": 0,
+    "project_submittals": 0,
+    "result_cache": 0
+   }
+  }
+ },
+ "lane_stopped": null,
+ "lane_violations": [],
+ "per_document": {
+  "F009": {
+   "doc_key": "EP-27331/Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0034-Rev.00 SD for 5th Floor Plan Fire Alarm & Voice Evacuation System - B.pdf",
+   "evaluations": [
+    {
+     "facts": 19,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 12,
+     "unresolved_criticals": [],
+     "when": "after_document"
+    },
+    {
+     "facts": 19,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 32,
+     "unresolved_criticals": [],
+     "when": "final"
+    }
+   ],
+   "exercised": true,
+   "extracted_present": true,
+   "facts": [
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "R0"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "1",
+     "reader": "parser",
+     "state": "observed",
+     "value": "BO1-ASC-SD-ELE-0034"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0006.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    }
+   ],
+   "facts_final": 19,
+   "judged_rows_final": [
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "wrong_only",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "missed",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "tn",
+     "page": "3",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "4",
+     "truth_kind": "value"
+    }
+   ],
+   "lane_reason": "processed by the application (B)",
+   "lane_status": "COMPLETE",
+   "resolved_criticals": [],
+   "row": {
+    "error": null,
+    "mirror": {
+     "reference": "B01-02-ASC_EGTS-P05-SD-FA-0006",
+     "revision": "R0",
+     "status": "UR",
+     "system_code": "FAS"
+    },
+    "role": "submittal_form",
+    "sha256": "970ddb0f5b59199b41f33bee8356dd87418d9daff26ec9a9b8a72a3538bab415",
+    "state": "fresh"
+   },
+   "staged_sha256": "970ddb0f5b59199b41f33bee8356dd87418d9daff26ec9a9b8a72a3538bab415",
+   "staged_sha_equals_row_sha": true,
+   "unread_reason": null,
+   "unresolved_criticals": []
+  },
+  "F020": {
+   "doc_key": "EP-27331/Drawing/Approved dwg/FAS/FIRE ALARM  & VOICE EVACUATION SYSTEM/B01-ASC-SD-ELE-0047-Rev.00 Shop Drawing for 7th Floor Plan Fire Alarm & Voice Evacuation System Layout - B.pdf",
+   "evaluations": [
+    {
+     "facts": 21,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 20,
+     "unresolved_criticals": [],
+     "when": "after_document"
+    },
+    {
+     "facts": 21,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 32,
+     "unresolved_criticals": [],
+     "when": "final"
+    }
+   ],
+   "exercised": true,
+   "extracted_present": true,
+   "facts": [
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "R0"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "decision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "held",
+     "value": "approved"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "1",
+     "reader": "parser",
+     "state": "observed",
+     "value": "B01-ASC-SD-ELE-0047"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "decision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "held",
+     "value": "approved"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0008.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    }
+   ],
+   "facts_final": 21,
+   "judged_rows_final": [
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "recovered_clean",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "missed",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "not_scorable",
+     "page": "3",
+     "truth_kind": "not_scorable"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "4",
+     "truth_kind": "value"
+    }
+   ],
+   "lane_reason": "processed by the application (B)",
+   "lane_status": "COMPLETE",
+   "resolved_criticals": [],
+   "row": {
+    "error": null,
+    "mirror": {
+     "reference": "B01-02-ASC_EGTS-P05-SD-FA-0008",
+     "revision": "R0",
+     "status": "UR",
+     "system_code": "FAS"
+    },
+    "role": "submittal_form",
+    "sha256": "599d36be15e6eded0fcbe4226afdb49c9b282f6bcbbd13c3c3376872da1891db",
+    "state": "fresh"
+   },
+   "staged_sha256": "599d36be15e6eded0fcbe4226afdb49c9b282f6bcbbd13c3c3376872da1891db",
+   "staged_sha_equals_row_sha": true,
+   "unread_reason": null,
+   "unresolved_criticals": []
+  },
+  "F030": {
+   "doc_key": "EP-27331/Drawing/shop dwg/FA/Commented dwg/B01-ASC-SD-ELE-0052-Rev.00 Shop Drawing for 9th Floor Plan Fire Alarm & Voice Evacuation System Layout Code-B+R.pdf",
+   "evaluations": [
+    {
+     "facts": 18,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 28,
+     "unresolved_criticals": [],
+     "when": "after_document"
+    },
+    {
+     "facts": 18,
+     "fields": {
+      "decision": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "identity": {
+       "critical": 0,
+       "unresolved": 0
+      },
+      "revision": {
+       "critical": 0,
+       "unresolved": 0
+      }
+     },
+     "resolved_criticals": [],
+     "seq": 32,
+     "unresolved_criticals": [],
+     "when": "final"
+    }
+   ],
+   "exercised": true,
+   "extracted_present": true,
+   "facts": [
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "3",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "R0"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "parser",
+     "state": "accepted",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "4",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.01"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "5",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.02"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "6",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    },
+    {
+     "field": "identity",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "B01-02-ASC_EGTS-P05-SD-FA-0010.03"
+    },
+    {
+     "field": "revision",
+     "layer": "raw",
+     "page": "7",
+     "reader": "title_block",
+     "state": "observed",
+     "value": "00"
+    }
+   ],
+   "facts_final": 18,
+   "judged_rows_final": [
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "1",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "tn",
+     "page": "2",
+     "truth_kind": "absent"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "missed",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "3",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "not_scorable",
+     "page": "3",
+     "truth_kind": "not_scorable"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "identity",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 1,
+     "accepted_wrong": 0,
+     "field": "revision",
+     "outcome": "recovered_clean",
+     "page": "4",
+     "truth_kind": "value"
+    },
+    {
+     "accepted_correct": 0,
+     "accepted_wrong": 0,
+     "field": "decision",
+     "outcome": "missed",
+     "page": "4",
+     "truth_kind": "value"
+    }
+   ],
+   "lane_reason": "processed by the application (B)",
+   "lane_status": "COMPLETE",
+   "resolved_criticals": [],
+   "row": {
+    "error": null,
+    "mirror": {
+     "reference": "B01-02-ASC_EGTS-P05-SD-FA-0010",
+     "revision": "R0",
+     "status": "UR",
+     "system_code": "FAS"
+    },
+    "role": "document",
+    "sha256": "feec64cdcb0b7a95262c9991fd09830d810f88e75d87be05ac308c106047010a",
+    "state": "fresh"
+   },
+   "staged_sha256": "feec64cdcb0b7a95262c9991fd09830d810f88e75d87be05ac308c106047010a",
+   "staged_sha_equals_row_sha": true,
+   "unread_reason": null,
+   "unresolved_criticals": []
+  }
+ },
+ "population_gate": "DISPATCH_ELIGIBLE",
+ "requests": {
+  "dry_stub_calls": 0,
+  "live_provider_attempts_blocked": [],
+  "model_requests": 0,
+  "provider_complete_calls_traced": 0,
+  "refusing_provider_calls": 0
+ },
+ "run_set_sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+ "seconds": 193.6,
+ "spec_sha256": "05a7caa86f34d603f42875f0692d6e3fc587935ea7f4d529d7e12b68ab6904b0",
+ "stamp": "r45-evidence-1",
+ "statement": "a dry drill: 0 model requests; it authorizes nothing",
+ "stop_condition": "INVALID: baseline incomplete (critical acceptance on resolved truth in B)",
+ "stop_condition_fired": false,
+ "stop_state": {
+  "comparison": "PENDING",
+  "findings": [],
+  "lanes": {
+   "B": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "C": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "P": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   },
+   "R": {
+    "reason": null,
+    "state": "running",
+    "streak": 0
+   }
+  }
+ },
+ "trace": {
+  "calls_by_function": {
+   "document_processing.read_task": 3,
+   "document_processing.run": 1,
+   "document_sync.process": 3,
+   "document_sync.read_in_completion_order": 4,
+   "lane_r32._after": 3,
+   "lane_r32.b_tripwire": 4,
+   "lane_r32.dump_rows": 1,
+   "lane_r32.observe_trip": 6,
+   "lane_r32.process": 3,
+   "lane_r32.row_dict": 3,
+   "submittal_reader.available": 1,
+   "submittal_scanner.ocr_available": 1
+  },
+  "provider_complete_calls": [],
+  "tripwire_calls": [
+   {
+    "pool_ids": [
+     "F009"
+    ],
+    "seq": 12,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F020"
+    ],
+    "seq": 20,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F030"
+    ],
+    "seq": 28,
+    "when": "after_document"
+   },
+   {
+    "pool_ids": [
+     "F009",
+     "F020",
+     "F030"
+    ],
+    "seq": 32,
+    "when": "final"
+   }
+  ]
+ },
+ "tripwire_consistency": {
+  "equal": true,
+  "lane_entries": 6,
+  "recomputed_entries": 6
+ },
+ "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+ "violations": []
+}

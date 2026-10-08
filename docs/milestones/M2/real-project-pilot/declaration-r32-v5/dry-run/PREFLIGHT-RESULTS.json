@@ -1,0 +1,1411 @@
+{
+ "after": {
+  "ai_ledger": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "bound_harness_listing_sha256": "39c27a507b75272dc4b981bcd3cc45c001f9f048533709cebcd2608293d992a2",
+  "bound_harness_pycache": [],
+  "forbidden_files": [
+   "C:/t/r2x/r42-sandbox/r32-v3-owner-records/OWNER-TOKEN.txt",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.RUN.json",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json"
+  ],
+  "harness_listing_sha256": "39c27a507b75272dc4b981bcd3cc45c001f9f048533709cebcd2608293d992a2",
+  "harness_pycache": [],
+  "package_listing_sha256": "0bb38cd64b1ba58925ee6000132710608ddc3e3f852996b03cccb0e822803b63",
+  "run_folder_exists": false,
+  "token_env_present": false
+ },
+ "before": {
+  "ai_ledger": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "bound_harness_listing_sha256": "39c27a507b75272dc4b981bcd3cc45c001f9f048533709cebcd2608293d992a2",
+  "bound_harness_pycache": [],
+  "forbidden_files": [
+   "C:/t/r2x/r42-sandbox/r32-v3-owner-records/OWNER-TOKEN.txt",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.RUN.json",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json"
+  ],
+  "harness_listing_sha256": "39c27a507b75272dc4b981bcd3cc45c001f9f048533709cebcd2608293d992a2",
+  "harness_pycache": [],
+  "package_listing_sha256": "0bb38cd64b1ba58925ee6000132710608ddc3e3f852996b03cccb0e822803b63",
+  "run_folder_exists": false,
+  "token_env_present": false
+ },
+ "binding_manifest": {
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/BINDING-MANIFEST-R45-HARNESS.json",
+  "sha256": "9af8e07ade4e0c15d1a04189b654eeabbcba7646ab726ef2c04ffa107b0c9ffb"
+ },
+ "checks": {
+  "1_validate_declaration_as_written": {
+   "expected": "REFUSED (placeholder digest)",
+   "reason": "refused: the declaration binds no owner token digest",
+   "result": "REFUSED"
+  },
+  "2_validate_declaration_in_memory_dummy_digest": {
+   "dummy_digest": "63 zeros and a one, held in memory only; no token's digest; never written",
+   "in_memory_run_copy": {
+    "bytes_differ_only_in_the_digest": true,
+    "sha256_of_the_in_memory_copy": "55e198efe90862e5194177d75a463fb41ca191ee6904068f5a21a158248805b7"
+   },
+   "ledger": {
+    "limits": {
+     "elapsed_s": 604800,
+     "input_tokens": 16300000,
+     "output_tokens": 3260000,
+     "per_request_input": 90000,
+     "per_request_output": 20000,
+     "requests": 556
+    },
+    "path": "C:/t/r2x/ledger/r2x-ledger.sqlite",
+    "scope": "m2-fresh-validation-r32-v5-2026-10-08",
+    "wrap_provider": true
+   },
+   "normalised": {
+    "application_env": {
+     "DRAWINGS_AI_REVIEW_ENABLED": "false"
+    },
+    "authorization_path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/OWNER-DISPATCH-AUTHORIZATION.json",
+    "bounds_ref": {
+     "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/PROJECT-REQUEST-BOUNDS.json",
+     "sha256": "ad059bfa314b89d1fe5e3c60ba182ce742173d58a5166967b04fd8828d88a072"
+    },
+    "caps": {
+     "B": 240,
+     "C": 240,
+     "P": 36,
+     "R": 40
+    },
+    "contract": "r42-live-contract-5",
+    "decision_coverage_gate": "C_GE_B_ONLY",
+    "disk_precondition": {
+     "min_free_bytes": 2147483648,
+     "path": "C:/"
+    },
+    "global_provider": {
+     "B": "harness_chain",
+     "C": "refusing",
+     "P": "refusing",
+     "R": "refusing"
+    },
+    "interpreter": {
+     "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe",
+     "sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+     "version": "3.12.10"
+    },
+    "isolation": {
+     "allowed_under_forbidden": {
+      "harness": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32",
+      "interpreter": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv"
+     },
+     "env_file_never_read": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env",
+     "forbidden_root": "G:/dev (2)/dev/ep-platform-merged"
+    },
+    "lane_switches": {
+     "B": {
+      "AI_EVIDENCE_VARIANT": "off"
+     },
+     "C": {
+      "AI_EVIDENCE_ADJUDICATE": "1",
+      "AI_EVIDENCE_ASSOC": "1",
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_DECISION_REGION": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_IDGUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     },
+     "P": {},
+     "R": {
+      "AI_EVIDENCE_DEADLINE": "1",
+      "AI_EVIDENCE_GUARD": "1",
+      "AI_EVIDENCE_SCHEDULING": "required_first",
+      "AI_EVIDENCE_SUPPORT": "v2",
+      "AI_EVIDENCE_TARGETED": "1",
+      "AI_EVIDENCE_VARIANT": "EV1"
+     }
+    },
+    "lane_task_kinds": {
+     "B": [
+      "read_submittal_form"
+     ],
+     "C": [
+      "discover_page",
+      "locate_decision",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ],
+     "P": [
+      "discover_page",
+      "locate_decision",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ],
+     "R": [
+      "discover_page",
+      "read_decision",
+      "read_field_context",
+      "read_identity",
+      "read_revision"
+     ]
+    },
+    "model_identity": {
+     "cli_path": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+     "cli_sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+     "cli_version": "2.1.263 (Claude Code)",
+     "provider": "claude-code",
+     "small": "claude-sonnet-5",
+     "standard": "claude-opus-5"
+    },
+    "parent": {
+     "elapsed_s": 604800,
+     "input_tokens": 16300000,
+     "output_tokens": 3260000,
+     "total": 556
+    },
+    "project_window": {
+     "limit": 60,
+     "window_s": 86400
+    },
+    "resume_authorization_max": 3,
+    "resume_policy": "full",
+    "run_folder": "C:/t/r2x/r42-sandbox/r32-v5",
+    "sandbox_base": "C:/t/r2x/r42-sandbox",
+    "stamp": "r32-v5"
+   },
+   "provider_env_keys": [
+    "AI_CACHE_TTL_DAYS",
+    "AI_CLAUDE_CLI",
+    "AI_CLI_TIMEOUT_S",
+    "AI_EFFORT",
+    "AI_LEDGER_LIMITS",
+    "AI_LEDGER_PATH",
+    "AI_LEDGER_SCOPE",
+    "AI_MAX_CALLS_PER_DOCUMENT",
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_MAX_CONCURRENCY",
+    "AI_MAX_COST_PER_JOB",
+    "AI_MAX_ELAPSED_S_PER_JOB",
+    "AI_MAX_ESCALATIONS_PER_DOCUMENT",
+    "AI_MAX_INPUT_TOKENS_PER_TASK",
+    "AI_MAX_OUTPUT_TOKENS_PER_TASK",
+    "AI_MAX_RETRIES",
+    "AI_MODEL_SMALL",
+    "AI_MODEL_STANDARD",
+    "AI_PRICE_CACHED_INPUT_PER_MILLION",
+    "AI_PRICE_INPUT_PER_MILLION",
+    "AI_PRICE_OUTPUT_PER_MILLION",
+    "AI_PROVIDER",
+    "AI_READ_EFFORT",
+    "AI_READ_MAX_CALLS_PER_DOCUMENT",
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY",
+    "AI_READ_MAX_ELAPSED_S",
+    "AI_TIMEOUT_S"
+   ],
+   "result": "PASSED"
+  },
+  "3_negative_probes": {
+   "all_as_expected": true,
+   "carried_from_v2": 48,
+   "count": 73,
+   "new_for_contract_5": 25,
+   "rows": [
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "budget.lane_allowances",
+       {
+        "B": 241,
+        "C": 240,
+        "P": 36,
+        "R": 40
+       }
+      ]
+     ],
+     "probe": "lane allowance B 241",
+     "reason": "refused: the declared lane allowances {'B': 241, 'C': 240, 'R': 40, 'P': 36} are not the plan's {'B': 240, 'C': 240, 'R': 40, 'P': 36}",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "budget.lane_allowances",
+       {
+        "B": 240,
+        "C": 240,
+        "R": 40
+       }
+      ]
+     ],
+     "probe": "lane allowances without P",
+     "reason": "refused: the declared lane allowances {'B': 240, 'C': 240, 'R': 40} are not the plan's {'B': 240, 'C': 240, 'R': 40, 'P': 36}",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 600
+       }
+      ]
+     ],
+     "probe": "parent total 600 (parent / lane inconsistency)",
+     "reason": "refused: the parent total must be 556 = the sum of the lane allowances",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 556
+       }
+      ]
+     ],
+     "probe": "parent missing elapsed_s",
+     "reason": "refused: budget.parent must bind exactly {total, input_tokens, output_tokens, elapsed_s} as positive integers",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "budget.parent",
+       {
+        "elapsed_s": 600000,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "total": 556
+       }
+      ],
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 600000,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 556
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 600000, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}"
+      ]
+     ],
+     "probe": "parent elapsed 600000 with the ledger equal (bounds computed for another elapsed bound)",
+     "reason": "refused: PROJECT-REQUEST-BOUNDS was computed for another elapsed bound",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3000000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 556
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3000000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 556}"
+      ]
+     ],
+     "probe": "ledger output_tokens differs from the parent",
+     "reason": "refused: the single ledger scope is the backstop of the parent budget: its requests / input_tokens / output_tokens / elapsed_s limits must equal the parent's",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "ledger.limits",
+       {
+        "elapsed_s": 604800,
+        "input_tokens": 16300000,
+        "output_tokens": 3260000,
+        "per_request_input": 90000,
+        "per_request_output": 20000,
+        "requests": 555
+       }
+      ],
+      [
+       "provider_env.AI_LEDGER_LIMITS",
+       "{\"elapsed_s\": 604800, \"input_tokens\": 16300000, \"output_tokens\": 3260000, \"per_request_input\": 90000, \"per_request_output\": 20000, \"requests\": 555}"
+      ]
+     ],
+     "probe": "ledger requests 555 (not the parent total)",
+     "reason": "refused: the single ledger scope is the backstop of the parent budget: its requests / input_tokens / output_tokens / elapsed_s limits must equal the parent's",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 61,
+        "window_s": 86400
+       }
+      ]
+     ],
+     "probe": "project window limit 61",
+     "reason": "refused: project_window must be {limit 1..60, window_s 86400} ({'limit': 61, 'window_s': 86400})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 60,
+        "window_s": 3600
+       }
+      ]
+     ],
+     "probe": "project window 3600 s",
+     "reason": "refused: project_window must be {limit 1..60, window_s 86400} ({'limit': 60, 'window_s': 3600})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "project_window",
+       {
+        "limit": 30,
+        "window_s": 86400
+       }
+      ]
+     ],
+     "probe": "project window limit 30 (bounds computed for another window)",
+     "reason": "refused: PROJECT-REQUEST-BOUNDS was computed for another project window",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "83"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY 83 (below the minimum 84)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '83' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "60"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY 60 (the tree default)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '60' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "83"
+      ]
+     ],
+     "probe": "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY 83",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY = '83' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "96.0"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY '96.0' (float string)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_PROJECT_PER_DAY = '96.0' could refuse before the harness project window (required >= 84)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_PROJECT_PER_DAY",
+       "84"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_PROJECT_PER_DAY '84' (the minimum)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "12.0"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT '12.0' (float string; R39-18 / R40-08: the harness accepts it)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_ELAPSED_S_PER_JOB",
+       "120.0"
+      ]
+     ],
+     "probe": "AI_MAX_ELAPSED_S_PER_JOB '120.0' (float string; R39-18 / R40-08: the harness accepts it)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "11"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT 11 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_DOCUMENT = '11': the bounds assume 12",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_CALLS_PER_DOCUMENT",
+       "13"
+      ]
+     ],
+     "probe": "AI_MAX_CALLS_PER_DOCUMENT 13 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_CALLS_PER_DOCUMENT = '13': the bounds assume 12",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MAX_ELAPSED_S_PER_JOB",
+       "119"
+      ]
+     ],
+     "probe": "AI_MAX_ELAPSED_S_PER_JOB 119 (per-document limit)",
+     "reason": "refused: incompatible limits -- the application could refuse before the harness: AI_MAX_ELAPSED_S_PER_JOB = '119': the bounds assume 120",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.models.small",
+       "sonnet"
+      ],
+      [
+       "provider_env.AI_MODEL_SMALL",
+       "sonnet"
+      ]
+     ],
+     "probe": "alias 'sonnet' pinned and configured",
+     "reason": "refused: model_identity.models.small must be a full model id, not an alias ('sonnet')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.models.standard",
+       "opus"
+      ],
+      [
+       "provider_env.AI_MODEL_STANDARD",
+       "opus"
+      ]
+     ],
+     "probe": "alias 'opus' pinned and configured",
+     "reason": "refused: model_identity.models.standard must be a full model id, not an alias ('opus')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_MODEL_SMALL",
+       "sonnet"
+      ]
+     ],
+     "probe": "AI_MODEL_SMALL 'sonnet' against the pin claude-sonnet-5",
+     "reason": "refused: provider_env AI_MODEL_SMALL 'sonnet' differs from model_identity.models.small 'claude-sonnet-5'",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.provider",
+       "claude"
+      ]
+     ],
+     "probe": "provider 'claude' in model_identity",
+     "reason": "refused: model_identity.provider must be 'claude-code' and equal AI_PROVIDER",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.cli.path",
+       "C:/other/claude.exe"
+      ]
+     ],
+     "probe": "CLI path differs from AI_CLAUDE_CLI",
+     "reason": "refused: model_identity.cli.path must equal AI_CLAUDE_CLI",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "model_identity.cli.version",
+       "2.1.263"
+      ]
+     ],
+     "probe": "CLI version '2.1.263' (not the exact version line; the contract accepts any non-empty stripped line, the runner compares it with `--version` before every invocation)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_LEDGER_SCOPE",
+       "m2-other-scope"
+      ]
+     ],
+     "probe": "AI_LEDGER_SCOPE differs from ledger.scope (scope mismatch)",
+     "reason": "refused: provider_env AI_LEDGER_PATH / AI_LEDGER_SCOPE / AI_LEDGER_LIMITS differ from the declared ledger",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "ledger.scope",
+       "m2-other-scope"
+      ]
+     ],
+     "probe": "ledger.scope differs from AI_LEDGER_SCOPE (scope mismatch)",
+     "reason": "refused: provider_env AI_LEDGER_PATH / AI_LEDGER_SCOPE / AI_LEDGER_LIMITS differ from the declared ledger",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "run.folder",
+       "C:/t/r2x/r42-sandbox/another"
+      ]
+     ],
+     "probe": "run folder elsewhere",
+     "reason": "refused: the declaration's run folder must be C:/t/r2x/r42-sandbox/r32-v5 (one run folder per declaration)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "run.sandbox_base",
+       "C:/t/r2x/sandbox"
+      ],
+      [
+       "run.folder",
+       "C:/t/r2x/sandbox/r32-v3"
+      ]
+     ],
+     "probe": "sandbox base not C:/t/r2x/r<NN>-sandbox",
+     "reason": "refused: run.sandbox_base must be declared as C:/t/r2x/r<NN>-sandbox ('C:/t/r2x/sandbox')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "run.stamp",
+       "a"
+      ],
+      [
+       "run.folder",
+       "C:/t/r2x/r42-sandbox/a"
+      ]
+     ],
+     "probe": "stamp 'a' (too short)",
+     "reason": "refused: a stamp is 3-64 characters A-Z a-z 0-9 . _ - ('a')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "authorization.path",
+       "C:/t/OWNER-DISPATCH-AUTHORIZATION.json"
+      ]
+     ],
+     "probe": "authorization path elsewhere",
+     "reason": "refused: the declaration must bind the pinned authorization path G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/OWNER-DISPATCH-AUTHORIZATION.json",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ]
+     ],
+     "probe": "digest upper-case hex",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "000000000000000000000000000000000000000000000000000000000000000"
+      ]
+     ],
+     "probe": "digest 63 characters",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "authorization.owner_token_sha256",
+       "TO-BE-NAMED-BY-OWNER-BUDGET-AUTHORIZATION"
+      ]
+     ],
+     "probe": "digest = the placeholder",
+     "reason": "refused: the declaration binds no owner token digest",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "ledger.wrap_provider",
+       false
+      ]
+     ],
+     "probe": "wrap_provider false",
+     "reason": "refused: ledger must bind path, scope, limits and wrap_provider true (LedgerProvider writes to the declared scope)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "application_env",
+       null
+      ]
+     ],
+     "probe": "application_env missing",
+     "reason": "refused: the declaration does not bind 'application_env' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "application_env",
+       {
+        "DRAWINGS_AI_REVIEW_ENABLED": "true"
+       }
+      ]
+     ],
+     "probe": "application_env DRAWINGS_AI_REVIEW_ENABLED true",
+     "reason": "refused: application_env must be exactly {'DRAWINGS_AI_REVIEW_ENABLED': 'false'} (extra [], missing [], wrong value ['DRAWINGS_AI_REVIEW_ENABLED'])",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "application_env",
+       {
+        "DRAWINGS_AI_REVIEW_ENABLED": "false",
+        "OTHER": "x"
+       }
+      ]
+     ],
+     "probe": "application_env with an extra key",
+     "reason": "refused: application_env must be exactly {'DRAWINGS_AI_REVIEW_ENABLED': 'false'} (extra ['OTHER'], missing [], wrong value [])",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "decision_coverage_gate",
+       "C_GE_B_AND_C_GE_R"
+      ]
+     ],
+     "probe": "decision coverage gate binding R (plan v2 C_GE_B_AND_C_GE_R)",
+     "reason": "refused: decision_coverage_gate must be 'C_GE_B_ONLY' (owner ruling A-10): refused: decision coverage gate 'C_GE_B_AND_C_GE_R' binds R into eligibility -- superseded by the owner's ruling A-10 (C >= B only; C >= R is a mandatory diagnostic)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "decision_coverage_gate",
+       "C_GE_R"
+      ]
+     ],
+     "probe": "decision coverage gate unknown id",
+     "reason": "refused: decision_coverage_gate must be 'C_GE_B_ONLY' (owner ruling A-10): refused: unknown decision coverage gate definition 'C_GE_R' (only 'C_GE_B_ONLY' is bound, A-10)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "resume_policy",
+       "soonest"
+      ]
+     ],
+     "probe": "resume_policy 'soonest'",
+     "reason": "refused: resume_policy must be one of ('full', 'earliest') ('soonest')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "resume_policy",
+       "earliest"
+      ]
+     ],
+     "probe": "resume_policy 'earliest' (allowed by the contract; this declaration binds 'full')",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "lane_task_kinds.B",
+       [
+        "read_submittal_form",
+        "drawings_reply_match"
+       ]
+      ]
+     ],
+     "probe": "lane_task_kinds widened (B + drawings_reply_match)",
+     "reason": "refused: lane_task_kinds must equal the task kinds of the declared switches (REQUEST-PATHS.md): {'B': ['read_submittal_form'], 'C': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'R': ['discover_page', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'P': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision']} ({'B': ['read_submittal_form', 'drawings_reply_match'], 'C': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'P': ['discover_page', 'locate_decision', 'read_decision', 'read_field_context', 'read_identity', 'read_revision'], 'R': ['discover_page', 'read_decision', 'read_field_context', 'read_identity', 'read_revision']})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "lane_switches.P",
+       {
+        "AI_EVIDENCE_VARIANT": "EV1"
+       }
+      ]
+     ],
+     "probe": "lane P with switches",
+     "reason": "refused: lane P re-sends captured payloads and takes no switches ({})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "provider_env.AI_EVIDENCE_VARIANT",
+       "EV1"
+      ]
+     ],
+     "probe": "provider_env with an AI_EVIDENCE_* key",
+     "reason": "refused: provider_env may hold only AI_* provider settings, never ['AI_EVIDENCE_VARIANT']",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "contract",
+       "r38-live-contract-3"
+      ]
+     ],
+     "probe": "contract 3",
+     "reason": "refused: the declaration is not contract r42-live-contract-5 ('r38-live-contract-3')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "dry_exercise",
+       true
+      ]
+     ],
+     "probe": "a dry exercise flag",
+     "reason": "refused: not a live declaration",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "contract",
+       "r39-live-contract-4"
+      ]
+     ],
+     "probe": "contract 4 (the v2 contract)",
+     "reason": "refused: the declaration is not contract r42-live-contract-5 ('r39-live-contract-4')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.cli.path",
+       "claude"
+      ],
+      [
+       "provider_env.AI_CLAUDE_CLI",
+       "claude"
+      ]
+     ],
+     "probe": "CLI by name 'claude' (both bindings)",
+     "reason": "refused: model_identity.cli.path must be the ABSOLUTE path of the CLI file, not a name on PATH ('claude')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.cli",
+       {
+        "path": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+        "version": "2.1.263 (Claude Code)"
+       }
+      ]
+     ],
+     "probe": "CLI sha256 missing",
+     "reason": "refused: model_identity.cli.sha256 must pin the CLI file (64 lower-case hex)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.cli.sha256",
+       "0B35DF94C1307004F07B738390BFEF8DFCA5E9AF29AAF6517F305BF086B95B03"
+      ]
+     ],
+     "probe": "CLI sha256 upper-case",
+     "reason": "refused: model_identity.cli.sha256 must pin the CLI file (64 lower-case hex)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "model_identity.cli.version",
+       null
+      ]
+     ],
+     "probe": "CLI version null",
+     "reason": "refused: model_identity.cli.version must be the exact version line (contract 5: never null)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "model_identity.cli.path",
+       "G:/dev (2)/dev/ep-platform-merged/tools/claude-2.1.289/claude.exe"
+      ],
+      [
+       "provider_env.AI_CLAUDE_CLI",
+       "G:/dev (2)/dev/ep-platform-merged/tools/claude-2.1.289/claude.exe"
+      ]
+     ],
+     "probe": "CLI the bundled 2.1.289 (both bindings; its file hash differs at runtime)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "interpreter",
+       null
+      ]
+     ],
+     "probe": "interpreter missing",
+     "reason": "refused: the declaration does not bind 'interpreter' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "interpreter.path",
+       "C:/Users/moham/Desktop/dev/dev/ep-platform/backend/venv/Scripts/python.exe"
+      ]
+     ],
+     "probe": "interpreter the absent Desktop venv",
+     "reason": "refused: the interpreter must be the bound G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe ('C:/Users/moham/Desktop/dev/dev/ep-platform/backend/venv/Scripts/python.exe')",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "interpreter.sha256",
+       "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
+     ],
+     "probe": "interpreter sha256 not hex",
+     "reason": "refused: interpreter must bind {path, sha256 (64 hex), version} ({'path': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe', 'sha256': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'version': '3.12.10'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "interpreter.sha256",
+       "0000000000000000000000000000000000000000000000000000000000000000"
+      ]
+     ],
+     "probe": "interpreter sha256 of another file (contract accepts; the runner's verify_interpreter refuses at runtime)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "disk_precondition",
+       null
+      ]
+     ],
+     "probe": "disk_precondition missing",
+     "reason": "refused: the declaration does not bind 'disk_precondition' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "disk_precondition.min_free_bytes",
+       2147483647
+      ]
+     ],
+     "probe": "disk floor 2 GiB - 1",
+     "reason": "refused: disk_precondition.min_free_bytes must be an integer >= 2147483648 (2 GiB; configurable only upward) (2147483647)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "disk_precondition.min_free_bytes",
+       1000000000
+      ]
+     ],
+     "probe": "disk floor 1 GB (2 GB condition misread)",
+     "reason": "refused: disk_precondition.min_free_bytes must be an integer >= 2147483648 (2 GiB; configurable only upward) (1000000000)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "disk_precondition.path",
+       "G:/"
+      ]
+     ],
+     "probe": "disk floor on G: (not the sandbox base's drive)",
+     "reason": "refused: disk_precondition.path must be the drive of the sandbox base (C:/), not 'G:/'",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "disk_precondition.min_free_bytes",
+       4294967296
+      ]
+     ],
+     "probe": "disk floor 4 GiB (upward)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "isolation",
+       null
+      ]
+     ],
+     "probe": "isolation missing",
+     "reason": "refused: the declaration does not bind 'isolation' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "isolation.forbidden_root",
+       "G:/dev (2)/dev"
+      ]
+     ],
+     "probe": "isolation forbidden root elsewhere",
+     "reason": "refused: isolation must be exactly {'forbidden_root': 'G:/dev (2)/dev/ep-platform-merged', 'allowed_under_forbidden': {'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv', 'harness': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env'} ({'allowed_under_forbidden': {'harness': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32', 'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env', 'forbidden_root': 'G:/dev (2)/dev'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "isolation.allowed_under_forbidden.interpreter",
+       "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend"
+      ]
+     ],
+     "probe": "isolation allows the merged backend",
+     "reason": "refused: isolation must be exactly {'forbidden_root': 'G:/dev (2)/dev/ep-platform-merged', 'allowed_under_forbidden': {'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv', 'harness': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env'} ({'allowed_under_forbidden': {'harness': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32', 'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env', 'forbidden_root': 'G:/dev (2)/dev/ep-platform-merged'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "resume_authorization",
+       null
+      ]
+     ],
+     "probe": "resume_authorization missing",
+     "reason": "refused: the declaration does not bind 'resume_authorization' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "resume_authorization.max_invocations_per_file",
+       4
+      ]
+     ],
+     "probe": "resume_authorization 4 per file",
+     "reason": "refused: resume_authorization.max_invocations_per_file must be an integer 1..3 ({'expected_use': 'the run needs 2 invocations at the planning estimate and 3 at the structural maximum: one file with 3 nonces covers the planned resumptions', 'implementation': {'guard': {'path': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32/dispatch_guard_r32.py', 'sha256': '877dee5d1c1e57c6e1560e0442784b3f045c4547e0ee26e2d6fea451e9173118'}, 'tests': 'test_resume_authorization_r42.py, test_runner_order_r42.py::test_live_one_approval_for_all_planned_resumptions'}, 'max_invocations_per_file': 4, 'rules': ['one authorization file may carry invocations_authorized N (1..3) and N distinct nonces', 'each invocation consumes exactly one nonce, the first unconsumed one in list order; a consumed nonce is never reusable', 'a nonce consumed out of order, a nonce consumed under another file, a repeated nonce or N above the bound is refused', 'the file can never name, raise, reset or re-create an allowance, the parent, the window, the scope or any limit (only the five keys are accepted)', 'invocation N+1 needs a new authorization file', 'a file naming the frozen hash (or any hash other than the RUN hash) is refused'], 'status': 'PROPOSAL (A-11 section 4): a separable feature the owner may use or not; with invocations_authorized absent the per-invocation behaviour of v2 applies'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "resume_authorization.max_invocations_per_file",
+       0
+      ]
+     ],
+     "probe": "resume_authorization 0 per file",
+     "reason": "refused: resume_authorization.max_invocations_per_file must be an integer 1..3 ({'expected_use': 'the run needs 2 invocations at the planning estimate and 3 at the structural maximum: one file with 3 nonces covers the planned resumptions', 'implementation': {'guard': {'path': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32/dispatch_guard_r32.py', 'sha256': '877dee5d1c1e57c6e1560e0442784b3f045c4547e0ee26e2d6fea451e9173118'}, 'tests': 'test_resume_authorization_r42.py, test_runner_order_r42.py::test_live_one_approval_for_all_planned_resumptions'}, 'max_invocations_per_file': 0, 'rules': ['one authorization file may carry invocations_authorized N (1..3) and N distinct nonces', 'each invocation consumes exactly one nonce, the first unconsumed one in list order; a consumed nonce is never reusable', 'a nonce consumed out of order, a nonce consumed under another file, a repeated nonce or N above the bound is refused', 'the file can never name, raise, reset or re-create an allowance, the parent, the window, the scope or any limit (only the five keys are accepted)', 'invocation N+1 needs a new authorization file', 'a file naming the frozen hash (or any hash other than the RUN hash) is refused'], 'status': 'PROPOSAL (A-11 section 4): a separable feature the owner may use or not; with invocations_authorized absent the per-invocation behaviour of v2 applies'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "ACCEPTED",
+     "mutations": [
+      [
+       "resume_authorization.max_invocations_per_file",
+       1
+      ]
+     ],
+     "probe": "resume_authorization 1 per file (the per-invocation behaviour)",
+     "reason": null,
+     "result": "ACCEPTED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "global_provider",
+       null
+      ]
+     ],
+     "probe": "global_provider missing",
+     "reason": "refused: the declaration does not bind 'global_provider' (live mode has no default)",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "global_provider.C",
+       "harness_chain"
+      ]
+     ],
+     "probe": "global_provider C = harness_chain",
+     "reason": "refused: global_provider must be exactly {'B': 'harness_chain', 'C': 'refusing', 'R': 'refusing', 'P': 'refusing'} (R40-04, owner option 2) ({'B': 'harness_chain', 'C': 'harness_chain', 'P': 'refusing', 'R': 'refusing'})",
+     "result": "REFUSED"
+    },
+    {
+     "as_expected": true,
+     "expected": "REFUSED",
+     "mutations": [
+      [
+       "global_provider.P",
+       "none"
+      ]
+     ],
+     "probe": "global_provider P = none",
+     "reason": "refused: global_provider must be exactly {'B': 'harness_chain', 'C': 'refusing', 'R': 'refusing', 'P': 'refusing'} (R40-04, owner option 2) ({'B': 'harness_chain', 'C': 'refusing', 'P': 'none', 'R': 'refusing'})",
+     "result": "REFUSED"
+    }
+   ]
+  },
+  "4_verify_binding": {
+   "binding_manifest": "G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review45\\BINDING-MANIFEST-R45-HARNESS.json",
+   "files_verified": 629,
+   "result": "PASSED",
+   "sha256": "9af8e07ade4e0c15d1a04189b654eeabbcba7646ab726ef2c04ffa107b0c9ffb"
+  },
+  "5_verify_bounds": {
+   "population_gate": "DISPATCH_ELIGIBLE",
+   "required_minimum": {
+    "AI_MAX_CALLS_PER_PROJECT_PER_DAY": 84,
+    "AI_READ_MAX_CALLS_PER_PROJECT_PER_DAY": 84
+   },
+   "result": "PASSED",
+   "run_set_documents": 24,
+   "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+   "verified": true
+  },
+  "6_lane_environment_checks_offline": {
+   "lanes": {
+    "B": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_interpreter": "PASSED",
+      "verify_isolation": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "stderr_tail": null,
+     "tree": "C:/t/iso/frozen-r13/backend"
+    },
+    "C": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_interpreter": "PASSED",
+      "verify_isolation": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "stderr_tail": null,
+     "tree": "C:/t/iso/cand-r30n/backend"
+    },
+    "P": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_interpreter": "PASSED",
+      "verify_isolation": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "stderr_tail": null,
+     "tree": "C:/t/iso/cand-r30n/backend"
+    },
+    "R": {
+     "checks": {
+      "drawing_ai_review_enabled": "PASSED",
+      "verify_application_env": "PASSED",
+      "verify_interpreter": "PASSED",
+      "verify_isolation": "PASSED",
+      "verify_lane_environment": "PASSED"
+     },
+     "ok": true,
+     "returncode": 0,
+     "stderr_tail": null,
+     "tree": "C:/t/iso/cand-r30n/backend"
+    }
+   },
+   "result": "PASSED",
+   "what": "the live lane's own checks with the environment runner_r32.lane_env('live') builds from the declaration, plus isolation and the interpreter"
+  },
+  "7_interpreter_cli_file_disk": {
+   "cli_file": {
+    "cli_bytes": 218746016,
+    "cli_path": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+    "cli_sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+    "executed": false
+   },
+   "free_disk": {
+    "free_bytes": 3755597824,
+    "min_free_bytes": 2147483648,
+    "ok": true,
+    "path": "C:/"
+   },
+   "interpreter": {
+    "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe",
+    "sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+    "verified": true,
+    "version": "3.12.10"
+   },
+   "note": "the CLI file is read as bytes; `--version` is never run by this task",
+   "result": "PASSED"
+  }
+ },
+ "declaration": {
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/FRESH-VALIDATION-DECLARATION-R32-V5.json",
+  "sha256": "db72025b2bff28ffaf37b6605edd81cac2a0b9e17ac7f29479ca0aac157485df"
+ },
+ "finished_utc": "2026-10-08T00:36:10+00:00",
+ "harness": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32",
+ "imported_from": "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32",
+ "invariants": {
+  "ai_ledger_484_18_0_before_and_after": true,
+  "dummy_digest_never_written": true,
+  "harness_unchanged_no_pycache": true,
+  "model_requests": 0,
+  "no_authorization_run_or_token_file": true,
+  "no_token_in_the_environment": true,
+  "package_unchanged_by_the_preflight_outside_its_outputs": true,
+  "run_folder_never_created": true
+ },
+ "name": "PREFLIGHT-RESULTS (R43-44 dry preflight of declaration-r32-v5, steps 1-7)",
+ "ok": true,
+ "run_copy": {
+  "bound_folder": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32",
+  "files": 63,
+  "imported_from": "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32",
+  "run_copy": true
+ },
+ "started_utc": "2026-10-08T00:34:30+00:00",
+ "steps_not_run": {
+  "8-12": "not run by task R43-44 (card R43-44 item 3: preflight steps 1-7 only); the live runner, the dispatch guard and the scope command are not exercised here"
+ },
+ "steps_run": "1-7"
+}

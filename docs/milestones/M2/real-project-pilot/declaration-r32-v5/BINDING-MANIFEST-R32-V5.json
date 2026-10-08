@@ -1,0 +1,836 @@
+{
+ "answers": "Owner task R43-44 (A-13 item 2; Verification 44 option 1; Verification 45 section 5 item 2; card orchestrator/tasks/R43-44-TASK.md 1cd72eb3...): declaration v5 of the R32 fresh validation = v4 rebound to the review45 harness with the corrected disclosures (R45-06, R45-07, R45-08), a new stamp / folder / scope, A-13 item 3 as history and owner_decision_required; its build scripts (the v4 scripts copied byte-identically and changed only where V5-BUILD-DIFF.md lists), the v4 -> v5 leaf diff, the no-request preflight (steps 1-7), the single dry run, the 8 demonstrations, the review45 drill reproduced on v5's bindings, the R44-07 documents (runbook, scope-creation command, summary, budget card) and the implementation report, chained to BINDING-MANIFEST-R45-HARNESS (Verification 45), the superseded v4 and the executed v3",
+ "baseline": {
+  "clean": true,
+  "expected": "7ec3d2cf983b70a604844beda8eb6b1ec6173d34",
+  "head": "7ec3d2cf983b70a604844beda8eb6b1ec6173d34",
+  "tree": "C:/t/iso/frozen-r13"
+ },
+ "binds": {
+  "declaration_r32_v3": {
+   "authorization_file": "f2546c91912e4fefc5516158327a54c4c05776286310f61d6bea10f09b84425f",
+   "declaration": "9a55fa7b2d52dad5c87fff72b3225cb9ce1b3f0aba002357ad53d1f33fa81b40",
+   "manifest": "a2df60dca2dfba5ebaff8bdc4b73ef76926cbecd7fd58c8916885e7e709a1a24",
+   "run_declaration": "c31cccd4eab844d738b40b07e191e064221ea3dd3a7697c01c2fc998763a2b6a"
+  },
+  "declaration_r32_v4": {
+   "declaration": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+   "manifest": "4c7285eeea712dde9350dc5e7b1f3068eafea6becad10636bb58ff69665720ab",
+   "status": "frozen, never authorized, never run; superseded by v5"
+  },
+  "declaration_r32_v5": {
+   "budget_card": "00c5e3f61b304bc258e0672c954da5ab5ad151ab845654113fcbdff749e67a10",
+   "declaration": "db72025b2bff28ffaf37b6605edd81cac2a0b9e17ac7f29479ca0aac157485df",
+   "declaration_diff_json": "b64e931a7ee4a7444003b9e87ffcb0dd379a604fbdc7270763daa8ad38d08465",
+   "declaration_diff_md": "9e5ff0b603d142328aa310fe5d9d96297c911c7e36dcadb031933c51cc9b13b6",
+   "declaration_sha256_file": "fe28487d94286e1236358bc7b68ebb4ad0739c87816bc7478b33a650e0fba46f",
+   "implementation_report": "d7e5218c5a3692679a49bcebac3f45908127dec1f6129fc1598a11e2612c9096",
+   "runbook": "3fd7c98645eed9d0aa6cc0f203e1f0bb71a0254e8e239244c75eb12dbf6a2c84",
+   "scope_creation_command": "da6fe1e7dc11cbc80fe4cb858eb7041ee66c15ced50bb2b694c6e6a0f02469ea",
+   "status": "frozen, NOT authorized",
+   "summary": "a01f6b0f9bd97281dfff44b30e9db4144afbdf4c6e7509587f0304493f9b6651",
+   "v5_build_diff": "1afbb5323a8a2cd3ccc19f4cda9c1aac27540fb2b8de1c47c1b54b5a1a16b12d"
+  },
+  "harness_r45": {
+   "drill_criterion": "8b183053cf10e5332f8b198a1d5b1aae5169c47671ad5e35346acf31cca5d918",
+   "entries": 629,
+   "manifest": "9af8e07ade4e0c15d1a04189b654eeabbcba7646ab726ef2c04ffa107b0c9ffb"
+  },
+  "r43_session_log_prefix": {
+   "lines": "1-86",
+   "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/R43-SESSION-LOG.md",
+   "rule": "sha256 of lines 1..N with their LF terminators; later rows are appended, never edited",
+   "sha256": "8b62a8ddc3d738f54983248f480cceec1e6d696f04a39ce440d1b7d9f8482765"
+  },
+  "rehearsal": {
+   "demos": "3f178b85fc41b032bd644a4f3cd2bf561f131cff392531b8afdca528f665dee6",
+   "drill_v5_compare": "88cd7e57940b0ddaa497b4cf21b6a2f1a1a66143f0bc14aafc0543b173a5215e",
+   "drill_v5_report": "b590acfcb4a5890521db2d0fcfcc1e975e6f92015992463774c2f6e300f5e964",
+   "drill_v5_run": "80e5c814235a0fa0f9b2e1b6eeb9670fa53c68023bbf4c5b268296e07ad12d68",
+   "dry_exercise_single": "745ee2a62f9416391a42216171d497d87afa5c1a9c8094f27636eeed6679e6f0",
+   "preflight_steps_1_7": "7f006f433736622fac27f4b9173111b07ea3a04b37289b3756560ca87e27da03"
+  },
+  "verification43": {
+   "findings": "ad6e3cbf96177a4a1fba2439314ca561c437c74e007fced51cc0d2e0bf550394",
+   "package_check": "148019d06524b118ad74d31f9b28bec66bc0a92ea08562a36e051b1322bf4e8f",
+   "verification": "43ce04d7027dc22828d621c72cb484517291778dd9e3b28dd463dd5b98997be4"
+  },
+  "verification44": {
+   "findings": "7b22ed7014a0c35617daaff2ab14e580fe3692c0a8664ef119947cf45f7fa254",
+   "package_check": "0c7c92007d1576365a64a60320ee3b5b4f1b68a2d9aa3dcd1e123ce58494b144",
+   "verification": "cfd5846fe9f3968ab58bda6d356e30a16921c4a8d275b258a356d4f39203110c"
+  },
+  "verification45": {
+   "findings": "4e1d9cf01c957ba55b3eeac872239d59752a098c43c94d6edca096205f497e65",
+   "package_check": "f88895bd4b17022431bbce62a3b532273028a977569741230ca0992e2bb23392",
+   "verification": "2cde823212e7db72cb03a0074d98d6c3a42ebef350c8e9c1fd924435d35eea16"
+  }
+ },
+ "candidate": {
+  "clean": true,
+  "expected": "436daef215c72fbe2429dcd783e087bf39756ad7",
+  "head": "436daef215c72fbe2429dcd783e087bf39756ad7",
+  "tree": "C:/t/iso/cand-r30n"
+ },
+ "changed_from_review39": [
+  "dispatch_guard_r32.py",
+  "inputs_r32.py",
+  "lane_r32.py",
+  "model_identity_r38.py",
+  "preflight_r32.py",
+  "r32_test_helpers.py",
+  "run_control_r38.py",
+  "run_state_r38.py",
+  "runner_r32.py",
+  "sandbox_ingest_r32.py",
+  "test_dispatch_guard_r32.py",
+  "test_literal_compare_r32.py",
+  "test_model_identity_r38.py",
+  "test_preflight_r32.py",
+  "test_project_bounds_r32.py",
+  "test_runner_r32.py",
+  "test_sandbox_ingest_r32.py"
+ ],
+ "cli_pin": {
+  "bound_in": "the declaration (model_identity.cli); verified by preflight_r32.verify_cli before any lane (read as bytes)",
+  "bytes": 218746016,
+  "not_used": "G:/dev (2)/dev/ep-platform-merged/tools/claude-2.1.289/claude.exe",
+  "path": "C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe",
+  "sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+  "version_line": "2.1.263 (Claude Code)"
+ },
+ "contract": "r42-live-contract-5",
+ "files": {
+  "chain_r45_harness": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/BINDING-MANIFEST-R45-HARNESS.json": "9af8e07ade4e0c15d1a04189b654eeabbcba7646ab726ef2c04ffa107b0c9ffb",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/DISCLOSURE-AMENDMENT-DRAFT.md": "47a263e2c214c1af3ccd71daae6ea87283b98ee338d0e487390359f35a9d9caa",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/DRILL-CRITERION.md": "8b183053cf10e5332f8b198a1d5b1aae5169c47671ad5e35346acf31cca5d918"
+  },
+  "chain_v3": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/BUDGET-DECISION-CARD.v5.md": "55c31564aafcdc34bc3566bfb14c31235be43251a19885a18e6584d6eb1994da",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/DECLARATION-SUMMARY.md": "b64ad1ac105a85838abe67652c942d6a9da16ae9e7b4594b032f0eb7d77800fc",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/DECLARATION.sha256": "e4938ad106dacff4d85bfb316c67497c4a2f3a3126ec706fef535da93e78aee6",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.RUN.json": "c31cccd4eab844d738b40b07e191e064221ea3dd3a7697c01c2fc998763a2b6a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.json": "9a55fa7b2d52dad5c87fff72b3225cb9ce1b3f0aba002357ad53d1f33fa81b40",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json": "f2546c91912e4fefc5516158327a54c4c05776286310f61d6bea10f09b84425f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/RUNBOOK.md": "1fc0375e3f8b8ee8ca787ec2bc4d5c316b2f4340475134ef65a5f190568fd0df",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/SCOPE-CREATION-COMMAND.md": "6e0d757813e6f2d2f70d2a12c317a9724b79fb2ad4148fabc5dd04295097dfca",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/evidence/EVIDENCE-MANIFEST.json": "a2df60dca2dfba5ebaff8bdc4b73ef76926cbecd7fd58c8916885e7e709a1a24"
+  },
+  "chain_v4": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/BINDING-MANIFEST-R32-V4.json": "4c7285eeea712dde9350dc5e7b1f3068eafea6becad10636bb58ff69665720ab",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/DECLARATION-DIFF.json": "db28b650be303421ee7614158594fa358b88cc1c357d4a2661d2a6fef0fdeda7",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/DECLARATION-DIFF.md": "7737c6cd6f830e705d59372cdc39ab99e5329dc69df5f32f1c1cf537993eabdb",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/DECLARATION.sha256": "34ed2ff846d09e8b795e73b2554e71c525313085647ceefc29bc02878837d825",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/FRESH-VALIDATION-DECLARATION-R32-V4.json": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/IMPLEMENTATION-REPORT.md": "43622d38f4703762d4df2aa576545854258fcff877a9cbe73e71dc8cd0adca06",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/V4-BUILD-DIFF.md": "e96d64f1e7a68989679ad621b59003df783dc2aea488a59c45e3d597908530b6"
+  },
+  "declaration_r32_v5": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/BUDGET-CARD-V6.md": "00c5e3f61b304bc258e0672c954da5ab5ad151ab845654113fcbdff749e67a10",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/DECLARATION-DIFF-V4-V5.json": "b64e931a7ee4a7444003b9e87ffcb0dd379a604fbdc7270763daa8ad38d08465",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/DECLARATION-DIFF-V4-V5.md": "9e5ff0b603d142328aa310fe5d9d96297c911c7e36dcadb031933c51cc9b13b6",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/DECLARATION.sha256": "fe28487d94286e1236358bc7b68ebb4ad0739c87816bc7478b33a650e0fba46f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/FRESH-VALIDATION-DECLARATION-R32-V5.json": "db72025b2bff28ffaf37b6605edd81cac2a0b9e17ac7f29479ca0aac157485df",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/IMPLEMENTATION-REPORT.md": "d7e5218c5a3692679a49bcebac3f45908127dec1f6129fc1598a11e2612c9096",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/RUNBOOK-R32-V5.md": "3fd7c98645eed9d0aa6cc0f203e1f0bb71a0254e8e239244c75eb12dbf6a2c84",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/SCOPE-CREATION-COMMAND.md": "da6fe1e7dc11cbc80fe4cb858eb7041ee66c15ced50bb2b694c6e6a0f02469ea",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/SUMMARY-R32-V5.md": "a01f6b0f9bd97281dfff44b30e9db4144afbdf4c6e7509587f0304493f9b6651",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/V5-BUILD-DIFF.md": "1afbb5323a8a2cd3ccc19f4cda9c1aac27540fb2b8de1c47c1b54b5a1a16b12d"
+  },
+  "runbook_addendum_r42": {
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/RUNBOOK-ADDENDUM-R42.md": "961fd4825057585a30d9d267d34b217aab591ed469b6fac2ece0191e4df40e7d"
+  },
+  "v5_build_scripts": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/append_response_r42.py": "25ffc3c3d9bc7560e502f1a16c02ff5905341dbac3371ebca54768424d3fa621",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/auth_test_exception_r43p.py": "76ec713129308a20e04a0ded6bfefefb339aecfcf968caf9aafee0243a839bf0",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/build_declaration_r42.py": "4cb0284f0dd178ef50a3d75e27371fcd32915ed6201251d6b4d4161701a356cb",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/cli_version_drill_r42.py": "9ac64277cda856db9241148f64528e31500959e60e409ade11b457d18103b068",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/create_scope_r42.py": "5f17502d88784d46a37dd8b34e6d5ea318609bee6a8ed59d47fc0dc326e9747a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/demos_r42.py": "8473f5d02f8fe03df66fe1725970fc2545d393eb42384d26b0040d6256a44c97",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/diff_declaration_r42.py": "b29bccd36b1a6b52289580255db7e7ecda1a81d574502e4873651228c1220b5f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/dry_exercise_r42.py": "b785bd29bd55786027e55a115d3a10959fc900fa8e7a708142ab0d76f6fb7ab7",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/facts_r42.py": "be47cc9e4e0d42fe53a4743a3ff8d9b9149878657ef65559526cad7b333d077c",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/guard/sitecustomize.py": "6a622719c60d72d0d0fba478851df55bb8fc1f9766779cb389622f07b3d2aeba",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/guard_probe_r43p.py": "b60e5848b791ef992939275adfe8eb5003acfcf960c35d52fa5ccbac7c3111bd",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/interpreter_check_r42.py": "d5fda9139be10c28c071eb0c632787cdf5e5b06893ba33beca76f9444edeaf82",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/lane_env_check_r42.py": "67ee5ed08ff81286153e5a9690299be19eb6ecfc52e8655a93295e2927054811",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_binding_r42.py": "36e56876c055bc17a0ea9bbc3bed1210a34a241ef521e75a8f8df1c811124033",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_contract_v5_r42.py": "477d02493108d8d0f17bc779f475eb605282f990ab47fd1e9d2ef01e03ff8d6e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_outputs_r42.py": "a890904c48ff7eff76463c37ab864c5d035c4174ea8533df9e77812ac851dd2d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_report_r42.py": "ba46a61c5c1a4b99dcba3e3282443f03b3527174d13d15b6660fd074178ae640",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_review42_docs.py": "4e84842803cdb123e12c60d595e42e50c86ede4904febb838fd71c5527601ec0",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_v3_docs_r42.py": "a165196eff87e4c532e209f1fe6bc979f9ed3896c651b52c77f9cc406de40ad2",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_v4_build_diff_r43p.py": "6e3be854726636bfea82daff11b5ea9bf323ccce1c33be2c7a21b38dad2c75ad",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/make_v5_build_diff_r45q.py": "a48cf2d2cb9aab97875833a5e4c424352958f0fbc57b8427ed63d4c40e693e84",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/manifest_v4_r43p.py": "73de5002a7433e6c0ffd8e8e2dcccf32ed8af0d084d295fba640e634bbd1ae57",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/manifest_v5_r45q.py": "b78d178768112c83494f6afa2af3e06e07bd9328eabf9e1f86d69b0a9ad0afdf",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/package_r42.py": "cbfa20032bba5ff59fa030e4c30f5f0395e79ff203e7d44d387d8ce6b8c08f50",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/patch_runner_main_r42.py": "d20ea0df697ee609eccc04d3b8ba9d28d07f0ada6e62174adf20ee762ec78aaa",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/pathlen_probe_r42.py": "4763cc2efcdff45c5457fe5bfd4d5a42c487ba12632ec90b5d59af248c36a077",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/preflight_r42.py": "7f935367db2a7f43327d493684ee3dc841839fc7842ee51515cababa75c08d62",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/r42common.py": "2a8a7e6aef83dacb25f997d801f00368e4a7c57e49eb7ecfb0eb5117a030558d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/r43p_base.py": "b42b56789484775798708978cf2db17179d335f0e6149e17385c054a7c05f562",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/run_tests_r42.py": "bed0672b578d329e953a3b531a8e1d809c30b8a0bd9b4cf4342042051c4b219d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/run_tests_r42pkg.py": "d94dd756d33997355b238b6e6b93063270f47b3623b7fd419a19839ec4aa50fc",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/runner_r43p.py": "5ff4376e1a09048bc46235ea635a706416c9a81e9a18bd654bd411d24375204a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/snapshot_r42.py": "eebeede2a05a89f1b344ecddff4b5f83d5bd6a0d7be3555883de0d486f229b66",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/snapshot_r43p.py": "490e07dac5e9c9e038bbac3349ac05a8729477900af0201ac598de565563a88b",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/test_r42.py": "f5bda56117e435dfc249ed2d2f4eddc88762d6b5bcc5d99238241840cad40f8e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/scripts/trim_sandbox_r42.py": "71bad1201f87a73f8685e4d880c21bee5516fd511285e417fb85bfee393bc8e2"
+  },
+  "v5_evidence": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/COPY-V4-SCRIPTS.sha256": "4dcda54b3f97da4d6d00ff9a9b6524b7fa524f9cc7a2fb0df62dcd10111c45d5",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/DRY-TRIMMED-NOTE.json": "7683a5d31267745aaf500e9919d6fd767c5aa7f4af860f4af905dce77adc32ea",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/GUARD-PROBE-REFUSALS.log": "373a9d85bebdc34ab55dbbbf33e675f726504101aeebfb991551ee67679f967a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/GUARD-PROBES.json": "cf13477c1c60d78b6212b1a2b5661357fad5cfb22112aba16cef44a3189fcf0f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/LAUNCHES-BEFORE-MANIFEST.jsonl": "b722ffbed13992631842f3a67f47bfb8ebd375c1b39faf7d4705238e4e237291",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/RUN-COPY-V5.jsonl": "45b56b88ca553a09d5be2a8919c0d0e52112e43d58f67b15a977efeb4e78c1b9",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/SNAPSHOT-AFTER.json": "e9fd48206224c8f1c70306c2e28c2febceded26860f500ee495238592f4b4466",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/SNAPSHOT-BEFORE.json": "9b06eb4b161d9939dbd8aacbc3c1bcfddd6706d4b3a6e30298a95df527b67bf9",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/WORK-HELPERS.sha256": "b7942f2c09767597726987b4332e5c2eedaff81903b1d40ba5315c4317d1d470",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/DRILL-COMPARE-V5.json": "88cd7e57940b0ddaa497b4cf21b6a2f1a1a66143f0bc14aafc0543b173a5215e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/DRILL-RUN-V5.json": "80e5c814235a0fa0f9b2e1b6eeb9670fa53c68023bbf4c5b268296e07ad12d68",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/DRILL-SPEC.json": "05a7caa86f34d603f42875f0692d6e3fc587935ea7f4d529d7e12b68ab6904b0",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/RUN-COPY-AND-SUBSTITUTIONS.json": "78436cfc70635d187fb1fecb22e8210342636cd487d2087b7dcb38c8d3c60423",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/DRILL-CONFIG.json": "8e9bae1e24b66a96fa629c8f26f9383fc498f29902a0ac72524d90b8c5f8b9e4",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/DRILL-FACTS.json": "39dbdf8acd6ffd6c5b6a6019f65bfc727b242daf3a733e21b754c1512c021167",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/DRILL-REPORT.json": "b590acfcb4a5890521db2d0fcfcc1e975e6f92015992463774c2f6e300f5e964",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/DRILL-TRACE.json": "b48b0510fdaea34721f27a31f5b86dce78748f279b2b07710bee1204b547b034",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/LANE-B.json": "58fada16d0b223aa95e7637acf8c8664503c9f1236c0d18202c7e653357e555d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/_trip-in-B.json": "73ec0fc5705435c8cabeed11a057c2fa067b6f796efbbdfa958b147ca05b8c30",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/_trip-out-B.json": "4260d40179931e064d3ee1e0d934069c00d682e924bc86f0c757d6c4c9b53b9c",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/lane-B.log": "a28d71e1c8a26ea879c72dc8dc6d2096db5d3889ad2124ecc2650579ac34fdee",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/drill-v5/out/rows-B.json": "4df4bb4b1995c32f83cdbf6b5f0f3a47e98414d1def759120066837ff9b61090",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/PREFLIGHT-RESULTS.json": "3f36936853b1b1016c66a65602055da398088516894a9b783f33d17d7f5ce8f5",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/lane-env/LANE-ENV-B.json": "d8e021b0c20147863c11aa1574dfeb987fed70f33b248a5602f6f5de2cfafe5e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/lane-env/LANE-ENV-C.json": "eb37d559ee32e7d0b72f78677390dc5020201817a17eca6541b630db55f3f2d8",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/lane-env/LANE-ENV-CFG.json": "7bebcdc80cbe2c572b425814a1e0bd250044c4055f8032ca5e0d98a22954951f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/lane-env/LANE-ENV-P.json": "4cf5cff6f96528f0c5d3f891759f1f484fc25da758e6f419107db632bc8c7d2e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/evidence/preflight-attempt-1/lane-env/LANE-ENV-R.json": "4425465abfa7c234ef42c0594f0bc2dbc6c843dfd7238175c5cce60fac6d19e7"
+  },
+  "v5_rehearsal": {
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/DRY-EXERCISE.json": "745ee2a62f9416391a42216171d497d87afa5c1a9c8094f27636eeed6679e6f0",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/PREFLIGHT-RESULTS.json": "7f006f433736622fac27f4b9173111b07ea3a04b37289b3756560ca87e27da03",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/ALLOWANCE-AUDIT.json": "ffa9541fb9994e7a071fe9592b8fb9c36a6a3943057f267bfe82a47f32a5db37",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/LANE-B.json": "f574f3b04fd68bff94fb7b3a5983e69a49a9b153f6cc493e16c2ec22b22952ff",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/LANE-C.json": "6ce1ad936628489b034db32adad0b63a03f1e97560ce9829f32806b66926e0ad",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/LANE-P.json": "87d83202c6f5711ae50a3500802dc9dcab85104beea18b4ef4f8d52d3fb3e656",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/LANE-R.json": "e4881273fd076a487cc9a445a900fdbccedea6a932310adff21a0d2566e455c9",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/RUN-CONFIG.json": "68781bf569549fc785523b016911c6455072f7f08be95b33b3f98ff0156dbd9d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/RUN-REPORT.json": "d20ef15c4d3c957d1c15a17286e3d756c402c86e0e8c86cc73128cb1793ffabd",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/RUN-SET-KEYS.json": "bdd2d67f2bd206f468748f74f378d7f22cc6ea495117a9be3f1cb4b59c0913c6",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/RUN-STATE.json": "70b2b98ef53c70b96db8b421568ab78f4b5d126f4633e46cd0696d2803d025f3",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/SCORE-BCR-R32.json": "1dc6b4bf9e0dae80919cb18e752f6faaaee96af44769ed7a216ad85797993188",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/STATE-CHECK-C.json": "58ea56d9da50307948e022fe0f548ee6882d9fb7eb0c606a5cd10bf37f650e9a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/STATE-CHECK-R.json": "58ea56d9da50307948e022fe0f548ee6882d9fb7eb0c606a5cd10bf37f650e9a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/_trip-in-B.json": "c5b4794a814b61a060da17389e02d771cc86e411d1c68a139bac597760ef039f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/_trip-out-B.json": "e6cc2d728fa2b1c15329fce7868fdb0dbb9784cc176cd8a514cca50e02d90334",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-B.log": "22118037a21ccb09468cae4ec82865e80975003d5c64aba42f81e819e1bd5751",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-B.r32.json": "af4254f5021f7bdcd539d15d14d18d1c57be5a08bd77e3c0b2f07ff3a933b795",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-C.log": "543c5077eb8a30ec1a6707ef1f06663028a252bd958cc8b8a6aad03c2d7c412a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-C.r32.json": "a7acb96ce33bf377d010044f8cb235444da56afe26b3247ba54d6c9c63b3096d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-P.log": "629e7ba705766458f08d41b44f99e8dd7d2795675f3d7f7716f0e07509510ca6",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-R.log": "8a45b68323e79f73fc1387d8a33f521402429b188b1c77ba7c728fdc52d231f4",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/lane-R.r32.json": "d85f065ba26efa54d9f9bfdc5ac615e5126ce5f3a8b3e5182b71ba2f66bb38c0",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/requests-B.json": "3299c41bae014ecd5985063d21103c5e6975ef55dd8286b6010000c5f9a9f98c",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/requests-C.json": "d1e263f5d2dafc6693ebf102420243f4b42d9024dfacc5b4db696566322f342e",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/requests-R.json": "f1a200af57d66e7ba5be697867040bcd94bd07625f70eacf1ebc8ebad11f976c",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/rows-B.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/rows-C.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/rows-R.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/score-B.log": "8d9bdbd35266641001a8ba5e485bcf68995a5bd6c28bb753503c383f1c50b1b8",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/score-C.log": "5c6da23ec48e1541fc895fba2b558da26fca372319336da76da2a3a64a9bd559",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/exercise-single/score-R.log": "bc810c557a71893d958723923aeabb946d0cfac77c8d00b49825227f3581ede7",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/lane-env/LANE-ENV-B.json": "ff5f60427c4959ea503eb7698428a53801197025d22b39d72cb4c9a28e0cb26a",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/lane-env/LANE-ENV-C.json": "af1065e6bda7737b346e2e7a775d2f8c49d49a1823a8855a5d892d5aafdf0297",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/lane-env/LANE-ENV-CFG.json": "7bebcdc80cbe2c572b425814a1e0bd250044c4055f8032ca5e0d98a22954951f",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/lane-env/LANE-ENV-P.json": "dd95ddb77b47467182c53c24d2cfbcc5f237fc965a9e35469d66347ab9f46122",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/dry-run/lane-env/LANE-ENV-R.json": "34bc8233b615f52e24f312d10f05a2da8f77a9462f41f7ec5a7ff4b95852fbe9",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-completion.json": "586c1b8dc663fedcd0ce1551aa04dcf0aff2b187ed9f77772ca983bad675e0fb",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-durable_charging.json": "ec47660245a6b18016171fc0408967399ed003e4072c5b0d42a2d8b184094fab",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-global_provider.json": "a239b5fee50b949c7bbf181bf60ba27c343651c425241195cb74df79908d31be",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-interruption_and_deadends.json": "c618b4d27b1b01e3b9c13907c134a0652f4ad200ba72389788f61b0b33aee37d",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-page_accounting.json": "8c2c0725f89d171387cd6b861e89cb6f412ad7122deed9a5ba4391422dc886d3",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-refusal_before_dispatch.json": "728250b28ae12295a300635caee7e01b9b10f4d608a775b28e22840f5f9ed254",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-terminal_stop.json": "1981b26e398c13d78838d1b102c444b864f58a866a4be18006bd86b9726d0f5b",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMO-window_deferral.json": "9aab82b2ea3b9a317e9cbecae5a6851a2981a8ccd9107876cc8fde9250746a74",
+   "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v5/rehearsal/demos/DEMOS-R42.json": "3f178b85fc41b032bd644a4f3cd2bf561f131cff392531b8afdca528f665dee6"
+  },
+  "verifications_43_44_45": {
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-43-harness/FINDINGS.json": "ad6e3cbf96177a4a1fba2439314ca561c437c74e007fced51cc0d2e0bf550394",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-43-harness/INDEPENDENT-PACKAGE-CHECK.json": "148019d06524b118ad74d31f9b28bec66bc0a92ea08562a36e051b1322bf4e8f",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-43-harness/INDEPENDENT-VERIFICATION.md": "43ce04d7027dc22828d621c72cb484517291778dd9e3b28dd463dd5b98997be4",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-44/FINDINGS.json": "7b22ed7014a0c35617daaff2ab14e580fe3692c0a8664ef119947cf45f7fa254",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-44/INDEPENDENT-PACKAGE-CHECK.json": "0c7c92007d1576365a64a60320ee3b5b4f1b68a2d9aa3dcd1e123ce58494b144",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-44/INDEPENDENT-VERIFICATION.md": "cfd5846fe9f3968ab58bda6d356e30a16921c4a8d275b258a356d4f39203110c",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-45/FINDINGS.json": "4e1d9cf01c957ba55b3eeac872239d59752a098c43c94d6edca096205f497e65",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-45/INDEPENDENT-PACKAGE-CHECK.json": "f88895bd4b17022431bbce62a3b532273028a977569741230ca0992e2bb23392",
+   "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/reviews/M2-review-45/INDEPENDENT-VERIFICATION.md": "2cde823212e7db72cb03a0074d98d6c3a42ebef350c8e9c1fd924435d35eea16"
+  }
+ },
+ "global_provider": {
+  "B": "harness_chain",
+  "B_in_the_baseline_facts_drill": "refusing (run_control_r38.RefusingGlobalProvider; dry drill only)",
+  "C": "refusing",
+  "P": "refusing",
+  "R": "refusing"
+ },
+ "harness_files": {
+  "allowance_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "r45_sha256": "6231b238654150cb1c193db4d7ef4319254a1ad885906ec7b6249e4459d55e19",
+   "status": "unchanged"
+  },
+  "capture_store.py": {
+   "lines_changed": 0,
+   "r43_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "r45_sha256": "84c05fc438b83bef1673811be26b91a81fc8f0e52bd9e1cd94e82a22a30e27c3",
+   "status": "unchanged"
+  },
+  "concentration_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "r45_sha256": "fc5052f80ea6d2454feadb84ccc863877cdc9851921f7c4dd551c58da914dffe",
+   "status": "unchanged"
+  },
+  "converter_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ade5d0ea9a89216b700c61d0752375ff380b287d5ffb6b30fc6e321a2996a0ed",
+   "r45_sha256": "ade5d0ea9a89216b700c61d0752375ff380b287d5ffb6b30fc6e321a2996a0ed",
+   "status": "unchanged"
+  },
+  "coverage_v4.py": {
+   "lines_changed": 0,
+   "r43_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "r45_sha256": "e260a60975cc1cb72a021fee10303dfadb7ae5594c1d3cb026d4a77d7b2fcfad",
+   "status": "unchanged"
+  },
+  "dispatch_guard_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "877dee5d1c1e57c6e1560e0442784b3f045c4547e0ee26e2d6fea451e9173118",
+   "r45_sha256": "877dee5d1c1e57c6e1560e0442784b3f045c4547e0ee26e2d6fea451e9173118",
+   "status": "unchanged"
+  },
+  "drawings_ai_probe_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "d4d02aef32cd65633cbe4a6267077d4dbf70f50846bb3ee3d745fa9151d54656",
+   "r45_sha256": "d4d02aef32cd65633cbe4a6267077d4dbf70f50846bb3ee3d745fa9151d54656",
+   "status": "unchanged"
+  },
+  "drill_r45.py": {
+   "lines_changed": 551,
+   "r43_sha256": null,
+   "r45_sha256": "247ace3e3451fd6098468e815a408d3ff683a00840ad3ea60dcc1883fb537862",
+   "status": "new_in_review45"
+  },
+  "inputs_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "7715a792deb8cc2e272ce69a9004fa45fef26193fc4a4d396869aa595240bb82",
+   "r45_sha256": "7715a792deb8cc2e272ce69a9004fa45fef26193fc4a4d396869aa595240bb82",
+   "status": "unchanged"
+  },
+  "labels_adapter_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "r45_sha256": "ff9d2e6b9311bd9ceaaab76f1d3237c1129f8d6c1a70d56d831e11d0e02501ab",
+   "status": "unchanged"
+  },
+  "lane_judge_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "r45_sha256": "a3b0b9426fd316a10c8f48a153695502990e38707061f2888add8a919019ae70",
+   "status": "unchanged"
+  },
+  "lane_r32.py": {
+   "lines_changed": 63,
+   "r43_sha256": "d98790ca7c3583cd4b47b43dd9ff334409502f165014a03789b6814bdb25edaa",
+   "r45_sha256": "6eb94a8db7b0b3fc5152ede72d28f26731de183facf64786b7475b12c0428eec",
+   "status": "changed_in_review45"
+  },
+  "literal_compare_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "r45_sha256": "c23ba577dfb298361fabef6ffb06e0f80eb3ad338ee22e7a487197d9c4b86a09",
+   "status": "unchanged"
+  },
+  "model_identity_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "0a463df6eee20ad89dc490c994b3f30876fe8af3e2686452be32dd2e38f502b1",
+   "r45_sha256": "0a463df6eee20ad89dc490c994b3f30876fe8af3e2686452be32dd2e38f502b1",
+   "status": "unchanged"
+  },
+  "page_relations_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "r45_sha256": "256e1e3dd307f392eefc20d80cb8b0c42c320082a92a5438bfa0a9d64d0aee94",
+   "status": "unchanged"
+  },
+  "preflight_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "4b78972aa6656d8157faff870d4c706c22c4bb809ca7148dffd1138b6a740e88",
+   "r45_sha256": "4b78972aa6656d8157faff870d4c706c22c4bb809ca7148dffd1138b6a740e88",
+   "status": "unchanged"
+  },
+  "project_bounds_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "e49b5a45f746d1331bf84c9395ebaa53563d6075bcf0d6ad11ea5d78c22b6427",
+   "r45_sha256": "e49b5a45f746d1331bf84c9395ebaa53563d6075bcf0d6ad11ea5d78c22b6427",
+   "status": "unchanged"
+  },
+  "r32_test_helpers.py": {
+   "lines_changed": 0,
+   "r43_sha256": "2c2729e357014b38bc8ae79de4e30d7b2e46d7cacfe00726e4ddbc2515295335",
+   "r45_sha256": "2c2729e357014b38bc8ae79de4e30d7b2e46d7cacfe00726e4ddbc2515295335",
+   "status": "unchanged"
+  },
+  "r34_scenarios.py": {
+   "lines_changed": 0,
+   "r43_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "r45_sha256": "c2d52c56bf7c4119f62f851a8c8ae628dfa42a270aaa226d58c68f73e2e26fa1",
+   "status": "unchanged"
+  },
+  "request_paths_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "7f19cc82099de3e44f9eb913a686b9880699ad670c4b829025231fee20f1d089",
+   "r45_sha256": "7f19cc82099de3e44f9eb913a686b9880699ad670c4b829025231fee20f1d089",
+   "status": "unchanged"
+  },
+  "request_paths_r42.py": {
+   "lines_changed": 0,
+   "r43_sha256": "135a2baee9c47a45b66ab4de4e52452db4457d3e7f30cee5a533e66b19468263",
+   "r45_sha256": "135a2baee9c47a45b66ab4de4e52452db4457d3e7f30cee5a533e66b19468263",
+   "status": "unchanged"
+  },
+  "resume_invocations_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "b217b053f69213e7320469584e748d2b15679ed39d4345e0e95cfce6ebf36864",
+   "r45_sha256": "b217b053f69213e7320469584e748d2b15679ed39d4345e0e95cfce6ebf36864",
+   "status": "unchanged"
+  },
+  "run_control_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "5dd0ca3a770f13e6bc1f5e45bd74e3a942c75d5244e48457937259bc6d758c4a",
+   "r45_sha256": "5dd0ca3a770f13e6bc1f5e45bd74e3a942c75d5244e48457937259bc6d758c4a",
+   "status": "unchanged"
+  },
+  "run_set_selector_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "r45_sha256": "ec5025d248a190a14d8c2e128cdc8181b0708ab834ca322f62337cf7f32fc2f4",
+   "status": "unchanged"
+  },
+  "run_state_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "a12695bf987c3217260325b656acf5290473aa5d54f1a95d7b24216aec6b7cc7",
+   "r45_sha256": "a12695bf987c3217260325b656acf5290473aa5d54f1a95d7b24216aec6b7cc7",
+   "status": "unchanged"
+  },
+  "runner_r32.py": {
+   "lines_changed": 11,
+   "r43_sha256": "87ca348e7912c7f7232ab39fb7c540c57adf3b886bbbe4f0af1b66f61bae1c9e",
+   "r45_sha256": "a0591473d8533dca40a90a9aad1f9bb4b39ca7b478ece5f9867ac5ab130fec1d",
+   "status": "changed_in_review45"
+  },
+  "sandbox_child_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "8ed578abf38c7703927b3d3808bb17637bf0ce9e7308287fb466e665e748e9c1",
+   "r45_sha256": "8ed578abf38c7703927b3d3808bb17637bf0ce9e7308287fb466e665e748e9c1",
+   "status": "unchanged"
+  },
+  "sandbox_ingest_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "55694b1ee32f3fe4289d44a731426e5cb2a1a62b5bd28f6e0c5d62fc03f38ad0",
+   "r45_sha256": "55694b1ee32f3fe4289d44a731426e5cb2a1a62b5bd28f6e0c5d62fc03f38ad0",
+   "status": "unchanged"
+  },
+  "score_bcr_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "r45_sha256": "ccfc7200ca8906bc1383986cefc44b2ca134b7de5d5cfcda0268253da20f8524",
+   "status": "unchanged"
+  },
+  "score_lane_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "bf160fc048a980e9194cec0a72f2bb642e12321f65900a85a00b66bfea6d1043",
+   "r45_sha256": "bf160fc048a980e9194cec0a72f2bb642e12321f65900a85a00b66bfea6d1043",
+   "status": "unchanged"
+  },
+  "state_check.py": {
+   "lines_changed": 0,
+   "r43_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "r45_sha256": "a9985b100215363ba82c6070ce931b99b64110ce0b92566804dc2b6c482186c3",
+   "status": "unchanged"
+  },
+  "stop_rules.py": {
+   "lines_changed": 0,
+   "r43_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "r45_sha256": "4632ffeaea83d7849328f5f7ac5a3a857de121fd389e4a066627e1bdb77f4996",
+   "status": "unchanged"
+  },
+  "synthetic_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "r45_sha256": "9248cbf72e5a0033c1753bd9867591adf41de6c4ccaff9947323d16d450be65c",
+   "status": "unchanged"
+  },
+  "test_allowance_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "r45_sha256": "283009dbc86f224b0a83f1b91202cdb92154e78813977b05ddd17ea4132a9fee",
+   "status": "unchanged"
+  },
+  "test_capture_store.py": {
+   "lines_changed": 0,
+   "r43_sha256": "577d4e1160182ddd2756b3f1642b9bb4b5e436f70e2e68af235f3a0bfe621660",
+   "r45_sha256": "577d4e1160182ddd2756b3f1642b9bb4b5e436f70e2e68af235f3a0bfe621660",
+   "status": "unchanged"
+  },
+  "test_concentration_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "r45_sha256": "1fda538ec320dc14579452b42ce44e3a9f03bbfd3f94e14f6d73197498379787",
+   "status": "unchanged"
+  },
+  "test_converter_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "r45_sha256": "dd069a5db930f66dde761ad7cb4c5b28b5f41df4ba15b114cea7e3581a5e9c0b",
+   "status": "unchanged"
+  },
+  "test_dispatch_guard_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "59b1e0c19a7ecb8fb079b1b40c4cf6e468b10efefd73d0712d612b6a56d418f9",
+   "r45_sha256": "59b1e0c19a7ecb8fb079b1b40c4cf6e468b10efefd73d0712d612b6a56d418f9",
+   "status": "unchanged"
+  },
+  "test_dry_baseline_drill_r45.py": {
+   "lines_changed": 352,
+   "r43_sha256": null,
+   "r45_sha256": "45a182a7b7dba042cd18df42a8abbc681b79b1eaaa9f838e793e21fd2ebb5876",
+   "status": "new_in_review45"
+  },
+  "test_global_provider_r42.py": {
+   "lines_changed": 0,
+   "r43_sha256": "1e50dff2524ad39b77c3b75da73811ad0b2100e3582afb7c3a5cf1223d2dd058",
+   "r45_sha256": "1e50dff2524ad39b77c3b75da73811ad0b2100e3582afb7c3a5cf1223d2dd058",
+   "status": "unchanged"
+  },
+  "test_labels_adapter_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "r45_sha256": "6574426aa4c30af33f27de2db9e5d36d6b20a6eb02dc6ffac1d0b571240197f9",
+   "status": "unchanged"
+  },
+  "test_lane_judge_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "r45_sha256": "ce77341433881784861666ca9ca309c596c7ea1c1d825b027f4fdc8b074e13f4",
+   "status": "unchanged"
+  },
+  "test_literal_compare_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ca7ed221a2d361288425bb3a23671cefe4a60bf650525b24b27e2db4e9e40b90",
+   "r45_sha256": "ca7ed221a2d361288425bb3a23671cefe4a60bf650525b24b27e2db4e9e40b90",
+   "status": "unchanged"
+  },
+  "test_model_identity_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "987ffa8ec9e27d7b21a6a43305bdbd353b927acac3142e9069d4b8f63621d8e0",
+   "r45_sha256": "987ffa8ec9e27d7b21a6a43305bdbd353b927acac3142e9069d4b8f63621d8e0",
+   "status": "unchanged"
+  },
+  "test_portability_r42.py": {
+   "lines_changed": 0,
+   "r43_sha256": "0cb9412b36c5dcf4793af639cc8929f05e7634a04ec7fefea7439acc34f510e8",
+   "r45_sha256": "0cb9412b36c5dcf4793af639cc8929f05e7634a04ec7fefea7439acc34f510e8",
+   "status": "unchanged"
+  },
+  "test_preflight_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "1f1523f751312224cddb36d04cffb20f8a49c86d3ca8a2980ff74be00e7d18d5",
+   "r45_sha256": "1f1523f751312224cddb36d04cffb20f8a49c86d3ca8a2980ff74be00e7d18d5",
+   "status": "unchanged"
+  },
+  "test_project_bounds_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "b1bd251c269e03627d87d304f7ddfb903185ec76779119fce89bb2da16c10680",
+   "r45_sha256": "b1bd251c269e03627d87d304f7ddfb903185ec76779119fce89bb2da16c10680",
+   "status": "unchanged"
+  },
+  "test_request_paths_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "067abe2f6b10b73cc0467e6ef81795435477e1c3385dcf3a5181ca54232f05f1",
+   "r45_sha256": "067abe2f6b10b73cc0467e6ef81795435477e1c3385dcf3a5181ca54232f05f1",
+   "status": "unchanged"
+  },
+  "test_resume_authorization_r42.py": {
+   "lines_changed": 0,
+   "r43_sha256": "0f9fea2cd20e2c8d4c980d07b0af23a7d367e65aa01d9476bc30074d8e562f4d",
+   "r45_sha256": "0f9fea2cd20e2c8d4c980d07b0af23a7d367e65aa01d9476bc30074d8e562f4d",
+   "status": "unchanged"
+  },
+  "test_run_control_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "997b6d6e8cd7bedc64218405a2fb38fe132f0ac4107c8bedb539ab2f8d9446f5",
+   "r45_sha256": "997b6d6e8cd7bedc64218405a2fb38fe132f0ac4107c8bedb539ab2f8d9446f5",
+   "status": "unchanged"
+  },
+  "test_run_set_selector_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "r45_sha256": "32e34d6b632d04e555dedbe68382925e4fb579735c7cd8c354208a932a780eb5",
+   "status": "unchanged"
+  },
+  "test_runner_order_r42.py": {
+   "lines_changed": 0,
+   "r43_sha256": "45690911015da2363d25e2f8c54529074fcc0c8aaaba0935104d038ffb097f1b",
+   "r45_sha256": "45690911015da2363d25e2f8c54529074fcc0c8aaaba0935104d038ffb097f1b",
+   "status": "unchanged"
+  },
+  "test_runner_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "18beb790b5a89549cd894c77cc63d0398ec17d2a6a772f53d61fa1518c323332",
+   "r45_sha256": "18beb790b5a89549cd894c77cc63d0398ec17d2a6a772f53d61fa1518c323332",
+   "status": "unchanged"
+  },
+  "test_sandbox_ingest_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "ec0093fd98d83c6ead3fb29bbf11050da2a45215ab70e4b49da5fa9b31812202",
+   "r45_sha256": "ec0093fd98d83c6ead3fb29bbf11050da2a45215ab70e4b49da5fa9b31812202",
+   "status": "unchanged"
+  },
+  "test_score_bcr_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "r45_sha256": "605be29132412bc6d96a84ccd1e25df3d4ca7d52248fad41b94d2b9a5a90b942",
+   "status": "unchanged"
+  },
+  "test_state_check.py": {
+   "lines_changed": 0,
+   "r43_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "r45_sha256": "6ad41a9ce53c4ef5d467020b6bd62f9d74318eddeefc47c5aca4a252533b41a6",
+   "status": "unchanged"
+  },
+  "test_stop_rules.py": {
+   "lines_changed": 0,
+   "r43_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "r45_sha256": "a99f6334b6364966d3429a5b1a2d135eaf506714d98a320f7603f7fe5905ea30",
+   "status": "unchanged"
+  },
+  "test_tripwire_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "r45_sha256": "0fe21162d3a385eba05e1c4cc6de4360e551339e5e4c631c6304b223e2911e25",
+   "status": "unchanged"
+  },
+  "test_unread_pages_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "53961f7c81f61da5142a784ab701638326751c900d2b0142e1a5527299dd82c5",
+   "r45_sha256": "53961f7c81f61da5142a784ab701638326751c900d2b0142e1a5527299dd82c5",
+   "status": "unchanged"
+  },
+  "test_visibility_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "r45_sha256": "47e1a4f291fb61cb2ce44d753832cd6828863d0f44250025b37886055004f6ad",
+   "status": "unchanged"
+  },
+  "tripwire_r32.py": {
+   "lines_changed": 0,
+   "r43_sha256": "2d3f6829bc1b9a0d6f56bf9bc77bbfeb35417a1a894e38e4e8df78a5882f6ec2",
+   "r45_sha256": "2d3f6829bc1b9a0d6f56bf9bc77bbfeb35417a1a894e38e4e8df78a5882f6ec2",
+   "status": "unchanged"
+  },
+  "unread_pages_probe_r39.py": {
+   "lines_changed": 0,
+   "r43_sha256": "c071dc5b437a9f5a8f4a76191d2e1b5814dafeb50b626ba50abaf6c4890e7798",
+   "r45_sha256": "c071dc5b437a9f5a8f4a76191d2e1b5814dafeb50b626ba50abaf6c4890e7798",
+   "status": "unchanged"
+  },
+  "visibility_r38.py": {
+   "lines_changed": 0,
+   "r43_sha256": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156",
+   "r45_sha256": "4dcfff3777acbe4eb5c8ca861f3ea4e4e221f7242e21c1e47c93807c005cb156",
+   "status": "unchanged"
+  }
+ },
+ "immutable": "written once per freeze; a changed file is a new manifest with a new hash, never an edit",
+ "interpreter": {
+  "base": "C:/Users/moham/AppData/Local/Programs/Python/Python312/python.exe",
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe",
+  "sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+  "sha256_now": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+  "version": "3.12.10"
+ },
+ "name": "R32 v5 declaration binding manifest: the frozen declaration v5 (not authorized), its build scripts, diffs, R44-07 documents, implementation report and the dry rehearsal and drill evidence, chained to the review45 harness manifest, the superseded v4 and the executed v3 (declaration-r32-v5)",
+ "new_in_review42": [
+  "request_paths_r42.py",
+  "test_global_provider_r42.py",
+  "test_portability_r42.py",
+  "test_resume_authorization_r42.py",
+  "test_runner_order_r42.py"
+ ],
+ "not_bound_but_recorded": {
+  "authority_register": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/AUTHORITY-REGISTER.md",
+   "sha256_at_binding": "388bbbf5963549cb182242d6131c1604d0a9359c484f6a83982f66c4e87a6037",
+   "why": "append-only, updated by the orchestrator"
+  },
+  "carried_fields": "baseline and candidate re-read now; changed_from_review39, cli_pin, contract, global_provider, harness_files, interpreter, new_in_review42, reference_set, reference_set_statement, run_set_sha256, truth_sha256 and unchanged_from_review39 are carried from BINDING-MANIFEST-R45-HARNESS (the harness is unchanged); r39_rehash is that manifest's every entry re-hashed now",
+  "protected_state": {
+   "AFTER": {
+    "ai_ledger": {
+     "entries": 484,
+     "limit_amendments": 0,
+     "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+     "scopes": 18
+    },
+    "c_free_bytes": 3415429120,
+    "folders": {
+     "declaration_r32": "70d0a8d36000ca80c82f11bf1d6a98723a9aff33d2eb23b47fbe7f64c0e3c430",
+     "declaration_r32_v2": "4c953264994b28ba75228a189e65f5cf03af0c35cc18829fa66c77ec8959ccf0",
+     "declaration_r32_v3": "d53b1f61e7738b9d57bf797d218eb712d8f59cf473ce936b5a816bcb8fb7b97e",
+     "declaration_r32_v4": "8647ec00bf4aa9bb494a1d8c3db217349bbf771a212760b73aed08dc6b8be3b2",
+     "owner_records": "4290914518e36d6f763a3b39d441201a208d37b713a00f18bb5a2d88579c0fb6",
+     "r43_review_package": "3af26b03c4d2a30f65ae9f072b90aca0f2b83ae0f7fefe4779c86f7ee9806df5",
+     "review42": "c1f465d2ed3419c57f5c66f7fd0059c0ee2cc4400c27e8796bd2bbe7825fc65e",
+     "review43": "501d4b1942bbde4930d084ff329a39e763a0ec99fa10d3ce30f8645dd250e275",
+     "review45": "21ddf2f5182696b7debde751070fec8e9a00b2a3f462e34b518677112a423328"
+    },
+    "named_files": [
+     "C:/t/r2x/r42-sandbox/r32-v3-owner-records/OWNER-TOKEN.txt",
+     "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.RUN.json",
+     "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json"
+    ],
+    "pip_freeze": "bd424a5c4692ab4c1f634705e59ded3784549a6f6c9072ffea9860fbf611bf7f",
+    "v3_run_folder_stat": "3975f72c9b7f99c8707c35667522dcfbf406c39fa8a6ef0515910c4418280c4e",
+    "v3_scope_present": true,
+    "v4_run_folder_exists": false,
+    "v4_scope_present": false,
+    "v5_run_folder_exists": false,
+    "v5_scope_present": false
+   },
+   "BEFORE": {
+    "ai_ledger": {
+     "entries": 484,
+     "limit_amendments": 0,
+     "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+     "scopes": 18
+    },
+    "c_free_bytes": 3759935488,
+    "folders": {
+     "declaration_r32": "70d0a8d36000ca80c82f11bf1d6a98723a9aff33d2eb23b47fbe7f64c0e3c430",
+     "declaration_r32_v2": "4c953264994b28ba75228a189e65f5cf03af0c35cc18829fa66c77ec8959ccf0",
+     "declaration_r32_v3": "d53b1f61e7738b9d57bf797d218eb712d8f59cf473ce936b5a816bcb8fb7b97e",
+     "declaration_r32_v4": "8647ec00bf4aa9bb494a1d8c3db217349bbf771a212760b73aed08dc6b8be3b2",
+     "owner_records": "4290914518e36d6f763a3b39d441201a208d37b713a00f18bb5a2d88579c0fb6",
+     "r43_review_package": "3af26b03c4d2a30f65ae9f072b90aca0f2b83ae0f7fefe4779c86f7ee9806df5",
+     "review42": "c1f465d2ed3419c57f5c66f7fd0059c0ee2cc4400c27e8796bd2bbe7825fc65e",
+     "review43": "501d4b1942bbde4930d084ff329a39e763a0ec99fa10d3ce30f8645dd250e275",
+     "review45": "21ddf2f5182696b7debde751070fec8e9a00b2a3f462e34b518677112a423328"
+    },
+    "named_files": [
+     "C:/t/r2x/r42-sandbox/r32-v3-owner-records/OWNER-TOKEN.txt",
+     "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/FRESH-VALIDATION-DECLARATION-R32-V3.RUN.json",
+     "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v3/OWNER-DISPATCH-AUTHORIZATION.json"
+    ],
+    "pip_freeze": "bd424a5c4692ab4c1f634705e59ded3784549a6f6c9072ffea9860fbf611bf7f",
+    "v3_run_folder_stat": "3975f72c9b7f99c8707c35667522dcfbf406c39fa8a6ef0515910c4418280c4e",
+    "v3_scope_present": true,
+    "v4_run_folder_exists": false,
+    "v4_scope_present": false,
+    "v5_run_folder_exists": false,
+    "v5_scope_present": false
+   }
+  },
+  "protected_state_unchanged": {
+   "ai_ledger": true,
+   "folders": true,
+   "named_files": true,
+   "pip_freeze": true,
+   "trees": true,
+   "v3_run_folder_stat": true
+  },
+  "substitutions": "V5-BUILD-DIFF.md section 4 (S-RUN, S-HERE, S-BASE, S-GUARD, S-ENV, S-R45Q-1) and evidence/drill-v5/RUN-COPY-AND-SUBSTITUTIONS.json",
+  "task_file": {
+   "path": "C:/Users/moham/.codex/visualizations/2026/09/27/01a0e218-6014-77a0-be80-501dcc922424/master-roadmap/orchestrator/tasks/R43-44-TASK.md",
+   "sha256_at_binding": "1cd72eb3eaed75b8321ae7a201e0f504564137f02f67947e25b710908a6e4d0b"
+  },
+  "work_folder": {
+   "path": "C:/t/r2x/r42-sandbox/r45q",
+   "rule": "every file this task created outside the package lies under it (run copies, dry, demonstration and drill folders, logs, work helpers)"
+  },
+  "written_after_this_manifest": [
+   "SELF-CHECK-<n>.json"
+  ]
+ },
+ "r39_rehash": {
+  "differ": [],
+  "equal": 629,
+  "missing": [],
+  "rule": "every file binding of BINDING-MANIFEST-R45-HARNESS re-hashed at its path when this manifest was written"
+ },
+ "reference_set": {
+  "name": "r32-labels-reviewed-2",
+  "populations": {
+   "decision": 38,
+   "identity": 57,
+   "revision": 38
+  },
+  "sha256": "89c60e9d6a2f06c9d2afaa74fc2a6d3fca471bc56c9eb1591a6a32d1df0bb9a6"
+ },
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "run_set_sha256": "9058f3d6794342db40c76ff9ad79f0e40c171430a616c5eab4b570a2fb057ce8",
+ "sandbox_base": "declared by the declaration (run.sandbox_base C:/t/r2x/r42-sandbox, run.folder C:/t/r2x/r42-sandbox/r32-v5, never created here); this task's dry base C:/t/r2x/r42-sandbox/r45q/sb",
+ "statement": "binds code and inputs only; it authorizes nothing (no run, budget, scope, token, nonce, RUN or authorization file, no default); it is not signed and not bound to a nonce; M4 (historical M2) CHANGES STILL REQUIRED; M3 accepted (7 October 2026); the declaration v5 bound here is FROZEN and NOT AUTHORIZED; declaration v4 is untouched, frozen, never authorized and superseded; the review45 drill reproduced on v5's bindings is dry (0 model requests) and PASS against DRILL-CRITERION.md 8b183053...d918; the AI-on form reading of F009 and F020 is not rehearsed (R45-08); a run needs Verification 46, the owner's option-1 entry and a fresh D1/D2 naming the v5 hash (owner_decision_required)",
+ "supersedes": {
+  "file": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/declaration-r32-v4/BINDING-MANIFEST-R32-V4.json",
+  "for": "the declaration package of the R32 fresh validation (v4 frozen, never authorized, never run; v5 is its successor, not authorized)",
+  "sha256": "4c7285eeea712dde9350dc5e7b1f3068eafea6becad10636bb58ff69665720ab"
+ },
+ "truth_sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064",
+ "unchanged_from_review39": [
+  "allowance_r32.py",
+  "capture_store.py",
+  "concentration_r32.py",
+  "converter_r32.py",
+  "coverage_v4.py",
+  "drawings_ai_probe_r39.py",
+  "labels_adapter_r32.py",
+  "lane_judge_r32.py",
+  "literal_compare_r32.py",
+  "page_relations_r38.py",
+  "project_bounds_r32.py",
+  "r34_scenarios.py",
+  "request_paths_r39.py",
+  "resume_invocations_r39.py",
+  "run_set_selector_r32.py",
+  "sandbox_child_r32.py",
+  "score_bcr_r32.py",
+  "score_lane_r32.py",
+  "state_check.py",
+  "stop_rules.py",
+  "synthetic_r32.py",
+  "test_allowance_r32.py",
+  "test_capture_store.py",
+  "test_concentration_r32.py",
+  "test_converter_r32.py",
+  "test_labels_adapter_r32.py",
+  "test_lane_judge_r32.py",
+  "test_request_paths_r39.py",
+  "test_run_control_r38.py",
+  "test_run_set_selector_r32.py",
+  "test_score_bcr_r32.py",
+  "test_state_check.py",
+  "test_stop_rules.py",
+  "test_tripwire_r32.py",
+  "test_unread_pages_r39.py",
+  "test_visibility_r38.py",
+  "tripwire_r32.py",
+  "unread_pages_probe_r39.py",
+  "visibility_r38.py"
+ ],
+ "written_at_utc": "2026-10-08T00:55:12+00:00"
+}
