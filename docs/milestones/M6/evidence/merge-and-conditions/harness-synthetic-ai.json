@@ -1,0 +1,675 @@
+{
+ "harness_version": "m6-shadow-eval-2026-10-08.2",
+ "truth_version": "attribution-truth-provisional-2026-10-08.1",
+ "arm": "ai",
+ "labels": {
+  "documents": 6,
+  "at_utc": "2026-10-08T00:00:00+00:00",
+  "labeller": "synthetic",
+  "sha256": "synthetic"
+ },
+ "kind_map": {
+  "kinds": 241,
+  "mapped_kinds": 175,
+  "unmapped_kinds": 66,
+  "unmapped": [
+   "BOQ (design-sheet template titled BOQ; also in the BOQ set)",
+   "IFC drawing set (tender stage, mechanical)",
+   "authority (DCD) fire and life safety drawing set (23 pages)",
+   "authority approval certificate (Dubai Civil Defence FINAL APPROVAL)",
+   "authority document (Dubai Municipality affection plan, electronically certified)",
+   "authority permit (Dubai Development Authority Final Building Permit)",
+   "authority-approved consultant drawing set (Dubai Civil Defence stamped, 17 pages)",
+   "authority-approved consultant drawing set (Dubai Civil Defence stamped, 21 pages)",
+   "authority-approved traffic plan (RTA, scanned, signed)",
+   "calculation schedule (electrical load distribution, 11 pages)",
+   "consultant IFT drawing sheet (electrical power)",
+   "consultant IFT drawing sheet (facade lighting)",
+   "consultant IFT drawing sheet (fire fighting)",
+   "consultant IFT drawing sheet (mechanical smoke control)",
+   "consultant IFT drawing sheet (plumbing / LPG)",
+   "consultant IFT drawing sheet (smoke control)",
+   "consultant design sheet (facade lighting concept rendering)",
+   "consultant drawing sheet (gas layout, DCD approval submission, 9 pages)",
+   "consultant schematic sheet (BMS)",
+   "consultant tender drawing sheet (HVAC schematic)",
+   "consultant tender drawing sheet (ICT)",
+   "consultant tender drawing sheet (architectural GA plan)",
+   "consultant tender drawing sheet (architectural)",
+   "consultant tender drawing sheet (emergency lighting)",
+   "consultant tender drawing sheet (facade access)",
+   "consultant tender drawing sheet (infrastructure)",
+   "consultant tender drawing sheet (interior design)",
+   "consultant tender drawing sheet (interior design, electrical requirement)",
+   "consultant tender drawing sheet (interior design, scanned)",
+   "consultant tender drawing sheet (landscape details)",
+   "consultant tender drawing sheet (landscape)",
+   "consultant tender drawing sheet (lighting control)",
+   "consultant tender drawing sheet (lighting schematic)",
+   "consultant tender drawing sheet (signage)",
+   "consultant tender drawing sheet (structural)",
+   "cost sheet (design-sheet template titled Cost Sheet, 2 pages, scanned)",
+   "cover sheet (Emaar facilities management approval pack, 7 pages)",
+   "delivery sheet (design-sheet template titled Delivery Sheet, 2 pages)",
+   "design consultant drawing sheet (acoustics)",
+   "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form)",
+   "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form) + matrix (7 pages)",
+   "interior-design shop drawing sheet (another contractor's package)",
+   "interior-design shop drawing sheet (another contractor's package, not FAS)",
+   "letter (draft warranty certificate)",
+   "letter (manufacturer authorization)",
+   "material sample tag / submittal cover (Kling / IBA / CSCEC form, scanned, 11 pages)",
+   "pre-qualification submittal (Khatib & Alami / TAV form, rotated scan, 12 pages)",
+   "pre-qualification transmittal (Al Hilal / Samana form) + attachments (310 pages)",
+   "project execution request form (internal, scanned)",
+   "quotation (Al Arabia, 2 pages, scanned)",
+   "quotation (Al Arabia, 4 pages, scanned)",
+   "quotation (Al Arabia, scanned)",
+   "quotation (Al Arabia, variation, scanned)",
+   "sample tag sheets (material sample tags, 20 pages)",
+   "schedule (interior finish schedule, 63 pages)",
+   "schedule of equipment (PA schedule of materials)",
+   "schedule of equipment (technical submittal, text PDF, 2 pages; also in the BOQ set)",
+   "schedule of materials (technical submittal, 5 pages)",
+   "schedule of materials (technical submittal, VESDA)",
+   "schedule of materials table (submittal attachment)",
+   "supplier schematic (indicative central battery system schematic, Bellagio Hotel)",
+   "supplier schematic (indicative central battery system schematic, MGM-1 Hotel)",
+   "technical note (manufacturer IP65 test confirmation)",
+   "technical note (manufacturer test confirmation)",
+   "technical submission cover (Dutco TECHNICAL SUBMISSION form, Nakheel) + acoustic report",
+   "unlabelled"
+  ],
+  "documents": 6,
+  "mapped_documents": 5
+ },
+ "cohorts": {
+  "regression": {
+   "labelled": 2,
+   "joined": 2,
+   "answered": 2,
+   "type_truth": 2,
+   "type_unmapped": 0,
+   "type_accuracy": {
+    "numerator": 1,
+    "denominator": 2,
+    "value": 0.5
+   },
+   "per_type": {
+    "IFC_DRAWING": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     }
+    },
+    "SHOP_DRAWING": {
+     "true_positive": 1,
+     "precision": {
+      "numerator": 1,
+      "denominator": 2,
+      "value": 0.5
+     },
+     "recall": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     }
+    }
+   },
+   "system_accuracy": {
+    "numerator": 2,
+    "denominator": 2,
+    "value": 1.0
+   },
+   "system_excluded": 0,
+   "attribution_accuracy": {
+    "numerator": 1,
+    "denominator": 2,
+    "value": 0.5
+   },
+   "attribution_accuracy_answered": {
+    "numerator": 1,
+    "denominator": 2,
+    "value": 0.5
+   },
+   "attribution_side_accuracy": {
+    "numerator": 2,
+    "denominator": 2,
+    "value": 1.0
+   },
+   "attribution_unknown": {
+    "numerator": 0,
+    "denominator": 2,
+    "value": 0.0
+   },
+   "attribution_confusion": {
+    "OUR_SCOPE": {
+     "LIKELY_OUR_SCOPE": 1
+    },
+    "RELATED_EXTERNAL": {
+     "RELATED_EXTERNAL": 1
+    }
+   },
+   "false_supported_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate_incl_likely": {
+    "numerator": 0,
+    "denominator": 1,
+    "value": 0.0
+   }
+  },
+  "exploration": {
+   "labelled": 2,
+   "joined": 2,
+   "answered": 2,
+   "type_truth": 2,
+   "type_unmapped": 0,
+   "type_accuracy": {
+    "numerator": 1,
+    "denominator": 2,
+    "value": 0.5
+   },
+   "per_type": {
+    "MATERIAL_SUBMITTAL": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     }
+    },
+    "OTHER": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     }
+    },
+    "SPECIFICATION": {
+     "true_positive": 1,
+     "precision": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     },
+     "recall": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     }
+    }
+   },
+   "system_accuracy": {
+    "numerator": 2,
+    "denominator": 2,
+    "value": 1.0
+   },
+   "system_excluded": 0,
+   "attribution_accuracy": {
+    "numerator": 0,
+    "denominator": 1,
+    "value": 0.0
+   },
+   "attribution_accuracy_answered": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "attribution_side_accuracy": {
+    "numerator": 0,
+    "denominator": 1,
+    "value": 0.0
+   },
+   "attribution_unknown": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "attribution_confusion": {
+    "RELATED_EXTERNAL": {
+     "UNKNOWN": 1
+    }
+   },
+   "false_supported_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate_incl_likely": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   }
+  },
+  "holdout": {
+   "labelled": 2,
+   "joined": 1,
+   "answered": 1,
+   "type_truth": 0,
+   "type_unmapped": 1,
+   "type_accuracy": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "per_type": {},
+   "system_accuracy": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "system_excluded": 0,
+   "attribution_accuracy": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "attribution_accuracy_answered": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "attribution_side_accuracy": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "attribution_unknown": {
+    "numerator": 0,
+    "denominator": 1,
+    "value": 0.0
+   },
+   "attribution_confusion": {
+    "REFERENCE_ONLY": {
+     "REFERENCE_ONLY": 1
+    }
+   },
+   "false_supported_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate_incl_likely": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   }
+  }
+ },
+ "all": {
+  "labelled": 6,
+  "joined": 5,
+  "answered": 5,
+  "type_truth": 4,
+  "type_unmapped": 1,
+  "type_accuracy": {
+   "numerator": 2,
+   "denominator": 4,
+   "value": 0.5
+  },
+  "per_type": {
+   "IFC_DRAWING": {
+    "true_positive": 0,
+    "precision": {
+     "numerator": 0,
+     "denominator": 0,
+     "value": null
+    },
+    "recall": {
+     "numerator": 0,
+     "denominator": 1,
+     "value": 0.0
+    }
+   },
+   "MATERIAL_SUBMITTAL": {
+    "true_positive": 0,
+    "precision": {
+     "numerator": 0,
+     "denominator": 0,
+     "value": null
+    },
+    "recall": {
+     "numerator": 0,
+     "denominator": 1,
+     "value": 0.0
+    }
+   },
+   "OTHER": {
+    "true_positive": 0,
+    "precision": {
+     "numerator": 0,
+     "denominator": 1,
+     "value": 0.0
+    },
+    "recall": {
+     "numerator": 0,
+     "denominator": 0,
+     "value": null
+    }
+   },
+   "SHOP_DRAWING": {
+    "true_positive": 1,
+    "precision": {
+     "numerator": 1,
+     "denominator": 2,
+     "value": 0.5
+    },
+    "recall": {
+     "numerator": 1,
+     "denominator": 1,
+     "value": 1.0
+    }
+   },
+   "SPECIFICATION": {
+    "true_positive": 1,
+    "precision": {
+     "numerator": 1,
+     "denominator": 1,
+     "value": 1.0
+    },
+    "recall": {
+     "numerator": 1,
+     "denominator": 1,
+     "value": 1.0
+    }
+   }
+  },
+  "system_accuracy": {
+   "numerator": 5,
+   "denominator": 5,
+   "value": 1.0
+  },
+  "system_excluded": 0,
+  "attribution_accuracy": {
+   "numerator": 2,
+   "denominator": 4,
+   "value": 0.5
+  },
+  "attribution_accuracy_answered": {
+   "numerator": 2,
+   "denominator": 3,
+   "value": 0.6667
+  },
+  "attribution_side_accuracy": {
+   "numerator": 3,
+   "denominator": 4,
+   "value": 0.75
+  },
+  "attribution_unknown": {
+   "numerator": 1,
+   "denominator": 4,
+   "value": 0.25
+  },
+  "attribution_confusion": {
+   "OUR_SCOPE": {
+    "LIKELY_OUR_SCOPE": 1
+   },
+   "RELATED_EXTERNAL": {
+    "RELATED_EXTERNAL": 1,
+    "UNKNOWN": 1
+   },
+   "REFERENCE_ONLY": {
+    "REFERENCE_ONLY": 1
+   }
+  },
+  "false_supported_rate": {
+   "numerator": 0,
+   "denominator": 0,
+   "value": null
+  },
+  "false_our_scope_rate": {
+   "numerator": 0,
+   "denominator": 0,
+   "value": null
+  },
+  "false_our_scope_rate_incl_likely": {
+   "numerator": 0,
+   "denominator": 1,
+   "value": 0.0
+  }
+ },
+ "by_source": {
+  "ai": {
+   "labelled": 4,
+   "joined": 4,
+   "answered": 4,
+   "type_truth": 3,
+   "type_unmapped": 1,
+   "type_accuracy": {
+    "numerator": 1,
+    "denominator": 3,
+    "value": 0.3333
+   },
+   "per_type": {
+    "IFC_DRAWING": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     }
+    },
+    "MATERIAL_SUBMITTAL": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     }
+    },
+    "OTHER": {
+     "true_positive": 0,
+     "precision": {
+      "numerator": 0,
+      "denominator": 1,
+      "value": 0.0
+     },
+     "recall": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+     }
+    },
+    "SHOP_DRAWING": {
+     "true_positive": 1,
+     "precision": {
+      "numerator": 1,
+      "denominator": 2,
+      "value": 0.5
+     },
+     "recall": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     }
+    }
+   },
+   "system_accuracy": {
+    "numerator": 4,
+    "denominator": 4,
+    "value": 1.0
+   },
+   "system_excluded": 0,
+   "attribution_accuracy": {
+    "numerator": 2,
+    "denominator": 4,
+    "value": 0.5
+   },
+   "attribution_accuracy_answered": {
+    "numerator": 2,
+    "denominator": 3,
+    "value": 0.6667
+   },
+   "attribution_side_accuracy": {
+    "numerator": 3,
+    "denominator": 4,
+    "value": 0.75
+   },
+   "attribution_unknown": {
+    "numerator": 1,
+    "denominator": 4,
+    "value": 0.25
+   },
+   "attribution_confusion": {
+    "OUR_SCOPE": {
+     "LIKELY_OUR_SCOPE": 1
+    },
+    "RELATED_EXTERNAL": {
+     "RELATED_EXTERNAL": 1,
+     "UNKNOWN": 1
+    },
+    "REFERENCE_ONLY": {
+     "REFERENCE_ONLY": 1
+    }
+   },
+   "false_supported_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate_incl_likely": {
+    "numerator": 0,
+    "denominator": 1,
+    "value": 0.0
+   }
+  },
+  "rules": {
+   "labelled": 1,
+   "joined": 1,
+   "answered": 1,
+   "type_truth": 1,
+   "type_unmapped": 0,
+   "type_accuracy": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "per_type": {
+    "SPECIFICATION": {
+     "true_positive": 1,
+     "precision": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     },
+     "recall": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0
+     }
+    }
+   },
+   "system_accuracy": {
+    "numerator": 1,
+    "denominator": 1,
+    "value": 1.0
+   },
+   "system_excluded": 0,
+   "attribution_accuracy": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "attribution_accuracy_answered": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "attribution_side_accuracy": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "attribution_unknown": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "attribution_confusion": {},
+   "false_supported_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   },
+   "false_our_scope_rate_incl_likely": {
+    "numerator": 0,
+    "denominator": 0,
+    "value": null
+   }
+  }
+ },
+ "provisional": [
+  "attribution truth is derived from the labelled originator and system (derive_attribution), not labelled",
+  "the labels are a model's, from renders; the owner has not countersigned them",
+  "type truth covers mapped kinds only; system truth single-system labels only"
+ ],
+ "ai": {
+  "asked": 5,
+  "answered": 4,
+  "failed": 1,
+  "not_asked": 0,
+  "stages": {
+   "hint": 3,
+   "unknown": 1
+  },
+  "review_only": true,
+  "prompt_version": "m6-shadow-scripted-2026-10-08.1",
+  "provider": "recording"
+ }
+}

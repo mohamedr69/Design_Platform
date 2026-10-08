@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="20" skipped="0" tests="28" time="25.969" timestamp="2026-10-08T09:08:41.712783+04:00" hostname="LAPTOP-IL4L4UAJ"><testcase classname="tests.test_m6_merge_conditions" name="test_the_ai_pass_fills_the_stage_record_and_its_conflicts_carry_the_prompt_version" time="1.886" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[True-hint]" time="0.002" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[True-supported]" time="0.002" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[None-hint]" time="0.002" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[None-supported]" time="0.001" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[False-hint]" time="0.001" /><testcase classname="tests.test_m6_merge_conditions" name="test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[False-supported]" time="0.001" /><testcase classname="tests.test_m6_merge_conditions" name="test_a_models_ifc_answer_outside_the_given_folders_is_stored_as_not_ours" time="1.783" /><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_ai_arm_is_review_only_and_reports_each_source" time="1.270"><failure message="KeyError: 'review_only'">tmp_path = WindowsPath('C:/t/tmp/m6b/bt/test_the_harness_ai_arm_is_rev0')
+
+    def test_the_harness_ai_arm_is_review_only_and_reports_each_source(tmp_path):
+        engine = harness.open_clone(_clone(tmp_path / "clone.db", stored=False), live_url="sqlite:///:memory:")
+        report = harness.evaluate(engine, _labels(), harness.load_kind_map(), arm="ai", provider=RecordingProvider(list(ANSWERS)))
+        engine.dispose()
+        assert report["ai"]["asked"] == 5 and report["ai"]["answered"] == 4 and report["ai"]["failed"] == 1
+&gt;       assert report["ai"]["review_only"] is True and "supported" not in report["ai"]["stages"]
+E       KeyError: 'review_only'
+
+tests\test_m6_merge_conditions.py:150: KeyError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-high]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'SHOP_DRAWING', confidence = 'high'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-medium]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'SHOP_DRAWING', confidence = 'medium'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-low]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'SHOP_DRAWING', confidence = 'low'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-high]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'IFC_DRAWING', confidence = 'high'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-medium]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'IFC_DRAWING', confidence = 'medium'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-low]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'IFC_DRAWING', confidence = 'low'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-high]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'DATASHEET', confidence = 'high'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-medium]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'DATASHEET', confidence = 'medium'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-low]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'DATASHEET', confidence = 'low'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-high]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'OTHER', confidence = 'high'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-medium]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'OTHER', confidence = 'medium'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-low]" time="0.001"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'OTHER', confidence = 'low'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-high]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'UNKNOWN', confidence = 'high'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-medium]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'UNKNOWN', confidence = 'medium'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-low]" time="0.002"><failure message="AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'">kind = 'UNKNOWN', confidence = 'low'
+
+    @pytest.mark.parametrize("confidence", ["high", "medium", "low"])
+    @pytest.mark.parametrize("kind", ["SHOP_DRAWING", "IFC_DRAWING", "DATASHEET", "OTHER", "UNKNOWN"])
+    def test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way(kind, confidence):
+        row = _row("05- Misc/scan.pdf")
+        base = dc.hint(row.relative_path, row.filename, row.role)
+        verdict = {"primary_type": kind, "system_code": "FAS", "confidence": confidence}
+&gt;       ours = harness.review_only_assessment(row, base, verdict)
+E       AttributeError: module 'm6_shadow_eval' has no attribute 'review_only_assessment'
+
+tests\test_m6_merge_conditions.py:167: AttributeError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_the_harness_stored_arm_caps_a_stored_ai_answer_and_reports_each_source" time="1.433"><failure message="KeyError: 'stored'">tmp_path = WindowsPath('C:/t/tmp/m6b/bt/test_the_harness_stored_arm_ca0')
+
+    def test_the_harness_stored_arm_caps_a_stored_ai_answer_and_reports_each_source(tmp_path):
+        clone = _clone(tmp_path / "clone.db")
+        with sqlite3.connect(clone) as conn:   # the second document's stored answer is the model's, stored as supported
+            conn.execute("UPDATE document_classifications SET source = 'ai' WHERE document_id = "
+                         "(SELECT id FROM project_documents WHERE sha256 = ?)", ("a2" * 32,))
+        conn.close()
+        engine = harness.open_clone(clone, live_url="sqlite:///:memory:")
+        report = harness.evaluate(engine, _labels(), harness.load_kind_map(), arm="stored")
+        engine.dispose()
+&gt;       assert report["stored"]["ai_supported_capped"] == 1
+E       KeyError: 'stored'
+
+tests\test_m6_merge_conditions.py:185: KeyError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_a_weaker_claim_on_the_same_side_is_no_conflict_and_an_opposite_side_claim_is" time="4.792"><failure message="assert ([&lt;app.models....0233E6171D00&gt;] == []&#10;  &#10;  Left contains one more item: &lt;app.models.DocumentClassificationConflict object at 0x00000233E6171D00&gt;&#10;  Use -v to get more diff)">client = &lt;starlette.testclient.TestClient object at 0x00000233E4FEAA50&gt;
+db_session = &lt;sqlalchemy.orm.session.Session object at 0x00000233E5CF58E0&gt;
+tmp_path = WindowsPath('C:/t/tmp/m6b/bt/test_a_weaker_claim_on_the_sam0')
+ai = &lt;app.ai.provider.RecordingProvider object at 0x00000233E5CF7F20&gt;
+classification_on = None
+
+    def test_a_weaker_claim_on_the_same_side_is_no_conflict_and_an_opposite_side_claim_is(client, db_session, tmp_path, ai,
+                                                                                        classification_on):
+        project_id = _project(client, _folder(tmp_path, "30951"), "30951")
+        _sync(client, project_id)
+        drawing = _doc(db_session, project_id, "05- Drawings/L01.pdf")
+        ifc = _doc(db_session, project_id, "00- IFC/FA/IFC-L01.pdf")
+        automatic = _classifications(db_session, project_id)
+        rules_drawing, rules_ifc = automatic["05- Drawings/L01.pdf"], automatic["00- IFC/FA/IFC-L01.pdf"]
+        assert (rules_drawing.attribution, rules_ifc.attribution) == ("LIKELY_OUR_SCOPE", "RELATED_EXTERNAL")
+        _engineer(client, db_session, RoleEnum.design_manager, email="manager3@example.com")
+        project = db_session.get(Project, project_id)
+    
+        # OUR_SCOPE confirmed; the rules say LIKELY_OUR_SCOPE: the same side, no disagreement.
+        ours = _confirm(client, project_id, drawing.id, primary_type=rules_drawing.primary_type,
+                        system_code=rules_drawing.system_code, attribution="OUR_SCOPE", reason="our shop drawing").json()
+        # REFERENCE_ONLY confirmed; the rules say RELATED_EXTERNAL: not ours either way, no disagreement.
+        external = _confirm(client, project_id, ifc.id, primary_type=rules_ifc.primary_type, system_code=rules_ifc.system_code,
+                            attribution="REFERENCE_ONLY", reason="the consultant's sheet, for reference").json()
+        for _ in range(2):
+            dc.assess_row(db_session, project, db_session.get(ProjectDocument, drawing.id))
+            dc.assess_row(db_session, project, db_session.get(ProjectDocument, ifc.id))
+            db_session.commit()
+&gt;       assert _conflicts(db_session, ours["id"]) == [] and _conflicts(db_session, external["id"]) == []
+E       assert ([&lt;app.models....0233E6171D00&gt;] == []
+E         
+E         Left contains one more item: &lt;app.models.DocumentClassificationConflict object at 0x00000233E6171D00&gt;
+E         Use -v to get more diff)
+
+tests\test_m6_merge_conditions.py:222: AssertionError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_after_a_rules_bump_a_confirmed_row_is_re_marked_once_not_on_every_backfill" time="6.263"><failure message="AssertionError: one history row for the confirmed document, not one per backfill&#10;assert [4, 5, 6] == [4, 4, 4]&#10;  &#10;  At index 1 diff: 5 != 4&#10;  Use -v to get more diff">client = &lt;starlette.testclient.TestClient object at 0x00000233E5FD9D00&gt;
+db_session = &lt;sqlalchemy.orm.session.Session object at 0x00000233E64FF920&gt;
+tmp_path = WindowsPath('C:/t/tmp/m6b/bt/test_after_a_rules_bump_a_conf0')
+ai = &lt;app.ai.provider.RecordingProvider object at 0x00000233E61728D0&gt;
+classification_on = None
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000233E6171A90&gt;
+
+    def test_after_a_rules_bump_a_confirmed_row_is_re_marked_once_not_on_every_backfill(client, db_session, tmp_path, ai,
+                                                                                        classification_on, monkeypatch):
+        project_id = _project(client, _folder(tmp_path, "30952"), "30952")
+        _sync(client, project_id)
+        document = _doc(db_session, project_id, "05- Drawings/L01.pdf")
+        _engineer(client, db_session, RoleEnum.design_manager, email="manager4@example.com")
+        confirmed = _confirm(client, project_id, document.id).json()     # IFC_DRAWING / RELATED_EXTERNAL: the rules disagree
+        project = db_session.get(Project, project_id)
+        monkeypatch.setattr(dc, "RULES_VERSION", "classify-next")
+    
+        def rows() -&gt; int:
+            return db_session.query(DocumentClassification).filter(DocumentClassification.document_id == document.id).count()
+    
+        before = rows()
+        runs = []
+        for _ in range(3):
+            result = dc.backfill(db_session, project)
+            runs.append((result["assessed"], result["skipped"], result["failed"], rows()))
+&gt;       assert [r[3] for r in runs] == [before + 1] * 3, "one history row for the confirmed document, not one per backfill"
+E       AssertionError: one history row for the confirmed document, not one per backfill
+E       assert [4, 5, 6] == [4, 4, 4]
+E         
+E         At index 1 diff: 5 != 4
+E         Use -v to get more diff
+
+tests\test_m6_merge_conditions.py:257: AssertionError</failure></testcase><testcase classname="tests.test_m6_merge_conditions" name="test_a_changed_input_fingerprint_marks_the_attribution_stale_and_the_backfill_re_attributes_once" time="5.910"><failure message="KeyError: 'attribution_stale'">client = &lt;starlette.testclient.TestClient object at 0x00000233E6175760&gt;
+db_session = &lt;sqlalchemy.orm.session.Session object at 0x00000233E6561A90&gt;
+tmp_path = WindowsPath('C:/t/tmp/m6b/bt/test_a_changed_input_fingerpri0')
+ai = &lt;app.ai.provider.RecordingProvider object at 0x00000233E61735F0&gt;
+classification_on = None
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000233E61713A0&gt;
+
+    def test_a_changed_input_fingerprint_marks_the_attribution_stale_and_the_backfill_re_attributes_once(client, db_session,
+                                                                                                        tmp_path, ai,
+                                                                                                        classification_on,
+                                                                                                        monkeypatch):
+        project_id = _project(client, _folder(tmp_path, "30953"), "30953")
+        _sync(client, project_id)
+        ifc = _doc(db_session, project_id, "00- IFC/FA/IFC-L01.pdf")
+        _engineer(client, db_session, RoleEnum.design_manager, email="manager5@example.com")
+        confirmed = _confirm(client, project_id, ifc.id).json()
+    
+        def listing() -&gt; dict:
+            return {r["path"]: r["classification"] for r in client.get(f"/projects/{project_id}/documents/classification").json()}
+    
+&gt;       assert all(c["attribution_stale"] is False for c in listing().values())
+
+tests\test_m6_merge_conditions.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;dict_valueiterator object at 0x00000233E66B96C0&gt;
+
+&gt;   assert all(c["attribution_stale"] is False for c in listing().values())
+E   KeyError: 'attribution_stale'
+
+tests\test_m6_merge_conditions.py:283: KeyError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,32 @@
+........................................................................ [ 30%]
+........................................................................ [ 61%]
+........................................................................ [ 91%]
+....................                                                     [100%]
+============================== warnings summary ===============================
+..\..\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40
+  G:\dev (2)\dev\ep-platform-merged\ep-platform\backend\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_document_classification_v2.py: 11 warnings
+tests/test_document_classification_pilot.py: 9 warnings
+tests/test_m6_attribution.py: 13 warnings
+tests/test_document_classification_ai.py: 11 warnings
+tests/test_drawings_chat.py: 8 warnings
+tests/test_drawings_module.py: 28 warnings
+tests/test_migrations.py: 1 warning
+tests/test_worker_runtime.py: 3 warnings
+tests/test_document_sync.py: 12 warnings
+tests/test_file_sync_v2_processing.py: 14 warnings
+tests/test_projects.py: 38 warnings
+tests/test_repair_tool.py: 3 warnings
+tests/test_m6_merge_conditions.py: 6 warnings
+  G:\dev (2)\dev\ep-platform-merged\wt-m6b\backend\alembic\versions\e1f2a3b4c5d7_ifc_worker_identity_and_ai_review.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_document_classification_pilot.py::test_a_classification_write_that_fails_in_the_database_leaves_the_sync_and_its_session_whole
+  G:\dev (2)\dev\ep-platform-merged\wt-m6b\backend\tests\test_document_classification_pilot.py:63: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    assert db_session.query(Project).get(project_id).ep_number == "30930"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+----------- generated xml file: C:\t\tmp\m6b\out\final-targeted.xml -----------
+236 passed, 159 warnings in 407.50s (0:06:47)

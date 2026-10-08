@@ -1,0 +1,122 @@
+{
+ "baseline": {
+  "file": "docs/milestones/M6/evidence/merge-and-conditions/baseline-orch047-merged-full.xml",
+  "source": "C:/t/tmp/owner-work/merged-full.xml (ORCH-047, tree c865993a)",
+  "sha256": "f3f5c5f29681863ef174d9fc37edf06c4bd17f97b9e58533275cf8a2583fa69e",
+  "totals": {
+   "tests": 1926,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1890,
+   "time_s": 2194.992
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  'SIGA-OSD-FCN'\n  '3-SDDC2'"
+   }
+  }
+ },
+ "merged": {
+  "file": "docs/milestones/M6/evidence/merge-and-conditions/full-suite.xml",
+  "totals": {
+   "tests": 1981,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1945,
+   "time_s": 2062.763
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  'SIGA-OSD-FCN'\n  '3-SSDC2'\n  '3-SDDC2'"
+   }
+  }
+ },
+ "new_failures_vs_baseline": [],
+ "fixed_since_baseline": [],
+ "same_name_vs_baseline": {
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "same_message": true
+  }
+ },
+ "tests_missing_vs_baseline": [],
+ "tests_added_vs_baseline": [
+  "tests.test_m6_attribution::test_a_confirmation_is_refused_when_classification_is_off_or_the_request_is_not_a_confirmation",
+  "tests.test_m6_attribution::test_a_folder_of_drawings_given_to_us_is_external_related_by_the_system",
+  "tests.test_m6_attribution::test_a_later_confirmation_supersedes_the_earlier_one_and_agreement_is_no_conflict",
+  "tests.test_m6_attribution::test_a_producing_stage_fills_its_stage_record_slots_and_the_backfill_its_job",
+  "tests.test_m6_attribution::test_a_project_with_confirmations_and_conflicts_can_still_be_deleted",
+  "tests.test_m6_attribution::test_a_shop_drawing_outside_those_folders_is_likely_ours_unless_the_drf_says_another_party_draws",
+  "tests.test_m6_attribution::test_a_stored_title_block_originator_decides_ours_or_another_partys",
+  "tests.test_m6_attribution::test_a_title_block_discipline_that_is_not_ours_is_reference_only_and_ours_says_nothing_alone",
+  "tests.test_m6_attribution::test_an_engineer_confirms_with_an_audit_event_and_no_automated_run_supersedes_it",
+  "tests.test_m6_attribution::test_attribution_never_fails_the_classification_and_the_processing",
+  "tests.test_m6_attribution::test_freshness_keeps_its_semantics_under_a_rules_bump_and_ignores_the_attribution_version",
+  "tests.test_m6_attribution::test_nothing_to_go_on_is_unknown_and_disagreeing_evidence_is_kept_not_resolved",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[admin]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[draftsman]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[fire_alarm_estimation_engineer]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[viewer]",
+  "tests.test_m6_attribution::test_the_attribution_and_the_stage_record_are_stored_and_listed",
+  "tests.test_m6_attribution::test_the_confirmation_and_its_audit_event_are_one_transaction",
+  "tests.test_m6_attribution::test_the_derived_attribution_truth_is_provisional_and_rule_bound",
+  "tests.test_m6_attribution::test_the_harness_ai_arm_asks_only_a_scripted_provider_and_only_for_weak_answers",
+  "tests.test_m6_attribution::test_the_harness_on_a_synthetic_clone_stored_arm",
+  "tests.test_m6_attribution::test_the_harness_refuses_the_platforms_own_database_and_a_missing_clone",
+  "tests.test_m6_attribution::test_the_harness_rules_arm_reruns_this_checkouts_rules_on_the_stored_reading",
+  "tests.test_m6_attribution::test_the_intake_association_is_our_scope",
+  "tests.test_m6_attribution::test_the_kind_map_is_reviewed_data_covering_every_labelled_kind_with_the_unmapped_listed",
+  "tests.test_m6_attribution::test_unknown_is_never_in_or_out_of_scope",
+  "tests.test_m6_merge_conditions::test_a_changed_input_fingerprint_marks_the_attribution_stale_and_the_backfill_re_attributes_once",
+  "tests.test_m6_merge_conditions::test_a_models_ifc_answer_outside_the_given_folders_is_stored_as_not_ours",
+  "tests.test_m6_merge_conditions::test_a_weaker_claim_on_the_same_side_is_no_conflict_and_an_opposite_side_claim_is",
+  "tests.test_m6_merge_conditions::test_after_a_rules_bump_a_confirmed_row_is_re_marked_once_not_on_every_backfill",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[False-hint]",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[False-supported]",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[None-hint]",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[None-supported]",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[True-hint]",
+  "tests.test_m6_merge_conditions::test_an_ifc_drawing_type_outside_the_given_folders_never_claims_our_scope[True-supported]",
+  "tests.test_m6_merge_conditions::test_the_ai_pass_fills_the_stage_record_and_its_conflicts_carry_the_prompt_version",
+  "tests.test_m6_merge_conditions::test_the_backfill_never_replaces_the_models_answer_to_re_attribute_it",
+  "tests.test_m6_merge_conditions::test_the_harness_ai_arm_is_review_only_and_reports_each_source",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-high]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-low]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[DATASHEET-medium]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-high]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-low]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[IFC_DRAWING-medium]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-high]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-low]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[OTHER-medium]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-high]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-low]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[SHOP_DRAWING-medium]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-high]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-low]",
+  "tests.test_m6_merge_conditions::test_the_harness_and_the_live_pass_read_a_model_answer_the_same_way[UNKNOWN-medium]",
+  "tests.test_m6_merge_conditions::test_the_harness_stored_arm_caps_a_stored_ai_answer_and_reports_each_source"
+ ],
+ "m6_branch": {
+  "file": "docs/milestones/M6/evidence/attribution/full-suite.xml",
+  "totals": {
+   "tests": 1917,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "passed": 1881,
+   "time_s": 2273.521
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  'SIGA-OSD-FCN'\n  '3-SDDC2'"
+   }
+  },
+  "tests_missing_in_merged": [],
+  "new_failures_in_merged": []
+ }
+}
