@@ -493,6 +493,11 @@ class Settings(BaseSettings):
     # EP-30880: 06-WALL, 11-GLASS-1, 10-SILL; finishes drawn along a wall (23-WALL-TILES)
     # are not. Case-insensitive; walls.NOT_WALLS still refuses what it names.
     prep_wall_layers: str = r"^(?!.*(?:TILE|FINISH)).*(?:WALL|PARTITION|CURTAIN|GLASS|GLAZ|SILL)"
+    # The title block, sheet frame and border (engineer decision 1, A-16, 8 October
+    # 2026): content under a block of the INSERT chain whose own name is like these
+    # is neither a wall nor a room boundary, whatever layer it inherits (EP-30880:
+    # the CCSD file's T.FRAM on 06-WALL). Case-insensitive; "" turns the rule off.
+    prep_frame_blocks: str = r"T\.FRAM|TITLE|FRAME|BORDER|SHEET"
     # The interface schedule's damper pictures (app.interfaces.render): drawn in
     # a child process with a deadline per picture and for opening the drawing;
     # an overrun kills the child and that window is reported unread, never

@@ -16,7 +16,11 @@ point of it further than the detector's radius (6.3 m) from one.
             covered yet, half a metre clear of the walls, clear of the
             columns.
 
-Distances are in the drawing's units, taken as metres (as the walls).
+Distances are in the drawing's units, taken as metres (as the walls). The
+lengths a build measures (the boundaries' total against MIN_BOUNDS_M, a
+column's size) are converted to metres by the drawing's $INSUNITS first; a
+drawing without a known unit keeps no boundaries and no columns: held "not
+measured, units unknown" (engineer decision 3, A-16; M3 P-07).
 """
 from __future__ import annotations
 
@@ -29,7 +33,8 @@ from pathlib import Path
 
 import numpy as np
 
-VERSION = 3                 # 3 (M8): effective layers and visibility, the rules' fingerprint in the name
+VERSION = 4                 # 3 (M8): effective layers and visibility, the rules' fingerprint in the name
+                            # 4 (ORCH-044, A-16): title/frame rule, TAG not a boundary, units, meshes counted
 CELL = 2.0                  # the columns' grid, as the walls'
 MIN_SIDE, MAX_SIDE = 0.15, 2.5
 MAX_ASPECT = 5.0
@@ -47,7 +52,9 @@ GAP_TOLERANCE = 0.01        # a room is covered when no more than this share of 
 # (EP-30880: 06-WALL, 14-DOOR, 11-GLASS-1, 10-SILL, 08-COLUMN); a drawing
 # that does not is closed by its double lines alone (double_lines).
 BOUND_LAYERS = re.compile(r"WALL|DOOR|GLASS|GLAZ|SILL|WINDOW|WIN|CURTAIN|PARTITION|COLUMN|COLS?|S-COL", re.I)
-NOT_BOUNDS = re.compile(r"TILE|HTCH|HATCH|TEXT|DIM|FINISH", re.I)
+# TAG (engineer decision 5, A-16): a door tag's symbol is no boundary (EP-30880
+# X-REF_ TAG$0$49-DOOR-TAG, matched by DOOR above).
+NOT_BOUNDS = re.compile(r"TILE|HTCH|HATCH|TEXT|DIM|FINISH|TAG", re.I)
 MIN_BOUNDS_M = 200.0        # the named boundaries trusted only when the drawing has this much of them
 
 
@@ -79,21 +86,25 @@ class Columns:
         return None
 
 
-def columns_path(project, drawing, sha: str | None, *, layers: str | None = None) -> Path:
+def columns_path(project, drawing, sha: str | None, *, layers: str | None = None,
+                 deny_blocks: str | None = None) -> Path:
     from app.ifc import storage
+    from app.redesign.walls import frame_rules
 
     if layers is None:
         from app.core.config import get_settings
 
         layers = get_settings().prep_column_layers
-    rules = f"{layers}\n{BOUND_LAYERS.pattern}\n{NOT_BOUNDS.pattern}".encode("utf-8")
+    frame, annotation = frame_rules(deny_blocks)
+    rules = f"{layers}\n{BOUND_LAYERS.pattern}\n{NOT_BOUNDS.pattern}\n{frame}\n{annotation}\nINSUNITS->m".encode("utf-8")
     return (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign"
             / f"columns-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}-{hashlib.sha256(rules).hexdigest()[:12]}.pkl"
             ).resolve()
 
 
-def _column_box(item) -> tuple[float, float, float, float] | None:
-    """A column-sized closed shape's model extent (through its INSERT chain)."""
+def _column_box(item, factor: float = 1.0) -> tuple[float, float, float, float] | None:
+    """A column-sized closed shape's model extent (through its INSERT chain);
+    its size judged in metres (`factor`: metres per drawing unit)."""
     from app.redesign.layers import model_vertices
 
     entity = item.entity
@@ -106,7 +117,7 @@ def _column_box(item) -> tuple[float, float, float, float] | None:
     if not vertices:
         return None
     xs, ys = [v.x for v in vertices], [v.y for v in vertices]
-    w, h = max(xs) - min(xs), max(ys) - min(ys)
+    w, h = (max(xs) - min(xs)) * factor, (max(ys) - min(ys)) * factor
     if not (MIN_SIDE <= w <= MAX_SIDE and MIN_SIDE <= h <= MAX_SIDE) or max(w, h) / min(w, h) > MAX_ASPECT:
         return None
     return (round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3))
@@ -128,20 +139,27 @@ BOUND_KINDS = {"LINE", "LWPOLYLINE", "POLYLINE", "ARC"}
 COLUMN_KINDS = {"LWPOLYLINE", "POLYLINE", "HATCH", "SOLID", "CIRCLE"}
 
 
-def build_columns(dxf_path: Path, out: Path, layers: str, check=None, *, viewport: str | None = None) -> Columns:
+def build_columns(dxf_path: Path, out: Path, layers: str, check=None, *, viewport: str | None = None,
+                  deny_blocks: str | None = None, annotation_blocks: str | None = None) -> Columns:
     """Every column-sized shape on a column layer, and every line of the
     room boundaries (BOUND_LAYERS), at any depth (the architect's background
     is one large block), kept in a 2 m grid. By the wall index's rules
     (app.redesign.layers, M8): the effective layer's own name, and only what
     is shown -- a hidden boundary does not close a room, a hidden column is
-    not kept clear of."""
+    not kept clear of; a title block's, frame's or border's content (and a
+    dimension / text block's inherited content) is neither (A-16 decision 1,
+    `deny_blocks` as walls.build); lengths in metres by $INSUNITS, and
+    nothing kept when the drawing's unit is unknown (A-16 decision 3)."""
     import ezdxf
 
     from app.redesign import layers as L
-    from app.redesign.walls import Walls
+    from app.redesign.walls import Walls, frame_rules
 
     wanted = re.compile(layers, re.I)
+    frame = L.FrameRule(*frame_rules(deny_blocks, annotation_blocks))
     doc = ezdxf.readfile(dxf_path)
+    units = L.drawing_units(doc)
+    factor = units["factor_to_m"] or 1.0
     vp = L.viewport_info(doc, viewport) if viewport else None
     table = L.LayerTable(doc, vp["frozen_layers"] if vp else ())
     stats = L.WalkStats()
@@ -151,6 +169,7 @@ def build_columns(dxf_path: Path, out: Path, layers: str, check=None, *, viewpor
     seen = set()
     hidden: dict[str, int] = {}
     bound_layers: dict[str, float] = {}
+    meshes = {"polyface": 0, "polygon_mesh": 0}
     for item in L.walk(doc, BOUND_KINDS | COLUMN_KINDS, table, check=check, stats=stats):
         layer = L.local_name(item.layer)
         is_bound = (item.entity.dxftype() in BOUND_KINDS and BOUND_LAYERS.search(layer)
@@ -158,31 +177,43 @@ def build_columns(dxf_path: Path, out: Path, layers: str, check=None, *, viewpor
         is_column = item.entity.dxftype() in COLUMN_KINDS and wanted.search(layer)
         if not (is_bound or is_column):
             continue
-        if item.reason:
-            hidden[item.reason] = hidden.get(item.reason, 0) + 1
+        why = item.reason or frame.reason(item)
+        if why:
+            hidden[why] = hidden.get(why, 0) + 1
+            continue
+        if L.is_mesh(item.entity):
+            # A-16 decision 7: a mesh is not read as a boundary or a column -- counted
+            meshes[L.mesh_kind(item.entity)] += 1
             continue
         if is_bound:
             vertices = L.model_vertices(item)
             for a, b in zip(vertices, vertices[1:]):
-                length = math.hypot(b.x - a.x, b.y - a.y)
+                length = math.hypot(b.x - a.x, b.y - a.y) * factor
                 if length >= 0.05:
                     _add_segment(bounds, (round(a.x, 4), round(a.y, 4), round(b.x, 4), round(b.y, 4)))
                     total += length
                     bound_layers[item.layer] = bound_layers.get(item.layer, 0.0) + length
         if not is_column:
             continue
-        box = _column_box(item)
+        box = _column_box(item, factor)
         if box is None or box in seen:
             continue
         seen.add(box)
         for i in range(int(math.floor(box[0] / CELL)), int(math.floor(box[2] / CELL)) + 1):
             for j in range(int(math.floor(box[1] / CELL)), int(math.floor(box[3] / CELL)) + 1):
                 cells.setdefault((i, j), []).append(box)
-    kept = bounds if total >= MIN_BOUNDS_M else {}
-    report = {"version": VERSION, "viewport": vp, "walk": stats.to_dict(), "columns": len(seen),
-              "bounds_length_m": round(total, 3), "bounds_kept": bool(kept),
+    held = None if units["known"] else "units_unknown"
+    if held:
+        # not measured, units unknown: no boundary closes a room, no column is claimed
+        cells, found_columns = {}, len(seen)
+    else:
+        found_columns = len(seen)
+    kept = bounds if (total >= MIN_BOUNDS_M and not held) else {}
+    report = {"version": VERSION, "viewport": vp, "walk": stats.to_dict(), "columns": 0 if held else found_columns,
+              "columns_found": found_columns, "bounds_length_m": round(total, 3), "bounds_kept": bool(kept),
               "bounds_layers": {k: round(v, 3) for k, v in sorted(bound_layers.items())},
-              "hidden": dict(sorted(hidden.items()))}
+              "hidden": dict(sorted(hidden.items())), "units": units, "held": held, "rules": frame.rules(),
+              "mesh_not_read": meshes}
     found = Columns(cells, Walls(kept) if kept else None)
     found.report = report
     out.parent.mkdir(parents=True, exist_ok=True)

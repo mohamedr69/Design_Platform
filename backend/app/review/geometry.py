@@ -32,10 +32,30 @@ def _norm(text: str) -> str:
     return re.sub(r"[^A-Z0-9]", "", (text or "").upper())
 
 
-def fit(page, model_texts: list[tuple[str, float, float]]) -> dict | None:
+def _turn(rot_deg: float, u: float, v: float) -> tuple[float, float]:
+    if not rot_deg:
+        return u, v
+    c, s = math.cos(math.radians(rot_deg)), math.sin(math.radians(rot_deg))
+    return c * u - s * v, s * u + c * v
+
+
+def fit(page, model_texts: list[tuple[str, float, float]], view: dict | None = None) -> dict | None:
     """The page-to-model transform of one sheet -- X = a*x + bx, Y = -a*y + by
     (the page's y runs down) -- from the texts printed once on the page and
-    once in the sheet's part of the drawing. None when too few agree."""
+    once in the sheet's part of the drawing. None when too few agree.
+
+    The rotation term (F021, engineer decision 6, A-16): a sheet plotted
+    through a viewport twisted by t degrees shows the model turned by t, so
+    the page (y up) is turned back by -t onto the model: (X, Y) =
+    a * R(-t) * (x, -y) + (bx, by), `rot_deg` = -t on the result. `view` is
+    the sheet's viewport (its twist, centre, scale and frozen layers,
+    `sheet_view`); without one, or untwisted, the transform is the one above,
+    unchanged. The agreement rule decides as before: a twist the printed
+    texts do not bear out ties nothing (None)."""
+    if view is not None and view.get("mixed"):
+        return None                       # viewports turned differently on one sheet: no one transform
+    rot = -float(view.get("twist_deg") or 0.0) if view else 0.0
+    rot = 0.0 if abs(rot) < 1e-9 else rot
     model: dict[str, list] = defaultdict(list)
     for text, x, y in model_texts:
         key = _norm(text)
@@ -61,19 +81,76 @@ def fit(page, model_texts: list[tuple[str, float, float]]) -> dict | None:
     if len(scales) < 3:
         return None
     a = statistics.median(scales)
-    bx = statistics.median(m[0] - a * p[0] for p, m in pairs)
-    by = statistics.median(m[1] + a * p[1] for p, m in pairs)
-    residuals = sorted(math.dist((a * p[0] + bx, -a * p[1] + by), m) for p, m in pairs)
+    if rot:
+        turned = [(_turn(rot, p[0], -p[1]), m) for p, m in pairs]
+        bx = statistics.median(m[0] - a * q[0] for q, m in turned)
+        by = statistics.median(m[1] - a * q[1] for q, m in turned)
+        residuals = sorted(math.dist((a * q[0] + bx, a * q[1] + by), m) for q, m in turned)
+    else:
+        bx = statistics.median(m[0] - a * p[0] for p, m in pairs)
+        by = statistics.median(m[1] + a * p[1] for p, m in pairs)
+        residuals = sorted(math.dist((a * p[0] + bx, -a * p[1] + by), m) for p, m in pairs)
     agree = sum(1 for r in residuals if r <= 3.0)
     # most matched texts must land where the drawing has them
     if agree < max(4, len(pairs) // 2):
         return None
-    return {"v": FIT_VERSION, "a": a, "bx": bx, "by": by, "pairs": len(pairs),
-            "residual": round(residuals[len(residuals) // 2], 2)}
+    out = {"v": FIT_VERSION, "a": a, "bx": bx, "by": by, "pairs": len(pairs),
+           "residual": round(residuals[len(residuals) // 2], 2)}
+    if rot:
+        out["rot_deg"] = rot
+    if view is not None:
+        out["view"] = view
+    return out
 
 
 def to_model(geometry: dict, x: float, y: float) -> tuple[float, float]:
-    return geometry["a"] * x + geometry["bx"], -geometry["a"] * y + geometry["by"]
+    rot = geometry.get("rot_deg") or 0.0
+    if not rot:
+        return geometry["a"] * x + geometry["bx"], -geometry["a"] * y + geometry["by"]
+    u, v = _turn(rot, x, -y)
+    return geometry["a"] * u + geometry["bx"], geometry["a"] * v + geometry["by"]
+
+
+def to_page(geometry: dict, x: float, y: float) -> tuple[float, float]:
+    """The inverse of to_model: where a model point is on the plotted page."""
+    a, rot = geometry["a"], geometry.get("rot_deg") or 0.0
+    if not rot:
+        return (x - geometry["bx"]) / a, (geometry["by"] - y) / a
+    u, v = _turn(-rot, (x - geometry["bx"]) / a, (y - geometry["by"]) / a)
+    return u, -v
+
+
+def sheet_view(doc, layout_name: str) -> dict | None:
+    """The viewport information of one sheet (a paper-space layout) for the
+    fit and the wall index (engineer decision 6, A-16): its model viewport's
+    handle, twist, view centre, scale and frozen layers; `mixed` when its
+    viewports are twisted differently; None when it has none."""
+    try:
+        layout = doc.layouts.get(layout_name)
+    except Exception:  # noqa: BLE001 -- not a layout: no viewport
+        return None
+    if layout is None:
+        return None
+    views = []
+    for v in layout.query("VIEWPORT"):
+        try:
+            c = v.dxf.view_center_point
+            if abs(c.x - v.dxf.center.x) < 1e-6 and abs(c.y - v.dxf.center.y) < 1e-6:
+                continue                  # the sheet's own paper-space viewport (as ifc.dxf.sheets)
+            height = float(v.dxf.view_height or 0.0)
+            views.append({"handle": str(v.dxf.handle), "twist_deg": float(v.dxf.get("view_twist_angle", 0.0) or 0.0),
+                          "view_center": [float(c.x), float(c.y)], "view_height": height,
+                          "scale": (float(v.dxf.height) / height) if height else None,
+                          "frozen_layers": sorted(v.frozen_layers or [])})
+        except Exception:  # noqa: BLE001 -- an unreadable viewport is not this sheet's view
+            continue
+    if not views:
+        return None
+    if len({round(w["twist_deg"], 6) for w in views}) > 1:
+        return {"mixed": True, "viewports": views}
+    if len(views) == 1:
+        return views[0]
+    return {**views[0], "viewports": views}
 
 
 def fit_sheets(project, drawing, pdf_path: str, sheets: list[dict]) -> None:
@@ -99,7 +176,9 @@ def fit_sheets(project, drawing, pdf_path: str, sheets: list[dict]) -> None:
     pdf = pymupdf.open(pdf_path)
     try:
         for sh in sheets:
-            found = fit(pdf[sh["index"]], by_sheet.get(sh["name"], [])) if sh["index"] < pdf.page_count else None
+            view = sheet_view(doc, sh["name"])
+            found = (fit(pdf[sh["index"]], by_sheet.get(sh["name"], []), view)
+                     if sh["index"] < pdf.page_count else None)
             sh["geometry"] = found or {"v": FIT_VERSION, "error": "The plot could not be tied to the drawing."}
     finally:
         pdf.close()

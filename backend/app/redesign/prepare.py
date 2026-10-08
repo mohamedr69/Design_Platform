@@ -236,9 +236,15 @@ def rooms(changes: list[dict], sheets: dict, walls, cols) -> list[dict]:
     """The rooms the new detectors are in: one group a room (a device whose
     room could not be closed is a group of its own). With no named
     boundaries, a wall index that is missing or too sparse to close a room
-    by leaves every room not measured (M3 P-07), and says so."""
+    by leaves every room not measured (M3 P-07), and says so. A wall index
+    held for a reason of its own -- the drawing's unit unknown (A-16 decision
+    3), MLINE walls the index does not read with a sparse line index (A-16
+    decision 4) -- leaves every room not measured whatever else closes it."""
     groups: list[dict] = []
-    unmeasurable = (cols is None or cols.bounds is None) and (walls is None or bool(getattr(walls, "sparse", False)))
+    held = getattr(walls, "held", None) if walls is not None else None
+    forced = held in ("units_unknown", "mline_unsupported")
+    unmeasurable = forced or ((cols is None or cols.bounds is None)
+                              and (walls is None or bool(getattr(walls, "sparse", False))))
     for c in changes:
         if not is_detector(c) or "box" not in c:
             continue
@@ -250,9 +256,9 @@ def rooms(changes: list[dict], sheets: dict, walls, cols) -> list[dict]:
                       and g["room"].contains(x, y)), None)
         if group is None:
             group = {"key": f"{c['page']}:{round(x, 1)}:{round(y, 1)}", "page": c["page"], "name": c.get("room") or "",
-                     "room": C.room_at(walls, cols, x, y), "changes": []}
+                     "room": None if forced else C.room_at(walls, cols, x, y), "changes": []}
             if unmeasurable:
-                group["index"] = "missing" if walls is None else "sparse"
+                group["index"] = ("missing" if walls is None else walls.held_detail() if forced else "sparse")
             groups.append(group)
         group["changes"].append(c)
     return groups
@@ -505,7 +511,8 @@ def coordinate(db, project, pdf: str, sha: str, sheets: dict, changes: list[dict
     erased = {(c.get("remove") or {}).get("handle") for c in changes if c.get("remove")}
     groups = rooms(changes, sheets, walls, cols)
     stats = {"rooms": len(groups), "issues": 0, "agent_rooms": 0, "agent_calls": 0, "moved": 0, "added": 0,
-             "refused": 0, "open_rooms": 0, "gaps_left": 0, "columns": len(cols) if cols is not None else None}
+             "refused": 0, "open_rooms": 0, "gaps_left": 0, "columns": len(cols) if cols is not None else None,
+             "wall_index": index_state(walls, cols)}
     plans = {}
     say(0, max(1, len(groups)), f"Coordination: measuring {len(groups)} room{'s' if len(groups) != 1 else ''} "
                                 f"against the detector radius")
@@ -743,6 +750,24 @@ def review(db, project, sha: str, sheets: dict, changes: list[dict], cols, budge
 # --- the gate ---------------------------------------------------------------------------------
 
 
+def index_state(walls, cols) -> dict:
+    """The drawing's wall and boundary indexes as the gate reads them: held
+    "not measured" for a reason of the index's own (A-16 decisions 3 and 4)
+    or not -- what the index's report says, never a guess."""
+    held = getattr(walls, "held", None) if walls is not None else None
+    out = {"walls": "missing" if walls is None else (held or "measured"),
+           "columns": None if cols is None else ((getattr(cols, "report", None) or {}).get("held") or "measured")}
+    if held in ("units_unknown", "mline_unsupported"):
+        out["detail"] = walls.held_detail()
+    report = getattr(walls, "report", None) or {}
+    for key in ("mline_unsupported", "mesh_not_read"):
+        if report.get(key):
+            out[key] = {k: v for k, v in report[key].items() if k != "layers"}
+    if report.get("units"):
+        out["units"] = {k: report["units"].get(k) for k in ("unit", "factor_to_m", "known", "insunits")}
+    return out
+
+
 def gate(changes: list[dict], coordination: dict, reviewed: dict, cols) -> dict:
     """Whether the drawing is ready for the draftsman, by the platform's own
     count -- never the agents' word alone."""
@@ -750,6 +775,13 @@ def gate(changes: list[dict], coordination: dict, reviewed: dict, cols) -> dict:
 
     mine = [c for c in changes if c.get("source") != R.INTERFACE and c["status"] != "skipped"]
     reasons = []
+    index = coordination.get("wall_index") or {}
+    if index.get("walls") in ("units_unknown", "mline_unsupported"):
+        # A-16 decisions 3 and 4: the drawing is not measured, and says why
+        reasons.append(f"the drawing's wall index is {index.get('detail') or index['walls']}: "
+                       "coverage and wall placement not measured")
+    elif index.get("columns") == "units_unknown":
+        reasons.append("the drawing's columns and boundaries are not measured, units unknown")
     failed = sum(1 for c in mine if c["status"] == "failed")
     if failed:
         reasons.append(f"{failed} change{'s' if failed != 1 else ''} could not be placed")

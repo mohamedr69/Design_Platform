@@ -23,19 +23,45 @@ same (ezdxf's fixed metadata for testing). Units are metres.
                 whose xref prefix carries deny-list words; 240 m of
                 boundary only reachable through layer-"0" inheritance
   f7_denylist   layer names NOT_WALLS gets wrong both ways
+
+The engineer's decisions (A-16, ORCH-044) added:
+
+  f8_title_frame    a title frame (CCSD > ...$0$T.FRAM, layer "0") inheriting
+                    06-WALL, a BORDER block with explicit wall lines, an
+                    X-REF_ DIM_TEXT block on 06-WALL, and 240 m of real wall
+  f9_mline          walls drawn as MLINEs (and one MLINE off the wall layers,
+                    one on a frozen wall layer) beside a sparse line index
+  f10_meshes        a polyface and a polygon mesh on a wall layer, wall
+                    lines and a wall arc
+  f11_bounds_hidden named boundaries: 300 m shown, a frozen and an invisible
+                    wall line and an INSERT on a frozen wall layer (400 m by
+                    the raw-layer rule of the base code, 300 m now)
+  u1..u4            the same 301.6 m of wall, a short stub and a 0.4 m column
+                    in metres, millimetres, inches, and unitless ($INSUNITS 0)
+  f12_rotated_view  eight room names in model space seen through a viewport
+                    twisted 30 degrees (the plot is drawn from it by the test)
+
+Determinism (U2M8V-03): the CLASSES section is written in a fixed order
+(ezdxf adds the drawing's own entity classes from a set, whose order follows
+the hash seed) and every file is written with LF line ends, so any run, any
+PYTHONHASHSEED and any platform writes the same bytes (git keeps them as
+written: .gitattributes "backend/tests/fixtures_m8/*.dxf -text").
 """
 from __future__ import annotations
 
+import io
+import math
 from pathlib import Path
 
 import ezdxf
+from ezdxf.sections.classes import REQ_R2004, REQUIRED_CLASSES
 
 HERE = Path(__file__).resolve().parent
 
 
-def new():
+def new(insunits: int = 6):
     doc = ezdxf.new("R2018", setup=False)
-    doc.header["$INSUNITS"] = 6
+    doc.header["$INSUNITS"] = insunits
     return doc, doc.modelspace()
 
 
@@ -47,7 +73,14 @@ def layers(doc, *names):
 
 def save(doc, name: str) -> Path:
     path = HERE / name
-    doc.saveas(path)
+    doc.commit_pending_changes()
+    # the CLASSES in a fixed order: the required ones, then the drawing's own types sorted
+    for cls in REQUIRED_CLASSES.get(doc.dxfversion, REQ_R2004):
+        doc.classes.add_class(cls)
+    for dxftype in sorted(doc.entitydb.dxf_types_in_use()):
+        doc.classes.add_class(dxftype)
+    with io.open(path, mode="wt", encoding=doc.output_encoding, errors="dxfreplace", newline="\n") as f:
+        doc.write(f)
     return path
 
 
@@ -181,13 +214,132 @@ def f7_denylist():
     return save(doc, "f7_denylist.dxf")
 
 
-ALL = (f1_simple, f2_nested, f3_states, f4_invisible, f5_viewport, f6_xref, f7_denylist)
+def f8_title_frame():
+    doc, msp = new()
+    layers(doc, "06-WALL", "A-WALL")
+    frame = doc.blocks.new("X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM", base_point=(0, 0))
+    frame.add_lwpolyline([(0, 0), (120, 0), (120, 90), (0, 90)], close=True, dxfattribs={"layer": "0"})
+    ccsd = doc.blocks.new("CCSD", base_point=(0, 0))
+    ccsd.add_blockref("X-REF_ FILE ALL FLOORS PLANS$0$T.FRAM", (0, 0), dxfattribs={"layer": "0"})
+    border = doc.blocks.new("BORDER-A1", base_point=(0, 0))
+    border.add_line((0, -10), (50, -10), dxfattribs={"layer": "A-WALL"})
+    border.add_line((0, -10.2), (50, -10.2), dxfattribs={"layer": "A-WALL"})
+    dim = doc.blocks.new("X-REF_ DIM_TEXT", base_point=(0, 0))
+    dim.add_line((0, 0), (5, 0), dxfattribs={"layer": "0"})            # inherits 06-WALL: annotation
+    dim.add_line((0, 1), (4, 1), dxfattribs={"layer": "06-WALL"})      # its own wall layer: a wall
+    msp.add_blockref("CCSD", (0, 0), dxfattribs={"layer": "06-WALL"})
+    msp.add_blockref("BORDER-A1", (0, 0), dxfattribs={"layer": "A-WALL"})
+    msp.add_blockref("X-REF_ DIM_TEXT", (10, 40), dxfattribs={"layer": "06-WALL"})
+    msp.add_line((0, 10), (120, 10), dxfattribs={"layer": "06-WALL"})
+    msp.add_line((0, 10.2), (120, 10.2), dxfattribs={"layer": "06-WALL"})
+    return save(doc, "f8_title_frame.dxf")
+
+
+def f9_mline():
+    doc, msp = new()
+    layers(doc, "06-WALL", "A-FURN", "06-WALL-FROZEN")
+    doc.layers.get("06-WALL-FROZEN").freeze()
+    for y in (0, 5, 10):
+        msp.add_mline([(0, y), (10, y)], dxfattribs={"layer": "06-WALL"})
+    msp.add_mline([(0, 20), (10, 20)], dxfattribs={"layer": "A-FURN"})
+    msp.add_mline([(0, 30), (10, 30)], dxfattribs={"layer": "06-WALL-FROZEN"})
+    msp.add_line((0, -5), (5, -5), dxfattribs={"layer": "06-WALL"})
+    return save(doc, "f9_mline.dxf")
+
+
+def f10_meshes():
+    doc, msp = new()
+    layers(doc, "06-WALL")
+    face = msp.add_polyface(dxfattribs={"layer": "06-WALL"})
+    face.append_face([(0, 0, 0), (10, 0, 0), (10, 0, 3), (0, 0, 3)])
+    face.append_face([(0, 0.2, 0), (10, 0.2, 0), (10, 0.2, 3), (0, 0.2, 3)])
+    grid = msp.add_polymesh((3, 3), dxfattribs={"layer": "06-WALL"})
+    for m in range(3):
+        for n in range(3):
+            grid.set_mesh_vertex((m, n), (20 + 5 * m, 5 * n, 0))
+    msp.add_line((0, 20), (10, 20), dxfattribs={"layer": "06-WALL"})
+    msp.add_line((0, 20.2), (10, 20.2), dxfattribs={"layer": "06-WALL"})
+    msp.add_arc((0, 40), 5, 0, 90, dxfattribs={"layer": "06-WALL"})
+    return save(doc, "f10_meshes.dxf")
+
+
+def f11_bounds_hidden():
+    doc, msp = new()
+    layers(doc, "06-WALL", "A-WALL-FROZEN")
+    doc.layers.get("A-WALL-FROZEN").freeze()
+    for y in (0, 0.2, 10):
+        msp.add_line((0, y), (100, y), dxfattribs={"layer": "06-WALL"})            # 300 m shown
+    msp.add_line((0, 20), (50, 20), dxfattribs={"layer": "A-WALL-FROZEN"})        # 50 m frozen
+    msp.add_line((0, 30), (50, 30), dxfattribs={"layer": "06-WALL", "invisible": 1})   # 50 m invisible
+    bx = doc.blocks.new("BX", base_point=(0, 0))
+    bx.add_line((0, 0), (100, 0), dxfattribs={"layer": "0"})
+    msp.add_blockref("BX", (0, 40), dxfattribs={"layer": "A-WALL-FROZEN"})        # 100 m, inherits frozen
+    return save(doc, "f11_bounds_hidden.dxf")
+
+
+UNITS = (("u1_metres.dxf", 6, 1.0), ("u2_millimetres.dxf", 4, 1000.0), ("u3_inches.dxf", 1, 1.0 / 0.0254),
+         ("u4_unitless.dxf", 0, 1.0))
+
+
+def _units(name: str, insunits: int, k: float):
+    """301.6 m of double wall, a 0.25 m stub, a 0.4 m column; k drawing units a metre."""
+    doc, msp = new(insunits)
+    layers(doc, "06-WALL", "08-COLUMN")
+
+    def p(x, y):
+        return (round(x * k, 6), round(y * k, 6))
+
+    for o in (0.0, 0.2):
+        corners = [p(-o, -o), p(50 + o, -o), p(50 + o, 25 + o), p(-o, 25 + o)]
+        for a, b in zip(corners, corners[1:] + corners[:1]):
+            msp.add_line(a, b, dxfattribs={"layer": "06-WALL"})
+    msp.add_line(p(60, 0), p(60.25, 0), dxfattribs={"layer": "06-WALL"})
+    msp.add_lwpolyline([p(10, 10), p(10.4, 10), p(10.4, 10.4), p(10, 10.4)], close=True,
+                       dxfattribs={"layer": "08-COLUMN"})
+    return save(doc, name)
+
+
+def u_units():
+    return [_units(*spec) for spec in UNITS]
+
+
+ROTATED = {"twist": 30.0, "center": (210.0, 148.5), "size": (380.0, 260.0), "view_center": (50.0, 30.0),
+           "view_height": 100.0}
+ROTATED_TEXTS = (("STORE ROOM", -40, -25), ("PUMP ROOM", 0, -30), ("ELEC ROOM", 45, -20), ("LOBBY HALL", -45, 10),
+                 ("CORRIDOR", 5, 0), ("MEETING", 50, 15), ("OFFICE 01", -20, 30), ("PANTRY", 30, 32))
+
+
+def f12_rotated_view():
+    """Room names at points of the view (DCS, around its centre), placed in the
+    model turned back by the twist: through the viewport they print where
+    the view has them."""
+    doc, msp = new()
+    layers(doc, "A-ANNO")
+    t = math.radians(ROTATED["twist"])
+    cx, cy = ROTATED["view_center"]
+    for text, dx, dy in ROTATED_TEXTS:
+        u, v = cx + dx, cy + dy
+        x, y = math.cos(t) * u + math.sin(t) * v, -math.sin(t) * u + math.cos(t) * v      # R(-twist)
+        msp.add_text(text, height=1.0, dxfattribs={"layer": "A-ANNO", "insert": (round(x, 6), round(y, 6))})
+    sheet = doc.layouts.new("FA-201")
+    vp = sheet.add_viewport(center=ROTATED["center"], size=ROTATED["size"], view_center_point=ROTATED["view_center"],
+                            view_height=ROTATED["view_height"])
+    vp.dxf.view_twist_angle = ROTATED["twist"]
+    return save(doc, "f12_rotated_view.dxf")
+
+
+ALL = (f1_simple, f2_nested, f3_states, f4_invisible, f5_viewport, f6_xref, f7_denylist, f8_title_frame, f9_mline,
+       f10_meshes, f11_bounds_hidden, u_units, f12_rotated_view)
 
 
 def main() -> list[Path]:
     ezdxf.options.write_fixed_meta_data_for_testing = True
     try:
-        return [make() for make in ALL]
+        out: list[Path] = []
+        for make in ALL:
+            made = make()
+            out.extend(made if isinstance(made, list) else [made])
+        return out
     finally:
         ezdxf.options.write_fixed_meta_data_for_testing = False
 

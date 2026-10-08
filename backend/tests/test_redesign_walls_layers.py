@@ -158,14 +158,21 @@ def test_f2_the_transforms_agree_with_ezdxfs_own_explosion(tmp_path):
 
 def test_f3_layers_off_frozen_and_no_plot_and_inserts_on_hidden_layers_are_not_walls(tmp_path):
     walls = _build(tmp_path, "f3_states.dxf")
-    assert _kept(walls) == {(0.0, 0.0, 3.0, 0.0), (30.0, 0.0, 33.0, 0.0), (30.0, 1.0, 33.0, 1.0)}
+    # Engineer decision 2 (A-16, ORCH-044), the AutoCAD rule: B0 on an off layer hides
+    # only its layer-"0" line; its explicit A-WALL line (20,1)-(23,1) is shown and kept
+    # (was insert_layer_off under ORCH-036 item 3). B0 on a frozen layer hides both.
+    assert _kept(walls) == {(0.0, 0.0, 3.0, 0.0), (30.0, 0.0, 33.0, 0.0), (30.0, 1.0, 33.0, 1.0),
+                            (20.0, 1.0, 23.0, 1.0)}
     assert _reasons(walls) == {
         ("A-WALL-OFF", "layer_off"): 1, ("A-WALL-FROZEN", "layer_frozen"): 1, ("A-WALL-NOPLOT", "layer_no_plot"): 1,
         ("Defpoints", "layer_no_plot"): 1,
-        ("X-INS-FROZEN", "layer_frozen"): 1, ("A-WALL", "insert_layer_frozen"): 1,     # B0 on a frozen layer
-        ("X-INS-OFF", "layer_off"): 1, ("A-WALL", "insert_layer_off"): 1,              # B0 on an off layer
+        # B0 on a frozen layer: insert_layer_frozen for all its content (decision 2; the
+        # inherited line was layer_frozen)
+        ("X-INS-FROZEN", "insert_layer_frozen"): 1, ("A-WALL", "insert_layer_frozen"): 1,
+        # B0 on an off layer: insert_layer_off for the inherited line only (decision 2)
+        ("X-INS-OFF", "insert_layer_off"): 1,
         ("08-COLUMN", "not_allow_listed"): 4, ("08-COLUMN-OFF", "layer_off"): 4}
-    assert walls.report["layers"]["A-WALL"]["excluded"] == {"insert_layer_frozen": 1, "insert_layer_off": 1}
+    assert walls.report["layers"]["A-WALL"]["excluded"] == {"insert_layer_frozen": 1}
     # the columns index reads by the same rules: the column on the off layer is not kept clear of
     cols = C.build_columns(FIX / "f3_states.dxf", tmp_path / "cols.pkl", get_settings().prep_column_layers)
     assert {b for boxes in cols.cells.values() for b in boxes} == {(40.0, 0.0, 40.5, 0.5)}
@@ -208,8 +215,9 @@ def test_f6_bound_xref_layers_are_read_by_their_own_name_and_inherit_through_the
     assert _kept(walls) == {(0.0, 0.0, 120.0, 0.0), (0.0, 0.2, 120.0, 0.2),     # layer "0" in the xref block
                             (0.0, 20.0, 4.0, 20.0),                              # FIRE ALARM only in the prefix
                             (0.0, 50.0, 4.0, 50.0)}                              # 11-GLASS-1
+    # the frozen copy's layer-"0" lines: insert_layer_frozen (engineer decision 2, A-16; was layer_frozen)
     assert _reasons(walls) == {("X-ARCH$0$02-CAB", "not_allow_listed"): 1, ("X-ARCH$0$02-CAB", "insert_layer_frozen"): 1,
-                               ("X-FRZ-XREF", "layer_frozen"): 2, ("X-ARCH$0$29-PARKING", "deny_listed"): 1,
+                               ("X-FRZ-XREF", "insert_layer_frozen"): 2, ("X-ARCH$0$29-PARKING", "deny_listed"): 1,
                                ("X-PLOT$0$A-NORTH", "layer_frozen"): 1}
     assert walls.report["layers"]["X-ARCH$0$06-WALL"]["via_insert"] == 2
     # the named boundaries: 248 m, reachable only through layer "0" inheritance
@@ -261,7 +269,8 @@ def test_the_saved_index_carries_its_report_and_its_name_its_version_and_rules(t
     project, drawing = SimpleNamespace(ep_number=30880), SimpleNamespace(id=1)
     sha = "66043c11fab9eaf5" + "0" * 48
     path = W.path_for(project, drawing, sha)
-    assert W.VERSION == 2 and path.name == f"walls-1-66043c11fab9eaf5-v2-{W.fingerprint()}.pkl"
+    # version 3 (ORCH-044): the engineer's decisions 1-4 and 7 (A-16) change what a build keeps
+    assert W.VERSION == 3 and path.name == f"walls-1-66043c11fab9eaf5-v3-{W.fingerprint()}.pkl"
     assert W.path_for(project, drawing, sha, allow="WALL") != path
     assert W.path_for(project, drawing, sha, deny="GRID") != path
     assert W.path_for(project, drawing, sha) == path
@@ -277,7 +286,8 @@ def test_the_saved_index_carries_its_report_and_its_name_its_version_and_rules(t
     assert W.load(path) is None
     # the columns index too: its rules in its name, a new version
     cpath = C.columns_path(project, drawing, sha)
-    assert C.VERSION == 3 and cpath.name.startswith("columns-1-66043c11fab9eaf5-v3-")
+    # version 4 (ORCH-044): decisions 1, 3, 5 and 7 (A-16) change what a build keeps
+    assert C.VERSION == 4 and cpath.name.startswith("columns-1-66043c11fab9eaf5-v4-")
     assert C.columns_path(project, drawing, sha, layers="PILLAR") != cpath
 
 

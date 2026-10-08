@@ -18,6 +18,23 @@ viewport the index is built for, the entity and every INSERT above it
 visible -- and whose layer's own name is on the wall allow-list
 (settings.prep_wall_layers) and not on NOT_WALLS. Every segment met is
 counted in the index's layer composition report, kept or not and why.
+
+The engineer's decisions (A-16, 8 October 2026; ORCH-044):
+  1 a title block's, sheet frame's or border's content (any block of the
+    INSERT chain named like settings.prep_frame_blocks), and layer-"0"
+    content of a dimension / text block put on a wall layer, is no wall:
+    reason title_frame (layers.FrameRule; per build: deny_blocks=);
+  2 an INSERT on an off / no-plot layer hides only its layer-"0" content,
+    a frozen one all of it (layers.walk);
+  3 lengths are converted to metres by the drawing's $INSUNITS before the
+    200 m threshold and the report; a drawing without a known unit gives an
+    index held "not measured, units unknown" (Walls.held), never measured;
+    the cells stay in the drawing's own coordinates;
+  4 MLINE is not read as wall geometry: the report counts the MLINEs on
+    wall layers (mline_unsupported), and a sparse index with them is held
+    for that reason;
+  7 arcs are wall candidates; polyface / polygon meshes are not read and are
+    counted (mesh_not_read).
 """
 from __future__ import annotations
 
@@ -36,11 +53,18 @@ NOT_WALLS = re.compile(r"GRID|AXIS|DIM|TEXT|NAME|ANNO|TAG|FURN|CAR|PARK|SYMBOL|F
                        r"|EXIT|SIGN|DOOR|WIN|TITLE|LEVEL|ROOM|HATCH|ARROW|STAIR", re.I)
 # 1: every line not on NOT_WALLS by its raw layer. 2 (M8): effective layer,
 # visibility, allow-list, composition report; the rules' fingerprint in the name.
-VERSION = 2
+# 3 (ORCH-044, A-16): title/frame rule, the AutoCAD off-layer INSERT rule, lengths
+# in metres by $INSUNITS (held when unknown), MLINE and meshes reported.
+VERSION = 3
 KINDS = {"LINE", "LWPOLYLINE", "POLYLINE", "ARC"}
+# met in the walk only to be counted, never read as a line (decision 4)
+UNREAD_KINDS = {"MLINE"}
 # Under this much kept wall the index cannot close a room: coverage is "not
 # measured" (M3 P-07), never measured against no walls (as coverage.MIN_BOUNDS_M).
+# Metres (engineer decision 3, A-16: kept at 200 m, lengths converted first).
 MIN_WALLS_M = 200.0
+# Why a built index is held "not measured" (Walls.held), the first that applies.
+UNITS_UNKNOWN, MLINE_UNSUPPORTED, SPARSE = "units_unknown", "mline_unsupported", "sparse"
 
 
 class Walls:
@@ -53,13 +77,54 @@ class Walls:
         self.detail: list[dict] | None = None
 
     @property
+    def units_unknown(self) -> bool:
+        """A built index of a drawing whose length unit is not known (A-16 3)."""
+        return self.report is not None and not (self.report.get("units") or {}).get("known", True)
+
+    @property
     def sparse(self) -> bool:
-        """A built index with too little kept wall to close a room by."""
+        """A built index with too little kept wall to close a room by -- or
+        one whose length cannot be had in metres (units unknown), which is
+        never taken for enough."""
         if self.report is None:
             return False
+        if self.units_unknown:
+            return True
         return self.report["totals"]["included_length_m"] < MIN_WALLS_M
 
+    @property
+    def held(self) -> str | None:
+        """Why the index is held "not measured" (M3 P-07), or None: units
+        unknown (A-16 3); MLINE walls not read and a sparse line index
+        (A-16 4, mline_unsupported); sparse."""
+        if self.report is None:
+            return None
+        if self.units_unknown:
+            return UNITS_UNKNOWN
+        if not self.sparse:
+            return None
+        if (self.report.get("mline_unsupported") or {}).get("count"):
+            return MLINE_UNSUPPORTED
+        return SPARSE
+
+    def held_detail(self) -> str:
+        """The held reason in words, for the issue and the gate."""
+        why = self.held
+        if why == UNITS_UNKNOWN:
+            u = self.report.get("units") or {}
+            return (f"not measured, units unknown ($INSUNITS {u.get('insunits')}, $MEASUREMENT "
+                    f"{u.get('measurement')}, $LUNITS {u.get('lunits')})")
+        if why == MLINE_UNSUPPORTED:
+            m = self.report["mline_unsupported"]
+            return (f"sparse, mline_unsupported ({m['count']} MLINE on wall layers, {m['length_m']} m, "
+                    "not read as walls)")
+        return why or ""
+
     def near(self, x: float, y: float, radius: float) -> list[tuple[float, float, float, float]]:
+        if self.units_unknown:
+            # held (A-16 3): no wall of an unknown unit is offered to a placement,
+            # a snap or a room (ORCH-044, U2-prep-fallback F-07 where it is "unknown")
+            return []
         out = []
         r = int(math.ceil(radius / CELL))
         cx, cy = int(math.floor(x / CELL)), int(math.floor(y / CELL))
@@ -179,21 +244,38 @@ def rules(allow: str | None = None, deny: str | None = None) -> tuple[str, str]:
     return allow, (NOT_WALLS.pattern if deny is None else deny)
 
 
-def fingerprint(allow: str | None = None, deny: str | None = None, viewport: str | None = None) -> str:
+def frame_rules(deny_blocks: str | None = None, annotation_blocks: str | None = None) -> tuple[str, str]:
+    """The title/frame block rule a build uses (engineer decision 1, A-16):
+    the given one, else settings.prep_frame_blocks; and the dimension / text
+    block rule for inherited content, else layers.ANNOTATION_BLOCKS."""
+    from app.redesign import layers as L
+
+    if deny_blocks is None:
+        from app.core.config import get_settings
+
+        deny_blocks = get_settings().prep_frame_blocks
+    return deny_blocks, (L.ANNOTATION_BLOCKS if annotation_blocks is None else annotation_blocks)
+
+
+def fingerprint(allow: str | None = None, deny: str | None = None, viewport: str | None = None, *,
+                deny_blocks: str | None = None, annotation_blocks: str | None = None) -> str:
     """The rules' fingerprint, in the saved index's name: an index built under
     other rules is never read for these."""
     allow, deny = rules(allow, deny)
+    deny_blocks, annotation_blocks = frame_rules(deny_blocks, annotation_blocks)
     text = json.dumps({"v": VERSION, "allow": allow, "deny": deny, "viewport": viewport, "kinds": sorted(KINDS),
-                       "min": MIN_LENGTH}, sort_keys=True)
+                       "min": MIN_LENGTH, "deny_blocks": deny_blocks, "annotation_blocks": annotation_blocks,
+                       "units": "INSUNITS->m", "min_walls_m": MIN_WALLS_M}, sort_keys=True)
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
 
 
 def path_for(project, drawing, sha: str | None, *, allow: str | None = None, deny: str | None = None,
-             viewport: str | None = None) -> Path:
+             viewport: str | None = None, deny_blocks: str | None = None) -> Path:
     from app.ifc import storage
 
     return (storage.uploads_root() / f"EP-{project.ep_number}" / "redesign"
-            / f"walls-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}-{fingerprint(allow, deny, viewport)}.pkl").resolve()
+            / f"walls-{drawing.id}-{(sha or 'x')[:16]}-v{VERSION}-"
+              f"{fingerprint(allow, deny, viewport, deny_blocks=deny_blocks)}.pkl").resolve()
 
 
 def _add(cells: dict, seg: tuple[float, float, float, float]) -> None:
@@ -210,23 +292,33 @@ def _add(cells: dict, seg: tuple[float, float, float, float]) -> None:
 
 
 def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, deny: str | None = None,
-          viewport: str | None = None, detail: bool = False) -> Walls:
+          viewport: str | None = None, detail: bool = False, deny_blocks: str | None = None,
+          annotation_blocks: str | None = None) -> Walls:
     """Read every line of the drawing, at any depth, into the grid (a minute
     or two for a large drawing), and save it with its layer composition.
 
     `allow` / `deny`: the wall layers' regular expressions for this build
     (default: settings.prep_wall_layers and NOT_WALLS), matched,
-    case-insensitively, on the effective layer's own name. `viewport`: the
-    handle of the paper-space VIEWPORT the index is built for (its frozen
-    layers are not walls); the index stays in model coordinates. `detail`:
-    keep every segment's record on the returned index (tests, evidence)."""
+    case-insensitively, on the effective layer's own name. `deny_blocks`:
+    the title/frame/border block names of this build (default:
+    settings.prep_frame_blocks; "" turns the rule off), `annotation_blocks`
+    the dimension / text blocks whose layer-"0" content is no wall (default
+    layers.ANNOTATION_BLOCKS). `viewport`: the handle of the paper-space
+    VIEWPORT the index is built for (its frozen layers are not walls); the
+    index stays in model coordinates. `detail`: keep every segment's record
+    on the returned index (tests, evidence). Lengths are in metres by the
+    drawing's $INSUNITS; without a known unit the index is held (Walls.held)."""
     import ezdxf
 
     from app.redesign import layers as L
 
     allow, deny = rules(allow, deny)
+    deny_blocks, annotation_blocks = frame_rules(deny_blocks, annotation_blocks)
     wanted, refused = re.compile(allow, re.I), re.compile(deny, re.I)
+    frame = L.FrameRule(deny_blocks, annotation_blocks)
     doc = ezdxf.readfile(dxf_path)
+    units = L.drawing_units(doc)
+    factor = units["factor_to_m"] or 1.0          # unknown: kept in drawing units, and held
     vp = L.viewport_info(doc, viewport) if viewport else None
     table = L.LayerTable(doc, vp["frozen_layers"] if vp else ())
     stats = L.WalkStats()
@@ -234,6 +326,9 @@ def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, de
     composition: dict[str, dict] = {}
     records: list[dict] | None = [] if detail else None
     verdicts: dict[str, str | None] = {}
+    mline = {"count": 0, "length_m": 0.0, "hidden": 0, "title_frame": 0, "layers": {}}
+    meshes = {"polyface": 0, "polygon_mesh": 0, "on_wall_layers": 0, "layers": {}}
+    frames: dict[str, dict] = {}
 
     def layer_verdict(layer: str) -> str | None:
         if layer not in verdicts:
@@ -242,7 +337,28 @@ def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, de
                                None if wanted.search(own) else "not_allow_listed")
         return verdicts[layer]
 
-    for item in L.walk(doc, KINDS, table, check=check, stats=stats):
+    for item in L.walk(doc, KINDS | UNREAD_KINDS, table, check=check, stats=stats):
+        kind = item.entity.dxftype()
+        framed = frame.reason(item)
+        if kind in UNREAD_KINDS:
+            # decision 4: an MLINE is not read; one on a wall layer is reported
+            if layer_verdict(item.layer) is None:
+                if item.reason:
+                    mline["hidden"] += 1
+                elif framed:
+                    mline["title_frame"] += 1
+                else:
+                    mline["count"] += 1
+                    mline["length_m"] += L.mline_length(item) * factor
+                    mline["layers"][item.layer] = mline["layers"].get(item.layer, 0) + 1
+            continue
+        if L.is_mesh(item.entity):
+            # decision 7: a polyface / polygon mesh is not read as a line, and is counted
+            meshes[L.mesh_kind(item.entity)] += 1
+            meshes["layers"][item.layer] = meshes["layers"].get(item.layer, 0) + 1
+            if layer_verdict(item.layer) is None:
+                meshes["on_wall_layers"] += 1
+            continue
         vertices = L.model_vertices(item)
         row = composition.get(item.layer)
         if row is None:
@@ -250,8 +366,9 @@ def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, de
                                              "excluded": {}, "via_insert": 0, "top_level": 0,
                                              "included_via_insert": 0}
         for a, b in zip(vertices, vertices[1:]):
-            length = math.hypot(b.x - a.x, b.y - a.y)
-            reason = "below_min_length" if length < MIN_LENGTH else (item.reason or layer_verdict(item.layer))
+            length = math.hypot(b.x - a.x, b.y - a.y) * factor
+            reason = ("below_min_length" if length < MIN_LENGTH else
+                      (item.reason or framed or layer_verdict(item.layer)))
             seg = (round(a.x, 4), round(a.y, 4), round(b.x, 4), round(b.y, 4))
             row["segments"] += 1
             row["length_m"] += length
@@ -263,10 +380,17 @@ def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, de
                 _add(cells, seg)
             else:
                 row["excluded"][reason] = row["excluded"].get(reason, 0) + 1
+            if reason == "title_frame":
+                for block in frame.blocks(item)[:1]:
+                    f = frames.setdefault(block, {"segments": 0, "length_m": 0.0, "layers": {}})
+                    f["segments"] += 1
+                    f["length_m"] += length
+                    f["layers"][item.layer] = f["layers"].get(item.layer, 0) + 1
             if records is not None:
                 records.append({"seg": seg, "layer": item.layer, "raw_layer": item.raw_layer, "reason": reason,
-                                "kind": item.entity.dxftype(), "chain": list(item.chain)})
-    report = _report(composition, stats, allow, deny, vp)
+                                "kind": kind, "chain": list(item.chain), "length_m": round(length, 6)})
+    report = _report(composition, stats, allow, deny, vp, units=units, frame=frame.rules(), mline=mline,
+                     meshes=meshes, frames=frames)
     walls = Walls(cells, report)
     walls.detail = records
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -276,7 +400,8 @@ def build(dxf_path: Path, out: Path, check=None, *, allow: str | None = None, de
     return walls
 
 
-def _report(composition: dict, stats, allow: str, deny: str, vp: dict | None) -> dict:
+def _report(composition: dict, stats, allow: str, deny: str, vp: dict | None, *, units: dict, frame: dict,
+            mline: dict, meshes: dict, frames: dict) -> dict:
     layers = {}
     totals = {"segments": 0, "length_m": 0.0, "included": 0, "included_length_m": 0.0, "excluded": {},
               "via_insert": 0, "included_via_insert": 0}
@@ -297,11 +422,23 @@ def _report(composition: dict, stats, allow: str, deny: str, vp: dict | None) ->
     totals["length_m"] = round(totals["length_m"], 3)
     totals["included_length_m"] = round(totals["included_length_m"], 3)
     totals["excluded"] = dict(sorted(totals["excluded"].items()))
-    return {"version": VERSION, "rules": {"allow": allow, "deny": deny, "fingerprint": fingerprint(allow, deny,
-                                                                                                    vp and vp["handle"]),
-                                          "min_length": MIN_LENGTH, "kinds": sorted(KINDS)},
-            "viewport": vp, "walk": stats.to_dict(), "totals": totals,
-            "sparse": totals["included_length_m"] < MIN_WALLS_M, "layers": layers}
+    mline = {**mline, "length_m": round(mline["length_m"], 3), "layers": dict(sorted(mline["layers"].items()))}
+    meshes = {**meshes, "layers": dict(sorted(meshes["layers"].items()))}
+    frames = {k: {**v, "length_m": round(v["length_m"], 3), "layers": dict(sorted(v["layers"].items()))}
+              for k, v in sorted(frames.items())}
+    # units unknown: the length is not in metres, so "sparse" cannot be decided -- held instead
+    sparse = None if not units["known"] else totals["included_length_m"] < MIN_WALLS_M
+    held = (UNITS_UNKNOWN if not units["known"] else
+            (MLINE_UNSUPPORTED if mline["count"] else SPARSE) if sparse else None)
+    return {"version": VERSION, "rules": {"allow": allow, "deny": deny, **frame,
+                                          "fingerprint": fingerprint(allow, deny, vp and vp["handle"],
+                                                                     deny_blocks=frame["deny_blocks"],
+                                                                     annotation_blocks=frame["annotation_blocks"]),
+                                          "min_length": MIN_LENGTH, "min_walls_m": MIN_WALLS_M,
+                                          "kinds": sorted(KINDS)},
+            "units": units, "viewport": vp, "walk": stats.to_dict(), "totals": totals,
+            "sparse": sparse, "held": held, "mline_unsupported": mline, "mesh_not_read": meshes,
+            "title_frame_blocks": frames, "layers": layers}
 
 
 def load(path: Path) -> Walls | None:

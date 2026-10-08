@@ -207,18 +207,39 @@ _VECTORS = {"up": (0.0, 1.0), "down": (0.0, -1.0), "left": (-1.0, 0.0), "right":
 _WALLS: dict[str, object] = {}
 
 
-def _walls(project: Project, drawing: ProjectIfcDrawing, sha: str | None, *, build: bool = False, check=None):
+def _index_viewport(sheets) -> str | None:
+    """The viewport the drawing's wall index is built for (engineer decision
+    6, A-16): the sheets' viewports as the review's fit read them
+    (geometry["view"], review.geometry.sheet_view). One index serves every
+    sheet, so a viewport is passed only when every sheet with a view freezes
+    the same layers in it (that index is then right for all of them); none
+    when no viewport freezes a layer (the model-space index is the same) or
+    when the sheets freeze different layers (the model-space index, as
+    before -- reported, ORCH-044)."""
+    views = [(sh.get("geometry") or {}).get("view") for sh in (sheets.values() if isinstance(sheets, dict)
+                                                                else sheets or [])]
+    views = [v for v in views if v and not v.get("mixed") and v.get("handle")]
+    frozen = {tuple(v.get("frozen_layers") or ()) for v in views}
+    if len(frozen) != 1 or not next(iter(frozen)):
+        return None
+    return sorted(v["handle"] for v in views)[0]
+
+
+def _walls(project: Project, drawing: ProjectIfcDrawing, sha: str | None, *, build: bool = False, check=None,
+           sheets=None):
     """The drawing's walls (app.redesign.walls): read from the saved index,
-    built from the drawing when `build` (in a job -- it takes a minute)."""
+    built from the drawing when `build` (in a job -- it takes a minute); for
+    the sheets' viewport where `_index_viewport` names one."""
     from app.redesign import walls as W
 
-    path = W.path_for(project, drawing, sha)
+    viewport = _index_viewport(sheets) if sheets else None
+    path = W.path_for(project, drawing, sha, viewport=viewport)
     key = str(path)
     if key in _WALLS:
         return _WALLS[key]
     found = W.load(path)
     if found is None and build and storage.dxf_path(drawing).is_file():
-        found = W.build(storage.dxf_path(drawing), path, check=check)
+        found = W.build(storage.dxf_path(drawing), path, check=check, viewport=viewport)
     if found is not None:
         _WALLS[key] = found
     return found
@@ -395,7 +416,8 @@ def _top_level(drawing: ProjectIfcDrawing, measure: set[str] | None = None
 
 
 def _page(g: dict, x: float, y: float) -> list[float]:
-    return [round((x - g["bx"]) / g["a"], 2), round((g["by"] - y) / g["a"], 2)]
+    px, py = G.to_page(g, x, y)           # with the fit's rotation term (F021, A-16 decision 6)
+    return [round(px, 2), round(py, 2)]
 
 
 def _model(g: dict, px: float, py: float) -> list[float]:
@@ -709,7 +731,8 @@ def add_interfaces(db: Session, project: Project, drawing_id: int) -> dict:
     occurrences = _occurrences(resolved_drawing(db, drawing, with_occurrences=True))
     top, blocks, sizes = _top_level(drawing, _measured(occurrences))
     symbols = _all_symbols(occurrences, blocks, sizes, sheets)
-    walls = _walls(project, drawing, row.source_sha256 or review_row.source_sha256, build=True)
+    walls = _walls(project, drawing, row.source_sha256 or review_row.source_sha256, build=True,
+                    sheets=sheets)
     generated = _interface_changes(db, project, sheets, occurrences, top, symbols, walls, built=built)
     changes = [dict(c) for c in _merge_interfaces(row.changes or [], generated, {c["id"]: c for c in row.changes or []})]
     for c in changes:
@@ -1335,7 +1358,7 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
         changes += [old for old in row.changes or []
                     if old.get("source") not in (INTERFACE, PR.COVERAGE) and old["id"] not in present]
         say(0, 1, "Reading the drawing's walls (once per drawing)")
-        walls = _walls(project, drawing, review_row.source_sha256, build=True, check=check)
+        walls = _walls(project, drawing, review_row.source_sha256, build=True, check=check, sheets=sheets)
         kept: dict[str, dict] = {}
         try:
             verified, built = interfaces_verified(db, project)
@@ -1456,7 +1479,7 @@ def adjust(db: Session, project: Project, drawing_id: int, change_id: str, *, st
         was = change["status"]
         change["status"] = "pending"
         drawing = db.get(ProjectIfcDrawing, drawing_id)
-        walls = _walls(project, drawing, row.source_sha256)
+        walls = _walls(project, drawing, row.source_sha256, sheets=review_row.sheets)
         if change.get("source") == INTERFACE:
             _place_module(change, sheet, row.symbols or [], answer, walls)
         else:
@@ -1483,7 +1506,7 @@ def _measure_again(db: Session, project: Project, drawing_id: int, row: ProjectR
     drawing = db.get(ProjectIfcDrawing, drawing_id)
     review_row = (db.query(ProjectDrawingReview)
                   .filter(ProjectDrawingReview.project_id == project.id, ProjectDrawingReview.drawing_id == drawing_id).first())
-    walls = _walls(project, drawing, row.source_sha256)
+    walls = _walls(project, drawing, row.source_sha256, sheets=review_row.sheets if review_row is not None else None)
     if walls is None or review_row is None:
         return
     try:
@@ -1610,7 +1633,7 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
                               ProjectDrawingReview.drawing_id == drawing.id).first())
         changes = [dict(c) for c in row.changes or []]
         if coordinate(changes, {sh["index"]: sh for sh in review_row.sheets or []},
-                      _walls(project, drawing, row.source_sha256), row.symbols or [],
+                      _walls(project, drawing, row.source_sha256, sheets=review_row.sheets), row.symbols or [],
                       PR.columns(project, drawing, row.source_sha256)):
             row.changes = changes
             db.commit()
@@ -1622,7 +1645,7 @@ def refresh(db: Session, project: Project, drawing: ProjectIfcDrawing, row: Proj
     _top, blocks, sizes = _top_level(drawing, _measured(occurrences))
     symbols = _all_symbols(occurrences, blocks, sizes, sheets)
     changes = [dict(c) for c in row.changes or []]
-    walls = _walls(project, drawing, row.source_sha256, build=True)
+    walls = _walls(project, drawing, row.source_sha256, build=True, sheets=sheets)
     again = 0
     for change in changes:
         if not change.get("insert") or "box" not in change:
