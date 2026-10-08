@@ -1,0 +1,86 @@
+{
+ "counts": {
+  "orch047": {
+   "total": 1926,
+   "passed": 1890,
+   "skipped": 35,
+   "failure": 1
+  },
+  "before": {
+   "total": 1926,
+   "passed": 1890,
+   "skipped": 35,
+   "failure": 1
+  },
+  "after": {
+   "total": 1959,
+   "passed": 1920,
+   "skipped": 35,
+   "failure": 4
+  }
+ },
+ "after_not_passing": [
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it",
+  "tests.test_render_bounds::test_an_overrun_window_is_recorded_unread_and_the_other_windows_still_get_looked_at",
+  "tests.test_render_bounds::test_progress_is_reported_per_window_while_drawing",
+  "tests.test_render_bounds::test_stop_between_windows_ends_the_loop_before_the_next_picture"
+ ],
+ "before_not_passing": [
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it"
+ ],
+ "orch047_not_passing": [
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it"
+ ],
+ "changed_state_before_to_after": {
+  "tests.test_render_bounds::test_an_overrun_window_is_recorded_unread_and_the_other_windows_still_get_looked_at": [
+   "passed",
+   "failure"
+  ],
+  "tests.test_render_bounds::test_progress_is_reported_per_window_while_drawing": [
+   "passed",
+   "failure"
+  ],
+  "tests.test_render_bounds::test_stop_between_windows_ends_the_loop_before_the_next_picture": [
+   "passed",
+   "failure"
+  ]
+ },
+ "only_in_after": [
+  "tests.test_ai_policy_enforcement::test_a_block_held_only_in_the_session_is_honoured_too",
+  "tests.test_ai_policy_enforcement::test_a_job_over_several_projects_is_checked_per_project_per_call",
+  "tests.test_ai_policy_enforcement::test_a_project_blocked_between_two_calls_is_refused_at_the_next",
+  "tests.test_ai_policy_enforcement::test_a_review_blocked_mid_run_stops_at_the_next_look",
+  "tests.test_ai_policy_enforcement::test_a_stored_answer_is_not_served_for_a_blocked_project",
+  "tests.test_ai_policy_enforcement::test_an_allowed_project_is_served_exactly_as_before",
+  "tests.test_ai_policy_enforcement::test_call_task_refuses_before_anything_is_hashed_cached_or_sent[ambiguous]",
+  "tests.test_ai_policy_enforcement::test_call_task_refuses_before_anything_is_hashed_cached_or_sent[blocked]",
+  "tests.test_ai_policy_enforcement::test_call_task_refuses_before_anything_is_hashed_cached_or_sent[missing]",
+  "tests.test_ai_policy_enforcement::test_call_task_refuses_before_anything_is_hashed_cached_or_sent[unknown]",
+  "tests.test_ai_policy_enforcement::test_classification_rechecks_the_policy_before_every_batch",
+  "tests.test_ai_policy_enforcement::test_enforce_refuses_missing_unknown_ambiguous_and_blocked_with_an_audit_row_and_no_content",
+  "tests.test_ai_policy_enforcement::test_health_reports_every_ai_switch",
+  "tests.test_ai_policy_enforcement::test_require_fails_closed_while_allowed_keeps_its_read_model_meaning",
+  "tests.test_ai_policy_enforcement::test_review_fa_visual_and_preparation_have_their_own_daily_cap_per_project[fa_visual-fa_visual_max_calls_per_project_per_day-fa_interfaces_visual]",
+  "tests.test_ai_policy_enforcement::test_review_fa_visual_and_preparation_have_their_own_daily_cap_per_project[prep-prep_max_calls_per_project_per_day-fa_prep_coordination]",
+  "tests.test_ai_policy_enforcement::test_review_fa_visual_and_preparation_have_their_own_daily_cap_per_project[review-drawing_review_max_calls_per_project_per_day-fa_drawing_review_window]",
+  "tests.test_ai_policy_enforcement::test_the_chat_keeps_its_check_and_now_records_the_refusal",
+  "tests.test_ai_policy_enforcement::test_the_drawing_review_is_refused_at_the_route_and_in_the_job",
+  "tests.test_ai_policy_enforcement::test_the_drawings_ai_review_is_refused_per_project",
+  "tests.test_ai_policy_enforcement::test_the_drf_read_at_project_creation_names_no_project_and_is_refused",
+  "tests.test_ai_policy_enforcement::test_the_extraction_call_is_gated_per_call",
+  "tests.test_ai_policy_enforcement::test_the_fa_workflow_run_and_retry_are_refused_at_routes_and_entry_points",
+  "tests.test_ai_policy_enforcement::test_the_ifc_symbol_review_is_refused_per_project",
+  "tests.test_ai_policy_enforcement::test_the_preparation_plan_is_refused_at_its_route_and_entry",
+  "tests.test_ai_policy_enforcement::test_the_scoped_cli_preflight_refuses_a_blocked_project_before_any_provider_is_built",
+  "tests.test_ai_policy_enforcement::test_with_every_project_blocked_no_entry_point_sends_or_serialises_anything",
+  "tests.test_ai_policy_guard::test_each_registered_gate_is_real",
+  "tests.test_ai_policy_guard::test_every_central_call_reaches_the_gated_function",
+  "tests.test_ai_policy_guard::test_every_direct_send_is_gated_before_it_sends",
+  "tests.test_ai_policy_guard::test_every_place_a_provider_is_obtained_is_registered_with_its_gate",
+  "tests.test_ai_policy_guard::test_the_central_call_path_opens_with_the_fail_closed_gate",
+  "tests.test_ai_policy_guard::test_the_entry_points_carry_their_own_gate"
+ ],
+ "only_in_before": [],
+ "only_in_orch047_vs_before": [],
+ "only_in_before_vs_orch047": []
+}
