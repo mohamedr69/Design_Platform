@@ -1,0 +1,168 @@
+{
+ "task": "ORCH-043 (U2-M6-ATTRIBUTION), ep-implementer, Claude Opus 5.5",
+ "generated_at_utc": "2026-10-08T02:47:24+00:00",
+ "base": {
+  "branch": "roadmap/u2",
+  "commit": "f57fd637e4794722b62095def0d8b9ee1575aa35",
+  "contains": [
+   "fcc5ddd (M5 merge)",
+   "f95a3f4 (M8 merge)"
+  ],
+  "not_contained": "task/m5-low-fixes (a3d2d7d)"
+ },
+ "branch": "task/m6-attribution",
+ "implementation_commit": "ef66141",
+ "interpreter": {
+  "path": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B",
+  "python": "3.12.10",
+  "sqlite": "3.49.1",
+  "sqlalchemy": "2.0.36",
+  "pytest": "8.3.4"
+ },
+ "pytest_flags": "-p no:cacheprovider --basetemp=C:/t/tmp/m6/bt",
+ "env": {
+  "TEMP": "C:/t/tmp/m6/tmp",
+  "TMP": "C:/t/tmp/m6/tmp"
+ },
+ "runs_utc": {
+  "head": "ef661413655ed6b5117a6f64e8c8c225ba493ce0",
+  "targeted_start": "2026-10-08T02:04:17Z",
+  "targeted_exit": "0",
+  "targeted_end": "2026-10-08T02:08:26Z",
+  "full_start": "2026-10-08T02:08:34Z",
+  "full_exit": "1",
+  "full_end": "2026-10-08T02:46:38Z"
+ },
+ "commands": {
+  "targeted": "cd backend && G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m6/bt -q tests/test_m6_attribution.py tests/test_document_classification_v2.py tests/test_document_classification_pilot.py tests/test_classification_evidence.py tests/test_document_routing.py tests/test_document_processing_v2.py tests/test_file_sync_v2_processing.py tests/test_document_sync.py tests/test_worker_runtime.py tests/test_repair_tool.py tests/test_migrations.py tests/test_projects.py::test_a_project_carrying_every_kind_of_row_can_still_be_deleted --junitxml=<evidence>/targeted.xml -W ignore",
+  "full": "cd backend && G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B -m pytest -p no:cacheprovider --basetemp=C:/t/tmp/m6/bt -q tests --junitxml=<evidence>/full-suite.xml -W ignore",
+  "compare": "G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv/Scripts/python.exe -B docs/milestones/M6/evidence/attribution/scripts/compare.py"
+ },
+ "changed_files": {
+  "backend/alembic/versions/c6d8e0f2a4b6_classification_attribution.py": {
+   "git_blob": "17c85f64f51321184f789bc3a9a6966c57d049b4",
+   "sha256_committed": "1f8b57b916b9c55e29ee75156e59c0cc473eb4f2a9d629212354b1894d9fa56e",
+   "bytes_committed": 5039,
+   "sha256_worktree": "1f8b57b916b9c55e29ee75156e59c0cc473eb4f2a9d629212354b1894d9fa56e"
+  },
+  "backend/app/core/config.py": {
+   "git_blob": "2884086d54db4b6d570acd1d0cbfb3cc4f0e671a",
+   "sha256_committed": "4c92a78697f3e6885d66376a6c00e4eb41d55d8c14f50c123231af1ca5780d15",
+   "bytes_committed": 34636,
+   "sha256_worktree": "f3b0d04a30f339e8b86b8bd334cf1ff07b2614d04ff9a26afb98fdf30bf4e756"
+  },
+  "backend/app/models.py": {
+   "git_blob": "bc56b4682941e07f5b022a7227a9907d2e4397a9",
+   "sha256_committed": "2c9dea60d62d361789983cf93bc40db202db32d150c9adbc949a7b1b2875f2d0",
+   "bytes_committed": 157682,
+   "sha256_worktree": "69547fdf6df82fc5da38e71ad0e0b8a76e80ab36be59fe956328212bc12335c7"
+  },
+  "backend/app/routers/documents.py": {
+   "git_blob": "f64f72ddf77ff81ac60f923ebff894d9f51878cb",
+   "sha256_committed": "09813b6d176987219f5adb9dc4602e214937fe1076349675c78debbd2e3b1d6d",
+   "bytes_committed": 22001,
+   "sha256_worktree": "09813b6d176987219f5adb9dc4602e214937fe1076349675c78debbd2e3b1d6d"
+  },
+  "backend/app/services/classification_kind_map.json": {
+   "git_blob": "5a1632ab15a999be179ddbbd1c559cb6a3c34e34",
+   "sha256_committed": "01bc504b91c4a301268012c7a58e487ed3eb552f7e297c7eaa0491bccd678af0",
+   "bytes_committed": 67339,
+   "sha256_worktree": "7a222408a00fb49ef39e30ab86ab8ee67271864cfcb4430d02a6a1b4a76f6431"
+  },
+  "backend/app/services/document_attribution.py": {
+   "git_blob": "0faaee134984a395ab3de2e3a2402eb5ef241c7e",
+   "sha256_committed": "3fad74038f0281c9af4851c76270ffe7d18b351382d144ac45864902d19c6d32",
+   "bytes_committed": 14041,
+   "sha256_worktree": "3fad74038f0281c9af4851c76270ffe7d18b351382d144ac45864902d19c6d32"
+  },
+  "backend/app/services/document_classification.py": {
+   "git_blob": "acd32dff0d8c2637e68bc5b28442e678a5ab5428",
+   "sha256_committed": "116218d5e77cab5a26d347b3cabb8255daa0816317e920dee155cdb1dbda3344",
+   "bytes_committed": 77987,
+   "sha256_worktree": "29fca759de49a8bb04bcc6c6989582ea0cfb8280731c6d36939ee5ef9a165834"
+  },
+  "backend/app/services/project_deletion.py": {
+   "git_blob": "eb8544e2daf02e28560aa8619d0de9ed6d389c15",
+   "sha256_committed": "b918a6f838a7699e5ff07f259dbf963d39ec72b854bbb195613f779e238f6c61",
+   "bytes_committed": 4994,
+   "sha256_worktree": "b918a6f838a7699e5ff07f259dbf963d39ec72b854bbb195613f779e238f6c61"
+  },
+  "backend/app/workers/runtime.py": {
+   "git_blob": "fb3d9d5605f2de211421d62c97ed52e00d9766d5",
+   "sha256_committed": "93eef507ee8ebf42575e9d926a1b94ac8221037e31bc4d0be307ab99d30f671a",
+   "bytes_committed": 9235,
+   "sha256_worktree": "93eef507ee8ebf42575e9d926a1b94ac8221037e31bc4d0be307ab99d30f671a"
+  },
+  "backend/scripts/m6_shadow_eval.py": {
+   "git_blob": "538add023f4a5cd02539f2b387057f4caf3b23c6",
+   "sha256_committed": "6e702102b60b558499b2fa7eaf9aa0a420d958715cd4ae539522526994ece88a",
+   "bytes_committed": 22714,
+   "sha256_worktree": "6e702102b60b558499b2fa7eaf9aa0a420d958715cd4ae539522526994ece88a"
+  },
+  "backend/tests/test_m6_attribution.py": {
+   "git_blob": "37fa6acd3b05d503f7a2c133a1f6ac58ab4f5ab4",
+   "sha256_committed": "03a55725dce7477b7ec7e4876a324373cf9766ffdbbb99cdf8ece71c19298d0e",
+   "bytes_committed": 41011,
+   "sha256_worktree": "03a55725dce7477b7ec7e4876a324373cf9766ffdbbb99cdf8ece71c19298d0e"
+  }
+ },
+ "evidence": {
+  "full-suite-comparison.json": {
+   "sha256": "10cd6aec125463698bfa17ac7191d3ccca2a863a2e1ea37e8e7eef98ea52ae82",
+   "bytes": 6315
+  },
+  "full-suite.log": {
+   "sha256": "1a484bba0af670c16d88496c9d5f8bb8360b8c79e766b0c36f2921e273991070",
+   "bytes": 5925
+  },
+  "full-suite.xml": {
+   "sha256": "f50f9b0e835902d7fffb28f6ff6eeb264889b0587a5c5fc87bffc195482fa0b0",
+   "bytes": 262864
+  },
+  "harness-synthetic-ai.json": {
+   "sha256": "24632611b8bacb1c16b87fbfab8c85857d647a524f9702acbc674979eb8a8127",
+   "bytes": 11902
+  },
+  "harness-synthetic-rules.json": {
+   "sha256": "144688aa908da3840b58719ddf2c2e52d6b044a965e1f50ac7b213933d18d0bf",
+   "bytes": 11298
+  },
+  "harness-synthetic-stored.json": {
+   "sha256": "dbd598a20aba19d8231a84861edfe80eb6bc0948f36a762226ed58f7dde5a3d7",
+   "bytes": 11746
+  },
+  "harness-synthetic.log": {
+   "sha256": "81f09fe41120067cb853691796edf70c8a4dd9a751950612cc05b40c533529bb",
+   "bytes": 1911
+  },
+  "runs.txt": {
+   "sha256": "5ac0580def6625e1b08d4fff9d2b0b58e9a71c67cc0f0e1ce526e8d22d39c8db",
+   "bytes": 206
+  },
+  "scripts/compare.py": {
+   "sha256": "d4f83616ad40ad061a2098b58466625d0194b103bbee8c360fef1984c900e096",
+   "bytes": 3248
+  },
+  "scripts/harness_synthetic.py": {
+   "sha256": "248cb5a22d76a1cdbeabc1b5368e95f49e61329d01f1bae0a6686deb865fee28",
+   "bytes": 2309
+  },
+  "scripts/manifest.py": {
+   "sha256": "84e2e513b68e2a41994a7b649cdd6a0f567305c2f52acb90405753c6d09d1612",
+   "bytes": 4469
+  },
+  "targeted.log": {
+   "sha256": "4ada434a634a4a7a4713599a118f26f9d5f22e0d31d15e2566c080a6aed67e8f",
+   "bytes": 313
+  },
+  "targeted.xml": {
+   "sha256": "29cdc7318c8ad255412723b6d43047e94d1f0da63eb3a93b900a4c68d1546c42",
+   "bytes": 17583
+  }
+ },
+ "report": {
+  "path": "docs/milestones/M6/M6-ATTRIBUTION-IMPLEMENTATION.md",
+  "sha256": "2b8b09e4b887be711151f19877406b782121b015967fac8f1614c203be811df2"
+ },
+ "note": "Evidence classes: SQLITE (file-backed test databases), SCRIPTED-PROVIDER (RecordingProvider in the harness's AI arm), SYNTHETIC-CLONE (the harness's fixture database). No REAL-MODEL, no REAL-CLONE, no live database."
+}

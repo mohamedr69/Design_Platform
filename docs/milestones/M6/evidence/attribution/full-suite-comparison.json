@@ -1,0 +1,123 @@
+{
+ "baseline": {
+  "file": "docs/milestones/M4/evidence/tests-2026-10-07-windows-run2/full-suite.xml",
+  "totals": {
+   "tests": 1819,
+   "failures": 2,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 1450.575
+  },
+  "failing": {
+   "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches": {
+    "kind": "failure",
+    "message": "AssertionError: assert ('G:\\\\dev (2)\\\\dev\\\\ep-platform-merged\\\\data' is None)\n +  where 'G:\\\\dev (2)\\\\dev\\\\ep-platform-merged\\\\data' = Settings(app_name='Engineering Project Platform', app_tagline='Engineering a Safer Tomorrow', company_name='Al Arabia ...detect=False, compliance_knowledge_import_on"
+   },
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  'SIGA-OSD-FCN'\n  '3-SDDC2'\n  '3-SSDC2'"
+   }
+  }
+ },
+ "m6": {
+  "file": "docs/milestones/M6/evidence/attribution/full-suite.xml",
+  "totals": {
+   "tests": 1917,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 2273.521
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  'SIGA-OSD-FCN'\n  '3-SDDC2'"
+   }
+  }
+ },
+ "new_failures_vs_baseline": [],
+ "fixed_since_baseline": [
+  "tests.test_persistence::test_a_data_root_gathers_the_database_uploads_backups_and_caches"
+ ],
+ "same_name_vs_baseline": {
+  "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+   "same_message": true
+  }
+ },
+ "tests_missing_vs_baseline": [],
+ "tests_added_vs_baseline": 98,
+ "tests_added_m6": [
+  "tests.test_m6_attribution::test_a_confirmation_is_refused_when_classification_is_off_or_the_request_is_not_a_confirmation",
+  "tests.test_m6_attribution::test_a_folder_of_drawings_given_to_us_is_external_related_by_the_system",
+  "tests.test_m6_attribution::test_a_later_confirmation_supersedes_the_earlier_one_and_agreement_is_no_conflict",
+  "tests.test_m6_attribution::test_a_producing_stage_fills_its_stage_record_slots_and_the_backfill_its_job",
+  "tests.test_m6_attribution::test_a_project_with_confirmations_and_conflicts_can_still_be_deleted",
+  "tests.test_m6_attribution::test_a_shop_drawing_outside_those_folders_is_likely_ours_unless_the_drf_says_another_party_draws",
+  "tests.test_m6_attribution::test_a_stored_title_block_originator_decides_ours_or_another_partys",
+  "tests.test_m6_attribution::test_a_title_block_discipline_that_is_not_ours_is_reference_only_and_ours_says_nothing_alone",
+  "tests.test_m6_attribution::test_an_engineer_confirms_with_an_audit_event_and_no_automated_run_supersedes_it",
+  "tests.test_m6_attribution::test_attribution_never_fails_the_classification_and_the_processing",
+  "tests.test_m6_attribution::test_freshness_keeps_its_semantics_under_a_rules_bump_and_ignores_the_attribution_version",
+  "tests.test_m6_attribution::test_nothing_to_go_on_is_unknown_and_disagreeing_evidence_is_kept_not_resolved",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[admin]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[draftsman]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[fire_alarm_estimation_engineer]",
+  "tests.test_m6_attribution::test_only_engineers_confirm_and_admin_gains_no_engineering_authority[viewer]",
+  "tests.test_m6_attribution::test_the_attribution_and_the_stage_record_are_stored_and_listed",
+  "tests.test_m6_attribution::test_the_confirmation_and_its_audit_event_are_one_transaction",
+  "tests.test_m6_attribution::test_the_derived_attribution_truth_is_provisional_and_rule_bound",
+  "tests.test_m6_attribution::test_the_harness_ai_arm_asks_only_a_scripted_provider_and_only_for_weak_answers",
+  "tests.test_m6_attribution::test_the_harness_on_a_synthetic_clone_stored_arm",
+  "tests.test_m6_attribution::test_the_harness_refuses_the_platforms_own_database_and_a_missing_clone",
+  "tests.test_m6_attribution::test_the_harness_rules_arm_reruns_this_checkouts_rules_on_the_stored_reading",
+  "tests.test_m6_attribution::test_the_intake_association_is_our_scope",
+  "tests.test_m6_attribution::test_the_kind_map_is_reviewed_data_covering_every_labelled_kind_with_the_unmapped_listed",
+  "tests.test_m6_attribution::test_unknown_is_never_in_or_out_of_scope"
+ ],
+ "m5": {
+  "file": "docs/milestones/M5/evidence/safe-apply/full-suite.xml",
+  "totals": {
+   "tests": 1878,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 2091.538
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  '3-SSDC2'\n  '3-SDDC2'\n  'SIGA-OSD-FCN'"
+   }
+  },
+  "new_failures_in_m6": [],
+  "same_name": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "same_message": true
+   }
+  },
+  "tests_missing_in_m6": []
+ },
+ "m8": {
+  "file": "docs/milestones/M8/evidence/wall-index/full-suite.xml",
+  "totals": {
+   "tests": 1832,
+   "failures": 1,
+   "errors": 0,
+   "skipped": 35,
+   "time_s": 1936.207
+  },
+  "failing": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "kind": "failure",
+    "message": "AssertionError: assert {'3-SDDC2', '...N', 'SIGA-PS'} <= {'3-CAB14B', ...3-CHAS4', ...}\n  \n  Extra items in the left set:\n  'SIGA-OSD-FCN'\n  '3-SDDC2'\n  '3-SSDC2'"
+   }
+  },
+  "new_failures_in_m6": [],
+  "same_name": {
+   "tests.test_proposed_materials::test_the_part_catalogue_knows_every_number_on_file_for_a_brand_and_completes_it": {
+    "same_message": true
+   }
+  },
+  "tests_missing_in_m6": []
+ }
+}

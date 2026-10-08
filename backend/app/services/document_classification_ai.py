@@ -360,13 +360,16 @@ def _assessment(candidate: Candidate, verdict: dict) -> DC.Assessment:
 
 
 def keep(db: Session, project: Project, candidate: Candidate, verdict: dict, *, model: str | None = None,
-         reused: bool, earlier: dict | None = None) -> bool:
+         reused: bool, earlier: dict | None = None, job_id: int | None = None) -> bool:
     """Write the verdict as the document's current classification (source
     "ai"), the rules' answer and the answer's provenance kept inside it, in
     the row's one insert (a failure afterwards cannot leave the row without
     them). `earlier`: the stored answer reused -- its model, prompt version
-    and page size are copied, never the current ones. False when nothing
-    was written."""
+    and page size are copied, never the current ones. The same provenance
+    fills the row's stage-record slots (M6: `model`, `prompt_version`,
+    `page_chars`, `producing_job_id` = `job_id`), so a conflict the answer
+    raises against an engineer's confirmation carries the prompt version.
+    False when nothing was written."""
     rules = candidate.entry
     if earlier is not None:
         origin = {"model": earlier.get("model"), "prompt_version": earlier.get("prompt_version"),
@@ -379,7 +382,13 @@ def keep(db: Session, project: Project, candidate: Candidate, verdict: dict, *, 
                     **origin, "reused": reused},
              "rules": {"primary_type": rules.primary_type, "stage": rules.stage,
                        "evidence_strength": rules.evidence_strength, "reason": rules.reason}}
-    entry = DC.record(db, project, candidate.row, _assessment(candidate, verdict), source=SOURCE, extra=extra)
+    page_chars = origin.get("page_chars")
+    stage_record = {"model": None if origin.get("model") is None else str(origin["model"])[:80],
+                    "prompt_version": None if origin.get("prompt_version") is None else str(origin["prompt_version"])[:80],
+                    "page_chars": page_chars if isinstance(page_chars, int) else None,
+                    "producing_job_id": job_id}
+    entry = DC.record(db, project, candidate.row, _assessment(candidate, verdict), source=SOURCE, extra=extra,
+                      stage_record=stage_record)
     return entry is not None
 
 
@@ -419,12 +428,13 @@ def run(db: Session, project: Project, *, max_calls: int | None = None, ctx=None
     if not ok:
         return {"project": project.ep_number, "skipped_run": why}
     started = time.monotonic()
+    job_id = getattr(ctx, "job_id", None)   # the stage record's producing job (M6)
     p = plan(db, project)
     counts = {"project": project.ep_number, "weak": p.weak, "skipped": dict(p.skipped), "reused": 0, "sent": 0,
               "answered": 0, "written": 0, "calls": 0, "cached_calls": 0, "failed_calls": 0, "errors": [],
               "estimate": p.estimate()}
     for candidate in p.reused:
-        if keep(db, project, candidate, candidate.reuse["verdict"], reused=True, earlier=candidate.reuse):
+        if keep(db, project, candidate, candidate.reuse["verdict"], reused=True, earlier=candidate.reuse, job_id=job_id):
             counts["reused"] += 1
     db.commit()
     batch_size = max(1, settings.document_classification_ai_batch)
@@ -470,7 +480,8 @@ def run(db: Session, project: Project, *, max_calls: int | None = None, ctx=None
                 continue
             counts["answered"] += 1
             for target in [candidate, *p.followers.get(candidate.row.sha256 or "", [])]:
-                if keep(db, project, target, verdict, model=result.model, reused=target is not candidate):
+                if keep(db, project, target, verdict, model=result.model, reused=target is not candidate,
+                        job_id=job_id):
                     counts["written"] += 1
         db.commit()
     counts["seconds"] = round(time.monotonic() - started, 1)

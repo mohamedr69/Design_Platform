@@ -584,6 +584,56 @@ class DocumentClassification(Base):
     assessment: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, nullable=False)
     superseded_at: Mapped[datetime | None] = mapped_column(DateTime(), nullable=True)
+    # --- attribution (app.services.document_attribution, M6): whose document
+    # this is, a field of its own beside the type and never a stage string.
+    # "OUR_SCOPE" | "LIKELY_OUR_SCOPE" | "RELATED_EXTERNAL" | "REFERENCE_ONLY" | "UNKNOWN";
+    # UNKNOWN is neither in nor out of scope.
+    attribution: Mapped[str] = mapped_column(String(24), nullable=False, default="UNKNOWN", server_default="UNKNOWN")
+    # The evidence each rule weighed: originator, folder, title block, system / discipline match, the
+    # project's drawings_in_scope, the rule that decided, and every claim made.
+    attribution_basis: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    attribution_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    # Evidence that disagrees about whose document this is, kept, never resolved by a guess (D-04).
+    attribution_conflict: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    # --- the stage record (M6 for M7 adoption): what produced this row, from what input.
+    # sha256 of the content hash, the normalised path and the settings the answer depends on.
+    input_fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # For a model-sourced row only (none is written by the rules): the model, the prompt version and the
+    # page characters it was shown.
+    model: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    prompt_version: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    page_chars: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    producing_job_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # "complete" | "partial" | "failed": the producing stage's own status, never a document's status.
+    stage_status: Mapped[str | None] = mapped_column(String(16), nullable=True)
+
+
+class DocumentClassificationConflict(Base):
+    """An automated classification or attribution that disagrees with an
+    engineer-confirmed one (M3 P-02): recorded, never applied. The
+    confirmed row stays current and unchanged; this keeps what the
+    automation proposed, from which source and version, and when it was
+    first and last seen."""
+
+    __tablename__ = "document_classification_conflicts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), nullable=False, index=True)
+    document_id: Mapped[int] = mapped_column(ForeignKey("project_documents.id"), nullable=False, index=True)
+    confirmed_classification_id: Mapped[int] = mapped_column(ForeignKey("document_classifications.id"), nullable=False,
+                                                             index=True)
+    # The automatic row that proposed it (stored already superseded), when one was written.
+    proposed_classification_id: Mapped[int | None] = mapped_column(ForeignKey("document_classifications.id"), nullable=True)
+    # "primary_type" | "system_code" | "attribution"
+    field: Mapped[str] = mapped_column(String(24), nullable=False)
+    confirmed_value: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    proposed_value: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # The proposing source ("hint" | "assessment" | "backfill" | "ai") and its version (rules, attribution or prompt).
+    source: Mapped[str] = mapped_column(String(16), nullable=False)
+    version: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, nullable=False)
+    last_seen_at: Mapped[datetime] = mapped_column(DateTime(), default=utc_now, nullable=False)
+    seen_count: Mapped[int] = mapped_column(Integer, nullable=False, default=1, server_default="1")
 
 
 class DocumentDependency(Base):

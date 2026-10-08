@@ -1,0 +1,1854 @@
+{
+ "_about": {
+  "purpose": "GOLDEN-LABELS kind (free text) -> DocumentType, and label system -> platform system code, for the M6 offline shadow evaluation (backend/scripts/m6_shadow_eval.py). Data, reviewed entry by entry; a kind with no faithful type is unmapped (type null) with the reason, never guessed.",
+  "labels_file": "docs/milestones/M2/real-project-pilot/GOLDEN-LABELS.json",
+  "labels_sha256": "2a984fbe26a9949595ebae13632690157d4cbb05b53c0726b5ecf3ddd3e3a31d",
+  "reviewed_by": "ep-implementer (Claude Opus 5.5), ORCH-043, 2026-10-08; owner countersignature not claimed",
+  "status": "provisional",
+  "conventions": [
+   "SHOP_DRAWING: a shop drawing cover or sheet (any contractor of our systems' chain); an interior-design shop drawing of another contractor's package is unmapped (the taxonomy's SHOP_DRAWING / IFC_DRAWING carry a provenance neither fits).",
+   "IFC_DRAWING: a consultant's issued-for-construction sheet or set. A tender / IFT drawing is unmapped: the taxonomy has no type for it, and the rules' OTHER for tender drawings is a convention, not a truth.",
+   "DRAWING: a drawing whose provenance the label does not state.",
+   "OTHER: a document of none of the named types (letters, calculations, O&M manuals, minutes, orders, BOQs).",
+   "A kind that could be either of two types (a quotation of ours not attached as a Design Sheet; a letter that may stand as a certificate) is unmapped."
+  ],
+  "system_codes": "FAS (fire alarm, its voice evacuation), PAVA, ELS (emergency lighting, central battery), FRC (fire-rated cables), NONE (labelled as another discipline); null = excluded from system accuracy"
+ },
+ "kinds": {
+  "drawing sheet (shop drawing, no cover)": {
+   "type": "SHOP_DRAWING",
+   "documents": 21,
+   "why": "a shop drawing sheet"
+  },
+  "interior-design IFC drawing sheet": {
+   "type": "IFC_DRAWING",
+   "documents": 13,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "shop-drawing cover (Shop Drawing Submittal, York/Samana form)": {
+   "type": "SHOP_DRAWING",
+   "documents": 11,
+   "why": "a shop drawing submission cover"
+  },
+  "consultant IFC drawing sheet (architectural)": {
+   "type": "IFC_DRAWING",
+   "documents": 10,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "Word transmittal (DOCUMENT TRANSMITTAL)": {
+   "type": "TRANSMITTAL",
+   "documents": 7,
+   "why": "a transmittal"
+  },
+  "drawing sheet (contractor shop drawing, JAM series, no cover)": {
+   "type": "SHOP_DRAWING",
+   "documents": 7,
+   "why": "a shop drawing sheet"
+  },
+  "shop-drawing cover (Shop Drawings Submittal Form)": {
+   "type": "SHOP_DRAWING",
+   "documents": 7,
+   "why": "a shop drawing submission cover"
+  },
+  "DRF (Design Request Form, ELV Systems; internal, scanned)": {
+   "type": "DRF",
+   "documents": 5,
+   "why": "the Design Request Form"
+  },
+  "drawing sheet (contractor shop drawing with an Approval Status block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 5,
+   "why": "a shop drawing sheet"
+  },
+  "consultant tender drawing sheet (interior design)": {
+   "type": null,
+   "documents": 4,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "design sheet (FAS quotation; also in the BOQ set)": {
+   "type": "DESIGN_SHEET",
+   "documents": 4,
+   "why": "a Design Sheet (quotation-based, in the BOQ set)"
+  },
+  "drawing sheet (contractor shop drawing with a consultant's review block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 4,
+   "why": "a shop drawing sheet"
+  },
+  "shop drawing sheet (BK Gulf FA schematic, Arif & Bintoak review block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 4,
+   "why": "a shop drawing sheet"
+  },
+  "shop drawing sheet (BK Gulf PAVA, Arif & Bintoak review block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 4,
+   "why": "a shop drawing sheet"
+  },
+  "O&M manual section (equipment location)": {
+   "type": "OTHER",
+   "documents": 3,
+   "why": "an O&M manual: none of the named types"
+  },
+  "Word transmittal (DOCUMENT TRANSMITAL)": {
+   "type": "TRANSMITTAL",
+   "documents": 3,
+   "why": "a transmittal"
+  },
+  "consultant IFC drawing sheet (HVAC)": {
+   "type": "IFC_DRAWING",
+   "documents": 3,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (electrical, fire alarm)": {
+   "type": "IFC_DRAWING",
+   "documents": 3,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFT drawing sheet (electrical power)": {
+   "type": null,
+   "documents": 3,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "cost sheet (design-sheet template titled Cost Sheet, 2 pages, scanned)": {
+   "type": null,
+   "documents": 3,
+   "why": "a design-sheet template titled otherwise (BOQ / Cost / Delivery Sheet): whether it is a Design Sheet is not established"
+  },
+  "interior-design shop drawing sheet (another contractor's package)": {
+   "type": null,
+   "documents": 3,
+   "why": "another contractor's shop drawing: the taxonomy's SHOP_DRAWING means a drawing we produced, IFC_DRAWING one issued to us; neither fits"
+  },
+  "letter (draft warranty certificate)": {
+   "type": null,
+   "documents": 3,
+   "why": "a letter that may stand as a certificate: CERTIFICATE or OTHER not established"
+  },
+  "material / equipment approval form (Emaar / Voltas form, 7 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 3,
+   "why": "a material submittal form or package"
+  },
+  "quotation (Al Arabia, 2 pages, scanned)": {
+   "type": null,
+   "documents": 3,
+   "why": "our quotation, not attached as a Design Sheet: DESIGN_SHEET or OTHER not established"
+  },
+  "shop-drawing cover (LACASA SHOPDRAWING SUBMITTAL form, scanned, 3 pages)": {
+   "type": "SHOP_DRAWING",
+   "documents": 3,
+   "why": "a shop drawing submission cover"
+  },
+  "specification section (estimation input)": {
+   "type": "SPECIFICATION",
+   "documents": 3,
+   "why": "a specification"
+  },
+  "IFC drawing set (tender stage, mechanical)": {
+   "type": null,
+   "documents": 2,
+   "why": "labelled both IFC and tender stage: the issue stage, and so the type, is not established"
+  },
+  "authority (DCD) fire and life safety drawing set (23 pages)": {
+   "type": null,
+   "documents": 2,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "cause and effect matrix drawing (fire alarm & voice evacuation)": {
+   "type": "DRAWING",
+   "documents": 2,
+   "why": "a drawing whose provenance the label does not state"
+  },
+  "consultant IFC drawing sheet (ICT)": {
+   "type": "IFC_DRAWING",
+   "documents": 2,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (electrical power)": {
+   "type": "IFC_DRAWING",
+   "documents": 2,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (fire alarm)": {
+   "type": "IFC_DRAWING",
+   "documents": 2,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (fire fighting)": {
+   "type": "IFC_DRAWING",
+   "documents": 2,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFT drawing sheet (smoke control)": {
+   "type": null,
+   "documents": 2,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (ICT)": {
+   "type": null,
+   "documents": 2,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (infrastructure)": {
+   "type": null,
+   "documents": 2,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (landscape)": {
+   "type": null,
+   "documents": 2,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (signage)": {
+   "type": null,
+   "documents": 2,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "electronic document transmittal (Aconex mail print, 3 pages)": {
+   "type": "TRANSMITTAL",
+   "documents": 2,
+   "why": "a transmittal"
+  },
+  "reply (contractor's reply to consultant comments on FA drawings)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 2,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "schedule of materials (technical submittal, 5 pages)": {
+   "type": null,
+   "documents": 2,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "shop drawing sheet (BK Gulf CBS, Arif & Bintoak review block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 2,
+   "why": "a shop drawing sheet"
+  },
+  "shop-drawing cover (LACASA SHOPDRAWING SUBMITTAL form, scanned)": {
+   "type": "SHOP_DRAWING",
+   "documents": 2,
+   "why": "a shop drawing submission cover"
+  },
+  "shop-drawing cover (LACASA SHOPDRAWING SUBMITTAL form, scanned, 2 pages)": {
+   "type": "SHOP_DRAWING",
+   "documents": 2,
+   "why": "a shop drawing submission cover"
+  },
+  "shop-drawing cover (LACASA SHOPDRAWING SUBMITTAL form, scanned, unmarked)": {
+   "type": "SHOP_DRAWING",
+   "documents": 2,
+   "why": "a shop drawing submission cover"
+  },
+  "specification (mechanical technical specifications, 415 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 2,
+   "why": "a specification"
+  },
+  "specification section (plumbing, 12 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 2,
+   "why": "a specification"
+  },
+  "technical submission cover (Dutco TECHNICAL SUBMISSION form, Nakheel) + acoustic report": {
+   "type": null,
+   "documents": 2,
+   "why": "a document / pre-qualification / technical submission: not a material submittal, no faithful type"
+  },
+  "transmittal (document transmittal with receipt signature; scanned)": {
+   "type": "TRANSMITTAL",
+   "documents": 2,
+   "why": "a transmittal"
+  },
+  "BOQ (design-sheet template titled BOQ; also in the BOQ set)": {
+   "type": null,
+   "documents": 1,
+   "why": "a design-sheet template titled otherwise (BOQ / Cost / Delivery Sheet): whether it is a Design Sheet is not established"
+  },
+  "IFC drawing set (electrical schematic)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "O&M manual (full, 308 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual (supplier's cover, 291 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual cover (supplier's cover, single page)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual cover / contents (57 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (3-ASU operating instructions, 8 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (emergency information)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (maintenance schedule, 4 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (preventive maintenance schedule, scanned, 2 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (preventive maintenance, 7 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (scanned, 37 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "O&M manual section (system description, 2 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "an O&M manual: none of the named types"
+  },
+  "RFI response (contractor's response to consultant comments on an RFI, scanned, 2 pages)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "authority approval certificate (Dubai Civil Defence FINAL APPROVAL)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "authority document (Dubai Municipality affection plan, electronically certified)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "authority permit (Dubai Development Authority Final Building Permit)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "authority-approved consultant drawing set (Dubai Civil Defence stamped, 17 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "authority-approved consultant drawing set (Dubai Civil Defence stamped, 21 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "authority-approved traffic plan (RTA, scanned, signed)": {
+   "type": null,
+   "documents": 1,
+   "why": "an authority document or authority-approved set: no faithful type"
+  },
+  "calculation output (aspiration detector pipe calculation, ModuLaser)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation report (PA/VA acoustic analysis, basement 1, 8 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation report (PA/VA acoustic analysis, first floor, 8 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation report (PA/VA acoustic analysis, ground mezz floor, 14 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation report (PA/VA acoustic, staircase, 3 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation report (SPL calculation, Aria B2)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation schedule (electrical load distribution, 11 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "calculation sheet (booster power supply distribution, tower A2)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation sheet (booster power supply distribution, tower A3)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation sheet (garbage container requirement, scanned spreadsheet)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "calculation sheet (main FACP battery calculation, Edwards EST4)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "commented drawing (scanned cause and effect matrix with handwritten reviewer comments, rotated)": {
+   "type": "DRAWING",
+   "documents": 1,
+   "why": "a drawing whose provenance the label does not state"
+  },
+  "commented shop drawing (JAM series with reviewer sticky-note comments, 4 pages)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet or set"
+  },
+  "compliance statement (specification compliance table, 24 pages)": {
+   "type": "COMPLIANCE_STATEMENT",
+   "documents": 1,
+   "why": "a compliance statement"
+  },
+  "compliance statement page (fire alarm system, page 64)": {
+   "type": "COMPLIANCE_STATEMENT",
+   "documents": 1,
+   "why": "a compliance statement"
+  },
+  "consultant IFC drawing sheet": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (architectural / structural)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (architectural area calculation)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (architectural schedule)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (electrical lighting)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (electrical, junior suite)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (fire alarm and emergency lighting)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (fire alarm network schematic)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (fire alarm schematic)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (lighting)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (low current)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (mechanical drainage)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (mechanical schematic)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (mechanical)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (plumbing)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (schematic)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (security)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (structural detail)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (structural)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFC drawing sheet (ventilation)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant IFT drawing sheet (facade lighting)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant IFT drawing sheet (fire fighting)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant IFT drawing sheet (mechanical smoke control)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant IFT drawing sheet (plumbing / LPG)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant design drawing set (IFC / estimation input, 37 pages)": {
+   "type": "IFC_DRAWING",
+   "documents": 1,
+   "why": "an issued-for-construction drawing given to us"
+  },
+  "consultant design sheet (facade lighting concept rendering)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant drawing whose issue stage the label does not give, or a concept sheet: no faithful type"
+  },
+  "consultant drawing sheet (gas layout, DCD approval submission, 9 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant drawing whose issue stage the label does not give, or a concept sheet: no faithful type"
+  },
+  "consultant schematic sheet (BMS)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant drawing whose issue stage the label does not give, or a concept sheet: no faithful type"
+  },
+  "consultant tender drawing sheet (HVAC schematic)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (architectural GA plan)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (architectural)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (emergency lighting)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (facade access)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (infrastructure, list of drawings)": {
+   "type": "DRAWING_SCHEDULE",
+   "documents": 1,
+   "why": "a list of drawings"
+  },
+  "consultant tender drawing sheet (interior design, electrical requirement)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (interior design, scanned)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (landscape details)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (lighting control)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (lighting schematic)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "consultant tender drawing sheet (security, list of drawings)": {
+   "type": "DRAWING_SCHEDULE",
+   "documents": 1,
+   "why": "a list of drawings"
+  },
+  "consultant tender drawing sheet (structural)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant's tender / issued-for-tender drawing: the taxonomy has no type for it (IFC_DRAWING is issued for construction; the rules file tender drawings as OTHER by convention, which is not a truth)"
+  },
+  "cover sheet (Emaar facilities management approval pack, 7 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "an internal request form / an approval-pack cover: no faithful type"
+  },
+  "datasheet (Edwards 3-LCDXL1, 4 pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "datasheet (Edwards SIGA-OSHD-FCN, 4 pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "datasheet (TOA SC-630M-EB-Q paging horn speaker, 2 pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "datasheet (manufacturer technical characteristics, GRANITOKER / Casalgrande Padana)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "datasheet pack (Edwards data sheets, 182 pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "delivery sheet (design-sheet template titled Delivery Sheet, 2 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a design-sheet template titled otherwise (BOQ / Cost / Delivery Sheet): whether it is a Design Sheet is not established"
+  },
+  "design consultant drawing sheet (acoustics)": {
+   "type": null,
+   "documents": 1,
+   "why": "a consultant drawing whose issue stage the label does not give, or a concept sheet: no faithful type"
+  },
+  "design sheet (CBS quotation; also in the BOQ set)": {
+   "type": "DESIGN_SHEET",
+   "documents": 1,
+   "why": "a Design Sheet (quotation-based, in the BOQ set)"
+  },
+  "design sheet (ELS quotation; also in the BOQ set)": {
+   "type": "DESIGN_SHEET",
+   "documents": 1,
+   "why": "a Design Sheet (quotation-based, in the BOQ set)"
+  },
+  "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form)": {
+   "type": null,
+   "documents": 1,
+   "why": "a document / pre-qualification / technical submission: not a material submittal, no faithful type"
+  },
+  "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form) + matrix (7 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a document / pre-qualification / technical submission: not a material submittal, no faithful type"
+  },
+  "drawing list (interior design IFC set index)": {
+   "type": "DRAWING_SCHEDULE",
+   "documents": 1,
+   "why": "a list of drawings"
+  },
+  "drawing sheet (contractor shop drawing with a consultant's review block, filed under BOQ/SD)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "drawing sheet (contractor shop drawing with consultant review mark-ups)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "drawing sheet (contractor shop drawing, installation details)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "drawing sheet (interior fit-out reflected ceiling plan, not FAS)": {
+   "type": "DRAWING",
+   "documents": 1,
+   "why": "a drawing sheet whose provenance the label does not state"
+  },
+  "drawing sheet (scanned approved shop drawing, rotated)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet (scanned)"
+  },
+  "drawing sheet (scanned commented shop drawing, rotated landscape sheet)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet (scanned)"
+  },
+  "drawing sheet (scanned shop drawing detail sheet, rotated title block)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet (scanned)"
+  },
+  "drawing sheet (shop drawing, marked-up copy, 1 page)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "electronic document transmittal (Aconex mail print, 5 pages)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "email printout (Outlook, 2 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "facsimile transmittal (EFECO to Al Arabia, 4 pages, scanned)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "facsimile transmittal (EFECO to Al Arabia, 6 pages, scanned)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "fire strategy addendum report (fire safety consultancy, 4 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "interior-design shop drawing sheet (another contractor's package, not FAS)": {
+   "type": null,
+   "documents": 1,
+   "why": "another contractor's shop drawing: the taxonomy's SHOP_DRAWING means a drawing we produced, IFC_DRAWING one issued to us; neither fits"
+  },
+  "letter (manufacturer authorization)": {
+   "type": null,
+   "documents": 1,
+   "why": "a letter that may stand as a certificate: CERTIFICATE or OTHER not established"
+  },
+  "letter (manufacturer certification commitment)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer country-of-origin confirmation, DocuSigned, 3 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer end-of-life notice, DocuSigned)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer equivalence letter)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer letter of transition, 2 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer ownership confirmation)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer product confirmation)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer relationship confirmation)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "letter (manufacturer statement)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a letter: none of the named types"
+  },
+  "manufacturer output (Teknoware emergency-lighting calculation / order print, 118 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "manufacturer output (Teknoware emergency-lighting calculation / order print, 476 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "manufacturer output (Teknoware emergency-lighting calculation / order print, 604 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a calculation: none of the named types"
+  },
+  "marked-up drawing extract (scanned floor plan with handwritten comments, 3 pages)": {
+   "type": "DRAWING",
+   "documents": 1,
+   "why": "a drawing whose provenance the label does not state"
+  },
+  "marked-up drawing extract (scanned, handwritten notes; atrium material detail, 2 pages)": {
+   "type": "DRAWING",
+   "documents": 1,
+   "why": "a drawing whose provenance the label does not state"
+  },
+  "material / equipment approval form (Emaar / Voltas MATERIAL / EQUIPMENT APPROVAL FORM, scanned)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material / equipment approval form (Emaar / Voltas form, 2 pages, scanned)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material / equipment approval form (Emaar / Voltas form, 6 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material / equipment approval form (Emaar / Voltas form, scanned)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material approval request (Dutco MATERIAL APPROVAL REQUEST form, Nakheel; 3 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material sample tag / submittal cover (Kling / IBA / CSCEC form, scanned, 11 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "sample tags on a submittal cover: SAMPLE_APPROVAL or MATERIAL_SUBMITTAL not established"
+  },
+  "material submittal (supplier's own cover, 18 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal (supplier's own cover, 250 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal (supplier's own cover, 52 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal cover (Material & Sample Approval Submittal, York/Samana form) + catalogue": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal cover (Materials Submittal Form)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal cover (Materials Submittal Form) + attachments": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal form (Khatib & Alami / TAV / Emaar MATERIAL SUBMITTAL form, scanned, faint)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal form (Khatib & Alami / TAV form, rotated scan, 11 pages)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal transmittal / cover (RAQ MATERIAL SUBMITTAL form)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "material submittal transmittal / cover (RAQ MATERIAL SUBMITTAL form, Project Central / Tim Aerospace)": {
+   "type": "MATERIAL_SUBMITTAL",
+   "documents": 1,
+   "why": "a material submittal form or package"
+  },
+  "minutes of meeting (weekly MEP meeting no. 020, scanned, 19 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "pre-qualification submittal (Khatib & Alami / TAV form, rotated scan, 12 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a document / pre-qualification / technical submission: not a material submittal, no faithful type"
+  },
+  "pre-qualification transmittal (Al Hilal / Samana form) + attachments (310 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a document / pre-qualification / technical submission: not a material submittal, no faithful type"
+  },
+  "product catalogue (Edwards EST4, scanned pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "product catalogue / datasheet pack (Edwards EST4, scanned, 204 pages)": {
+   "type": "DATASHEET",
+   "documents": 1,
+   "why": "a datasheet or catalogue"
+  },
+  "project execution request form (internal, scanned)": {
+   "type": null,
+   "documents": 1,
+   "why": "an internal request form / an approval-pack cover: no faithful type"
+  },
+  "purchase order (client's LPO, scanned)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "quotation (Al Arabia, 4 pages, scanned)": {
+   "type": null,
+   "documents": 1,
+   "why": "our quotation, not attached as a Design Sheet: DESIGN_SHEET or OTHER not established"
+  },
+  "quotation (Al Arabia, scanned)": {
+   "type": null,
+   "documents": 1,
+   "why": "our quotation, not attached as a Design Sheet: DESIGN_SHEET or OTHER not established"
+  },
+  "quotation (Al Arabia, variation, scanned)": {
+   "type": null,
+   "documents": 1,
+   "why": "our quotation, not attached as a Design Sheet: DESIGN_SHEET or OTHER not established"
+  },
+  "quotation (third-party supplier, 3 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a third party's quotation: none of the named types"
+  },
+  "quotation (third-party supplier, battery cells)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "a third party's quotation: none of the named types"
+  },
+  "reply (contractor's reply to consultant comments on EML submittal)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "reply (contractor's reply to consultant comments on FA SD)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "reply (contractor's reply to consultant comments on FA samples)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "reply (contractor's reply to consultant comments on MS R0, 2 pages)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "reply (contractor's reply to consultant comments on the O&M manual Rev.00)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "reply (contractor's reply to consultant comments, table)": {
+   "type": "COMMENT_RESPONSE",
+   "documents": 1,
+   "why": "a contractor's reply to consultant comments"
+  },
+  "requirements note (Civil Defense Requirements, designed page, 8 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "sample approval request (SAF Sample Approval Form)": {
+   "type": "SAMPLE_APPROVAL",
+   "documents": 1,
+   "why": "a sample approval form"
+  },
+  "sample tag sheets (material sample tags, 20 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "sample tags: no faithful type"
+  },
+  "schedule (electrical load schedule, 36 pages)": {
+   "type": "LOAD_SCHEDULE",
+   "documents": 1,
+   "why": "a load schedule"
+  },
+  "schedule (interior finish schedule, 63 pages)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "schedule of equipment (PA schedule of materials)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "schedule of equipment (technical submittal, text PDF, 2 pages; also in the BOQ set)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "schedule of materials (technical submittal, VESDA)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "schedule of materials table (submittal attachment)": {
+   "type": null,
+   "documents": 1,
+   "why": "a schedule of another kind (finishes, load distribution): no faithful type"
+  },
+  "shop drawing sheet (BK Gulf PAVA, clouded copy)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "shop drawing sheet (BK Gulf PAVA; filed under Calc/Input from BK Gulf)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "shop drawing sheet (BK Gulf PAVA; filed under Calc/SPL/Atrium)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet"
+  },
+  "shop-drawing cover (LACASA SHOPDRAWING SUBMITTAL form, scanned, 5 pages)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing submission cover"
+  },
+  "shop-drawing transmittal / cover (Dutco SHOP DRAWINGS form, scanned) + attachments": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing submission form (printed title SHOP DRAWINGS)"
+  },
+  "specification (tender MEP specifications, 48 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (HVAC, 7 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (consultant spec, 22 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (mechanical, 12 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (mechanical, 7 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (plumbing, 11 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (scanned, 28 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification section (tender, 14 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "specification volume (particular specifications, lighting part B, 204 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "stamped shop drawing set (JAM series, 7 pages, fire-safety consultancy approval stamp)": {
+   "type": "SHOP_DRAWING",
+   "documents": 1,
+   "why": "a shop drawing sheet or set"
+  },
+  "supplier schematic (indicative central battery system schematic, Bellagio Hotel)": {
+   "type": null,
+   "documents": 1,
+   "why": "a supplier's indicative schematic: given to us but not issued for construction; no faithful type"
+  },
+  "supplier schematic (indicative central battery system schematic, MGM-1 Hotel)": {
+   "type": null,
+   "documents": 1,
+   "why": "a supplier's indicative schematic: given to us but not issued for construction; no faithful type"
+  },
+  "technical note (manufacturer IP65 test confirmation)": {
+   "type": null,
+   "documents": 1,
+   "why": "a manufacturer's test confirmation: CERTIFICATE or OTHER not established"
+  },
+  "technical note (manufacturer test confirmation)": {
+   "type": null,
+   "documents": 1,
+   "why": "a manufacturer's test confirmation: CERTIFICATE or OTHER not established"
+  },
+  "technical write-up (cause and effect matrix write-up sequence, 6 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "technical write-up (cause and effect matrix write-up sequence, 7 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "tender bill of quantities (Volume III, 298 pages)": {
+   "type": "OTHER",
+   "documents": 1,
+   "why": "none of the named types"
+  },
+  "tender specification volume (787 pages)": {
+   "type": "SPECIFICATION",
+   "documents": 1,
+   "why": "a specification"
+  },
+  "transmittal (document transmittal, scanned, signed as received)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "transmittal (document transmittal, scanned, signed as received, 2 pages)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "transmittal (document transmittal, scanned, signed as received, 3 pages)": {
+   "type": "TRANSMITTAL",
+   "documents": 1,
+   "why": "a transmittal"
+  },
+  "unlabelled": {
+   "type": null,
+   "documents": 1,
+   "why": "no label"
+  },
+  "vendor list (list of approved manufacturers / suppliers / sub-contractors, scanned, landscape)": {
+   "type": "VENDOR_LIST",
+   "documents": 1,
+   "why": "a vendor list"
+  },
+  "vendor list (preferred supplier and sub-contractor list, scanned, 33 pages)": {
+   "type": "VENDOR_LIST",
+   "documents": 1,
+   "why": "a vendor list"
+  },
+  "vendor list page (rotated scan, cable row)": {
+   "type": "VENDOR_LIST",
+   "documents": 1,
+   "why": "a vendor list"
+  },
+  "vendor list page (rotated scan, emergency lighting row)": {
+   "type": "VENDOR_LIST",
+   "documents": 1,
+   "why": "a vendor list"
+  }
+ },
+ "unmapped": [
+  "BOQ (design-sheet template titled BOQ; also in the BOQ set)",
+  "IFC drawing set (tender stage, mechanical)",
+  "authority (DCD) fire and life safety drawing set (23 pages)",
+  "authority approval certificate (Dubai Civil Defence FINAL APPROVAL)",
+  "authority document (Dubai Municipality affection plan, electronically certified)",
+  "authority permit (Dubai Development Authority Final Building Permit)",
+  "authority-approved consultant drawing set (Dubai Civil Defence stamped, 17 pages)",
+  "authority-approved consultant drawing set (Dubai Civil Defence stamped, 21 pages)",
+  "authority-approved traffic plan (RTA, scanned, signed)",
+  "calculation schedule (electrical load distribution, 11 pages)",
+  "consultant IFT drawing sheet (electrical power)",
+  "consultant IFT drawing sheet (facade lighting)",
+  "consultant IFT drawing sheet (fire fighting)",
+  "consultant IFT drawing sheet (mechanical smoke control)",
+  "consultant IFT drawing sheet (plumbing / LPG)",
+  "consultant IFT drawing sheet (smoke control)",
+  "consultant design sheet (facade lighting concept rendering)",
+  "consultant drawing sheet (gas layout, DCD approval submission, 9 pages)",
+  "consultant schematic sheet (BMS)",
+  "consultant tender drawing sheet (HVAC schematic)",
+  "consultant tender drawing sheet (ICT)",
+  "consultant tender drawing sheet (architectural GA plan)",
+  "consultant tender drawing sheet (architectural)",
+  "consultant tender drawing sheet (emergency lighting)",
+  "consultant tender drawing sheet (facade access)",
+  "consultant tender drawing sheet (infrastructure)",
+  "consultant tender drawing sheet (interior design)",
+  "consultant tender drawing sheet (interior design, electrical requirement)",
+  "consultant tender drawing sheet (interior design, scanned)",
+  "consultant tender drawing sheet (landscape details)",
+  "consultant tender drawing sheet (landscape)",
+  "consultant tender drawing sheet (lighting control)",
+  "consultant tender drawing sheet (lighting schematic)",
+  "consultant tender drawing sheet (signage)",
+  "consultant tender drawing sheet (structural)",
+  "cost sheet (design-sheet template titled Cost Sheet, 2 pages, scanned)",
+  "cover sheet (Emaar facilities management approval pack, 7 pages)",
+  "delivery sheet (design-sheet template titled Delivery Sheet, 2 pages)",
+  "design consultant drawing sheet (acoustics)",
+  "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form)",
+  "document submittal cover (Khatib & Alami / TAV / Emaar DOCUMENT SUBMITTAL form) + matrix (7 pages)",
+  "interior-design shop drawing sheet (another contractor's package)",
+  "interior-design shop drawing sheet (another contractor's package, not FAS)",
+  "letter (draft warranty certificate)",
+  "letter (manufacturer authorization)",
+  "material sample tag / submittal cover (Kling / IBA / CSCEC form, scanned, 11 pages)",
+  "pre-qualification submittal (Khatib & Alami / TAV form, rotated scan, 12 pages)",
+  "pre-qualification transmittal (Al Hilal / Samana form) + attachments (310 pages)",
+  "project execution request form (internal, scanned)",
+  "quotation (Al Arabia, 2 pages, scanned)",
+  "quotation (Al Arabia, 4 pages, scanned)",
+  "quotation (Al Arabia, scanned)",
+  "quotation (Al Arabia, variation, scanned)",
+  "sample tag sheets (material sample tags, 20 pages)",
+  "schedule (interior finish schedule, 63 pages)",
+  "schedule of equipment (PA schedule of materials)",
+  "schedule of equipment (technical submittal, text PDF, 2 pages; also in the BOQ set)",
+  "schedule of materials (technical submittal, 5 pages)",
+  "schedule of materials (technical submittal, VESDA)",
+  "schedule of materials table (submittal attachment)",
+  "supplier schematic (indicative central battery system schematic, Bellagio Hotel)",
+  "supplier schematic (indicative central battery system schematic, MGM-1 Hotel)",
+  "technical note (manufacturer IP65 test confirmation)",
+  "technical note (manufacturer test confirmation)",
+  "technical submission cover (Dutco TECHNICAL SUBMISSION form, Nakheel) + acoustic report",
+  "unlabelled"
+ ],
+ "systems": {
+  "FAS": {
+   "code": "FAS",
+   "documents": 96,
+   "why": "as labelled"
+  },
+  "ELS": {
+   "code": "ELS",
+   "documents": 36,
+   "why": "as labelled"
+  },
+  "FAS / VES": {
+   "code": "FAS",
+   "documents": 33,
+   "why": "labelled FAS / VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "other (interior design; non-FAS)": {
+   "code": "NONE",
+   "documents": 19,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "CBS": {
+   "code": "ELS",
+   "documents": 15,
+   "why": "labelled CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "other (architectural; non-FAS)": {
+   "code": "NONE",
+   "documents": 15,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "PA/VA": {
+   "code": "PAVA",
+   "documents": 11,
+   "why": "as labelled"
+  },
+  "other (HVAC; non-FAS)": {
+   "code": "NONE",
+   "documents": 6,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (electrical power; non-FAS)": {
+   "code": "NONE",
+   "documents": 5,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "FAS (fire-rated cables)": {
+   "code": "FRC",
+   "documents": 4,
+   "why": "fire-rated / fire-resistant cables: the platform's FRC"
+  },
+  "other (ICT; non-FAS)": {
+   "code": "NONE",
+   "documents": 4,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (interior finishes; non-FAS)": {
+   "code": "NONE",
+   "documents": 4,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (mechanical; non-FAS)": {
+   "code": "NONE",
+   "documents": 4,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "FAS (flame detectors)": {
+   "code": "FAS",
+   "documents": 3,
+   "why": "as labelled"
+  },
+  "PA/VA (acoustic calculation)": {
+   "code": "PAVA",
+   "documents": 3,
+   "why": "as labelled"
+  },
+  "VES": {
+   "code": "FAS",
+   "documents": 3,
+   "why": "labelled VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "other (landscape; non-FAS)": {
+   "code": "NONE",
+   "documents": 3,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (lighting; non-FAS)": {
+   "code": "NONE",
+   "documents": 3,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (plumbing; non-FAS)": {
+   "code": "NONE",
+   "documents": 3,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (smoke control; non-FAS)": {
+   "code": "NONE",
+   "documents": 3,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (structural; non-FAS)": {
+   "code": "NONE",
+   "documents": 3,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "ASD (aspiration)": {
+   "code": null,
+   "documents": 2,
+   "why": "a system the platform has no code for (ASD): excluded"
+  },
+  "CBS (batteries)": {
+   "code": "ELS",
+   "documents": 2,
+   "why": "labelled CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS (emergency lighting design input)": {
+   "code": "ELS",
+   "documents": 2,
+   "why": "as labelled"
+  },
+  "ELS (manufacturer EARON (MENVIER))": {
+   "code": "ELS",
+   "documents": 2,
+   "why": "as labelled"
+  },
+  "FAS / life safety": {
+   "code": "FAS",
+   "documents": 2,
+   "why": "labelled FAS / life safety -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "other (LV electrical; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (architectural lighting; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (chilled water; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (facade lighting; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (fire fighting; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (fire suppression; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (signage; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (ventilation; non-FAS)": {
+   "code": "NONE",
+   "documents": 2,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "CBS (the highlighted row); whole-project vendor list": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "CBS / ELS": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled CBS / ELS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "CBS / ELS (luminaires)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled CBS / ELS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS (manufacturer EARON (MENVIER), emergency lighting)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "ELS / CBS": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled ELS / CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS / CBS (Fire Alarm System X; CBS X)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled ELS / CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS / CBS (filed under the fire alarm ELV series)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled ELS / CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS / CBS (sample tags)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled ELS / CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "ELS / CBS (scope boxes: Fire Alarm System X, CBS X)": {
+   "code": "ELS",
+   "documents": 1,
+   "why": "labelled ELS / CBS -> ELS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "FAS (Edwards detectors)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (Edwards manufacturing)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (Fire Alarm System X; Other Low Voltage System X)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (Fire Alarm ticked, brand EDWARDS; scope Design, Supply, T&C ticked)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (Fire Alarm ticked, brand Edwards)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (cables)": {
+   "code": "FRC",
+   "documents": 1,
+   "why": "fire-rated / fire-resistant cables: the platform's FRC"
+  },
+  "FAS (fire resistant cable X)": {
+   "code": "FRC",
+   "documents": 1,
+   "why": "fire-rated / fire-resistant cables: the platform's FRC"
+  },
+  "FAS (flame and gas detectors)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (manufacturer EDWARDS (EST4))": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS (manufacturer EDWARDS EST4)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "FAS + VES + fire telephone (Edwards) + emergency light monitoring (Menvier)": {
+   "code": null,
+   "documents": 1,
+   "why": "a system the platform has no code for (fire telephone): excluded"
+  },
+  "FAS / CBS": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / CBS (Fire Alarm System X)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / CBS (scope boxes Fire Alarm System, CBS)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / ELS": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / ELS / FF (pre-qualification of the supplier)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS, NONE): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / FF / ELS (fire fighting, hi-expansion foam, sprinklers, fire alarm, emergency lighting, boom lift)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS, NONE): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / VES (Fire Alarm System X)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled FAS / VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "FAS / VES (Other Low Voltage System X)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled FAS / VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "FAS / VES (booster power supply loads)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled FAS / VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "FAS / VES / CBS": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / VES / CBS (Fire Alarm System X; CBS)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / VES / CBS (Fire Alarm, Voice Evacuation, Central Battery System ticked)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (ELS, FAS): the platform's system_code is single-valued; excluded"
+  },
+  "FAS / life safety (authority approval of the building)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled FAS / life safety -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "FAS / life safety (fire strategy)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled FAS / life safety -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "PA/VA (Fire Alarm System X)": {
+   "code": "PAVA",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "PA/VA (acoustic studies service)": {
+   "code": "PAVA",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "PA/VA (public address and voice evacuation)": {
+   "code": "PAVA",
+   "documents": 1,
+   "why": "as labelled"
+  },
+  "VES (EST3 panel)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "VES (voice evacuation acoustic calculation)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "VES (voice evacuation, EST3 panel)": {
+   "code": "FAS",
+   "documents": 1,
+   "why": "labelled VES -> FAS (VES is the fire alarm's voice evacuation, CBS is emergency lighting, life safety adds no system)"
+  },
+  "VES / PA (voice evacuation acoustic calculation)": {
+   "code": null,
+   "documents": 1,
+   "why": "more than one system (FAS, PAVA): the platform's system_code is single-valued; excluded"
+  },
+  "VES / fire telephone (Voice Evacuation and Fire Telephone ticked, brand Edwards)": {
+   "code": null,
+   "documents": 1,
+   "why": "a system the platform has no code for (fire telephone): excluded"
+  },
+  "other (AV / BGM / digital signage; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (BMS / chilled water; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (LPG gas; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (LPG; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (acoustics; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (architectural signage; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (building permit; non-FAS control)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (disabled toilet alarm, to be interfaced with the FA system)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (drainage; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (electrical; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (electrical; with a fire alarm and emergency lighting legend; non-FAS control)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (facade access / BMU; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (fire fighting / sprinklers; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (fire fighting, FF; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (fire suppression pumps; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (hydraulics / plumbing; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (infrastructure / LV; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (infrastructure; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (interior / ceiling materials; input to the PA/VA acoustic calc)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (interior ceilings; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (interior design / ceiling finishes)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (interior design / electrical requirement; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (land / authority; non-FAS control)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (low current / ELV; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (mechanical / fire fighting suppliers; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (porcelain tiles; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (project meeting; non-FAS control)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (security / access control; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (security; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (smoke management)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (storm water; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (traffic; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (water supply; non-FAS)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (whole-project specification; non-FAS control)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "other (whole-project tender BOQ; the FAS section is within)": {
+   "code": "NONE",
+   "documents": 1,
+   "why": "labelled as another discipline: no system of ours"
+  },
+  "unlabelled": {
+   "code": null,
+   "documents": 1,
+   "why": "not labelled"
+  }
+ }
+}

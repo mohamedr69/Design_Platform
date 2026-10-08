@@ -27,6 +27,7 @@ from app.models import (
     ComplianceLearnedAnswer,
     ComplianceStatement,
     DocumentClassification,
+    DocumentClassificationConflict,
     DocumentDependency,
     DocumentReading,
     DrawingIssue,
@@ -91,7 +92,7 @@ def delete_project(db: Session, project: Project) -> None:
     db.execute(delete(ShopDrawingCandidate).where(ShopDrawingCandidate.project_id == project_id))
     # Classification assessments and BOQ corrections point at the project's
     # documents and users; they go before the documents do.
-    for model in (DocumentClassification, BoqCorrection, AiVerification, DocumentDependency, DocumentReading, BatteryPanelResult, SubmittalReply,
+    for model in (DocumentClassificationConflict, DocumentClassification, BoqCorrection, AiVerification, DocumentDependency, DocumentReading, BatteryPanelResult, SubmittalReply,
                   ProjectShopDrawing, ProjectBuildingFloor, ProjectFloorAlias, DrawingIssue, DrawingRequirementState, ShopDrawingEvent,
                   ProjectFrcCables, ProjectProposedMaterial, ProjectFloorSchedule, ProjectShopBoq, ProjectDraftsmanAssignment, ProjectRedesign, ProjectFaInterfaces, FaInterfaceRun,
                   ReviewRuling, ProjectDrawingReview, ProjectAmplifierDesign, ProjectIfcDrawing,
