@@ -1,0 +1,67 @@
+{
+ "computer_name": "LAPTOP-IL4L4UAJ",
+ "os": "Windows 10 Home 10.0.19045",
+ "python": "3.12.10",
+ "sqlite": "3.49.1",
+ "console": {
+  "path": "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+  "file_version": "25.1.164.0.0",
+  "product": "AcCoreConsole",
+  "banner": "AutoCAD Core Engine Console - Copyright 2025 Autodesk, Inc.  All rights reserved. (W.164.0.0)",
+  "version_number": "W.164.0.0 (UNICODE)",
+  "sha256": "fd4b36cf17081bdb9cd7a0c9a5d6f18c2edbc6aea164faa549918bc7c8c41ec9",
+  "bytes": 504152,
+  "host_product": "DWG TrueView 2026 - English (no full AutoCAD installed)",
+  "template_seen": "dwgviewriso.dwt"
+ },
+ "profile": {
+  "isolate_switch": "/isolate m5cad C:\\t\\tmp\\m5cad\\profile",
+  "user_data_folder": "C:\\t\\tmp\\m5cad\\profile (Local, Roaming, Temp created by the console; 7.2 MB)",
+  "temp_for_harness_runs": "C:\\t\\tmp\\m5cad\\tmp",
+  "outside_the_dedicated_folder": [
+   "p0 (usage probe, 06:42 local) ran WITHOUT /isolate: printed usage, opened a blank drawing, waited for input, killed by a 60 s timeout",
+   "84 zero-byte accc* stdout-redirect files in %TEMP% from probes before TEMP was redirected (06:42-07:09 local); deleted at 07:21 local",
+   "the default %LOCALAPPDATA%\\Autodesk\\DWG TrueView 2026 - English\\R24\\enu folder's directory timestamp changed to 07:20:25 local (during s9); no file in it changed",
+   "no HKCU\\Software\\Autodesk key named m5cad was found; HKCU\\Software\\Autodesk\\DWG TrueView\\R24 has only its existing dwgviewr-9128:409 profile key"
+  ]
+ },
+ "code": {
+  "branch": "roadmap/u2",
+  "commit": "37350bc848f9e5ec97dcae0695f52719cc99b6b6",
+  "copy": "C:\\t\\tmp\\m5cad\\code\\ep platform (m5 copy)\backend (git -c core.autocrlf=false archive: app, tests, alembic, scripts, alembic.ini, pytest.ini)",
+  "sha256": {
+   "backend/app/redesign/cad.py": "43672b306083c0b362b2b10ce314dfa68ec0304135032a442dc4a67105c8ff00",
+   "backend/app/redesign/verify.py": "449ad1af366e4c3072bcccaea36624e957bf24c9cfd81f8ddcbf02f55e97837a",
+   "backend/app/redesign/service.py": "dfd5ade7f4f0670666bce94ffce26a484c28d73245e9ef92a24b0848716a0831",
+   "backend/app/ifc/dxf/convert.py": "d86bcff892e30659ce69b77cb030178ea1eeb19aa32a00846cf8234fec49435b",
+   "backend/app/redesign/library/CR.dwg": "d0b4cd2244d45ae5913a8e01b3eb1ff623333bdc5f03598a8d2f77f9536e888a"
+  },
+  "backend_library_not_copied": "backend/library (495 MB company datasheet library) was not copied: the Redesign blocks CR/CT1/CT2 are in backend/app/redesign/library (copied with app/), and no test needing backend/library was run"
+ },
+ "source": {
+  "path": "G:\\dev (2)\\dev\\ep-platform-merged\\data\\uploads\\EP-30880\\ifc\\60de2a377daa.dwg",
+  "bytes": 4380643,
+  "mtime": "2026-10-03 17:44 local",
+  "sha256_expected": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "sha256_before": {
+   "at": "2026-10-08T02:41:36Z",
+   "value": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+  },
+  "sha256_after": {
+   "at": "2026-10-08T03:21:29Z",
+   "value": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+  },
+  "also_checked_inside_every_scenario": "results/*.json before/after live_source_sha256",
+  "isolated_copies": {
+   "C:/t/tmp/m5cad/src/GC-01-copy.dwg (read-only attribute)": "66043c11...ec21",
+   "C:/t/tmp/m5cad/uploads/EP-90880/ifc/60de2a377daa.dwg": "66043c11...ec21"
+  }
+ },
+ "isolation": {
+  "database": "C:/t/tmp/m5cad/db/m5cad.db (fresh SQLite, create_all)",
+  "uploads": "C:/t/tmp/m5cad/uploads",
+  "archive": "C:/t/tmp/m5cad/archive (empty at the end)",
+  "second_volume": "G:/t/tmp/m5cad-vol2 (item 7 only; removed). The empty parents G:/t/tmp and G:/t were created by the run and are left: their removal was refused by a safety check",
+  "scratch_size_end": "75 MB under C:/t/tmp/m5cad"
+ }
+}

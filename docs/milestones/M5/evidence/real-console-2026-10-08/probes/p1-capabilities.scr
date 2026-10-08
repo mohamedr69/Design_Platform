@@ -1,0 +1,32 @@
+_.FILEDIA
+0
+_.CMDDIA
+0
+(princ (strcat "\n" "P1-LISP" "-ALIVE" "\n"))
+(setvar "TILEMODE" 1)
+_.CIRCLE
+0,0
+5
+(princ (strcat "\n" "P1-AFTER-CIRCLE:" (if (entlast) (cdr (assoc 0 (entget (entlast)))) "NONE") "\n"))
+(setq p1e (entmake (list (cons 0 "LINE") (cons 8 "0") (list 10 0.0 0.0 0.0) (list 11 10.0 10.0 0.0))))
+(princ (strcat "\n" "P1-ENTMAKE:" (if p1e "YES" "NO") "\n"))
+(princ (strcat "\n" "P1-HANDLE-LAST:" (cdr (assoc 5 (entget (entlast)))) "\n"))
+(entmake (list (cons 0 "BLOCK") (cons 2 "P1BLK") (cons 70 0) (list 10 0.0 0.0 0.0)))
+(entmake (list (cons 0 "CIRCLE") (cons 8 "0") (list 10 0.0 0.0 0.0) (cons 40 1.0)))
+(princ (strcat "\n" "P1-BLOCKDEF:" (if (entmake (list (cons 0 "ENDBLK"))) "YES" "NO") "\n"))
+(setq p1b (entlast))
+(command "_.-INSERT" "P1BLK" "_S" 1.0 (list 20.0 20.0 0.0) 0.0)
+(princ (strcat "\n" "P1-INSERT:" (if (and (entlast) (not (eq (entlast) p1b)) (= (cdr (assoc 0 (entget (entlast)))) "INSERT")) "YES" "NO") "\n"))
+(setq p1i (entlast))
+(command "_.-INSERT" "P1BLK" "_S" 1.0 (list 30.0 30.0 0.0) 0.0)
+(setq p1j (entlast))
+(entdel p1j)
+(princ (strcat "\n" "P1-ENTDEL:" (if (entget p1j) "STILL" "GONE") "\n"))
+(princ (strcat "\n" "P1-DWGNAME:" (getvar "DWGNAME") ":" (getvar "DWGPREFIX") "\n"))
+_.SAVEAS
+2018
+"C:/t/tmp/m5cad/probe/p1-new.dwg"
+(princ (strcat "\n" "P1-AFTER-SAVEAS:" (if (findfile "C:/t/tmp/m5cad/probe/p1-new.dwg") "FILE" "NOFILE") "\n"))
+_.QUIT
+_Y
+

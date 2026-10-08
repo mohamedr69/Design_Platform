@@ -1,0 +1,78 @@
+{
+ "events": [
+  {
+   "at": "2026-10-08T03:17:18+00:00",
+   "worker_pid": 22472,
+   "console_seen": [
+    {
+     "pid": 21564,
+     "ppid": 13424,
+     "cmdline": [
+      "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+      "/i",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j5-fb21b0ad11\\redesign.dwg",
+      "/s",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j5-fb21b0ad11\\redesign.scr",
+      "/l",
+      "en-US",
+      "/isolate",
+      "m5cad",
+      "C:\\t\\tmp\\m5cad\\profile"
+     ]
+    }
+   ]
+  },
+  {
+   "at": "2026-10-08T03:17:19+00:00",
+   "action": "taskkill /F /PID 22472 (the worker, not its tree)",
+   "taskkill": [
+    0,
+    "SUCCESS: The process with PID 22472 has been terminated.",
+    ""
+   ]
+  },
+  {
+   "at": "2026-10-08T03:17:20+00:00",
+   "worker_exit": 1,
+   "console_alive_after_worker_kill": [
+    21564
+   ]
+  },
+  {
+   "at": "2026-10-08T03:17:24+00:00",
+   "console_alive_after_wait": [],
+   "waited_s": 4.5
+  }
+ ],
+ "row": {
+  "output_status": "making",
+  "output_error": null,
+  "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+  "output_relative": null,
+  "output_at": "2026-10-08 03:14:19.665116",
+  "output_changes": 0
+ },
+ "job": {
+  "id": 5,
+  "status": "running"
+ },
+ "last_run_dir": "j5-fb21b0ad11",
+ "last_run_files": [
+  {
+   "path": "redesign.dwg",
+   "bytes": 4380643,
+   "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+  },
+  {
+   "path": "redesign.scr",
+   "bytes": 4926,
+   "sha256": "d680985f672482f32eb57591bf70f2d07d93d06aca66ac00d767cc9a28ceae7c"
+  }
+ ],
+ "final_named_outputs": [
+  "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+ ],
+ "parts": [],
+ "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+ "consoles": []
+}

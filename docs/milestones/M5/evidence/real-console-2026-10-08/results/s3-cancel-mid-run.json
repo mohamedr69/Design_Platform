@@ -1,0 +1,251 @@
+{
+ "name": "s3-cancel-mid-run",
+ "at": "2026-10-08T03:15:47+00:00",
+ "seconds": 11.75,
+ "job_id": 3,
+ "job_status": "cancelled",
+ "request": {
+  "source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "fingerprint": "8ddcc9ca6b5280e01b391cae254054a963aceadac4965046e6ac1b203b92841f",
+  "drawn": 3
+ },
+ "commands": [
+  {
+   "code_command": [
+    "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+    "/i",
+    "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.dwg",
+    "/s",
+    "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.scr",
+    "/l",
+    "en-US"
+   ],
+   "issued": [
+    "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+    "/i",
+    "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.dwg",
+    "/s",
+    "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.scr",
+    "/l",
+    "en-US",
+    "/isolate",
+    "m5cad",
+    "C:\\t\\tmp\\m5cad\\profile"
+   ]
+  }
+ ],
+ "outcome": {
+  "raised": "Cancelled",
+  "message": "Cancelled by the M5 real-console run (ORCH-046)",
+  "traceback": [
+   "    check()",
+   "  File \"C:\\t\\tmp\\m5cad\\harness\\m5cad.py\", line 254, in check",
+   "    on_check(seen)",
+   "  File \"C:\\t\\tmp\\m5cad\\harness\\m5cad.py\", line 346, in on_check",
+   "    raise jobs.Cancelled(\"Cancelled by the M5 real-console run (ORCH-046)\")",
+   "app.services.jobs.Cancelled: Cancelled by the M5 real-console run (ORCH-046)"
+  ]
+ },
+ "checks_called": 4,
+ "events": [
+  {
+   "at": "2026-10-08T03:15:44+00:00",
+   "check": 4,
+   "console_alive": [
+    {
+     "pid": 13716,
+     "ppid": 25340,
+     "cmdline": [
+      "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+      "/i",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.dwg",
+      "/s",
+      "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8\\redesign.scr",
+      "/l",
+      "en-US",
+      "/isolate",
+      "m5cad",
+      "C:\\t\\tmp\\m5cad\\profile"
+     ]
+    }
+   ],
+   "action": "raise jobs.Cancelled (the engineer's cancel)"
+  }
+ ],
+ "before": {
+  "row": {
+   "output_status": "failed",
+   "output_error": "Change m1: the CR module's file is missing from this installation's Redesign library.",
+   "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+   "output_relative": null,
+   "output_at": "2026-10-08 03:14:19.665116",
+   "output_changes": 0
+  },
+  "redesign_tree": [
+   {
+    "path": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/autocad.log",
+    "bytes": 1210,
+    "sha256": "4f6ffd8eccc383d168151cda038e593cc3bff0f9c763630ea71f73df5b661147"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.scr",
+    "bytes": 4926,
+    "sha256": "eee1a6ce0ab173606d7edf0609a460012c18780db059281da231118283aedcdb"
+   },
+   {
+    "path": "runs/j1-238d814a69/verification.json",
+    "bytes": 999,
+    "sha256": "ea2ed277a9ff81f87168374cbf1fd61ddfddc81af8b9f258715dc047138d9768"
+   }
+  ],
+  "archive_tree": [],
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "source_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "consoles": [],
+  "last_output": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+ },
+ "run": {
+  "run_dir": "j3-b00fafb9f8",
+  "files": [
+   {
+    "path": "autocad.log",
+    "bytes": 781,
+    "sha256": "bb9d1aee96ef9afce44675bcc5132abd647f4eb6a769a8341a8a879bc0db8b9c"
+   },
+   {
+    "path": "redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "redesign.scr",
+    "bytes": 4926,
+    "sha256": "e2a1e3b1dc05d7c507f6a5f4e395430cab4b67b74b413760d247dc5df9f3e67a"
+   }
+  ],
+  "parse_log": {
+   "failures": [],
+   "ok": [],
+   "nosave": 0
+  },
+  "nonce": "062002400bf10bfc",
+  "log_lines_after_open": [
+   "C:\\Program Files\\Autodesk\\DWG TrueView 2026 - English\\accoreconsole.exe",
+   "Current Directory: C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\runs\\j3-b00fafb9f8",
+   "Isolating to regkey=m5cad, userDataFolder=C:\\t\\tmp\\m5cad\\profile.",
+   "INFO: Isolation create time: 197 ms.",
+   "Version Number: W.164.0.0 (UNICODE)",
+   "LogFilePath has been set to the working folder.",
+   "Loading AEC Base...",
+   "Loading AEC Base Extended...",
+   "Loading AEC Core...",
+   "Loading AEC Project Base...",
+   "Loading AEC Architectural Base...",
+   "Loading AEC Schedule..."
+  ],
+  "verification": null
+ },
+ "after": {
+  "row": {
+   "output_status": "cancelled",
+   "output_error": "Cancelled: nothing was published; the run's log is kept.",
+   "output_path": "EP-90880/redesign/GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+   "output_relative": null,
+   "output_at": "2026-10-08 03:14:19.665116",
+   "output_changes": 0
+  },
+  "redesign_tree": [
+   {
+    "path": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/autocad.log",
+    "bytes": 1210,
+    "sha256": "4f6ffd8eccc383d168151cda038e593cc3bff0f9c763630ea71f73df5b661147"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j1-238d814a69/redesign.scr",
+    "bytes": 4926,
+    "sha256": "eee1a6ce0ab173606d7edf0609a460012c18780db059281da231118283aedcdb"
+   },
+   {
+    "path": "runs/j1-238d814a69/verification.json",
+    "bytes": 999,
+    "sha256": "ea2ed277a9ff81f87168374cbf1fd61ddfddc81af8b9f258715dc047138d9768"
+   },
+   {
+    "path": "runs/j3-b00fafb9f8/autocad.log",
+    "bytes": 781,
+    "sha256": "bb9d1aee96ef9afce44675bcc5132abd647f4eb6a769a8341a8a879bc0db8b9c"
+   },
+   {
+    "path": "runs/j3-b00fafb9f8/redesign.dwg",
+    "bytes": 4380643,
+    "sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21"
+   },
+   {
+    "path": "runs/j3-b00fafb9f8/redesign.scr",
+    "bytes": 4926,
+    "sha256": "e2a1e3b1dc05d7c507f6a5f4e395430cab4b67b74b413760d247dc5df9f3e67a"
+   }
+  ],
+  "archive_tree": [],
+  "live_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "source_copy_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "uploads_source_sha256": "66043c11fab9eaf5a1768ba24ed924821baecec3b6726ee70f6c529300ceec21",
+  "consoles": [],
+  "last_output": "C:\\t\\tmp\\m5cad\\uploads\\EP-90880\\redesign\\GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+  "final_named_outputs": [
+   "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg"
+  ],
+  "parts": [],
+  "view_available": null,
+  "view_output": {
+   "output": {
+    "status": "cancelled",
+    "error": "Cancelled: nothing was published; the run's log is kept.",
+    "relative": null,
+    "published": null,
+    "filed_earlier": null,
+    "file": "GC-01 FA LAYOUT R0 - Redesign 20261008-031419-657118Z d1 s66043c11fab9 j0-0000000000.dwg",
+    "available": true,
+    "at": "2026-10-08T03:14:19.665116",
+    "changes": 0
+   }
+  },
+  "view_keys": [
+   "agents_on",
+   "calls",
+   "changes",
+   "counts",
+   "drawing",
+   "error",
+   "finished_at",
+   "folder",
+   "output",
+   "readiness",
+   "review",
+   "run",
+   "started_at",
+   "status",
+   "symbols"
+  ]
+ }
+}
