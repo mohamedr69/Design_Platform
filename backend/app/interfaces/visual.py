@@ -26,6 +26,7 @@ import math
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from app.ai import project_policy
 from app.ai.provider import ImagePart, TextPart, fa_ai_on, get_fa_provider
 from app.compliance import assist
 from app.core.config import get_settings
@@ -239,6 +240,9 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
     s = get_settings()
     if not fa_ai_on():
         return 0                        # no model to look: the labels stay held for the engineer
+    # the project's AI policy, fail closed, before any drawing is opened or pictured (ORCH-053); each look
+    # is checked again per call (assist._call)
+    project_policy.enforce(db, project.id, task=TASK)
     looked = 0
     for src in sources:
         labels = wanted(src)
@@ -272,7 +276,7 @@ def check(db, project, sources: list[dict], *, progress=None, check=None, limits
         per_call = max(1, s.fa_look_windows_per_call)
         items: dict[str, dict] = {}
         unread: dict[str, str] = {}
-        budget = review._budget(db, project)
+        budget = review._budget(db, project, "fa_visual")
         done = 0
         futures: dict = {}
         pool = ThreadPoolExecutor(max_workers=max(1, s.drawing_review_parallel))

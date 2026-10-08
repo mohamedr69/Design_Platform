@@ -181,7 +181,12 @@ def _setup(monkeypatch, tmp_path):
     monkeypatch.setattr(render, "annotate", lambda png, w, start=1: png)
     from app.review import service as review
 
-    monkeypatch.setattr(review, "_budget", lambda db, project: None)
+    monkeypatch.setattr(review, "_budget", lambda db, project, *_feature: None)
+    # no database here: the project stands in as one whose AI use is allowed (the gate is tested in
+    # tests/test_ai_policy_enforcement.py; ORCH-053)
+    from app.ai import project_policy
+
+    monkeypatch.setattr(project_policy, "enforce", lambda db, project_id, *, task: None)
     FakeSession.drawn = []
     src = {"discipline": "SM", "status": "read", "sha256": sha, "filename": "SMOKE LAYOUT.dwg",
            "result": {"units": "m", "items": _labels(),

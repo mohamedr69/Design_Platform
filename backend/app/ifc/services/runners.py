@@ -21,6 +21,7 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from app.ai.project_policy import AiPolicyRefused
 from app.ifc.dxf import convert
 from app.ifc.progress import ReadTimer
 from app.ifc.services import processing, revisions, upload, zip_import
@@ -264,7 +265,7 @@ def run_drawing_review(session: Session, job: BackgroundJob, ctx: jobs.JobContex
     except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
         from app.review.render import RenderError
 
-        if isinstance(exc, (RenderError, review.ReviewIncomplete)):
+        if isinstance(exc, (RenderError, review.ReviewIncomplete, AiPolicyRefused)):
             # said as it is: a plot is not a review
             raise processing.ReadError(str(exc)) from exc
         raise _unexpected(job.id, exc) from exc
@@ -289,7 +290,7 @@ def _redesign(kind: str):
                         progress=lambda done, total, message: ctx.progress(done, max(total, 1), message, stage=kind))
         except (jobs.Cancelled, jobs.Interrupted):
             raise
-        except (redesign.RedesignError, cad.CadError) as exc:
+        except (redesign.RedesignError, cad.CadError, AiPolicyRefused) as exc:
             raise processing.ReadError(str(exc)) from exc
         except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
             raise _unexpected(job.id, exc) from exc
@@ -315,6 +316,8 @@ def run_interfaces_run(session: Session, job: BackgroundJob, ctx: jobs.JobContex
         raise
     except (service.SourceUnreachable, service.SourcesChanged) as exc:
         raise processing.ReadError(f"{exc}. Nothing was changed.") from exc
+    except AiPolicyRefused as exc:
+        raise processing.ReadError(f"{exc} Nothing was changed.") from exc
     except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log
         raise _unexpected(job.id, exc) from exc
 
@@ -335,6 +338,8 @@ def run_interfaces_review(session: Session, job: BackgroundJob, ctx: jobs.JobCon
         return workflow.run_retry(session, project, run)
     except (jobs.Cancelled, jobs.Interrupted):
         raise
+    except AiPolicyRefused as exc:
+        raise processing.ReadError(f"{exc} Nothing was changed.") from exc
     except ValueError as exc:
         raise processing.ReadError(f"{exc}. Nothing was changed.") from exc
     except Exception as exc:  # noqa: BLE001 -- said plainly; the trace is in the log

@@ -598,6 +598,10 @@ def _ai_review(db: Session, project: Project, systems: list[str], rows: list[Pro
     ok, _why = drawing_ai_review.enabled()
     if not ok:
         return
+    from app.ai import project_policy
+
+    if project_policy.check(db, project.id, task=drawing_ai_review.TASK_REPLY):
+        return                          # the project's AI policy, fail closed (ORCH-053); each call re-checks
     report = drawing_ai_review.Report()
     wanted: dict[str, dict] = {}
     known = {(r.reference.upper(), system_rules.effective_code(r.system_code, integrated=integrated))

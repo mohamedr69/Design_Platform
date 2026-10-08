@@ -417,6 +417,8 @@ def run(db: Session, project: Project, *, max_calls: int | None = None, ctx=None
     settings = get_settings()
     ok, why = available(project)
     if not ok:
+        if why == project_policy.BLOCKED_MESSAGE:
+            project_policy.audit(db, project.id, TASK, "blocked")          # the refusal recorded (ORCH-053)
         return {"project": project.ep_number, "skipped_run": why}
     started = time.monotonic()
     p = plan(db, project)
@@ -442,6 +444,10 @@ def run(db: Session, project: Project, *, max_calls: int | None = None, ctx=None
         if ctx is not None:
             ctx.progress(start, len(p.to_send), f"Classifying with the model — {start} of {len(p.to_send)}")
             ctx.check()
+        refused = project_policy.check(db, project.id, task=TASK)          # re-read before every batch (ORCH-053)
+        if refused:
+            counts["stopped"] = refused
+            break
         batch = p.to_send[start:start + batch_size]
         documents = [{"i": i, "path": c.row.relative_path or c.row.filename,
                       "rules_guess": f"{c.entry.primary_type} ({c.entry.stage})", "first_page_text": c.text}

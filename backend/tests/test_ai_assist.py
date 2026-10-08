@@ -352,6 +352,18 @@ def test_a_changed_document_gets_a_different_key_and_an_unchanged_one_the_same()
     assert len({a, changed_doc, changed_parser, changed_prompt}) == 4
 
 
+def _allowed_project_id(db) -> int:
+    """A project whose AI use is allowed: the extraction call refuses a request that names no
+    project (fail closed, ORCH-053), so these tests name one."""
+    from app.models import Project, User
+
+    project = Project(ep_number="80002", project_name="Extraction call", ai_policy="allowed",
+                      created_by_id=db.query(User).order_by(User.id).first().id)
+    db.add(project)
+    db.commit()
+    return project.id
+
+
 def test_simultaneous_identical_requests_make_one_call(client, db_session):
     from app.ai.evidence import Evidence
     from app.ai.provider import AiRequest
@@ -363,13 +375,14 @@ def test_simultaneous_identical_requests_make_one_call(client, db_session):
     evidence = Evidence(request=request, sent_regions={"cell"}, crop_png=None, fingerprint="fp")
     budget = JobBudget(limits=Limits.from_settings(), calls_today_before=0)
     results = []
+    pid = _allowed_project_id(db_session)
 
     def go():
         from app.database import SessionLocal
 
         db = SessionLocal()
         try:
-            verdict, *_ = pipeline.ask(db, project_id=None, run_id=None, document_sha256="doc", evidence=evidence,
+            verdict, *_ = pipeline.ask(db, project_id=pid, run_id=None, document_sha256="doc", evidence=evidence,
                                        context={}, budget=budget, provider=provider, allowed_target="boq_line:1:1",
                                        independent={"7"})
             results.append(verdict.state)
@@ -491,14 +504,15 @@ def test_invalid_proposals_never_reach_the_project(client, db_session, tmp_path,
     provider = RecordingProvider([_proposal("boq_line:9:9", "74")])
     request = AiRequest(task="read_cell", system="s", parts=[TextPart("task", "t")], schema=PROPOSAL_SCHEMA, max_output_tokens=100)
     evidence = Evidence(request=request, sent_regions={"cell"}, crop_png=None, fingerprint="fp2")
+    pid = _allowed_project_id(db_session)
     verdict, data, cached, _model, key = pipeline.ask(
-        db_session, project_id=None, run_id=None, document_sha256="d", evidence=evidence, context={},
+        db_session, project_id=pid, run_id=None, document_sha256="d", evidence=evidence, context={},
         budget=JobBudget(limits=Limits.from_settings(), calls_today_before=0), provider=provider,
         allowed_target="boq_line:1:1", independent={"74"},
     )
     assert verdict.state == "rejected"
     # A rejected answer is not cached either: the next run asks again.
-    assert result_cache.get(db_session, key, project_id=None, ttl_days=90) is None
+    assert result_cache.get(db_session, key, project_id=pid, ttl_days=90) is None
 
 
 def test_missing_engineering_evidence_is_not_filled_in(client, db_session, tmp_path, recording, ai_on):

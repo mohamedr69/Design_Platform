@@ -31,6 +31,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Callable
 
+from app.ai import project_policy
 from app.ai import provider as prov
 from app.ai.provider import AiRequest, AiResponse, ImagePart, TextPart, Usage
 from app.compliance import assist
@@ -88,6 +89,10 @@ def preflight(db, scope: Scope) -> dict:
     project = db.query(Project).filter(Project.ep_number == scope.ep_number).one_or_none()
     if project is None:
         raise Refused(f"no project EP-{scope.ep_number}")
+    try:   # the project's AI policy, fail closed, before any provider is built (ORCH-053; --live included)
+        project_policy.enforce(db, project.id, task=service.TASK_WINDOW)
+    except project_policy.AiPolicyRefused as exc:
+        raise Refused(str(exc)) from exc
     drawing = db.get(ProjectIfcDrawing, scope.drawing_id)
     if drawing is None or drawing.project_id != project.id:
         raise Refused(f"drawing {scope.drawing_id} is not EP-{scope.ep_number}'s")

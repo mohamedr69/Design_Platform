@@ -24,6 +24,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.database import get_db
 from app.deps import get_current_user, require_role
 from app.models import ProjectDrawingReview, ProjectIfcDrawing, User
@@ -99,6 +100,10 @@ def _start(db: Session, project, drawing, kind: str, user: User, what: str, extr
 def start_plan(project_id: int, drawing_id: int, current_user: User = Depends(require_role(*CREATOR_ROLES)),
                db: Session = Depends(get_db)):
     project = _get_project_or_404(db, project_id)
+    try:   # the project's AI policy, fail closed, before anything is queued (ORCH-053)
+        project_policy.enforce(db, project.id, task=service.A.TASK)
+    except project_policy.AiPolicyRefused as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     return _start(db, project, _drawing(db, project, drawing_id), service.KIND_PLAN, current_user, "plan")
 
 

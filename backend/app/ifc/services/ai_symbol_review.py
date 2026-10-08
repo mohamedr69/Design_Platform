@@ -41,7 +41,7 @@ from datetime import timedelta
 
 from sqlalchemy.orm import Session
 
-from app.ai import guard
+from app.ai import guard, project_policy
 from app.ai.provider import AiRequest, ImagePart, TextPart, get_provider
 from app.core.config import get_settings
 from app.core.timeutils import utc_now
@@ -289,8 +289,10 @@ def _cached(db: Session, key: str) -> IfcSymbolReview | None:
     return row
 
 
-def _call(request: AiRequest, retries: int):
-    """One request, retried `retries` times on a failure on the way."""
+def _call(db: Session, project_id, request: AiRequest, retries: int):
+    """One request, retried `retries` times on a failure on the way; the
+    project's AI policy checked first, fail closed (ORCH-053)."""
+    project_policy.enforce(db, project_id, task=request.task)
     provider = get_provider()
     response = provider.complete(request)
     for attempt in range(retries):
@@ -318,6 +320,10 @@ def review(db: Session, items: list[Item], *, project_id: int | None, drawing_na
     failure: `check` (a stop asked for) is the only way out mid-way."""
     report = Report(reviewed=len(items))
     ok, why = enabled()
+    if ok:
+        # the project's AI policy, fail closed (ORCH-053): a project that may not send is as if AI were off
+        why = project_policy.check(db, project_id, task=TASK_METADATA)
+        ok = why is None
     if not ok:
         report.enabled, report.note = False, why
         for it in items:
@@ -374,6 +380,12 @@ def review(db: Session, items: list[Item], *, project_id: int | None, drawing_na
             if check is not None:
                 check()
             batch = misses[start:start + batch_size]
+            refused = project_policy.check(db, project_id, task=task)       # re-read per batch (ORCH-053)
+            if refused:
+                report.note = refused
+                for it, _ in misses[start:]:
+                    report.verdicts[it.signature] = Verdict(it.signature, "engineer", AI_DISABLED)
+                break
             if calls_left[0] <= 0:
                 for it, _ in batch:
                     report.verdicts[it.signature] = Verdict(it.signature, "engineer", AI_BUDGET)
@@ -391,7 +403,7 @@ def review(db: Session, items: list[Item], *, project_id: int | None, drawing_na
                                 max_output_tokens=80 * len(batch) + 100, tier="small",
                                 timeout_s=settings.ifc_ai_timeout_s, model=_model_for(stage),
                                 idempotency_key=hashlib.sha256("|".join(k for _, k in batch).encode()).hexdigest())
-            response = _call(request, settings.ifc_ai_retries)
+            response = _call(db, project_id, request, settings.ifc_ai_retries)
             if stage == "visual":
                 report.visual_calls += 1
             else:

@@ -292,4 +292,29 @@ def health() -> dict:
                       # which models this process may call: the platform's, and each workflow's own switch
                       "ai_enabled": bool(settings.ai_enabled), "fa_ai_enabled": bool(settings.fa_ai_enabled),
                       "prep_ai_enabled": bool(settings.prep_ai_enabled),
-                      "drawing_review_ai_enabled": bool(settings.drawing_review_ai_enabled)}}
+                      "drawing_review_ai_enabled": bool(settings.drawing_review_ai_enabled),
+                      # every other AI switch (ORCH-053, LC-12): the assistant, the classification pass, and
+                      # the paths that need AI_ENABLED as well
+                      "drawings_chat_ai_enabled": bool(settings.drawings_chat_ai_enabled),
+                      "drawings_chat_enabled": bool(settings.drawings_chat_enabled),
+                      "document_classification_ai_enabled": bool(settings.document_classification_ai_enabled),
+                      "ifc_ai_symbol_review_enabled": bool(settings.ifc_ai_symbol_review_enabled),
+                      "ifc_ai_visual_review_enabled": bool(settings.ifc_ai_visual_review_enabled),
+                      "drawings_ai_review_enabled": bool(settings.drawings_ai_review_enabled),
+                      "ai_verify_auto": bool(settings.ai_verify_auto)},
+            # the rest of the AI controls this process holds: the route, the tasks switched off, the project AI
+            # policy's enforcement (central, fail closed: M3 B-04) and the per-project daily caps
+            "ai": {"provider": settings.ai_provider,
+                   "disabled_tasks": sorted(t.strip() for t in (settings.ai_disabled_tasks or "").split(",")
+                                            if t.strip()),
+                   "policy_enforcement": "fail_closed",
+                   "daily_caps_per_project": {
+                       "platform": settings.ai_max_calls_per_project_per_day,
+                       "drawing_review": settings.drawing_review_max_calls_per_project_per_day,
+                       "fa_visual": settings.fa_visual_max_calls_per_project_per_day,
+                       "fa_findings": settings.fa_findings_max_calls_per_day,
+                       "fa_orchestrator": settings.fa_orchestrator_max_calls_per_day,
+                       "prep": settings.prep_max_calls_per_project_per_day,
+                       "drawings_chat": settings.drawings_chat_max_calls_per_project_per_day,
+                       "document_classification": settings.document_classification_ai_max_calls_per_project_per_day,
+                   }}}

@@ -123,11 +123,22 @@ class JobBudget:
             return actual
 
 
-def calls_today(db: Session, project_id: int | None) -> int:
+def not_a_refusal():
+    """The usage rows that are calls: not a project-policy refusal's audit row
+    (app.ai.project_policy), which records a request that was never sent."""
+    return AiUsage.outcome.notlike("policy\\_%", escape="\\")
+
+
+def calls_today(db: Session, project_id: int | None, *, tasks: tuple[str, ...] | None = None) -> int:
+    """Calls in the last 24 hours (stored answers and policy refusals not
+    counted), for one project or all; `tasks`: of those tasks alone."""
     since = utc_now() - timedelta(days=1)
-    query = db.query(func.count(AiUsage.id)).filter(AiUsage.at >= since, AiUsage.cache_hit.is_(False))
+    query = db.query(func.count(AiUsage.id)).filter(AiUsage.at >= since, AiUsage.cache_hit.is_(False),
+                                                    not_a_refusal())
     if project_id is not None:
         query = query.filter(AiUsage.project_id == project_id)
+    if tasks:
+        query = query.filter(AiUsage.task.in_(tasks))
     return int(query.scalar() or 0)
 
 

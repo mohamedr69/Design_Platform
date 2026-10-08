@@ -452,6 +452,12 @@ class Settings(BaseSettings):
     # used its own default and the API AI_EFFORT ("low").
     drawing_review_effort: str = "high"
     drawing_review_max_calls: int = 300
+    # Per-project daily caps (rolling 24 hours, per project), each counted on its own tasks only and set by the
+    # owner (ORCH-053, LC-10): the review's looks; the FA Interfaces damper look (the drawing agents); the
+    # Drawings Preparation agents (placement, coordination, orchestrator). A job keeps its own bound above.
+    drawing_review_max_calls_per_project_per_day: int = 600
+    fa_visual_max_calls_per_project_per_day: int = 600
+    prep_max_calls_per_project_per_day: int = 600
     drawing_review_max_elapsed_s: float = 4 * 3600.0
     drawing_review_max_cost: float = 50.0
     drawing_review_timeout_s: float = 600.0

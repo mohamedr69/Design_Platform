@@ -336,6 +336,8 @@ def ask(db: Session, project: Project, system: str, message: str, history: list[
     to apply (or not)."""
     ok, reason = available(project)
     if not ok:
+        if reason == project_policy.BLOCKED_MESSAGE:
+            project_policy.audit(db, project.id, TASK, "blocked")          # the refusal recorded (ORCH-053)
         raise ChatUnavailable(reason)
     settings = get_settings()
     message = message.strip()

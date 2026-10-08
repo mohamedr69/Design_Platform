@@ -28,6 +28,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.core.timeutils import utc_now
 from app.database import get_db
 from app.deps import get_current_user, require_role
@@ -109,6 +110,10 @@ def start_run(project_id: int, fresh: bool = False, current_user: User = Depends
     from app.routers.ifc_boq import _queue_note, _run_inline, _started
 
     project = _get_project_or_404(db, project_id)
+    try:   # the project's AI policy, fail closed, before anything is queued (ORCH-053)
+        project_policy.enforce(db, project.id, task="fa_interfaces_orchestrator")
+    except project_policy.AiPolicyRefused as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     if not project.source_folder_path:
         raise HTTPException(422, "This project has no folder: the IFC drawings are read from its 03- Drawings/IFC folders.")
     existing = _active_read(db, project.id)
@@ -184,6 +189,10 @@ def retry_review(project_id: int, run_id: int, current_user: User = Depends(requ
     from app.routers.ifc_boq import _queue_note, _run_inline, _started
 
     project = _get_project_or_404(db, project_id)
+    try:   # the project's AI policy, fail closed, before anything is queued (ORCH-053)
+        project_policy.enforce(db, project.id, task="fa_interfaces_orchestrator")
+    except project_policy.AiPolicyRefused as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     run = _run_or_404(db, project, run_id)
     existing = _active_read(db, project.id)
     if existing is not None:

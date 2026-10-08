@@ -56,8 +56,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from string import ascii_uppercase
 
-from app.ai import guard
-from app.ai.budget import JobBudget, Limits
+from app.ai import guard, project_policy
+from app.ai.budget import JobBudget, Limits, not_a_refusal
 from app.ai.provider import ImagePart, TextPart, fa_ai_on, get_fa_provider
 from app.compliance import assist
 from app.core.config import get_settings
@@ -628,7 +628,7 @@ def calls_today(db, project_id: int) -> int:
     since = utc_now() - timedelta(days=1)
     return int(db.query(func.count(AiUsage.id)).filter(
         AiUsage.project_id == project_id, AiUsage.task == TASK, AiUsage.at >= since,
-        AiUsage.cache_hit.is_(False)).scalar() or 0)
+        AiUsage.cache_hit.is_(False), not_a_refusal()).scalar() or 0)
 
 
 def readiness() -> tuple[bool, str | None]:
@@ -695,6 +695,8 @@ def review_all(db, project, view: dict, readings: list[dict], run_reports: list[
     (`ProjectFaInterfaces.reviews`): its state, and each item's outcome."""
     from app.interfaces import service
 
+    # the project's AI policy, fail closed, before any item is drawn or sent (ORCH-053)
+    project_policy.enforce(db, project.id, task=TASK)
     s = get_settings()
     open_items = list(view.get("verification") or [])
     record = {"run_id": run_id, "at": utc_now().isoformat(), "model": s.fa_findings_model,

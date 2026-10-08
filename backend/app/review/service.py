@@ -27,6 +27,7 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 import pymupdf
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.ai.budget import JobBudget, Limits, calls_today
 from app.ai.provider import ImagePart, TextPart, get_review_provider
 from app.compliance import assist
@@ -58,13 +59,25 @@ def state(db: Session, project: Project, drawing_id: int) -> ProjectDrawingRevie
     return row
 
 
-def _budget(db: Session, project: Project) -> JobBudget:
+# The per-project daily caps of the drawing workflows (rolling 24 hours), each counted on its own tasks only
+# (ORCH-053, LC-10): the review's looks, the FA Interfaces damper look, the preparation agents. Settings, so the
+# owner sets the numbers; a job still has its own bound (DRAWING_REVIEW_MAX_CALLS).
+DAILY_CAPS = {
+    "review": ("drawing_review_max_calls_per_project_per_day", (TASK_WINDOW, TASK_SHEET, TASK_FLS)),
+    "fa_visual": ("fa_visual_max_calls_per_project_per_day", ("fa_interfaces_visual",)),
+    "prep": ("prep_max_calls_per_project_per_day", ("fa_drawing_redesign", "fa_prep_coordination",
+                                                    "fa_prep_orchestrator")),
+}
+
+
+def _budget(db: Session, project: Project, feature: str = "review") -> JobBudget:
     s = get_settings()
+    setting, tasks = DAILY_CAPS[feature]
     limits = dataclasses.replace(
         Limits.from_settings(), max_input_tokens_per_task=80_000, max_output_tokens_per_task=8_000,
-        max_calls_per_document=s.drawing_review_max_calls, max_calls_per_project_per_day=10 ** 6,
+        max_calls_per_document=s.drawing_review_max_calls, max_calls_per_project_per_day=getattr(s, setting),
         max_elapsed_s_per_job=s.drawing_review_max_elapsed_s, max_cost_per_job=s.drawing_review_max_cost)
-    return JobBudget(limits=limits, calls_today_before=calls_today(db, project.id))
+    return JobBudget(limits=limits, calls_today_before=calls_today(db, project.id, tasks=tasks))
 
 
 def _match_pages(doc: pymupdf.Document, drawing: ProjectIfcDrawing) -> list[dict]:
@@ -152,6 +165,8 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
     `ReviewIncomplete`, with what the review held before (its answers, the
     engineers' decisions) kept as it was."""
     s = get_settings()
+    # the project's AI policy first, fail closed: a refused review plots nothing and changes nothing (ORCH-053)
+    project_policy.enforce(db, project.id, task=TASK_WINDOW)
     drawing = db.get(ProjectIfcDrawing, drawing_id)
     if drawing is None or drawing.project_id != project.id:
         raise ValueError("That drawing is not this project's")
@@ -230,6 +245,12 @@ def run(db: Session, project: Project, drawing_id: int, *, pages_wanted: list[in
                 sh = by_index[index]
                 try:
                     answer = future.result()
+                except project_policy.AiPolicyRefused as exc:
+                    # the project was blocked while the review ran: nothing more is sent (ORCH-053)
+                    answer = {"error": str(exc)}
+                    if not stopped:
+                        stopped = f"Stopped: {str(exc).rstrip('.')}"
+                        waiting.clear()
                 except Exception as exc:  # noqa: BLE001 -- one look that fails is named; the rest go on
                     answer = {"error": str(exc) or type(exc).__name__}
                 cli = answer.pop("_cli", None)
@@ -686,6 +707,12 @@ def _ask(project_id: int, pdf: str, sha: str, sheet: dict, task: tuple, budget: 
     route = dict(max_turns=s.drawing_review_cli_max_turns, inline_images=s.drawing_review_inline_images,
                  fresh=fresh)
     db = SessionLocal()
+    try:
+        # re-read per look, before the drawing is cut into pictures: a project blocked mid-run sends nothing more
+        project_policy.enforce(db, project_id, task={"fls": TASK_FLS, "sheet": TASK_SHEET}.get(kind, TASK_WINDOW))
+    except project_policy.AiPolicyRefused:
+        db.close()
+        raise
     doc = pymupdf.open(pdf)
     try:
         session = assist.AssistSession(db=db, project_id=project_id, document_sha256=f"{sha}:{index}", budget=budget,

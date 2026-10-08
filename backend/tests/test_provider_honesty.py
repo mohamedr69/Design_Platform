@@ -230,6 +230,18 @@ def test_api_effort_defaults_to_ai_effort_and_is_validated(monkeypatch):
 # --- through assist: cache and usage log -------------------------------------------------------------------------
 
 
+def _allowed_project_id(db) -> int:
+    """A project whose AI use is allowed: the central call path refuses a request that names
+    no project (fail closed, ORCH-053), so these tests name one."""
+    from app.models import Project, User
+
+    project = Project(ep_number="80001", project_name="Provider honesty", ai_policy="allowed",
+                      created_by_id=db.query(User).order_by(User.id).first().id)
+    db.add(project)
+    db.commit()
+    return project.id
+
+
 def test_a_substituted_answer_is_logged_and_never_cached(db_session):
     from app.ai.budget import JobBudget, Limits
     from app.compliance import assist
@@ -245,7 +257,7 @@ def test_a_substituted_answer_is_logged_and_never_cached(db_session):
             return P.AiResponse(data=None, error="model_substituted", error_detail="asked for x", model="claude-opus-4-8",
                                 substituted=True)
 
-    session = assist.AssistSession(db=db_session, project_id=None, document_sha256="d" * 64,
+    session = assist.AssistSession(db=db_session, project_id=_allowed_project_id(db_session), document_sha256="d" * 64,
                                    budget=JobBudget(limits=Limits.from_settings(), calls_today_before=0), provider=Substituting())
     for _ in range(2):
         result = assist.call_task(session, "fa_interfaces_visual", "s", [TextPart("a", "b")], {"type": "object"}, 100,
@@ -269,7 +281,7 @@ def test_effort_and_exactness_are_in_the_cache_key_only_when_set(db_session):
             keys.append(request.idempotency_key)
             return P.AiResponse(data=None, error="transport", model="m")
 
-    session = assist.AssistSession(db=db_session, project_id=None, document_sha256="e" * 64,
+    session = assist.AssistSession(db=db_session, project_id=_allowed_project_id(db_session), document_sha256="e" * 64,
                                    budget=JobBudget(limits=Limits.from_settings(), calls_today_before=0), provider=Recording())
     parts = [TextPart("a", "b")]
     assist.call_task(session, "t1", "s", parts, {}, 10, model="claude-opus-5-5")

@@ -46,6 +46,7 @@ from PIL import Image, ImageDraw
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.ai.provider import ImagePart, TextPart, get_prep_provider, prep_ai_on
 from app.compliance import assist
 from app.core.config import get_settings
@@ -1292,6 +1293,9 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
     from app.review import service as review
 
     s = get_settings()
+    # the project's AI policy, fail closed, before the plan starts (ORCH-053): each agent call is checked
+    # again per call (assist._call)
+    project_policy.enforce(db, project.id, task=A.TASK)
     drawing = db.get(ProjectIfcDrawing, drawing_id)
     if drawing is None or drawing.project_id != project.id:
         raise RedesignError("That drawing is not this project's")
@@ -1368,7 +1372,7 @@ def plan(db: Session, project: Project, drawing_id: int, *, progress=None, check
             run["agents"].append(agent)
             row.run = json.loads(json.dumps(run))
 
-        budget = review._budget(db, project)
+        budget = review._budget(db, project, "prep")
         pdf = str(storage.absolute(review_row.pdf_path))
         sha = review_row.source_sha256 or ""
         # 1. the placement agents, side by side

@@ -32,6 +32,7 @@ from sqlalchemy.orm import Session
 
 from app.ai import cache as result_cache
 from app.ai import guard
+from app.ai import project_policy
 from app.ai.budget import BudgetExceeded, JobBudget, Limits, calls_today
 from app.ai.provider import AiProvider, AiRequest, TextPart, estimate_input_tokens, get_provider
 from app.core.config import get_settings
@@ -275,6 +276,10 @@ def _call(session: AssistSession, task: str, system: str, parts: list[TextPart],
           effort: str | None = None, model: str | None = None, timeout_s: float | None = None,
           exact_model: bool = False, accept=None, fresh: bool = False, max_turns: int | None = None,
           inline_images: bool | None = None) -> CallResult:
+    project_policy.enforce(session.db, session.project_id, task=task)
+    # ^ the project's AI policy, re-read for every call and FAIL CLOSED (M3 B-04; ORCH-053): a missing, unknown,
+    # ambiguous or blocked project raises AiPolicyRefused, with its audit row, before the parts are hashed,
+    # scanned, looked up in the cache or put into a request -- nothing of the project's content goes further.
     settings = get_settings()
     pinned = model
     model = pinned or (settings.ai_model_standard if tier == "standard" else settings.ai_model_small)

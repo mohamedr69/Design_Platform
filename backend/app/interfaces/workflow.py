@@ -63,8 +63,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
-from app.ai import guard
-from app.ai.budget import JobBudget, Limits
+from app.ai import guard, project_policy
+from app.ai.budget import JobBudget, Limits, not_a_refusal
 from app.ai.provider import TextPart, fa_ai_on, get_fa_provider
 from app.compliance import assist
 from app.core.config import get_settings
@@ -452,7 +452,7 @@ def review_calls_today(db: Session, project_id: int) -> int:
     since = utc_now() - timedelta(days=1)
     return int(db.query(func.count(AiUsage.id)).filter(
         AiUsage.project_id == project_id, AiUsage.task == TASK_REVIEW, AiUsage.at >= since,
-        AiUsage.cache_hit.is_(False)).scalar() or 0)
+        AiUsage.cache_hit.is_(False), not_a_refusal()).scalar() or 0)
 
 
 def review_allowance(db: Session, project: Project, due: int) -> tuple[bool, str | None]:
@@ -716,6 +716,9 @@ def _schedule_summary(view: dict) -> dict:
 def run_workflow(db: Session, project: Project, *, user_id: int | None = None, job_id: int | None = None,
                  progress=None, check=None, fresh: bool = False) -> dict:
     s = get_settings()
+    # the project's AI policy, fail closed, before a run is opened (ORCH-053): every model call of the run is
+    # checked again per call (assist._call), per drawing agent (visual.check) and per review (findings.review_all)
+    project_policy.enforce(db, project.id, task=TASK_REVIEW)
     run = FaInterfaceRun(project_id=project.id, job_id=job_id, status="running", created_by_id=user_id,
                          manifest=[], agent_reports=[], package_reports=[], review={}, review_inputs={},
                          trace={"fresh": fresh})
@@ -963,6 +966,7 @@ def run_retry(db: Session, project: Project, run: FaInterfaceRun) -> dict:
     """The reviews again -- the finding review on the items it could not review,
     then the orchestrator on the run's frozen inputs; no drawing re-read, the
     same package payloads -- then the publication gate on what is current now."""
+    project_policy.enforce(db, project.id, task=TASK_REVIEW)          # a retry re-checks (ORCH-053)
     if run.publication_state == "accepted":
         raise ValueError("This run is accepted: its review is final")
     if ((run.review or {}).get("findings") or {}).get("state") not in (None, "completed"):

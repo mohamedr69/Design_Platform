@@ -32,6 +32,7 @@ from dataclasses import dataclass, field
 
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.ai import cache, guard
 from app.ai.provider import AiRequest, TextPart, get_provider
 from app.core.config import get_settings
@@ -133,7 +134,13 @@ def _revision_ok(value) -> str | None:
 
 
 def _ask(task: str, schema: dict, payload: dict, *, sha: str, project_id: int, db: Session, report: Report):
-    """One question, through the cache. Returns (data, error)."""
+    """One question, through the cache. Returns (data, error). The project's
+    AI policy first, per call and fail closed (ORCH-053): a project that may
+    not send gets its question refused, recorded, and nothing looked up or sent."""
+    refused = project_policy.check(db, project_id, task=task)
+    if refused:
+        report.skipped += 1
+        return None, refused
     settings = get_settings()
     fingerprint = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     model = settings.drawings_ai_model or settings.ai_model_small

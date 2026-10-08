@@ -210,6 +210,10 @@ def test_health_carries_the_api_runtime_fingerprint(client):
     assert body["status"] == "ok"
     assert body["runtime"]["process"] == "api" and body["runtime"]["python"] == sys.executable
     assert body["runtime"]["models"].lower().endswith("models.py") and body["runtime"]["root"] == str(runtime.root())
+    # every AI switch is reported (ORCH-053, LC-12)
     assert set(body["flags"]) == {"document_classification_v2", "ai_read_full_second_pass", "ai_enabled",
-                                  "fa_ai_enabled", "prep_ai_enabled", "drawing_review_ai_enabled"}
+                                  "fa_ai_enabled", "prep_ai_enabled", "drawing_review_ai_enabled",
+                                  "drawings_chat_ai_enabled", "drawings_chat_enabled",
+                                  "document_classification_ai_enabled", "ifc_ai_symbol_review_enabled",
+                                  "ifc_ai_visual_review_enabled", "drawings_ai_review_enabled", "ai_verify_auto"}
     assert all(isinstance(v, bool) for v in body["flags"].values())

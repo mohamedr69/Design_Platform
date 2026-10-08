@@ -19,6 +19,7 @@ from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.ai import project_policy
 from app.core.timeutils import utc_now
 from app.database import get_db
 from app.deps import get_current_user, require_role
@@ -75,6 +76,10 @@ def start(project_id: int, drawing_id: int, body: StartIn | None = None,
     from app.routers.ifc_boq import _queue_note, _run_inline, _started
 
     project = _get_project_or_404(db, project_id)
+    try:   # the project's AI policy, fail closed, before anything is queued (ORCH-053)
+        project_policy.enforce(db, project.id, task=service.TASK_WINDOW)
+    except project_policy.AiPolicyRefused as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     drawing = _drawing(db, project, drawing_id)
     pages = sorted(set(body.pages)) if body and body.pages else None
     fresh = bool(body and body.fresh)

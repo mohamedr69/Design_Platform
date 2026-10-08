@@ -1302,8 +1302,10 @@ def read_drf(db: Session, drf: Path, *, project: Project | None, user_id: int | 
         # passes before it starts. Inside a verification, the job was admitted.
         if not settings.ai_enabled:
             raise RuntimeError("AI assistance is disabled (AI_ENABLED=false)")
-        if project is not None and not project_policy.allowed(project):
-            raise RuntimeError(project_policy.BLOCKED_MESSAGE)
+        # fail closed (ORCH-053): at project creation there is no project yet, so no project whose AI use is
+        # allowed -- the form is refused, recorded, and left for the engineer (or the AI check once the
+        # project exists and is allowed); a blocked or unknown project likewise
+        project_policy.enforce(db, project.id if project is not None else None, task="verify_drf")
         provider = provider or get_provider()
         if not getattr(provider, "ready", False):
             raise RuntimeError(str(getattr(provider, "status", "AI is not available on this server")))

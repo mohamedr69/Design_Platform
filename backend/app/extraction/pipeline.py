@@ -194,7 +194,11 @@ def ask(
     independent: set[str] | None = None,
 ) -> tuple[Validation, dict | None, bool, str, str]:
     """Ask once about one issue. Returns (validation, proposal data,
-    from_cache, model, cache_key). Raises `BudgetExceeded`."""
+    from_cache, model, cache_key). Raises `BudgetExceeded`, and `AiPolicyRefused`
+    (with its audit row) for a project whose AI use is not allowed."""
+    from app.ai import project_policy
+
+    project_policy.enforce(db, project_id, task=evidence.request.task)     # fail closed, per call (ORCH-053)
     settings = get_settings()
     provider = provider or get_provider()
     request: AiRequest = evidence.request
