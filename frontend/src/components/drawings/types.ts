@@ -70,12 +70,53 @@ export interface Hint {
   path?: string | null;
 }
 
-/** A shop drawing, or an IFC floor no shop drawing covers yet (`reference` null). */
+/** How the log is listed: a row per floor of the building, or a row per
+ *  IFC plan sheet (a typical sheet for a run of floors is one row, as the
+ *  shop drawing answering it is one submission). */
+export type LogView = "floor" | "ifc";
+
+/** The IFC plan sheet a row of the IFC view belongs to. */
+export interface IfcSheetRef {
+  key: string;
+  drawing: string;
+  revision: string;
+  /** The sheet's reference: the drawing number its title block prints, else its layout name. */
+  sheet: string;
+  /** The layout (tab) name in the IFC file ("FA 111"). */
+  layout: string;
+  /** The number the title block prints, if any; and why it is not the reference when it is not. */
+  number: string | null;
+  number_note: string | null;
+  title: string;
+  /** The sheet's floor as it writes it ("Typical 3rd to 16th Floor"). */
+  label: string;
+  floors: number;
+  floor_keys: string[];
+  floor_names: string[];
+  /** The floors in a few words ("floors 3-16", "Ground Floor"). */
+  range: string;
+}
+
+/** A shop drawing, or an IFC floor no shop drawing covers yet (`reference` null);
+ *  in the IFC view, a shop drawing under its IFC sheet, or a sheet's floors still to submit (`ifc_sheet`). */
 export interface LogRow {
   key: string;
   id: number | null;
-  source: "shop_drawing" | "ifc_floor";
+  source: "shop_drawing" | "ifc_floor" | "ifc_sheet";
   reference: string | null;
+  /** The drawing's title as its title block reads. */
+  title?: string | null;
+  /** IFC view only: the sheet the row is under; null for a floor on no IFC sheet. */
+  ifc?: IfcSheetRef | null;
+  /** IFC view only: the first row of its sheet, and how many rows the sheet has. */
+  group_first?: boolean;
+  group_size?: number;
+  /** IFC view only: the drawing covers only part of the sheet's floors; the drawing goes on beyond this sheet. */
+  partial?: boolean;
+  spans?: boolean;
+  /** IFC view only: the other shop drawings covering floors of this sheet, and the sheet's floors not submitted yet. */
+  others?: { id: number; reference: string; floors: string; floor_keys: string[]; latest_revision: string | null; latest_status: Status; label: string }[];
+  not_submitted_floors?: string[];
   /** The floor's canonical name ("L02"); the project's own name for it under it ("1st Mechanical Floor"). */
   floor: string;
   floor_secondary?: string | null;
@@ -97,7 +138,37 @@ export interface LogRow {
   issues: number;
 }
 
+/** One file of the project's IFC folder (backend app/ifc/services/folder_import.py). */
+export interface IfcFolderFile {
+  path: string;
+  name: string;
+  ext: string;
+  size: number;
+  modified: string;
+  /** A DWG or DXF: the platform can read it. */
+  readable: boolean;
+  /** The drawing it is read as, if it is. */
+  drawing: { id: number; filename: string; revision: string; reference: string | null; in_force: boolean } | null;
+  /** A read of it queued or running. */
+  job: { id: number; status: string; message: string | null; stage: string | null; done: number | null } | null;
+}
+
+export interface IfcFolder {
+  system: string;
+  /** The folder relative to the project ("03- Drawings/IFC/Electrical/FA"); null for a system whose IFC is not read. */
+  folder: string | null;
+  /** The project folder is on this PC and the IFC folder exists. */
+  reachable: boolean;
+  files: IfcFolderFile[];
+  readable: string[];
+}
+
 export interface DrawingsLog {
+  view: LogView;
+  /** IFC view only: the IFC plan sheets in force (= the rows), and the shop drawings for floors the IFC has no sheet for, listed apart. */
+  sheets?: number;
+  groups?: number;
+  others?: LogRow[];
   revisions: string[];
   rows: LogRow[];
   counts: Partial<Record<Status, number>>;
@@ -109,7 +180,12 @@ export interface DrawingsLog {
   system: string;
   system_name: string;
   systems: string[];
-  ifc: { id: number; filename: string; revision: string }[];
+  /** The IFC drawings the rows' sheets come from: the system's own, read into the platform. */
+  ifc: { id: number; filename: string; revision: string; reference?: string | null; archive_path?: string | null }[];
+  /** The system has no IFC drawing of its own: the sheets are this system's. */
+  ifc_borrowed_from?: string | null;
+  /** The system's IFC folder in the project folder, file by file. */
+  ifc_folder?: IfcFolder;
   synced_at: string | null;
   reconciled_at: string | null;
   folder: string | null;
@@ -220,4 +296,40 @@ export function when(value: string | null | undefined): string {
   if (!value) return "–";
   const date = new Date(value.endsWith("Z") || value.includes("+") ? value : value + "Z");
   return date.toLocaleString(undefined, { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+/** The Drawings Assistant (backend app/services/drawings_chat.py). */
+export interface AssistantStatus {
+  available: boolean;
+  reason: string | null;
+  model: string | null;
+  can_apply: boolean;
+  actions: Record<string, string>;
+}
+
+/** A change the assistant proposes: the very call the page's own button
+ *  makes, applied only when the engineer says so. */
+export interface AssistantAction {
+  kind: string;
+  label: string;
+  method: "POST" | "PUT" | "PATCH";
+  path: string;
+  body: Record<string, unknown>;
+  drawing_id: number | null;
+  drawing_reference: string | null;
+  floor: string | null;
+  reason: string;
+}
+
+export interface AssistantAnswer {
+  system: string;
+  reply: string;
+  needs_engineer: boolean;
+  actions: AssistantAction[];
+  /** Proposals the records refused, with why. */
+  dropped: { kind: string | null; reason: string }[];
+  model: string;
+  from_cache: boolean;
+  can_apply: boolean;
+  memory: { rows: number; rows_total: number; issues: number; events: number; truncated: boolean };
 }

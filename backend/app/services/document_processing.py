@@ -521,6 +521,29 @@ def run(db: Session, project: Project, *, user: User | None = None, ctx=None, pr
         counts["drawings"] = None
     telemetry.add("reconcile_drawings", time.perf_counter() - drawings_started)
     telemetry.add("reconcile", time.perf_counter() - reconcile_started)
+    # The model's look at what the rules could only guess, run after a
+    # processing run that read something (it plans over the project's weak
+    # answers; the earlier ones were answered already, or are reused): off
+    # unless switched on, bounded by its own call limits and the AI budget,
+    # and never a reason for the processing to fail. A stop asked for is
+    # honoured between its batches and stops the job, as everywhere else.
+    from app.ai.provider import classification_ai_on
+    from app.services.jobs import Cancelled, Interrupted
+
+    if anything_read and classification_ai_on():
+        if ctx is not None:
+            ctx.progress(total, total, "Classifying the documents the rules could only guess", phase="classify")
+        try:
+            from app.services import document_classification_ai
+
+            counts["classification_ai"] = document_classification_ai.run(db, project, ctx=ctx)
+        except (Cancelled, Interrupted):
+            db.rollback()
+            raise
+        except Exception:  # noqa: BLE001 -- metadata only; the readings stand
+            db.rollback()
+            log.exception("The model's classification pass failed for project %s", project.id)
+            counts["classification_ai"] = None
     counts["forms_changed"] = forms_changed
     counts["remaining"] = pending_count(db, project)   # a sync meanwhile may have found more
     counts["finished_at"] = utc_now().isoformat()

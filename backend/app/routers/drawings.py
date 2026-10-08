@@ -1,8 +1,9 @@
 """The Drawings page (app/services/shop_drawings, drawing_issues, drawing_requirements).
 
 GET  /projects/{id}/drawings/summary                    every system: floors, statuses, review items (the system cards)
-GET  /projects/{id}/drawings/log?system=                one system's log: the building's floors x shop drawing revisions
-GET  /projects/{id}/drawings/log/export.xlsx?system=    the same, as a workbook
+GET  /projects/{id}/drawings/log?system=&view=          one system's log: the building's floors x shop drawing revisions
+                                                        (view=ifc: a row per IFC plan sheet instead of per floor)
+GET  /projects/{id}/drawings/log/export.xlsx?system=&view=  the same, as a workbook
 GET  /projects/{id}/drawings/issues?system=             Review & Issues: the open findings (system checks and AI review)
 POST /projects/{id}/drawings/issues/{issue}/resolve     an engineer settles one
 GET  /projects/{id}/drawings/activity?system=           Activity / History
@@ -17,6 +18,8 @@ GET  /projects/{id}/drawings/required?system=           Actions Required: what t
 GET  /projects/{id}/drawings/required/export.xlsx?system=
 POST /projects/{id}/drawings/required/request           the request email (records nothing)
 POST /projects/{id}/drawings/required/request/sent      ... was sent: noted against each item
+GET  /projects/{id}/drawings/assistant                  whether the Drawings Assistant can answer here, and why not
+POST /projects/{id}/drawings/assistant                  one message to it: the answer and the changes it proposes
 
 The router checks and answers; the records are written by the sync
 (app.services.shop_drawings.reconcile) and read here. No request walks
@@ -29,6 +32,7 @@ import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -41,8 +45,8 @@ from app.database import get_db
 from app.deps import get_current_user, require_role
 from app.models import DrawingIssue, Project, ProjectShopDrawing, ShopDrawingCandidate, User
 from app.routers.projects import CREATOR_ROLES, _get_project_or_404
-from app.services import (activity, building_floors, drawing_issues, drawing_requirements, project_folders,
-                          project_state, required_drawings, shop_drawings, system_rules)
+from app.services import (activity, building_floors, drawing_issues, drawing_requirements, drawings_chat,
+                          project_folders, project_state, required_drawings, shop_drawings, system_rules)
 
 router = APIRouter(tags=["drawings"])
 
@@ -86,20 +90,30 @@ def _catch_up(db: Session, project: Project) -> None:
         shop_drawings.reconcile(db, project, ai=False)
 
 
-def _log(db: Session, project: Project, system: str | None = None) -> dict:
+LogView = Literal["floor", "ifc"]
+
+
+def _log(db: Session, project: Project, system: str | None = None, view: LogView = "floor") -> dict:
     _catch_up(db, project)
     wanted, systems = _system(db, project, system)
-    out = shop_drawings.log(db, project, wanted)
+    # "floor": a row per floor of the building (the records' own grain, and
+    # what the summary cards and the assistant read). "ifc": a row per IFC
+    # plan sheet, a typical sheet and the drawing answering it being one row.
+    out = shop_drawings.log_by_ifc(db, project, wanted) if view == "ifc" else shop_drawings.log(db, project, wanted)
     warnings: list[str] = []
     if project.source_folder_path and project.documents_synced_at is None:
         warnings.append("The project folder has not been synced yet: sync the documents to read the shop drawings.")
-    from app.ifc.services import revisions
+    from app.ifc.services import folder_import, revisions
 
     in_force = revisions.in_force(db, project.id)
     out.update({
         "project": {"id": project.id, "ep_number": project.ep_number, "name": project.project_name},
         "system": wanted, "system_name": system_rules.CODE_NAMES.get(wanted, wanted), "systems": systems,
-        "ifc": [{"id": d.id, "filename": d.filename, "revision": d.revision or "R0"} for d in in_force],
+        # The IFC view names the drawings its sheets came from (the system's own); the floor view, the building's.
+        "ifc": out.get("ifc") or [{"id": d.id, "filename": d.filename, "revision": d.revision or "R0",
+                                   "reference": d.drawing_reference, "archive_path": d.archive_path} for d in in_force],
+        # The system's IFC folder in the project, file by file: read, being read, or not read yet.
+        "ifc_folder": folder_import.files(db, project, wanted),
         "synced_at": project.documents_synced_at.isoformat() if project.documents_synced_at else None,
         "reconciled_at": project.drawings_reconciled_at.isoformat() if project.drawings_reconciled_at else None,
         "folder": shop_drawings_folder(wanted) if project.source_folder_path else None,
@@ -120,11 +134,12 @@ def drawings_summary(project_id: int, _current_user: User = Depends(get_current_
 
 
 @router.get("/projects/{project_id}/drawings/log")
-def drawings_log(project_id: int, system: str | None = None,
+def drawings_log(project_id: int, system: str | None = None, view: LogView = "floor",
                  _current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """One system's Drawings Log: each floor of the building with its shop
-    drawing's status at every official revision, from the records."""
-    return _log(db, _get_project_or_404(db, project_id), system)
+    drawing's status at every official revision, from the records; or,
+    with `view=ifc`, each IFC plan sheet with the shop drawing answering it."""
+    return _log(db, _get_project_or_404(db, project_id), system, view)
 
 
 @router.post("/projects/{project_id}/drawings/reconcile")
@@ -136,14 +151,15 @@ def reconcile(project_id: int, current_user: User = Depends(require_role(*CREATO
 
 
 @router.get("/projects/{project_id}/drawings/log/export.xlsx")
-def export_drawings_log(project_id: int, system: str | None = None,
+def export_drawings_log(project_id: int, system: str | None = None, view: LogView = "floor",
                         _current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     from openpyxl import Workbook
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
 
     project = _get_project_or_404(db, project_id)
-    log = _log(db, project, system)
+    log = _log(db, project, system, view)
+    by_ifc = view == "ifc"
     wb = Workbook()
     ws = wb.active
     ws.title = f"Drawings Log {log['system']}"[:31]
@@ -153,15 +169,19 @@ def export_drawings_log(project_id: int, system: str | None = None,
                f"floors from {', '.join(f'{d['filename']} {d['revision']}' for d in log['ifc']) or 'no IFC drawing'}; "
                f"as of {datetime.now():%Y-%m-%d %H:%M}"])
     ws.append([])
-    header = ["#", "Floor", "Drawing Reference", "No. of floors", *log["revisions"], "Latest Revision", "Latest Status",
-              "Issues / Hints", "Remarks"]
+    header = ["#", *(["IFC Drawing", "Floors"] if by_ifc else []), "Floor", "Drawing Reference", "No. of floors", *log["revisions"],
+              "Latest Revision", "Latest Status", "Issues / Hints", "Remarks"]
     ws.append(header)
     fills = {"approved": "C6EFCE", "approved_as_noted": "DDEBF7", "under_review": "FFEB9C", "not_approved": "FFC7CE",
              "not_submitted": "EDEDED", "reply_not_found": "F4B183"}
-    first_revision_column = 5
-    for i, row in enumerate(log["rows"], 1):
+    first_revision_column = 7 if by_ifc else 5
+    # The IFC view lists shop drawings for floors the IFC has no sheet for apart: in the workbook, after the sheets.
+    for i, row in enumerate([*log["rows"], *log.get("others", [])], 1):
         hints = "; ".join(h["label"] for h in row.get("hints", []))
-        ws.append([i, row["floor"], row["reference"] or "Not submitted yet", row["floors"],
+        ifc = row.get("ifc")
+        sheet = ([f"{ifc['sheet']} · {ifc['label']} ({ifc['drawing']} {ifc['revision']})", ifc["range"]] if ifc
+                 else ["No IFC sheet", row["floor"]]) if by_ifc else []
+        ws.append([i, *sheet, row["floor"], row["reference"] or "Not submitted yet", row["floors"],
                    *(row["cells"][r]["label"] for r in log["revisions"]),
                    row["latest_revision"] or "-", shop_drawings.STATUS_LABELS.get(row["latest_status"], row["latest_status"]),
                    hints or "-", row["remarks"] or "-"])
@@ -174,7 +194,7 @@ def export_drawings_log(project_id: int, system: str | None = None,
     for c in ws[4]:
         c.font = Font(bold=True)
     ws["A1"].font = Font(bold=True, size=13)
-    widths = [5, 34, 40, 12, *([18] * len(log["revisions"])), 15, 22, 40, 60]
+    widths = [5, *([44, 18] if by_ifc else []), 34, 40, 12, *([18] * len(log["revisions"])), 15, 22, 40, 60]
     for index, width in enumerate(widths, 1):
         ws.column_dimensions[get_column_letter(index)].width = width
     for r in ws.iter_rows(min_row=5):
@@ -620,3 +640,46 @@ def request_sent(project_id: int, body: RequestItems,
     activity.record(db, current_user, REQUESTED, f"Requested from the contractor: {', '.join(names)}",
                     project=project, entity_type="project", entity_id=project.id, detail={"keys": keys, "system": system})
     return _required(db, project, system)
+
+
+# --- The Drawings Assistant ---------------------------------------------------------------------
+
+
+class Turn(BaseModel):
+    role: Literal["user", "assistant"]
+    text: str = Field(max_length=8000)
+
+
+class Ask(BaseModel):
+    system: str | None = None
+    message: str = Field(min_length=1, max_length=4000)
+    # The conversation so far, kept by the page: the server holds none of it.
+    history: list[Turn] = Field(default_factory=list, max_length=30)
+
+
+@router.get("/projects/{project_id}/drawings/assistant")
+def assistant_status(project_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Whether the assistant can answer on this project (AI on, a credential,
+    the project's AI policy), so the page says so before a message is typed."""
+    project = _get_project_or_404(db, project_id)
+    ok, reason = drawings_chat.available(project)
+    return {"available": ok, "reason": reason, "model": drawings_chat.model_name() if ok else None,
+            "can_apply": current_user.role in CREATOR_ROLES, "actions": drawings_chat.KINDS}
+
+
+@router.post("/projects/{project_id}/drawings/assistant")
+def assistant_ask(project_id: int, body: Ask, current_user: User = Depends(get_current_user),
+                  db: Session = Depends(get_db)):
+    """One message: the answer from the project's memory, and the changes it
+    proposes as the calls the engineer's own buttons make. Nothing is
+    written here; the page applies each proposal only when the engineer
+    says so, through the endpoints above, under the engineer's role."""
+    project = _get_project_or_404(db, project_id)
+    wanted, _systems = _system(db, project, body.system)
+    try:
+        answer = drawings_chat.ask(db, project, wanted, body.message, [t.model_dump() for t in body.history])
+    except drawings_chat.ChatUnavailable as exc:
+        raise HTTPException(503, str(exc))
+    except drawings_chat.ChatError as exc:
+        raise HTTPException(502, f"The assistant could not answer: {exc}")
+    return {"system": wanted, "can_apply": current_user.role in CREATOR_ROLES, **answer.out()}

@@ -26,7 +26,7 @@ git config --global core.longpaths true    # once per PC, before cloning (see be
 git clone https://github.com/mohamedr69/JUMAA-AL-MAJID---AI-PLATFORM.git
 cd JUMAA-AL-MAJID---AI-PLATFORM
 setup.bat        # once: Python packages, backend\.env with a new secret key, npm packages
-start.bat        # every time: API on :8000, the background worker, web app on :5173, opens the browser
+start.bat        # every time: API on :8002, the background worker, web app on :5175, opens the browser
 ```
 
 The `core.longpaths` line matters on Windows: the company library keeps the
@@ -81,7 +81,7 @@ processes (`stop-backend.bat`: the processes running `app.workers.*` or
 `uvicorn app.main` from this backend folder, their children, and orphaned
 children of this venv's interpreter left by an earlier stop -- `uvicorn
 --reload` serves the API from a `multiprocessing` child that does not
-name uvicorn, and killing only the supervisor leaves it on port 8000
+name uvicorn, and killing only the supervisor leaves it on port 8002
 with the old code) and starts the API and the three workers again
 without touching the web app. `GET /health` says which process answers:
 its PID, Python, root, models.py, revision and feature flags. A worker left running
@@ -144,12 +144,12 @@ cd backend
 python -m venv venv
 .\venv\Scripts\pip install -r requirements.txt
 copy .env.example .env      # set SECRET_KEY and the AI key (see the comments)
-.\venv\Scripts\python -m uvicorn app.main:app --reload --port 8000
+.\venv\Scripts\python -m uvicorn app.main:app --reload --port 8002
 .\venv\Scripts\python -m app.workers.sync_worker     # a second window: runs the document syncs
 
 cd ..\frontend
 npm install
-npm run dev                 # http://localhost:5173
+npm run dev                 # http://localhost:5175
 ```
 
 **The project archive (OneDrive).** The platform reads the SharePoint
@@ -171,7 +171,7 @@ cd backend
 python -m venv venv
 .\venv\Scripts\pip install -r requirements.txt
 copy .env.example .env   # then edit SECRET_KEY (see comment in the file)
-.\venv\Scripts\python -m uvicorn app.main:app --reload --port 8000
+.\venv\Scripts\python -m uvicorn app.main:app --reload --port 8002
 ```
 
 Tests: `.\venv\Scripts\python -m pytest tests -v` (auth/RBAC, the EP-folder
@@ -1182,7 +1182,7 @@ npm install
 npm run dev
 ```
 
-Runs at http://localhost:5173, expects the backend at http://localhost:8000 (override with `VITE_API_BASE_URL`).
+Runs at http://localhost:5175, proxies API requests to http://localhost:8002 (override with `VITE_API_BASE_URL`).
 
 ## Notes
 

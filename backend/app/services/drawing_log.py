@@ -169,6 +169,8 @@ class Row:
     floors: int
     keys: set[str]
     order: int
+    # The drawing number the sheet's title block prints, where it does ("" otherwise).
+    number: str = ""
 
 
 def _rows(drawings: list[dict], aliases: dict[str, str] | None = None) -> list[Row]:
@@ -188,7 +190,7 @@ def _rows(drawings: list[dict], aliases: dict[str, str] | None = None) -> list[R
                 keys = floor_identity(sheet["floor_name"], sheet.get("title"), aliases) or {floor_key(sheet["floor_name"])[0]}
             rows.append(Row(key=f"{d['id']}:{sheet['name']}", sheet=sheet["name"], drawing=d["filename"],
                             ifc_revision=d.get("revision") or "R0", floor_name=sheet["floor_name"], title=sheet["title"],
-                            floors=mult, keys=keys, order=len(rows)))
+                            floors=mult, keys=keys, order=len(rows), number=" ".join((sheet.get("number") or "").split())))
     return rows
 
 

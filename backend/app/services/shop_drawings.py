@@ -818,12 +818,11 @@ def rows_of(drawing: ProjectShopDrawing, revisions: list[str], issues: list, flo
              "floor_secondary": (secondaries or {}).get(key), "floor_keys": [key], "floors": 1} for key in keys]
 
 
-def log(db: Session, project: Project, system: str) -> dict:
-    """The Drawings Log of one system, from the records: every floor of the
-    building, with its shop drawing at every official revision."""
+def _records(db: Session, project: Project, system: str) -> tuple:
+    """What one system's log is built from: the floor registry, the
+    system's live shop drawings with their revisions and candidates, the
+    open issues (and those by drawing), and the revision columns."""
     registry = building_floors.registry(db, project.id)
-    floor_names = {f.floor_key: f.display_name for f in registry}
-    secondaries = {f.floor_key: f.secondary_name for f in registry}
     drawings = (db.query(ProjectShopDrawing)
                 .filter(ProjectShopDrawing.project_id == project.id, ProjectShopDrawing.system_code == system,
                         ProjectShopDrawing.active.is_(True))
@@ -836,24 +835,31 @@ def log(db: Session, project: Project, system: str) -> dict:
     top = max([r.number for d in drawings for r in d.revisions if r.submitted]
               + [_rev(c.revision) for d in drawings for c in d.candidates if c.candidate_status == "available"], default=-1)
     revisions = [f"R{n}" for n in range(max(MIN_REVISIONS, top + 1))]
-    rows = [row for d in drawings for row in rows_of(d, revisions, by_drawing.get(d.id, []), floor_names, secondaries)]
-    covered = {key for row in rows for key in row["floor_keys"]}
-    for floor in registry:
-        if floor.floor_key in covered:
-            continue
-        rows.append({
-            "key": f"floor:{floor.floor_key}", "id": None, "source": "ifc_floor", "reference": None,
-            "system": system, "title": None, "schedule": None,
-            "floor": floor.display_name, "floor_secondary": floor.secondary_name, "floor_named": None,
-            "floor_keys": [floor.floor_key], "floors": 1, "typical": False,
-            "confirmed": False, "remarks": "", "revision": None, "status": "not_submitted", "label": "Not Submitted",
-            "path": None, "page": 1, "name": None, "revisions": {},
-            "cells": {rev: dict(drawing_log.NOT_SUBMITTED) for rev in revisions},
-            "latest_revision": None, "latest_status": "not_submitted", "latest_note": None, "latest_path": None,
-            "latest_page": 1, "candidates": [], "hints": [], "issues": 0,
-        })
-    heights = {f.floor_key: f.elevation for f in registry}
-    rows.sort(key=lambda row: drawing_log._height(row["floor_keys"], heights))
+    return registry, drawings, issues, by_drawing, revisions
+
+
+def _blank_row(system: str, revisions: list[str]) -> dict:
+    """A row nothing was submitted for: the shape of a shop drawing's row, empty."""
+    return {
+        "key": None, "id": None, "source": "ifc_floor", "reference": None,
+        "system": system, "title": None, "schedule": None,
+        "floor": None, "floor_secondary": None, "floor_named": None,
+        "floor_keys": [], "floors": 1, "typical": False,
+        "confirmed": False, "remarks": "", "revision": None, "status": "not_submitted", "label": "Not Submitted",
+        "path": None, "page": 1, "name": None, "revisions": {},
+        "cells": {rev: dict(drawing_log.NOT_SUBMITTED) for rev in revisions},
+        "latest_revision": None, "latest_status": "not_submitted", "latest_note": None, "latest_path": None,
+        "latest_page": 1, "candidates": [], "hints": [], "issues": 0,
+    }
+
+
+def _floor_row(floor: ProjectBuildingFloor, system: str, revisions: list[str]) -> dict:
+    """A floor of the building no shop drawing covers yet."""
+    return {**_blank_row(system, revisions), "key": f"floor:{floor.floor_key}", "floor": floor.display_name,
+            "floor_secondary": floor.secondary_name, "floor_keys": [floor.floor_key]}
+
+
+def _out(rows: list[dict], drawings: list, issues: list, registry: list, revisions: list[str]) -> dict:
     counts: dict[str, int] = {}
     for row in rows:
         counts[row["latest_status"]] = counts.get(row["latest_status"], 0) + 1
@@ -867,12 +873,179 @@ def log(db: Session, project: Project, system: str) -> dict:
     }
 
 
+def log(db: Session, project: Project, system: str) -> dict:
+    """The Drawings Log of one system, from the records: every floor of the
+    building, with its shop drawing at every official revision."""
+    registry, drawings, issues, by_drawing, revisions = _records(db, project, system)
+    floor_names = {f.floor_key: f.display_name for f in registry}
+    secondaries = {f.floor_key: f.secondary_name for f in registry}
+    rows = [row for d in drawings for row in rows_of(d, revisions, by_drawing.get(d.id, []), floor_names, secondaries)]
+    covered = {key for row in rows for key in row["floor_keys"]}
+    rows += [_floor_row(floor, system, revisions) for floor in registry if floor.floor_key not in covered]
+    heights = {f.floor_key: f.elevation for f in registry}
+    rows.sort(key=lambda row: drawing_log._height(row["floor_keys"], heights))
+    return {**_out(rows, drawings, issues, registry, revisions), "view": "floor"}
+
+
+def ifc_sheet_label(floor_name: str | None, title: str | None) -> str:
+    """An IFC plan sheet as the log names it: its floor as the sheet writes
+    it ("Typical 3rd to 16th Floor"), else its title."""
+    from app.ifc.dxf.sheets import NOT_IDENTIFIED
+
+    name = (floor_name or "").strip()
+    if name and name.upper() != NOT_IDENTIFIED.upper():
+        return drawing_log.floor_label(name)
+    return drawing_log.floor_label(title) if title else "Sheet naming no floor"
+
+
+def floor_range(keys: list[str], names: list[str]) -> str:
+    """The floors of a sheet in a few words, as the IFC page writes them:
+    "floors 3-16" for a run of levels, "floors 14, 21" for levels apart,
+    the floors' names otherwise ("Ground Floor"; "Basement 4, Basement 3")."""
+    numbers = sorted(int(k[1:]) for k in keys if re.fullmatch(r"L\d+", k))
+    if len(keys) > 1 and len(numbers) == len(keys):
+        if numbers == list(range(numbers[0], numbers[-1] + 1)):
+            return f"floors {numbers[0]}-{numbers[-1]}"
+        return "floors " + ", ".join(str(n) for n in numbers)
+    return ", ".join(names)
+
+
+def log_by_ifc(db: Session, project: Project, system: str) -> dict:
+    """The Drawings Log as the IFC drawings in force issue the building:
+    exactly one row per IFC plan sheet, with the shop drawing that answers
+    it at every official revision. A typical sheet ("L03 TO L21") is one
+    row, as the shop drawing submitted against it is one submission, where
+    the floor view lists its nineteen floors one by one. Every system of
+    the project counts the same sheets. A sheet several shop drawings
+    cover is the row of the one covering most of it, the others named on
+    it; floors of a sheet not submitted yet are a hint on its row. Shop
+    drawings for floors the IFC has no sheet for are listed apart
+    (`others`), not counted. The records are the floor view's: nothing is
+    written."""
+    registry, drawings, issues, by_drawing, revisions = _records(db, project, system)
+    floor_names = {f.floor_key: f.display_name for f in registry}
+    secondaries = {f.floor_key: f.secondary_name for f in registry}
+    heights = {f.floor_key: f.elevation for f in registry}
+    # The aliases in force, read: `_rows` brings every sheet's floors to the
+    # floors they are on this building, as the registry was built.
+    aliases = building_floors.alias_map(building_floors.alias_rows(db, project.id))
+    # The system's own IFC drawings (those filed in its IFC folder of the
+    # project); another system's where it has none, and the page says whose.
+    from app.ifc.services import folder_import
+
+    ifc_drawings, borrowed = folder_import.drawings_for(db, project, system)
+    sheets = drawing_log._rows([{"id": d.id, "filename": d.filename, "revision": d.revision or "R0",
+                                 "sheets": building_floors.ifc_sheets(d)} for d in ifc_drawings], aliases)
+    whole = {d.id: row_of(d, revisions, by_drawing.get(d.id, []), floor_names, secondaries) for d in drawings}
+
+    def named(keys: list[str]) -> str:
+        return ", ".join(floor_names.get(k) or drawing_log._spelled(k) for k in keys)
+
+    # The reference a sheet is listed under: the drawing number its title
+    # block prints, first; the layout's name where the title block prints
+    # none -- or prints one number on every sheet (a title block never
+    # updated per sheet: EP-30880's prints "FA 119" on all twenty), which
+    # names the set, not the sheet.
+    printed: dict[tuple[str, str], int] = {}
+    for sheet in sheets:
+        if sheet.number:
+            printed[(sheet.drawing, sheet.number.upper())] = printed.get((sheet.drawing, sheet.number.upper()), 0) + 1
+
+    def brief(d: ProjectShopDrawing, shared: list[str]) -> dict:
+        row = whole[d.id]
+        return {"id": d.id, "reference": d.drawing_reference, "floors": named(shared), "floor_keys": shared,
+                "latest_revision": row["latest_revision"], "latest_status": row["latest_status"], "label": row["label"]}
+
+    # Exactly one row per IFC sheet, for every system alike: the sheets are
+    # the IFC's, the same count whichever system is on show. The row is the
+    # shop drawing covering the sheet -- where several do, the one covering
+    # most of its floors, then the latest; the others are named on the row
+    # (`others`) and opened from the floor view. Floors of a sheet no
+    # drawing covers yet are a hint on the row, never a row of their own.
+    rows: list[dict] = []
+    on_sheet: set[str] = set()
+    for sheet in sheets:
+        keys = sorted(sheet.keys, key=drawing_log._floor_order)
+        label = ifc_sheet_label(sheet.floor_name, sheet.title)
+        names = [floor_names.get(k) or drawing_log._spelled(k) for k in keys]
+        same = sheet.number and printed.get((sheet.drawing, sheet.number.upper()), 0) > 1
+        reference = sheet.number if sheet.number and not same else sheet.sheet
+        note = (f"The title block prints {sheet.number} on every sheet of {sheet.drawing}: the sheet goes by its layout name."
+                if same else None)
+        ifc = {"key": sheet.key, "drawing": sheet.drawing, "revision": sheet.ifc_revision, "sheet": reference,
+               "layout": sheet.sheet, "number": sheet.number or None, "number_note": note,
+               "title": sheet.title, "label": label, "floors": len(keys), "floor_keys": keys,
+               "floor_names": names, "range": floor_range(keys, names)}
+        covering = []
+        for d in drawings:
+            shared = [k for k in keys if k in set(d.floor_keys or [])]
+            if shared:
+                covering.append((d, shared))
+        on_sheet.update(keys)
+        base = {"key": f"ifc:{sheet.key}", "ifc": ifc, "floor": label, "floor_keys": keys, "floors": len(keys),
+                "floor_secondary": None, "typical": len(keys) > 1, "group_first": True, "group_size": 1,
+                "partial": False, "spans": False, "others": [], "not_submitted_floors": []}
+        if not covering:
+            rows.append({**_blank_row(system, revisions), **base, "source": "ifc_sheet"})
+            continue
+        covering.sort(key=lambda t: (-len(t[1]), -_rev(whole[t[0].id]["latest_revision"] or "R-1"),
+                                     -(t[0].updated_at.timestamp() if t[0].updated_at else 0)))
+        primary, shared = covering[0]
+        covered = {k for _d, s in covering for k in s}
+        left = [k for k in keys if k not in covered]
+        row = {**whole[primary.id], **base, "partial": len(shared) < len(keys),
+               "spans": len(primary.floor_keys or []) > len(shared),
+               "others": [brief(d, s) for d, s in covering[1:]], "not_submitted_floors": left}
+        hints = list(row["hints"])
+        if covering[1:]:
+            hints.append({"kind": "other_drawings", "severity": "info",
+                          "label": f"+{len(covering) - 1} more drawing{'s' if len(covering) > 2 else ''}: "
+                                   + ", ".join(b["reference"] for b in row["others"]),
+                          "note": "; ".join(f"{b['reference']} ({b['floors']}): {b['latest_revision'] or '-'} {b['label']}"
+                                            for b in row["others"])})
+        if left:
+            hints.append({"kind": "floors_not_submitted", "severity": "warning",
+                          "label": f"Not submitted: {named(left)}",
+                          "note": f"{primary.drawing_reference} covers {named(shared)} of this sheet."})
+        row["hints"] = hints
+        rows.append(row)
+    rows.sort(key=lambda row: drawing_log._height(row["floor_keys"], heights))
+
+    # Shop drawings for floors the IFC has no sheet for (a lift machine
+    # room the set never drew, a drawing naming no floor): listed apart,
+    # under the sheets, never counted among the IFC drawings.
+    others: list[dict] = []
+    for d in drawings:
+        keys = list(d.floor_keys or [])
+        off = [k for k in keys if k not in on_sheet]
+        if keys and not off:
+            continue    # on the IFC sheets above
+        row = whole[d.id]
+        others.append({**row, "key": f"off:sd:{d.id}", "ifc": None, "floor_keys": off, "floors": max(1, len(off)),
+                       "floor": named(off) if off else row["floor"], "floor_secondary": None if off else row.get("floor_secondary"),
+                       "group_first": True, "group_size": 1, "partial": False, "spans": len(keys) > len(off),
+                       "others": [], "not_submitted_floors": []})
+    others.sort(key=lambda row: drawing_log._height(row["floor_keys"], heights))
+    if not sheets:
+        # No IFC drawing read yet: nothing to list the drawings under, so
+        # the shop drawings themselves are the rows, one per drawing.
+        rows, others = others, []
+
+    return {**_out(rows, drawings, issues, registry, revisions), "view": "ifc", "sheets": len(sheets),
+            "groups": len(rows), "others": others,
+            "ifc": [{"id": d.id, "filename": d.filename, "revision": d.revision or "R0", "reference": d.drawing_reference,
+                     "archive_path": d.archive_path} for d in ifc_drawings],
+            "ifc_borrowed_from": borrowed}
+
+
 def summary(db: Session, project: Project) -> list[dict]:
     """Every system's numbers, for the system cards and the design manager:
-    floors, each status at the latest revision, review items."""
+    drawings (a row per IFC sheet, as the Drawings Log lists them: `floors`
+    keeps its name for the page), each status at the latest revision,
+    review items."""
     out = []
     for system in project_systems(db, project):
-        built = log(db, project, system)
+        built = log_by_ifc(db, project, system)
         counts = built["counts"]
         approved = counts.get("approved", 0) + counts.get("approved_as_noted", 0)
         out.append({

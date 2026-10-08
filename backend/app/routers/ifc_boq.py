@@ -516,10 +516,19 @@ async def start_reading_drawing(project_id: int, file: UploadFile = File(...),
     "revision_confirmation_required"). The same file sent twice for the
     same drawing and revision while the first is still queued or running
     returns that job (`already_active`)."""
-    from app.routers import jobs as jobs_router
-
     project = _get_project_or_404(db, project_id)
     staged = await upload.stream_to_staging(file, allowed=("dxf", "dwg"), default_name="drawing.dxf")
+    return _queue_read(db, project, current_user, staged, revision=revision, supersedes_id=supersedes_id,
+                       confirm_new=confirm_new)
+
+
+def _queue_read(db: Session, project, current_user: User, staged: upload.Staged, *, revision: str | None,
+                supersedes_id: int | None, confirm_new: bool, extra: dict | None = None):
+    """Queue a staged DWG or DXF for the IFC worker (an upload's, or a copy
+    of a file in the project's IFC folder) and answer with the job. The
+    staged copy is discarded unless a job was queued for it."""
+    from app.routers import jobs as jobs_router
+
     queued = False
     try:
         if staged.ext == "dwg" and convert.find_converter() is None:
@@ -538,7 +547,7 @@ async def start_reading_drawing(project_id: int, file: UploadFile = File(...),
         params = {"staged_path": str(staged.path), "name": staged.name, "ext": staged.ext, "size": staged.size,
                   "sha256": staged.sha256, "revision": plan.revision, "reference": plan.reference,
                   "supersedes_id": plan.supersedes.id if plan.supersedes is not None else None,
-                  "user_id": current_user.id}
+                  "user_id": current_user.id, **(extra or {})}
         job, created = jobs.enqueue(db, kind=runners.READ, project_id=project.id, user_id=current_user.id,
                                     dedup_key=key, params=params,
                                     progress={**_queue_note(db), "file": staged.name}, message="")
@@ -553,6 +562,45 @@ async def start_reading_drawing(project_id: int, file: UploadFile = File(...),
         db.expire_all()
         job = db.get(type(job), job.id)
     return _started(db, job, True)
+
+
+# --- the IFC drawings as the project folder holds them ------------------------------------------
+
+
+class FolderRead(BaseModel):
+    # The file's path relative to the project folder, as the listing gives it.
+    path: str = Field(min_length=1, max_length=600)
+    revision: str | None = None
+    supersedes_id: int | None = None
+    confirm_new: bool = False
+
+
+@router.get("/projects/{project_id}/ifc-drawings/folder")
+def ifc_folder(project_id: int, system: str | None = None, _current_user: User = Depends(get_current_user),
+               db: Session = Depends(get_db)):
+    """The files in the system's IFC folder of the project (03- Drawings/IFC/
+    Electrical/FA for the fire alarm), each with the drawing it is read as,
+    or the read under way, or nothing yet. Nothing is read here."""
+    from app.ifc.services import folder_import
+
+    return folder_import.files(db, _get_project_or_404(db, project_id), (system or "FAS").upper())
+
+
+@router.post("/projects/{project_id}/ifc-drawings/folder/jobs", status_code=status.HTTP_202_ACCEPTED)
+def start_reading_from_folder(project_id: int, body: FolderRead,
+                              current_user: User = Depends(require_role(*CREATOR_ROLES)), db: Session = Depends(get_db)):
+    """Queue a DWG or DXF that is in the project's IFC folder for the IFC
+    worker, as uploading that file would (the same refusals, the same job;
+    the file stays where it is in the folder)."""
+    from app.ifc.services import folder_import
+
+    project = _get_project_or_404(db, project_id)
+    try:
+        staged = folder_import.stage(project, body.path)
+    except folder_import.FolderError as exc:
+        raise HTTPException(exc.status, str(exc))
+    return _queue_read(db, project, current_user, staged, revision=body.revision, supersedes_id=body.supersedes_id,
+                       confirm_new=body.confirm_new, extra={"folder_path": body.path.replace("\\", "/").strip("/")})
 
 
 @router.post("/projects/{project_id}/ifc-drawings/zip/jobs", status_code=status.HTTP_202_ACCEPTED)

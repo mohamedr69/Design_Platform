@@ -127,7 +127,7 @@ export function DrawingDetailPanel({ projectId, drawingId, canEdit, summary, onC
                 <Row k="Latest Status" v={STATUS_LABEL[d.latest_status]} />
                 <Row k="Remarks" v={d.remarks || "—"} />
               </Block>
-              {summary && <p className="text-[11px] text-gray-400">{summary.name}: {summary.approved_total} of {summary.floors} floors approved.</p>}
+              {summary && <p className="text-[11px] text-gray-400">{summary.name}: {summary.approved_total} of {summary.floors} drawings approved.</p>}
             </>
           )}
 

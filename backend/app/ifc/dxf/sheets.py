@@ -80,10 +80,18 @@ class Sheet:
     # block's DRAWING TITLE label), "title text" (the sheet's title-like
     # text, where the title block has no such label), "" (nothing titled).
     title_source: str = ""
+    # The drawing number the sheet's title block prints ("FA 111"): the
+    # reference the Drawings Log lists the sheet under, before the layout's
+    # name. Read where the title was read: "dwg no" (the text under the
+    # title block's DWG NO label), "title block" (a title-block attribute
+    # that reads like a drawing number), "" (none printed).
+    number: str = ""
+    number_source: str = ""
 
     def to_dict(self) -> dict:
         return {"name": self.name, "title": self.title, "kind": self.kind, "floors": self.floors,
-                "multiplier": self.multiplier, "note": self.note, "title_source": self.title_source}
+                "multiplier": self.multiplier, "note": self.note, "title_source": self.title_source,
+                "number": self.number, "number_source": self.number_source}
 
 
 OUTSIDE = "(outside sheets)"
@@ -322,6 +330,33 @@ def _labelled_title(texts: list[_Text]) -> list[str] | None:
     return None
 
 
+_NUMBER_LABEL = re.compile(r"^\s*(?:DWG|DRAWING|SHEET)\.?\s*(?:NO\.?|NUMBER|#)\s*:?\s*$", re.I)
+# A drawing number as title blocks print one: "FA 111", "FA-101A", "E-FA-105", "MAJ002-GME-IFC-FA-ZZZ-010008".
+_NUMBER_SHAPE = re.compile(r"^(?:[A-Z]{1,4}[\s-]?\d{2,4}[A-Z]?|[A-Z]{1,3}-[A-Z]{1,4}-\d{2,4}[A-Z]?|[A-Z0-9]+(?:-[A-Z0-9]+){3,})$", re.I)
+
+
+def _number_of(texts: list[_Text], layout) -> tuple[str, str]:
+    """(the drawing number the sheet's title block prints, where it was
+    read). The text written under or beside the title block's DWG NO label
+    first; where there is no such label, a title-block attribute that
+    reads like a drawing number. ("", "") when nothing is printed: the
+    sheet then goes by its layout name."""
+    for label in (t for t in texts if _NUMBER_LABEL.match(t.text)):
+        size = label.h or max((t.h for t in texts), default=1.0) or 1.0
+        near = [t for t in texts
+                if t is not label and not t.in_block and _NUMBER_SHAPE.match(t.text)
+                and label.x - 5 * size <= t.x <= label.x + 60 * size and label.y - 12 * size <= t.y <= label.y + 3 * size]
+        if near:
+            near.sort(key=lambda t: (abs(t.y - label.y), abs(t.x - label.x)))
+            return " ".join(near[0].text.split()), "dwg no"
+    for e in layout.query("INSERT"):
+        for a in getattr(e, "attribs", []):
+            s = " ".join(str(a.dxf.get("text", "")).split())
+            if s and _NUMBER_SHAPE.match(s):
+                return s, "title block"
+    return "", ""
+
+
 def _title_of(layout, doc=None) -> tuple[str, str]:
     """(title, where it was read). The lines under the title block's DRAWING
     TITLE label first; where there is no such label, a title-block attribute
@@ -376,10 +411,11 @@ def read_sheets(doc) -> list[Sheet]:
         if not wins:
             continue
         title, source = _title_of(layout, doc)
+        number, number_source = _number_of(_texts(layout, doc), layout)
         kind = "diagram" if DIAGRAM.search(title) else "plan"
         floors = parse_floors(title) if kind == "plan" else []
         sheets.append(Sheet(name=name, title=title, kind=kind, floors=floors, multiplier=floor_count(title, floors),
-                            windows=wins, title_source=source))
+                            windows=wins, title_source=source, number=number, number_source=number_source))
     _resolve_overlaps(sheets)
     return sheets
 
@@ -392,7 +428,8 @@ def refresh_floors(stored: list[dict]) -> list[dict]:
     for s in stored:
         floors = parse_floors(s["title"]) if s.get("kind") == "plan" else []
         sheets.append(Sheet(name=s["name"], title=s["title"], kind=s.get("kind", "plan"), floors=floors,
-                            multiplier=floor_count(s["title"], floors), title_source=s.get("title_source", "")))
+                            multiplier=floor_count(s["title"], floors), title_source=s.get("title_source", ""),
+                            number=s.get("number") or "", number_source=s.get("number_source") or ""))
     _resolve_overlaps(sheets)
     return [{**old, **new.to_dict()} for old, new in zip(stored, sheets)]
 
