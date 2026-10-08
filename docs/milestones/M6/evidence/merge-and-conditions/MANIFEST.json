@@ -1,0 +1,119 @@
+{
+ "task": "ORCH-049",
+ "branch": "task/m6-merge",
+ "base": "b3c4949e3c1579eff997a651634184accee29ec6",
+ "head_at_manifest": "980f9a323e9e4c0a2ef54c333732ad36c19688ce",
+ "note": "text files hashed with LF line endings (as committed)",
+ "evidence": {
+  "baseline-orch047-merged-full.xml": {
+   "sha256": "d6cfbacda2eb56f8f0ca0373c0677801e9a2eca954e07da5c1fe305c43f74c3b",
+   "bytes": 263705
+  },
+  "conditions-after.log": {
+   "sha256": "d16e0b0392118a760bed5f76d907dc261a89bd46ed56dd763e4b2f7ced5110f1",
+   "bytes": 1191
+  },
+  "conditions-after.xml": {
+   "sha256": "cc0cd47e5a2541c8cf734189725dc05836a0f7621b033abf3a6735d8801ab1e9",
+   "bytes": 8585
+  },
+  "conditions-before.log": {
+   "sha256": "c31241813ba77acce1d3530c7c1ace27ec0e8400618e767de9144e7b1fe5b56d",
+   "bytes": 24659
+  },
+  "conditions-before.xml": {
+   "sha256": "1e548cdae5d3074aa342fad27fb99a2e8c50c6c78c2098867875dfaf215779f6",
+   "bytes": 25792
+  },
+  "full-suite-comparison.json": {
+   "sha256": "e359ff606ff90f9a235c06dd42418b3ed56f41449ac5637cc7fab77e7f5cb1ac",
+   "bytes": 8533
+  },
+  "full-suite.log": {
+   "sha256": "27aef6c5e325d48cb9e1e360f5094ac1f2e4684df2a23348875396e0fa004797",
+   "bytes": 12129
+  },
+  "full-suite.xml": {
+   "sha256": "60e48abb73a13eb18c8803447a8ef6ac2d4aa392fed9a7824b7c1117f9e296ec",
+   "bytes": 272538
+  },
+  "harness-synthetic-ai.json": {
+   "sha256": "51713640d2dd157aeafdb19120649df7856a9fed5ef513fa318ceb07a1088e9b",
+   "bytes": 15482
+  },
+  "harness-synthetic-rules.json": {
+   "sha256": "4a7a2ecb23e6d05c9157d91d5e82d883b1f4b83c9cbb629ca885944b7f152f94",
+   "bytes": 13515
+  },
+  "harness-synthetic-stored-with-ai-row.json": {
+   "sha256": "38982b041838079c543866dc08b0a96a7cb76fb53ba8ebd16b138d32a0838377",
+   "bytes": 15615
+  },
+  "harness-synthetic-stored.json": {
+   "sha256": "ab4bff6a01aebed3fdfee2595b670434b8efa72b6fc0bfa85139acdf964cbc5d",
+   "bytes": 14279
+  },
+  "harness-synthetic.log": {
+   "sha256": "22cda52bbbdc0cc1cc9ccee5eb349d876003a6992f14815b452e0f11bec8d393",
+   "bytes": 4720
+  },
+  "mutation-n1c.json": {
+   "sha256": "91680d3b79163d109596a1d91b8d76037cd1c5f93b7d155fbb4e279821646c9f",
+   "bytes": 1154
+  },
+  "runs.txt": {
+   "sha256": "863d866d118ec23270c12c49170997b057873dc9c74857fcb1bbc691e35b56a8",
+   "bytes": 703
+  },
+  "scripts/compare.py": {
+   "sha256": "d8b2bf98d0b4742ca2df31f5016d94d4a8b2fb3390fecb6ef6a2986446b8f55e",
+   "bytes": 3223
+  },
+  "scripts/harness_synthetic.py": {
+   "sha256": "3ba8092cebf97c6b5ebc31b76ab5c904a4a888bb48a26a91d51a9f3448fcd532",
+   "bytes": 3318
+  },
+  "scripts/manifest.py": {
+   "sha256": "03764847d0c785c8637c0da7da9c1a25c91f01971feb7c9385c18d7833dd5a42",
+   "bytes": 1683
+  },
+  "scripts/mutate_n1c.py": {
+   "sha256": "8695f760c412e4f3c66fe1e2c225bba769f0cdaa2138d7e50c98875b2ae64b13",
+   "bytes": 1857
+  },
+  "targeted-at-merge.log": {
+   "sha256": "b53e4a00e8a22e41df7967c445b467490a8e5df56b6c2f030aa84b01128bbf13",
+   "bytes": 2377
+  },
+  "targeted-at-merge.xml": {
+   "sha256": "0daece0ed49a9781bf6dc493998d1cec70340fc16ef8b05138ff91a3dd814cfe",
+   "bytes": 28173
+  },
+  "targeted-final.log": {
+   "sha256": "df602deea6c0145876c21d280a7b339e3e64055e2b47e158501e5240c76c2735",
+   "bytes": 2503
+  },
+  "targeted-final.xml": {
+   "sha256": "463a28b7f38377f2e94c17884a7f116c068a4daa3d2b4f13d2f1a5b6e5b29121",
+   "bytes": 32760
+  }
+ },
+ "changed_code_blobs_vs_base": {
+  "backend/alembic/versions/c6d8e0f2a4b6_classification_attribution.py": "17c85f64f51321184f789bc3a9a6966c57d049b4",
+  "backend/app/core/config.py": "af2907c8c0d42e708f82adab8571d33010314bbc",
+  "backend/app/models.py": "bc56b4682941e07f5b022a7227a9907d2e4397a9",
+  "backend/app/routers/documents.py": "c8c55b981a4b7540c4c2afe084f57e026cbfe5b1",
+  "backend/app/services/classification_kind_map.json": "5a1632ab15a999be179ddbbd1c559cb6a3c34e34",
+  "backend/app/services/document_attribution.py": "0faaee134984a395ab3de2e3a2402eb5ef241c7e",
+  "backend/app/services/document_classification.py": "3bb3e38c0e2dfa27d70ab89c16d40e4d8337138d",
+  "backend/app/services/document_classification_ai.py": "35a4226910e15d3898308a23d3a3b3cf9c39f991",
+  "backend/app/services/document_sync.py": "616e96a86e29254ef23734f927d016eae19d6d0c",
+  "backend/app/services/project_deletion.py": "eb8544e2daf02e28560aa8619d0de9ed6d389c15",
+  "backend/app/workers/runtime.py": "fb3d9d5605f2de211421d62c97ed52e00d9766d5",
+  "backend/scripts/m6_shadow_eval.py": "e4ddfc426a1f7bd23323f47d9b1281a721c3d5ea",
+  "backend/tests/test_m6_attribution.py": "7402e295fe9f88b29c6a8342660360480fba1a74",
+  "backend/tests/test_m6_merge_conditions.py": "a95a7d9e5b24eab014f90cc43dc01508555535fe",
+  "docs/DOCUMENT_CLASSIFICATION_AI.md": "aecfcac4020e97a2c5c94e5e6ea4d2bac9de7023",
+  "docs/DOCUMENT_CLASSIFICATION_V2.md": "29cdbdb3813eb95274639237f2ecd75042787253"
+ }
+}

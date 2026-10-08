@@ -37,7 +37,7 @@ log = logging.getLogger("app.workers.runtime")
 # What every worker's jobs import from app.models one way or another.
 REQUIRED_MODELS = ("Project", "ProjectDocument", "BackgroundJob", "BackgroundWorker", "DocumentReading")
 # With Document Classification V2 on, what the processing imports as well.
-CLASSIFICATION_MODELS = ("DocumentClassification",)
+CLASSIFICATION_MODELS = ("DocumentClassification", "DocumentClassificationConflict")
 # The service modules each worker runs, imported at start rather than on
 # the first job, so a module that cannot be imported says so at once.
 SERVICES = {

@@ -119,6 +119,11 @@ class Settings(BaseSettings):
     # a routing, a status or a record. Stored assessments stay when it is
     # turned off again.
     document_classification_v2: bool = False
+    # Attribution (app.services.document_attribution): the names, besides
+    # `company_name`, a title block's originator may print for this company
+    # ("Al Arabia SSD; ..."), separated by semicolons. Only an originator the
+    # readers stored is compared; nothing is read for it.
+    attribution_own_originators: str = ""
     # M2 extraction: whether observations the current reader makes but the
     # accepted reader did not (a decision framed or highlighted into the
     # page, a cover of an untracked discipline, a scanned transmittal) are
