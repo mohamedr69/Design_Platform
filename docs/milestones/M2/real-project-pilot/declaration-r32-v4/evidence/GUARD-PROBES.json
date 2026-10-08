@@ -1,0 +1,141 @@
+{
+ "all_as_expected": true,
+ "created_by_refused_probes": [],
+ "guard": "C:\\t\\r2x\\r42-sandbox\\r43p\\run\\v4\\guard\\sitecustomize.py",
+ "ok": true,
+ "probes": [
+  {
+   "as_expected": true,
+   "expected": "ALLOWED",
+   "probe": "write inside the work folder",
+   "reason": null,
+   "result": "ALLOWED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write into the executed v3 run folder",
+   "reason": "R43 guard refused write: C:\\t\\r2x\\r42-sandbox\\r32-v3\\PROBE-NEVER.txt mode=w flags=33665",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "mkdir the future v4 run folder",
+   "reason": "R43 guard refused os.mkdir: C:\\t\\r2x\\r42-sandbox\\r32-v4",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "mkdir another live-shaped run folder r32-v9",
+   "reason": "R43 guard refused os.mkdir: C:\\t\\r2x\\r42-sandbox\\r32-v9",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "read a file in the owner records (no hash-only flag)",
+   "reason": "R43 guard refused open owner records: C:\\t\\r2x\\r42-sandbox\\r32-v3-owner-records\\RUN-HASH.txt",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write into the owner records",
+   "reason": "R43 guard refused open owner records: C:\\t\\r2x\\r42-sandbox\\r32-v3-owner-records\\PROBE-NEVER.txt",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "sqlite read-write in the v3 run folder",
+   "reason": "R43 guard refused sqlite3 read-write: C:\\t\\r2x\\r42-sandbox\\r32-v3\\PROBE-NEVER.sqlite",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "sqlite read-write of the AI ledger",
+   "reason": "R43 guard refused sqlite3 read-write: C:\\t\\r2x\\ledger\\r2x-ledger.sqlite",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "ALLOWED",
+   "probe": "sqlite mode=ro of the AI ledger",
+   "reason": null,
+   "result": "ALLOWED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write into review43",
+   "reason": "R43 guard refused write: G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review43\\PROBE-NEVER.txt mode=w flags=33665",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write into declaration-r32-v3",
+   "reason": "R43 guard refused write: G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v3\\PROBE-NEVER.txt mode=w flags=33665",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write into frozen-r13",
+   "reason": "R43 guard refused write: C:/t/iso/frozen-r13/PROBE-NEVER.txt mode=w flags=33665",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "write at the sandbox base outside r43p",
+   "reason": "R43 guard refused write: C:\\t\\r2x\\r42-sandbox\\PROBE-NEVER.txt mode=w flags=33665",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "open the merged .env",
+   "reason": "R43 guard refused open .env: G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\backend\\.env",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "claude by name",
+   "reason": "R43 guard refused claude process: [None, 'claude --version']",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "claude by full path",
+   "reason": "R43 guard refused claude process: [None, 'C:/Users/moham/AppData/Local/Microsoft/WinGet/Packages/Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe/claude.exe --version']",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "claude through a shell",
+   "reason": "R43 guard refused claude process: ['claude --version']",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "REFUSED",
+   "probe": "network name lookup",
+   "reason": "R43 guard refused network: ('example.com', 443, 0, 0, 0)",
+   "result": "REFUSED"
+  },
+  {
+   "as_expected": true,
+   "expected": "ALLOWED",
+   "probe": "write (and remove) a file in the v4 package",
+   "reason": null,
+   "result": "ALLOWED"
+  }
+ ]
+}

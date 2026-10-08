@@ -1,0 +1,43 @@
+{
+ "drill_folder": "C:/t/r2x/r42-sandbox/r45q/sb/r32-drill-r45q-v5bind-1",
+ "guard": "the review45 guard (run copy r45/guard/sitecustomize.py, unchanged) through r45_launch.py, R43_GUARD_ROOTS=C:/t/r2x/r42-sandbox/r45q; guard log r45q/guard-log never created (0 refusals)",
+ "helper_scripts_not_package": {
+  "compare_drill.py": "34829c0792b892089f065f660d1bcd8499347662025682e96ce998cb29daba2a",
+  "pack_drill.py": "60edfe8f091d0efda8ccf1503992fab14314e8834de6c5e32488fdd083b50118"
+ },
+ "run_copy": {
+  "byte_identical_at_copy": "85 of 85 (sha256sum -c: 0 differ before the substitution)",
+  "files": 85,
+  "from": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts",
+  "source_listing_sha256": "7eba9b06361007283f8cb88fcbf27931c4ad7d30b5510dd799e90702924af67b",
+  "to": "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts"
+ },
+ "spec": {
+  "path": "DRILL-SPEC.json (byte copy of review45/evidence/drill/DRILL-SPEC.json)",
+  "sha256": "05a7caa86f34d603f42875f0692d6e3fc587935ea7f4d529d7e12b68ab6904b0"
+ },
+ "statement": "a dry drill, AI off, 0 model requests; it authorizes nothing",
+ "substitutions": [
+  {
+   "after": "WORK = SANDBOX_BASE / \"r45q\"",
+   "before": "WORK = SANDBOX_BASE / \"r45p\"",
+   "file": "r45/r45common.py (run copy only)",
+   "id": "S-R45Q-1",
+   "line": 21,
+   "sha256_after": "51f23f49a2d5e630924a64f7f5bd6a14b5087013ddd1c17ce1f77b65d9294d98",
+   "sha256_before": "55c97fdde3b5efd70e25a1b37f4fe68d6422647c4da300533939087dcf898bd2",
+   "why": "the one work folder of task R43-44; the same substitution as Verification 45's V45-S1 (r45p -> r45v)"
+  },
+  {
+   "file": "none (in process)",
+   "id": "S-BASE",
+   "what": "r45_drill_run.py widens the sandbox-base pattern in its own process to accept exactly C:/t/r2x/r42-sandbox/r45q/sb (the package's own driver substitution, unchanged)"
+  }
+ ],
+ "truth_file_not_copied": {
+  "equals_bound_truth": true,
+  "name": "TRUTH-R32.json",
+  "sha256": "4e237a4e321949c5138caf1b203e52257499d9ca9739d5b6fa93df474705e064"
+ },
+ "what": "the review45 drill reproduced once on v5's bindings (task R43-44): runner_r32.py run --mode dry --dry-baseline-facts from a byte copy of PILOT/review45/scripts, --binding PILOT/review45/BINDING-MANIFEST-R45-HARNESS.json --binding-sha 9af8e07a...9ffb (the manifest declaration v5 binds; 629 files verified by preflight_r32.verify_binding), stamp r45q-v5bind-1"
+}

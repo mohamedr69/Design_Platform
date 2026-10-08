@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\moham\AppData\Local\Temp\claude\G--dev--2--dev-ep-platform-merged\642e8760-80e9-4762-a17d-ae3c2a6c429d\scratchpad\run43\preflight\preflight_r43run.py", line 181, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\moham\AppData\Local\Temp\claude\G--dev--2--dev-ep-platform-merged\642e8760-80e9-4762-a17d-ae3c2a6c429d\scratchpad\run43\preflight\preflight_r43run.py", line 96, in main
+    v = PF.validate_declaration(mem, run_path)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\moham\AppData\Local\Temp\claude\g--dev--2--dev-ep-platform-merged\642e8760-80e9-4762-a17d-ae3c2a6c429d\scratchpad\run43\scripts\harness-r32\preflight_r32.py", line 407, in validate_declaration
+    iso = validate_isolation(decl["isolation"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\moham\AppData\Local\Temp\claude\g--dev--2--dev-ep-platform-merged\642e8760-80e9-4762-a17d-ae3c2a6c429d\scratchpad\run43\scripts\harness-r32\preflight_r32.py", line 489, in validate_isolation
+    raise Refused(f"refused: isolation must be exactly {want} ({x!r})")
+preflight_r32.Refused: refused: isolation must be exactly {'forbidden_root': 'G:/dev (2)/dev/ep-platform-merged', 'allowed_under_forbidden': {'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv', 'harness': 'C:/Users/moham/AppData/Local/Temp/claude/g--dev--2--dev-ep-platform-merged/642e8760-80e9-4762-a17d-ae3c2a6c429d/scratchpad/run43/scripts/harness-r32'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env'} ({'allowed_under_forbidden': {'harness': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review42/scripts/harness-r32', 'interpreter': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/venv'}, 'env_file_never_read': 'G:/dev (2)/dev/ep-platform-merged/ep-platform/backend/.env', 'forbidden_root': 'G:/dev (2)/dev/ep-platform-merged'})

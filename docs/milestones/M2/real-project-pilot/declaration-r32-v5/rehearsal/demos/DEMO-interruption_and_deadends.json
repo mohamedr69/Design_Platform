@@ -1,0 +1,1413 @@
+{
+ "dry": {
+  "A_version_mismatch": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": "PENDING",
+      "kind": "fresh",
+      "n": 1,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": "PENDING",
+      "kind": "fresh",
+      "n": 1,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "nothing_created": true,
+    "result": "refused",
+    "why": "refused: CLI version '2.1.264 (Claude Code)' differs from the declared '2.1.263 (Claude Code)' (nothing was created and no authorization was consumed)"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "run"
+  },
+  "B_disk_full_at_identity_record": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "reentry",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "reentry",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "error",
+    "why": "OSError: [Errno 28] No space left on device"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "run (re-entry)"
+  },
+  "C_interrupted_at_allowance_creation": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "reentry",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "reentry",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "interrupted",
+    "why": "KeyboardInterrupt (injected)"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "run (re-entry)"
+  },
+  "D_failure_after_the_allowance": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "error",
+    "second_run": {
+     "result": "refused",
+     "why": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r42-sandbox/r45q/sb/r45q-demo-950daaac holds the run's allowance); use 'resume'"
+    },
+    "why": "RuntimeError: injected failure after the allowance"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "resume"
+  },
+  "E_lane_B_crash_after_a_response": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dispatched",
+       1
+      ],
+      [
+       "B",
+       "dry_refused",
+       1
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "B"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dispatched",
+       1
+      ],
+      [
+       "B",
+       "dry_refused",
+       1
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "B"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "error",
+    "why": "RuntimeError: lane B failed (76); see C:\\t\\r2x\\r42-sandbox\\r45q\\sb\\r45q-demo-e4983aaa\\inv-1\\out\\lane-B.log"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "resume",
+   "served_interrupted_charged": [
+    {
+     "lane": "B",
+     "mode": "same_bound_fingerprint",
+     "n": 1,
+     "served_lane": "B"
+    }
+   ]
+  },
+  "E_lane_C_crash_after_a_response": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dispatched",
+       1
+      ],
+      [
+       "C",
+       "dry_refused",
+       1
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "B"
+      },
+      {
+       "lane": "C",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dispatched",
+       1
+      ],
+      [
+       "C",
+       "dry_refused",
+       1
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "B"
+      },
+      {
+       "lane": "C",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "error",
+    "why": "RuntimeError: lane C failed (76); see C:\\t\\r2x\\r42-sandbox\\r45q\\sb\\r45q-demo-db6857ae\\inv-1\\out\\lane-C.log"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "resume",
+   "served_interrupted_charged": [
+    {
+     "lane": "B",
+     "mode": "same_bound_fingerprint",
+     "n": 2,
+     "served_lane": "B"
+    },
+    {
+     "lane": "C",
+     "mode": "same_bound_fingerprint",
+     "n": 1,
+     "served_lane": "C"
+    }
+   ]
+  },
+  "E_lane_R_crash_after_a_response": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dispatched",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "B"
+      },
+      {
+       "lane": "C",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 4,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "R"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dispatched",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": null,
+      "kind": "fresh",
+      "n": 1,
+      "run_state": null,
+      "status": "interrupted"
+     },
+     {
+      "comparison_state": "PENDING",
+      "kind": "resume",
+      "n": 2,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 1,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "B",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "B"
+      },
+      {
+       "lane": "C",
+       "mode": "same_bound_fingerprint",
+       "n": 2,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 4,
+       "served_lane": "C"
+      },
+      {
+       "lane": "R",
+       "mode": "same_bound_fingerprint",
+       "n": 1,
+       "served_lane": "R"
+      }
+     ]
+    }
+   },
+   "first": {
+    "result": "error",
+    "why": "RuntimeError: lane R failed (76); see C:\\t\\r2x\\r42-sandbox\\r45q\\sb\\r45q-demo-2f226d4b\\inv-1\\out\\lane-R.log"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "resume",
+   "served_interrupted_charged": [
+    {
+     "lane": "B",
+     "mode": "same_bound_fingerprint",
+     "n": 2,
+     "served_lane": "B"
+    },
+    {
+     "lane": "C",
+     "mode": "same_bound_fingerprint",
+     "n": 2,
+     "served_lane": "C"
+    },
+    {
+     "lane": "R",
+     "mode": "same_bound_fingerprint",
+     "n": 1,
+     "served_lane": "R"
+    }
+   ]
+  },
+  "T_version_timeout": {
+   "facts_after_failure": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": "PENDING",
+      "kind": "fresh",
+      "n": 1,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "facts_final": {
+    "allowance_exists": true,
+    "charges": {
+     "by_lane_outcome": [
+      [
+       "B",
+       "dry_refused",
+       2
+      ],
+      [
+       "C",
+       "dry_refused",
+       2
+      ],
+      [
+       "R",
+       "dry_refused",
+       1
+      ]
+     ],
+     "stops": [],
+     "total": 5
+    },
+    "folder_exists": true,
+    "invocations": [
+     {
+      "comparison_state": "PENDING",
+      "kind": "fresh",
+      "n": 1,
+      "run_state": "FINISHED",
+      "status": "finished"
+     }
+    ],
+    "store": {
+     "duplicate_bound_keys": 0,
+     "reserved_without_answer": 0,
+     "rows": 5,
+     "serves": [
+      {
+       "lane": "R",
+       "mode": "reference_from_capture",
+       "n": 2,
+       "served_lane": "C"
+      }
+     ]
+    }
+   },
+   "first": {
+    "nothing_created": true,
+    "result": "refused",
+    "why": "refused: `claude --version` failed: timed out after 60 s (nothing was created and no authorization was consumed)"
+   },
+   "ok": true,
+   "recovery": {
+    "result": "finished"
+   },
+   "recovery_command": "run"
+  }
+ },
+ "live_shaped": {
+  "B_identity_record_disk_full": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 0,
+    "version_calls": 1
+   },
+   "result": "error",
+   "why": "OSError: [Errno 28] No space left on device"
+  },
+  "C_interrupted_at_allowance": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": false,
+      "kind": "reentry",
+      "n": 2,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 0,
+    "version_calls": 2
+   },
+   "result": "interrupted",
+   "why": "KeyboardInterrupt (injected)"
+  },
+  "D_consumption_fails_after_the_allowance": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 0,
+    "version_calls": 1
+   },
+   "result": "error",
+   "why": "OSError: [Errno 28] No space left on device (consumption record)"
+  },
+  "D_resume_with_the_same_unconsumed_authorization": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 2,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 1,
+    "version_calls": 2
+   },
+   "result": "error",
+   "why": "RuntimeError: live-shaped demo: stopped before any lane (no lane, no provider, no request)"
+  },
+  "D_run_again_refused": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 0,
+    "version_calls": 1
+   },
+   "result": "refused",
+   "why": "refused: a second fresh invocation of this run is refused (C:/t/r2x/r42-sandbox/r45q/sb/r45q-demo-live-3ed850fb holds the run's allowance); use 'resume'"
+  },
+  "E_resume_cli_updated": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 2,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 1,
+    "version_calls": 3
+   },
+   "result": "refused",
+   "why": "refused: CLI version '2.1.300 (Claude Code)' differs from the declared '2.1.263 (Claude Code)' (nothing was created and no authorization was consumed)"
+  },
+  "E_resume_disk_below_floor": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 2,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 1,
+    "version_calls": 3
+   },
+   "result": "refused",
+   "why": "refused: C:/ has 4096 bytes free, below the declared floor 2147483648 (condition C1, R41-10); nothing was created and no authorization was consumed"
+  },
+  "E_resume_fresh_nonce": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 2,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 3,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 2,
+    "version_calls": 4
+   },
+   "result": "error",
+   "why": "RuntimeError: live-shaped demo: stopped before any lane (no lane, no provider, no request)"
+  },
+  "E_resume_with_the_consumed_nonce": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "resume",
+      "n": 2,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 1,
+    "version_calls": 2
+   },
+   "result": "refused",
+   "why": "refused: this authorization's nonce was already consumed (consumed-e2f8d783636aa8bfece13e1d166a8ba4.json); one authorization is one run invocation"
+  },
+  "re_entry_with_the_same_authorization": {
+   "facts": {
+    "allowance_exists": true,
+    "folder_exists": true,
+    "invocations": [
+     {
+      "authorization_consumed": false,
+      "kind": "fresh",
+      "n": 1,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": false,
+      "kind": "reentry",
+      "n": 2,
+      "status": "interrupted"
+     },
+     {
+      "authorization_consumed": true,
+      "kind": "reentry",
+      "n": 3,
+      "status": "interrupted"
+     }
+    ],
+    "nonces_consumed": 1,
+    "version_calls": 3
+   },
+   "result": "error",
+   "why": "RuntimeError: live-shaped demo: stopped before any lane (no lane, no provider, no request)"
+  }
+ },
+ "ok": true,
+ "seconds": 199.0,
+ "summary": {
+  "A_version_mismatch": {
+   "final": "FINISHED",
+   "first": "refused",
+   "ok": true,
+   "recovered_by": "run"
+  },
+  "B_disk_full_at_identity_record": {
+   "final": "FINISHED",
+   "first": "error",
+   "ok": true,
+   "recovered_by": "run (re-entry)"
+  },
+  "C_interrupted_at_allowance_creation": {
+   "final": "FINISHED",
+   "first": "interrupted",
+   "ok": true,
+   "recovered_by": "run (re-entry)"
+  },
+  "D_failure_after_the_allowance": {
+   "final": "FINISHED",
+   "first": "error",
+   "ok": true,
+   "recovered_by": "resume"
+  },
+  "E_lane_B_crash_after_a_response": {
+   "final": "FINISHED",
+   "first": "error",
+   "ok": true,
+   "recovered_by": "resume"
+  },
+  "E_lane_C_crash_after_a_response": {
+   "final": "FINISHED",
+   "first": "error",
+   "ok": true,
+   "recovered_by": "resume"
+  },
+  "E_lane_R_crash_after_a_response": {
+   "final": "FINISHED",
+   "first": "error",
+   "ok": true,
+   "recovered_by": "resume"
+  },
+  "T_version_timeout": {
+   "final": "FINISHED",
+   "first": "refused",
+   "ok": true,
+   "recovered_by": "run"
+  },
+  "live_shaped": {
+   "B_identity_record_disk_full": {
+    "allowance": false,
+    "nonces_consumed": 0,
+    "result": "error"
+   },
+   "C_interrupted_at_allowance": {
+    "allowance": false,
+    "nonces_consumed": 0,
+    "result": "interrupted"
+   },
+   "D_consumption_fails_after_the_allowance": {
+    "allowance": true,
+    "nonces_consumed": 0,
+    "result": "error"
+   },
+   "D_resume_with_the_same_unconsumed_authorization": {
+    "allowance": true,
+    "nonces_consumed": 1,
+    "result": "error"
+   },
+   "D_run_again_refused": {
+    "allowance": true,
+    "nonces_consumed": 0,
+    "result": "refused"
+   },
+   "E_resume_cli_updated": {
+    "allowance": true,
+    "nonces_consumed": 1,
+    "result": "refused"
+   },
+   "E_resume_disk_below_floor": {
+    "allowance": true,
+    "nonces_consumed": 1,
+    "result": "refused"
+   },
+   "E_resume_fresh_nonce": {
+    "allowance": true,
+    "nonces_consumed": 2,
+    "result": "error"
+   },
+   "E_resume_with_the_consumed_nonce": {
+    "allowance": true,
+    "nonces_consumed": 1,
+    "result": "refused"
+   },
+   "re_entry_with_the_same_authorization": {
+    "allowance": true,
+    "nonces_consumed": 1,
+    "result": "error"
+   }
+  },
+  "ok": true
+ },
+ "tests": [
+  "test_runner_order_r42.py (15 tests)",
+  "test_runner_r32.py::test_* two-invocation drills"
+ ]
+}

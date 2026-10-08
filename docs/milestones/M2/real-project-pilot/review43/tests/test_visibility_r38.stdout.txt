@@ -1,0 +1,31 @@
+...............F..                                                       [100%]
+================================== FAILURES ===================================
+_ test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume __
+
+tmp_path = WindowsPath('C:/t/r2x/r42-sandbox/r43t1/m17/test_the_full_resume_policy_re0')
+ledger_before = {'entries': 484, 'limit_amendments': 0, 'scope_names_sha256': '2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778', 'scopes': 18}
+
+    def test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume(tmp_path, ledger_before):
+        res, folder, loc = _run(tmp_path, "retry_policy_full")
+        st = _st(folder)
+        deferred = [i for i in st["invocations"] if i.get("run_state") == "DEFERRED"]
+        assert deferred and all(i["resume_policy"] == "full" and i["retry_at_full_utc"]["structural"] and i["retry_at_full_utc"]["planning"]
+                                and i["resume_not_before"] >= i["earliest_retry"] for i in deferred)
+        assert st["invocations"][-1]["run_state"] == "FINISHED"
+        early = [s for s in res["steps"] if s.get("early") or s.get("between_earliest_and_full")]
+>       assert early and all(s["result"] == "refused" and "'full'" in s["why"] and "nothing was created" in s["why"] for s in early)
+E       assert ([{'command': 'resume', 'earliest_retry_utc': '2026-10-07T18:12:16+00:00', 'early': True, 'result': 'refused', ...}, {'..."}, {'command': 'resume', 'earliest_retry_utc': '2026-10-07T18:13:24+00:00', 'early': True, 'result': 'finished', ...}] and False)
+E        +  where False = all(<generator object test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume.<locals>.<genexpr> at 0x000001D25E287AC0>)
+
+test_visibility_r38.py:264: AssertionError
+---------------------------- Captured stdout call -----------------------------
+{"mode": "dry", "command": "run", "invocation": 1, "kind": "fresh", "status": "finished", "model_requests": 0, "ledger_before": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "ledger_after": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "candidate_outcome": "INCOMPLETE", "score_outcome_by_field": null, "comparison_state": "DEFERRED: B documents deferred by the project window; C not started (earliest retry 2026-10-07T18:12:16+00:00)", "run_state": "DEFERRED", "earliest_retry_utc": "2026-10-07T18:12:16+00:00"}
+{"mode": "dry", "command": "resume", "invocation": 2, "kind": "resume", "status": "finished", "model_requests": 0, "ledger_before": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "ledger_after": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "candidate_outcome": "INCOMPLETE", "score_outcome_by_field": {"identity": "INCOMPLETE", "revision": "INCOMPLETE", "decision": "INCOMPLETE"}, "comparison_state": "INCOMPLETE", "run_state": "DEFERRED", "earliest_retry_utc": "2026-10-07T18:12:41+00:00"}
+{"mode": "dry", "command": "resume", "invocation": 3, "kind": "resume", "status": "finished", "model_requests": 0, "ledger_before": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "ledger_after": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "candidate_outcome": "NOT ELIGIBLE", "score_outcome_by_field": {"identity": "NOT ELIGIBLE", "revision": "NOT ELIGIBLE", "decision": "NOT ELIGIBLE"}, "comparison_state": "PENDING", "run_state": "DEFERRED", "earliest_retry_utc": "2026-10-07T18:13:24+00:00"}
+{"mode": "dry", "command": "resume", "invocation": 4, "kind": "resume", "status": "finished", "model_requests": 0, "ledger_before": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "ledger_after": {"entries": 484, "scopes": 18, "limit_amendments": 0}, "candidate_outcome": "NOT ELIGIBLE", "score_outcome_by_field": {"identity": "NOT ELIGIBLE", "revision": "NOT ELIGIBLE", "decision": "NOT ELIGIBLE"}, "comparison_state": "PENDING", "run_state": "FINISHED", "earliest_retry_utc": null}
+- generated xml file: C:\Users\moham\AppData\Local\Temp\claude\G--dev--2--dev-ep-platform-merged\642e8760-80e9-4762-a17d-ae3c2a6c429d\scratchpad\run43\tests-full1\test_visibility_r38.xml -
+=========================== short test summary info ===========================
+FAILED test_visibility_r38.py::test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume
+1 failed, 17 passed in 754.60s (0:12:34)
+
+---stderr---

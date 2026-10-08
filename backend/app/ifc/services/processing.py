@@ -191,6 +191,10 @@ def read_drawing(db: Session, project, user: User, *, source: Path, name: str, e
         }
         drawing.meta = meta
         drawing.archive_path = filed
+        # The Drawings page reads its IFC sheets from this: an open page reloads.
+        from app.services import project_state
+
+        project_state.record_change(db, project.id, "drawing", "ifc_read", entity_id=drawing.id)
         db.commit()
     except BaseException:
         if inserted:

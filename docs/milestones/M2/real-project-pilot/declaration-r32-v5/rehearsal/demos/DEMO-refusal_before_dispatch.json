@@ -1,0 +1,77 @@
+{
+ "cases": {
+  "authorization_names_another_hash": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: the authorization names declaration eeeeeeeeeeee..., the runner verified 0efc5c91dc19..."
+  },
+  "authorization_names_the_executed_v3_run_hash": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: the authorization names declaration c31cccd4eab8..., the runner verified 0efc5c91dc19..."
+  },
+  "authorization_names_the_frozen_v2_hash": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: the authorization names declaration f38fb281f30b..., the runner verified 0efc5c91dc19..."
+  },
+  "no_authorization_file": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: no owner dispatch authorization (C:\\t\\r2x\\r42-sandbox\\r45q\\sb\\r45q-demos-c61e98\\refusal_before_dispatch\\a\\pkg\\OWNER-DISPATCH-AUTHORIZATION.json does not exist)"
+  },
+  "the_declaration_as_written_with_the_placeholder": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: the declaration binds no owner token digest"
+  },
+  "token_not_presented": {
+   "facts": {
+    "allowance_exists": false,
+    "folder_exists": false,
+    "invocations": [],
+    "nonces_consumed": 0,
+    "version_calls": 0
+   },
+   "result": "refused",
+   "why": "refused: the owner token was not presented (R34_OWNER_DISPATCH_TOKEN is not set)"
+  }
+ },
+ "ok": true,
+ "seconds": 1.5,
+ "tests": [
+  "test_dispatch_guard_r32.py",
+  "test_resume_authorization_r42.py::test_a_file_naming_the_frozen_hash_is_refused_in_both_forms",
+  "test_runner_r32.py::test_live_mode_* (refusals before any folder)"
+ ]
+}

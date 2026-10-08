@@ -1,0 +1,21 @@
+................................................F.                       [100%]
+================================== FAILURES ===================================
+_____________ test_no_authorization_file_was_written_by_the_tests _____________
+
+    def test_no_authorization_file_was_written_by_the_tests():
+        roots = [RN.SANDBOX_BASE, pathlib.Path("C:/t/iso/work/r2x/r38"), PF.I.PILOT]
+        found = [str(p) for r in roots if r.exists() for p in r.rglob("OWNER-DISPATCH-AUTHORIZATION*.json")]
+>       assert found == [], found
+E       AssertionError: ['G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v3\\OWNER-DISPATCH-AUTHORIZATION.json']
+E       assert ['G:\\dev (2)...IZATION.json'] == []
+E         
+E         Left contains one more item: 'G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\declaration-r32-v3\\OWNER-DISPATCH-AUTHORIZATION.json'
+E         Use -v to get more diff
+
+test_runner_r32.py:514: AssertionError
+- generated xml file: C:\t\r2x\r42-sandbox\r45p\tests\full-r1\test_runner_r32.xml -
+=========================== short test summary info ===========================
+FAILED test_runner_r32.py::test_no_authorization_file_was_written_by_the_tests
+1 failed, 49 passed in 157.67s (0:02:37)
+
+---stderr---

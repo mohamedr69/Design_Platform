@@ -878,6 +878,7 @@ _provider: AiProvider | None = None
 _fa_provider: AiProvider | None = None
 _prep_provider: AiProvider | None = None
 _review_provider: AiProvider | None = None
+_chat_provider: AiProvider | None = None
 _provider_lock = threading.Lock()
 _BUILDERS = {"claude-code": ClaudeCodeProvider, "claude_code": ClaudeCodeProvider, "subscription": ClaudeCodeProvider,
              "claude": ClaudeProvider, "anthropic": ClaudeProvider, "openai": OpenAiProvider, "gpt": OpenAiProvider}
@@ -977,12 +978,62 @@ def get_review_provider() -> AiProvider:
         return _review_provider
 
 
+def chat_ai_on() -> bool:
+    """Whether the Drawings Assistant may be called: AI_ENABLED, or
+    DRAWINGS_CHAT_AI_ENABLED for it alone."""
+    settings = get_settings()
+    return bool(settings.ai_enabled or settings.drawings_chat_ai_enabled)
+
+
+def get_chat_provider() -> AiProvider:
+    """The Drawings Assistant's provider: the platform's own when AI_ENABLED
+    is on (or a test swapped it in); when only DRAWINGS_CHAT_AI_ENABLED is,
+    the same route built for the assistant alone, while every other caller
+    keeps the NullProvider."""
+    global _chat_provider
+    settings = get_settings()
+    swapped = _provider is not None and not isinstance(_provider, NullProvider)
+    if settings.ai_enabled or not settings.drawings_chat_ai_enabled or swapped:
+        return get_provider()
+    with _provider_lock:
+        if _chat_provider is None:
+            _chat_provider = _build(settings)
+        return _chat_provider
+
+
+_classification_provider: AiProvider | None = None
+
+
+def classification_ai_on() -> bool:
+    """Whether the documents' classification may ask the model: AI_ENABLED,
+    or DOCUMENT_CLASSIFICATION_AI_ENABLED for it alone."""
+    settings = get_settings()
+    return bool(settings.ai_enabled or settings.document_classification_ai_enabled)
+
+
+def get_classification_provider() -> AiProvider:
+    """The classification's provider, as `get_chat_provider` is the chat's:
+    the platform's own when AI_ENABLED is on (or a test swapped it in); built
+    for it alone when only DOCUMENT_CLASSIFICATION_AI_ENABLED is."""
+    global _classification_provider
+    settings = get_settings()
+    swapped = _provider is not None and not isinstance(_provider, NullProvider)
+    if settings.ai_enabled or not settings.document_classification_ai_enabled or swapped:
+        return get_provider()
+    with _provider_lock:
+        if _classification_provider is None:
+            _classification_provider = _build(settings)
+        return _classification_provider
+
+
 def set_provider(provider: AiProvider | None) -> None:
     """Swap the provider (tests, or a diagnostics switch)."""
-    global _provider, _fa_provider, _prep_provider, _review_provider
+    global _provider, _fa_provider, _prep_provider, _review_provider, _chat_provider, _classification_provider
     with _provider_lock:
         _provider = provider
         if provider is None:
             _fa_provider = None
             _prep_provider = None
             _review_provider = None
+            _chat_provider = None
+            _classification_provider = None

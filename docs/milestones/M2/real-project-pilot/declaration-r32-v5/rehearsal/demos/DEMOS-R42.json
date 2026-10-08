@@ -1,0 +1,247 @@
+{
+ "authorization_files_written": [],
+ "deadends": {
+  "summary": {
+   "A_version_mismatch": {
+    "final": "FINISHED",
+    "first": "refused",
+    "ok": true,
+    "recovered_by": "run"
+   },
+   "B_disk_full_at_identity_record": {
+    "final": "FINISHED",
+    "first": "error",
+    "ok": true,
+    "recovered_by": "run (re-entry)"
+   },
+   "C_interrupted_at_allowance_creation": {
+    "final": "FINISHED",
+    "first": "interrupted",
+    "ok": true,
+    "recovered_by": "run (re-entry)"
+   },
+   "D_failure_after_the_allowance": {
+    "final": "FINISHED",
+    "first": "error",
+    "ok": true,
+    "recovered_by": "resume"
+   },
+   "E_lane_B_crash_after_a_response": {
+    "final": "FINISHED",
+    "first": "error",
+    "ok": true,
+    "recovered_by": "resume"
+   },
+   "E_lane_C_crash_after_a_response": {
+    "final": "FINISHED",
+    "first": "error",
+    "ok": true,
+    "recovered_by": "resume"
+   },
+   "E_lane_R_crash_after_a_response": {
+    "final": "FINISHED",
+    "first": "error",
+    "ok": true,
+    "recovered_by": "resume"
+   },
+   "T_version_timeout": {
+    "final": "FINISHED",
+    "first": "refused",
+    "ok": true,
+    "recovered_by": "run"
+   },
+   "live_shaped": {
+    "B_identity_record_disk_full": {
+     "allowance": false,
+     "nonces_consumed": 0,
+     "result": "error"
+    },
+    "C_interrupted_at_allowance": {
+     "allowance": false,
+     "nonces_consumed": 0,
+     "result": "interrupted"
+    },
+    "D_consumption_fails_after_the_allowance": {
+     "allowance": true,
+     "nonces_consumed": 0,
+     "result": "error"
+    },
+    "D_resume_with_the_same_unconsumed_authorization": {
+     "allowance": true,
+     "nonces_consumed": 1,
+     "result": "error"
+    },
+    "D_run_again_refused": {
+     "allowance": true,
+     "nonces_consumed": 0,
+     "result": "refused"
+    },
+    "E_resume_cli_updated": {
+     "allowance": true,
+     "nonces_consumed": 1,
+     "result": "refused"
+    },
+    "E_resume_disk_below_floor": {
+     "allowance": true,
+     "nonces_consumed": 1,
+     "result": "refused"
+    },
+    "E_resume_fresh_nonce": {
+     "allowance": true,
+     "nonces_consumed": 2,
+     "result": "error"
+    },
+    "E_resume_with_the_consumed_nonce": {
+     "allowance": true,
+     "nonces_consumed": 1,
+     "result": "refused"
+    },
+    "re_entry_with_the_same_authorization": {
+     "allowance": true,
+     "nonces_consumed": 1,
+     "result": "error"
+    }
+   },
+   "ok": true
+  }
+ },
+ "demos": {
+  "completion": {
+   "error": null,
+   "ok": true,
+   "seconds": 19.8,
+   "tests": [
+    "test_runner_r32.py (the dry pipeline on the real reference set)",
+    "test_runner_order_r42.py::test_dry_A_and_T_..."
+   ]
+  },
+  "durable_charging": {
+   "error": null,
+   "ok": true,
+   "seconds": 106.1,
+   "tests": [
+    "test_visibility_r38.py::test_provider_timeouts_are_visible_per_page_and_the_terminal_stop_survives_the_resume",
+    "test_visibility_r38.py::test_an_interrupted_or_unsaved_dispatch_stays_charged_and_is_visible_on_the_resume",
+    "test_allowance_r32.py::test_charges_are_never_refunded_whatever_the_outcome"
+   ]
+  },
+  "global_provider": {
+   "error": null,
+   "ok": true,
+   "seconds": 70.6,
+   "tests": [
+    "test_global_provider_r42.py (7 tests)"
+   ]
+  },
+  "interruption_and_deadends": {
+   "error": null,
+   "ok": true,
+   "seconds": 199.0,
+   "tests": [
+    "test_runner_order_r42.py (15 tests)",
+    "test_runner_r32.py::test_* two-invocation drills"
+   ]
+  },
+  "page_accounting": {
+   "error": null,
+   "ok": true,
+   "seconds": 58.8,
+   "tests": [
+    "test_visibility_r38.py::test_pages_left_unread_by_the_application_are_listed_and_the_document_stays_complete",
+    "test_visibility_r38.py::test_the_application_path_on_synthetic_documents_records_pages",
+    "test_unread_pages_r39.py (17 tests)"
+   ]
+  },
+  "refusal_before_dispatch": {
+   "error": null,
+   "ok": true,
+   "seconds": 1.5,
+   "tests": [
+    "test_dispatch_guard_r32.py",
+    "test_resume_authorization_r42.py::test_a_file_naming_the_frozen_hash_is_refused_in_both_forms",
+    "test_runner_r32.py::test_live_mode_* (refusals before any folder)"
+   ]
+  },
+  "terminal_stop": {
+   "error": null,
+   "ok": true,
+   "seconds": 80.8,
+   "tests": [
+    "test_visibility_r38.py::test_lane_allowance_refusal_is_visible_everywhere_and_the_resume_keeps_the_stop",
+    "test_allowance_r32.py::test_refusals_and_terminal_stops_are_durable_and_a_resume_never_resets_them"
+   ]
+  },
+  "window_deferral": {
+   "error": null,
+   "ok": true,
+   "seconds": 92.2,
+   "tests": [
+    "test_visibility_r38.py::test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume",
+    "test_visibility_r38.py::test_project_window_deferral_resumes_after_the_window_frees_and_never_resends",
+    "declaration-r32-v3 dry-run deferral loops (EP-27331, 2 and 3 invocations)"
+   ]
+  }
+ },
+ "dry_base": {
+  "dry_base": "C:/t/r2x/r42-sandbox/r45q/sb",
+  "live_base_unchanged": true,
+  "pattern_after": "(?:C:/t/r2x/r\\d{2}-sandbox)|C:/t/r2x/r42\\-sandbox/r45q/sb",
+  "pattern_before": "C:/t/r2x/r\\d{2}-sandbox",
+  "substitution": "S-BASE"
+ },
+ "finished_utc": "2026-10-08T00:47:43Z",
+ "global_provider": {
+  "summary": {
+   "B": {
+    "breach": null,
+    "drill_answer": "dry_refused",
+    "global_provider": "the harness chain (installed below, lane B)",
+    "run_state": "FINISHED"
+   },
+   "C": {
+    "breach": "global_provider_request",
+    "drill_answer": "dispatch_refused",
+    "global_provider": "RefusingGlobalProvider",
+    "run_state": "INVALID"
+   },
+   "P": {
+    "breach": "global_provider_request",
+    "drill_answer": "dispatch_refused",
+    "global_provider": "RefusingGlobalProvider",
+    "run_state": "INVALID"
+   },
+   "R": {
+    "breach": "global_provider_request",
+    "drill_answer": "dispatch_refused",
+    "global_provider": "RefusingGlobalProvider",
+    "run_state": "INVALID"
+   }
+  }
+ },
+ "harness": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32",
+ "imported_from": "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32",
+ "ledger_after": {
+  "entries": 484,
+  "limit_amendments": 0,
+  "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+  "scopes": 18
+ },
+ "ledger_before": {
+  "entries": 484,
+  "limit_amendments": 0,
+  "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+  "scopes": 18
+ },
+ "ledger_unchanged": true,
+ "model_requests": 0,
+ "name": "DEMOS (R43-44) of the review45 harness for declaration-r32-v5 (the ORCH-10 section 2.6 demonstrations)",
+ "ok": true,
+ "run_copy": {
+  "bound_folder": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review45/scripts/harness-r32",
+  "files": 63,
+  "imported_from": "C:/t/r2x/r42-sandbox/r45q/run/r45/scripts/harness-r32",
+  "run_copy": true
+ },
+ "started_utc": "2026-10-08T00:37:15Z",
+ "work": "C:/t/r2x/r42-sandbox/r45q/sb/r45q-demos-c61e98"
+}

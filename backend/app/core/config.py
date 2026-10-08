@@ -250,6 +250,42 @@ class Settings(BaseSettings):
     drawings_ai_auto_accept_threshold: float = 0.97
     drawings_ai_max_calls_per_sync: int = 10
     drawings_ai_timeout_s: float = 90.0
+    # The Drawings Assistant (app/services/drawings_chat): a chat on the
+    # Drawings page that answers from the project's records and proposes
+    # the changes the engineer asks for, each applied only by the engineer.
+    # Runs only when AI_ENABLED is on as well; a project whose AI policy
+    # is "blocked" gets none. The memory it is given is bounded by rows
+    # and events, and by input tokens, so a tall building fits a call.
+    drawings_chat_enabled: bool = True
+    # Switched on by itself (DRAWINGS_CHAT_AI_ENABLED) like the drawing review, AI_ENABLED
+    # staying off for the rest of the platform; AI_ENABLED on switches it on as well.
+    drawings_chat_ai_enabled: bool = False
+    drawings_chat_model: str | None = None
+    drawings_chat_timeout_s: float = 120.0
+    drawings_chat_max_rows: int = 150
+    drawings_chat_max_events: int = 30
+    drawings_chat_max_input_tokens: int = 24000
+    drawings_chat_max_output_tokens: int = 1500
+    drawings_chat_max_calls_per_project_per_day: int = 200
+    # The model's look at documents the classification rules could only
+    # guess (app/services/document_classification_ai): a document whose
+    # answer is a path hint, unknown or ambiguous has its first page's text
+    # read by the small model, several documents per call. Only a fresh
+    # reading is sent, never twice for the same content and path, and the
+    # answer is stored beside the rules' (source "ai"), never confirmed.
+    # Switched on by itself (DOCUMENT_CLASSIFICATION_AI_ENABLED), AI_ENABLED
+    # staying off for the rest of the platform; AI_ENABLED on switches it on too.
+    document_classification_ai_enabled: bool = False
+    document_classification_ai_model: str | None = None
+    document_classification_ai_batch: int = 24
+    document_classification_ai_page_chars: int = 2500
+    document_classification_ai_max_calls_per_run: int = 100
+    # The pass's own daily cap (rolling 24 hours, per project), counted on its
+    # task alone and checked before each batch -- distinct from, and inside,
+    # the platform's AI_MAX_CALLS_PER_PROJECT_PER_DAY shared by every task.
+    document_classification_ai_max_calls_per_project_per_day: int = 25
+    document_classification_ai_timeout_s: float = 240.0
+    document_classification_ai_max_output_tokens: int = 5000
     # Opening a project folder in Explorer on the PC the platform runs on
     # (Drawings > Open folder). Only for a browser on that same PC: the
     # request must come from a loopback address with no proxy header on it,

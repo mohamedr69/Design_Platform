@@ -1,0 +1,123 @@
+{
+ "invocations": [
+  {
+   "earliest_retry_utc": "2026-10-07T20:41:45+00:00",
+   "kind": "fresh",
+   "n": 1,
+   "resume_not_before_utc": "2026-10-07T20:41:45+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:41:45+00:00",
+    "structural": "2026-10-07T20:41:45+00:00"
+   },
+   "run_state": "DEFERRED",
+   "status": "finished"
+  },
+  {
+   "earliest_retry_utc": "2026-10-07T20:42:12+00:00",
+   "kind": "resume",
+   "n": 2,
+   "resume_not_before_utc": "2026-10-07T20:42:18+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:42:18+00:00",
+    "structural": "2026-10-07T20:42:18+00:00"
+   },
+   "run_state": "DEFERRED",
+   "status": "finished"
+  },
+  {
+   "earliest_retry_utc": "2026-10-07T20:42:44+00:00",
+   "kind": "resume",
+   "n": 3,
+   "resume_not_before_utc": "2026-10-07T20:42:44+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:42:44+00:00",
+    "structural": "2026-10-07T20:42:44+00:00"
+   },
+   "run_state": "DEFERRED",
+   "status": "finished"
+  },
+  {
+   "earliest_retry_utc": null,
+   "kind": "resume",
+   "n": 4,
+   "resume_not_before_utc": null,
+   "resume_policy": null,
+   "retry_at_full_utc": null,
+   "run_state": "FINISHED",
+   "status": "finished"
+  }
+ ],
+ "ok": true,
+ "seconds": 104.1,
+ "steps": [
+  {
+   "command": "run",
+   "result": "finished"
+  },
+  {
+   "command": "resume",
+   "earliest_retry_utc": "2026-10-07T20:41:45+00:00",
+   "early": true,
+   "result": "refused",
+   "resume_not_before_utc": "2026-10-07T20:41:45+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:41:45+00:00",
+    "structural": "2026-10-07T20:41:45+00:00"
+   },
+   "why": "refused: the resume policy 'full' allows a resume at 2026-10-07T20:41:45+00:00 (earliest retry 2026-10-07T20:41:45+00:00, full 2026-10-07T20:41:45+00:00); nothing was created"
+  },
+  {
+   "command": "resume",
+   "result": "finished"
+  },
+  {
+   "command": "resume",
+   "earliest_retry_utc": "2026-10-07T20:42:12+00:00",
+   "early": true,
+   "result": "refused",
+   "resume_not_before_utc": "2026-10-07T20:42:18+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:42:18+00:00",
+    "structural": "2026-10-07T20:42:18+00:00"
+   },
+   "why": "refused: the resume policy 'full' allows a resume at 2026-10-07T20:42:18+00:00 (earliest retry 2026-10-07T20:42:12+00:00, full 2026-10-07T20:42:18+00:00); nothing was created"
+  },
+  {
+   "between_earliest_and_full": true,
+   "command": "resume",
+   "result": "refused",
+   "why": "refused: the resume policy 'full' allows a resume at 2026-10-07T20:42:18+00:00 (earliest retry 2026-10-07T20:42:12+00:00, full 2026-10-07T20:42:18+00:00); nothing was created"
+  },
+  {
+   "command": "resume",
+   "result": "finished"
+  },
+  {
+   "command": "resume",
+   "earliest_retry_utc": "2026-10-07T20:42:44+00:00",
+   "early": true,
+   "result": "refused",
+   "resume_not_before_utc": "2026-10-07T20:42:44+00:00",
+   "resume_policy": "full",
+   "retry_at_full_utc": {
+    "planning": "2026-10-07T20:42:44+00:00",
+    "structural": "2026-10-07T20:42:44+00:00"
+   },
+   "why": "refused: the resume policy 'full' allows a resume at 2026-10-07T20:42:44+00:00 (earliest retry 2026-10-07T20:42:44+00:00, full 2026-10-07T20:42:44+00:00); nothing was created"
+  },
+  {
+   "command": "resume",
+   "result": "finished"
+  }
+ ],
+ "tests": [
+  "test_visibility_r38.py::test_the_full_resume_policy_records_both_times_and_refuses_an_early_resume",
+  "test_visibility_r38.py::test_project_window_deferral_resumes_after_the_window_frees_and_never_resends",
+  "declaration-r32-v3 dry-run deferral loops (EP-27331, 2 and 3 invocations)"
+ ]
+}

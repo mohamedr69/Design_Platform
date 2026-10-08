@@ -1,0 +1,1069 @@
+{
+ "candidate": {
+  "basis": "NOT ELIGIBLE in identity, revision, decision (precedence INVALID > NOT ELIGIBLE > INCOMPLETE)",
+  "decision_coverage_gate": "C_GE_B_ONLY",
+  "fields_not_eligible": [
+   "identity",
+   "revision",
+   "decision"
+  ],
+  "outcome": "NOT ELIGIBLE",
+  "reads_lanes": [
+   "B",
+   "C"
+  ],
+  "reasons_not_eligible": {
+   "decision": [
+    "request-normalised gate not met",
+    "decision: clean recovery None < 0.90",
+    "decision: matched 0 < 12"
+   ],
+   "identity": [
+    "request-normalised gate not met",
+    "identity: clean recovery 0.0 < 0.90",
+    "identity: matched 0 < 12"
+   ],
+   "revision": [
+    "request-normalised gate not met",
+    "revision: clean recovery 0.0 < 0.90",
+    "revision: matched 0 < 12"
+   ]
+  },
+  "rule": "candidate-level outcome (RC-2): a comparison state other than INVALID / INCOMPLETE (PREPARATION BLOCKED, NOT DISPATCHABLE) is the outcome; otherwise ELIGIBLE FOR A SEPARATE SELECTION DECISION only when all three fields are ELIGIBLE, else the first of INVALID > NOT ELIGIBLE > INCOMPLETE among the field outcomes; the per-field outcomes are diagnostics; it reads only B and C (never R or P); no default is ever selected"
+ },
+ "comparison_detail": "PENDING",
+ "comparison_state": "PENDING",
+ "concentration": {
+  "contractor_equals_project": true,
+  "contractor_note": "each project has exactly one contractor in PROJECT-VERIFICATION.json, so the contractor leg equals the project leg for this cohort; the cross-project issuing subcontractor is not measured (R34-07, disclosed for the declaration)",
+  "decision_controls": {
+   "B": {
+    "negative": {
+     "attempted": 0,
+     "by_stratum": {
+      "drawing_signal": 1
+     },
+     "correct": 0,
+     "documents": 1,
+     "false_accept": 0,
+     "false_accept_documents": []
+    },
+    "positive": {
+     "attempted": 0,
+     "by_stratum": {},
+     "correct": 0,
+     "documents": 0,
+     "false_accept": 0,
+     "false_accept_documents": []
+    }
+   },
+   "C": {
+    "negative": {
+     "attempted": 0,
+     "by_stratum": {
+      "drawing_signal": 1
+     },
+     "correct": 0,
+     "documents": 1,
+     "false_accept": 0,
+     "false_accept_documents": []
+    },
+    "positive": {
+     "attempted": 0,
+     "by_stratum": {},
+     "correct": 0,
+     "documents": 0,
+     "false_accept": 0,
+     "false_accept_documents": []
+    }
+   }
+  },
+  "fields": {
+   "decision": {
+    "attribution_statement": "decision: net gain 0 over 0 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+    "decision_controls": {
+     "B": {
+      "negative": {
+       "attempted": 0,
+       "by_stratum": {
+        "drawing_signal": 1
+       },
+       "correct": 0,
+       "documents": 1,
+       "false_accept": 0,
+       "false_accept_documents": []
+      },
+      "positive": {
+       "attempted": 0,
+       "by_stratum": {},
+       "correct": 0,
+       "documents": 0,
+       "false_accept": 0,
+       "false_accept_documents": []
+      }
+     },
+     "C": {
+      "negative": {
+       "attempted": 0,
+       "by_stratum": {
+        "drawing_signal": 1
+       },
+       "correct": 0,
+       "documents": 1,
+       "false_accept": 0,
+       "false_accept_documents": []
+      },
+      "positive": {
+       "attempted": 0,
+       "by_stratum": {},
+       "correct": 0,
+       "documents": 0,
+       "false_accept": 0,
+       "false_accept_documents": []
+      }
+     }
+    },
+    "failure_count_rule": "once per (document, field): a wrong acceptance that also loses the fact is one failure (RC-6)",
+    "failure_documents": [],
+    "failures": 0,
+    "field": "decision",
+    "groupings": {
+     "contractor": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "decision_type": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "layout_key": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "project": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "stratum": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     }
+    },
+    "lost_facts": [],
+    "mainly_from": {
+     "contractor": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "layout_key": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "project": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     }
+    },
+    "matched": 0,
+    "net_gain": 0,
+    "notes": [
+     "net gain 0 <= 0: no gain to attribute; reported, not blocking by itself (the field's other gates apply)"
+    ],
+    "outcome": "UNDETERMINED",
+    "per_document": {},
+    "reasons": [],
+    "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+    "rule_version": "concentration-r32-2026-10-03.2",
+    "thresholds": {
+     "failure_share_max": 0.5,
+     "gain_share_max": 0.5,
+     "min_failures": 2,
+     "negative_control_false_accepts_max": 0
+    },
+    "wrong_acceptances": []
+   },
+   "identity": {
+    "attribution_statement": "identity: net gain 0 over 0 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+    "decision_controls": null,
+    "failure_count_rule": "once per (document, field): a wrong acceptance that also loses the fact is one failure (RC-6)",
+    "failure_documents": [],
+    "failures": 0,
+    "field": "identity",
+    "groupings": {
+     "contractor": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "decision_type": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "layout_key": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "project": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "stratum": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     }
+    },
+    "lost_facts": [],
+    "mainly_from": {
+     "contractor": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "layout_key": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "project": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     }
+    },
+    "matched": 0,
+    "net_gain": 0,
+    "notes": [
+     "net gain 0 <= 0: no gain to attribute; reported, not blocking by itself (the field's other gates apply)"
+    ],
+    "outcome": "UNDETERMINED",
+    "per_document": {},
+    "reasons": [],
+    "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+    "rule_version": "concentration-r32-2026-10-03.2",
+    "thresholds": {
+     "failure_share_max": 0.5,
+     "gain_share_max": 0.5,
+     "min_failures": 2,
+     "negative_control_false_accepts_max": 0
+    },
+    "wrong_acceptances": []
+   },
+   "revision": {
+    "attribution_statement": "revision: net gain 0 over 0 matched documents; failures 0 (once per document); gains do not come mainly from one project, contractor or layout; failures do not come mainly from one project, contractor or layout",
+    "decision_controls": null,
+    "failure_count_rule": "once per (document, field): a wrong acceptance that also loses the fact is one failure (RC-6)",
+    "failure_documents": [],
+    "failures": 0,
+    "field": "revision",
+    "groupings": {
+     "contractor": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "decision_type": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "layout_key": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "project": {
+      "blocking": true,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     },
+     "stratum": {
+      "blocking": false,
+      "groups": {},
+      "largest_failure_group": null,
+      "largest_failure_share": null,
+      "largest_gain_group": null,
+      "largest_gain_share": null
+     }
+    },
+    "lost_facts": [],
+    "mainly_from": {
+     "contractor": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "layout_key": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     },
+     "project": {
+      "failures_mainly_from": null,
+      "gains_mainly_from": null
+     }
+    },
+    "matched": 0,
+    "net_gain": 0,
+    "notes": [
+     "net gain 0 <= 0: no gain to attribute; reported, not blocking by itself (the field's other gates apply)"
+    ],
+    "outcome": "UNDETERMINED",
+    "per_document": {},
+    "reasons": [],
+    "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+    "rule_version": "concentration-r32-2026-10-03.2",
+    "thresholds": {
+     "failure_share_max": 0.5,
+     "gain_share_max": 0.5,
+     "min_failures": 2,
+     "negative_control_false_accepts_max": 0
+    },
+    "wrong_acceptances": []
+   }
+  },
+  "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+  "rule_version": "concentration-r32-2026-10-03.2",
+  "thresholds": {
+   "failure_share_max": 0.5,
+   "gain_share_max": 0.5,
+   "min_failures": 2,
+   "negative_control_false_accepts_max": 0
+  }
+ },
+ "decision_coverage_C_ge_R": {
+  "C_missing_where_R_covered": [],
+  "change_from_plan_v2": "CHANGED from plan v2 (review31 REVISED-FRESH-VALIDATION-PLAN.v2.md), whose gate was C >= B AND C >= R: the C >= R leg is removed from eligibility and kept as a mandatory diagnostic (owner ruling A-10)",
+  "counts": {
+   "C": {
+    "completed_read": 0,
+    "coverage": 0,
+    "not_scorable": 0,
+    "other:not_attempted": 4,
+    "pages": 4,
+    "status_rows": {},
+    "verified_absence": 0,
+    "wrong_absence": 0
+   },
+   "R": {
+    "completed_read": 0,
+    "coverage": 0,
+    "not_scorable": 0,
+    "other:not_attempted": 4,
+    "pages": 4,
+    "status_rows": {},
+    "verified_absence": 0,
+    "wrong_absence": 0
+   }
+  },
+  "coverage": {
+   "C": 0,
+   "R": 0
+  },
+  "credit": "none",
+  "determines_eligibility": false,
+  "holds": true,
+  "mandatory": true,
+  "missing_coverage": {
+   "F043": {
+    "C_status": "COMPLETE",
+    "R_status": "COMPLETE",
+    "pages": {
+     "1": {
+      "C": "not_attempted",
+      "C_covered": false,
+      "C_missing_where_R_covered": false,
+      "C_reason": "not covered: no read was attempted",
+      "R": "not_attempted",
+      "R_covered": false,
+      "R_reason": "not covered: no read was attempted"
+     },
+     "2": {
+      "C": "not_attempted",
+      "C_covered": false,
+      "C_missing_where_R_covered": false,
+      "C_reason": "not covered: no read was attempted",
+      "R": "not_attempted",
+      "R_covered": false,
+      "R_reason": "not covered: no read was attempted"
+     },
+     "3": {
+      "C": "not_attempted",
+      "C_covered": false,
+      "C_missing_where_R_covered": false,
+      "C_reason": "not covered: no read was attempted",
+      "R": "not_attempted",
+      "R_covered": false,
+      "R_reason": "not covered: no read was attempted"
+     },
+     "4": {
+      "C": "not_attempted",
+      "C_covered": false,
+      "C_missing_where_R_covered": false,
+      "C_reason": "not covered: no read was attempted",
+      "R": "not_attempted",
+      "R_covered": false,
+      "R_reason": "not covered: no read was attempted"
+     }
+    }
+   }
+  },
+  "rule": "mandatory diagnostic (owner ruling A-10): C >= R decision coverage, reported with both lanes' counts, the missing coverage per document and the reasons; INCOMPLETE when R did not complete its declared population (or did not run); it never determines eligibility and earns no credit",
+  "state": "COMPLETE",
+  "why_incomplete": []
+ },
+ "decision_coverage_gate": {
+  "B": {
+   "completed_read": 0,
+   "coverage": 0,
+   "not_scorable": 0,
+   "other:not_attempted": 4,
+   "pages": 4,
+   "status_rows": {},
+   "verified_absence": 0,
+   "wrong_absence": 0
+  },
+  "C": {
+   "completed_read": 0,
+   "coverage": 0,
+   "not_scorable": 0,
+   "other:not_attempted": 4,
+   "pages": 4,
+   "status_rows": {},
+   "verified_absence": 0,
+   "wrong_absence": 0
+  },
+  "change_from_plan_v2": "CHANGED from plan v2 (review31 REVISED-FRESH-VALIDATION-PLAN.v2.md), whose gate was C >= B AND C >= R: the C >= R leg is removed from eligibility and kept as a mandatory diagnostic (owner ruling A-10)",
+  "definition": "C_GE_B_ONLY",
+  "passes": true,
+  "reads_lanes": [
+   "B",
+   "C"
+  ],
+  "rule": "completed read or verified absence on scorable rows; a wrong absence, located_incomplete and NOT_SCORABLE rows are never coverage; C >= B (C >= R is the mandatory diagnostic, never an eligibility input)",
+  "state": "COMPLETE",
+  "status": "BOUND by the owner's ruling A-10 (2026-10-04); a change from plan v2, never an unchanged gate",
+  "text": "decision coverage eligibility: decision coverage of C >= decision coverage of B on the resolved decision documents of the run set (completed read or verified absence on scorable rows; a wrong absence, located_incomplete and NOT_SCORABLE rows are never coverage). C >= R is a MANDATORY diagnostic -- reported in every result with both lanes' counts, the missing coverage per document and its reasons, INCOMPLETE when R did not complete its population -- and it never determines eligibility"
+ },
+ "default_selected": null,
+ "diagnostics": {
+  "P": {
+   "credit": "none: the variation probe is report-only (A-09 point 6)",
+   "items_not_complete": [],
+   "of": 0,
+   "sampled": 0,
+   "state": "COMPLETE"
+  },
+  "R": {
+   "C_ge_R_decision_coverage": {
+    "C": 0,
+    "R": 0,
+    "holds": true,
+    "note": "diagnostic contrast",
+    "state": "COMPLETE"
+   },
+   "credit": "none: R earns no accuracy or recovery credit and decides nothing (A-09 point 6)",
+   "decision_controls_diagnostic_only": {
+    "negative": {
+     "attempted": 0,
+     "by_stratum": {
+      "drawing_signal": 1
+     },
+     "correct": 0,
+     "documents": 1,
+     "false_accept": 0,
+     "false_accept_documents": []
+    },
+    "positive": {
+     "attempted": 0,
+     "by_stratum": {},
+     "correct": 0,
+     "documents": 0,
+     "false_accept": 0,
+     "false_accept_documents": []
+    }
+   },
+   "metrics_diagnostic_only": {
+    "critical": {
+     "resolved": [],
+     "unresolved": []
+    },
+    "fields": {
+     "decision": {
+      "accepted": {
+       "correct": 0,
+       "wrong": 0
+      },
+      "accepted_precision": null,
+      "clean_recovery": null,
+      "coverage_resolved": {
+       "completed_read": 0,
+       "coverage": 0,
+       "not_scorable": 0,
+       "other:not_attempted": 4,
+       "pages": 4,
+       "status_rows": {},
+       "verified_absence": 0,
+       "wrong_absence": 0
+      },
+      "critical_resolved": [],
+      "critical_unresolved": [],
+      "documents_absent_from_lane_counted_missed": [],
+      "negatives": {
+       "tn": 4
+      },
+      "not_scorable_rows_excluded": 0,
+      "readable": 0,
+      "recovery_counts": {}
+     },
+     "identity": {
+      "accepted": {
+       "correct": 0,
+       "wrong": 0
+      },
+      "accepted_precision": null,
+      "clean_recovery": 0.0,
+      "coverage_resolved": {
+       "completed_read": 0,
+       "coverage": 0,
+       "not_scorable": 3,
+       "other:not_attempted": 1,
+       "pages": 1,
+       "status_rows": {},
+       "verified_absence": 0,
+       "wrong_absence": 0
+      },
+      "critical_resolved": [],
+      "critical_unresolved": [],
+      "documents_absent_from_lane_counted_missed": [],
+      "negatives": {},
+      "not_scorable_rows_excluded": 3,
+      "readable": 1,
+      "recovery_counts": {
+       "missed": 1
+      }
+     },
+     "revision": {
+      "accepted": {
+       "correct": 0,
+       "wrong": 0
+      },
+      "accepted_precision": null,
+      "clean_recovery": 0.0,
+      "coverage_resolved": {
+       "completed_read": 0,
+       "coverage": 0,
+       "not_scorable": 0,
+       "other:not_attempted": 4,
+       "pages": 4,
+       "status_rows": {},
+       "verified_absence": 0,
+       "wrong_absence": 0
+      },
+      "critical_resolved": [],
+      "critical_unresolved": [],
+      "documents_absent_from_lane_counted_missed": [],
+      "negatives": {
+       "tn": 1
+      },
+      "not_scorable_rows_excluded": 0,
+      "readable": 3,
+      "recovery_counts": {
+       "missed": 3
+      }
+     }
+    }
+   },
+   "not_complete": [],
+   "population": [
+    "F043"
+   ],
+   "revision_under_PA_C_vs_R": {
+    "gained": [],
+    "lost": [],
+    "note": "identical captured responses wherever both asked the same request (content key)",
+    "state": "COMPLETE"
+   },
+   "state": "COMPLETE",
+   "status": {
+    "deferred": {},
+    "limit_incomplete": {},
+    "other_incomplete": {}
+   }
+  }
+ },
+ "exercise_only": "dry run: no application reader ran on any document (reader 'none'); every lane has 0 facts; the figures exercise the scorer and are not a result",
+ "fields": {
+  "decision": {
+   "concentration_outcome": "UNDETERMINED",
+   "critical_resolved_in_C": [],
+   "default_selected": null,
+   "matched": 0,
+   "outcome": "NOT ELIGIBLE",
+   "reasons_not_eligible": [
+    "request-normalised gate not met",
+    "decision: clean recovery None < 0.90",
+    "decision: matched 0 < 12"
+   ],
+   "role": "diagnostic (the comparison outcome is the candidate-level `outcome`)"
+  },
+  "identity": {
+   "concentration_outcome": "UNDETERMINED",
+   "critical_resolved_in_C": [],
+   "default_selected": null,
+   "matched": 0,
+   "outcome": "NOT ELIGIBLE",
+   "reasons_not_eligible": [
+    "request-normalised gate not met",
+    "identity: clean recovery 0.0 < 0.90",
+    "identity: matched 0 < 12"
+   ],
+   "role": "diagnostic (the comparison outcome is the candidate-level `outcome`)"
+  },
+  "revision": {
+   "concentration_outcome": "UNDETERMINED",
+   "critical_resolved_in_C": [],
+   "default_selected": null,
+   "matched": 0,
+   "outcome": "NOT ELIGIBLE",
+   "reasons_not_eligible": [
+    "request-normalised gate not met",
+    "revision: clean recovery 0.0 < 0.90",
+    "revision: matched 0 < 12"
+   ],
+   "role": "diagnostic (the comparison outcome is the candidate-level `outcome`)"
+  }
+ },
+ "limit_incomplete": {
+  "B": {
+   "deferred": {},
+   "limit_incomplete": {},
+   "other_incomplete": {}
+  },
+  "C": {
+   "deferred": {},
+   "limit_incomplete": {},
+   "other_incomplete": {}
+  }
+ },
+ "matched_before_exclusions": {
+  "decision": 0,
+  "identity": 0,
+  "revision": 0
+ },
+ "matched_exclusions": {},
+ "metrics": {
+  "B": {
+   "critical": {
+    "resolved": [],
+    "unresolved": []
+   },
+   "fields": {
+    "decision": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": null,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 4,
+      "pages": 4,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {
+      "tn": 4
+     },
+     "not_scorable_rows_excluded": 0,
+     "readable": 0,
+     "recovery_counts": {}
+    },
+    "identity": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": 0.0,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 3,
+      "other:not_attempted": 1,
+      "pages": 1,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {},
+     "not_scorable_rows_excluded": 3,
+     "readable": 1,
+     "recovery_counts": {
+      "missed": 1
+     }
+    },
+    "revision": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": 0.0,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 4,
+      "pages": 4,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {
+      "tn": 1
+     },
+     "not_scorable_rows_excluded": 0,
+     "readable": 3,
+     "recovery_counts": {
+      "missed": 3
+     }
+    }
+   }
+  },
+  "C": {
+   "critical": {
+    "resolved": [],
+    "unresolved": []
+   },
+   "fields": {
+    "decision": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": null,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 4,
+      "pages": 4,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {
+      "tn": 4
+     },
+     "not_scorable_rows_excluded": 0,
+     "readable": 0,
+     "recovery_counts": {}
+    },
+    "identity": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": 0.0,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 3,
+      "other:not_attempted": 1,
+      "pages": 1,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {},
+     "not_scorable_rows_excluded": 3,
+     "readable": 1,
+     "recovery_counts": {
+      "missed": 1
+     }
+    },
+    "revision": {
+     "accepted": {
+      "correct": 0,
+      "wrong": 0
+     },
+     "accepted_precision": null,
+     "clean_recovery": 0.0,
+     "coverage_resolved": {
+      "completed_read": 0,
+      "coverage": 0,
+      "not_scorable": 0,
+      "other:not_attempted": 4,
+      "pages": 4,
+      "status_rows": {},
+      "verified_absence": 0,
+      "wrong_absence": 0
+     },
+     "critical_resolved": [],
+     "critical_unresolved": [],
+     "documents_absent_from_lane_counted_missed": [],
+     "negatives": {
+      "tn": 1
+     },
+     "not_scorable_rows_excluded": 0,
+     "readable": 3,
+     "recovery_counts": {
+      "missed": 3
+     }
+    }
+   }
+  }
+ },
+ "not_claimed": [
+  "unsupported-format safety (no unsupported or illegible control was read)",
+  "generalization beyond the six cohort projects, their contractors and their layouts"
+ ],
+ "outcome": "NOT ELIGIBLE",
+ "outcome_by_field": {
+  "decision": "NOT ELIGIBLE",
+  "identity": "NOT ELIGIBLE",
+  "revision": "NOT ELIGIBLE"
+ },
+ "paired": {
+  "decision": {
+   "matched": 0,
+   "matched_documents": [],
+   "paired_difference": null,
+   "verdict": "INCONCLUSIVE (matched resolved documents 0 < 12)"
+  },
+  "identity": {
+   "matched": 0,
+   "matched_documents": [],
+   "paired_difference": null,
+   "verdict": "INCONCLUSIVE (matched resolved documents 0 < 12)"
+  },
+  "revision": {
+   "matched": 0,
+   "matched_documents": [],
+   "paired_difference": null,
+   "verdict": "INCONCLUSIVE (matched resolved documents 0 < 12)"
+  }
+ },
+ "population_gate": {
+  "action": "DISPATCH_ELIGIBLE",
+  "counts": {
+   "decision": 38,
+   "identity": 57,
+   "revision": 38
+  },
+  "extensions_used": 0,
+  "rule": ">= 12 resolved (per field), independently reviewed documents per field carrying the fact; canonical ids; no partial closure run",
+  "short": {}
+ },
+ "primary_outcomes": {
+  "association": {
+   "B": {},
+   "C": {}
+  },
+  "critical": {
+   "B": {
+    "resolved": 0,
+    "unresolved": 0
+   },
+   "C": {
+    "resolved": 0,
+    "unresolved": 0
+   }
+  },
+  "critical_by_field": {
+   "B": {
+    "decision": {
+     "resolved": 0,
+     "unresolved": 0
+    },
+    "identity": {
+     "resolved": 0,
+     "unresolved": 0
+    },
+    "revision": {
+     "resolved": 0,
+     "unresolved": 0
+    }
+   },
+   "C": {
+    "decision": {
+     "resolved": 0,
+     "unresolved": 0
+    },
+    "identity": {
+     "resolved": 0,
+     "unresolved": 0
+    },
+    "revision": {
+     "resolved": 0,
+     "unresolved": 0
+    }
+   }
+  },
+  "decision": {
+   "B": {
+    "accepted": {
+     "correct": 0,
+     "wrong": 0
+    },
+    "completed_read": 0,
+    "coverage": 0,
+    "not_scorable": 12,
+    "other:not_attempted": 132,
+    "pages": 132,
+    "verified_absence": 0,
+    "wrong_absence": 0
+   },
+   "C": {
+    "accepted": {
+     "correct": 0,
+     "wrong": 0
+    },
+    "completed_read": 0,
+    "coverage": 0,
+    "not_scorable": 12,
+    "other:not_attempted": 132,
+    "pages": 132,
+    "verified_absence": 0,
+    "wrong_absence": 0
+   }
+  },
+  "requests": {
+   "B": {
+    "inherited_from_b": 0,
+    "own_dispatched": 1
+   },
+   "C": {
+    "inherited_from_b": 1,
+    "own_dispatched": 1
+   }
+  },
+  "tokens": {
+   "B": "dry run: no tokens",
+   "C": "dry run: no tokens"
+  }
+ },
+ "reference_set_statement": "reference set independently AI-reviewed (Claude agents), not human-signed",
+ "request_gate": {
+  "applicable": true,
+  "caps": {
+   "B": 240,
+   "C": 240
+  },
+  "extra_requests": 1,
+  "facts_per_8_extra": 0.0,
+  "net_correct_facts": 0,
+  "net_gain_per_document": null,
+  "new_false_accepts": [],
+  "passes": false,
+  "policy_cost_note": "the request difference is part of the policy; nothing is reported as equal-budget accuracy",
+  "requests": {
+   "B": 1,
+   "C": 2
+  },
+  "rule": ">= 1 correctly associated fact per 8 extra requests at equal caps, no new false accept, interval excluding zero"
+ },
+ "scope_limitations": [
+  {
+   "declared_by": "A-09 point 5 (owner)",
+   "found": 0,
+   "id": "unsupported-control-shortfall",
+   "required": 2,
+   "statement": "the run set holds 0 of the 2 unsupported-format controls plan v2 section 2.3 requires: no canonical pool document has an in-scope page labelled 'unsupported' or 'illegible' in r32-labels-reviewed-2; the shortfall is accepted ONLY as a declared scope limitation; no control is replaced once a prediction exists for the run (run_set_selector_r32.replace_controls); this limitation is never removed from a report"
+  }
+ ],
+ "scorer": "score_bcr_r32",
+ "thresholds": {
+  "accepted_precision_min": 0.98,
+  "clean_recovery_min": 0.9,
+  "critical_on_resolved_max": 0,
+  "facts_per_extra_requests": 8
+ },
+ "unread_pages": {
+  "B": {
+   "documents": {},
+   "documents_with_unread_pages": 0,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator",
+   "unread_pages": 0
+  },
+  "C": {
+   "documents": {},
+   "documents_with_unread_pages": 0,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator",
+   "unread_pages": 0
+  },
+  "R": {
+   "documents": {},
+   "documents_with_unread_pages": 0,
+   "rule": "COMPLETE with every page not read under the application's own per-document limits listed; counted as unread in every denominator",
+   "unread_pages": 0
+  }
+ }
+}

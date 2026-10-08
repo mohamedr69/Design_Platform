@@ -9,6 +9,7 @@ import { DrawingsLogTab } from "../components/drawings/DrawingsLogTab";
 import { ReviewIssuesTab } from "../components/drawings/ReviewIssuesTab";
 import { ActivityTab } from "../components/drawings/ActivityTab";
 import { AssignDraftsmanTab } from "../components/drawings/AssignDraftsmanTab";
+import { AssistantPanel } from "../components/drawings/AssistantPanel";
 import type { DrawingsSummary, SystemSummary } from "../components/drawings/types";
 import { when } from "../components/drawings/types";
 
@@ -196,11 +197,14 @@ function DrawingsWorkspace() {
       {tab === "issues" && <ReviewIssuesTab projectId={project.id} canEdit={canEdit} system={shownCode} onOpenDrawing={goToDrawing} onChanged={loadSummary} />}
       {tab === "activity" && <ActivityTab projectId={project.id} system={shownCode} />}
       {tab === "assign" && <AssignDraftsmanTab projectId={project.id} canEdit={canEdit} />}
+
+      {/* The assistant: answers from the records of the system on show; its proposals are applied by the engineer, never by it. */}
+      <AssistantPanel key={shownCode} projectId={project.id} system={shownCode} canEdit={canEdit} onChanged={loadSummary} onOpenDrawing={goToDrawing} />
     </div>
   );
 }
 
-/** One system, at a glance: approved of floors, and what needs attention. */
+/** One system, at a glance: approved of its drawings (one per IFC sheet), and what needs attention. */
 function SystemCard({ system, selected, onSelect, onIssues }: { system: SystemSummary; selected: boolean; onSelect: () => void; onIssues: () => void }) {
   const share = system.floors ? Math.round((system.approved_total / system.floors) * 100) : 0;
   return (
@@ -227,7 +231,7 @@ function SystemCard({ system, selected, onSelect, onIssues }: { system: SystemSu
           </span>
         </div>
         <div className="mt-0.5 text-sm text-gray-700">
-          <span className="text-lg font-semibold text-navy-900">{system.approved_total} / {system.floors}</span> Approved
+          <span className="text-lg font-semibold text-navy-900">{system.approved_total} / {system.floors}</span> drawings approved
           <span className="ml-3 text-gray-500">{share}%</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">

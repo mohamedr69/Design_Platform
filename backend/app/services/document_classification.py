@@ -828,7 +828,8 @@ def is_current(entry: DocumentClassification | None, row: ProjectDocument, finge
     return freshness(entry, row, fingerprint) == CURRENT
 
 
-def record(db: Session, project: Project, row: ProjectDocument, assessment: Assessment, *, source: str) -> DocumentClassification | None:
+def record(db: Session, project: Project, row: ProjectDocument, assessment: Assessment, *, source: str,
+           extra: dict | None = None) -> DocumentClassification | None:
     """Keep the assessment beside the row: the earlier current one is
     superseded (kept as history), unless an engineer confirmed it -- then
     the automatic one is stored already superseded, and the engineer's
@@ -836,11 +837,15 @@ def record(db: Session, project: Project, row: ProjectDocument, assessment: Asse
     already current (nothing written). Never commits: the caller's
     transaction decides. Writes inside a savepoint of its own, so a write
     that fails leaves the caller's session usable and its writes untouched
-    (the database also refuses a second current row per document)."""
+    (the database also refuses a second current row per document).
+    `extra` is merged into the stored assessment before the insert (the
+    model pass's provenance), so the row is written whole in one INSERT:
+    on SQLite the savepoint's release can be final, and nothing may be
+    left to add afterwards."""
     intake_role, intake_system = intake_of(project, row)
     fingerprint = context_fingerprint(row, project, intake_role=intake_role, intake_system=intake_system)
     existing = current(db, row)
-    data = assessment.to_dict()
+    data = {**assessment.to_dict(), **(extra or {})}
     if is_current(existing, row, fingerprint) and existing.assessment == data and existing.stage == assessment.stage.value:
         return None
     now = utc_now()
@@ -913,6 +918,12 @@ def assess_row(db: Session, project: Project, row: ProjectDocument, *, source: s
         return None
 
 
+# The model's classification pass (document_classification_ai) writes rows of this source: review-only, always
+# flagged for a person until an engineer confirms them.
+AI_SOURCE = "ai"
+AI_REVIEW_REASON = "answered by the model, not confirmed: a person confirms it"
+
+
 def review_reasons(entry: DocumentClassification, row: ProjectDocument | None, fresh: str | None) -> list[str]:
     """Why a person should look at this one: conflicting or no evidence, an
     answer no longer current, or a workflow document assessed from its
@@ -930,6 +941,8 @@ def review_reasons(entry: DocumentClassification, row: ProjectDocument | None, f
         reasons.append("a workflow document assessed from its path and role only")
     if entry.primary_type == DocumentType.CONSULTANT_DECISION.value:
         reasons.append("a consultant's decision document: which submission it applies to is for a person; nothing is applied")
+    if getattr(entry, "source", None) == AI_SOURCE and not getattr(entry, "engineer_confirmed", False):
+        reasons.append(AI_REVIEW_REASON)
     reasons.extend((entry.assessment or {}).get("flags") or [])
     return reasons
 

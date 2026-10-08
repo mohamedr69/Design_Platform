@@ -1,0 +1,1 @@
+Copied byte-for-byte on 7 October 2026 from G:\dev (2)\dev\ep-platform-merged\m2-closure\ (the owner's G: drive closure package of 6 October 2026); hashes in SHA256SUMS.txt equal the source files' hashes at copy time. These are M4 input 1 (docs/milestones/M4/README.md).

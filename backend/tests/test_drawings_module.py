@@ -103,9 +103,11 @@ def _cells(row: dict) -> dict[str, str]:
     return {rev: cell["status"] for rev, cell in row["cells"].items()}
 
 
-def _dxf(path: Path, floors: list[str]) -> Path:
+def _dxf(path: Path, floors: list[str], numbers: list[str] | None = None) -> Path:
     """An IFC drawing with a plan sheet per floor, its title block naming
-    the floor (the way test_ifc_boq's building set is drawn)."""
+    the floor (the way test_ifc_boq's building set is drawn). `numbers`:
+    the drawing number each sheet's title block prints under its DWG NO
+    label; none printed otherwise."""
     doc = ezdxf.new("R2018")
     doc.header["$INSUNITS"] = 4
     block = doc.blocks.new("SD")
@@ -114,13 +116,19 @@ def _dxf(path: Path, floors: list[str]) -> Path:
     msp = doc.modelspace()
     title_block = doc.blocks.new("TITLE")
     title_block.add_attdef("TITLE", (0, 0), dxfattribs={"height": 5})
+    if numbers is not None:
+        title_block.add_text("DWG NO:", height=3).set_placement((0, 30))
+        title_block.add_attdef("DWGNO", (0, 24), dxfattribs={"height": 4})
     for i, floor in enumerate(floors):
         x = i * 100_000
         for k in range(3):
             msp.add_blockref("SD", (x + 5000 + k * 3000, 5000), dxfattribs={"layer": "E-FIRE"})
         lay = doc.layouts.new(f"FA-{i + 1:02d}")
         lay.add_viewport(center=(200, 150), size=(400, 300), view_center_point=(x + 20_000, 5000), view_height=30_000)
-        lay.add_blockref("TITLE", (10, 10)).add_auto_attribs({"TITLE": f"{floor} PLAN"})
+        attribs = {"TITLE": f"{floor} PLAN"}
+        if numbers is not None:
+            attribs["DWGNO"] = numbers[i]
+        lay.add_blockref("TITLE", (10, 10)).add_auto_attribs(attribs)
     doc.saveas(path)
     return path
 
@@ -661,3 +669,192 @@ def test_normal_rows_cost_no_ai_call(client, db_session, tmp_path, ai):
                                     _reply(f"{FA}-L23", "R1", "approved", path="03- Drawings/SD/FA/R1/Received/reply.pdf")])
     shop_drawings.reconcile(db_session, db_session.get(Project, pid), ai=True)
     assert fake.requests == []
+
+
+# --- the log as per IFC: a row per IFC plan sheet ---------------------------------------------------
+
+
+def _log_by_ifc(client, pid: int, system: str) -> dict:
+    response = client.get(f"/projects/{pid}/drawings/log?system={system}&view=ifc")
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
+def test_the_ifc_view_is_a_row_per_sheet_and_the_floor_view_is_unchanged(client, db_session, tmp_path):
+    """A typical sheet for floors 3 to 5 is three floors in the floor view
+    and one row in the IFC view; a shop drawing for one of its floors is
+    shown under the sheet with the floors still to submit under it; the
+    floor view, the summary and the records are untouched."""
+    _admin(client)
+    pid, folder = _project(client, tmp_path, "93020")
+    _import_ifc(client, pid, _dxf(tmp_path / "ifc-view.dxf", ["GROUND FLOOR", "TYPICAL 3RD TO 5TH FLOOR", "ROOF"]))
+    _seed(db_session, pid, folder, [_doc("Ground Floor", "R0", "approved", ref=f"{FA}-GF"),
+                                    _doc("Level 4", "R0", "UR", ref=f"{FA}-L04", day=2)])
+    _reconcile(client, pid)
+
+    floors = _log(client, pid, "FAS")
+    assert floors["view"] == "floor"
+    assert [r["floor"] for r in floors["rows"]] == ["Ground Floor", "Level 3", "Level 4", "Level 5", "Roof"]
+    assert floors["counts"] == {"approved": 1, "under_review": 1, "not_submitted": 3}
+
+    by_ifc = _log_by_ifc(client, pid, "FAS")
+    assert by_ifc["view"] == "ifc" and by_ifc["sheets"] == 3 and by_ifc["groups"] == 3 and by_ifc["others"] == []
+    assert by_ifc["revisions"] == floors["revisions"]
+    rows = by_ifc["rows"]
+    # Exactly one row per IFC sheet: the sheet partly submitted is the row of its drawing, the rest a hint.
+    assert [(r["ifc"]["sheet"], r["ifc"]["label"], r["floor"], r["reference"], r["latest_status"], r["floors"])
+            for r in rows] == [
+        ("FA-01", "Ground Floor", "Ground Floor", f"{FA}-GF", "approved", 1),
+        ("FA-02", "Typical 3rd to 5th Floor", "Typical 3rd to 5th Floor", f"{FA}-L04", "under_review", 3),
+        ("FA-03", "Roof", "Roof", None, "not_submitted", 1),
+    ]
+    typical = rows[1]["ifc"]
+    assert (typical["floors"], typical["floor_keys"], typical["floor_names"], typical["range"]) == (
+        3, ["L3", "L4", "L5"], ["Level 3", "Level 4", "Level 5"], "floors 3-5")
+    assert rows[0]["ifc"]["range"] == "Ground Floor"
+    assert rows[1]["partial"] is True and rows[1]["spans"] is False and rows[1]["others"] == []
+    assert rows[1]["not_submitted_floors"] == ["L3", "L5"]
+    assert [(h["kind"], h["label"]) for h in rows[1]["hints"]] == [("floors_not_submitted", "Not submitted: Level 3, Level 5")]
+    assert rows[2]["source"] == "ifc_sheet" and rows[2]["id"] is None
+    # The cells are the floor view's: the same drawing, the same revisions.
+    assert _cells(rows[1]) == _cells(_row(floors, f"{FA}-L04"))
+    assert by_ifc["counts"] == {"approved": 1, "under_review": 1, "not_submitted": 1}
+    # Nothing was written for the view: the records are the floor view's.
+    assert db_session.query(ShopDrawingRevision).count() == 2
+    assert db_session.query(ProjectShopDrawing).count() == 2
+    # The system cards count the IFC sheets, the same for every system of the project.
+    summary = {s["code"]: s for s in client.get(f"/projects/{pid}/drawings/summary").json()["systems"]}
+    assert summary["FAS"]["floors"] == 3 and summary["FAS"]["not_submitted"] == 1 and summary["FAS"]["approved"] == 1
+    # The workbook follows the view: an IFC Drawing column first.
+    export = client.get(f"/projects/{pid}/drawings/log/export.xlsx?system=FAS&view=ifc")
+    assert export.status_code == 200
+    from openpyxl import load_workbook
+    import io as _io
+    ws = load_workbook(_io.BytesIO(export.content)).active
+    assert [c.value for c in ws[4]][:5] == ["#", "IFC Drawing", "Floors", "Floor", "Drawing Reference"]
+    assert ws.cell(row=5, column=2).value.startswith("FA-01 · Ground Floor")
+    assert ws.cell(row=6, column=3).value == "floors 3-5"
+    assert ws.max_row == 7
+
+
+def test_a_typical_shop_drawing_answers_a_typical_sheet_as_one_row_and_a_floor_off_the_ifc_keeps_its_row(client, db_session, tmp_path):
+    _admin(client)
+    pid, folder = _project(client, tmp_path, "93021")
+    _import_ifc(client, pid, _dxf(tmp_path / "ifc-view2.dxf", ["GROUND FLOOR", "TYPICAL 3RD TO 5TH FLOOR"]))
+    _seed(db_session, pid, folder, [_doc("Typical 3rd to 5th Floor", "R1", "approved", ref=f"{FA}-TYP"),
+                                    _doc("Roof", "R0", "UR", ref=f"{FA}-RF")])
+    _reconcile(client, pid)
+    log = _log_by_ifc(client, pid, "FAS")
+    rows = log["rows"]
+    assert [(r["ifc"]["sheet"], r["floor"], r["reference"], r["latest_revision"], r["floors"], r["partial"])
+            for r in rows] == [
+        ("FA-01", "Ground Floor", None, None, 1, False),
+        ("FA-02", "Typical 3rd to 5th Floor", f"{FA}-TYP", "R1", 3, False),
+    ]
+    assert rows[1]["typical"] is True and rows[1]["ifc"]["range"] == "floors 3-5"
+    # The roof has no IFC sheet: its drawing is listed apart, not counted among the IFC drawings.
+    assert [(r["floor"], r["reference"], r["latest_revision"]) for r in log["others"]] == [("Roof", f"{FA}-RF", "R0")]
+    assert log["sheets"] == len(rows) == 2
+    # A view the API does not know is refused, not guessed.
+    assert client.get(f"/projects/{pid}/drawings/log?system=FAS&view=sheet").status_code == 422
+
+
+# --- the IFC drawings as the project folder holds them ----------------------------------------------
+
+
+def test_the_log_reads_its_ifc_from_the_project_folder(client, db_session, tmp_path, monkeypatch):
+    """The consultant's IFC drawing is filed in the project folder under
+    03- Drawings/IFC/Electrical/FA: the log lists what is there, a file not
+    read yet is read on request by the same job an upload queues, and the
+    rows' sheets then come from it. Another system borrows the building's
+    sheets and says so."""
+    import app.routers.jobs as jobs_router
+
+    monkeypatch.setattr(jobs_router, "RUN_INLINE", True)
+    _admin(client)
+    pid, folder = _project(client, tmp_path, "93030", systems=BOTH)
+    ifc = folder / "03- Drawings" / "IFC" / "Electrical" / "FA"
+    ifc.mkdir(parents=True, exist_ok=True)     # the project's own folder structure may have made it
+    _dxf(ifc / "FA-IFC.dxf", ["GROUND FLOOR", "TYPICAL 3RD TO 5TH FLOOR"])
+    (ifc / "FA-IFC.pdf").write_bytes(b"%PDF-1.4")
+
+    log = _log_by_ifc(client, pid, "FAS")
+    listing = log["ifc_folder"]
+    assert listing["folder"] == "03- Drawings/IFC/Electrical/FA" and listing["reachable"] is True
+    assert [(f["name"], f["readable"], f["drawing"], f["job"]) for f in listing["files"]] == [
+        ("FA-IFC.dxf", True, None, None), ("FA-IFC.pdf", False, None, None)]
+    assert log["rows"] == [] and log["sheets"] == 0 and log["ifc"] == []
+    assert client.get(f"/projects/{pid}/ifc-drawings/folder?system=FAS").json() == listing
+
+    # A reader may look, not read; the PDF is not a drawing; a path outside the folder is refused.
+    assert client.post(f"/projects/{pid}/ifc-drawings/folder/jobs", json={"path": listing["files"][1]["path"]}).status_code == 415
+    assert client.post(f"/projects/{pid}/ifc-drawings/folder/jobs", json={"path": "03- Drawings/SD/FA/x.dxf"}).status_code == 422
+    assert client.post(f"/projects/{pid}/ifc-drawings/folder/jobs", json={"path": "03- Drawings/IFC/Electrical/FA/../../x.dxf"}).status_code == 422
+
+    started = client.post(f"/projects/{pid}/ifc-drawings/folder/jobs", json={"path": listing["files"][0]["path"]})
+    assert started.status_code == 202, started.text
+    job = client.get(f"/jobs/{started.json()['id']}").json()
+    assert job["status"] == "succeeded" and job["kind"] == "ifc_read", job
+    assert (ifc / "FA-IFC.dxf").is_file()      # the file stays where it was filed
+
+    log = _log_by_ifc(client, pid, "FAS")
+    (dxf, pdf) = log["ifc_folder"]["files"]
+    assert dxf["drawing"]["filename"] == "FA-IFC.dxf" and dxf["drawing"]["revision"] == "R0" and dxf["drawing"]["in_force"]
+    assert pdf["drawing"] is None
+    assert [d["filename"] for d in log["ifc"]] == ["FA-IFC.dxf"] and log["ifc_borrowed_from"] is None
+    assert [(r["ifc"]["sheet"], r["ifc"]["label"], r["floors"]) for r in log["rows"]] == [
+        ("FA-01", "Ground Floor", 1), ("FA-02", "Typical 3rd to 5th Floor", 3)]
+    # The same file again is already read: refused, nothing queued.
+    again = client.post(f"/projects/{pid}/ifc-drawings/folder/jobs", json={"path": dxf["path"]})
+    assert again.status_code == 409 and again.json()["detail"]["code"] == "duplicate_drawing"
+
+    # Emergency lighting has no IFC folder read: the building's sheets stand in, and the page is told whose.
+    els = _log_by_ifc(client, pid, "ELS")
+    assert els["ifc_borrowed_from"] == "FAS" and els["ifc_folder"]["folder"] is None
+    assert [r["ifc"]["sheet"] for r in els["rows"]] == ["FA-01", "FA-02"]
+    assert [d["filename"] for d in els["ifc"]] == ["FA-IFC.dxf"]
+
+
+# --- the sheet's reference: the title block's number first ------------------------------------------
+
+
+def test_a_sheet_is_listed_under_the_number_its_title_block_prints(client, db_session, tmp_path):
+    """The reference is read when the drawing is processed and kept on the
+    record; the log takes it from there. A title block that prints one
+    number on every sheet names the set, not the sheet: the layout name
+    stands, and the page is told why."""
+    from app.models import ProjectIfcDrawing
+
+    _admin(client)
+    pid, folder = _project(client, tmp_path, "93040")
+    _import_ifc(client, pid, _dxf(tmp_path / "numbered.dxf", ["GROUND FLOOR", "TYPICAL 3RD TO 5TH FLOOR"],
+                                  numbers=["E-FA-104", "E-FA-111"]))
+    (drawing,) = db_session.query(ProjectIfcDrawing).filter(ProjectIfcDrawing.project_id == pid).all()
+    assert [(s["name"], s["number"], s["number_source"]) for s in drawing.meta["sheets"]] == [
+        ("FA-01", "E-FA-104", "dwg no"), ("FA-02", "E-FA-111", "dwg no")]
+    rows = _log_by_ifc(client, pid, "FAS")["rows"]
+    assert [(r["ifc"]["sheet"], r["ifc"]["layout"], r["ifc"]["number"], r["ifc"]["number_note"]) for r in rows] == [
+        ("E-FA-104", "FA-01", "E-FA-104", None), ("E-FA-111", "FA-02", "E-FA-111", None)]
+
+    # The same number on every sheet: the layout names, with the reason.
+    pid2, _folder = _project(client, tmp_path, "93041")
+    _import_ifc(client, pid2, _dxf(tmp_path / "stale.dxf", ["GROUND FLOOR", "1ST FLOOR", "ROOF"], numbers=["FA 119"] * 3))
+    rows = _log_by_ifc(client, pid2, "FAS")["rows"]
+    assert [r["ifc"]["sheet"] for r in rows] == ["FA-01", "FA-02", "FA-03"]
+    assert all(r["ifc"]["number"] == "FA 119" and "prints FA 119 on every sheet" in r["ifc"]["number_note"] for r in rows)
+
+    # A drawing processed before numbers were recorded: read off its stored DXF once, into the record.
+    from app.ifc.services import sheet_numbers
+
+    meta = dict(drawing.meta)
+    meta["sheets"] = [{k: v for k, v in s.items() if k not in ("number", "number_source")} for s in meta["sheets"]]
+    drawing.meta = meta
+    db_session.commit()
+    db_session.expire_all()
+    drawing = db_session.get(ProjectIfcDrawing, drawing.id)
+    assert sheet_numbers.needs_numbers(drawing)
+    assert [r["ifc"]["sheet"] for r in _log_by_ifc(client, pid, "FAS")["rows"]] == ["FA-01", "FA-02"]
+    assert sheet_numbers.refresh(db_session, drawing) == {"FA-01": "E-FA-104", "FA-02": "E-FA-111"}
+    db_session.expire_all()
+    assert not sheet_numbers.needs_numbers(db_session.get(ProjectIfcDrawing, drawing.id))
+    assert [r["ifc"]["sheet"] for r in _log_by_ifc(client, pid, "FAS")["rows"]] == ["E-FA-104", "E-FA-111"]

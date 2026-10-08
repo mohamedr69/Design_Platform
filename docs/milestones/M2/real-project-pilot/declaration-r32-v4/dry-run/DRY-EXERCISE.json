@@ -1,0 +1,2514 @@
+{
+ "ai_ledger_snapshots": [
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  }
+ ],
+ "ai_ledger_unchanged_484_18_0": true,
+ "checks_before": {
+  "application_env_equal": true,
+  "decision_coverage_gate_equal": true,
+  "disk_floor_equal_dry_floor": true,
+  "global_provider_equal": true,
+  "lane_allowances_equal_dry_caps": true,
+  "lane_switches_equal_runner_dry_defaults": true,
+  "lane_task_kinds_equal": true,
+  "parent_equal_dry_parent": true,
+  "project_window_equal_dry_window": true,
+  "resume_policy_equal_dry_default": true
+ },
+ "cli_version_case": {
+  "after_the_refusal": {
+   "run_folder_exists": false
+  },
+  "ai_ledger_after": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "ai_ledger_before": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "ai_ledger_unchanged": true,
+  "final_invocations": [
+   {
+    "kind": "fresh",
+    "n": 1,
+    "run_state": "FINISHED",
+    "status": "finished"
+   }
+  ],
+  "model_requests": 0,
+  "name": "CLI-version case under the corrected runner (dry)",
+  "ok": true,
+  "reading": "the runner now compares the CLI version line BEFORE it creates the run folder: a refusal at invocation 1 creates nothing (and, in live mode, consumes no authorization); the same 'run' command then starts the run normally -- the dead-end of Verification 41 (R41-09 case A) no longer exists",
+  "run_folder": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-cli-30b02b",
+  "stamp": "r43d-cli-30b02b",
+  "steps": [
+   {
+    "command": "run",
+    "injected": "CLI version refusal at invocation 1",
+    "result": "refused",
+    "why": "refused: CLI version '9.9.9 (Claude Code)' differs from the declared '2.1.263 (Claude Code)' [dry drill: the live check's refusal injected in-process] (nothing was created and no authorization was consumed)"
+   },
+   {
+    "command": "run",
+    "injected": null,
+    "result": "finished"
+   }
+  ]
+ },
+ "cross_project_drill": {
+  "ai_ledger_after": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "ai_ledger_before": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "declaration_sha256": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+  "finished_utc": "2026-10-07T20:32:59+00:00",
+  "first_invocation": {
+   "deferred": {
+    "C": {
+     "F020": "2026-10-07T20:32:30+00:00",
+     "F030": "2026-10-07T20:32:30+00:00",
+     "F046": "2026-10-07T20:32:30+00:00",
+     "F057": "2026-10-07T20:32:30+00:00",
+     "F060": "2026-10-07T20:32:30+00:00",
+     "F066": "2026-10-07T20:32:30+00:00"
+    },
+    "R": {
+     "F006": "2026-10-07T20:32:30+00:00",
+     "F009": "2026-10-07T20:32:30+00:00",
+     "F015": "2026-10-07T20:32:30+00:00",
+     "F016": "2026-10-07T20:32:30+00:00",
+     "F018": "2026-10-07T20:32:30+00:00",
+     "F020": "2026-10-07T20:32:30+00:00",
+     "F021": "2026-10-07T20:32:30+00:00",
+     "F030": "2026-10-07T20:32:30+00:00",
+     "F032": "2026-10-07T20:32:30+00:00",
+     "F033": "2026-10-07T20:32:30+00:00",
+     "F035": "2026-10-07T20:32:30+00:00",
+     "F037": "2026-10-07T20:32:30+00:00",
+     "F038": "2026-10-07T20:32:30+00:00",
+     "F039": "2026-10-07T20:32:30+00:00",
+     "F040": "2026-10-07T20:32:30+00:00",
+     "F042": "2026-10-07T20:32:30+00:00",
+     "F043": "2026-10-07T20:32:30+00:00",
+     "F046": "2026-10-07T20:32:30+00:00",
+     "F047": "2026-10-07T20:32:30+00:00",
+     "F051": "2026-10-07T20:32:30+00:00",
+     "F057": "2026-10-07T20:32:30+00:00",
+     "F060": "2026-10-07T20:32:30+00:00",
+     "F066": "2026-10-07T20:32:30+00:00",
+     "F072": "2026-10-07T20:32:30+00:00"
+    }
+   },
+   "lane_gates": {
+    "P": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:32:30+00:00)",
+    "R": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:32:30+00:00)"
+   }
+  },
+  "kind": "cross-project deferral drill on all 24 documents (window 10 per 20 s, resume_policy full)",
+  "loop": {
+   "between_resumes_refused": 1,
+   "copied_to": "dry-run/cross-project-drill-window-10/",
+   "early_resumes_refused": 1,
+   "final_run_state": "FINISHED",
+   "inject": {
+    "project_window": {
+     "limit": 10,
+     "window_s": 20
+    },
+    "resume_policy": "full"
+   },
+   "invocations": 2,
+   "per_invocation": [
+    {
+     "allowance_used": {
+      "B": 24,
+      "C": 18,
+      "P": 0,
+      "R": 0
+     },
+     "comparison_state": "INCOMPLETE",
+     "deferred": {
+      "C": {
+       "F020": "2026-10-07T20:32:30+00:00",
+       "F030": "2026-10-07T20:32:30+00:00",
+       "F046": "2026-10-07T20:32:30+00:00",
+       "F057": "2026-10-07T20:32:30+00:00",
+       "F060": "2026-10-07T20:32:30+00:00",
+       "F066": "2026-10-07T20:32:30+00:00"
+      },
+      "R": {
+       "F006": "2026-10-07T20:32:30+00:00",
+       "F009": "2026-10-07T20:32:30+00:00",
+       "F015": "2026-10-07T20:32:30+00:00",
+       "F016": "2026-10-07T20:32:30+00:00",
+       "F018": "2026-10-07T20:32:30+00:00",
+       "F020": "2026-10-07T20:32:30+00:00",
+       "F021": "2026-10-07T20:32:30+00:00",
+       "F030": "2026-10-07T20:32:30+00:00",
+       "F032": "2026-10-07T20:32:30+00:00",
+       "F033": "2026-10-07T20:32:30+00:00",
+       "F035": "2026-10-07T20:32:30+00:00",
+       "F037": "2026-10-07T20:32:30+00:00",
+       "F038": "2026-10-07T20:32:30+00:00",
+       "F039": "2026-10-07T20:32:30+00:00",
+       "F040": "2026-10-07T20:32:30+00:00",
+       "F042": "2026-10-07T20:32:30+00:00",
+       "F043": "2026-10-07T20:32:30+00:00",
+       "F046": "2026-10-07T20:32:30+00:00",
+       "F047": "2026-10-07T20:32:30+00:00",
+       "F051": "2026-10-07T20:32:30+00:00",
+       "F057": "2026-10-07T20:32:30+00:00",
+       "F060": "2026-10-07T20:32:30+00:00",
+       "F066": "2026-10-07T20:32:30+00:00",
+       "F072": "2026-10-07T20:32:30+00:00"
+      }
+     },
+     "kind": "fresh",
+     "lane_gates": {
+      "P": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:32:30+00:00)",
+      "R": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:32:30+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-07T20:32:35+00:00",
+     "retry_at_earliest_utc": "2026-10-07T20:32:30+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:32:35+00:00",
+      "structural": "2026-10-07T20:32:35+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished"
+    },
+    {
+     "allowance_used": {
+      "B": 24,
+      "C": 24,
+      "P": 0,
+      "R": 1
+     },
+     "comparison_state": "PENDING",
+     "deferred": {},
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "retry_at_earliest_utc": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished"
+    }
+   ],
+   "refused_resumes_created_nothing": true,
+   "run_set": "G:\\dev (2)\\dev\\ep-platform-merged\\ep-platform\\docs\\milestones\\M2\\real-project-pilot\\review34\\RUN-SET-PROPOSAL.json",
+   "stamp": "r43d-xp-30b02b",
+   "steps": [
+    {
+     "at_utc": "2026-10-07T20:32:16+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "INCOMPLETE",
+      "command": "run",
+      "comparison_state": "INCOMPLETE",
+      "earliest_retry_utc": "2026-10-07T20:32:30+00:00",
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "DEFERRED",
+      "score_outcome_by_field": {
+       "decision": "INCOMPLETE",
+       "identity": "INCOMPLETE",
+       "revision": "INCOMPLETE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 17.0,
+     "why": null
+    },
+    {
+     "at_utc": "2026-10-07T20:32:18+00:00",
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-07T20:32:30+00:00",
+     "early": true,
+     "invocations_after": 1,
+     "invocations_before": 1,
+     "printed": null,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-07T20:32:35+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:32:35+00:00",
+      "structural": "2026-10-07T20:32:35+00:00"
+     },
+     "returncode": 1,
+     "seconds": 1.5,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:32:35+00:00 (earliest retry 2026-10-07T20:32:30+00:00, full 2026-10-07T20:32:35+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:32:32+00:00",
+     "between_earliest_and_full": true,
+     "command": "resume",
+     "invocations_after": 1,
+     "invocations_before": 1,
+     "printed": null,
+     "result": "refused",
+     "returncode": 1,
+     "seconds": 1.5,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:32:35+00:00 (earliest retry 2026-10-07T20:32:30+00:00, full 2026-10-07T20:32:35+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:32:59+00:00",
+     "command": "resume",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "resume",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 2,
+      "kind": "resume",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 22.9,
+     "why": null
+    }
+   ]
+  },
+  "ok": true
+ },
+ "declaration_sha256": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+ "deferral_loops": {
+  "deferral-loop-planning-shape-window-10": {
+   "between_resumes_refused": 1,
+   "copied_to": "dry-run/deferral-loop-planning-shape-window-10/",
+   "early_resumes_refused": 1,
+   "final_run_state": "FINISHED",
+   "inject": {
+    "project_window": {
+     "limit": 10,
+     "window_s": 20
+    },
+    "resume_policy": "full"
+   },
+   "invocations": 2,
+   "per_invocation": [
+    {
+     "allowance_used": {
+      "B": 6,
+      "C": 4,
+      "P": 0,
+      "R": 0
+     },
+     "comparison_state": "INCOMPLETE",
+     "deferred": {
+      "C": {
+       "F020": "2026-10-07T20:30:06+00:00",
+       "F030": "2026-10-07T20:30:06+00:00"
+      },
+      "R": {
+       "F009": "2026-10-07T20:30:06+00:00",
+       "F020": "2026-10-07T20:30:06+00:00",
+       "F021": "2026-10-07T20:30:06+00:00",
+       "F030": "2026-10-07T20:30:06+00:00",
+       "F032": "2026-10-07T20:30:06+00:00",
+       "F037": "2026-10-07T20:30:06+00:00"
+      }
+     },
+     "kind": "fresh",
+     "lane_gates": {
+      "P": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-07T20:30:06+00:00)",
+      "R": "not started: 2 C document(s) DEFERRED (earliest retry 2026-10-07T20:30:06+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-07T20:30:10+00:00",
+     "retry_at_earliest_utc": "2026-10-07T20:30:06+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:30:10+00:00",
+      "structural": "2026-10-07T20:30:10+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished"
+    },
+    {
+     "allowance_used": {
+      "B": 6,
+      "C": 6,
+      "P": 0,
+      "R": 1
+     },
+     "comparison_state": "PENDING",
+     "deferred": {},
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": null,
+     "retry_at_earliest_utc": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished"
+    }
+   ],
+   "refused_resumes_created_nothing": true,
+   "run_set": "C:\\t\\r2x\\r42-sandbox\\r43p\\dry\\RUN-SET-EP27331.json",
+   "stamp": "r43d-p10-30b02b",
+   "steps": [
+    {
+     "at_utc": "2026-10-07T20:29:51+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "INCOMPLETE",
+      "command": "run",
+      "comparison_state": "INCOMPLETE",
+      "earliest_retry_utc": "2026-10-07T20:30:06+00:00",
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "DEFERRED",
+      "score_outcome_by_field": {
+       "decision": "INCOMPLETE",
+       "identity": "INCOMPLETE",
+       "revision": "INCOMPLETE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 34.3,
+     "why": null
+    },
+    {
+     "at_utc": "2026-10-07T20:30:01+00:00",
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-07T20:30:06+00:00",
+     "early": true,
+     "invocations_after": 1,
+     "invocations_before": 1,
+     "printed": null,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-07T20:30:10+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:30:10+00:00",
+      "structural": "2026-10-07T20:30:10+00:00"
+     },
+     "returncode": 1,
+     "seconds": 10.6,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:30:10+00:00 (earliest retry 2026-10-07T20:30:06+00:00, full 2026-10-07T20:30:10+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:30:08+00:00",
+     "between_earliest_and_full": true,
+     "command": "resume",
+     "invocations_after": 1,
+     "invocations_before": 1,
+     "printed": null,
+     "result": "refused",
+     "returncode": 1,
+     "seconds": 1.4,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:30:10+00:00 (earliest retry 2026-10-07T20:30:06+00:00, full 2026-10-07T20:30:10+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:30:32+00:00",
+     "command": "resume",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "resume",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 2,
+      "kind": "resume",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 21.2,
+     "why": null
+    }
+   ]
+  },
+  "deferral-loop-structural-shape-window-6": {
+   "between_resumes_refused": 0,
+   "copied_to": "dry-run/deferral-loop-structural-shape-window-6/",
+   "early_resumes_refused": 2,
+   "final_run_state": "FINISHED",
+   "inject": {
+    "project_window": {
+     "limit": 6,
+     "window_s": 20
+    },
+    "resume_policy": "full"
+   },
+   "invocations": 3,
+   "per_invocation": [
+    {
+     "allowance_used": {
+      "B": 6,
+      "C": 0,
+      "P": 0,
+      "R": 0
+     },
+     "comparison_state": "INCOMPLETE",
+     "deferred": {
+      "C": {
+       "F009": "2026-10-07T20:31:03+00:00",
+       "F020": "2026-10-07T20:31:03+00:00",
+       "F021": "2026-10-07T20:31:03+00:00",
+       "F030": "2026-10-07T20:31:03+00:00",
+       "F032": "2026-10-07T20:31:03+00:00",
+       "F037": "2026-10-07T20:31:03+00:00"
+      },
+      "R": {
+       "F009": "2026-10-07T20:31:03+00:00",
+       "F020": "2026-10-07T20:31:03+00:00",
+       "F021": "2026-10-07T20:31:03+00:00",
+       "F030": "2026-10-07T20:31:03+00:00",
+       "F032": "2026-10-07T20:31:03+00:00",
+       "F037": "2026-10-07T20:31:03+00:00"
+      }
+     },
+     "kind": "fresh",
+     "lane_gates": {
+      "P": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:31:03+00:00)",
+      "R": "not started: 6 C document(s) DEFERRED (earliest retry 2026-10-07T20:31:03+00:00)"
+     },
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 1,
+     "resume_not_before_utc": "2026-10-07T20:31:03+00:00",
+     "retry_at_earliest_utc": "2026-10-07T20:31:03+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:31:03+00:00",
+      "structural": "2026-10-07T20:31:03+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished"
+    },
+    {
+     "allowance_used": {
+      "B": 6,
+      "C": 6,
+      "P": 0,
+      "R": 0
+     },
+     "comparison_state": "PENDING",
+     "deferred": {
+      "R": {
+       "_reference_only": "2026-10-07T20:31:37+00:00"
+      }
+     },
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 2,
+     "resume_not_before_utc": "2026-10-07T20:31:37+00:00",
+     "retry_at_earliest_utc": "2026-10-07T20:31:37+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:31:37+00:00",
+      "structural": "2026-10-07T20:31:37+00:00"
+     },
+     "run_state": "DEFERRED",
+     "status": "finished"
+    },
+    {
+     "allowance_used": {
+      "B": 6,
+      "C": 6,
+      "P": 0,
+      "R": 1
+     },
+     "comparison_state": "PENDING",
+     "deferred": {},
+     "kind": "resume",
+     "lane_gates": {},
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "n": 3,
+     "resume_not_before_utc": null,
+     "retry_at_earliest_utc": null,
+     "retry_at_full_utc": null,
+     "run_state": "FINISHED",
+     "status": "finished"
+    }
+   ],
+   "refused_resumes_created_nothing": true,
+   "run_set": "C:\\t\\r2x\\r42-sandbox\\r43p\\dry\\RUN-SET-EP27331.json",
+   "stamp": "r43d-s6-30b02b",
+   "steps": [
+    {
+     "at_utc": "2026-10-07T20:30:47+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "INCOMPLETE",
+      "command": "run",
+      "comparison_state": "INCOMPLETE",
+      "earliest_retry_utc": "2026-10-07T20:31:03+00:00",
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "DEFERRED",
+      "score_outcome_by_field": {
+       "decision": "INCOMPLETE",
+       "identity": "INCOMPLETE",
+       "revision": "INCOMPLETE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 15.1,
+     "why": null
+    },
+    {
+     "at_utc": "2026-10-07T20:30:49+00:00",
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-07T20:31:03+00:00",
+     "early": true,
+     "invocations_after": 1,
+     "invocations_before": 1,
+     "printed": null,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-07T20:31:03+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:31:03+00:00",
+      "structural": "2026-10-07T20:31:03+00:00"
+     },
+     "returncode": 1,
+     "seconds": 1.5,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:31:03+00:00 (earliest retry 2026-10-07T20:31:03+00:00, full 2026-10-07T20:31:03+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:31:23+00:00",
+     "command": "resume",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "resume",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": "2026-10-07T20:31:37+00:00",
+      "invocation": 2,
+      "kind": "resume",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "DEFERRED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 19.2,
+     "why": null
+    },
+    {
+     "at_utc": "2026-10-07T20:31:24+00:00",
+     "command": "resume",
+     "earliest_retry_utc": "2026-10-07T20:31:37+00:00",
+     "early": true,
+     "invocations_after": 2,
+     "invocations_before": 2,
+     "printed": null,
+     "result": "refused",
+     "resume_not_before_utc": "2026-10-07T20:31:37+00:00",
+     "retry_at_full_utc": {
+      "planning": "2026-10-07T20:31:37+00:00",
+      "structural": "2026-10-07T20:31:37+00:00"
+     },
+     "returncode": 1,
+     "seconds": 1.3,
+     "why": "preflight_r32.Refused: refused: the resume policy 'full' allows a resume at 2026-10-07T20:31:37+00:00 (earliest retry 2026-10-07T20:31:37+00:00, full 2026-10-07T20:31:37+00:00); nothing was created"
+    },
+    {
+     "at_utc": "2026-10-07T20:31:58+00:00",
+     "command": "resume",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "resume",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 3,
+      "kind": "resume",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 20.0,
+     "why": null
+    }
+   ]
+  }
+ },
+ "finished_utc": "2026-10-07T20:33:42+00:00",
+ "harness": "G:/dev (2)/dev/ep-platform-merged/ep-platform/docs/milestones/M2/real-project-pilot/review43/scripts/harness-r32",
+ "imported_from": "C:/t/r2x/r42-sandbox/r43p/run/h43/harness-r32",
+ "live_run_folder_absent": true,
+ "model_requests_total": 0,
+ "name": "DRY-EXERCISE (R43-40) of declaration-r32-v4 with the bound review43 harness (byte copies)",
+ "ok": true,
+ "sandbox_base": "C:/t/r2x/r42-sandbox/r43p/sb",
+ "single": {
+  "ai_ledger_after": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "ai_ledger_before": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "copied": {
+   "ALLOWANCE-AUDIT.json": "ce0745e62d5bcdf53e1b86969c0e100d289ae7493b3907a52366dd1158412596",
+   "LANE-B.json": "91f4eb4352e36f45b3f97aafb61855cc7702defaf00dea2c99921c93ef09b148",
+   "LANE-C.json": "c8e4c722137d3af6699fab897dbfb6c85393982381a5b976db591b779b0030af",
+   "LANE-P.json": "c879a13f335a48d80cdc4c6f0850f5b10317bb60396c540a3f664741e21423f4",
+   "LANE-R.json": "a07c5ce42dd4785479854c585a05c7b9cb7aa577f87794a9f3dd291d2fc990c3",
+   "RUN-CONFIG.json": "264628788f7843d04008310db1b5499b749c896fb25ceca47ca285ef360f8ccd",
+   "RUN-REPORT.json": "95c94899e036f8fa1fa16339a214c50850d36c0824e5aea941de5d5e3ba50484",
+   "RUN-SET-KEYS.json": "bdd2d67f2bd206f468748f74f378d7f22cc6ea495117a9be3f1cb4b59c0913c6",
+   "RUN-STATE.json": "b4a8437486ae2efb1eb1df988fcb7eaebd3d51d0630a7d596d6c22f754a159f8",
+   "SCORE-BCR-R32.json": "1dc6b4bf9e0dae80919cb18e752f6faaaee96af44769ed7a216ad85797993188",
+   "STATE-CHECK-C.json": "9046edf456d312ef0ebfb3a29f85bc5731d245ad07161e5be820ddc4874c86ad",
+   "STATE-CHECK-R.json": "9046edf456d312ef0ebfb3a29f85bc5731d245ad07161e5be820ddc4874c86ad",
+   "_trip-in-B.json": "c5b4794a814b61a060da17389e02d771cc86e411d1c68a139bac597760ef039f",
+   "_trip-out-B.json": "e6cc2d728fa2b1c15329fce7868fdb0dbb9784cc176cd8a514cca50e02d90334",
+   "lane-B.log": "58edc13d5f4dc71a565e84154b926c4b788de8fd4052dc358443f0fb9695b821",
+   "lane-B.r32.json": "b2e9fcb6b7ae3cab73b1229ecd46fa7327f9b691fd65fc0b97dae5c4a7d042d0",
+   "lane-C.log": "cf241b0bfaef7aba85b83f77d0b0de772a75543572ef125717b5cd4b22b37498",
+   "lane-C.r32.json": "9c49049852245e3d5a4afd9cad054a0009a9137a89dae5feb84be832cd493e4d",
+   "lane-P.log": "629e7ba705766458f08d41b44f99e8dd7d2795675f3d7f7716f0e07509510ca6",
+   "lane-R.log": "4ad1dd84c5570e30e3eceb76011ee2f61674f3e7bd0b01e2d488cef995257b36",
+   "lane-R.r32.json": "ada3324c6d95962194ef043dfa1d760da997a1c80fcab930033c7af3546afbbd",
+   "requests-B.json": "3299c41bae014ecd5985063d21103c5e6975ef55dd8286b6010000c5f9a9f98c",
+   "requests-C.json": "d1e263f5d2dafc6693ebf102420243f4b42d9024dfacc5b4db696566322f342e",
+   "requests-R.json": "f1a200af57d66e7ba5be697867040bcd94bd07625f70eacf1ebc8ebad11f976c",
+   "rows-B.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "rows-C.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "rows-R.json": "f820345411d0c832b1c53d6da1ef910ec4b529128bd7b39bb56980ed30c58774",
+   "score-B.log": "8d9bdbd35266641001a8ba5e485bcf68995a5bd6c28bb753503c383f1c50b1b8",
+   "score-C.log": "5c6da23ec48e1541fc895fba2b558da26fca372319336da76da2a3a64a9bd559",
+   "score-R.log": "bc810c557a71893d958723923aeabb946d0cfac77c8d00b49825227f3581ede7"
+  },
+  "copied_to": "dry-run/exercise-single/",
+  "declaration_sha256": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+  "documents": 24,
+  "finished_utc": "2026-10-07T20:26:58+00:00",
+  "kind": "single: ONE dry run over the 24-document run set",
+  "lanes": {
+   "B": {
+    "allowance_used": 24,
+    "deferred": {},
+    "dry_stub_calls": 24,
+    "global_provider": {
+     "at_end": "StopGuardR38",
+     "at_start": "the harness chain (installed below, lane B)",
+     "lane_kind": "harness_chain",
+     "requests_refused": 0
+    },
+    "isolation_ok": true,
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "reader": "none",
+    "serves_by_mode": {},
+    "statuses": {
+     "F006": "COMPLETE",
+     "F009": "COMPLETE",
+     "F015": "COMPLETE",
+     "F016": "COMPLETE",
+     "F018": "COMPLETE",
+     "F020": "COMPLETE",
+     "F021": "COMPLETE",
+     "F030": "COMPLETE",
+     "F032": "COMPLETE",
+     "F033": "COMPLETE",
+     "F035": "COMPLETE",
+     "F037": "COMPLETE",
+     "F038": "COMPLETE",
+     "F039": "COMPLETE",
+     "F040": "COMPLETE",
+     "F042": "COMPLETE",
+     "F043": "COMPLETE",
+     "F046": "COMPLETE",
+     "F047": "COMPLETE",
+     "F051": "COMPLETE",
+     "F057": "COMPLETE",
+     "F060": "COMPLETE",
+     "F066": "COMPLETE",
+     "F072": "COMPLETE"
+    },
+    "switches_verified": {
+     "AI_EVIDENCE_VARIANT": "off"
+    },
+    "task_kinds": [
+     "r33_dry_probe",
+     "read_submittal_form"
+    ]
+   },
+   "C": {
+    "allowance_used": 24,
+    "deferred": {},
+    "dry_stub_calls": 24,
+    "global_provider": {
+     "at_end": "RefusingGlobalProvider",
+     "at_start": "RefusingGlobalProvider",
+     "lane_kind": "refusing",
+     "requests_refused": 0
+    },
+    "isolation_ok": true,
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "reader": "none",
+    "serves_by_mode": {},
+    "statuses": {
+     "F006": "COMPLETE",
+     "F009": "COMPLETE",
+     "F015": "COMPLETE",
+     "F016": "COMPLETE",
+     "F018": "COMPLETE",
+     "F020": "COMPLETE",
+     "F021": "COMPLETE",
+     "F030": "COMPLETE",
+     "F032": "COMPLETE",
+     "F033": "COMPLETE",
+     "F035": "COMPLETE",
+     "F037": "COMPLETE",
+     "F038": "COMPLETE",
+     "F039": "COMPLETE",
+     "F040": "COMPLETE",
+     "F042": "COMPLETE",
+     "F043": "COMPLETE",
+     "F046": "COMPLETE",
+     "F047": "COMPLETE",
+     "F051": "COMPLETE",
+     "F057": "COMPLETE",
+     "F060": "COMPLETE",
+     "F066": "COMPLETE",
+     "F072": "COMPLETE"
+    },
+    "switches_verified": {
+     "AI_EVIDENCE_ADJUDICATE": "1",
+     "AI_EVIDENCE_ASSOC": "1",
+     "AI_EVIDENCE_DEADLINE": "1",
+     "AI_EVIDENCE_DECISION_REGION": "1",
+     "AI_EVIDENCE_GUARD": "1",
+     "AI_EVIDENCE_IDGUARD": "1",
+     "AI_EVIDENCE_SCHEDULING": "required_first",
+     "AI_EVIDENCE_SUPPORT": "v2",
+     "AI_EVIDENCE_TARGETED": "1",
+     "AI_EVIDENCE_VARIANT": "EV1"
+    },
+    "task_kinds": [
+     "discover_page",
+     "locate_decision",
+     "r33_dry_probe",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ]
+   },
+   "P": {
+    "allowance_used": 0,
+    "deferred": {},
+    "dry_stub_calls": 0,
+    "global_provider": {
+     "at_end": "RefusingGlobalProvider",
+     "at_start": "RefusingGlobalProvider",
+     "lane_kind": "refusing",
+     "requests_refused": 0
+    },
+    "isolation_ok": true,
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "reader": "none",
+    "serves_by_mode": {},
+    "statuses": {},
+    "switches_verified": {},
+    "task_kinds": [
+     "discover_page",
+     "locate_decision",
+     "r33_dry_probe",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ]
+   },
+   "R": {
+    "allowance_used": 1,
+    "deferred": {},
+    "dry_stub_calls": 1,
+    "global_provider": {
+     "at_end": "RefusingGlobalProvider",
+     "at_start": "RefusingGlobalProvider",
+     "lane_kind": "refusing",
+     "requests_refused": 0
+    },
+    "isolation_ok": true,
+    "live_provider_attempts_blocked": [],
+    "model_requests": 0,
+    "reader": "none",
+    "serves_by_mode": {
+     "reference_from_capture": 24
+    },
+    "statuses": {
+     "F006": "COMPLETE",
+     "F009": "COMPLETE",
+     "F015": "COMPLETE",
+     "F016": "COMPLETE",
+     "F018": "COMPLETE",
+     "F020": "COMPLETE",
+     "F021": "COMPLETE",
+     "F030": "COMPLETE",
+     "F032": "COMPLETE",
+     "F033": "COMPLETE",
+     "F035": "COMPLETE",
+     "F037": "COMPLETE",
+     "F038": "COMPLETE",
+     "F039": "COMPLETE",
+     "F040": "COMPLETE",
+     "F042": "COMPLETE",
+     "F043": "COMPLETE",
+     "F046": "COMPLETE",
+     "F047": "COMPLETE",
+     "F051": "COMPLETE",
+     "F057": "COMPLETE",
+     "F060": "COMPLETE",
+     "F066": "COMPLETE",
+     "F072": "COMPLETE",
+     "_reference_only": "COMPLETE"
+    },
+    "switches_verified": {
+     "AI_EVIDENCE_DEADLINE": "1",
+     "AI_EVIDENCE_GUARD": "1",
+     "AI_EVIDENCE_SCHEDULING": "required_first",
+     "AI_EVIDENCE_SUPPORT": "v2",
+     "AI_EVIDENCE_TARGETED": "1",
+     "AI_EVIDENCE_VARIANT": "EV1"
+    },
+    "task_kinds": [
+     "discover_page",
+     "r33_dry_probe",
+     "read_decision",
+     "read_field_context",
+     "read_identity",
+     "read_revision"
+    ]
+   }
+  },
+  "model_requests_total": 0,
+  "ok": true,
+  "report": {
+   "allowance": {
+    "caps_fixed": {
+     "B": 240,
+     "C": 240,
+     "P": 36,
+     "R": 40
+    },
+    "elapsed_bound_ends_utc": "2026-10-14T20:26:28+00:00",
+    "parent": {
+     "elapsed_s": 604800,
+     "input_tokens": 16300000,
+     "output_tokens": 3260000,
+     "total": 556
+    },
+    "project_window": {
+     "limit": 60,
+     "window_s": 86400
+    },
+    "run_key": "819d656ede4413e3281abc9cffcb5fda1d6620b6d0be7963038721420346e2dd",
+    "stops": {},
+    "used": {
+     "B": 24,
+     "C": 24,
+     "P": 0,
+     "R": 1
+    },
+    "used_total": 49
+   },
+   "allowance_creation": {
+    "created": true,
+    "path": "C:/t/r2x/r42-sandbox/r43p/sb/r43d-single-30b02b/allowance.sqlite"
+   },
+   "candidate_outcome": "NOT ELIGIBLE",
+   "comparison_state": "PENDING",
+   "concentration_outcome_by_field": {
+    "decision": "UNDETERMINED",
+    "identity": "UNDETERMINED",
+    "revision": "UNDETERMINED"
+   },
+   "diagnostics": {
+    "P": {
+     "credit": "none: the variation probe is report-only (A-09 point 6)",
+     "state": "COMPLETE"
+    },
+    "R": {
+     "credit": "none: R earns no accuracy or recovery credit and decides nothing (A-09 point 6)",
+     "state": "COMPLETE"
+    }
+   },
+   "dispatch_guard": {
+    "authorized": false,
+    "reason": "dry mode: no declaration, no provider; the dry stub refuses every request"
+   },
+   "free_disk": {
+    "free_bytes": 5726101504,
+    "min_free_bytes": 2147483648,
+    "ok": true,
+    "path": "C:/"
+   },
+   "heads": {
+    "C:/t/iso/cand-r30n": "436daef215c72fbe2429dcd783e087bf39756ad7",
+    "C:/t/iso/frozen-r13": "7ec3d2cf983b70a604844beda8eb6b1ec6173d34"
+   },
+   "ingest": {
+    "b_database_sha256": "17df8be6ecbe412b51b90d99a63eb18220c59bdf0e83139733ffb474759b2b3f",
+    "documents": 24,
+    "ok": true,
+    "projects": [
+     "15744",
+     "22349",
+     "26687",
+     "27331",
+     "29255",
+     "3563"
+    ],
+    "registration": {
+     "by_project": {
+      "15744": 1,
+      "22349": 5,
+      "26687": 7,
+      "27331": 6,
+      "29255": 2,
+      "3563": 3
+     },
+     "by_state": {
+      "pending": 24
+     },
+     "ok": true,
+     "problems": [],
+     "rows": 24,
+     "table_counts": {
+      "ai_usage": 0,
+      "background_jobs": 0,
+      "document_readings": 0,
+      "extraction_runs": 0,
+      "project_submittals": 0,
+      "result_cache": 0
+     }
+    },
+    "state_check": {
+     "checks": {
+      "b_file_sha256": "17df8be6ecbe412b51b90d99a63eb18220c59bdf0e83139733ffb474759b2b3f",
+      "b_logical_sha256": "6db9e5af9ae1361d94a874ea35d7102fafa39b852994f4aa26b95b969c134475",
+      "c_logical_sha256": "6db9e5af9ae1361d94a874ea35d7102fafa39b852994f4aa26b95b969c134475",
+      "documents_with_c_policy_evidence": [],
+      "evidence_task_cache_rows": 0
+     },
+     "ok": true,
+     "problems": []
+    }
+   },
+   "kind": "fresh",
+   "lane_gates": {},
+   "ledger_after": {
+    "entries": 484,
+    "limit_amendments": 0,
+    "scopes": 18
+   },
+   "ledger_before": {
+    "entries": 484,
+    "limit_amendments": 0,
+    "scopes": 18
+   },
+   "ledger_unchanged": true,
+   "mode": "dry",
+   "model_requests": 0,
+   "population_gate": {
+    "action": "DISPATCH_ELIGIBLE",
+    "counts": {
+     "decision": 38,
+     "identity": 57,
+     "revision": 38
+    },
+    "extensions_used": 0,
+    "rule": ">= 12 resolved (per field), independently reviewed documents per field carrying the fact; canonical ids; no partial closure run",
+    "short": {}
+   },
+   "provider_identity": {
+    "at_utc": "2026-10-07T20:26:28+00:00",
+    "cli_path": null,
+    "cli_sha256": null,
+    "cli_version": "dry mode: no CLI is run",
+    "declared_models": {
+     "small": "claude-sonnet-5",
+     "standard": "claude-opus-5"
+    },
+    "invocation": 1,
+    "mode": "dry",
+    "provider": "claude-code"
+   },
+   "run_state": "FINISHED",
+   "scope_limitations": [
+    {
+     "declared_by": "A-09 point 5 (owner)",
+     "found": 0,
+     "id": "unsupported-control-shortfall",
+     "required": 2,
+     "statement": "the run set holds 0 of the 2 unsupported-format controls plan v2 section 2.3 requires: no canonical pool document has an in-scope page labelled 'unsupported' or 'illegible' in r32-labels-reviewed-2; the shortfall is accepted ONLY as a declared scope limitation; no control is replaced once a prediction exists for the run (run_set_selector_r32.replace_controls); this limitation is never removed from a report"
+    }
+   ],
+   "score_outcome_by_field": {
+    "decision": "NOT ELIGIBLE",
+    "identity": "NOT ELIGIBLE",
+    "revision": "NOT ELIGIBLE"
+   },
+   "status": "finished",
+   "store": {
+    "b_or_c_served_from_p": 0,
+    "duplicate_bound_keys": [],
+    "r_rows_served_to_c": 0,
+    "reference_serves": 24,
+    "releases": [],
+    "requests_by_lane_state": [
+     {
+      "lane": "B",
+      "n": 24,
+      "outcome": "dry_refused",
+      "state": "failed"
+     },
+     {
+      "lane": "C",
+      "n": 24,
+      "outcome": "dry_refused",
+      "state": "failed"
+     },
+     {
+      "lane": "R",
+      "n": 1,
+      "outcome": "dry_refused",
+      "state": "failed"
+     }
+    ],
+    "reserved_without_answer": 0,
+    "retries": [],
+    "rows": 49,
+    "serves_by_lane_mode": [
+     {
+      "lane": "R",
+      "mode": "reference_from_capture",
+      "n": 24,
+      "served_lane": "C"
+     }
+    ]
+   },
+   "unread_pages": {
+    "B": {},
+    "C": {},
+    "R": {}
+   }
+  },
+  "stamp": "r43d-single-30b02b",
+  "step": {
+   "at_utc": "2026-10-07T20:26:58+00:00",
+   "command": "run",
+   "printed": {
+    "candidate_outcome": "NOT ELIGIBLE",
+    "command": "run",
+    "comparison_state": "PENDING",
+    "earliest_retry_utc": null,
+    "invocation": 1,
+    "kind": "fresh",
+    "ledger_after": {
+     "entries": 484,
+     "limit_amendments": 0,
+     "scopes": 18
+    },
+    "ledger_before": {
+     "entries": 484,
+     "limit_amendments": 0,
+     "scopes": 18
+    },
+    "mode": "dry",
+    "model_requests": 0,
+    "run_state": "FINISHED",
+    "score_outcome_by_field": {
+     "decision": "NOT ELIGIBLE",
+     "identity": "NOT ELIGIBLE",
+     "revision": "NOT ELIGIBLE"
+    },
+    "status": "finished"
+   },
+   "result": "finished",
+   "returncode": 0,
+   "seconds": 31.1,
+   "why": null
+  },
+  "truth_equals_bound_truth": true
+ },
+ "split": {
+  "ai_ledger_after": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "ai_ledger_before": {
+   "entries": 484,
+   "limit_amendments": 0,
+   "scope_names_sha256": "2f520ab19f932ea9e971b5d188c45a2698d8348b0124506696892679e22c3778",
+   "scopes": 18
+  },
+  "declaration_sha256": "e0a93c461fee31222098a3b774cd7af25201398925fb67170c49a950394fbeb9",
+  "documents_covered": 24,
+  "finished_utc": "2026-10-07T20:29:14+00:00",
+  "kind": "split: one dry run per project (all 24 run-set documents)",
+  "model_requests_total": 0,
+  "ok": true,
+  "runs": {
+   "EP-15744": {
+    "documents": [
+     "F043"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F043": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F043": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 1
+      },
+      "statuses": {
+       "F043": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m15744-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:27:46+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 20.5,
+     "why": null
+    }
+   },
+   "EP-22349": {
+    "documents": [
+     "F038",
+     "F035",
+     "F051",
+     "F042",
+     "F047"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 5,
+      "deferred": {},
+      "dry_stub_calls": 5,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F035": "COMPLETE",
+       "F038": "COMPLETE",
+       "F042": "COMPLETE",
+       "F047": "COMPLETE",
+       "F051": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 5,
+      "deferred": {},
+      "dry_stub_calls": 5,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F035": "COMPLETE",
+       "F038": "COMPLETE",
+       "F042": "COMPLETE",
+       "F047": "COMPLETE",
+       "F051": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 5
+      },
+      "statuses": {
+       "F035": "COMPLETE",
+       "F038": "COMPLETE",
+       "F042": "COMPLETE",
+       "F047": "COMPLETE",
+       "F051": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m22349-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:28:07+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 20.3,
+     "why": null
+    }
+   },
+   "EP-26687": {
+    "documents": [
+     "F072",
+     "F039",
+     "F040",
+     "F060",
+     "F057",
+     "F046",
+     "F066"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 7,
+      "deferred": {},
+      "dry_stub_calls": 7,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F039": "COMPLETE",
+       "F040": "COMPLETE",
+       "F046": "COMPLETE",
+       "F057": "COMPLETE",
+       "F060": "COMPLETE",
+       "F066": "COMPLETE",
+       "F072": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 7,
+      "deferred": {},
+      "dry_stub_calls": 7,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F039": "COMPLETE",
+       "F040": "COMPLETE",
+       "F046": "COMPLETE",
+       "F057": "COMPLETE",
+       "F060": "COMPLETE",
+       "F066": "COMPLETE",
+       "F072": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 7
+      },
+      "statuses": {
+       "F039": "COMPLETE",
+       "F040": "COMPLETE",
+       "F046": "COMPLETE",
+       "F057": "COMPLETE",
+       "F060": "COMPLETE",
+       "F066": "COMPLETE",
+       "F072": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m26687-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:28:29+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 21.5,
+     "why": null
+    }
+   },
+   "EP-27331": {
+    "documents": [
+     "F037",
+     "F009",
+     "F032",
+     "F021",
+     "F030",
+     "F020"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 6,
+      "deferred": {},
+      "dry_stub_calls": 6,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F009": "COMPLETE",
+       "F020": "COMPLETE",
+       "F021": "COMPLETE",
+       "F030": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 6,
+      "deferred": {},
+      "dry_stub_calls": 6,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F009": "COMPLETE",
+       "F020": "COMPLETE",
+       "F021": "COMPLETE",
+       "F030": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 6
+      },
+      "statuses": {
+       "F009": "COMPLETE",
+       "F020": "COMPLETE",
+       "F021": "COMPLETE",
+       "F030": "COMPLETE",
+       "F032": "COMPLETE",
+       "F037": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m27331-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:28:52+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 22.9,
+     "why": null
+    }
+   },
+   "EP-29255": {
+    "documents": [
+     "F006",
+     "F015"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 2,
+      "deferred": {},
+      "dry_stub_calls": 2,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F006": "COMPLETE",
+       "F015": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 2,
+      "deferred": {},
+      "dry_stub_calls": 2,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F006": "COMPLETE",
+       "F015": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 2
+      },
+      "statuses": {
+       "F006": "COMPLETE",
+       "F015": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m29255-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:29:13+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 20.9,
+     "why": null
+    }
+   },
+   "EP-3563": {
+    "documents": [
+     "F033",
+     "F016",
+     "F018"
+    ],
+    "lanes": {
+     "B": {
+      "allowance_used": 3,
+      "deferred": {},
+      "dry_stub_calls": 3,
+      "global_provider": {
+       "at_end": "StopGuardR38",
+       "at_start": "the harness chain (installed below, lane B)",
+       "lane_kind": "harness_chain",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F016": "COMPLETE",
+       "F018": "COMPLETE",
+       "F033": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_VARIANT": "off"
+      },
+      "task_kinds": [
+       "r33_dry_probe",
+       "read_submittal_form"
+      ]
+     },
+     "C": {
+      "allowance_used": 3,
+      "deferred": {},
+      "dry_stub_calls": 3,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {
+       "F016": "COMPLETE",
+       "F018": "COMPLETE",
+       "F033": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_ADJUDICATE": "1",
+       "AI_EVIDENCE_ASSOC": "1",
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_DECISION_REGION": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_IDGUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "P": {
+      "allowance_used": 0,
+      "deferred": {},
+      "dry_stub_calls": 0,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {},
+      "statuses": {},
+      "switches_verified": {},
+      "task_kinds": [
+       "discover_page",
+       "locate_decision",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     },
+     "R": {
+      "allowance_used": 1,
+      "deferred": {},
+      "dry_stub_calls": 1,
+      "global_provider": {
+       "at_end": "RefusingGlobalProvider",
+       "at_start": "RefusingGlobalProvider",
+       "lane_kind": "refusing",
+       "requests_refused": 0
+      },
+      "isolation_ok": true,
+      "live_provider_attempts_blocked": [],
+      "model_requests": 0,
+      "reader": "none",
+      "serves_by_mode": {
+       "reference_from_capture": 3
+      },
+      "statuses": {
+       "F016": "COMPLETE",
+       "F018": "COMPLETE",
+       "F033": "COMPLETE",
+       "_reference_only": "COMPLETE"
+      },
+      "switches_verified": {
+       "AI_EVIDENCE_DEADLINE": "1",
+       "AI_EVIDENCE_GUARD": "1",
+       "AI_EVIDENCE_SCHEDULING": "required_first",
+       "AI_EVIDENCE_SUPPORT": "v2",
+       "AI_EVIDENCE_TARGETED": "1",
+       "AI_EVIDENCE_VARIANT": "EV1"
+      },
+      "task_kinds": [
+       "discover_page",
+       "r33_dry_probe",
+       "read_decision",
+       "read_field_context",
+       "read_identity",
+       "read_revision"
+      ]
+     }
+    },
+    "report": {
+     "candidate_outcome": "NOT ELIGIBLE",
+     "comparison_state": "PENDING",
+     "ledger_unchanged": true,
+     "model_requests": 0,
+     "run_state": "FINISHED",
+     "status": "finished"
+    },
+    "stamp": "r43d-m3563-30b02b",
+    "step": {
+     "at_utc": "2026-10-07T20:27:26+00:00",
+     "command": "run",
+     "printed": {
+      "candidate_outcome": "NOT ELIGIBLE",
+      "command": "run",
+      "comparison_state": "PENDING",
+      "earliest_retry_utc": null,
+      "invocation": 1,
+      "kind": "fresh",
+      "ledger_after": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "ledger_before": {
+       "entries": 484,
+       "limit_amendments": 0,
+       "scopes": 18
+      },
+      "mode": "dry",
+      "model_requests": 0,
+      "run_state": "FINISHED",
+      "score_outcome_by_field": {
+       "decision": "NOT ELIGIBLE",
+       "identity": "NOT ELIGIBLE",
+       "revision": "NOT ELIGIBLE"
+      },
+      "status": "finished"
+     },
+     "result": "finished",
+     "returncode": 0,
+     "seconds": 22.2,
+     "why": null
+    }
+   }
+  }
+ },
+ "staged_pdf_copies_trimmed": "after every finished dry invocation (WORK out/TRIMMED.jsonl and each phase's trim list)",
+ "statement": "dry exercise only: reader 'none' on the real run set (no application reader touched a cohort document: the bound harness runs a reader in dry mode on synthetic documents only, so no lane-B fact of a cohort document exists here), every request ended at the refusing stub ('dry_refused'), no provider was built, no ledger path, no scope; the loops and the cross-project drill use dry drill windows (10 or 6 per 20 s) to show the deferral / resume loop under 'full'; the scorer figures exercise the scorer and are not results; reference set independently AI-reviewed (Claude agents), not human-signed",
+ "substitution": "S-BASE (r43p_base.py): the dry base inside the work folder",
+ "tag": "30b02b"
+}
